@@ -1,0 +1,20 @@
+/*
+.component_carusel{
+    height: 50%;
+}
+*/
+
+.columna_carusel{
+    height: 300px;
+    /*background-color: blue;*/
+}
+
+.contenedor_imagen{
+    height: 100%;
+    width:100%;
+}
+
+.img{
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,19 @@
+:root{
+    --color-fondo-contenedor-boton:#fff;
+}
+
+.component_funcion_trabajador_inicio{
+    height: 100%;
+    width: 100%;
+}
+
+.columna-boton{
+    background-color: var(--color-fondo-contenedor-boton);
+    border-radius: 15px;
+    margin-top: 30px;
+    height:60px;
+}
+
+.contenedor-boton{
+    height: 100%;
+}

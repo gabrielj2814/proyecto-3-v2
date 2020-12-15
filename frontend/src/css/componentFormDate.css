@@ -1,0 +1,23 @@
+.columna{
+    margin-bottom: 15px;
+}
+
+.obligatorio-campo{
+    color:red
+}
+
+.error-campo{
+    color:red
+}
+
+.color-texto-rojo{
+    color:red
+}
+
+.color-texto-verde{
+    color:green
+}
+
+.color-texto-blanco{
+    color:white
+}
