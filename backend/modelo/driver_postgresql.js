@@ -17,9 +17,11 @@ class DriverPostgreSQL {
 
     async query(sql){
         this.conexion()
-        console.log(sql)
+        console.log("----------Inicio---------");
+        console.log("consulta sql ->>>",sql);
+        console.log("----------Fin------------");
         const respuesta=await this.database.query(sql)
-        console.log(respuesta)
+        // console.log(respuesta)
         // Promise.all([respuesta])
         // .then(res => {
         //     console.log(res)

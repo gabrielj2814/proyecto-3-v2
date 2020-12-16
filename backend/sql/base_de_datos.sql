@@ -82,7 +82,7 @@ CREATE TABLE tpermiso(
     constraint PK_id_permiso primary key(id_permiso)
 );
 
-INSERT INTO tpermiso(id_permiso,nombre_permiso,dias_permiso,estatu_remunerado,estatu_dias_aviles,estatu_permiso) VALUES('per-1','permiso x','20','1','1','1')
+INSERT INTO tpermiso(id_permiso,nombre_permiso,dias_permiso,estatu_remunerado,estatu_dias_aviles,estatu_permiso) VALUES('per-1','permiso x','20','1','1','1');
 
 CREATE TABLE tpermisotrabajador(
     id_permiso_trabajador character varying(19) NOT NULL,
