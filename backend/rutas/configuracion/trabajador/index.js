@@ -77,10 +77,12 @@ router.put("/actualizar/:id",async (req,res)=>{
 })
 
 router.patch("/activar-cuenta/:id",async (req,res)=>{
-    const datos_clienet=req.body.trabajador
+    const datos_clienet=req.body.trabajador;
     var respuesta_api={trabajador:"",mensaje:"",estado_peticion:""}
     const TRABAJADOR=new TrabajadorControlador()
+    // problema
     const trabajador=await TRABAJADOR.consultarControlador(datos_clienet.id_cedula)
+    console.log(trabajador);
     if(trabajador.rows.length===1){
         if(trabajador.rows[0].estatu_cuenta==="0"){
             const clave_encriptada=await TRABAJADOR.encriptarClave(bcrypt,datos_clienet.clave_trabajador)
@@ -107,6 +109,9 @@ router.patch("/activar-cuenta/:id",async (req,res)=>{
         res.write(JSON.stringify(respuesta_api))
         res.end()
     }
+    // res.writeHead(200,{"Content-Type":"application/json"})
+    // res.write(JSON.stringify(trabajador))
+    // res.end()
 })
 
 router.get("/consultar-todos",async (req,res)=>{

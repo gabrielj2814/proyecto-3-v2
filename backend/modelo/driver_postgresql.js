@@ -3,9 +3,9 @@ class DriverPostgreSQL {
     constructor(){
         const {Pool} =require("pg"),
         config={
-            user:"postgres",
+            user:"gabriel",
             host:"localhost",
-            password:"juan241198",
+            password:"stark",
             database:"proyecto_3"
         }
         this.database=new Pool(config);
@@ -17,13 +17,21 @@ class DriverPostgreSQL {
 
     async query(sql){
         this.conexion()
+        console.log(sql)
         const respuesta=await this.database.query(sql)
-        //console.log(respuesta)
+        console.log(respuesta)
+        // Promise.all([respuesta])
+        // .then(res => {
+        //     console.log(res)
+        // })
         return respuesta
         //console.log("estoy en el driver de conexion")
     }
 
 
 }
+
+// let driver =new DriverPostgreSQL()
+// console.log(driver.query("SELECT * FROM ttrabajador;"))
 
 module.exports = DriverPostgreSQL
