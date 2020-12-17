@@ -17,7 +17,6 @@ class ComponentHorario extends React.Component{
         this.guardarHorario=this.guardarHorario.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.state={
-            estadoModulo:false,
             modulo:"",
             estado_menu:false,
             horaEntrada:"01",
@@ -68,7 +67,7 @@ class ComponentHorario extends React.Component{
         }
     }
 
-    componentWillMount(){
+    async componentWillMount(){
         // alert("hola")
         let listHora=[];
         let listMinuto=[];
@@ -86,25 +85,53 @@ class ComponentHorario extends React.Component{
             listHora,
             listMinuto
         });
-        if(!this.state.estadoModulo){
-            
+        let respuesta=await this.consultarHorarioActivo();
+        console.log("respuesta servidor ->>>",respuesta)
+        if(respuesta.horario){
+            this.insertatHorarioActual(respuesta.horario)
         }
         else{
-            alert("si hay horario")
+            this.setState({
+                horaEntrada:"01",
+                minutoEntrada:"00",
+                horaSalida:"01",
+                minutoSalida:"00",
+                periodoEntrada:"PM",
+                periodoSalida:"AM",
+            })
         }
         
 
     }
 
-    // componentDidMount(){
-    //     // if(!this.state.estadoModulo){
-            
-    //     // }
-    //     // else{
-    //     //     alert("si hay horario Mount")
-    //     // }
+    insertatHorarioActual(horaio){
+        let horaEntrada=horaio.horario_entrada[0]+horaio.horario_entrada[1];
+        let minutoEntrada=horaio.horario_entrada[3]+horaio.horario_entrada[4];
+        let periodoEntrada=horaio.horario_entrada[5]+horaio.horario_entrada[6];
+        let horaSalida=horaio.horario_salida[0]+horaio.horario_salida[1];
+        let minutoSalida=horaio.horario_salida[3]+horaio.horario_salida[4];
+        let periodoSalida=horaio.horario_salida[5]+horaio.horario_salida[6];
+        this.setState({
+            horaEntrada,
+            minutoEntrada,
+            horaSalida,
+            minutoSalida,
+            periodoEntrada,
+            periodoSalida,
+        })
+    }
 
-    // }
+   async consultarHorarioActivo(){
+       let repuestaServidor=null;
+        await axios.get("http://localhost:8080/configuracion/horario/consultar-activo")
+        .then(respuesta => {
+            repuestaServidor=respuesta.data;
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        return repuestaServidor
+    }
 
     guardarHorario(){
         // alert("hola")
@@ -148,7 +175,7 @@ class ComponentHorario extends React.Component{
                         <select onChange={this.cambiarEstado} id="horaEntrada" name="horaEntrada" className="hora tiempo" value={this.state.horaEntrada}>
                             {
                                 this.state.listHora.map(hora => {
-                                    return(<option value={hora}>{hora}</option>)
+                                    return(<option key={hora} value={hora}>{hora}</option>)
                                 })
                             }
                         </select>
@@ -157,7 +184,7 @@ class ComponentHorario extends React.Component{
 
                         {
                             this.state.listMinuto.map(minuto => {
-                                return (<option value={minuto}>{minuto}</option>)
+                                return (<option key={minuto} value={minuto}>{minuto}</option>)
                             })
                         }
                         
@@ -172,7 +199,7 @@ class ComponentHorario extends React.Component{
                         <select onChange={this.cambiarEstado} id="horaSalida" name="horaSalida" className="hora tiempo" value={this.state.horaSalida}>
                         {
                             this.state.listHora.map(hora => {
-                                return(<option value={hora}>{hora}</option>)
+                                return(<option key={hora} value={hora}>{hora}</option>)
                             })
                         }
                         
@@ -181,7 +208,7 @@ class ComponentHorario extends React.Component{
                         <select onChange={this.cambiarEstado} id="minutoSalida" name="minutoSalida" className="minito tiempo" value={this.state.minutoSalida}>
                         {
                             this.state.listMinuto.map(minuto => {
-                                return (<option value={minuto}>{minuto}</option>)
+                                return (<option key={minuto} value={minuto}>{minuto}</option>)
                             })
                         }
                         </select>

@@ -4,11 +4,11 @@ Moment=require("moment")
 const HorarioControlador={}
 
 HorarioControlador.consultarHoraioActivoControlador=async (req,res) => {
-    var respuesta_api={horaio:[],mensaje:"",estado_peticion:""}
+    var respuesta_api={horario:[],mensaje:"",estado_peticion:""}
     const horario_modelo=new HorarioModelo()
     const horario_result=await horario_modelo.consultarHorarioActivoModelo()
     if(HorarioControlador.verificarExistencia(horario_result)){
-        respuesta_api.horaio=horario_result.rows[0]
+        respuesta_api.horario=horario_result.rows[0]
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_peticion="200"
         res.writeHead(200,{"Content-Type":"application/json"})
