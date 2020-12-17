@@ -75,7 +75,7 @@ const MenuDashboard = (props) =>{
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
 
-                            <span className="item-sub-menu">Horario</span>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
 
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Medico"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
