@@ -9,7 +9,7 @@ HorarioControlador.consultarHoraioActivoControlador=async (req,res) => {
     const horario_result=await horario_modelo.consultarHorarioActivoModelo()
     if(HorarioControlador.verificarExistencia(horario_result)){
         respuesta_api.horario=horario_result.rows[0]
-        respuesta_api.mensaje="consulta completada"
+        respuesta_api.mensaje="Si hay horario"
         respuesta_api.estado_peticion="200"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))

@@ -123,11 +123,18 @@ class ComponentHorario extends React.Component{
 
    async consultarHorarioActivo(){
        let repuestaServidor=null;
+       let mensaje={};
         await axios.get("http://localhost:8080/configuracion/horario/consultar-activo")
         .then(respuesta => {
             repuestaServidor=respuesta.data;
+            mensaje.texto=repuestaServidor.data.mensaje;
+            mensaje.estado=repuestaServidor.data.estado_peticion;
+            this.setState({mensaje})
         })
         .catch(error => {
+            mensaje.texto=repuestaServidor.mensaje;
+            mensaje.estado=repuestaServidor.estado_peticion;
+            this.setState({mensaje})
             console.log(error);
         })
         return repuestaServidor
@@ -135,6 +142,7 @@ class ComponentHorario extends React.Component{
 
     guardarHorario(){
         // alert("hola")
+        let mensaje={};
         let horaEntrada=`${this.state.horaEntrada}:${this.state.minutoEntrada}${this.state.periodoEntrada}`;
         let horaSalida=`${this.state.horaSalida}:${this.state.minutoSalida}${this.state.periodoSalida}`;
         alert(horaEntrada+" / "+horaSalida)
@@ -147,9 +155,15 @@ class ComponentHorario extends React.Component{
         axios.post("http://localhost:8080/configuracion/horario/agregar-horario",datos)
         .then(respuesta => {
             console.log(respuesta);
+            mensaje.texto=respuesta.data.mensaje
+            mensaje.estado=respuesta.data.estado_peticion
+            this.setState({mensaje})
         })
         .catch(error => {
             console.log(error);
+            mensaje.texto="Conexion defisiente"
+            mensaje.estado="500"
+            this.setState({mensaje})
         })
     }
 
@@ -159,12 +173,27 @@ class ComponentHorario extends React.Component{
         this.setState({[$input.name]:$input.value})
     }
     
-    
+    // <p>Estado: {this.state.mensaje.estado}</p>
 
     render(){
         const jsx=(
 
             <div className="contenedor_from">
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404" || this.state.mensaje.estado==="500")  &&
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
+                                    <p>Mensaje: {this.state.mensaje.texto}</p>
+                                    
+                                    <button className="close" data-dismiss="alert">
+                                        <span>X</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
 
                 <h1 className="titulo_h1">Horario</h1>
 
