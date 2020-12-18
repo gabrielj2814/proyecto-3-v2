@@ -1,4 +1,4 @@
-import React, { createElement } from 'react';
+import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 //css
@@ -17,17 +17,18 @@ class ComponentHorario extends React.Component{
         this.guardarHorario=this.guardarHorario.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.state={
-            modulo:"",
-            estado_menu:false,
+            
             horaEntrada:"01",
             minutoEntrada:"00",
             horaSalida:"01",
             minutoSalida:"00",
             periodoEntrada:"PM",
             periodoSalida:"AM",
-            //////
             listHora:[],
             listMinuto:[],
+            //////
+            modulo:"",
+            estado_menu:false,
             mensaje:{
               texto:"",
               estado:""

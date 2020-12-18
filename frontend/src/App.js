@@ -60,8 +60,9 @@ import ComponentTipoCam from './componentes/componentTipoCam'
 import ComponentTipoCamForm from './componentes/componentTipoCamForm'
 import ComponentTipoCamConsulta from './componentes/componentTipoCamConsulta'
 // HORARIO
-import ComponentHorario from './componentes/componentHorario';
 import componentHorario from './componentes/componentHorario';
+// ASISTENCIA
+import ComponentAsistencia from './componentes/componentAsistencia';
 //modulos seguridad
 
 function App() {
@@ -120,6 +121,8 @@ function App() {
         <Route exact path="/dashboard/transaccion/permiso-trabajador/editar:id" component={ComponentEditarPermisoTrabajador}/>
 
         <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
+
+        <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
         </Switch>
     </Router>
   );
