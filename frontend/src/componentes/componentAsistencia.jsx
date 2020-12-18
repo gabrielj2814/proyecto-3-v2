@@ -15,6 +15,7 @@ class ComponentAsistencia extends React.Component {
         super();
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.validarCampoCedula=this.validarCampoCedula.bind(this);
+        this.enviarDatos=this.enviarDatos.bind(this);
         this.state={
             cedula:"",
             // --------
@@ -88,6 +89,37 @@ class ComponentAsistencia extends React.Component {
 
     }
 
+    enviarDatos(){
+        let mensaje={};
+        let json={
+            asistencia:{
+                cedula:this.state.cedula
+            }
+        }
+        // console.log(json);
+        axios.post("http://localhost:8080/transaccion/asistencia/presente",json)
+        .then(respuesta => {
+
+            console.log(respuesta)
+           if(respuesta.data.respuesta_api){
+                mensaje.texto=respuesta.data.respuesta_api.mensaje;
+                mensaje.estado=respuesta.data.respuesta_api.estado_peticion;
+           }
+           else{
+            mensaje.texto=respuesta.data.mensaje;
+            mensaje.estado=respuesta.data.estado_peticion;
+           }
+            this.setState({mensaje})
+        })
+        .catch(error => {
+            mensaje.texto="Conexion defisiente"
+            mensaje.estado="500"
+            this.setState({mensaje})
+            console.log(error)
+        })
+
+    }
+
     render(){
         let jsx=(
             <div className="contenedor_from">
@@ -123,7 +155,7 @@ class ComponentAsistencia extends React.Component {
 
                 <div className="contenedor_boton_guardar_horario">
 
-                    <button id="botonEnviarDatos" className="btn btn-primary btn-block" >Enviar</button>
+                    <button id="botonEnviarDatos" onClick={this.enviarDatos} className="btn btn-primary btn-block" >Enviar</button>
                 
                 </div>
             

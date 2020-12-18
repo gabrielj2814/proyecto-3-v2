@@ -20,7 +20,7 @@ AsistenciaControlador.presenteControlador=async (req,res) => {
     const reposo_result=await ReposoTrabajadorControlador.consultarReposoActivo(asistencia.cedula)
     const permiso_result=await PermisoTrabajadorControlador.consultarPermisoActivos(asistencia.cedula)
     if( AsistenciaControlador.verificarExistencia(reposo_result) || AsistenciaControlador.verificarExistencia(permiso_result)){
-        respuesta_api.mensaje="error al registrar la asistencia del trabajador, por que el trabajador tiene actualmente un permiso o un reposo activo "
+        respuesta_api.mensaje="error al registrar la asistencia del trabajador, por que el trabajador tiene actualmente un permiso o un reposo activo"
         respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))
