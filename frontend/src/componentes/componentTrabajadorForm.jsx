@@ -513,8 +513,8 @@ class ComponentTrabajadorForm extends React.Component{
                 alert("como son las "+fecha_ingreso.format("HH:mmA")+", la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
             }
             else{
-                alert("como ya son mas de las 10:00AM, la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
                 fecha_ingreso.add(1,"d")
+                alert("como ya son mas de las 10:00AM, la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
                 estado=true
             }
         }
