@@ -123,7 +123,7 @@ router.put("/actualizar/:id",async (req,res)=>{
             }
             else{
                 const MODULO=new ModuloControlador()
-                MODULO.registrarControlador(modulos[veces],perfil_form.id_perfil)
+                MODULO.registrarControlador(modulos[veces],perfil.id_perfil)
             }
             veces+=1
         }
