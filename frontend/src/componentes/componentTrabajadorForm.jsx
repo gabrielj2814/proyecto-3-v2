@@ -74,7 +74,7 @@ class ComponentTrabajadorForm extends React.Component{
                 {id:"licenciado",descripcion:"licenciado"},
                 {id:"tsu",descripcion:"tsu"},
                 {id:"bachiller",descripcion:"bachiller"},
-                {id:"educacion basica",descripcion:"educacion basica"}
+                {id:"educacion basica",descripcion:"educación basica"}
             ],
             fecha_minimo:"",
             ///
@@ -132,9 +132,15 @@ class ComponentTrabajadorForm extends React.Component{
             propiedad_descripcion="descripcion_tipo_trabajador"
             const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
             ///
+            alert(tipo_trabajador[0].id)
+            let listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
             this.setState({
                 perfiles:lista_perfiles,
-                tipos_trabajador:tipo_trabajador
+                tipos_trabajador:tipo_trabajador,
+                id_perfil:lista_perfiles[0].id,
+                id_tipo_trabajador:tipo_trabajador[0].id,
+                id_funcion_trabajador:listaFuncionTrabajador.funcion_trabajador[0].id,
+                funcion_trabajador:listaFuncionTrabajador.funcion_trabajador
             })
     }
     else if(operacion==="actualizar"){
@@ -148,6 +154,7 @@ class ComponentTrabajadorForm extends React.Component{
             propiedad_id="id_tipo_trabajador",
             propiedad_descripcion="descripcion_tipo_trabajador"
             const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+
             const id=this.props.match.params.id
             await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
         }
@@ -231,6 +238,10 @@ class ComponentTrabajadorForm extends React.Component{
             funcion_trabajador:objeto_estado.funcion_trabajador,
             mensaje:objeto_estado.mensaje
         })
+        document.getElementById("grado_instruccion").value=grado_instruccion
+        document.getElementById("id_perfil").value=id_perfil
+        document.getElementById("id_tipo_trabajador").value=id_tipo_trabajador
+        document.getElementById("id_funcion_trabajador").value=id_funcion_trabajador
     }
 
     async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion){
@@ -405,6 +416,8 @@ class ComponentTrabajadorForm extends React.Component{
         propiedad_descripcion="descripcion_tipo_trabajador"
         const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
         alert("agregando nuevo formulario")
+        let listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+        console.log(listaFuncionTrabajador);
         var mensaje=this.state.mensaje
         mensaje.estado=""
         var mensaje_campo=[{mensaje:"",color_texto:""}]
@@ -419,12 +432,13 @@ class ComponentTrabajadorForm extends React.Component{
             fecha_nacimiento:"",
             fecha_ingreso:"",
             direccion:"",
-            id_perfil:"",
-            id_tipo_trabajador:"",
-            id_funcion_trabajador:"",
             perfiles:lista_perfiles,
             tipos_trabajador:tipo_trabajador,
             mensaje:mensaje,
+            id_perfil:lista_perfiles[0].id,
+            id_tipo_trabajador:tipo_trabajador[0].id,
+            id_funcion_trabajador:listaFuncionTrabajador.funcion_trabajador[0].id,
+            funcion_trabajador:listaFuncionTrabajador.funcion_trabajador,
             //
             msj_id_cedula:mensaje_campo,
             msj_nombres:mensaje_campo,
@@ -441,7 +455,15 @@ class ComponentTrabajadorForm extends React.Component{
             msj_correo:mensaje_campo,
         })
         this.props.history.push("/dashboard/configuracion/trabajador/registrar")
+        document.getElementById("id_funcion_trabajador").value=listaFuncionTrabajador.funcion_trabajador[0].id;
+        document.getElementById("grado_instruccion").value="ingeniero"
+        document.getElementById("id_perfil").value=lista_perfiles[0].id
+        document.getElementById("id_tipo_trabajador").value=tipo_trabajador[0].id
     }
+
+    // componentDidUpdate(){
+    //     alert("hola")
+    // }
 
     validarCampoNumero(nombre_campo){
         var estado=false
@@ -604,7 +626,7 @@ class ComponentTrabajadorForm extends React.Component{
     validarEmail() {
         const correo=this.state.correo
         var msj_correo=this.state.msj_correo
-        const exprecion=/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3,4})+$/
+        const exprecion=/^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/ 
         if(correo!==""){
             if (exprecion.test(correo)){
                 msj_correo[0]={mensaje:"",color_texto:""}
@@ -628,12 +650,8 @@ class ComponentTrabajadorForm extends React.Component{
         validar_cedula=this.validarCampoNumero("id_cedula"),
         validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_fecha_ingreso=this.validarFechaIngreso(),
-        validar_direccion=this.validarDireccion(),
-        validar_grado_instruccion=this.verificarSelect("grado_instruccion",this.state.grado_instruccion,this.state.grados_instruccion),
-        validar_perfil=this.verificarSelect("id_perfil",this.state.id_perfil,this.state.perfiles),
-        validar_tipo_trabajador=this.verificarSelect("id_tipo_trabajador",this.state.id_tipo_trabajador,this.state.tipos_trabajador),
-        validar_funcion_trabajador=this.verificarSelect("id_funcion_trabajador",this.state.id_funcion_trabajador,this.state.funcion_trabajador)
-        if(validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_fecha_ingreso.estado && validar_direccion && validar_grado_instruccion && validar_perfil && validar_tipo_trabajador && validar_funcion_trabajador){
+        validar_direccion=this.validarDireccion()
+        if(validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_fecha_ingreso.estado && validar_direccion){
             estado=true
             return {estado:estado,fecha:validar_fecha_ingreso.fecha}
         }
@@ -648,18 +666,21 @@ class ComponentTrabajadorForm extends React.Component{
         validar_apellidos=this.validarCampo("apellidos"),
         validar_cedula=this.validarCampoNumero("id_cedula"),
         validar_fecha_nacimiento=this.validarFechaNacimineto(),
-        validar_direccion=this.validarDireccion(),
-        validar_grado_instruccion=this.verificarSelect("grado_instruccion",this.state.grado_instruccion,this.state.grados_instruccion),
-        validar_perfil=this.verificarSelect("id_perfil",this.state.id_perfil,this.state.perfiles),
-        validar_tipo_trabajador=this.verificarSelect("id_tipo_trabajador",this.state.id_tipo_trabajador,this.state.tipos_trabajador),
-        validar_funcion_trabajador=this.verificarSelect("id_funcion_trabajador",this.state.id_funcion_trabajador,this.state.funcion_trabajador)
-        if(validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_direccion && validar_grado_instruccion && validar_perfil && validar_tipo_trabajador && validar_funcion_trabajador){
+        validar_direccion=this.validarDireccion()
+        if(validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_direccion){
             estado=true
             return {estado:estado,fecha:this.state.fecha_ingreso}
         }
         else{
             return {estado:estado}
         }
+    }
+
+    componentDidMount(){
+        // alert(document.getElementById("grado_instruccion").value)
+        this.setState({
+            grado_instruccion:document.getElementById("grado_instruccion").value
+        })
     }
 
     operacion(){
@@ -681,10 +702,10 @@ class ComponentTrabajadorForm extends React.Component{
             msj_correo:[{mensaje:"",color_texto:""}],
         }
         if(operacion==="registrar"){
-            const estado_validar_formulario=this.validarFormularioRegistrar()
             this.validarTelefono("telefono_movil")
             this.validarTelefono("telefono_local")
             this.validarEmail()
+            const estado_validar_formulario=this.validarFormularioRegistrar()
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
@@ -947,7 +968,7 @@ class ComponentTrabajadorForm extends React.Component{
                             defaultValue={this.state.id_tipo_trabajador}
                             option={this.state.tipos_trabajador}
                             />
-                            {this.state.mensaje.estado==="200" &&
+                            {this.state.funcion_trabajador.length>0 &&
                                 (
                                     <ComponentFormSelect
                                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -963,7 +984,7 @@ class ComponentTrabajadorForm extends React.Component{
                                     />
                                 )
                             }
-                            {this.state.mensaje.estado==="" &&
+                            {this.state.funcion_trabajador.length===0 &&
                                 (
                                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"></div>
                                 )
