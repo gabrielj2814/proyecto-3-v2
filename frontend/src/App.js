@@ -96,23 +96,23 @@ function App() {
         <Route exact path="/dashboard/configuracion/funcion-trabajador/:operacion/:id?" component={ComponentFuncionTrabajadorForm}/>
         <Route exact path="/dashboard/configuracion/funcion-trabajador:mensaje?" component={ComponentFuncionTrabajador}/>
 
-        <Route exact path="/dashboard/configuracion/estado/:consultar/:id" component={ComponentEstadoConsulta}/>
+        <Route exact path="/dashboard/configuracion/estado/consultar/:id" component={ComponentEstadoConsulta}/>
         <Route exact path="/dashboard/configuracion/estado/:operacion/:id?" component={ComponentEstadoForm}/>
         <Route exact path="/dashboard/configuracion/estado:mensaje?" component={ComponentEstado}/>
 
-        <Route exact path="/dashboard/configuracion/ciudad/:consultar/:id" component={ComponentCiudadConsulta}/>
+        <Route exact path="/dashboard/configuracion/ciudad/consultar/:id" component={ComponentCiudadConsulta}/>
         <Route exact path="/dashboard/configuracion/ciudad/:operacion/:id?" component={ComponentCiudadForm}/>
         <Route exact path="/dashboard/configuracion/ciudad:mensaje?" component={ComponentCiudad}/>
 
-        <Route exact path="/dashboard/configuracion/medico/:consultar/:id" component={ComponentMedicoConsulta}/>
+        <Route exact path="/dashboard/configuracion/medico/consultar/:id" component={ComponentMedicoConsulta}/>
         <Route exact path="/dashboard/configuracion/medico/:operacion/:id?" component={ComponentMedicoForm}/>
         <Route exact path="/dashboard/configuracion/medico:mensaje?" component={ComponentMedico}/>
 
-        <Route exact path="/dashboard/configuracion/especialidad/:consultar/:id" component={ComponentEspecialidadConsulta}/>
+        <Route exact path="/dashboard/configuracion/especialidad/consultar/:id" component={ComponentEspecialidadConsulta}/>
         <Route exact path="/dashboard/configuracion/especialidad/:operacion/:id?" component={ComponentEspecialidadForm}/>
         <Route exact path="/dashboard/configuracion/especialidad:mensaje?" component={ComponentEspecialidad}/>
 
-        <Route exact path="/dashboard/configuracion/tipo-cam/:consultar/:id" component={ComponentTipoCamConsulta}/>
+        <Route exact path="/dashboard/configuracion/tipo-cam/consultar/:id" component={ComponentTipoCamConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
         

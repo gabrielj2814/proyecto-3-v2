@@ -245,13 +245,20 @@ class ComponentTrabajadorRegistro extends React.Component{
         const validar_respusta_1=this.validarCampoTexto("respuesta_1"),
         validar_respusta_2=this.validarCampoTexto("respuesta_2"),
         validar_cedula=this.validarCampoNumero("id_cedula"),
-        validar_clave=this.validarClave(),
-        validar_pergunta_1=this.verificarSelect("pregunta_1",this.state.pregunta_1,this.state.lista_preguntas),
-        validar_pergunta_2=this.verificarSelect("pregunta_2",this.state.pregunta_2,this.state.lista_preguntas)
-        if(validar_respusta_1 && validar_respusta_2 && validar_cedula && validar_clave && validar_pergunta_1 && validar_pergunta_2){
+        validar_clave=this.validarClave()
+        if(validar_respusta_1 && validar_respusta_2 && validar_cedula && validar_clave){
             estado=true
         }
         return estado
+    }
+
+    componentDidMount(){
+        // alert(document.getElementById("pregunta_1").value)
+        // alert(document.getElementById("pregunta_2").value)
+        this.setState({
+            pregunta_1:document.getElementById("pregunta_1").value,
+            pregunta_2:document.getElementById("pregunta_2").value
+        })
     }
 
     registrar(){

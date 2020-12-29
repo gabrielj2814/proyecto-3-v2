@@ -60,7 +60,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 
     registrarModelo(){
         const SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.fecha_desde_permiso_trabajador}','${this.fecha_hasta_permiso_trabajador}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}');`
-        //console.log(SQL)
+        console.log(SQL)
         this.query(SQL)
     }
 
@@ -72,7 +72,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 
     async consultarPermisoTrabajadorXCedulaActivolModelo(){
         const SQL=`SELECT * FROM tpermisotrabajador WHERE id_cedula='${this.id_cedula}' AND estatu_permiso_trabajador='A' OR estatu_permiso_trabajador='E';`
-        //console.log(SQL)
+        // console.log(SQL)
         return await this.query(SQL)
     }
 

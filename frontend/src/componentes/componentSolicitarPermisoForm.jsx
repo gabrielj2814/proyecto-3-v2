@@ -177,14 +177,32 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 descripcion:"nombre_permiso"
             }
             var lista_vacia=[]
+            lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
             const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
+            // console.log("->>>",lista_permisos.permisos);
             this.setState({
                 id_cedula:id_cedula,
                 estatu_formulario:"nuevo",
                 id_permiso_trabajador:id_fomrulario.id,
-                lista_permisos:lista
+                lista_permisos:lista,
+                id_permiso:lista_permisos.permisos[0].id_permiso
             })
+            let objeto={
+                target:{
+                    value:lista_permisos.permisos[0].id_permiso
+                }
+            }
+            this.buscarPermiso(objeto)
         }
+    }
+
+    eliminarPermisoInactivos(permiso){
+        for(let contador=0;contador<permiso.length;contador++){
+            if(permiso[contador].estatu_permiso==="0"){
+                permiso.splice(contador,1);
+            }
+        }
+        return permiso;
     }
 
     // logica menu
@@ -226,7 +244,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
     }
 
     async buscarPermiso(a){
-        var input=a.target;
+        let input=a.target;
         const ruta_permiso=`http://localhost:8080/configuracion/permiso/consultar/${input.value}`
         const permiso=await this.consultarAlServidor(ruta_permiso)
         console.log(permiso)
@@ -290,6 +308,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 respuesta_servidor=respuesta.data
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_peticion
+                console.log(mensaje);
                 this.setState({mensaje:mensaje})
             })
             .catch(error=>{
@@ -314,6 +333,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             descripcion:"nombre_permiso"
         }
         var lista_vacia=[]
+        lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
         const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
         this.setState({
             id_cedula:this.state.id_cedula,
@@ -326,14 +346,19 @@ class ComponentSolicitarPermisoForm extends React.Component{
             estatu_permiso_trabajador:"",
             permiso_trabajador_dias_aviles:"",
 
-            id_permiso:"",
+            id_permiso:lista_permisos.permisos[0].id_permiso,
             nombre_permiso:"",
             dias_permiso:"",
             estatu_permiso:"",
             estatu_remunerado:"",
             estatu_dias_aviles:"",
         })
-        console.log(this.state)
+        let objeto={
+            target:{
+                value:lista_permisos.permisos[0].id_permiso
+            }
+        }
+        this.buscarPermiso(objeto)
     }
 
     render(){
@@ -506,7 +531,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
         const jsx_solicitud_permiso=(
             <div className="row justify-content-center">
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404") &&
+                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404" || this.state.mensaje.estado==="500") &&
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
