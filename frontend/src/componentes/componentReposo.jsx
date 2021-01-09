@@ -86,7 +86,7 @@ class ComponentReposo extends React.Component{
 
     async consultarTodosReposo(){
         var respuesta_servidor=[]
-        await axios.get("http://localhost:8080/configuracion/reposo/consultar-permisos")
+        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
         .then(respuesta=>{
           respuesta_servidor=respuesta.data.reposos
           console.log(respuesta.data)

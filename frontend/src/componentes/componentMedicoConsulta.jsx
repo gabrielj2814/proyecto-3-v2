@@ -24,7 +24,6 @@ class ComponentMedicoConsulta extends React.Component{
             id_medico:"" ,
             nombre_medico:"" ,
             apellido_medico:"" ,
-            estatu_medico:"1",
         }
 	}
 
@@ -134,12 +133,6 @@ class ComponentMedicoConsulta extends React.Component{
                         <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
                             <span className="propiedad">Apellido del Medico: </span>
                             <span className="valor">{this.state.apellido_medico}</span>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Estatus del Medico: </span>
-                            <span className="valor">{this.state.estatu_medico}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

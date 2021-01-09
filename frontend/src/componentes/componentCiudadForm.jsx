@@ -138,7 +138,7 @@ class ComponentCiudadForm extends React.Component{
                 ciudad={
                     id_ciudad:respuesta_servidor.ciudad.id_ciudad,
                     nombre_ciudad:respuesta_servidor.ciudad.nombre_ciudad,
-                    id_estado:respuesta_servidor.estado.ciudad,
+                    id_estado:respuesta_servidor.ciudad.id_estado,
                     estatu_ciudad:respuesta_servidor.ciudad.estatu_ciudad,
                 }
             }
@@ -366,7 +366,7 @@ class ComponentCiudadForm extends React.Component{
 
     enviarDatos(peticion){
         const datos={
-            funcion:{
+            ciudad:{
                 id_ciudad:this.state.id_ciudad,
                 nombre_ciudad:this.state.nombre_ciudad,
                 id_estado:this.state.id_estado,

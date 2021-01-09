@@ -29,7 +29,6 @@ class ComponentMedicoForm extends React.Component{
             id_medico:"" ,
             nombre_medico:"" ,
             apellido_medico:"" ,
-            estatu_medico:"1",
             modulo:"",// modulo menu
             estado_menu:false,
             //
@@ -41,6 +40,10 @@ class ComponentMedicoForm extends React.Component{
                 mensaje:"",
                 color_texto:""
             },
+            msj_id_medico:{
+                mensaje:"",
+                color_texto:""
+            },
             //
             mensaje:{
                 texto:"",
@@ -49,29 +52,30 @@ class ComponentMedicoForm extends React.Component{
         }
 	}
 
-	async generarIdMedico(){
-        var respuesta_servidor="",
-        mensaje={texto:"",estado:""}
-        await axios.get("http://localhost:8080/configuracion/medico/generar-id")
-        .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            //console.log(respuesta_servidor)
-        })
-        .catch(error=>{
-            mensaje.texto="no hay conxion con el servido"
-            mensaje.estado="500"
-            this.props.history.push(`/dashboard/configuracion/medico${JSON.stringify(mensaje)}`)
-        })
-        return respuesta_servidor
+	// async generarIdMedico(){
+    //     var respuesta_servidor="",
+    //     mensaje={texto:"",estado:""}
+    //     await axios.get("http://localhost:8080/configuracion/medico/generar-id")
+    //     .then(respuesta=>{
+    //         respuesta_servidor=respuesta.data
+    //         //console.log(respuesta_servidor)
+    //     })
+    //     .catch(error=>{
+    //         mensaje.texto="no hay conxion con el servido"
+    //         mensaje.estado="500"
+    //         this.props.history.push(`/dashboard/configuracion/medico${JSON.stringify(mensaje)}`)
+    //     })
+    //     return respuesta_servidor
+    // }
+
+    cambiarEstado(a){
+        var input=a.target;
+        this.setState({[input.name]:input.value})
     }
 
     async UNSAFE_componentWillMount(){
         const formulario=this.props.match.params.operacion
-        if(formulario==="registrar"){
-            const id=await this.generarIdMedico()
-            this.setState({id_medico:id.id})
-        }
-        else if(formulario==="actualizar"){
+        if(formulario==="actualizar"){
             const id=this.props.match.params.id
             this.consultarIdMedico(id)
         }
@@ -86,12 +90,11 @@ class ComponentMedicoForm extends React.Component{
             if(respuesta_servidor.estado_peticion==="200"){
                 const id_medico=respuesta_servidor.medico.id_medico,
                 nombre_medico=respuesta_servidor.medico.nombre_medico,
-                apellido_medico=respuesta_servidor.medico.apellido_medico,
-                estatu_medico=respuesta_servidor.medico.estatu_medico
+                apellido_medico=respuesta_servidor.medico.apellido_medico
                 this.setState({
                     id_medico:id_medico,
                     nombre_medico:nombre_medico,
-                    estatu_medico:estatu_medico
+                    apellido_medico:apellido_medico
                 })
             }
             else if(respuesta_servidor.estado_peticion==="404"){
@@ -141,18 +144,18 @@ class ComponentMedicoForm extends React.Component{
     }
 
     async agregar(){
-        const id=await this.generarIdMedico()
+        
         var mensaje_campo={
             mensaje:"",
             color_texto:""
         }
         this.setState({
-            id_medico:id,
+            id_medico:"",
             nombre_medico:"" ,
             apellido_medico:"",
-            estatu_medico:"1",
             msj_nombre_medico:mensaje_campo,
-            apellido_medico:mensaje_campo
+            msj_apellido_medico:mensaje_campo,
+            msj_id_medico:mensaje_campo
 
         })
         this.props.history.push("/dashboard/configuracion/medico/registrar")
@@ -196,18 +199,18 @@ class ComponentMedicoForm extends React.Component{
                 console.log("campo nombre OK")
                 msj_nombre_medico.mensaje=""
                 msj_nombre_medico.color_texto="rojo"
-                this.setState(msj_nombre_medico)
+                this.setState({msj_nombre_medico})
             }
             else{
                 msj_nombre_medico.mensaje="este campo solo permite letras"
                 msj_nombre_medico.color_texto="rojo"
-                this.setState(msj_nombre_medico)
+                this.setState({msj_nombre_medico})
             } 
         }
         else{
             msj_nombre_medico.mensaje="este campo no puede estar vacio"
             msj_nombre_medico.color_texto="rojo"
-            this.setState(msj_nombre_medico)
+            this.setState({msj_nombre_medico})
         }
         return estado
     }
@@ -222,25 +225,52 @@ class ComponentMedicoForm extends React.Component{
                 console.log("campo apellido OK")
                 msj_apellido_medico.mensaje=""
                 msj_apellido_medico.color_texto="rojo"
-                this.setState(msj_apellido_medico)
+                this.setState({msj_apellido_medico})
             }
             else{
                 msj_apellido_medico.mensaje="este campo solo permite letras"
                 msj_apellido_medico.color_texto="rojo"
-                this.setState(msj_apellido_medico)
+                this.setState({msj_apellido_medico})
             } 
         }
         else{
             msj_apellido_medico.mensaje="este campo no puede estar vacio"
             msj_apellido_medico.color_texto="rojo"
-            this.setState(msj_apellido_medico)
+            this.setState({msj_apellido_medico})
+        }
+        return estado
+    }
+    validarIdMedico(){
+        var estado=false
+        const id=this.state.id_medico,
+        exprecion=/[A-Za-z]/
+        var msj_id_medico=this.state.msj_id_medico
+        if(id!==""){
+            if(exprecion.test(id) || /[0-9]/g.test(id)){
+                estado=true
+                console.log("campo id OK")
+                msj_id_medico.mensaje=""
+                msj_id_medico.color_texto="rojo"
+                this.setState({msj_id_medico})
+            }
+            else{
+                msj_id_medico.mensaje="este campo solo permite letras o numeros"
+                msj_id_medico.color_texto="rojo"
+                this.setState(msj_id_medico)
+            } 
+        }
+        else{
+            msj_id_medico.mensaje="este campo no puede estar vacio"
+            msj_id_medico.color_texto="rojo"
+            this.setState({msj_id_medico})
         }
         return estado
     }
     validar(){
-        const respuesta_validar_nombre =this.validarDescripcion(),
-        respuesta_validar_apellido = this.validarApellido()
-        if(respuesta_validar_nombre && respuesta_validar_apellido){
+        const respuesta_validar_nombre =this.validarNombre(),
+        respuesta_validar_apellido = this.validarApellido(),
+        respuestaIdMedico=this.validarIdMedico()
+        if(respuesta_validar_nombre && respuesta_validar_apellido && respuestaIdMedico){
             return true
         }
         else{
@@ -254,7 +284,7 @@ class ComponentMedicoForm extends React.Component{
             const estado_validar_formulario=this.validar()
             if(estado_validar_formulario){
                 this.enviarDatos((objeto)=>{
-                    const mensaje =this.state.mensaje
+                    let mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.post("http://localhost:8080/configuracion/medico/registrar",objeto)
                     .then(respuesta=>{
@@ -279,7 +309,7 @@ class ComponentMedicoForm extends React.Component{
             const estado_validar_formulario=this.validar()
             if(estado_validar_formulario){
                 this.enviarDatos((objeto)=>{
-                    const mensaje =this.state.mensaje
+                    let mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.put(`http://localhost:8080/configuracion/medico/actualizar/${this.state.id_medico}`,objeto)
                     .then(respuesta=>{
@@ -307,8 +337,7 @@ class ComponentMedicoForm extends React.Component{
             medico:{
             id_medico:this.state.id_medico,
             nombre_medico:this.state.nombre_medico,
-            apellido_medico:this.state.apellido_medico,
-            estatu_medico:this.state.estatu_medico
+            apellido_medico:this.state.apellido_medico
             }
         }
         petion(objeto)
@@ -358,12 +387,15 @@ class ComponentMedicoForm extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             nombreCampo="Codigo del Medico:"
-                            activo="no"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_medico}
+                            activo="si"
                             type="text"
                             value={this.state.id_medico}
                             name="id_medico"
                             id="id_medico"
                             placeholder="Codigo Medico"
+                            eventoPadre={this.cambiarEstado}
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -379,25 +411,22 @@ class ComponentMedicoForm extends React.Component{
                             placeholder="Nombre Medico"
                             eventoPadre={this.validarTexto}
                             />
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
-                        </div>
-                        <div className="row justify-content-center">
-                            <ComponentFormRadioState
-                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            extra="custom-control-inline"
-                            nombreCampoRadio="Estatus:"
-                            name="estatu_medico"
-                            nombreLabelRadioA="Activo"
-                            idRadioA="activoA"
-                            checkedRadioA={this.state.estatu_medico}
-                            valueRadioA="1"
-                            nombreLabelRadioB="Inactivo"
-                            idRadioB="activoB"
-                            valueRadioB="0"
-                            eventoPadre={this.cambiarEstado}
-                            checkedRadioB={this.state.estatu_medico}
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            obligatorio="si"
+                            mensaje={this.state.msj_apellido_medico}
+                            nombreCampo="Apellido del Medico:"
+                            activo="si"
+                            type="text"
+                            value={this.state.apellido_medico}
+                            name="apellido_medico"
+                            id="apellido_medico"
+                            placeholder="Apellido Medico"
+                            eventoPadre={this.validarTexto}
                             />
                         </div>
+                        
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
