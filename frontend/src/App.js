@@ -27,6 +27,7 @@ import ComponentPermisoConsulta from './componentes/componentPermisoConsulta'
 //REPOSO
 import ComponentReposo from './componentes/componentReposo'
 import ComponentReposoForm from './componentes/componentReposoForm'
+import ComponentReposoConsulta from './componentes/componentReposoConsulta'
 //TIPO TRABAJADOR
 import ComponentTipoTrabajador from './componentes/componentTipoTrab'
 import ComponentTipoTrabajadorForm from './componentes/componentTipoTrabForm'
@@ -43,7 +44,7 @@ import ComponentFuncionTrabajador from './componentes/componentFuncionTrabajador
 import ComponentEstado from './componentes/componentEstado'
 import ComponentEstadoForm from './componentes/componentEstadoForm'
 import ComponentEstadoConsulta from './componentes/componentEstadoConsulta'
-//ESTADO
+//CIUDAD
 import ComponentCiudad from './componentes/componentCiudad'
 import ComponentCiudadForm from './componentes/componentCiudadForm'
 import ComponentCiudadConsulta from './componentes/componentCiudadConsulta'
@@ -83,15 +84,18 @@ function App() {
         <Route exact path="/dashboard/configuracion/permiso:mensaje?" component={ComponentPermiso}/>
 
 
+        <Route exact path="/dashboard/configuracion/reposo/consultar/:id" component={ComponentReposoConsulta}/>
         <Route exact path="/dashboard/configuracion/reposo/:operacion/:id?" component={ComponentReposoForm}/>
         <Route exact path="/dashboard/configuracion/reposo:mensaje?" component={ComponentReposo}/>
 
         <Route exact path="/dashboard/configuracion/tipo-trabajador/consultar/:id" component={ComponentTipoTrabajadorConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-trabajador/:operacion/:id?" component={ComponentTipoTrabajadorForm}/>
         <Route exact path="/dashboard/configuracion/tipo-trabajador:mensaje?" component={ComponentTipoTrabajador}/>
+
         <Route exact path="/dashboard/configuracion/trabajador/consultar/:id" component={ComponentTrabajadorConsulta}/>
         <Route exact path="/dashboard/configuracion/trabajador/:operacion/:id?" component={ComponentTrabajadorForm}/>
         <Route exact path="/dashboard/configuracion/trabajador:mensaje?" component={ComponentTrabajador}/>
+
         <Route exact path="/dashboard/configuracion/funcion-trabajador/consultar/:id" component={ComponentFuncionTrabajadorConsulta}/>
         <Route exact path="/dashboard/configuracion/funcion-trabajador/:operacion/:id?" component={ComponentFuncionTrabajadorForm}/>
         <Route exact path="/dashboard/configuracion/funcion-trabajador:mensaje?" component={ComponentFuncionTrabajador}/>

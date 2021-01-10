@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
-import '../css/componentCiudadConsulta.css'
+import '../css/componentReposoConsulta.css'
 //JS
 import axios from 'axios'
 //componentes
@@ -11,47 +11,45 @@ import ComponentDashboard from './componentDashboard'
 //sub componentes
 import InputButton from '../subComponentes/input_button' 
 
+class ComponentReposoConsulta extends React.Component{
 
-class ComponentCiudadConsulta extends React.Component{
-	constructor(){
-		super();
-		this.mostrarModulo=this.mostrarModulo.bind(this);
+
+    constructor(){
+        super()
+        this.mostrarModulo=this.mostrarModulo.bind(this)
         this.actualizar=this.actualizar.bind(this);
         this.regresar=this.regresar.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
-            //////
-            id_ciudad:"" ,
-            nombre_ciudad:"" ,
-            nombre_estado:"" ,
-            estatu_ciudad:"1",
         }
-	}
 
-	async UNSAFE_componentWillMount(){
-        const id=this.props.match.params.id
-        this.consultarCiudad(id)
     }
 
-    async consultarCiudad(id){
+    async UNSAFE_componentWillMount(){
+        const id=this.props.match.params.id
+        this.consultarReposo(id)
+    }
+
+    async consultarReposo(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}`)
+        await axios.get(`http://localhost:8080/configuracion/reposo/consultar/${id}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
+            console.log(respuesta_servidor)
             if(respuesta_servidor.estado_peticion==="200"){
                 this.setState({
-                    id_ciudad:respuesta_servidor.ciudad.id_ciudad,
-                    nombre_ciudad:respuesta_servidor.ciudad.nombre_ciudad,
-                    estatu_ciudad:(respuesta_servidor.ciudad.estatu_ciudad==="1")?"Activo":"Incativo",
+                    id_reposo:respuesta_servidor.reposo.id_reposo,
+                    dias_reposo:respuesta_servidor.reposo.dias_reposo,
+                    nombre_reposo:respuesta_servidor.reposo.nombre_reposo,
+                    estatu_reposo:(respuesta_servidor.reposo.estatu_reposo==="1")?"Activo":"Incativo"
                 })
-                this.consultarEstadoCiudad(respuesta_servidor.ciudad.id_estado)
             }
             else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_peticion
-                this.props.history.push(`/dashboard/configuracion/ciudad${JSON.stringify(mensaje)}`)
+                this.props.history.push(`/dashboard/configuracion/reposo${JSON.stringify(mensaje)}`)
             }
 
         })
@@ -59,23 +57,13 @@ class ComponentCiudadConsulta extends React.Component{
             console.log(error)
             mensaje.texto="No se puedo conectar con el servidor"
             mensaje.estado="500"
-            this.props.history.push(`/dashboard/configuracion/ciudad${JSON.stringify(mensaje)}`)
+            this.props.history.push(`/dashboard/configuracion/reposo${JSON.stringify(mensaje)}`)
         })
     }
 
-    async consultarEstadoCiudad(id){
-        let respuesta_servidor=null
-        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}`)
-        .then(respuesta => {
-            respuesta_servidor=respuesta.data
-            let nombre_estado=respuesta_servidor.estado.nombre_estado
-            this.setState({nombre_estado})
-        })
 
-    }
-
-    // logica menu
-    mostrarModulo(a){
+     // logica menu
+     mostrarModulo(a){
         var span=a.target;
         if(this.state.modulo===""){
             const estado="true-"+span.id;
@@ -107,45 +95,44 @@ class ComponentCiudadConsulta extends React.Component{
     }
 
     actualizar(){
-        this.props.history.push(`/dashboard/configuracion/ciudad/actualizar/${this.props.match.params.id}`)
+        this.props.history.push(`/dashboard/configuracion/reposo/actualizar/${this.props.match.params.id}`)
     }
 
     regresar(){
-        this.props.history.push("/dashboard/configuracion/ciudad");
+        this.props.history.push("/dashboard/configuracion/reposo");
     }
 
     render(){
-
-    	const jsx_ciudad_consulta=(
+        const component=(
             <div className="row justify-content-center">
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_ciudad_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-ciudad-consulta">
-                            <span className="titulo-ciudad-consulta">Ciudad : {this.state.id_ciudad} </span>
+                            <span className="titulo-ciudad-consulta">Reposo : {this.state.nombre_reposo} </span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Codigo Ciudad: </span>
-                            <span className="valor">{this.state.id_ciudad}</span>
+                            <span className="propiedad">Codigo Reposo: </span>
+                            <span className="valor">{this.state.id_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Nombre: </span>
-                            <span className="valor">{this.state.nombre_ciudad}</span>
+                            <span className="propiedad">Nombre Reposo: </span>
+                            <span className="valor">{this.state.nombre_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Estado: </span>
-                            <span className="valor">{this.state.nombre_estado}</span>
+                            <span className="propiedad">Dias Reposo: </span>
+                            <span className="valor">{this.state.dias_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Estatu Ciudad: </span>
-                            <span className="valor">{this.state.estatu_ciudad}</span>
+                            <span className="propiedad">Estatu Reposo: </span>
+                            <span className="valor">{this.state.estatu_reposo}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">
@@ -166,24 +153,29 @@ class ComponentCiudadConsulta extends React.Component{
                             />   
                         </div>
                     </div>
+                    
+                
                 </div>
             </div>
+
         )
 
-    	return(
-    		<div className="component_ciudad_consulta">
+
+        return(
+            <div className="component_reposo_consulta">
+            
                 <ComponentDashboard
                 eventoPadreMenu={this.mostrarModulo}
                 modulo={this.state.modulo}
                 estado_menu={this.state.estado_menu}
-                componente={jsx_ciudad_consulta}
+                componente={component}
                 />
+            
+            
             </div>
-    	)
-
+        )
     }
-
 
 }
 
-export default withRouter(ComponentCiudadConsulta)
+export default withRouter(ComponentReposoConsulta)

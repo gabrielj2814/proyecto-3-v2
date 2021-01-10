@@ -127,7 +127,7 @@ class ComponentReposo extends React.Component{
     
     consultarElementoTabla(a){
         let input=a.target;
-        //alert("Consultar -> "+input.id);
+        // alert("Consultar -> "+input.id);
         this.props.history.push("/dashboard/configuracion/reposo/consultar/"+input.id);
     }
 
