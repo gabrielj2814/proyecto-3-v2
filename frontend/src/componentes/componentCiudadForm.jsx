@@ -109,9 +109,11 @@ class ComponentCiudadForm extends React.Component{
             propiedad_id="id_estado",
             propiedad_descripcion="nombre_estado"
             const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            // console.log("->>>>",estado)
             this.setState({
                 id_ciudad:id,
-                estados:estado
+                estados:estado,
+                id_estado:estado[0].id
             })
         }
         else{
@@ -386,7 +388,7 @@ class ComponentCiudadForm extends React.Component{
         const formulario={
             id_ciudad:id,
             nombre_ciudad:"",
-            id_estado:"",
+            id_estado:estado[0].id,
             estatu_ciudad:"1",
             estados:estado
         }
@@ -396,6 +398,8 @@ class ComponentCiudadForm extends React.Component{
     regresar(){
         this.props.history.push("/dashboard/configuracion/ciudad");
     }
+
+    
 
     render(){
     	const jsx_ciudad=(
