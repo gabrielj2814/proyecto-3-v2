@@ -106,11 +106,13 @@ class ComponentFuncionTrabajador extends React.Component{
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
             nombre_propiedad_lista="tipos_trabajador",
             propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="descripcion_tipo_trabajador",
+            propiedad_estado="estatu_tipo_trabajador"
+            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             this.setState({
                 id_funcion_trabajador:id,
-                tipos_trabajador:tipo_trabajador
+                tipos_trabajador:tipo_trabajador,
+                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id
             })
         }
         else{
@@ -119,8 +121,9 @@ class ComponentFuncionTrabajador extends React.Component{
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
             nombre_propiedad_lista="tipos_trabajador",
             propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="descripcion_tipo_trabajador",
+            propiedad_estado="estatu_tipo_trabajador"
+            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             funcion.tipos_trabajador=tipo_trabajador
             this.setState(funcion)
         }
@@ -157,7 +160,7 @@ class ComponentFuncionTrabajador extends React.Component{
         return funcion
     }
 
-    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion){
+    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
         var respuesta_servidor=[]
         var lista=[]
         var mensaje={texto:"",estado:""}
@@ -168,7 +171,8 @@ class ComponentFuncionTrabajador extends React.Component{
                 var lista_vacia=[]
                 const propiedades={
                     id:propiedad_id,
-                    descripcion:propiedad_descripcion
+                    descripcion:propiedad_descripcion,
+                    estado:propiedad_estado
                 }
                 lista=this.formatoOptionSelect(respuesta_servidor[nombre_propiedad_lista],lista_vacia,propiedades)
             }
@@ -187,7 +191,9 @@ class ComponentFuncionTrabajador extends React.Component{
     formatoOptionSelect(lista,lista_vacia,propiedades){
         var veces=0
         while(veces<lista.length){
-            lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            if(lista[veces][propiedades.estado]==="1"){
+                lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            }
             veces+=1
         }
         return lista_vacia
@@ -380,12 +386,13 @@ class ComponentFuncionTrabajador extends React.Component{
         const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
         nombre_propiedad_lista="tipos_trabajador",
         propiedad_id="id_tipo_trabajador",
-        propiedad_descripcion="descripcion_tipo_trabajador"
-        const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+        propiedad_descripcion="descripcion_tipo_trabajador",
+        propiedad_estado="estatu_tipo_trabajador"
+        const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
         const formulario={
             id_funcion_trabajador:id,
             funcion_descripcion:"",
-            id_tipo_trabajador:"",
+            id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
             estatu_funcion_trabajador:"1",
             tipo_trabajador:tipo_trabajador
         }

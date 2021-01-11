@@ -123,23 +123,30 @@ class ComponentTrabajadorForm extends React.Component{
             const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
             nombre_propiedad_lista_1="perfiles",
             propiedad_id_1="id_perfil",
-            propiedad_descripcion_1="nombre_perfil"
-            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1)
+            propiedad_descripcion_1="nombre_perfil",
+            propiedad_estado_1="estatu_perfil"
+            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
             ///
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
             nombre_propiedad_lista="tipos_trabajador",
             propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="descripcion_tipo_trabajador",
+            propiedad_estado="estatu_tipo_trabajador"
+            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             ///
-            alert(tipo_trabajador[0].id)
-            let listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+            // alert(tipo_trabajador[0].id)
+            let listaFuncionTrabajador={
+                funcion_trabajador:[]
+            }
+            if(tipo_trabajador.length!==0){
+                listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+            }
             this.setState({
                 perfiles:lista_perfiles,
                 tipos_trabajador:tipo_trabajador,
-                id_perfil:lista_perfiles[0].id,
-                id_tipo_trabajador:tipo_trabajador[0].id,
-                id_funcion_trabajador:listaFuncionTrabajador.funcion_trabajador[0].id,
+                id_perfil:(lista_perfiles.length===0)?null:lista_perfiles[0].id,
+                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
+                id_funcion_trabajador:(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id,
                 funcion_trabajador:listaFuncionTrabajador.funcion_trabajador
             })
     }
@@ -147,13 +154,15 @@ class ComponentTrabajadorForm extends React.Component{
             const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
             nombre_propiedad_lista_1="perfiles",
             propiedad_id_1="id_perfil",
-            propiedad_descripcion_1="nombre_perfil"
-            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1)
+            propiedad_descripcion_1="nombre_perfil",
+            propiedad_estado_1="estatu_perfil"
+            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
             nombre_propiedad_lista="tipos_trabajador",
             propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="descripcion_tipo_trabajador",
+            propiedad_estado="estatu_tipo_trabajador"
+            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
 
             const id=this.props.match.params.id
             await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
@@ -179,7 +188,8 @@ class ComponentTrabajadorForm extends React.Component{
         id_perfil="",
         id_tipo_trabajador="",
         id_funcion_trabajador=""
-        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
@@ -244,7 +254,7 @@ class ComponentTrabajadorForm extends React.Component{
         document.getElementById("id_funcion_trabajador").value=id_funcion_trabajador
     }
 
-    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion){
+    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
         var respuesta_servidor=[]
         var lista=[]
         var mensaje={texto:"",estado:""}
@@ -255,7 +265,8 @@ class ComponentTrabajadorForm extends React.Component{
                 var lista_vacia=[]
                 const propiedades={
                     id:propiedad_id,
-                    descripcion:propiedad_descripcion
+                    descripcion:propiedad_descripcion,
+                    estado:propiedad_estado
                 }
                 lista=this.formatoOptionSelect(respuesta_servidor[nombre_propiedad_lista],lista_vacia,propiedades)
             }
@@ -274,7 +285,9 @@ class ComponentTrabajadorForm extends React.Component{
     formatoOptionSelect(lista,lista_vacia,propiedades){
         var veces=0
         while(veces<lista.length){
-            lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            if(lista[veces][propiedades.estado]==="1"){
+                lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            }
             veces+=1
         }
         return lista_vacia
@@ -353,7 +366,8 @@ class ComponentTrabajadorForm extends React.Component{
                     var lista_vacia=[]
                     const propiedades={
                         id:"id_funcion_trabajador",
-                        descripcion:"funcion_descripcion"
+                        descripcion:"funcion_descripcion",
+                        estado:"estatu_funcion_trabajador"
                     }
                     const lista_funciones_trabajador=this.formatoOptionSelect(respuesta_servidor.funciones,lista_vacia,propiedades)
                     
@@ -408,15 +422,22 @@ class ComponentTrabajadorForm extends React.Component{
         const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
         nombre_propiedad_lista_1="perfiles",
         propiedad_id_1="id_perfil",
-        propiedad_descripcion_1="nombre_perfil"
-        const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1)
+        propiedad_descripcion_1="nombre_perfil",
+        propiedad_estado_1="estatu_perfil"
+        const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
         const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
         nombre_propiedad_lista="tipos_trabajador",
         propiedad_id="id_tipo_trabajador",
-        propiedad_descripcion="descripcion_tipo_trabajador"
-        const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
-        alert("agregando nuevo formulario")
-        let listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+        propiedad_descripcion="descripcion_tipo_trabajador",
+        propiedad_estado="estatu_tipo_trabajador"
+        const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+        // alert("agregando nuevo formulario")
+        let listaFuncionTrabajador={
+            funcion_trabajador:[]
+        }
+        if(tipo_trabajador.length!==0){
+            listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+        }
         console.log(listaFuncionTrabajador);
         var mensaje=this.state.mensaje
         mensaje.estado=""
@@ -435,9 +456,9 @@ class ComponentTrabajadorForm extends React.Component{
             perfiles:lista_perfiles,
             tipos_trabajador:tipo_trabajador,
             mensaje:mensaje,
-            id_perfil:lista_perfiles[0].id,
-            id_tipo_trabajador:tipo_trabajador[0].id,
-            id_funcion_trabajador:listaFuncionTrabajador.funcion_trabajador[0].id,
+            id_perfil:(lista_perfiles.length===0)?null:lista_perfiles[0].id,
+            id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
+            id_funcion_trabajador:(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id,
             funcion_trabajador:listaFuncionTrabajador.funcion_trabajador,
             //
             msj_id_cedula:mensaje_campo,
@@ -455,10 +476,10 @@ class ComponentTrabajadorForm extends React.Component{
             msj_correo:mensaje_campo,
         })
         this.props.history.push("/dashboard/configuracion/trabajador/registrar")
-        document.getElementById("id_funcion_trabajador").value=listaFuncionTrabajador.funcion_trabajador[0].id;
+        document.getElementById("id_funcion_trabajador").value=(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id;
         document.getElementById("grado_instruccion").value="ingeniero"
-        document.getElementById("id_perfil").value=lista_perfiles[0].id
-        document.getElementById("id_tipo_trabajador").value=tipo_trabajador[0].id
+        document.getElementById("id_perfil").value=(lista_perfiles.length===0)?null:lista_perfiles[0].id
+        document.getElementById("id_tipo_trabajador").value=(tipo_trabajador.length===0)?null:tipo_trabajador[0].id
     }
 
     // componentDidUpdate(){
@@ -758,6 +779,7 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     enviarDatos(estado_validar_formulario,petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             trabajador:{
                 id_cedula:this.state.id_cedula,
@@ -775,7 +797,8 @@ class ComponentTrabajadorForm extends React.Component{
                 estatu_trabajador:this.state.estatu_trabajador,
                 id_perfil:this.state.id_perfil,
                 id_funcion_trabajador:this.state.id_funcion_trabajador
-            }
+            },
+            token:token
         }
         petion(objeto)
     }

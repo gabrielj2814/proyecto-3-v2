@@ -77,20 +77,23 @@ class ComponentCamFormulario extends React.Component {
             const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
             nombre_propiedad_lista="estados",
             propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado"
-            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="nombre_estado",
+            propiedad_estado="estatu_estado"
+            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             console.log("lista de estados ->>>",estados)
             const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
             nombre_propiedad_lista_2="ciudades",
             propiedad_id_2="id_ciudad",
-            propiedad_descripcion_2="nombre_ciudad"
-            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2)
+            propiedad_descripcion_2="nombre_ciudad",
+            propiedad_estado_2="estatu_ciudad"
+            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
             console.log("lista de de ciudades por estado ->>>",ciudades)
             const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
             nombre_propiedad_lista_3="tipo_cams",
             propiedad_id_3="id_tipo_cam",
-            propiedad_descripcion_3="nombre_tipo_cam"
-            const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3)
+            propiedad_descripcion_3="nombre_tipo_cam",
+            propiedad_estado_3="estatu_tipo_cam"
+            const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
             console.log("lista todos los tipo cam ->>>",tipo_cams)
             this.setState({
                 tipo_cams,
@@ -104,7 +107,7 @@ class ComponentCamFormulario extends React.Component {
 
     }
 
-    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion){
+    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
         var respuesta_servidor=[]
         var lista=[]
         var mensaje={texto:"",estado:""}
@@ -115,7 +118,8 @@ class ComponentCamFormulario extends React.Component {
                 var lista_vacia=[]
                 const propiedades={
                     id:propiedad_id,
-                    descripcion:propiedad_descripcion
+                    descripcion:propiedad_descripcion,
+                    estado:propiedad_estado
                 }
                 lista=this.formatoOptionSelect(respuesta_servidor[nombre_propiedad_lista],lista_vacia,propiedades)
             }
@@ -134,7 +138,9 @@ class ComponentCamFormulario extends React.Component {
     formatoOptionSelect(lista,lista_vacia,propiedades){
         var veces=0
         while(veces<lista.length){
-            lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            if(lista[veces][propiedades.estado]==="1"){
+                lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            }
             veces+=1
         }
         return lista_vacia
@@ -145,8 +151,9 @@ class ComponentCamFormulario extends React.Component {
         const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
         nombre_propiedad_lista_2="ciudades",
         propiedad_id_2="id_ciudad",
-        propiedad_descripcion_2="nombre_ciudad"
-        const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2)
+        propiedad_descripcion_2="nombre_ciudad",
+        propiedad_estado_2="estatu_ciudad"
+        const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
         console.log("lista de de ciudades por estado ->>>",ciudades)
         this.setState({
             id_estado:input.value,
@@ -197,7 +204,149 @@ class ComponentCamFormulario extends React.Component {
     }
 
     operacion(){
-        alert("operacion")
+        // alert("operacion")
+        if(this.validarFormulario()){
+            alert("formulario ok")
+        }
+    }
+
+    validarFormulario(){
+        let estadoFormulario=false
+        const estadoNombreCam=this.validarNombreCam();
+        const estadoTelelfono=this.validarTelefono();
+        const estatuEstado=this.validarSelectNull("estado");
+        const estatuCiudad=this.validarSelectNull("ciudad");
+        const estatuTipoCam=this.validarSelectNull("tipo_cam"); 
+        const estatuDireccion=this.validarDireccion(); 
+        if(estadoNombreCam && estadoTelelfono && estatuEstado && estatuCiudad && estatuTipoCam && estatuDireccion){
+            estadoFormulario=true;
+        }
+        return estadoFormulario;
+    }
+
+    validarTelefono(){
+        let estado=false;
+        let $inputTelefono=document.getElementById("telefono_cam");
+        let msj_telefono_cam=JSON.parse(JSON.stringify(this.state.msj_telefono_cam))
+        const exprecion1=/\s/g;
+        const exprecion2=/[a-zA-Z]/g;
+        if($inputTelefono.value!==""){
+
+            if(!exprecion1.test($inputTelefono.value)){
+
+                if(!exprecion2.test($inputTelefono.value)){
+                    
+                    if($inputTelefono.value.length===11){
+                        estado = true;
+                        msj_telefono_cam.mensaje="";
+                        msj_telefono_cam.color_texto="";
+                        this.setState({msj_telefono_cam});
+                    }
+                    else{
+                        msj_telefono_cam.mensaje=`numeros insuficientes -> ${$inputTelefono.value.length}/11`;
+                        msj_telefono_cam.color_texto="rojo";
+                        this.setState({msj_telefono_cam});
+                    }
+                    
+                }
+                else{
+                    msj_telefono_cam.mensaje="este campo no permite letras";
+                    msj_telefono_cam.color_texto="rojo";
+                    this.setState({msj_telefono_cam});
+                }
+
+            }
+            else{
+                msj_telefono_cam.mensaje="este campo no permite espacios en blanco";
+                msj_telefono_cam.color_texto="rojo";
+                this.setState({msj_telefono_cam});
+            }
+
+        }
+        else{
+            msj_telefono_cam.mensaje="esta campo no puede estar vacio";
+            msj_telefono_cam.color_texto="rojo";
+            this.setState({msj_telefono_cam});
+        }
+
+        return estado;
+    }
+
+    validarNombreCam(){
+        let estado=false;
+        let msj_nombre_cam=JSON.parse(JSON.stringify(this.state.msj_nombre_cam));
+        let $inputNombreCam=document.getElementById("nombre_cam");
+        const exprecion1=/[a-zA-Z]|[0-9]/g;
+        if($inputNombreCam.value!==""){
+
+            if(exprecion1.test($inputNombreCam.value)){
+                estado = true;
+                msj_nombre_cam.mensaje="";
+                msj_nombre_cam.color_texto="";
+                this.setState({msj_nombre_cam});
+
+            }
+            else{
+                msj_nombre_cam.mensaje="este campo no permite espacios en blanco";
+                msj_nombre_cam.color_texto="rojo";
+                this.setState({msj_nombre_cam});
+            }
+
+        }
+        else{
+            msj_nombre_cam.mensaje="esta campo no puede estar vacio";
+            msj_nombre_cam.color_texto="rojo";
+            this.setState({msj_nombre_cam});
+        }
+        return estado;
+    }
+
+    validarSelectNull(valorSelect){
+        let estado=false;
+        let msj=JSON.parse(JSON.stringify(this.state["msj_id_"+valorSelect]));
+        if(this.state["id_"+valorSelect]!==null){
+            estado = true
+            msj.mensaje="";
+            msj.color_texto="";
+            this.setState({["msj_"+valorSelect]:msj})
+        }
+        else{
+            msj.mensaje="este combo esta vacio por favor inserte datos primero en el modulo de "+valorSelect+" para poder continuar";
+            msj.color_texto="rojo";
+            this.setState({["msj_"+valorSelect]:msj})
+        }
+        return estado;
+
+    }
+
+    validarDireccion(){
+        let estado=false;
+        let $inputDireccion=document.getElementById("direccion_cam");
+        let msj_direccion_cam=JSON.parse(JSON.stringify(this.state.msj_direccion_cam));
+        const exprecion1=/[a-zA-Z]|[0-9]/g;
+        if($inputDireccion.value!==""){
+
+            if(exprecion1.test($inputDireccion.value)){
+                estado = true;
+                msj_direccion_cam.mensaje="";
+                msj_direccion_cam.color_texto="";
+                this.setState({msj_direccion_cam});
+
+            }
+            else{
+                msj_direccion_cam.mensaje="este campo no permite espacios en blanco";
+                msj_direccion_cam.color_texto="rojo";
+                this.setState({msj_direccion_cam});
+            }
+
+        }
+        else{
+            msj_direccion_cam.mensaje="esta campo no puede estar vacio";
+            msj_direccion_cam.color_texto="rojo";
+            this.setState({msj_direccion_cam});
+        }
+
+        return estado
     }
 
     render(){
@@ -266,7 +415,7 @@ class ComponentCamFormulario extends React.Component {
                         <div className="row justify-content-center">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
-                            nombreCampoTextArea="Dirección"
+                            nombreCampoTextArea="Dirección:"
                             clasesTextArear="form-control"
                             obligatorio="si"
                             value={this.state.direccion_cam}

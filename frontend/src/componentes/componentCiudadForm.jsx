@@ -107,13 +107,14 @@ class ComponentCiudadForm extends React.Component{
             const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
             nombre_propiedad_lista="estados",
             propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado"
-            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="nombre_estado",
+            propiedad_estado="estatu_estado"
+            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             // console.log("->>>>",estado)
             this.setState({
                 id_ciudad:id,
                 estados:estado,
-                id_estado:estado[0].id
+                id_estado:(estado.length===0)?null:estado[0].id
             })
         }
         else{
@@ -122,8 +123,9 @@ class ComponentCiudadForm extends React.Component{
             const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
             nombre_propiedad_lista="estados",
             propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado"
-            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+            propiedad_descripcion="nombre_estado",
+            propiedad_estado="estatu_estado"
+            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             ciudad.estados=estado
             this.setState(ciudad)
         }
@@ -160,7 +162,7 @@ class ComponentCiudadForm extends React.Component{
         return ciudad
     }
 
-    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion){
+    async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
         var respuesta_servidor=[]
         var lista=[]
         var mensaje={texto:"",estado:""}
@@ -171,7 +173,8 @@ class ComponentCiudadForm extends React.Component{
                 var lista_vacia=[]
                 const propiedades={
                     id:propiedad_id,
-                    descripcion:propiedad_descripcion
+                    descripcion:propiedad_descripcion,
+                    estado:propiedad_estado
                 }
                 lista=this.formatoOptionSelect(respuesta_servidor[nombre_propiedad_lista],lista_vacia,propiedades)
             }
@@ -190,7 +193,9 @@ class ComponentCiudadForm extends React.Component{
     formatoOptionSelect(lista,lista_vacia,propiedades){
         var veces=0
         while(veces<lista.length){
-            lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            if(lista[veces][propiedades.estado]==="1"){
+                lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+            }
             veces+=1
         }
         return lista_vacia
@@ -383,12 +388,13 @@ class ComponentCiudadForm extends React.Component{
         const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
         nombre_propiedad_lista="estados",
         propiedad_id="id_estado",
-        propiedad_descripcion="nombre_estado"
-        const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion)
+        propiedad_descripcion="nombre_estado",
+        propiedad_estado="estatu_estado"
+        const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
         const formulario={
             id_ciudad:id,
             nombre_ciudad:"",
-            id_estado:estado[0].id,
+            id_estado:(estado.length===0)?null:estado[0].id,
             estatu_ciudad:"1",
             estados:estado
         }

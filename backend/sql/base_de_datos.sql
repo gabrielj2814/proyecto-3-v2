@@ -224,3 +224,14 @@ CREATE TABLE  tasistencia(
     constraint PK_id_asistencia primary key(id_asistencia),
     constraint FK_id_cedula_tasistencia foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
 );
+
+CREATE TABLE tvitacora(
+    id_vitacora SERIAL,
+    id_cedula character varying(8) NOT NULL,
+    operacion character varying(6) NOT NULL,
+    tabla character varying(50) NOT NULL,
+    fecha_operacion DATE NOT NULL,
+    aquien character varying(50),
+    constraint PK_id_vitacora primary key(id_vitacora),
+    constraint FK_id_cedula_tvitacora foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
