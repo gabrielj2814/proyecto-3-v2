@@ -18,7 +18,7 @@ const componentFormTextArea = (props) => {
                 {props.nombreCampoTextArea}</label>
                 <textarea  
                 value={props.value}
-                className={props.clasesTextArear}
+                className={props.clasesTextArear+" textArea"}
                 name={props.name}
                 id={props.id}
                 onChange={props.eventoPadre}

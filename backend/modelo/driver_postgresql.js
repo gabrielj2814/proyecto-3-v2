@@ -22,10 +22,6 @@ class DriverPostgreSQL {
         console.log("----------Fin------------");
         const respuesta=await this.database.query(sql)
         // console.log(respuesta)
-        // Promise.all([respuesta])
-        // .then(res => {
-        //     console.log(res)
-        // })
         return respuesta
         //console.log("estoy en el driver de conexion")
     }

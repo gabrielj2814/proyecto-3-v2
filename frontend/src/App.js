@@ -60,6 +60,8 @@ import ComponentEspecialidadConsulta from './componentes/componentEspecialidadCo
 import ComponentTipoCam from './componentes/componentTipoCam'
 import ComponentTipoCamForm from './componentes/componentTipoCamForm'
 import ComponentTipoCamConsulta from './componentes/componentTipoCamConsulta'
+// CAM
+import ComponentCamFormulario from "./componentes/componentCamFormulario"
 // HORARIO
 import componentHorario from './componentes/componentHorario';
 // ASISTENCIA
@@ -120,11 +122,16 @@ function App() {
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
         
+        <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
+        
+        
+        <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
+
+
+
         <Route exact path="/dashboard/transaccion/permiso-trabajador/solicitar" component={ComponentSolicitarPermisoForm}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador:mensaje?" component={ComponentPermisoTrabajador}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador/editar:id" component={ComponentEditarPermisoTrabajador}/>
-
-        <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
 
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
         </Switch>

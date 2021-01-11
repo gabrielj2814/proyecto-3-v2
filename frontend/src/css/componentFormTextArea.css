@@ -13,3 +13,7 @@
 .color-texto-blanco{
     color:white
 }
+
+.textArea{
+    resize: none;
+}

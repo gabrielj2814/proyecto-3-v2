@@ -300,6 +300,7 @@ class ComponentEspecialidadForm extends React.Component{
                         </div>
                     }
                 </div>
+
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_especialidad">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-especialidad">
@@ -317,7 +318,7 @@ class ComponentEspecialidadForm extends React.Component{
                         </div>
                     </div>
     
-                    <form id="form_tipo_traba" onClick="" >
+                    <form  >
                         <div className="row justify-content-center">
                                 <ComponentFormCampo
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
