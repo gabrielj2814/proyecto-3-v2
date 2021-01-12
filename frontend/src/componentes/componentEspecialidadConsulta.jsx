@@ -68,7 +68,8 @@ class ComponentEspecialidadConsulta extends React.Component{
     async consultarEspecialidad(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/especialidad/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/especialidad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
            if(respuesta_servidor.estado_peticion==="200"){

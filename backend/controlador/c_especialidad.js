@@ -8,24 +8,25 @@ EspecialidadControlador.registrarControlador=async (req,res,next) => {
     const ESPECIALIDAD=new EspecialidadModelo()
     const {especialidad,token} = req.body
     ESPECIALIDAD.setDatos(especialidad)
-    const especialidad_result=await ESPECIALIDAD.consultarModelo()
-    if(!EspecialidadControlador.verificarExistencia(especialidad_result)){
-        ESPECIALIDAD.registrarModelo()
-        respuesta_api.mensaje="registro completado"
-        respuesta_api.estado_peticion="200"
-        req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tespecialidad",especialidad.id_especialidad)
-        next()
-        // res.writeHead(200,{"Content-Type":"application/json"})
-        // res.write(JSON.stringify(respuesta_api))
-        // res.end()
-    }
-    else{
-        respuesta_api.mensaje=`al registrar, ya hay un resgitro con este codigo -> ${especialidad.id_especialidad}`
-        respuesta_api.estado_peticion="404"
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
-    }
+    ESPECIALIDAD.registrarModelo()
+    respuesta_api.mensaje="registro completado"
+    respuesta_api.estado_peticion="200"
+    req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tespecialidad",especialidad.id_especialidad)
+    next()
+    // res.writeHead(200,{"Content-Type":"application/json"})
+    // res.write(JSON.stringify(respuesta_api))
+    // res.end()
+    // const especialidad_result=await ESPECIALIDAD.consultarModelo()
+    // if(!EspecialidadControlador.verificarExistencia(especialidad_result)){
+       
+    // }
+    // else{
+    //     respuesta_api.mensaje=`al registrar, ya hay un resgitro con este codigo -> ${especialidad.id_especialidad}`
+    //     respuesta_api.estado_peticion="404"
+    //     res.writeHead(200,{"Content-Type":"application/json"})
+    //     res.write(JSON.stringify(respuesta_api))
+    //     res.end()
+    // }
 }
 
 EspecialidadControlador.consultarControlador=async (req,res,next) => {

@@ -61,11 +61,7 @@ class ComponentEspecialidadForm extends React.Component{
 
     async UNSAFE_componentWillMount(){
         const formulario=this.props.match.params.operacion
-        if(formulario==="registrar"){
-            const id=await this.generarIdEspecialidad()
-            this.setState({id_especialidad:id.id})
-        }
-        else if(formulario==="actualizar"){
+        if(formulario==="actualizar"){
             const id=this.props.match.params.id
             this.consultar_id_especialidad(id)
         }
@@ -74,7 +70,8 @@ class ComponentEspecialidadForm extends React.Component{
     async consultar_id_especialidad(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/especialidad/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/especialidad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -267,12 +264,14 @@ class ComponentEspecialidadForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
-            especialidades:{
+            especialidad:{
             id_especialidad:this.state.id_especialidad,
             nombre_especialidad:this.state.nombre_especialidad,
             estatu_especialidad:this.state.estatu_especialidad
-            }
+            },
+            token
         }
         petion(objeto)
     }
