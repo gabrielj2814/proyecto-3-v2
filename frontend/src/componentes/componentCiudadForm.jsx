@@ -135,7 +135,8 @@ class ComponentCiudadForm extends React.Component{
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
         var ciudad={}
-        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -372,13 +373,15 @@ class ComponentCiudadForm extends React.Component{
     }
 
     enviarDatos(peticion){
+        const token=localStorage.getItem('usuario')
         const datos={
             ciudad:{
                 id_ciudad:this.state.id_ciudad,
                 nombre_ciudad:this.state.nombre_ciudad,
                 id_estado:this.state.id_estado,
                 estatu_ciudad:this.state.estatu_ciudad
-            }
+            },
+            token
         }
         peticion(datos)
     }

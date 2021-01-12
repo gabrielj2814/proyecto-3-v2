@@ -74,7 +74,8 @@ class ComponentTipoTrabForm extends React.Component{
     async consultar_id_tipo_traba(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/tipo-trabajador/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/tipo-trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -267,12 +268,14 @@ class ComponentTipoTrabForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             tipo_trabajador:{
             id_tipo_trabajador:this.state.id_tipo_trabajador,
             descripcion_tipo_trabajador:this.state.descripcion_tipo_trabajador,
             estatu_tipo_trabajador:this.state.estatu_tipo_trabajador
-            }
+            },
+            token
         }
         petion(objeto)
     }

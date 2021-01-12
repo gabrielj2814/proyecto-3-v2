@@ -67,7 +67,8 @@ class ComponentTipoCamConsulta extends React.Component{
     async consultarTipoCam(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
            if(respuesta_servidor.estado_peticion==="200"){

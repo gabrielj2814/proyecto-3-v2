@@ -91,10 +91,12 @@ class ComponentAsistencia extends React.Component {
 
     enviarDatos(){
         let mensaje={};
+        const token=localStorage.getItem('usuario')
         let json={
             asistencia:{
                 cedula:this.state.cedula
-            }
+            },
+            token
         }
         // console.log(json);
         axios.post("http://localhost:8080/transaccion/asistencia/presente",json)

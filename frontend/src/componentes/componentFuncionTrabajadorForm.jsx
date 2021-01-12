@@ -133,7 +133,8 @@ class ComponentFuncionTrabajador extends React.Component{
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
         var funcion={}
-        await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -370,13 +371,15 @@ class ComponentFuncionTrabajador extends React.Component{
     }
 
     enviarDatos(peticion){
+        const token=localStorage.getItem('usuario')
         const datos={
             funcion:{
                 id_funcion_trabajador:this.state.id_funcion_trabajador,
                 funcion_descripcion:this.state.funcion_descripcion,
                 id_tipo_trabajador:this.state.id_tipo_trabajador,
                 estatu_funcion_trabajador:this.state.estatu_funcion_trabajador
-            }
+            },
+            token
         }
         peticion(datos)
     }

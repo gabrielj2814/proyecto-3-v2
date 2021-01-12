@@ -74,7 +74,8 @@ class ComponentTipoCamForm extends React.Component{
     async consultarIdTipoCam(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -267,12 +268,14 @@ class ComponentTipoCamForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             tipo_cam:{
             id_tipo_cam:this.state.id_tipo_cam,
             nombre_tipo_cam:this.state.nombre_tipo_cam,
             estatu_tipo_cam:this.state.estatu_tipo_cam
-            }
+            },
+            token
         }
         petion(objeto)
     }

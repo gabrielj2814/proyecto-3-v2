@@ -67,7 +67,8 @@ class ComponentEstadoConsulta extends React.Component{
     async consultarEstado(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
            if(respuesta_servidor.estado_peticion==="200"){

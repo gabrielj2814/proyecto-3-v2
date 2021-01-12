@@ -74,7 +74,8 @@ class ComponentEstadoForm extends React.Component{
     async consultar_id_estado(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -267,12 +268,14 @@ class ComponentEstadoForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             estado:{
             id_estado:this.state.id_estado,
             nombre_estado:this.state.nombre_estado,
             estatu_estado:this.state.estatu_estado
-            }
+            },
+            token
         }
         petion(objeto)
     }

@@ -84,7 +84,8 @@ class ComponentMedicoForm extends React.Component{
     async consultarIdMedico(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/medico/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/medico/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -333,12 +334,14 @@ class ComponentMedicoForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             medico:{
             id_medico:this.state.id_medico,
             nombre_medico:this.state.nombre_medico,
             apellido_medico:this.state.apellido_medico
-            }
+            },
+            token
         }
         petion(objeto)
     }

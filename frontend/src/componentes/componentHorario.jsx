@@ -146,12 +146,14 @@ class ComponentHorario extends React.Component{
         let mensaje={};
         let horaEntrada=`${this.state.horaEntrada}:${this.state.minutoEntrada}${this.state.periodoEntrada}`;
         let horaSalida=`${this.state.horaSalida}:${this.state.minutoSalida}${this.state.periodoSalida}`;
-        alert(horaEntrada+" / "+horaSalida)
+        // alert(horaEntrada+" / "+horaSalida)
+        const token=localStorage.getItem('usuario')
         let datos={
             "horario":{
                 "horario_entrada":horaEntrada,
                 "horario_salida":horaSalida
-            }
+            },
+            token
         }
         axios.post("http://localhost:8080/configuracion/horario/agregar-horario",datos)
         .then(respuesta => {

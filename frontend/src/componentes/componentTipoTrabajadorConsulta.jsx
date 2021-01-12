@@ -68,7 +68,8 @@ class ComponentTipoTrabajadorConsulta extends React.Component {
     async consultarTipoTrabajador(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/tipo-trabajador/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/tipo-trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
            if(respuesta_servidor.estado_peticion==="200"){

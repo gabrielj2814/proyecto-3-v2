@@ -83,7 +83,8 @@ class ComponentPermisoForm extends React.Component{
     async consultarPermiso(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/permiso/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/permiso/consultar/${id}/${token}`)
         .then(respuesta=>{
         respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -325,6 +326,7 @@ class ComponentPermisoForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             permiso:{
                 id_permiso:this.state.id_permiso,
@@ -333,7 +335,8 @@ class ComponentPermisoForm extends React.Component{
                 estatu_permiso:this.state.estatu_permiso,
                 estatu_remunerado:this.state.estatu_remunerado,
                 estatu_dias_aviles:this.state.estatu_dias_aviles
-            }
+            },
+            token
         }
         petion(objeto)
     }

@@ -81,7 +81,8 @@ class ComponentReposoForm extends React.Component{
     async consultarReposo(id){
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
-        await axios.get(`http://localhost:8080/configuracion/reposo/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/reposo/consultar/${id}/${token}`)
         .then(respuesta=>{
         respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -317,13 +318,15 @@ class ComponentReposoForm extends React.Component{
     }
 
     enviarDatos(petion){
+        const token=localStorage.getItem('usuario')
         const objeto={
             reposo:{
                 id_reposo:this.state.id_reposo,
                 nombre_reposo:this.state.nombre_reposo,
                 dias_reposo:this.state.dias_reposo,
                 estatu_reposo:this.state.estatu_reposo
-            }
+            },
+            token
         }
         petion(objeto)
     }
