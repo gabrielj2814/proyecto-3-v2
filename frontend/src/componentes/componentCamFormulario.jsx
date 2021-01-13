@@ -110,7 +110,99 @@ class ComponentCamFormulario extends React.Component {
                 id_tipo_cam:(tipo_cams.length===0)?null:tipo_cams[0].id
             })
         }
+        else if(operacion==="actualizar"){
+            const {id}=this.props.match.params
+            let datos = await this.consultarIdConsultar(id)
+            console.log(datos)
+            let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
+            const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+            nombre_propiedad_lista="estados",
+            propiedad_id="id_estado",
+            propiedad_descripcion="nombre_estado",
+            propiedad_estado="estatu_estado"
+            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+            console.log("lista de estados ->>>",estados)
+            const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
+            nombre_propiedad_lista_2="ciudades",
+            propiedad_id_2="id_ciudad",
+            propiedad_descripcion_2="nombre_ciudad",
+            propiedad_estado_2="estatu_ciudad"
+            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+            console.log("lista de de ciudades por estado ->>>",ciudades)
+            const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+            nombre_propiedad_lista_3="tipo_cams",
+            propiedad_id_3="id_tipo_cam",
+            propiedad_descripcion_3="nombre_tipo_cam",
+            propiedad_estado_3="estatu_tipo_cam"
+            const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+            console.log("lista todos los tipo cam ->>>",tipo_cams)
+            this.setState({
+                tipo_cams,
+                estados,
+                ciudades,
+                id_estado:datosCiudad.id_estado
+            })
+            document.getElementById("id_estado").value=datosCiudad.id_estado
+            document.getElementById("id_ciudad").value=datos.id_ciudad
+            document.getElementById("id_tipo_cam").value=datos.id_tipo_cam
+            
+        }
 
+    }
+
+    async consultarCiudad(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        var ciudad={}
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            if(respuesta_servidor.estado_peticion==="200"){
+                ciudad=respuesta_servidor.ciudad
+            }
+            else if(respuesta_servidor.estado_peticion==="404"){
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_peticion
+                this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+            }
+
+        })
+        .catch(error=>{
+            console.log(error)
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.estado="500"
+            this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return ciudad
+    }
+
+    async consultarIdConsultar(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        let datos=[]
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/cam/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            if(respuesta_servidor.estado_peticion==="200"){
+                // console.log(respuesta_servidor.cam)
+                this.setState(respuesta_servidor.cam)
+                datos=JSON.parse(JSON.stringify(respuesta_servidor.cam))
+            }
+            else if(respuesta_servidor.estado_peticion==="404"){
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_peticion
+                this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+            }
+        })
+        .catch(error=>{
+            console.log(error)
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.estado="500"
+            this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return datos
     }
 
     async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
@@ -222,6 +314,7 @@ class ComponentCamFormulario extends React.Component {
 
     operacion(){
         // alert("operacion")
+        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
         const token=localStorage.getItem('usuario')
         const {operacion}=this.props.match.params
         if(this.validarFormulario()){
@@ -238,7 +331,6 @@ class ComponentCamFormulario extends React.Component {
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
                     console.log(datosServidor)
-                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
                     if(datosServidor.estado_peticion && datosServidor.estado_peticion==="200"){
                         alerta.color="success"
                         alerta.mensaje=datosServidor.mensaje
@@ -247,12 +339,41 @@ class ComponentCamFormulario extends React.Component {
                     }
                 })
                 .catch(error => {
+                    alerta.color="danger"
+                    alerta.mensaje="Error al conectar con el servidor"
+                    alerta.estado=true
+                    this.setState({alerta})
                     console.log("error al registrar ->>>> ",error)
                 })
 
             }
             else if(operacion==="actualizar"){
-                alert("actualizando")
+                // alert("actualizando")
+                const {id}=this.props.match.params 
+                axios.put(`http://localhost:8080/configuracion/cam/actualizar/${id}`,datos)
+                .then(respuesta => {
+                    let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    console.log(datosServidor)
+                    if(datosServidor.estado_peticion && datosServidor.estado_peticion==="200"){
+                        alerta.color="success"
+                        alerta.mensaje=datosServidor.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.color="danger"
+                        alerta.mensaje=datosServidor.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                })
+                .catch(error => {
+                    alerta.color="danger"
+                    alerta.mensaje="Error al conectar con el servidor"
+                    alerta.estado=true
+                    this.setState({alerta})
+                    console.log("error al actualizar ->>>> ",error)
+                })
             }
         }
     }

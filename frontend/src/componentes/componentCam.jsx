@@ -172,7 +172,7 @@ class ComponentCam extends React.Component{
       
       actualizarElementoTabla(a){
           var input=a.target;
-        //   this.props.history.push("/dashboard/configuracion/estado/actualizar/"+input.id);
+          this.props.history.push("/dashboard/configuracion/cam/actualizar/"+input.id);
       }
       
       consultarElementoTabla(a){
