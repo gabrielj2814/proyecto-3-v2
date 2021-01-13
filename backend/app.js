@@ -22,7 +22,8 @@ rutas_modulo_asignacion_medico_especialidad=require("./rutas/configuracion/asign
 rutas_modulo_reposo=require("./rutas/configuracion/reposo"),
 rutas_modulo_reposo_trabajador=require("./rutas/transaccion/reposo-trabajador"),
 rutas_modulo_horario=require("./rutas/configuracion/horario"),
-rutas_modulo_asistencia=require("./rutas/transaccion/asistencia")
+rutas_modulo_asistencia=require("./rutas/transaccion/asistencia"),
+rutas_modulo_bitacora=require("./rutas/transaccion/bitacora")
 //SET
 app.set("puerto",8080)
 // USE
@@ -48,5 +49,6 @@ app
 .use("/transaccion/permiso-trabajador",rutas_modulo_permiso_trabajador)
 .use("/transaccion/reposo-trabajador",rutas_modulo_reposo_trabajador)
 .use("/transaccion/asistencia",rutas_modulo_asistencia)
+.use("/transaccion/bitacora",rutas_modulo_bitacora)
 
 module.exports = app

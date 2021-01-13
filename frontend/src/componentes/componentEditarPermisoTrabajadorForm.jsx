@@ -66,7 +66,8 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
 
     async UNSAFE_componentWillMount(){
         const id=this.props.match.params.id
-        const ruta_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar/${id}`
+        const token=localStorage.getItem('usuario')
+        const ruta_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar/${id}/${token}`
         const permiso_trabajador=await this.consultarAlServidor(ruta_permiso)
         this.setState({
             id_cedula:permiso_trabajador.permiso_trabajador.id_cedula,
@@ -148,12 +149,14 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
     }
 
     async actualizarPermiso(){
+        const token=localStorage.getItem('usuario')
         const objeto={
             permiso_trabajador:{
                 id_permiso_trabajador:this.state.id_permiso_trabajador,
                 permiso_trabajador_dias_aviles:(this.state.permiso_trabajador_dias_aviles==="VC" || this.state.permiso_trabajador_dias_aviles===0)?"VC":this.state.permiso_trabajador_dias_aviles,
                 fecha_hasta_permiso_trabajador:Moment(this.state.fecha_hasta_permiso_trabajador).format("YYYY-MM-DD")
-            }
+            },
+            token
         }
         //axios
         var respuesta_servidor=""

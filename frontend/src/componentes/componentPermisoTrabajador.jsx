@@ -154,11 +154,13 @@ class ComponentPermisoTrabajador extends React.Component{
 
     async aprovarPermiso(a){
         var input=a.target
+        const token=localStorage.getItem('usuario')
         const objeto={
             permiso_trabajador:{
                 id_permiso_trabajador:input.id,
                 estatu_permiso_trabajador:"A"
-            }
+            },
+            token
         }//UPDATE tpermisotrabajador SET estatu_permiso_trabajador='D' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         //UPDATE tpermisotrabajador SET estatu_permiso_trabajador='C' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         var mensaje=this.state.mensaje
@@ -177,11 +179,13 @@ class ComponentPermisoTrabajador extends React.Component{
 
     async denegarPermiso(a){
         var input=a.target
+        const token=localStorage.getItem('usuario')
         const objeto={
             permiso_trabajador:{
                 id_permiso_trabajador:input.id,
                 estatu_permiso_trabajador:"D"
-            }
+            },
+            token
         }//UPDATE tpermisotrabajador SET estatu_permiso_trabajador='E' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         var mensaje=this.state.mensaje
         const ruta_actualizar_permiso=`http://localhost:8080/transaccion/permiso-trabajador/actualizar-estatu/${input.id}`

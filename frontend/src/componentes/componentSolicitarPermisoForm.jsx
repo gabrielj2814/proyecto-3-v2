@@ -245,7 +245,8 @@ class ComponentSolicitarPermisoForm extends React.Component{
 
     async buscarPermiso(a){
         let input=a.target;
-        const ruta_permiso=`http://localhost:8080/configuracion/permiso/consultar/${input.value}`
+        const token=localStorage.getItem('usuario')
+        const ruta_permiso=`http://localhost:8080/configuracion/permiso/consultar/${input.value}/${token}`
         const permiso=await this.consultarAlServidor(ruta_permiso)
         console.log(permiso)
         this.setState({
@@ -292,6 +293,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
         if(this.validarFechaDesde()){
             var respuesta_servidor=""
             var mensaje=this.state.mensaje
+            const token=localStorage.getItem('usuario')
             const objeto={
                 permiso_trabajador:{
                     id_permiso_trabajador:this.state.id_permiso_trabajador,
@@ -301,7 +303,8 @@ class ComponentSolicitarPermisoForm extends React.Component{
                     fecha_hasta_permiso_trabajador:Moment(this.state.fecha_hasta_permiso_trabajador).format("YYYY-MM-DD"),
                     estatu_permiso_trabajador:"E",
                     permiso_trabajador_dias_aviles:""
-                }
+                },
+                token
             }
             await axios.post("http://localhost:8080/transaccion/permiso-trabajador/registrar",objeto)
             .then(respuesta=>{
