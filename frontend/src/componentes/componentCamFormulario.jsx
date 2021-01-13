@@ -205,8 +205,8 @@ class ComponentCamFormulario extends React.Component {
     }
 
     regresar(){
-        alert("regesando")
-        // this.props.history.push("/dashboard/configuracion/cam");
+        // alert("regesando")
+        this.props.history.push("/dashboard/configuracion/cam");
     }
 
     extrarDatosDelFormData(formData){

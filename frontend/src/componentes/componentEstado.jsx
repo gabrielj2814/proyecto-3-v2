@@ -82,6 +82,7 @@ class ComponentEstado extends React.Component{
             }
         }
     }
+    
     async consultarTodosEstado(){
         var respuesta_servidor=[]
         await axios.get("http://localhost:8080/configuracion/estado/consultar-todos")
@@ -150,7 +151,7 @@ class ComponentEstado extends React.Component{
 
     async escribir_codigo(a){
       var input=a.target,
-      valor=input.value.toLowerCase(),
+      valor=input.value,
       respuesta_servidor=""
       if(valor!==""){
         await axios.get(`http://localhost:8080/configuracion/estado/consultar-patron/${valor}`)
