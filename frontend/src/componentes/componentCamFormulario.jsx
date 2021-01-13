@@ -17,6 +17,7 @@ import ComponentFormCampo from '../subComponentes/componentFormCampo';
 import ComponentFormTextArea from "../subComponentes/componentFormTextArea"
 import ComponentFormSelect from "../subComponentes/componentFormSelect"
 import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
+import AlertBootstrap from "../subComponentes/alertBootstrap"
 
 class ComponentCamFormulario extends React.Component {
 
@@ -67,7 +68,12 @@ class ComponentCamFormulario extends React.Component {
             // 
             tipo_cams:[],
             estados:[],
-            ciudades:[]
+            ciudades:[],
+            alerta:{
+                color:null,
+                mensaje:null,
+                estado:false
+            }
         }
     }
 
@@ -203,12 +209,55 @@ class ComponentCamFormulario extends React.Component {
         // this.props.history.push("/dashboard/configuracion/cam");
     }
 
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
+    }
+
     operacion(){
         // alert("operacion")
+        const token=localStorage.getItem('usuario')
+        const {operacion}=this.props.match.params
         if(this.validarFormulario()){
-            alert("formulario ok")
+            // alert("formulario ok")
+            let datosFormulario=new FormData(document.getElementById("formulario_cam"))
+            let datos={
+                cam:this.extrarDatosDelFormData(datosFormulario),
+                token
+            }
+            console.log("datos del formulario preparados ->>>> ",datos)
+            if(operacion==="registrar"){
+
+                axios.post(`http://localhost:8080/configuracion/cam/registrar`,datos)
+                .then(respuesta => {
+                    let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    console.log(datosServidor)
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    if(datosServidor.estado_peticion && datosServidor.estado_peticion==="200"){
+                        alerta.color="success"
+                        alerta.mensaje=datosServidor.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                })
+                .catch(error => {
+                    console.log("error al registrar ->>>> ",error)
+                })
+
+            }
+            else if(operacion==="actualizar"){
+                alert("actualizando")
+            }
         }
     }
+
+    
 
     validarFormulario(){
         let estadoFormulario=false
@@ -352,7 +401,13 @@ class ComponentCamFormulario extends React.Component {
     render(){
         const component=(
             <div className="row justify-content-center">
+                {this.state.alerta.estado===true &&
+                    (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
+                        <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
+                        
+                    </div>)
+                }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cam">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-especialidad">

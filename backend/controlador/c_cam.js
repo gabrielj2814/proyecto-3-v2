@@ -8,21 +8,11 @@ CamControlador.registrarControlador=async (req,res,next) => {
     const CAM=new CamModelo()
     const {cam,token}=req.body
     CAM.setDatos(cam)
-    const cam_result=await CAM.consultarModelo()
-    if(!CamControlador.verificarExistencia(cam_result)){
-        CAM.registrarModelo()
-        respuesta_api.mensaje=`registro completado`
-        respuesta_api.estado_peticion="200"
-        req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tcam",cam.id_cam)
-        next()
-    }
-    else{
-        respuesta_api.mensaje=`al registrar, ya hay un registro con este codigo -> ${cam.id_cam}`
-        respuesta_api.estado_peticion="404"
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
-    }
+    CAM.registrarModelo()
+    respuesta_api.mensaje=`registro completado`
+    respuesta_api.estado_peticion="200"
+    req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tcam",cam.id_cam)
+    next()
     
 }
 
