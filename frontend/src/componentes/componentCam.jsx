@@ -177,8 +177,8 @@ class ComponentCam extends React.Component{
       
       consultarElementoTabla(a){
           let input=a.target;
-          //alert("Consultar -> "+input.id);
-        //   this.props.history.push("/dashboard/configuracion/estado/consultar/"+input.id);
+        //   alert("Consultar -> "+input.id);
+          this.props.history.push("/dashboard/configuracion/cam/consultar/"+input.id);
       }
 
     render(){

@@ -63,6 +63,7 @@ import ComponentTipoCamConsulta from './componentes/componentTipoCamConsulta'
 // CAM
 import ComponentCamFormulario from "./componentes/componentCamFormulario"
 import ComponentCam from "./componentes/componentCam"
+import ComponentCamConsultar from "./componentes/componentCamConsulta"
 // HORARIO
 import componentHorario from './componentes/componentHorario';
 // ASISTENCIA
@@ -126,6 +127,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
         
         
+        <Route exact path="/dashboard/configuracion/cam/consultar/:id" component={ComponentCamConsultar}/>
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
 
