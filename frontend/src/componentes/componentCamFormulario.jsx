@@ -28,6 +28,7 @@ class ComponentCamFormulario extends React.Component {
         this.consultarCiudadesXEstado=this.consultarCiudadesXEstado.bind(this)
         this.operacion=this.operacion.bind(this)
         this.regresar=this.regresar.bind(this);
+        this.agregar=this.agregar.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -517,6 +518,45 @@ class ComponentCamFormulario extends React.Component {
         }
 
         return estado
+    }
+
+    async agregar(){
+        const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+        nombre_propiedad_lista="estados",
+        propiedad_id="id_estado",
+        propiedad_descripcion="nombre_estado",
+        propiedad_estado="estatu_estado"
+        const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+        console.log("lista de estados ->>>",estados)
+        const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
+        nombre_propiedad_lista_2="ciudades",
+        propiedad_id_2="id_ciudad",
+        propiedad_descripcion_2="nombre_ciudad",
+        propiedad_estado_2="estatu_ciudad"
+        const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+        console.log("lista de de ciudades por estado ->>>",ciudades)
+        const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+        nombre_propiedad_lista_3="tipo_cams",
+        propiedad_id_3="id_tipo_cam",
+        propiedad_descripcion_3="nombre_tipo_cam",
+        propiedad_estado_3="estatu_tipo_cam"
+        const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+        console.log("lista todos los tipo cam ->>>",tipo_cams)
+        this.setState({
+            id_cam:"",
+            nombre_cam:"",
+            telefono_cam:"",
+            direccion_cam:"",
+            tipo_cams,
+            estados,
+            ciudades,
+            id_estado:(estados.length===0)?null:estados[0].id,
+            id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+            id_tipo_cam:(tipo_cams.length===0)?null:tipo_cams[0].id,
+            estatu_cam:"1",
+        })
+        document.getElementById("id_estado").value=(estados.length===0)?null:estados[0].id
+        document.getElementById("id_tipo_cam").value=(tipo_cams.length===0)?null:tipo_cams[0].id
     }
 
     render(){
