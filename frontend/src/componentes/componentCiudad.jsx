@@ -188,6 +188,20 @@ class ComponentCiudad extends React.Component{
             </thead>
         )
 
+        /*
+        {!ciudad.vacio &&
+                            <td>
+                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                                value={ciudad.id_ciudad} 
+                                id={ciudad.id_ciudad}
+                                eventoPadre={this.eliminarElementoTabla} 
+                                icon="icon-bin"
+                                />
+                            </td>
+                        }
+        
+        */
+
         const jsx_tabla_body=(
             <tbody>
                 {this.state.registros.map((ciudad)=>{
@@ -206,16 +220,7 @@ class ComponentCiudad extends React.Component{
                                 />
                             </td>
                         }
-                        {!ciudad.vacio &&
-                            <td>
-                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                                value={ciudad.id_ciudad} 
-                                id={ciudad.id_ciudad}
-                                eventoPadre={this.eliminarElementoTabla} 
-                                icon="icon-bin"
-                                />
-                            </td>
-                        }
+                        
                         {!ciudad.vacio &&
                             <td>
                                 <ButtonIcon 

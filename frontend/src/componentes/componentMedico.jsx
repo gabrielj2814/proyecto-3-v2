@@ -190,6 +190,19 @@ class ComponentMedico extends React.Component {
             </thead>
         )
 
+        /*
+        {!medico.vacio &&
+                            <td>
+                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                                value={medico.id_medico} 
+                                id={medico.id_medico}
+                                eventoPadre={this.eliminarElementoTabla} 
+                                icon="icon-bin"
+                                />
+                            </td>
+                            }
+        */
+
         const jsx_tabla_body=(
             <tbody>
                 {this.state.registros.map((medico)=>{
@@ -208,16 +221,7 @@ class ComponentMedico extends React.Component {
                                 />
                             </td>
                             }
-                            {!medico.vacio &&
-                            <td>
-                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                                value={medico.id_medico} 
-                                id={medico.id_medico}
-                                eventoPadre={this.eliminarElementoTabla} 
-                                icon="icon-bin"
-                                />
-                            </td>
-                            }
+                            
                             {!medico.vacio &&
                             <td>
                                 <ButtonIcon 

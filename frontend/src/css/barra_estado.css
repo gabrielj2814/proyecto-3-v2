@@ -5,6 +5,7 @@
 .contenedor_barra_estado{
     background-color: var(--color_fondo_barrar_estado);
     height: 10%;
+    position: relative;
 }
 
 .nombre-usuario{
@@ -24,4 +25,10 @@
 .boton-cabecera{
     cursor: pointer;
     font-size: 1.3rem;
+}
+
+.contenedorArrowLeft{
+    box-sizing: border-box;
+    position: absolute;
+    right: 10px;
 }

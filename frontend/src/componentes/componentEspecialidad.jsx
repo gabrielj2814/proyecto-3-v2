@@ -179,6 +179,19 @@ class ComponentEspecialidad extends React.Component{
     }
     
 
+    /*
+    {!especialidad.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={especialidad.id_especialidad} 
+                              id={especialidad.id_especialidad}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
 
         const jsx_tabla_encabezado=(
@@ -208,16 +221,7 @@ class ComponentEspecialidad extends React.Component{
                                   />
                               </td>
                            }
-                          {!especialidad.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={especialidad.id_especialidad} 
-                              id={especialidad.id_especialidad}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!especialidad.vacio &&
                           <td>
                               <ButtonIcon 

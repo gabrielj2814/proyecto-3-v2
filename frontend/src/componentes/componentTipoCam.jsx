@@ -193,6 +193,20 @@ constructor(){
             </thead>
         )
 
+        /*
+        {!tipo_cam.vacio &&
+                            <td>
+                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                                value={tipo_cam.id_tipo_cam} 
+                                id={tipo_cam.id_tipo_cam}
+                                eventoPadre={this.eliminarElementoTabla} 
+                                icon="icon-bin"
+                                />
+                            </td>
+                            }
+        
+        */
+
         const jsx_tabla_body=(
             <tbody>
                 {this.state.registros.map((tipo_cam)=>{
@@ -211,16 +225,7 @@ constructor(){
                                 />
                             </td>
                             }
-                            {!tipo_cam.vacio &&
-                            <td>
-                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                                value={tipo_cam.id_tipo_cam} 
-                                id={tipo_cam.id_tipo_cam}
-                                eventoPadre={this.eliminarElementoTabla} 
-                                icon="icon-bin"
-                                />
-                            </td>
-                            }
+                            
                             {!tipo_cam.vacio &&
                             <td>
                                 <ButtonIcon 

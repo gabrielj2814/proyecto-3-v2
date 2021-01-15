@@ -177,6 +177,20 @@ class ComponentEstado extends React.Component{
         }
     }
 
+    /*
+    
+    {!estado.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={estado.id_estado} 
+                              id={estado.id_estado}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
 
     	const jsx_tabla_encabezado=(
@@ -206,16 +220,7 @@ class ComponentEstado extends React.Component{
                                   />
                               </td>
                            }
-                          {!estado.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={estado.id_estado} 
-                              id={estado.id_estado}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!estado.vacio &&
                           <td>
                               <ButtonIcon 

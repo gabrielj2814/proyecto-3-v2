@@ -28,7 +28,7 @@ const BarraEsatdo= (props) =>{
             <div className="col-auto">
                 <span className="nombre-usuario">{props.nombre_usuario}</span>
             </div>
-            <div className="col-auto offset-8">
+            <div className="contenedorArrowLeft">
                 <div className="dropdown dropleft">
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown"></button>
                     <div className="dropdown-menu">

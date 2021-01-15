@@ -181,6 +181,19 @@ class ComponentCam extends React.Component{
           this.props.history.push("/dashboard/configuracion/cam/consultar/"+input.id);
       }
 
+      /*
+      {!cam.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={cam.id_cam} 
+                              id={cam.id_cam}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+      */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -209,16 +222,7 @@ class ComponentCam extends React.Component{
                                   />
                               </td>
                            }
-                          {!cam.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={cam.id_cam} 
-                              id={cam.id_cam}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!cam.vacio &&
                           <td>
                               <ButtonIcon 
