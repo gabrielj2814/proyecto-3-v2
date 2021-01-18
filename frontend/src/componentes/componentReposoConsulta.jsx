@@ -113,25 +113,25 @@ class ComponentReposoConsulta extends React.Component{
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Codigo Reposo: </span>
                             <span className="valor">{this.state.id_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Nombre Reposo: </span>
                             <span className="valor">{this.state.nombre_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Dias Reposo: </span>
                             <span className="valor">{this.state.dias_reposo}</span>
                         </div>
                     </div>
                     <div className="row">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estatu Reposo: </span>
                             <span className="valor">{this.state.estatu_reposo}</span>
                         </div>

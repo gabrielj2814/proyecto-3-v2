@@ -187,6 +187,20 @@ class ComponentAcceso extends React.Component {
       }
     }
 
+
+    /**
+     * {!perfil.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={perfil.id_perfil} 
+                              id={perfil.id_perfil}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -214,16 +228,7 @@ class ComponentAcceso extends React.Component {
                                   />
                               </td>
                            }
-                          {!perfil.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={perfil.id_perfil} 
-                              id={perfil.id_perfil}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!perfil.vacio &&
                           <td>
                               <ButtonIcon 

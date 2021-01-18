@@ -179,6 +179,19 @@ class ComponentReposo extends React.Component{
         }
     }
 
+    /**
+     * {!reposo.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={reposo.id_reposo} 
+                              id={reposo.id_reposo}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
 
         const jsx_tabla_encabezado=(
@@ -208,16 +221,7 @@ class ComponentReposo extends React.Component{
                                   />
                               </td>
                           }
-                          {!reposo.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={reposo.id_reposo} 
-                              id={reposo.id_reposo}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                         {!reposo.vacio &&
                           <td>
                               <ButtonIcon 

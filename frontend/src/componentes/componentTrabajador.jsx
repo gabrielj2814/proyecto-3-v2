@@ -179,6 +179,19 @@ class ComponentTrabajador extends React.Component{
         this.props.history.push("/dashboard/configuracion/trabajador/consultar/"+input.id);
     }
 
+    /**
+     * {!trabajador.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={trabajador.id_cedula} 
+                              id={trabajador.id_cedula}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -206,16 +219,7 @@ class ComponentTrabajador extends React.Component{
                                   />
                               </td>
                            }
-                          {!trabajador.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={trabajador.id_cedula} 
-                              id={trabajador.id_cedula}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!trabajador.vacio &&
                           <td>
                               <ButtonIcon 

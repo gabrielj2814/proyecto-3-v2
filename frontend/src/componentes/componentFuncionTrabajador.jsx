@@ -179,6 +179,19 @@ class ComponentFuncionTrabajador extends React.Component{
         }
     }
 
+    /**
+     * {!funcion.vacio &&
+                            <td>
+                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                                value={funcion.id_funcion_trabajador} 
+                                id={funcion.id_funcion_trabajador}
+                                eventoPadre={this.eliminarElementoTabla} 
+                                icon="icon-bin"
+                                />
+                            </td>
+                        }
+    */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -206,16 +219,7 @@ class ComponentFuncionTrabajador extends React.Component{
                                 />
                             </td>
                         }
-                        {!funcion.vacio &&
-                            <td>
-                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                                value={funcion.id_funcion_trabajador} 
-                                id={funcion.id_funcion_trabajador}
-                                eventoPadre={this.eliminarElementoTabla} 
-                                icon="icon-bin"
-                                />
-                            </td>
-                        }
+                        
                         {!funcion.vacio &&
                             <td>
                                 <ButtonIcon 

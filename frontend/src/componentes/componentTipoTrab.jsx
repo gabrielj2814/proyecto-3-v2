@@ -181,6 +181,20 @@ class ComponentTipoTrab extends React.Component{
       }
     }
 
+    /**
+     * 
+     * {!tipo_trabajador.vacio &&
+                            <td>
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
+                              value={tipo_trabajador.id_tipo_trabajador} 
+                              id={tipo_trabajador.id_tipo_trabajador}
+                              eventoPadre={this.eliminarElementoTabla} 
+                              icon="icon-bin"
+                              />
+                            </td>
+                          }
+    */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -208,16 +222,7 @@ class ComponentTipoTrab extends React.Component{
                                   />
                               </td>
                            }
-                          {!tipo_trabajador.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={tipo_trabajador.id_tipo_trabajador} 
-                              id={tipo_trabajador.id_tipo_trabajador}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
+                          
                          {!tipo_trabajador.vacio &&
                           <td>
                               <ButtonIcon 
