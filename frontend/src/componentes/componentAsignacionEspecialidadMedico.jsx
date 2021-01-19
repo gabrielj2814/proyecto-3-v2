@@ -163,7 +163,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
               apellido_medico:"",
               vacio:"vacio"
             })
-            return {registros:json_server_response}
+            return {registros:json_server_response,numeros_registros:0}
           }
           else{
             return {

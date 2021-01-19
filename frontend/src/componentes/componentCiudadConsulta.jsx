@@ -64,12 +64,16 @@ class ComponentCiudadConsulta extends React.Component{
         })
     }
 
+
+
     async consultarEstadoCiudad(id){
         let respuesta_servidor=null
-        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}/${token}`)
         .then(respuesta => {
             respuesta_servidor=respuesta.data
             let nombre_estado=respuesta_servidor.estado.nombre_estado
+            console.log("estado --->>>> ",nombre_estado)
             this.setState({nombre_estado})
         })
 
@@ -122,7 +126,7 @@ class ComponentCiudadConsulta extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_ciudad_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-ciudad-consulta">
-                            <span className="titulo-ciudad-consulta">Ciudad : {this.state.id_ciudad} </span>
+                            <span className="titulo-ciudad-consulta">Ciudad : {this.state.nombre_ciudad} </span>
                         </div>
                     </div>
                     <div className="row">
