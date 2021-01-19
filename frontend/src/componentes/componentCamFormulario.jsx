@@ -555,6 +555,7 @@ class ComponentCamFormulario extends React.Component {
             id_tipo_cam:(tipo_cams.length===0)?null:tipo_cams[0].id,
             estatu_cam:"1",
         })
+        this.props.history.push("/dashboard/configuracion/cam/registrar")
         document.getElementById("id_estado").value=(estados.length===0)?null:estados[0].id
         document.getElementById("id_tipo_cam").value=(tipo_cams.length===0)?null:tipo_cams[0].id
     }

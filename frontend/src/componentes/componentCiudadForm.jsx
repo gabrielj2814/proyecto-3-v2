@@ -402,6 +402,8 @@ class ComponentCiudadForm extends React.Component{
             estados:estado
         }
         this.setState(formulario)
+        this.props.history.push("/dashboard/configuracion/ciudad/registrar")
+        document.getElementById("id_estado").value=(estado.length===0)?null:estado[0].id
     }
 
     regresar(){

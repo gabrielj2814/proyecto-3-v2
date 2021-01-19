@@ -208,8 +208,25 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
         return lista_vacia
     }
 
-    agregar(){
-        alert("agregando nuevo formulario")
+    async agregar(){
+        // alert("agregando nuevo formulario")
+        this.generarId();
+        let medicos=await this.consultarTodosLosMedicos()
+        console.log("lista de medicos ->>> ",medicos)
+        let listaMedicos=this.formatoOptionSelect(medicos)
+        let especialidades=await  this.consultarTodasEspecialidad()
+        console.log("lista de especialidades ->>> ",especialidades )
+        let listaEspecialidades=this.formatoOptionSelect2(especialidades)
+        console.log(listaEspecialidades)
+        this.setState({
+            medicos:listaMedicos,
+            especialidades:listaEspecialidades,
+            id_medico:(listaMedicos.length===0)?null:listaMedicos[0].id,
+            id_especialidad:(especialidades.length===0)?null:especialidades[0].id,
+        })
+        this.props.history.push("/dashboard/configuracion/asignacion-especialidad-medico/registrar")
+        document.getElementById("id_medico").value=(listaMedicos.length===0)?null:listaMedicos[0].id
+        document.getElementById("id_especialidad").value=(especialidades.length===0)?null:especialidades[0].id
     }
 
     cambiarEstado(a){
