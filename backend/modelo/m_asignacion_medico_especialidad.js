@@ -7,12 +7,14 @@ class AsignacionMedicoEspecialidadModelo extends DriverPostgre {
         this.id_asignacion_medico_especialidad="" //ams-año-mes-dia-numero registro
         this.id_medico=""
         this.id_especialidad=""
+        this.estatu_asignacion=""
     }
 
     setDatos(medico_especialidad){
         this.id_asignacion_medico_especialidad=medico_especialidad.id_asignacion_medico_especialidad
         this.id_medico=medico_especialidad.id_medico
         this.id_especialidad=medico_especialidad.id_especialidad
+        this.estatu_asignacion=medico_especialidad.estatu_asignacion
     }
 
     setIdAsignacionMedicoEspecialidad(id){
@@ -40,12 +42,12 @@ class AsignacionMedicoEspecialidadModelo extends DriverPostgre {
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad) VALUES('${this.id_asignacion_medico_especialidad}','${this.id_medico}',${this.id_especialidad});`
+        const SQL=`INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad,estatu_asignacion) VALUES('${this.id_asignacion_medico_especialidad}','${this.id_medico}',${this.id_especialidad},${this.estatu_asignacion});`
         this.query(SQL)
     }
     
     actualizarModelo(){
-        const SQL=`UPDATE tasignacionmedicoespecialidad SET id_medico='${this.id_medico}',id_especialidad=${this.id_especialidad} WHERE id_asignacion_medico_especialidad='${this.id_asignacion_medico_especialidad}';`
+        const SQL=`UPDATE tasignacionmedicoespecialidad SET id_medico='${this.id_medico}',id_especialidad=${this.id_especialidad},estatu_asignacion=${this.estatu_asignacion} WHERE id_asignacion_medico_especialidad='${this.id_asignacion_medico_especialidad}';`
         this.query(SQL)
     }
 }

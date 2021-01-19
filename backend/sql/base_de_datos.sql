@@ -168,6 +168,7 @@ CREATE TABLE tasignacionmedicoespecialidad(
     id_asignacion_medico_especialidad character varying(17),
     id_medico character varying(50) NOT NULL,
     id_especialidad INTEGER NOT NULL,
+    estatu_asignacion character(1) NOT NULL,
     constraint PK_id_asignacion_medico_especialidad primary key(id_asignacion_medico_especialidad),
     constraint FK_id_medico_tasignacionmedicoespecialidad foreign key(id_medico) references tmedico(id_medico) on update cascade on delete cascade,
     constraint FK_id_especialidad_tasignacionmedicoespecialidad foreign key(id_especialidad) references tespecialidad(id_especialidad) on update cascade on delete cascade
