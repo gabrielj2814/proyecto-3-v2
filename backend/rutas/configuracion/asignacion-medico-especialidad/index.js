@@ -11,6 +11,7 @@ router.post("/registrar",AsignacionMedicoEspecialidadControlador.registrarContro
 router.get("/consultar/:id/:token",AsignacionMedicoEspecialidadControlador.consultarControlador,VitacoraControlador.capturaDatos)
 router.put("/actualizar/:id",AsignacionMedicoEspecialidadControlador.actualizarControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar-todos",AsignacionMedicoEspecialidadControlador.consultarTodosControlador)
+router.get("/consultar-asignacion-por-medico/:id",AsignacionMedicoEspecialidadControlador.consultarAsignacionPorMedico)
 
 module.exports= router
 

@@ -58,6 +58,7 @@ import ComponentEspecialidadForm from './componentes/componentEspecialidadForm'
 import ComponentEspecialidadConsulta from './componentes/componentEspecialidadConsulta'
 // ASIGNACION ESPECIALIDAD MEDICO
 import ComponentAsignacionEspecialidadMedicoForm from "./componentes/componentAsignacionEspecialidadMedicoForm"
+import ComponentAsignacionEspecialidadMedico from "./componentes/componentAsignacionEspecialidadMedico"
 //TIPO CAM
 import ComponentTipoCam from './componentes/componentTipoCam'
 import ComponentTipoCamForm from './componentes/componentTipoCamForm'
@@ -123,6 +124,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/especialidad:mensaje?" component={ComponentEspecialidad}/>
         
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/:operacion/:id?" component={ComponentAsignacionEspecialidadMedicoForm}/>
+        <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/:mensaje?" component={ComponentAsignacionEspecialidadMedico}/>
 
         <Route exact path="/dashboard/configuracion/tipo-cam/consultar/:id" component={ComponentTipoCamConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>

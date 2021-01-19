@@ -50,6 +50,11 @@ class AsignacionMedicoEspecialidadModelo extends DriverPostgre {
         const SQL=`UPDATE tasignacionmedicoespecialidad SET id_medico='${this.id_medico}',id_especialidad=${this.id_especialidad},estatu_asignacion=${this.estatu_asignacion} WHERE id_asignacion_medico_especialidad='${this.id_asignacion_medico_especialidad}';`
         this.query(SQL)
     }
+
+    async consultarAsignacionPorMedico(id_medico){
+        const SQL=`SELECT * FROM tasignacionmedicoespecialidad,tmedico,tespecialidad WHERE tasignacionmedicoespecialidad.id_medico='${id_medico} AND tasignacionmedicoespecialidad.id_medico=tmedico.id_medico AND tasignacionmedicoespecialidad.id_especialidad=tespecialidad.id_especialidad;'`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = AsignacionMedicoEspecialidadModelo
