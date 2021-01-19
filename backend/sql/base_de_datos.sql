@@ -193,7 +193,7 @@ CREATE TABLE treposotrabajador(
     fecha_desde_reposo_trabajador DATE NOT NULL,
     fecha_hasta_reposo_trabajador DATE NOT NULL,
     estatu_reposo_trabajador character(1) NOT NULL,
-    descripcion_reposo_trabajador character varying(300) NOT NULL,
+    descripcion_reposo_trabajador character varying(2000) NOT NULL,
     id_cam INTEGER NOT NULL,
     id_asignacion_medico_especialidad character varying(17) NOT NULL,
     constraint PK_id_reposo_trabajador primary key(id_reposo_trabajador),
