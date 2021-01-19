@@ -75,16 +75,17 @@ const MenuDashboard = (props) =>{
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
 
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
-
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Medico"/>
+                            
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
-
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignacion medico especialidad"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Medico"/>
+                            
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de Asistencia Medica"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de centro de asistencia Medica"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Medica"/>
                             
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
                         </div>
                     }

@@ -141,6 +141,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
 
     async consultarAsignacion(id){
         var respuesta_servidor=[]
+        var mensaje={texto:"",estado:""}
         const token=localStorage.getItem('usuario')
         await axios.get(`http://localhost:8080/configuracion/asignacion-medico-especialidad/consultar/${id}/${token}`)
         .then(respuesta=>{
@@ -150,6 +151,9 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
         .catch(error=>{
           alert("No se pudo conectar con el servidor")
           console.log(error)
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.estado="500"
+            this.props.history.push(`/dashboard/configuracion/asignacion-especialidad-medico${JSON.stringify(mensaje)}`)
         })
         return respuesta_servidor;
     } 

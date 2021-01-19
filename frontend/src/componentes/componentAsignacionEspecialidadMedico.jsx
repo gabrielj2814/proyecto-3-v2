@@ -91,15 +91,14 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
         this.setState(datos)
         
         console.log("asignaciones ->>>> ",asignacionesPorMedico)
-        console.log("->>>>>",datos)
         if(this.props.match.params.mensaje){
-            alert("mensaje")
+            // alert("mensaje")
             const msj=JSON.parse(this.props.match.params.mensaje)
             // alert("OK "+msj.texto)
             var mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
             mensaje.texto=msj.texto
             mensaje.estado=msj.estado
-            this.setState(mensaje)
+            this.setState({mensaje:mensaje})
         }
     }
 
@@ -200,7 +199,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
   consultarElementoTabla(a){
       let input=a.target;
     //   alert("Consultar -> "+input.id);
-      this.props.history.push("/dashboard/configuracion/cam/consultar/"+input.id);
+      this.props.history.push("/dashboard/configuracion/asignacion-especialidad-medico/consultar/"+input.id);
   }
 
     render(){
@@ -215,33 +214,33 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
 
         const jsx_tabla_body=(
             <tbody>
-                  {this.state.registros.map((asignacion)=>{
-                      return(
-                          <tr key={asignacion.id_asignacion_medico_especialidad}>
+                {this.state.registros.map((asignacion)=>{
+                    return(
+                        <tr key={asignacion.id_asignacion_medico_especialidad}>
                             <td>{asignacion.id_asignacion_medico_especialidad}</td>
                             <td>{asignacion.nombre_medico} {(asignacion.apellido_medico==="")?"":asignacion.apellido_medico+","} {asignacion.nombre_especialidad}</td>
-                           {!asignacion.vacio &&
-                              <td>
-                                  <ButtonIcon 
-                                  clasesBoton="btn btn-warning btn-block" 
-                                  value={asignacion.id_asignacion_medico_especialidad} 
-                                  id={asignacion.id_asignacion_medico_especialidad}
-                                  eventoPadre={this.actualizarElementoTabla} 
-                                  icon="icon-pencil"
-                                  />
-                              </td>
-                           }
-                          
-                         {!asignacion.vacio &&
-                          <td>
-                              <ButtonIcon 
-                              clasesBoton="btn btn-secondary btn-block" 
-                              value={asignacion.id_asignacion_medico_especialidad}
-                              id={asignacion.id_asignacion_medico_especialidad} 
-                              eventoPadre={this.consultarElementoTabla} 
-                              icon="icon-search"
-                              />
-                          </td>
+                            {!asignacion.vacio &&
+                                <td>
+                                    <ButtonIcon 
+                                    clasesBoton="btn btn-warning btn-block" 
+                                    value={asignacion.id_asignacion_medico_especialidad} 
+                                    id={asignacion.id_asignacion_medico_especialidad}
+                                    eventoPadre={this.actualizarElementoTabla} 
+                                    icon="icon-pencil"
+                                    />
+                                </td>
+                            }
+                        
+                        {!asignacion.vacio &&
+                            <td>
+                                <ButtonIcon 
+                                clasesBoton="btn btn-secondary btn-block" 
+                                value={asignacion.id_asignacion_medico_especialidad}
+                                id={asignacion.id_asignacion_medico_especialidad} 
+                                eventoPadre={this.consultarElementoTabla} 
+                                icon="icon-search"
+                                />
+                            </td>
                         }
                     </tr>
                     )

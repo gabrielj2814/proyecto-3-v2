@@ -184,75 +184,75 @@ class ComponentCamConsultar extends React.Component{
     render(){
         const component=(
             <div className="row justify-content-center">
-            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_cam_consulta">
-                 <div className="row justify-content-center">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-estado-consulta">
-                         <span className="titulo-cam-consulta">Cam consultado: {this.state.nombre_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Codigo de cam: </span>
-                         <span className="valor">{this.state.id_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Nombre: </span>
-                         <span className="valor">{this.state.nombre_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Telefono: </span>
-                         <span className="valor">{this.state.telefono_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Ubicación: </span>
-                         <span className="valor">{this.state.ubicacion}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Direccion: </span>
-                         <span className="valor">{this.state.direccion_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Tipo de centro: </span>
-                         <span className="valor">{this.state.nombre_tipo_cam}</span>
-                     </div>
-                 </div>
-                 <div className="row">
-                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                         <span className="propiedad">Estatu: </span>
-                         <span className="valor">{(this.state.estatu_cam==="1")?"Activo":"Inactivo"}</span>
-                     </div>
-                 </div>
-                
-                 <div className="row justify-content-center">
-                         <div className="col-auto">
-                             <InputButton 
-                             clasesBoton="btn btn-warning"
-                             id="boton-actualizar"
-                             value="actualizar"
-                             eventoPadre={this.actualizar}
-                             />
-                         </div>
-                         <div className="col-auto">
-                             <InputButton 
-                             clasesBoton="btn btn-danger"
-                             id="boton-cancelar"
-                             value="cancelar"
-                             eventoPadre={this.regresar}
-                             />   
-                         </div>
-                     </div>
-             </div>
-         </div>
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_cam_consulta">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-cam-consulta">
+                            <span className="titulo-cam-consulta">Cam consultado: {this.state.nombre_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Codigo de cam: </span>
+                            <span className="valor">{this.state.id_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Nombre: </span>
+                            <span className="valor">{this.state.nombre_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Telefono: </span>
+                            <span className="valor">{this.state.telefono_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Ubicación: </span>
+                            <span className="valor">{this.state.ubicacion}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Direccion: </span>
+                            <span className="valor">{this.state.direccion_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Tipo de centro: </span>
+                            <span className="valor">{this.state.nombre_tipo_cam}</span>
+                        </div>
+                    </div>
+                    <div className="row">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                            <span className="propiedad">Estatu: </span>
+                            <span className="valor">{(this.state.estatu_cam==="1")?"Activo":"Inactivo"}</span>
+                        </div>
+                    </div>
+                    
+                    <div className="row justify-content-center">
+                        <div className="col-auto">
+                            <InputButton 
+                            clasesBoton="btn btn-warning"
+                            id="boton-actualizar"
+                            value="actualizar"
+                            eventoPadre={this.actualizar}
+                            />
+                        </div>
+                        <div className="col-auto">
+                            <InputButton 
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="cancelar"
+                            eventoPadre={this.regresar}
+                            />   
+                        </div>
+                    </div>
+                </div>
+            </div>
         )
 
         return (
