@@ -52,7 +52,7 @@ class AsignacionMedicoEspecialidadModelo extends DriverPostgre {
     }
 
     async consultarAsignacionPorMedico(id_medico){
-        const SQL=`SELECT * FROM tasignacionmedicoespecialidad,tmedico,tespecialidad WHERE tasignacionmedicoespecialidad.id_medico='${id_medico} AND tasignacionmedicoespecialidad.id_medico=tmedico.id_medico AND tasignacionmedicoespecialidad.id_especialidad=tespecialidad.id_especialidad;'`
+        const SQL=`SELECT * FROM tasignacionmedicoespecialidad,tmedico,tespecialidad WHERE tasignacionmedicoespecialidad.id_medico='${id_medico}' AND tasignacionmedicoespecialidad.id_medico=tmedico.id_medico AND tasignacionmedicoespecialidad.id_especialidad=tespecialidad.id_especialidad;`
         return await this.query(SQL)
     }
 }

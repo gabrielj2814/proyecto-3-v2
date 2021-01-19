@@ -26,7 +26,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.operacion=this.operacion.bind(this);
-        // this.regresar=this.regresar.bind(this);
+        this.regresar=this.regresar.bind(this);
         this.agregar= this.agregar.bind(this);
         this.state={
             modulo:"",
@@ -236,6 +236,12 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                         alerta.estado=true
                         this.setState({alerta})
                     }
+                    else{
+                        alerta.color="danger"
+                        alerta.mensaje=datosServidor.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
                 })
                 .catch(error => {
                     alerta.color="danger"
@@ -253,6 +259,12 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                     console.log(datosServidor)
                     if(datosServidor.estado_peticion && datosServidor.estado_peticion==="200"){
                         alerta.color="success"
+                        alerta.mensaje=datosServidor.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.color="danger"
                         alerta.mensaje=datosServidor.mensaje
                         alerta.estado=true
                         this.setState({alerta})
@@ -307,6 +319,10 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             next=iterador.next()
         }
         return json   
+    }
+
+    regresar(){
+        this.props.history.push("/dashboard/configuracion/asignacion-especialidad-medico/")
     }
 
 
