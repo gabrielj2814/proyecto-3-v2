@@ -31,6 +31,11 @@ class ComponetReposoTrabajadorForm extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            alerta:{
+                color:null,
+                mensaje:null,
+                estado:false
+            }
         }
     }
 
@@ -74,9 +79,22 @@ class ComponetReposoTrabajadorForm extends React.Component{
     render(){
 
         const component=(
-            <div>
-            
-                <h1>vista</h1>
+            <div className="row justify-content-center">
+                {this.state.alerta.estado===true &&
+                    (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
+                        
+                    </div>)
+                }
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_reposo_trabajador">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo-trabajador">
+                            <span className="titulo-form-especialidad">Formulario reposo trabajador</span>
+                        </div>
+                    </div>
+                
+                </div>
             
             </div>
         ) 

@@ -120,6 +120,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             let asignacion=await this.consultarAsignacion(id)
+           if(asignacion!==null){
             console.log("asignacion ->>> ",asignacion)
             let medicos=await this.consultarTodosLosMedicos()
             console.log("lista de medicos ->>> ",medicos)
@@ -136,16 +137,24 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             })
             document.getElementById("id_medico").value=asignacion.id_medico
             document.getElementById("id_especialidad").value=asignacion.id_especialidad
+           }
         }
     }
 
     async consultarAsignacion(id){
-        var respuesta_servidor=[]
+        var respuesta_servidor=null
         var mensaje={texto:"",estado:""}
         const token=localStorage.getItem('usuario')
         await axios.get(`http://localhost:8080/configuracion/asignacion-medico-especialidad/consultar/${id}/${token}`)
         .then(respuesta=>{
-          respuesta_servidor=respuesta.data.medico_especialidad
+            if(respuesta.data.estado_peticion==="200"){
+                respuesta_servidor=respuesta.data.medico_especialidad
+            }
+          else{
+            mensaje.texto=respuesta.data.mensaje
+            mensaje.estado="404"
+            this.props.history.push(`/dashboard/configuracion/asignacion-especialidad-medico${JSON.stringify(mensaje)}`)
+          }
           console.log(respuesta.data)
         })
         .catch(error=>{

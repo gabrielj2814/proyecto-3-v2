@@ -572,7 +572,7 @@ class ComponentCamFormulario extends React.Component {
                 }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cam">
                     <div className="row justify-content-center">
-                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-especialidad">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-cam">
                             <span className="titulo-form-especialidad">Formulario de CAM (Centro de Asistencia Medica)</span>
                         </div>
                     </div>
