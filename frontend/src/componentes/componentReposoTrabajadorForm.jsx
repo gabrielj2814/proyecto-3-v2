@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom"
 
 //JS
 import axios from 'axios'
+import Moment from 'moment'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -26,11 +27,44 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.cambiarEstado=this.cambiarEstado.bind(this);
         // this.operacion=this.operacion.bind(this)
         // this.regresar=this.regresar.bind(this);
-        // this.agregar=this.agregar.bind(this)
+        this.mostarDias=this.mostarDias.bind(this)
+        this.mostrarDatosCam=this.mostrarDatosCam.bind(this)
+        this.agregar=this.agregar.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            id_reposo_trabajador:"",
+            id_cedula:null,
+            id_reposo:null,
+            fecha_desde_reposo_trabajador:"",
+            fecha_hasta_reposo_trabajador:"",
+            estatu_reposo_trabajador:"1",
+            descripcion_reposo_trabajador:"",
+            id_cam:null,
+            id_asignacion_medico_especialidad:"",
+            // ---------
+            listaDeTrabajadoresActivos:[],
+            listaDeRepososActivos:[],
+            listaDeCamsActivos:[],
+            listaDeReposos:{},
+            listaDeCams:{},
+            // -----
+            dias_reposo:null,
+            infoCam:{},
+            // ----
+            msj_id_cedula:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_id_reposo:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_id_cam:{
+                mensaje:"",
+                color_texto:""
+            },
             alerta:{
                 color:null,
                 mensaje:null,
@@ -71,9 +105,220 @@ class ComponetReposoTrabajadorForm extends React.Component{
         }
     }
 
+    async UNSAFE_componentWillMount(){
+        let idRegistro=await this.generarId()
+        if(idRegistro!==null){
+            let listaDeTrabajadores=await this.consultarTodosTrabajadores();
+            let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
+            let listaDeTrabajadoresSelect=[]
+            for(let trabajador of listaDetrabajadoresActivos){
+                listaDeTrabajadoresSelect.push({
+                    id:trabajador.id_cedula,
+                    descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
+                })
+            }
+            // -----
+            let listaDeTodosLosReposos=await this.consultarTodosReposo()
+            // console.log("lista de reposos =>>> ",listaDeTodosLosReposos)
+            let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
+            // console.log("lista de reposos activos =>>> ",listaDeRepososActivos)
+            let listaDeReposoSelect=[];
+            let reposoTablaHash={}
+            for(let reposo of listaDeRepososActivos){
+                listaDeReposoSelect.push({
+                    id:reposo.id_reposo,
+                    descripcion:reposo.nombre_reposo
+                })
+                reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
+            }
+            // --------
+            let listaDeTodosLosCam=await this.consultarTodosLosCam()
+            // console.log("listas de cam =>>> ",listaDeTodosLosCam)
+            let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
+            // console.log("listas de cam =>>> ",listaDeCamActivos)
+            let listaDeCamSelect=[]
+            let camTablaHash={}
+            for(let cam of listaDeCamActivos){
+                listaDeCamSelect.push({
+                    id:cam.id_cam,
+                    descripcion:cam.nombre_cam
+                })
+                camTablaHash[cam.id_cam]=cam
+            }
+            // console.log(camTablaHash)
+             // cam["ciudad"]=await this.consultarCiudad(cam.id_ciudad)
+                // cam["estado"]=await this.consultarEstado(cam.ciudad.id_estado)
+                // cam["tipoCam"]=await this.consultarTipoCam(cam.id_tipo_cam)
+            if(listaDeCamSelect.length!==0){
+                camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
+                camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
+                camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
+            }
+            this.setState({
+                id_reposo_trabajador:idRegistro,
+                listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
+                id_cedula:(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id,
+                listaDeRepososActivos:listaDeReposoSelect,
+                id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id,
+                listaDeReposos:reposoTablaHash,
+                dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[listaDeReposoSelect[0].id].dias,
+                listaDeCams:camTablaHash,
+                listaDeCamsActivos:listaDeCamSelect,
+                id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
+                infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id]
+            })
+            // console.log(this.state.listaDeReposos[listaDeReposoSelect[0].id].dias)
+        }
+
+    }
+
+    async generarId(){
+        let id=null
+        await axios.get("http://localhost:8080/transaccion/reposo-trabajador/generar-id")
+        .then(respuesta => {
+            id=respuesta.data.id
+        })
+        .catch(error => {
+            console.error(error)
+        })
+        return id
+    }
+
+    async consultarTodosTrabajadores(){
+        let respuesta_servidor=null
+        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data.trabajadores
+            // console.log(respuesta.data)
+        })
+        .catch(error=>{
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+        return respuesta_servidor;
+    }
+
+    async consultarTodosReposo(){
+        let respuesta_servidor=null
+        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data.reposos
+        })
+        .catch(error=>{
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+        return respuesta_servidor;
+    }
+
+    async consultarTodosLosCam(){
+        let datos=null
+        await axios.get("http://localhost:8080/configuracion/cam/consultar-todos")
+        .then(respuesta => {
+            datos=respuesta.data.cams
+        })
+        .catch(error => {
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+
+        return datos
+    }
+
+    async consultarCiudad(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        var ciudad={}
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            ciudad=respuesta_servidor.ciudad
+
+        })
+        .catch(error=>{
+            console.log(error)
+            // mensaje.texto="No se puedo conectar con el servidor"
+            // mensaje.estado="500"
+            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return ciudad
+    }
+
+    async consultarEstado(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        let estado=null
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            estado=respuesta_servidor.estado
+
+        })
+        .catch(error=>{
+            console.log(error)
+            // mensaje.texto="No se puedo conectar con el servidor"
+            // mensaje.estado="500"
+            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return estado
+    }
+
+    async consultarTipoCam(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        let tipoCam=null
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            tipoCam=respuesta_servidor.tipo_cam
+
+        })
+        .catch(error=>{
+            console.log(error)
+            // mensaje.texto="No se puedo conectar con el servidor"
+            // mensaje.estado="500"
+            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return tipoCam
+    }
+
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
+    }
+
+    agregar(){
+        alert("agregando nuevo formulario")
+    }
+
+    componentDidMount(){
+        console.log(this.state.listaDeReposos)
+        // document.getElementById("diasReposo").textContent=(this.state.id_reposo!==null)?this.state.listaDeReposos[this.state.id_reposo].dias:""
+    }
+
+    mostarDias(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        this.setState({
+            dias_reposo:this.state.listaDeReposos[input.value].dias
+        })
+
+    }
+
+    async mostrarDatosCam(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        let cam=this.state.listaDeCams[input.value]
+        // console.log(cam)
+        cam["ciudad"]=await this.consultarCiudad(cam.id_ciudad)
+        cam["estado"]=await this.consultarEstado(cam.ciudad.id_estado)
+        cam["tipoCam"]=await this.consultarTipoCam(cam.id_tipo_cam)
+        this.setState({
+            infoCam:cam
+        })
     }
 
     render(){
@@ -90,11 +335,143 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_reposo_trabajador">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo-trabajador">
-                            <span className="titulo-form-especialidad">Formulario reposo trabajador</span>
+                            <span className="titulo-form-reposo-trabajador">Formulario reposo trabajador</span>
                         </div>
                     </div>
+                    <div className="row">
+                        <div className="col-auto">
+                            <ButtonIcon 
+                            clasesBoton="btn btn-outline-success"
+                            icon="icon-plus"
+                            id="icon-plus"
+                            eventoPadre={this.agregar}
+                            />
+                        </div>
+                    </div>
+                    <form  id="formulario_reposo_trabajador" >
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Codigo transacción:"
+                            activo="no"
+                            type="text"
+                            value={this.state.id_reposo_trabajador}
+                            name="id_reposo_trabajador"
+                            id="id_reposo_trabajador"
+                            placeholder="Codigo reposo"
+                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Trabajador</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormSelect
+                            clasesColumna="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_cedula}
+                            nombreCampoSelect="Trabajadores:"
+                            clasesSelect="custom-select"
+                            name="id_cedula"
+                            id="id_cedula"
+                            eventoPadre={this.cambiarEstado}
+                            defaultValue={this.state.id_cedula}
+                            option={this.state.listaDeTrabajadoresActivos}
+                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                        </div>
+
+
+
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Reposo</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                                <ComponentFormSelect
+                                clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                obligatorio="si"
+                                mensaje={this.state.msj_id_reposo}
+                                nombreCampoSelect="Lista de reposos:"
+                                clasesSelect="custom-select"
+                                name="id_reposo"
+                                id="id_reposo"
+                                eventoPadre={this.mostarDias}
+                                defaultValue={this.state.id_reposo}
+                                option={this.state.listaDeRepososActivos}
+                                />
+                            
+                                <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                    dias del reposo:<span id="diasReposo">{(this.state.dias_reposo===null)?"":this.state.dias_reposo}</span>
+                                </div>
+                        </div>
+
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Cam</span>
+                            </div>                            
+                        </div>
+                        <div className="row justify-content-center">
+                                <ComponentFormSelect
+                                clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                obligatorio="si"
+                                mensaje={this.state.msj_id_cam}
+                                nombreCampoSelect="Lista de CAM:"
+                                clasesSelect="custom-select"
+                                name="id_cam"
+                                id="id_cam"
+                                eventoPadre={this.mostrarDatosCam}
+                                defaultValue={this.state.id_cam}
+                                option={this.state.listaDeCamsActivos}
+                                />
+                            
+                                <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
+                        </div>
+                        {this.state.id_cam!==null &&
+                            (
+                                <div>
+                                    <div className="row justify-content-center">
+                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Telefono: {this.state.infoCam.telefono_cam}</div>
+                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">Tipo de centro: {this.state.infoCam.tipoCam.nombre_tipo_cam}</div>
+                                    </div>
+                                    <div className="row mt-3 justify-content-center">
+                                        <div className="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">Ubicación: Esta ubicado en el estado {this.state.infoCam.estado.nombre_estado}, en la ciudad de {this.state.infoCam.ciudad.nombre_ciudad}</div>
+                                    </div>
+                                    <div className="row mt-3 justify-content-center">
+                                        <div className="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">Dirección: {this.state.infoCam.direccion_cam}</div>
+                                    </div>
+                                    
+                                </div>
+                            )
+                        }
+                        
+
+
+
+
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Medico</span>
+                            </div>
+                        </div>
+
+
+
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Detalles</span>
+                            </div>
+                        </div>
+                    
+                    
+                    </form>
                 
                 </div>
+                
             
             </div>
         ) 

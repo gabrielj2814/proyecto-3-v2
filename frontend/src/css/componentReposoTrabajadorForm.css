@@ -7,6 +7,7 @@
     height: auto;
     border-radius: 15px;
     padding-bottom: 30px;
+    margin-bottom: 30px;
 }
 
 .component_reposo_trabajador_formulario{
@@ -18,6 +19,13 @@
     margin-bottom: 15px;
 }
 
-.titulo-form-reposo_trabajador{
+.titulo-form-reposo-trabajador{
     font-size: 2.5rem; 
+}
+
+.sub-titulo-form-reposo-trabajador{
+    font-size: 2.0rem; 
+}
+.diasReposo{
+    line-height: 70px;
 }
