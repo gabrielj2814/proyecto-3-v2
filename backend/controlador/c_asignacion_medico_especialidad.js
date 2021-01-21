@@ -191,6 +191,29 @@ AsignacionMedicoEspecialidadControlador.consultarAsignacionPorMedico=async (req,
     
 }
 
+AsignacionMedicoEspecialidadControlador.consultarAsignacionPorEspecialidad=async (req,res) => {
+    var respuesta_api={medico_especialidad:[],mensaje:"",estado_peticion:""}
+    const medico_especialidad=new AsignacionMedicoEspecialidadModelo()
+    const {id} = req.params
+    const medico_especialidad_result=await medico_especialidad.consultarAsignacionPorEspecialidad(id)
+    if(AsignacionMedicoEspecialidadControlador.verificarExistencia(medico_especialidad_result)){
+        respuesta_api.medico_especialidad=medico_especialidad_result.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="al consultar, no hay ningun registro con este codigo -> "+id
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    
+}
+
 AsignacionMedicoEspecialidadControlador.verificarExistencia= (result) => {
     return result.rows.length!=0
 }

@@ -30,6 +30,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.mostarDias=this.mostarDias.bind(this)
         this.mostrarDatosCam=this.mostrarDatosCam.bind(this)
         this.agregar=this.agregar.bind(this)
+        this.mostrarAsignacionMedico=this.mostrarAsignacionMedico.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -47,11 +48,15 @@ class ComponetReposoTrabajadorForm extends React.Component{
             listaDeTrabajadoresActivos:[],
             listaDeRepososActivos:[],
             listaDeCamsActivos:[],
+            listaDeEspecialidadActivos:[],
+            listaDeMedico:[],
             listaDeReposos:{},
             listaDeCams:{},
+            listaDeAsignaciones:{},
             // -----
             dias_reposo:null,
             infoCam:{},
+            id_especialidad:"",
             // ----
             msj_id_cedula:{
                 mensaje:"",
@@ -62,6 +67,14 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 color_texto:""
             },
             msj_id_cam:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_id_especialidad:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_id_asignacion_medico_especialidad:{
                 mensaje:"",
                 color_texto:""
             },
@@ -117,11 +130,9 @@ class ComponetReposoTrabajadorForm extends React.Component{
                     descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
                 })
             }
-            // -----
+            // ----- reposo
             let listaDeTodosLosReposos=await this.consultarTodosReposo()
-            // console.log("lista de reposos =>>> ",listaDeTodosLosReposos)
             let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-            // console.log("lista de reposos activos =>>> ",listaDeRepososActivos)
             let listaDeReposoSelect=[];
             let reposoTablaHash={}
             for(let reposo of listaDeRepososActivos){
@@ -131,11 +142,9 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 })
                 reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
             }
-            // --------
+            // -------- cam
             let listaDeTodosLosCam=await this.consultarTodosLosCam()
-            // console.log("listas de cam =>>> ",listaDeTodosLosCam)
             let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-            // console.log("listas de cam =>>> ",listaDeCamActivos)
             let listaDeCamSelect=[]
             let camTablaHash={}
             for(let cam of listaDeCamActivos){
@@ -145,14 +154,36 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 })
                 camTablaHash[cam.id_cam]=cam
             }
-            // console.log(camTablaHash)
-             // cam["ciudad"]=await this.consultarCiudad(cam.id_ciudad)
-                // cam["estado"]=await this.consultarEstado(cam.ciudad.id_estado)
-                // cam["tipoCam"]=await this.consultarTipoCam(cam.id_tipo_cam)
             if(listaDeCamSelect.length!==0){
                 camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
                 camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
                 camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
+            }
+            // ------ asignaciones medico
+            let listaDeEspecialidades= await this.consultarTodasEspecialidad()
+            // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
+            let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
+            console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
+            let listaDeEspecialidadesSelect=[]
+            let asigancionTablaHash={}
+            for(let especialidad of listaDeEspecialidadesActivas){
+                listaDeEspecialidadesSelect.push({
+                    id:especialidad.id_especialidad,
+                    descripcion:especialidad.nombre_especialidad
+                })
+                asigancionTablaHash[especialidad.id_especialidad]=especialidad
+            }
+            if(listaDeEspecialidadesActivas.length!==0){
+                asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
+            }
+            let listasDeMedicosSelect=[]
+            if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
+                for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
+                    listasDeMedicosSelect.push({
+                        id:asignacion.id_asignacion_medico_especialidad,
+                        descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
+                    })
+                }
             }
             this.setState({
                 id_reposo_trabajador:idRegistro,
@@ -165,7 +196,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 listaDeCams:camTablaHash,
                 listaDeCamsActivos:listaDeCamSelect,
                 id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
-                infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id]
+                infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
+                listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
+                id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
+                listaDeAsignaciones:asigancionTablaHash,
+                id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"].id_asignacion_medico_especialidad,
+                listaDeMedico:listasDeMedicosSelect
             })
             // console.log(this.state.listaDeReposos[listaDeReposoSelect[0].id].dias)
         }
@@ -285,18 +321,66 @@ class ComponetReposoTrabajadorForm extends React.Component{
         return tipoCam
     }
 
+    async consultarTodasEspecialidad(){
+        var respuesta_servidor=null
+        await axios.get("http://localhost:8080/configuracion/especialidad/consultar-todos")
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data.especialidades
+            // console.log(respuesta.data)
+        })
+        .catch(error=>{
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+        return respuesta_servidor;
+    }
+
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
     }
 
-    agregar(){
-        alert("agregando nuevo formulario")
+    async mostrarAsignacionMedico(a){
+        let input = a.target 
+        this.cambiarEstado(a)
+        let asiganciones=await this.consultarSignacionesPorEspecialidad(input.value)
+        console.log("lista de asignaciones por especialidad =>>> ",asiganciones)
+        let listaDeAsignaciones=JSON.parse(JSON.stringify(this.state.listaDeAsignaciones))
+        // let especialidad=JSON.parse(JSON.stringify(listaDeAsignaciones[this.state.id_especialidad]))
+        listaDeAsignaciones[input.value]["asignacion"]=asiganciones
+        let listasDeMedicosSelect=[]
+        if (listaDeAsignaciones[input.value]){
+            for(let asignacion of listaDeAsignaciones[input.value]["asignacion"]){
+                listasDeMedicosSelect.push({
+                id:asignacion.id_asignacion_medico_especialidad,
+                descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
+                })
+            }
+        }
+        
+        this.setState({
+            listaDeAsignaciones,
+            id_asignacion_medico_especialidad:listaDeAsignaciones[input.value]["asignacion"].id_asignacion_medico_especialidad,
+            listaDeMedico:listasDeMedicosSelect
+        })
+        
     }
 
-    componentDidMount(){
-        console.log(this.state.listaDeReposos)
-        // document.getElementById("diasReposo").textContent=(this.state.id_reposo!==null)?this.state.listaDeReposos[this.state.id_reposo].dias:""
+    async consultarSignacionesPorEspecialidad(id){
+        let datos=null
+        await axios.get(`http://localhost:8080/configuracion/asignacion-medico-especialidad/consultar-asignacion-por-especialidad/${id}`)
+        .then(repuesta => {
+            datos=repuesta.data.medico_especialidad
+        })
+        .catch(error => {
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+        return datos
+    }
+
+    agregar(){
+        alert("agregando nuevo formulario")
     }
 
     mostarDias(a){
@@ -320,6 +404,21 @@ class ComponetReposoTrabajadorForm extends React.Component{
             infoCam:cam
         })
     }
+
+    /**
+     * <ComponentFormSelect
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_asignacion_medico_especialidad}
+                            nombreCampoSelect="Lista de especialidades:"
+                            clasesSelect="custom-select"
+                            name="id_asignacion_medico_especialidad"
+                            id="id_asignacion_medico_especialidad"
+                            eventoPadre={this.mostrarAsignacionMedico}
+                            defaultValue={this.state.listaDeAsignaciones[this.state.id_asignacion_medico_especialidad.asignacion]}
+                            option={this.state.listaDeEspecialidadActivos}
+                            />
+    */
 
     render(){
 
@@ -458,7 +557,35 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <span className="sub-titulo-form-reposo-trabajador">Medico</span>
                             </div>
                         </div>
-
+                        <div className="row justify-content-center">
+                            <ComponentFormSelect
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_especialidad}
+                            nombreCampoSelect="Lista de especialidades:"
+                            clasesSelect="custom-select"
+                            name="id_especialidad"
+                            id="id_especialidad"
+                            eventoPadre={this.mostrarAsignacionMedico}
+                            defaultValue={this.state.id_especialidad}
+                            option={this.state.listaDeEspecialidadActivos}
+                            />
+                            <ComponentFormSelect
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_asignacion_medico_especialidad}
+                            nombreCampoSelect="Lista de medicos:"
+                            clasesSelect="custom-select"
+                            name="id_asignacion_medico_especialidad"
+                            id="id_asignacion_medico_especialidad"
+                            eventoPadre={this.cambiarEstado}
+                            defaultValue={this.state.id_asignacion_medico_especialidad}
+                            option={this.state.listaDeMedico}
+                            />
+                            
+                            
+                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                        </div>
 
 
                         <div className="row mt-3">

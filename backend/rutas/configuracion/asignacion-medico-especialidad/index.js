@@ -12,6 +12,7 @@ router.get("/consultar/:id/:token",AsignacionMedicoEspecialidadControlador.consu
 router.put("/actualizar/:id",AsignacionMedicoEspecialidadControlador.actualizarControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar-todos",AsignacionMedicoEspecialidadControlador.consultarTodosControlador)
 router.get("/consultar-asignacion-por-medico/:id",AsignacionMedicoEspecialidadControlador.consultarAsignacionPorMedico)
+router.get("/consultar-asignacion-por-especialidad/:id",AsignacionMedicoEspecialidadControlador.consultarAsignacionPorEspecialidad)
 
 module.exports= router
 
