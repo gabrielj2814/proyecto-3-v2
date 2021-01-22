@@ -18,6 +18,7 @@ import ComponentFormTextArea from "../subComponentes/componentFormTextArea"
 import ComponentFormSelect from "../subComponentes/componentFormSelect"
 import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
 import AlertBootstrap from "../subComponentes/alertBootstrap"
+import ComponentFormDate from '../subComponentes/componentFormDate'
 
 class ComponetReposoTrabajadorForm extends React.Component{
 
@@ -25,12 +26,13 @@ class ComponetReposoTrabajadorForm extends React.Component{
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
-        // this.operacion=this.operacion.bind(this)
+        this.operacion=this.operacion.bind(this)
         // this.regresar=this.regresar.bind(this);
         this.mostarDias=this.mostarDias.bind(this)
         this.mostrarDatosCam=this.mostrarDatosCam.bind(this)
         this.agregar=this.agregar.bind(this)
         this.mostrarAsignacionMedico=this.mostrarAsignacionMedico.bind(this)
+        this.mostrarFechaHasta=this.mostrarFechaHasta.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -43,7 +45,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
             estatu_reposo_trabajador:"1",
             descripcion_reposo_trabajador:"",
             id_cam:null,
-            id_asignacion_medico_especialidad:"",
+            id_asignacion_medico_especialidad:null,
             // ---------
             listaDeTrabajadoresActivos:[],
             listaDeRepososActivos:[],
@@ -75,6 +77,14 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 color_texto:""
             },
             msj_id_asignacion_medico_especialidad:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_descripcion_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_fecha_desde_reposo_trabajador:{
                 mensaje:"",
                 color_texto:""
             },
@@ -420,6 +430,28 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             />
     */
 
+    mostrarFechaHasta(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        // alert(this.state.dias_reposo)
+        if(this.state.dias_reposo!==""){
+            let dias=parseInt(this.state.dias_reposo)
+            let fecha_hasta=Moment(input.value)
+            fecha_hasta.add(dias,"days")
+            alert(fecha_hasta)
+            this.setState({
+                fecha_hasta_reposo_trabajador:fecha_hasta
+            })
+        }
+        else{
+            alert("por favor selecione un reposo")
+        }
+    }
+
+    operacion(){
+        alert("operacion")
+    }
+
     render(){
 
         const component=(
@@ -571,7 +603,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             option={this.state.listaDeEspecialidadActivos}
                             />
                             <ComponentFormSelect
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_id_asignacion_medico_especialidad}
                             nombreCampoSelect="Lista de medicos:"
@@ -582,17 +614,88 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             defaultValue={this.state.id_asignacion_medico_especialidad}
                             option={this.state.listaDeMedico}
                             />
-                            
-                            
-                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
-
 
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
                                 <span className="sub-titulo-form-reposo-trabajador">Detalles</span>
                             </div>
                         </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormDate
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_fecha_desde_reposo_trabajador}
+                            nombreCampoDate="desde:"
+                            clasesCampo="form-control"
+                            value={this.state.fecha_desde_reposo_trabajador}
+                            name="fecha_desde_reposo_trabajador"
+                            id="fecha_desde_reposo_trabajador"
+                            eventoPadre={this.mostrarFechaHasta}
+                            />
+                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                fecha hasta: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormTextArea
+                            clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
+                            nombreCampoTextArea="Detalle del reposo:"
+                            clasesTextArear="form-control"
+                            obligatorio="si"
+                            value={this.state.descripcion_reposo_trabajador}
+                            name="descripcion_reposo_trabajador"
+                            id="descripcion_reposo_trabajador"
+                            mensaje={this.state.msj_descripcion_reposo_trabajador}
+                            eventoPadre={this.cambiarEstado}
+                            />
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormRadioState
+                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="Estatus:"
+                            name="estatu_reposo_trabajador"
+                            nombreLabelRadioA="Activo"
+                            idRadioA="activoA"
+                            checkedRadioA={this.state.estatu_reposo_trabajador}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Inactivo"
+                            idRadioB="activoB"
+                            valueRadioB="0"
+                            eventoPadre={this.cambiarEstado}
+                            checkedRadioB={this.state.estatu_reposo_trabajador}
+                            />
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="col-auto">
+                                {this.props.match.params.operacion==="registrar" &&
+                                    <InputButton 
+                                    clasesBoton="btn btn-primary"
+                                    id="boton-registrar"
+                                    value="registrar"
+                                    eventoPadre={this.operacion}
+                                    />
+                                }
+                                {this.props.match.params.operacion==="actualizar" &&
+                                    <InputButton 
+                                    clasesBoton="btn btn-warning"
+                                    id="boton-actualizar"
+                                    value="actualizar"
+                                    eventoPadre={this.operacion}
+                                    />   
+                                }
+                            </div>
+                            <div className="col-auto">
+                                <InputButton 
+                                clasesBoton="btn btn-danger"
+                                id="boton-cancelar"
+                                value="cancelar"
+                                eventoPadre={this.regresar}
+                                />   
+                            </div>
+                        </div>
+                        
                     
                     
                     </form>
