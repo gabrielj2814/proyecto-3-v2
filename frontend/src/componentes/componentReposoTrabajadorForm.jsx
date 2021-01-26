@@ -60,23 +60,23 @@ class ComponetReposoTrabajadorForm extends React.Component{
             infoCam:{},
             id_especialidad:"",
             // ----
-            msj_id_cedula:{
+            msj_cedula:{
                 mensaje:"",
                 color_texto:""
             },
-            msj_id_reposo:{
+            msj_reposo:{
                 mensaje:"",
                 color_texto:""
             },
-            msj_id_cam:{
+            msj_cam:{
                 mensaje:"",
                 color_texto:""
             },
-            msj_id_especialidad:{
+            msj_especialidad:{
                 mensaje:"",
                 color_texto:""
             },
-            msj_id_asignacion_medico_especialidad:{
+            msj_asignacion_medico_especialidad:{
                 mensaje:"",
                 color_texto:""
             },
@@ -399,6 +399,15 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.setState({
             dias_reposo:this.state.listaDeReposos[input.value].dias
         })
+        if(this.state.fecha_desde_reposo_trabajador!==""){
+            alert("si")
+            let dias=parseInt(this.state.listaDeReposos[input.value].dias)
+            let fechaHasta=Moment(this.state.fecha_desde_reposo_trabajador)
+            fechaHasta.add(dias,"days")
+            this.setState({
+                fecha_hasta_reposo_trabajador:fechaHasta
+            })
+        }
 
     }
 
@@ -415,21 +424,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
         })
     }
 
-    /**
-     * <ComponentFormSelect
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            obligatorio="si"
-                            mensaje={this.state.msj_id_asignacion_medico_especialidad}
-                            nombreCampoSelect="Lista de especialidades:"
-                            clasesSelect="custom-select"
-                            name="id_asignacion_medico_especialidad"
-                            id="id_asignacion_medico_especialidad"
-                            eventoPadre={this.mostrarAsignacionMedico}
-                            defaultValue={this.state.listaDeAsignaciones[this.state.id_asignacion_medico_especialidad.asignacion]}
-                            option={this.state.listaDeEspecialidadActivos}
-                            />
-    */
-
     mostrarFechaHasta(a){
         let input=a.target
         this.cambiarEstado(a)
@@ -437,8 +431,9 @@ class ComponetReposoTrabajadorForm extends React.Component{
         if(this.state.dias_reposo!==""){
             let dias=parseInt(this.state.dias_reposo)
             let fecha_hasta=Moment(input.value)
+            // alert(input.value)
             fecha_hasta.add(dias,"days")
-            alert(fecha_hasta)
+            // alert(fecha_hasta)
             this.setState({
                 fecha_hasta_reposo_trabajador:fecha_hasta
             })
@@ -448,8 +443,143 @@ class ComponetReposoTrabajadorForm extends React.Component{
         }
     }
 
+    validarSelectNull(valorSelect){
+        let estado=false;
+        let msj=JSON.parse(JSON.stringify(this.state["msj_"+valorSelect]));
+        if(this.state["id_"+valorSelect]!==null){
+            estado = true
+            msj.mensaje="";
+            msj.color_texto="";
+            this.setState({["msj_"+valorSelect]:msj})
+        }
+        else{
+            msj.mensaje="este combo esta vacio por favor inserte datos primero en el modulo de "+valorSelect+" para poder continuar";
+            msj.color_texto="rojo";
+            this.setState({["msj_"+valorSelect]:msj})
+        }
+        return estado;
+
+    }
+
+    validarFechaDesde(){
+        let estado=false
+        let fechaDesde=document.getElementById("fecha_desde_reposo_trabajador").value
+        let msj=JSON.parse(JSON.stringify(this.state["msj_fecha_desde_reposo_trabajador"]));
+        if(fechaDesde!=="" && this.state.dias_reposo!==null){
+            estado=true
+            msj.mensaje="";
+            msj.color_texto="";
+            this.setState({["msj_fecha_desde_reposo_trabajador"]:msj})
+        }
+        else{
+            msj.mensaje="este campo no puede estar vacio";
+            msj.color_texto="rojo";
+            this.setState({["msj_fecha_desde_reposo_trabajador"]:msj})
+        }
+        return estado
+    }
+
+    validarDetalleDelReposo(){
+        let estado=false;
+        let $inputDireccion=document.getElementById("descripcion_reposo_trabajador");
+        let msj_descripcion_reposo_trabajador=JSON.parse(JSON.stringify(this.state.msj_descripcion_reposo_trabajador));
+        const exprecion1=/[a-zA-Z]|[0-9]/g;
+        if($inputDireccion.value!==""){
+
+            if(exprecion1.test($inputDireccion.value)){
+                estado = true;
+                msj_descripcion_reposo_trabajador.mensaje="";
+                msj_descripcion_reposo_trabajador.color_texto="";
+                this.setState({msj_descripcion_reposo_trabajador});
+
+            }
+            else{
+                msj_descripcion_reposo_trabajador.mensaje="este campo no permite espacios en blanco";
+                msj_descripcion_reposo_trabajador.color_texto="rojo";
+                this.setState({msj_descripcion_reposo_trabajador});
+            }
+        }
+        else{
+            msj_descripcion_reposo_trabajador.mensaje="esta campo no puede estar vacio";
+            msj_descripcion_reposo_trabajador.color_texto="rojo";
+            this.setState({msj_descripcion_reposo_trabajador});
+        }
+
+        return estado
+    }
+
+    validarFormulario(){
+        let estado=false
+        let validacionCedulaTrabajador=this.validarSelectNull("cedula")
+        let validacionReposo=this.validarSelectNull("reposo")
+        let validacionCam=this.validarSelectNull("cam")
+        let validacionAsignacion=this.validarSelectNull("asignacion_medico_especialidad")
+        let validacionFechaDesde=this.validarFechaDesde()
+        let validacionDetalle=this.validarDetalleDelReposo()
+        if(validacionCedulaTrabajador && validacionReposo && validacionCam && validacionAsignacion && validacionFechaDesde && validacionDetalle){
+            estado =true
+        }
+        return estado
+
+    }
+
     operacion(){
-        alert("operacion")
+        // alert("operacion")
+        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+        const token=localStorage.getItem('usuario')
+        const {operacion}=this.props.match.params
+        if(this.validarFormulario()){
+            alert("ok al validar el formulario")
+            let datosFormulario=new FormData(document.getElementById("formulario_reposo_trabajador"))
+            let datos={
+                reposo_trabajador:this.extrarDatosDelFormData(datosFormulario),
+                token
+            }
+            datos.reposo_trabajador["fecha_hasta_reposo_trabajador"]=Moment(this.state.fecha_hasta_reposo_trabajador).format("YYYY-MM-DD")
+            console.log("datos que se enviaran al servidor =>>> ",datos)
+            if(operacion==="registrar"){
+                alert("registrando")
+                axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
+                .then(respuesta => {
+                    let json=JSON.parse(JSON.stringify(respuesta.data))
+                    console.log("repuesta =>>> ",json)
+                    if(json.estado_peticion==="200"){
+                        alerta.estado=true
+                        alerta.color="success"
+                        alerta.mensaje=json.mensaje
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.estado=true
+                        alerta.color="danger"
+                        alerta.mensaje=json.mensaje
+                        this.setState({alerta})
+                    }
+                })
+                .catch(error => {
+                    console.log(error)
+                    alerta.estado=true
+                    alerta.color="danger"
+                    alerta.mensaje="error al conectar con el servidor"
+                    this.setState({alerta})
+                })
+            }
+            else if(operacion==="actualizar"){
+                alert("actualizando")
+            }
+
+        }
+    }
+
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
     }
 
     render(){
@@ -503,7 +633,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <ComponentFormSelect
                             clasesColumna="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"
                             obligatorio="si"
-                            mensaje={this.state.msj_id_cedula}
+                            mensaje={this.state.msj_cedula}
                             nombreCampoSelect="Trabajadores:"
                             clasesSelect="custom-select"
                             name="id_cedula"
@@ -526,7 +656,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <ComponentFormSelect
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 obligatorio="si"
-                                mensaje={this.state.msj_id_reposo}
+                                mensaje={this.state.msj_reposo}
                                 nombreCampoSelect="Lista de reposos:"
                                 clasesSelect="custom-select"
                                 name="id_reposo"
@@ -550,7 +680,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <ComponentFormSelect
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 obligatorio="si"
-                                mensaje={this.state.msj_id_cam}
+                                mensaje={this.state.msj_cam}
                                 nombreCampoSelect="Lista de CAM:"
                                 clasesSelect="custom-select"
                                 name="id_cam"
@@ -593,7 +723,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <ComponentFormSelect
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
-                            mensaje={this.state.msj_id_especialidad}
+                            mensaje={this.state.msj_especialidad}
                             nombreCampoSelect="Lista de especialidades:"
                             clasesSelect="custom-select"
                             name="id_especialidad"
@@ -605,7 +735,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <ComponentFormSelect
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"
                             obligatorio="si"
-                            mensaje={this.state.msj_id_asignacion_medico_especialidad}
+                            mensaje={this.state.msj_asignacion_medico_especialidad}
                             nombreCampoSelect="Lista de medicos:"
                             clasesSelect="custom-select"
                             name="id_asignacion_medico_especialidad"

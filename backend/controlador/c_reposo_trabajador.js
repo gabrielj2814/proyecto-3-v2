@@ -46,7 +46,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                                 // res.end()
                             }
                             else{
-                                respuesta_api.mensaje=`al registrar, el trabajador tiene un permiso activo por ende no puede registrar este reposo`
+                                respuesta_api.mensaje=`error al registrar, el trabajador tiene un permiso activo por ende no puede registrar este reposo`
                                 respuesta_api.estado_peticion="404"
                                 res.writeHead(200,{"Content-Type":"application/json"})
                                 res.write(JSON.stringify(respuesta_api))
@@ -54,7 +54,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                             }
                         }
                         else{
-                            respuesta_api.mensaje=`al registrar, el trabajador tiene un reposo activo (codigo del reposo activo '${reposo_trabajador_result_2.rows[0].id_reposo_trabajador}')`
+                            respuesta_api.mensaje=`error al registrar, el trabajador tiene un reposo activo (codigo del reposo activo '${reposo_trabajador_result_2.rows[0].id_reposo_trabajador}')`
                             respuesta_api.estado_peticion="404"
                             res.writeHead(200,{"Content-Type":"application/json"})
                             res.write(JSON.stringify(respuesta_api))
@@ -62,7 +62,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                         }
                     }
                     else{
-                        respuesta_api.mensaje="al registrar, no hay ningun reposo con este codigo ono esta activo"+reposo_trabajador.id_reposo
+                        respuesta_api.mensaje="error al registrar, no hay ningun reposo con este codigo "+reposo_trabajador.id_reposo
                         respuesta_api.estado_peticion="404"
                         res.writeHead(200,{"Content-Type":"application/json"})
                         res.write(JSON.stringify(respuesta_api))
@@ -70,7 +70,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                     }
                 }
                 else{
-                    respuesta_api.mensaje="al registrar, no hay ningun asignacion de especialida de medico con este codigo"+reposo_trabajador.id_asignacion_medico_especialidad
+                    respuesta_api.mensaje="error al registrar, no hay ningun asignacion de especialida de medico con este codigo"+reposo_trabajador.id_asignacion_medico_especialidad
                     respuesta_api.estado_peticion="404"
                     res.writeHead(200,{"Content-Type":"application/json"})
                     res.write(JSON.stringify(respuesta_api))
@@ -78,7 +78,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                 }
             }
             else{
-                respuesta_api.mensaje="al registrar, no hay ningun CAM con este codigo o no esta activio"+reposo_trabajador.id_cam
+                respuesta_api.mensaje="error al registrar, no hay ningun CAM con este codigo o no esta activio"+reposo_trabajador.id_cam
                 respuesta_api.estado_peticion="404"
                 res.writeHead(200,{"Content-Type":"application/json"})
                 res.write(JSON.stringify(respuesta_api))

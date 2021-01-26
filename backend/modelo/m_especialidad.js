@@ -21,7 +21,7 @@ class EspecialidadModelo extends DriverPostgre {
 
     async consultarTodosModelo(){
         const SQL="SELECT * FROM tespecialidad;"
-        console.log(SQL)
+        // console.log(SQL)
         return await this.query(SQL)
     }
 

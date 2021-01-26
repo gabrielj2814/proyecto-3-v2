@@ -14,22 +14,45 @@ class DriverPostgreSQL {
     conexion(){
         this.database.connect()
     }
-
+    
+    async conexion2(sql){
+        let datos=[]
+        await this.database.connect()
+        .then (async cliente => {
+            console.log("----------Inicio---------");
+            console.log("consulta sql =>>> ",sql);
+            console.log("----------Fin------------");
+            await cliente.query (sql)
+            .then(res => {
+                cliente.release ();
+                // console.log (res.rows [0]);
+                datos=res
+            })
+            .catch (e => {
+                cliente.release ();
+                console.log (e.stack);
+            })
+        })
+        .finally (() => {
+            setTimeout(() => {
+                this.database.end(() => {
+                console.log("cerrando la conexion con la base de datos")})
+            },5000)
+        });
+        return datos
+    }
     async query(sql){
-        this.conexion()
-        console.log("----------Inicio---------");
-        console.log("consulta sql ->>>",sql);
-        console.log("----------Fin------------");
-        const respuesta=await this.database.query(sql)
-        // console.log(respuesta)
-        return respuesta
-        //console.log("estoy en el driver de conexion")
+        // return await this.conexion2(sql)
+        return await this.conexion2(sql)
+        // console.log("----------Inicio---------");
+        // console.log("consulta sql ->>>",sql);
+        // console.log("----------Fin------------");
+        // const respuesta=await this.database.query(sql)
+
+        // return respuesta
     }
 
 
 }
-
-// let driver =new DriverPostgreSQL()
-// console.log(driver.query("SELECT * FROM ttrabajador;"))
 
 module.exports = DriverPostgreSQL
