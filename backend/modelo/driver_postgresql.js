@@ -37,7 +37,7 @@ class DriverPostgreSQL {
             setTimeout(() => {
                 this.database.end(() => {
                 console.log("cerrando la conexion con la base de datos")})
-            },5000)
+            },1000)
         });
         return datos
     }

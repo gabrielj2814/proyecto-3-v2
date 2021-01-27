@@ -136,12 +136,13 @@ class ComponentEstadoForm extends React.Component{
 
     async agregar(){
         const id=await this.generarIdEstado()
+        // alert(JSON.stringify(id))
         var mensaje_campo={
             mensaje:"",
             color_texto:""
         }
         this.setState({
-            id_estado:id,
+            id_estado:id.id,
             nombre_estado:"" ,
             estatu_estado:"1",
             msj_nombre_estado:mensaje_campo
