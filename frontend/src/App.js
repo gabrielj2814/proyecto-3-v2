@@ -74,6 +74,7 @@ import componentHorario from './componentes/componentHorario';
 import ComponentAsistencia from './componentes/componentAsistencia';
 // REPOSO TRABAJADOR 
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
+import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
 //modulos seguridad
 
 function App() {
@@ -142,6 +143,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
         
         <Route exact path="/dashboard/transaccion/reposo-trabajador/:operacion/:id?" component={ComponentReposoTrabajadorForm}/>
+        <Route exact path="/dashboard/transaccion/reposo-trabajador:mensaje?" component={ComponentReposoTrabajador}/>
 
 
         <Route exact path="/dashboard/transaccion/permiso-trabajador/solicitar" component={ComponentSolicitarPermisoForm}/>

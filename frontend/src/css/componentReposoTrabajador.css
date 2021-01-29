@@ -2,7 +2,7 @@
     --color-fondo-formulario:#fff;
 }
 
-.component_asignacion_inicio{
+.component_reposo_trabajador{
 	height: 100%;
     width: 100%;
 }
@@ -25,7 +25,6 @@
 
 .contenedor-tabla-de-datos{
     height: 100%;
-    background-color: var(--color-fondo-formulario);
     border-radius: 15px;
     padding-top: 15px;
 }

@@ -198,8 +198,8 @@ class ComponentCam extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                  <th>Codigo</th> 
-                  <th>Nombre</th>
+                    <th>Codigo</th> 
+                    <th>Nombre</th>
                 </tr> 
             </thead>
         )

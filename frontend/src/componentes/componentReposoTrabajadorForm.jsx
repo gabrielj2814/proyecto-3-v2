@@ -27,7 +27,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.operacion=this.operacion.bind(this)
-        // this.regresar=this.regresar.bind(this);
+        this.regresar=this.regresar.bind(this);
         this.mostarDias=this.mostarDias.bind(this)
         this.mostrarDatosCam=this.mostrarDatosCam.bind(this)
         this.agregar=this.agregar.bind(this)
@@ -814,6 +814,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
         return json   
     }
 
+    regresar(){
+        this.props.history.push("/dashboard/transaccion/reposo-trabajador")
+    }
+
     render(){
 
         const component=(
@@ -1069,7 +1073,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         ) 
 
         return(
-            <div className="component_cam_formulario">
+            <div className="component_reposo_trabajador_formulario">
 				<ComponentDashboard
                 componente={component}
                 modulo={this.state.modulo}
