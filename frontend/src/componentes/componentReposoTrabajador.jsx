@@ -30,6 +30,7 @@ class ComponentReposoTrabajador extends React.Component{
         this.redirigirFormulario=this.redirigirFormulario.bind(this);
         this.buscarReposos=this.buscarReposos.bind(this);
         this.actualizarElementoTabla=this.actualizarElementoTabla.bind(this);
+        this.consultarElementoTabla=this.consultarElementoTabla.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -199,6 +200,11 @@ class ComponentReposoTrabajador extends React.Component{
         let boton=a.target
         this.props.history.push(`/dashboard/transaccion/reposo-trabajador/actualizar/${boton.id}`)
 
+    }
+
+    consultarElementoTabla(a){
+        let boton=a.target
+        this.props.history.push(`/dashboard/transaccion/reposo-trabajador/consultar/${boton.id}`)
     }
 
     render(){
