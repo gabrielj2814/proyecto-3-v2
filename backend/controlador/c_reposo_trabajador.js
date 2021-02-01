@@ -191,7 +191,7 @@ ReposoTrabajadorControlador.consultarControlador=async (req,res,next) => {
         next()
     }
     else{
-        respuesta_api.mensaje="al consultar, no hay nigun registron con este codigo -> "+id
+        respuesta_api.mensaje="error al consultar, no hay nigun registro con este codigo -> "+id
         respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))

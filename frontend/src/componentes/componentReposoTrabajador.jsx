@@ -52,7 +52,7 @@ class ComponentReposoTrabajador extends React.Component{
                 color:null,
                 mensaje:null,
                 estado:false
-            }
+            },
         }
     }
 
@@ -114,6 +114,17 @@ class ComponentReposoTrabajador extends React.Component{
         console.log("datos reposos =>>> ",datosResposos)
         let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
         this.setState(datosTabla)
+        if(this.props.match.params.mensaje){
+            const msj=JSON.parse(this.props.match.params.mensaje)
+            //alert("OK "+msj.texto)
+            var alerta=this.state.alerta
+            alerta.mensaje=msj.texto
+            alerta.estado=true
+            alerta.color="danger"
+            this.setState({
+                alerta
+            })
+        }
 
     }
 

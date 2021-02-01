@@ -64,7 +64,7 @@ const MenuDashboard = (props) =>{
                         <div id="trasaccion">
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia" texto="Asistencia"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/permiso-trabajador" texto="Gestionar Permiso"/>
-                            <span className="item-sub-menu">Gestionar Reposo</span>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/reposo-trabajador" texto="Gestionar Reposo"/>
                         </div>
                     }
                     {modulo[1]==="configuracion"&&

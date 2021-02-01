@@ -49,52 +49,68 @@ class ComponentReposoTrabajadorConsulta extends React.Component{
     async UNSAFE_componentWillMount(){
         let id=this.props.match.params.id
         let datosReposoTrabajador=await this.consultarReposoTrabajador(id)
-        // alert(id)
-        console.log("datos reposo trabajador =>>> ",datosReposoTrabajador)
-        // datos estado
-        let ciudad=await this.consultarCiudad(datosReposoTrabajador.id_ciudad)
-        console.log("datos ciudad =>>> ",ciudad)
-        let estado=await this.consultarEstado(ciudad.id_estado)
-        console.log("datos estado =>>> ",estado)
-        let tipoCam=await this.consultarTipoCam(datosReposoTrabajador.id_tipo_cam)
-        console.log("datos tipo cam =>>> ",tipoCam)
-        let asignacionMedicoEspecialidad=await this.consultarAsignacion(datosReposoTrabajador.id_asignacion_medico_especialidad)
-        console.log("datos asignacion medico especialidad =>>> ",asignacionMedicoEspecialidad)
-        this.setState({
-            id_reposo_trabajador:datosReposoTrabajador.id_reposo_trabajador,
-            id_cedula:datosReposoTrabajador.id_cedula,
-            id_reposo:datosReposoTrabajador.id_reposo,
-            fecha_desde_reposo_trabajador:Moment(datosReposoTrabajador.fecha_desde_reposo_trabajador).format("DD-MM-YYYY"),
-            fecha_hasta_reposo_trabajador:Moment(datosReposoTrabajador.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY"),
-            estatu_reposo_trabajador:datosReposoTrabajador.estatu_reposo_trabajador,
-            descripcion_reposo_trabajador:datosReposoTrabajador.descripcion_reposo_trabajador,
-            id_cam:datosReposoTrabajador.id_cam,
-            id_asignacion_medico_especialidad:datosReposoTrabajador.id_asignacion_medico_especialidad,
-            // 
-            nombreCompletoTrabajador:datosReposoTrabajador.nombres+" "+datosReposoTrabajador.apellidos,
-            nombreReposo:datosReposoTrabajador.nombre_reposo,
-            diasReposo:datosReposoTrabajador.dias_reposo,
-            nombreCam:datosReposoTrabajador.nombre_cam,
-            direccionCam:datosReposoTrabajador.direccion_cam,
-            telefonoCam:datosReposoTrabajador.telefono_cam,
-            nombreCiudad:ciudad.nombre_ciudad,
-            nombreEstado:estado.nombre_estado,
-            nombreTipoCam:tipoCam.nombre_tipo_cam,
-            nombreMedico:asignacionMedicoEspecialidad.nombre_medico,
-            nombreEspecialidad:asignacionMedicoEspecialidad.nombre_especialidad
-        })
+        if(datosReposoTrabajador!==null){
+            // alert(id)
+            console.log("datos reposo trabajador =>>> ",datosReposoTrabajador)
+            // datos estado
+            let ciudad=await this.consultarCiudad(datosReposoTrabajador.id_ciudad)
+            console.log("datos ciudad =>>> ",ciudad)
+            let estado=await this.consultarEstado(ciudad.id_estado)
+            console.log("datos estado =>>> ",estado)
+            let tipoCam=await this.consultarTipoCam(datosReposoTrabajador.id_tipo_cam)
+            console.log("datos tipo cam =>>> ",tipoCam)
+            let asignacionMedicoEspecialidad=await this.consultarAsignacion(datosReposoTrabajador.id_asignacion_medico_especialidad)
+            console.log("datos asignacion medico especialidad =>>> ",asignacionMedicoEspecialidad)
+            this.setState({
+                id_reposo_trabajador:datosReposoTrabajador.id_reposo_trabajador,
+                id_cedula:datosReposoTrabajador.id_cedula,
+                id_reposo:datosReposoTrabajador.id_reposo,
+                fecha_desde_reposo_trabajador:Moment(datosReposoTrabajador.fecha_desde_reposo_trabajador).format("DD-MM-YYYY"),
+                fecha_hasta_reposo_trabajador:Moment(datosReposoTrabajador.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY"),
+                estatu_reposo_trabajador:datosReposoTrabajador.estatu_reposo_trabajador,
+                descripcion_reposo_trabajador:datosReposoTrabajador.descripcion_reposo_trabajador,
+                id_cam:datosReposoTrabajador.id_cam,
+                id_asignacion_medico_especialidad:datosReposoTrabajador.id_asignacion_medico_especialidad,
+                // 
+                nombreCompletoTrabajador:datosReposoTrabajador.nombres+" "+datosReposoTrabajador.apellidos,
+                nombreReposo:datosReposoTrabajador.nombre_reposo,
+                diasReposo:datosReposoTrabajador.dias_reposo,
+                nombreCam:datosReposoTrabajador.nombre_cam,
+                direccionCam:datosReposoTrabajador.direccion_cam,
+                telefonoCam:datosReposoTrabajador.telefono_cam,
+                nombreCiudad:ciudad.nombre_ciudad,
+                nombreEstado:estado.nombre_estado,
+                nombreTipoCam:tipoCam.nombre_tipo_cam,
+                nombreMedico:asignacionMedicoEspecialidad.nombre_medico,
+                nombreEspecialidad:asignacionMedicoEspecialidad.nombre_especialidad
+            })
+            // else{
+
+            // }
+        }
     }
 
     async consultarReposoTrabajador(id){
+        let mensaje={texto:"",estado:""}
         let datos=null
         const token=localStorage.getItem('usuario')
         await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar/${id}/${token}`)
         .then(repuesta => {
+            
             let json=JSON.parse(JSON.stringify(repuesta.data))
-            datos=json.reposo_trabajador
+            if(json.estado_peticion==="200"){
+                datos=json.reposo_trabajador
+            }
+            else if(json.estado_peticion==="404"){
+                mensaje.texto=json.mensaje
+                mensaje.estado=json.estado_peticion
+                this.props.history.push(`/dashboard/transaccion/reposo-trabajador${JSON.stringify(mensaje)}`)
+            }
         })
         .catch(error => {
-            console.log(error)
+            mensaje.texto="error al conectar con el servidor"
+            mensaje.estado="500"
+            this.props.history.push(`/dashboard/transaccion/reposo-trabajador${JSON.stringify(mensaje)}`)
         })
         return datos
     }
