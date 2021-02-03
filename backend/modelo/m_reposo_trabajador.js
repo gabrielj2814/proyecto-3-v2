@@ -27,7 +27,7 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         this.id_asignacion_medico_especialidad=reposo_trabajador.id_asignacion_medico_especialidad
     }
 
-    setIdReposoTrabajdor(id){
+    setIdReposoTrabajador(id){
         this.id_reposo_trabajador=id
     }
 
@@ -42,6 +42,11 @@ class ReposoTrabajadorModelo extends DriverPostgre {
 
     setIdReposoTrabajador(id){
         this.id_reposo_trabajador=id
+    }
+
+    async consultarRepososActivos(){
+        const SQL=`SELECT * FROM treposotrabajador WHERE estatu_reposo_trabajador='1';`
+        return await this.query(SQL)
     }
 
     async consultarRepososXFechaModelo(){

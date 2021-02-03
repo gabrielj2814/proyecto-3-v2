@@ -25,6 +25,10 @@ router.get("/caducar-permisos/:hasta/:token",PermisoTrabajadorControlador.caduca
 router.get("/reporte-fecha/:desde/:hasta",PermisoTrabajadorControlador.consultarPermisosXFechaControlador)
 router.get("/reporte-mensual",PermisoTrabajadorControlador.consultarMensualControlador)
 router.get("/consultar-permiso-trabajador/:cedula/:desde/:hasta/:token",PermisoTrabajadorControlador.consultarPermisoTrabajadorFechaDesdeHasta,VitacoraControlador.capturaDatos)
+// 
+router.get("/verifircar-vencimiento",PermisoTrabajadorControlador.verificarVencimiento)
+router.get("/consultar-culminados",PermisoTrabajadorControlador.consultarPermisosCulminadosHoy)
+router.get("/consultar-aprovados",PermisoTrabajadorControlador.consultarPermisosAprovadosTodos)
 
 const json={
 

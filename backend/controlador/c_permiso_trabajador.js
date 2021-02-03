@@ -341,6 +341,77 @@ PermisoTrabajadorControlador.consultarPermisoActivos=async (cedula) => {
     return permiso_result
 }
 
+PermisoTrabajadorControlador.verificarVencimiento=async (req,res) => {
+    // consultarRepososActivos
+    let info={
+        permisosCaducados:[],
+        numeroDePermisosCaducados:0
+    }
+    const hoy=Moment()
+    // console.log(hoy)
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
+    let datosConsultaPermisos=await PERMISOTRABAJADOR.consultarTodosPermisoAprovados()
+    let permisos=datosConsultaPermisos.rows
+    console.log("permisos =>>> ",permisos)
+    for(let permiso of permisos){
+        
+        let fechaPermiso=Moment(permiso.fecha_hasta_permiso_trabajador)
+        if(!hoy.isBefore(fechaPermiso)){
+            console.log("OK")
+            info.permisosCaducados.push(permiso)
+            info.numeroDePermisosCaducados+= 1
+            PERMISOTRABAJADOR.set_datoIdPermisoTrabajador(permiso.id_permiso_trabajador)
+            PERMISOTRABAJADOR.actualizarCaducarPermisoModelo()
+        }
+        // // console.log("datos reposo =>>> ",reposo)
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(info))
+    res.end()
+}
+
+PermisoTrabajadorControlador.consultarPermisosCulminadosHoy= async (req,res) => {
+    var respuesta_api={permisos_trabajador:[],mensaje:"actualizacion de estatu permiso completada",estado_peticion:"200"}
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
+    const permiso=await PERMISOTRABAJADOR.consultarPermisoCulminadosHoy()
+    if(permiso.rows.length!=0){
+        respuesta_api.permisos_trabajador=permiso.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="no hay permisos"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
+
+PermisoTrabajadorControlador.consultarPermisosAprovadosTodos= async (req,res) => {
+    var respuesta_api={permisos_trabajador:[],mensaje:"actualizacion de estatu permiso completada",estado_peticion:"200"}
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
+    const permiso=await PERMISOTRABAJADOR.consultarPermisoAprovadosTodos()
+    if(permiso.rows.length!=0){
+        respuesta_api.permisos_trabajador=permiso.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="no hay permisos"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
+
 module.exports= PermisoTrabajadorControlador
 
 

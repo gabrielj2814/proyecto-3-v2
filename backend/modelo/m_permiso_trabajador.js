@@ -46,6 +46,12 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         return await this.query(SQL)
     }
 
+    async consultarTodosPermisoAprovados(){
+        const SQL=`SELECT * FROM tpermisotrabajador WHERE estatu_permiso_trabajador='A';`
+        //console.log(SQL)
+        return await this.query(SQL)
+    }
+
     async consultarTodosActivoModelo(){
         const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.estatu_permiso_trabajador='1' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`
         //console.log(SQL)
@@ -54,6 +60,19 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 
     async consultarPermisoHoyModelo(hoy,estatu){
         const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.id_permiso_trabajador LIKE '%${hoy}%' AND tpermisotrabajador.estatu_permiso_trabajador='${estatu}' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`//Moment
+        //console.log(SQL)
+        return await this.query(SQL)
+    }
+
+    async consultarPermisoCulminadosHoy(){
+        const Moment=require("moment")
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.fecha_hasta_permiso_trabajador='${Moment().format("YYYY-MM-DD")}' AND tpermisotrabajador.estatu_permiso_trabajador='C' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`//Moment
+        //console.log(SQL)
+        return await this.query(SQL)
+    }
+    
+    async consultarPermisoAprovadosTodos(){
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.estatu_permiso_trabajador='A' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`//Moment
         //console.log(SQL)
         return await this.query(SQL)
     }

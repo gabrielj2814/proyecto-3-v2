@@ -335,6 +335,40 @@ ReposoTrabajadorControlador.consultarReposoActivo=async (cedula) => {
     return reposo_trabajador_result
 }
 
+ReposoTrabajadorControlador.verificarVencimiento= async (req,res) => {
+    // consultarRepososActivos
+    let info={
+        repososCaducados:[],
+        numeroDeRepososCaducados:0
+    }
+    const hoy=Moment()
+    // console.log(hoy)
+    const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
+    let datosConsultaReposos=await reposo_trabajador_modelo.consultarRepososActivos()
+    let reposos=datosConsultaReposos.rows
+    console.log("reposos =>>> ",reposos)
+    for(let reposo of reposos){
+        
+        // reposo.fecha_hasta_reposo_trabajador=Moment(reposo.fecha_hasta_reposo_trabajador,"YYYY-MM-DD")
+        let fechaReposo=Moment(reposo.fecha_hasta_reposo_trabajador)
+        // let fechaReposo=Moment(new Date("2021-2-1"))
+        if(!hoy.isBefore(fechaReposo)){
+            // console.log("OK")
+            info.repososCaducados.push(reposo)
+            info.numeroDeRepososCaducados+= 1
+            reposo_trabajador_modelo.setIdReposoTrabajador(reposo.id_reposo_trabajador)
+            reposo_trabajador_modelo.actualizarCaducarReposoModelo()
+        }
+        // console.log("datos reposo =>>> ",reposo)
+    }
+    // console.log("reposos =>>> ",reposos)
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(info))
+    res.end()
+}
+
+
+
 module.exports = ReposoTrabajadorControlador
 
 

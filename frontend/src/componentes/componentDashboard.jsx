@@ -23,6 +23,9 @@ class ComponentDashboard extends React.Component{
         }
 
         async UNSAFE_componentWillMount(){
+            this.caducarReposos()
+            this.caducarPermisos()
+
             var mensaje={texto:"",estado:""}
             if(localStorage.getItem("usuario")){
                 var respuesta_servior=""
@@ -58,6 +61,28 @@ class ComponentDashboard extends React.Component{
             
         }
 
+        caducarReposos(){
+            axios.get("http://localhost:8080/transaccion/reposo-trabajador/verifircar-vencimiento")
+            .then(repuesta => {
+                console.log(repuesta.data)
+            })
+            .catch(error=> {
+                console.log(error)
+            })
+        }
+
+        caducarPermisos(){
+            axios.get("http://localhost:8080/transaccion/permiso-trabajador/verifircar-vencimiento")
+            .then(repuesta => {
+                console.log(repuesta.data)
+            })
+            .catch(error=> {
+                console.log(error)
+            })
+        }
+
+
+
         render(){
             return(
                 <div className="container-fluid component_dashboard">
@@ -73,6 +98,9 @@ class ComponentDashboard extends React.Component{
                 </div>
             )
         }
+
+
+
 
 }
 

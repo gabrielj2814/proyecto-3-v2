@@ -142,14 +142,40 @@ class ComponentPermisoTrabajador extends React.Component{
 
     async consultarPermisosXEstatu(a){
         var input=a.target;
-        const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${input.value}`
-        const permisos=await this.consultarAlServidor(ruta_permisos)
-        const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
-        permisos_verificado.tabla=input.value
-        if(!permisos_verificado.numeros_registros){
-            permisos_verificado.numeros_registros=0
+        if(input.value==="C"){
+            // /consultar-culminados
+            // alert("hola")
+            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-culminados`
+            const permisos=await this.consultarAlServidor(ruta_permisos)
+            const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
+            permisos_verificado.tabla=input.value
+            if(!permisos_verificado.numeros_registros){
+                permisos_verificado.numeros_registros=0
+            }
+            this.setState(permisos_verificado)
         }
-        this.setState(permisos_verificado)
+        else if(input.value==="A"){
+            // /consultar-culminados
+            alert("hola")
+            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-aprovados`
+            const permisos=await this.consultarAlServidor(ruta_permisos)
+            const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
+            permisos_verificado.tabla=input.value
+            if(!permisos_verificado.numeros_registros){
+                permisos_verificado.numeros_registros=0
+            }
+            this.setState(permisos_verificado)
+        }
+        else{
+            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${input.value}`
+            const permisos=await this.consultarAlServidor(ruta_permisos)
+            const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
+            permisos_verificado.tabla=input.value
+            if(!permisos_verificado.numeros_registros){
+                permisos_verificado.numeros_registros=0
+            }
+            this.setState(permisos_verificado)
+        }
     }
 
     async aprovarPermiso(a){
