@@ -20,7 +20,7 @@ import 'bootstrap/dist/js/bootstrap.bundle';
 const ComponentCarusel= () => {
 
     return (
-        <div className="row ">
+        <div className="row row-conenedor-carusel">
             <div className="col-12 col-sm-12 col-md-12 col-lg-12 columna_carusel">
                 <div id="carousel1" className="carousel slide contenedor_imagen" data-ride="carousel">
                     <ol className="carousel-indicators">

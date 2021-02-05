@@ -7,7 +7,28 @@
 .component_login{
     height: 100%;
     background-color: var(--color_fondo_login);
+    position: relative;
     
+}
+
+.contenedor-icon-row-left-login{
+    box-sizing: border-box;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.icon-row-left-login{
+    width: 30px;
+    height: 30px;
+    color:#fff;
+    transition: transform 1s,
+                color 1s;
+    cursor: pointer;
+}
+.icon-row-left-login:hover{
+    transform:scale(1.2);
+    color: #0069d9;
 }
 
 .fila_login{

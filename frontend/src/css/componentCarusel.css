@@ -3,9 +3,12 @@
     height: 50%;
 }
 */
-
+.row-conenedor-carusel{
+    margin: 0;
+}
 .columna_carusel{
     height: 300px;
+    padding: 0;
     /*background-color: blue;*/
 }
 
