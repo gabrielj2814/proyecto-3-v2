@@ -73,7 +73,7 @@ class ComponentTrabajador extends React.Component{
               nombre_permiso:"vacio",
               vacio:"vacio"
             })
-            return {registros:json_server_response}
+            return {registros:json_server_response,numeros_registros:0}
           }
           else{
             return {
@@ -151,7 +151,7 @@ class ComponentTrabajador extends React.Component{
           .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
-            this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.trabajadores})
+            this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.trabajadores,numeros_registros:respuesta_servidor.trabajadores.length})
           })
           .catch(error=>{
             console.log(error)
@@ -159,7 +159,10 @@ class ComponentTrabajador extends React.Component{
           })
         }
         else{
-          console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
+          // console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
+          var json_server_response=await this.consultarTodosTrabajadores();
+          var servidor=this.verficarLista(json_server_response);
+          this.setState(servidor)
         }
     }
 
