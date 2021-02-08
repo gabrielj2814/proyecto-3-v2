@@ -8,9 +8,10 @@
     position: relative;
 }
 
-.nombre-usuario{
+.nombre-usuario,.fecha{
     color: white;
     font-size: 1.3rem;
+    text-transform: capitalize;
 }
 
 .contenedor-foto-avatar{
@@ -30,5 +31,6 @@
 .contenedorArrowLeft{
     box-sizing: border-box;
     position: absolute;
-    right: 10px;
+    top: 10px;
+    right: 2px;
 }

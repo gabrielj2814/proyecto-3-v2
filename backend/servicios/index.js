@@ -31,6 +31,7 @@ ServisWebToken.decodificarToken=(token)=>{
                     id_cedula:token_decodificado.id_cedula,
                     nombre_usuario:token_decodificado.nombre_usuario,
                     id_perfil:token_decodificado.id_perfil,
+                    fecha:moment()
                 }
             })
         }

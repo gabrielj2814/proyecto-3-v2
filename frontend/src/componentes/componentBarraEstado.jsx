@@ -16,10 +16,11 @@ const BarraEsatdo= (props) =>{
     function salirDelSistema(){
         if(localStorage.getItem("usuario")){
             localStorage.removeItem("usuario")
+            clearInterval(props.referenciaRelog)
             props.history.push("/login")
         }
     }
-
+    // <span className="fecha" id="fechaRelog">{props.fechaRelog}</span>
     return (
         <div className="row justify-content-start align-items-center contenedor_barra_estado">
             <div className="col-md-1 contenedor-foto-avatar">
@@ -27,6 +28,9 @@ const BarraEsatdo= (props) =>{
             </div>
             <div className="col-auto">
                 <span className="nombre-usuario">{props.nombre_usuario}</span>
+            </div>
+            <div className="col-auto offset-md-6 offset-lg-6">
+                <span className="fecha" id="fechaRelog">{props.fechaRelog}</span>
             </div>
             <div className="contenedorArrowLeft">
                 <div className="dropdown dropleft">
