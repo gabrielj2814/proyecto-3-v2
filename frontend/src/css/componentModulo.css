@@ -1,12 +1,13 @@
 :root{
     --color_fondo_dashboard_1:rgb(2, 9, 105);
     --color_fondo_dashboard_2:rgb(151, 0, 118);
+    --color_fondo_dashboard_3:#2e415c;
 }
 
 
 
 .columna-modulo{
-    background-color:var(--color_fondo_dashboard_1);
+    background-color:var(--color_fondo_dashboard_3);
     height: 100%;
     overflow: scroll;
     overflow-x: hidden;
