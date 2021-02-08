@@ -1,6 +1,6 @@
 :root{
-    --color_fondo_login:#111;
-    --color_fondo_formulario_login:rgb(98, 135, 190);
+    --color_fondo_login:#fff;
+    --color_fondo_formulario_login:rgba(49, 49, 49, 0.815);
     --color_texto:#fff;
 }
 
@@ -21,7 +21,7 @@
 .icon-row-left-login{
     width: 30px;
     height: 30px;
-    color:#fff;
+    color:#111;
     transition: transform 1s,
                 color 1s;
     cursor: pointer;

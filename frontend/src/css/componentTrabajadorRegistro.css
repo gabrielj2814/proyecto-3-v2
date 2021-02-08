@@ -1,5 +1,5 @@
 :root{
-    --color_fondo_registro_trabajador:#111;
+    --color_fondo_registro_trabajador:#fff;
     --color_fondo_formulario_registro_trabajador:rgba(49, 49, 49, 0.815);
     --color_texto:#fff;
 }
@@ -21,7 +21,7 @@
 .icon-row-left-registrar-trabajador{
     width: 30px;
     height: 30px;
-    color:#fff;
+    color:#111;
     transition: transform 1s,
                 color 1s;
     cursor: pointer;
