@@ -16,7 +16,10 @@ const BarraEsatdo= (props) =>{
     function salirDelSistema(){
         if(localStorage.getItem("usuario")){
             localStorage.removeItem("usuario")
+            localStorage.removeItem("tiempoSesion")
+            localStorage.removeItem("fechaSesion")
             clearInterval(props.referenciaRelog)
+            clearInterval(props.referenciaTemporzadorSesion)
             props.history.push("/login")
         }
     }

@@ -1,5 +1,27 @@
 .component_dashboard{
     height: 100%;
+    position: relative;
+}
+
+.contenedor_alerta_extender_sesion{
+    position: absolute;
+    top: 0px;
+    left: 25%;
+    z-index: 1;
+    width: 50vw;
+    transform:translateY(-90%);
+    transition: transform .5s;
+}
+
+.mostart_alerta_extender_sesion{
+    transform:translateY(110%);
+    transition: transform 1s;
+    
+}
+
+.mensaje_alerta_estender_sesion{
+    display: inline-block;
+    margin-right: 10px;
 }
 
 .contenedor_app{

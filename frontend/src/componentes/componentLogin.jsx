@@ -85,10 +85,16 @@ class ComponentLogin extends React.Component{
                         console.log("シーテムに入ります")
                         if(localStorage.getItem("usuario")){
                             localStorage.removeItem("usuario")
+                            localStorage.removeItem("tiempoSesion")
+                            localStorage.removeItem("fechaSesion","")
                             localStorage.setItem("usuario",respuesta_servidor.token)
+                            localStorage.setItem("tiempoSesion","")
+                            localStorage.setItem("fechaSesion","")
                         }
                         else{
                             localStorage.setItem("usuario",respuesta_servidor.token)
+                            localStorage.setItem("tiempoSesion","")
+                            localStorage.setItem("fechaSesion","")
                         }
                         this.props.history.push("/dashboard")
                     }
