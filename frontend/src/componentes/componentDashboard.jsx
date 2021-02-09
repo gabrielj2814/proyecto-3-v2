@@ -65,7 +65,6 @@ class ComponentDashboard extends React.Component{
                             localStorage.tiempoSesion=Moment(respuesta_servior.usuario.fecha).format("hh:mm:ssA")
                         }
                         else{
-                            let tiempoInicio=Moment(localStorage.getItem("tiempoSesion"),"hh:mm:ssA")
                             let fechaSecion=Moment(respuesta_servior.usuario.fecha)
                             let tiempoExtender=Moment(localStorage.getItem("tiempoSesion"),"hh:mm:ssA")
                             let tiempoFinal=Moment(localStorage.getItem("tiempoSesion"),"hh:mm:ssA")
@@ -137,8 +136,8 @@ class ComponentDashboard extends React.Component{
                 
                 tiempoExtender.add(this.state.timpoPreguntarExtenderSesion,"minutes")
                 tiempoFinal.add(this.state.timpoTerminarSesion,"minutes")
-                console.log(tiempoExtender.format("hh:mm:ssA"))
-                console.log(tiempoFinal.format("hh:mm:ssA"))
+                // console.log(tiempoExtender.format("hh:mm:ssA"))
+                // console.log(tiempoFinal.format("hh:mm:ssA"))
                 if(fechaSecion.isSameOrAfter(tiempoFinal)){
                     // console.log("sacar del sistema por que se vencio la sesion")
                     const $alertaExtenderSesion=document.getElementById("alerta_extender_sesion")
