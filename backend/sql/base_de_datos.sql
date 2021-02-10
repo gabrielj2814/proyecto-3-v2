@@ -48,8 +48,8 @@ CREATE TABLE ttrabajador(
     nombres character varying(50) NOT NULL,
     apellidos character varying(50) NOT NULL,
     sexo_trabajador character(1) NOT NULL,
-    telefono_movil character varying(11) NOT NULL,
-    telefono_local character varying(11) NOT NULL,
+    telefono_movil character varying(11),
+    telefono_local character varying(11),
     correo character varying(360) NOT NULL,
     direccion character varying(300) NOT NULL,
     clave_trabajador character varying(300) NOT NULL,
@@ -235,4 +235,13 @@ CREATE TABLE tvitacora(
     aquien character varying(50),
     constraint PK_id_vitacora primary key(id_vitacora),
     constraint FK_id_cedula_tvitacora foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
+
+CREATE TABLE tcintillo(
+    id_foto_cintillo serial,
+    nombre_foto_cintillo character varying(145) NOT NULL,
+    fecha_subida_foto DATE NOT NULL,
+    hora_subida_foto character varying(10) NOT NULL,-- 12-12-12AM
+    estatu_foto_cintillo character(1) NOT NULL,
+    constraint PK_id_foto_cintillo primary key(id_foto_cintillo)
 );

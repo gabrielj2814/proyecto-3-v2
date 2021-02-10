@@ -75,8 +75,10 @@ import ComponentAsistencia from './componentes/componentAsistencia';
 // REPOSO TRABAJADOR 
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
 import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
-import componentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
-//modulos seguridad
+import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
+//cintillo
+import ComponentCintillo from "./componentes/componentCintillo"
+
 
 function App() {
   return (
@@ -137,13 +139,15 @@ function App() {
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
         
         <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
+
+        <Route exact path="/dashboard/configuracion/cintillo-home" component={ComponentCintillo}/>
         
         
         <Route exact path="/dashboard/configuracion/cam/consultar/:id" component={ComponentCamConsultar}/>
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
         
-        <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={componentReposoTrabajadorConsulta}/>
+        <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorConsulta}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/:operacion/:id?" component={ComponentReposoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador:mensaje?" component={ComponentReposoTrabajador}/>
 

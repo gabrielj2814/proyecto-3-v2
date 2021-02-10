@@ -29,8 +29,8 @@ class ComponentDashboard extends React.Component{
                 referenciaRelog:"",
                 referenciaTemporzadorSesion:"",
                 
-                timpoTerminarSesion:10,
-                timpoPreguntarExtenderSesion:9,
+                timpoTerminarSesion:160,
+                timpoPreguntarExtenderSesion:150,
                 mensaje:{
                     texto:"",
                     estado:""
