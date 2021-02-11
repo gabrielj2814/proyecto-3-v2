@@ -7,7 +7,7 @@
     position: absolute;
     top: 0px;
     left: 25%;
-    z-index: 1;
+    z-index: 1000;
     width: 50vw;
     transform:translateY(-90%);
     transition: transform .5s;
