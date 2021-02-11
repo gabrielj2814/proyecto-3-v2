@@ -240,6 +240,7 @@ CREATE TABLE tvitacora(
 CREATE TABLE tcintillo(
     id_foto_cintillo serial,
     nombre_foto_cintillo character varying(145) NOT NULL,
+    extension_foto_cintillo character varying(5) ,
     fecha_subida_foto DATE NOT NULL,
     hora_subida_foto character varying(10) NOT NULL,-- 12-12-12AM
     estatu_foto_cintillo character(1) NOT NULL,
