@@ -109,7 +109,7 @@ ControladorCintillo.consultarTodosLosCintillos= async (req,res) => {
     let repuesta={
         estado:false,
         mensaje:"",
-        datos:[]
+        datos:[],
     }
     let consultaCintillos=await cintilloModelo.consultarTodos()
     if(consultaCintillos.rowCount>0){
@@ -127,6 +127,12 @@ ControladorCintillo.consultarTodosLosCintillos= async (req,res) => {
     }
     
 }
+
+
+
+
+
+
 
 ControladorCintillo.consultarCintilloActivo= async (req,res) => {
     const cintilloModelo=new ModeloCintillo()
@@ -206,20 +212,6 @@ ControladorCintillo.actualizarCintillo= async (req,res) => {
         res.write(JSON.stringify(repuesta))
         res.end()
     }
-    // let consultaCintillos=await cintilloModelo.consultarCintilloActivo()
-    // if(consultaCintillos.rowCount>0){
-    //     repuesta.estado=true
-    //     repuesta.mensaje="consulta completada"
-    //     repuesta.datos=consultaCintillos.rows[0]
-    //     res.writeHead(200,{"Content-Type":"application/json"})
-    //     res.write(JSON.stringify(repuesta))
-    //     res.end()
-    // }
-    // else{
-    //     res.writeHead(200,{"Content-Type":"application/json"})
-    //     res.write(JSON.stringify(repuesta))
-    //     res.end()
-    // }
     
 }
 

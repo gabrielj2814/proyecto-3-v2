@@ -3,7 +3,8 @@
 const express=require("express"),
 app =express(),
 logger=require("morgan"),
-cors=require("cors");
+cors=require("cors"),
+fs=require("fs");
 // importando rutas de los modulos 
 const rutas_modulo_login=require("./rutas/login"),
 rutas_modulo_acceso=require("./rutas/configuracion/acceso"),
@@ -28,6 +29,8 @@ rutas_modulo_cintillo=require("./rutas/configuracion/cintillo")
 //SET
 app.set("puerto",8080)
 // USE
+app.use(express.static(__dirname+"/upload"))
+
 app
 .use(logger('dev'))
 .use(cors())
@@ -52,5 +55,14 @@ app
 .use("/transaccion/reposo-trabajador",rutas_modulo_reposo_trabajador)
 .use("/transaccion/asistencia",rutas_modulo_asistencia)
 .use("/transaccion/bitacora",rutas_modulo_bitacora)
+
+// app.get("/ver-imagen",(req,res) => {
+//     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
+//     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png"))
+//     console.log(__dirname+"\\upload\\cintillo\\cintillo-2021-02-11_05-11-56PM.png")
+//     res.writeHead(200,{"Content-Type":"image/png"})
+//     fs.createReadStream(__dirname+"\\upload\\cintillo\\cintillo-2021-02-11_05-11-56PM.png").pipe(res)
+//     res.end()
+// })
 
 module.exports = app
