@@ -115,6 +115,18 @@ class ComponentCintillo extends React.Component{
     cerrarModalFormulario(){
         const $formulario=document.getElementById("formularioCintillo")
         $formulario.classList.toggle("contenedor-formulario-cintillo-mostrar")
+        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+        alerta.estado=false
+        alerta.color="danger"
+        alerta.mensaje=""
+        this.setState({
+            nombre_foto_cintillo:"",
+            alerta
+        })
+        document.getElementById("mensaje_foto_cintillo").textContent=""
+        document.getElementById("mensaje_nombre_foto_cintillo").textContent=""
+        document.getElementById("nombre_foto_cintillo").value=""
+        document.getElementById("archivo").value=""
     }
 
     cambiarEstado(a){
@@ -240,6 +252,8 @@ class ComponentCintillo extends React.Component{
                                 alerta
                             })
                             this.refrescarGaleria()
+                            document.getElementById("nombre_foto_cintillo").value=""
+                            document.getElementById("archivo").value=""
                         }
                         else{
                             // 

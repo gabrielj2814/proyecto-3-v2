@@ -107,7 +107,7 @@ class ModeloCintillo extends DriverPostgreSQL{
     }
 
     async consultarTodos(){
-        const SQL="SELECT * FROM tcintillo"
+        const SQL="SELECT * FROM tcintillo ORDER BY estatu_foto_cintillo DESC"
         return this.query(SQL)
     }
     
