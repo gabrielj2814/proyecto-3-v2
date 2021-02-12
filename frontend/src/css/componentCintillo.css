@@ -157,3 +157,27 @@
     font-weight: bold;
 }
 
+.formulario-ver-info-cintillo{
+    box-sizing: border-box;
+    position: absolute;
+    z-index: 11;
+    width: 87vw;
+    /* height: 520px; */
+    height: 320px;
+    background: rgba(39, 39, 39, 0.986);
+    /* calc(-100% - 100%) */
+    transform: translateY(calc(-100% - 100%)) translateX(-2.5%);
+    transition: transform 1s ;
+    left: 0;
+    /* border: 1px solid grey; */
+    border-radius: 10px;
+    padding-top: 60px;
+    padding-bottom: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.formulario-ver-info-cintillo-mostrar{
+    transform: translateY(-45%) translateX(-2.5%);
+}
+

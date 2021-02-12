@@ -28,6 +28,9 @@ class ComponentCintillo extends React.Component{
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.enviarDatos=this.enviarDatos.bind(this);
         this.envitarEventoPorDefecto=this.envitarEventoPorDefecto.bind(this);
+        this.verInfoFoto=this.verInfoFoto.bind(this);
+        this.mostarModalFormularioEditar=this.mostarModalFormularioEditar.bind(this);
+        this.cerrarModalFormularioEditar=this.cerrarModalFormularioEditar.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -45,7 +48,8 @@ class ComponentCintillo extends React.Component{
                 mensaje:null,
                 estado:false
             },
-            archvios:[]
+            archvios:[],
+            hashArchivo:{}
 
         }
     }
@@ -59,16 +63,20 @@ class ComponentCintillo extends React.Component{
         .then(repuesta => {
             let json=repuesta.data
             // console.log(json)
+            let hashArchivo={}
             let archvios=[]
             for(let archivo of json.datos){
                 if(archivo.extension_foto_cintillo!==null){
                     archivo.fecha_subida_foto=archivo.fecha_subida_foto.split("T")[0]
                     archvios.push(archivo)
+                    hashArchivo[archivo.id_foto_cintillo]=archivo
                 }
             }
-            console.log(archvios)
+
+            console.log(hashArchivo)
             this.setState({
-                archvios
+                archvios,
+                hashArchivo
             })
         })
         .catch(error => {
@@ -112,6 +120,7 @@ class ComponentCintillo extends React.Component{
         $formulario.classList.toggle("contenedor-formulario-cintillo-mostrar")
     }
 
+    
     cerrarModalFormulario(){
         const $formulario=document.getElementById("formularioCintillo")
         $formulario.classList.toggle("contenedor-formulario-cintillo-mostrar")
@@ -129,6 +138,33 @@ class ComponentCintillo extends React.Component{
         document.getElementById("archivo").value=""
     }
 
+    mostarModalFormularioEditar(a){
+        const $formulario=document.getElementById("formularioEditarCintillo")
+        $formulario.classList.toggle("formulario-ver-info-cintillo-mostrar")
+        let boton=a.target
+        let infoArchivo=this.state.hashArchivo[boton.getAttribute("data-id-foto")]
+        // alert(boton.getAttribute("data-id-foto"))
+        console.log(infoArchivo)
+        this.setState(infoArchivo)
+    }
+
+    cerrarModalFormularioEditar(){
+        const $formulario=document.getElementById("formularioEditarCintillo")
+        $formulario.classList.toggle("formulario-ver-info-cintillo-mostrar")
+        // let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+        // alerta.estado=false
+        // alerta.color="danger"
+        // alerta.mensaje=""
+        // this.setState({
+        //     nombre_foto_cintillo:"",
+        //     alerta
+        // })
+        // document.getElementById("mensaje_foto_cintillo").textContent=""
+        // document.getElementById("mensaje_nombre_foto_cintillo").textContent=""
+        // document.getElementById("nombre_foto_cintillo").value=""
+        // document.getElementById("archivo").value=""
+    }
+    
     cambiarEstado(a){
         let input=a.target;
         this.setState({[input.name]:input.value})
@@ -240,7 +276,7 @@ class ComponentCintillo extends React.Component{
                     })
                     .then(repuesta2 => {
                         let json2=JSON.parse(JSON.stringify(repuesta2.data))
-                        console.log(json2)
+                        // console.log(json2)
                         if(json2.estado){
                             this.cerrarModalFormulario()
                             let alerta=JSON.parse(JSON.stringify(this.state.alerta))
@@ -282,6 +318,13 @@ class ComponentCintillo extends React.Component{
             })
         }
         
+    }
+
+    verInfoFoto(a){
+        let boton=a.target
+        let infoArchivo=this.state.hashArchivo[boton.getAttribute("data-id-foto")]
+        // alert(boton.getAttribute("data-id-foto"))
+        console.log(infoArchivo)
     }
 
     render(){
@@ -344,7 +387,6 @@ class ComponentCintillo extends React.Component{
 
                     </form>
 
-
                     <div className="row justify-content-center mb-3">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                             <button className="btn btn-block btn-outline-primary" onClick={this.mostarModalFormulario}>
@@ -357,20 +399,27 @@ class ComponentCintillo extends React.Component{
                         </div>
                     </div>
 
+                    <form id="formularioEditarCintillo" class="formulario-ver-info-cintillo">
+                        <div className="icon-x" onClick={this.cerrarModalFormularioEditar}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x" viewBox="0 0 16 16">
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                        </div>
                     
+                    </form>
 
                     <div id="galeriaCintillo" className="galeria-cintillo">
                         {this.state.archvios.map((archivo,index) => {
                             return (
-                                <div id={"contendor-imagen-index-"+index} className="contenedor-imagen">
+                                <div id={"contendor-imagen-index-"+index} className="contenedor-imagen" key={index}>
                                 <img id="" className="imagen-cintillo" src={`http://localhost:8080/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
                                 <div class="hover-imagen">
                                     <div className="row justify-content-center">
                                         <div className=" col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6">
-                                            <button className="btn btn-block btn-outline-info">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
+                                            <button onClick={this.mostarModalFormularioEditar} className="btn btn-block btn-outline-info" data-id-foto={archivo.id_foto_cintillo}>
+                                                <svg data-id-foto={archivo.id_foto_cintillo} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-eye" viewBox="0 0 16 16">
+                                                    <path data-id-foto={archivo.id_foto_cintillo} d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
+                                                    <path data-id-foto={archivo.id_foto_cintillo} d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
                                                 </svg>
                                             </button>
                                         </div>
