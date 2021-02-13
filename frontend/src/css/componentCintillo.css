@@ -1,5 +1,6 @@
 :root{
     --color-fondo-formulario:#fff;
+    --color-fondo-modal:rgba(39, 39, 39, 0.986);
 }
 
 .contenedor_formulario_cintillo{
@@ -32,11 +33,10 @@
     z-index: 10;
     width: 60vw;
     height: 520px;
-    background: rgba(39, 39, 39, 0.986);
+    background-color:  var(--color-fondo-modal);
     transform: translateY(calc(-100% - 100%)) translateX(18%);
     transition: transform 1s ;
     left: 0;
-    /* border: 1px solid grey; */
     border-radius: 10px;
     padding-top: 60px;
     padding-bottom: 15px;
@@ -84,10 +84,6 @@
     text-align: center;
     color:#fff;
 }
-
-/* .input-file-archivo{
-    border-radius: 10px;
-} */
 
 .label-input-nombre-archivo{
     color: #fff;
@@ -162,22 +158,114 @@
     position: absolute;
     z-index: 11;
     width: 87vw;
-    /* height: 520px; */
-    height: 320px;
-    background: rgba(39, 39, 39, 0.986);
-    /* calc(-100% - 100%) */
+    height: 530px;
+    background-color: var(--color-fondo-modal);
     transform: translateY(calc(-100% - 100%)) translateX(-2.5%);
     transition: transform 1s ;
+    overflow: hidden;
     left: 0;
-    /* border: 1px solid grey; */
     border-radius: 10px;
-    padding-top: 60px;
-    padding-bottom: 15px;
-    padding-left: 20px;
-    padding-right: 20px;
+}
+
+.icon-x-modal-info-foto{
+    position: absolute;
+    z-index: 10;
+    color:#fff;
+    transform:scale(1);
+    transition: color 1s,
+                transform 1s;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+.icon-x-modal-info-foto > svg {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-fondo-modal);
+    border-radius: 50px;
+    
+}
+
+.icon-x-modal-info-foto:hover{
+    color: rgb(226, 43, 43);
+    transform:scale(1.2);
 }
 
 .formulario-ver-info-cintillo-mostrar{
-    transform: translateY(-45%) translateX(-2.5%);
+    transform: translateY(-27%) translateX(-2.5%);
+}
+
+.contendor-visor-foto-cintillo{
+    float: left;
+    width: 70%;
+    height: 100%;
+    background-color: transparent;
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.contendor-datos-info-cintillo{
+    float: left;
+    width: 30%;
+    height: 100%;
+    background-color: #fff;
+    padding-top: 16px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+.propiedad-info-foto{
+    font-weight: bold;
+}
+
+.visor-imagen{
+    display: block;
+    width: 500px;
+    height: 500px;
+    /* border: 1px solid #fff; */
+}
+
+.fila-icono-trash{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.alerta-de-eliminar-cintillo{
+    font-weight: bold;
+    padding-top: 8px;
+    padding-right: 0;
+    margin-right: 10px;
+    display: none;
+    
+}
+
+.boton-cancelar-eliminar-cintillo-ocultar{
+    display: none;
+}
+
+.animar-alerta-eliminar-cintillo{
+    color:#926e00;
+    animation: colorLetra 1s infinite alternate;
+    display: block;
+}
+
+@keyframes colorLetra{
+    from{
+        color:#dfa700;
+    }
+}
+
+.input-file-archivo-editar{
+    width: 100%;
+}
+
+.label-input-nombre-archivo-editar{
+    color: #111;
 }
 

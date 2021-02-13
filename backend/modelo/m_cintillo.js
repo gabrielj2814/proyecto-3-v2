@@ -79,13 +79,13 @@ class ModeloCintillo extends DriverPostgreSQL{
         return this.query(SQL)
     }
 
-    desactivarCintilloActiva(){
+    async desactivarCintilloActiva(){
         const SQL=`
         UPDATE tcintillo SET 
         estatu_foto_cintillo='0'
         WHERE estatu_foto_cintillo='1'
         `
-        this.query(SQL)
+        return await this.query(SQL)
     }
     
     async consultarCintilloActivo(){

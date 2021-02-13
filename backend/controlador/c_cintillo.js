@@ -128,12 +128,6 @@ ControladorCintillo.consultarTodosLosCintillos= async (req,res) => {
     
 }
 
-
-
-
-
-
-
 ControladorCintillo.consultarCintilloActivo= async (req,res) => {
     const cintilloModelo=new ModeloCintillo()
     let repuesta={
@@ -173,9 +167,10 @@ ControladorCintillo.actualizarCintillo= async (req,res) => {
     
 
     if(cintillo.estatu_foto_cintillo==="1"){
-        cintilloModelo.desactivarCintilloActiva()
+        await cintilloModelo.desactivarCintilloActiva()
         const actualizarCintillo=await cintilloModelo.actualizarCintillo()
         estado=actualizarCintillo.rowCount
+        repuesta.estatu_foto_cintillo=true
 
     }
     else{
@@ -228,7 +223,6 @@ ControladorCintillo.eliminarCintillo=async (req,res) => {
     let cintillo=datosCintillo.rows[0]
     const fechaCintillo=Moment(cintillo.fecha_subida_foto,"YYYY-MM-DD")
     let nombreFoto=`cintillo-${fechaCintillo.format("YYYY-MM-DD")}_${cintillo.hora_subida_foto}.${cintillo.extension_foto_cintillo}`
-    console.log(nombreFoto)
     let eliminarCintillo=await cintilloModelo.eliminarCintillo()
     if(eliminarCintillo.rowCount>0){
         repuesta.estado=true
@@ -245,10 +239,6 @@ ControladorCintillo.eliminarCintillo=async (req,res) => {
         res.write(JSON.stringify(repuesta))
         res.end()
     }
-    // ControladorCintillo.eliminarFoto(req,res,nombreFoto)
-    // res.writeHead(200,{"Content-Type":"application/json"})
-    // res.write(JSON.stringify({msj:"dddd"}))
-    // res.end()
 }
 
 ControladorCintillo.eliminarFoto= (nombreFoto) => {
