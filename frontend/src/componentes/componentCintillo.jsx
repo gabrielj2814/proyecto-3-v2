@@ -64,12 +64,37 @@ class ComponentCintillo extends React.Component{
                 mensaje:null,
                 estado:false
             },
+            estatuCintilloActual:false,
+            cintilloActual:{}
             
         }
     }
 
     UNSAFE_componentWillMount(){
+        this.consultarCintilloActual()
         this.refrescarGaleria()
+    }
+
+    consultarCintilloActual(){
+        axios.get("http://localhost:8080/configuracion/cintillo/consultar-activo")
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            if(json.estado){
+                // alert("si")
+                this.setState({
+                    estatuCintilloActual:true,
+                    cintilloActual:json.datos[0]
+                })
+            }
+            else{
+                // alert("no")
+                this.setState({estatuCintilloActual:false})
+            }
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
     }
 
     refrescarGaleria(){
@@ -517,11 +542,40 @@ class ComponentCintillo extends React.Component{
                         })
                     }
                     else{
-                        if(json.estatu_foto_cintillo){
-                            this.refrescarGaleria()
-                            this.cerrarModalFormularioEditar()
+                        this.refrescarGaleria()
+                        this.cerrarModalFormularioEditar()
+                    }
+                    if(this.state.cintilloActual.id_foto_cintillo){
+                        if(this.state.id_foto_cintillo===this.state.cintilloActual.id_foto_cintillo && this.state.estatu_foto_cintillo!==this.state.cintilloActual.estatu_foto_cintillo){
+                            let foto=document.getElementById(this.state.id_foto_cintillo)
+                            let $cintilloPorDefecto=null
+                            if(foto.previousElementSibling!==null){
+                                $cintilloPorDefecto=foto.previousElementSibling
+                            }
+                            if(foto.nextElementSibling!==null){
+                                $cintilloPorDefecto=foto.nextElementSibling
+                            }
+
+                            // console.log($cintilloPorDefecto.id)
+                            
+                            let datosCintillo=this.state.hashArchivo[$cintilloPorDefecto.id]
+                            
+                            console.log(datosCintillo)
+                            datosCintillo.estatu_foto_cintillo="1"
+
+                            let datosCintilloActualizar={
+                                cintillo:datosCintillo,
+                                token:"",
+                            }
+                            console.log("=>>>>>>>>>>>> ",datosCintilloActualizar)
+
                         }
                     }
+                    // let contendorGaleria=document.getElementById("galeriaCintillo")
+                    // console.log(contendorGaleria)
+                    // let foto=document.getElementById("24")
+                    // console.log(foto.previousElementSibling)
+                    // console.log(foto.nextElementSibling)
                 }
                 else{
                     let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
@@ -534,7 +588,13 @@ class ComponentCintillo extends React.Component{
             .catch(error => {
                 console.log("error al conectar con el servidor")
             })
+            
+
+
+
+
         }
+        // -------
     }
 
     render(){
@@ -716,8 +776,8 @@ class ComponentCintillo extends React.Component{
                     <div id="galeriaCintillo" className="galeria-cintillo">
                         {this.state.archvios.map((archivo,index) => {
                             return (
-                                <div id={"contendor-imagen-index-"+index} className="contenedor-imagen" key={index}>
-                                <img id="" className="imagen-cintillo" src={`http://localhost:8080/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
+                                <div id={archivo.id_foto_cintillo} className="contenedor-imagen" key={index}>
+                                <img className="imagen-cintillo" src={`http://localhost:8080/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
                                 <div className="hover-imagen">
                                     <div className="row justify-content-center">
                                         <div className=" col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6">

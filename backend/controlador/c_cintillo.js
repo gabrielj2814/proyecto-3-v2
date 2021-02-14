@@ -28,7 +28,7 @@ ControladorCintillo.subirCintillo=async  (req,res) => {
     cintillo.estatu_foto_cintillo="1"
     const cintilloModelo=new ModeloCintillo()
     cintilloModelo.setDatos(cintillo)
-    cintilloModelo.desactivarCintilloActiva()
+    await cintilloModelo.desactivarCintilloActiva()
     const registro=await cintilloModelo.registrarFoto()
     console.log(registro)
     if(registro.rowCount>0){
@@ -176,6 +176,7 @@ ControladorCintillo.actualizarCintillo= async (req,res) => {
     else{
         const actualizarCintillo=await cintilloModelo.actualizarCintillo()
         estado=actualizarCintillo.rowCount
+        repuesta.estatu_foto_cintillo=false
     }
 
 
