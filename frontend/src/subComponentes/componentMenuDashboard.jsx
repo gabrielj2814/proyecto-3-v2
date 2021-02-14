@@ -45,9 +45,9 @@ const MenuDashboard = (props) =>{
             <div className="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 columna-menu">
                 <div className="row text-center align-items-center justify-content-center contendor-menu">
                     <span className="col-12 nvl_1 item_menu_nvl_1 encabezado_menu icon-home"></span>
-                    <span className={(modulo[1]==="reporte" ? props.modulo : "false-reporte")+" col-12 nvl_1 item_menu_nvl_1 icon-file-text2"} onClick={props.eventoPadreMenu} id="reporte"></span>
-                    <span className={(modulo[1]==="transaccion" ? props.modulo : "false-transaccion")+" col-12 nvl_1 item_menu_nvl_1 icon-rocket"} onClick={props.eventoPadreMenu} id="transaccion"></span>
                     <span className={(modulo[1]==="configuracion" ? props.modulo : "false-configuracion")+" col-12 nvl_1 item_menu_nvl_1 icon-cog"} onClick={props.eventoPadreMenu} id="configuracion"></span>
+                    <span className={(modulo[1]==="transaccion" ? props.modulo : "false-transaccion")+" col-12 nvl_1 item_menu_nvl_1 icon-rocket"} onClick={props.eventoPadreMenu} id="transaccion"></span>
+                    <span className={(modulo[1]==="reporte" ? props.modulo : "false-reporte")+" col-12 nvl_1 item_menu_nvl_1 icon-file-text2"} onClick={props.eventoPadreMenu} id="reporte"></span>
                     <span className={(modulo[1]==="seguridad" ? props.modulo : "false-seguridad")+" col-12 nvl_1 item_menu_nvl_1 icon-key"} onClick={props.eventoPadreMenu} id="seguridad"></span>
                     <span className="col-12 nvl_1 item_menu_nvl_1 icon-credit-card" onClick={irASolicitudPermiso} id="solicitar-pemriso"></span>
                 </div>
@@ -87,6 +87,7 @@ const MenuDashboard = (props) =>{
                             
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cintillo-home" texto="Cintillo"/>
                         </div>
                     }
                     {modulo[1]==="seguridad"&&

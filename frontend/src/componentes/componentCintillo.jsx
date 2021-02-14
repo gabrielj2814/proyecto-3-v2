@@ -397,11 +397,56 @@ class ComponentCintillo extends React.Component{
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado){
-                this.cerrarModalFormularioEditar()
-                this.refrescarGaleria()
+                if(this.state.cintilloActual.id_foto_cintillo){
+                    if(this.state.id_foto_cintillo===this.state.cintilloActual.id_foto_cintillo){
+                        let foto=document.getElementById(this.state.id_foto_cintillo)
+                        let $cintilloPorDefecto=null
+                        if(foto.previousElementSibling!==null){
+                            $cintilloPorDefecto=foto.previousElementSibling
+                        }
+                        if(foto.nextElementSibling!==null){
+                            $cintilloPorDefecto=foto.nextElementSibling
+                        }
+                        let datosCintillo=this.state.hashArchivo[$cintilloPorDefecto.id]
+                        datosCintillo.estatu_foto_cintillo="1"
+
+                        let datosCintilloActualizar={
+                            cintillo:datosCintillo,
+                            token:"",
+                        }
+                        console.log(datosCintilloActualizar)
+                        if($cintilloPorDefecto!==null){
+                            axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datosCintilloActualizar)
+                            .then(respuesta => {
+                                this.consultarCintilloActual()
+                                this.refrescarGaleria()
+                                this.cerrarModalFormularioEditar()
+                            })
+                            .catch(error => {
+                                console.log("error al conectar con el servidor")
+                            })
+                        }
+                        else{
+                            console.log("no hay remplazo")
+                        }
+
+                    }
+                    else{
+                        this.consultarCintilloActual()
+                        this.refrescarGaleria()
+                        this.cerrarModalFormularioEditar()
+                    }
+                }
+                else{
+                    this.consultarCintilloActual()
+                    this.refrescarGaleria()
+                    this.cerrarModalFormularioEditar()
+                }
+
+
             }
             else{
-                alert("no funciono")
+                // alert("no funciono")
                 let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
                 alertaEditarCintillo.estado=true
                 alertaEditarCintillo.color="danger"
@@ -593,7 +638,6 @@ class ComponentCintillo extends React.Component{
             })
             
         }
-        // -------
     }
 
     render(){
@@ -775,7 +819,7 @@ class ComponentCintillo extends React.Component{
                     <div id="galeriaCintillo" className="galeria-cintillo">
                         {this.state.archvios.map((archivo,index) => {
                             return (
-                                <div id={archivo.id_foto_cintillo} className="contenedor-imagen" key={index}>
+                                <div id={archivo.id_foto_cintillo} className={`contenedor-imagen ${(archivo.estatu_foto_cintillo==="1")?"foto-principal":""}`} key={index}>
                                 <img className="imagen-cintillo" src={`http://localhost:8080/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
                                 <div className="hover-imagen">
                                     <div className="row justify-content-center">
