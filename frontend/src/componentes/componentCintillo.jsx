@@ -79,9 +79,7 @@ class ComponentCintillo extends React.Component{
         axios.get("http://localhost:8080/configuracion/cintillo/consultar-activo")
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
             if(json.estado){
-                // alert("si")
                 this.setState({
                     estatuCintilloActual:true,
                     cintilloActual:json.datos[0]
@@ -101,7 +99,6 @@ class ComponentCintillo extends React.Component{
         axios.get("http://localhost:8080/configuracion/cintillo/consultar-todos")
         .then(repuesta => {
             let json=repuesta.data
-            // console.log(json)
             let hashArchivo={}
             let archvios=[]
             for(let archivo of json.datos){
@@ -111,8 +108,6 @@ class ComponentCintillo extends React.Component{
                     hashArchivo[archivo.id_foto_cintillo]=archivo
                 }
             }
-
-            console.log(hashArchivo)
             this.setState({
                 archvios,
                 hashArchivo
@@ -191,7 +186,6 @@ class ComponentCintillo extends React.Component{
         $formulario.classList.toggle("formulario-ver-info-cintillo-mostrar")
         let boton=a.target
         let infoArchivo=this.state.hashArchivo[boton.getAttribute("data-id-foto")]
-        console.log(infoArchivo)
         this.setState(infoArchivo)
         let $visorImagen=document.getElementById("imagen-visor")
         $visorImagen.src=`http://localhost:8080/cintillo/cintillo-${infoArchivo.fecha_subida_foto}_${infoArchivo.hora_subida_foto}.${infoArchivo.extension_foto_cintillo}`
@@ -302,11 +296,9 @@ class ComponentCintillo extends React.Component{
                 },
                 token:"",
             }
-            // console.log(datosFormulario)
             axios.post("http://localhost:8080/configuracion/cintillo/subir-cintillo",datos)
             .then(repuesta => {
                 let  json=JSON.parse(JSON.stringify(repuesta.data))
-                // console.log(json)
                 if(json.estado){
                     let datosArchivo=new FormData()
                     let archivo=document.getElementById("archivo")
@@ -316,7 +308,6 @@ class ComponentCintillo extends React.Component{
                     })
                     .then(repuesta2 => {
                         let json2=JSON.parse(JSON.stringify(repuesta2.data))
-                        // console.log(json2)
                         if(json2.estado){
                             this.cerrarModalFormulario()
                             let alerta=JSON.parse(JSON.stringify(this.state.alerta))
@@ -327,6 +318,7 @@ class ComponentCintillo extends React.Component{
                                 nombre_foto_cintillo:"",
                                 alerta
                             })
+                            this.consultarCintilloActual()
                             this.refrescarGaleria()
                             document.getElementById("archivo").value=""
                         }
@@ -434,7 +426,6 @@ class ComponentCintillo extends React.Component{
     }
 
     mostrarFormularioEditar(){
-        console.clear()
         // vista-editar
         let $componentesVistaInfo=document.querySelectorAll(".vista-info")
         for(let $component of $componentesVistaInfo){
@@ -502,7 +493,6 @@ class ComponentCintillo extends React.Component{
             if(document.getElementById("archivo_editar").value){
                 datos.cintillo["actualizarFoto"]=true
             }
-            // console.log(datos)
             axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datos)
             .then(respuesta => {
                 let json=JSON.parse(JSON.stringify(respuesta.data))
@@ -542,40 +532,53 @@ class ComponentCintillo extends React.Component{
                         })
                     }
                     else{
-                        this.refrescarGaleria()
-                        this.cerrarModalFormularioEditar()
-                    }
-                    if(this.state.cintilloActual.id_foto_cintillo){
-                        if(this.state.id_foto_cintillo===this.state.cintilloActual.id_foto_cintillo && this.state.estatu_foto_cintillo!==this.state.cintilloActual.estatu_foto_cintillo){
-                            let foto=document.getElementById(this.state.id_foto_cintillo)
-                            let $cintilloPorDefecto=null
-                            if(foto.previousElementSibling!==null){
-                                $cintilloPorDefecto=foto.previousElementSibling
+                        if(this.state.cintilloActual.id_foto_cintillo){
+                            if(this.state.id_foto_cintillo===this.state.cintilloActual.id_foto_cintillo && this.state.estatu_foto_cintillo!==this.state.cintilloActual.estatu_foto_cintillo){
+                                let foto=document.getElementById(this.state.id_foto_cintillo)
+                                let $cintilloPorDefecto=null
+                                if(foto.previousElementSibling!==null){
+                                    $cintilloPorDefecto=foto.previousElementSibling
+                                }
+                                if(foto.nextElementSibling!==null){
+                                    $cintilloPorDefecto=foto.nextElementSibling
+                                }
+                                let datosCintillo=this.state.hashArchivo[$cintilloPorDefecto.id]
+                                datosCintillo.estatu_foto_cintillo="1"
+    
+                                let datosCintilloActualizar={
+                                    cintillo:datosCintillo,
+                                    token:"",
+                                }
+                                console.log(datosCintilloActualizar)
+                                if($cintilloPorDefecto!==null){
+                                    axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datosCintilloActualizar)
+                                    .then(respuesta => {
+                                        this.consultarCintilloActual()
+                                        this.refrescarGaleria()
+                                        this.cerrarModalFormularioEditar()
+                                    })
+                                    .catch(error => {
+                                        console.log("error al conectar con el servidor")
+                                    })
+                                }
+                                else{
+                                    console.log("no hay remplazo")
+                                }
+    
                             }
-                            if(foto.nextElementSibling!==null){
-                                $cintilloPorDefecto=foto.nextElementSibling
+                            else{
+                                this.consultarCintilloActual()
+                                this.refrescarGaleria()
+                                this.cerrarModalFormularioEditar()
                             }
-
-                            // console.log($cintilloPorDefecto.id)
-                            
-                            let datosCintillo=this.state.hashArchivo[$cintilloPorDefecto.id]
-                            
-                            console.log(datosCintillo)
-                            datosCintillo.estatu_foto_cintillo="1"
-
-                            let datosCintilloActualizar={
-                                cintillo:datosCintillo,
-                                token:"",
-                            }
-                            console.log("=>>>>>>>>>>>> ",datosCintilloActualizar)
-
+                        }
+                        else{
+                            this.consultarCintilloActual()
+                            this.refrescarGaleria()
+                            this.cerrarModalFormularioEditar()
                         }
                     }
-                    // let contendorGaleria=document.getElementById("galeriaCintillo")
-                    // console.log(contendorGaleria)
-                    // let foto=document.getElementById("24")
-                    // console.log(foto.previousElementSibling)
-                    // console.log(foto.nextElementSibling)
+                    
                 }
                 else{
                     let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
@@ -589,10 +592,6 @@ class ComponentCintillo extends React.Component{
                 console.log("error al conectar con el servidor")
             })
             
-
-
-
-
         }
         // -------
     }
