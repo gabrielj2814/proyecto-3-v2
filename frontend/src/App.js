@@ -78,6 +78,8 @@ import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
 import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
 //cintillo
 import ComponentCintillo from "./componentes/componentCintillo"
+// error
+import ComponentError404 from "./componentes/componentError404"
 
 
 function App() {
@@ -157,6 +159,8 @@ function App() {
         <Route exact path="/dashboard/transaccion/permiso-trabajador/editar:id" component={ComponentEditarPermisoTrabajador}/>
 
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
+
+        <Route  path="*" component={ComponentError404}/>
         </Switch>
     </Router>
   );

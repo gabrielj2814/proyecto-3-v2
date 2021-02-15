@@ -1,37 +1,31 @@
-:root{
-    --color-fondo-error-404:#111;
+.contenedorError404{
+    width: 100vw;
+    height: 100vh;
+    padding-top: 15vh;
 }
 
-.conponente_error_404{
-    height: 100%;
-    background-color: var(--color-fondo-error-404);
-}
-
-.contenedor_error_404{
-    height: 100%;
-}
-
-.fondo{
-    background-color: red;
-}
-
-.columna-error-404{
-    height: 50%;
-}
-
-.fila-gif{
-    height:100%;
-}
-
-.fila-boton{
-    margin-top: 30px;
-}
-
-.text-404{
-    color:#fff;
-}
-
-.estilos-gif{
-    height: 100%;
+.mensaje-error-404{
     width: 100%;
+    font-size: 4.5rem;
+    text-align: center;
+}
+
+.imagen404 {
+    display: block;
+    width: 40vw;
+    height: 40vh;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contendor-boton{
+    width: 10%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+.boton-regresar > svg{
+    margin-right: 10px;
 }
