@@ -210,7 +210,8 @@ CREATE TABLE thorario(
     horario_entrada character varying(7) NOT NULL,
     horario_salida character varying(7) NOT NULL,
     estatu_horario character(1) NOT NULL,
-    constraint PK_id_horario primary key(id_horario)
+    constraint PK_id_horario primary key(id_horario),
+    constraint FK_id_funcion_trabajador foreign key (id_funcion_trabajador) references tfunciontrabajador(id_funcion_trabajador) on update cascade on delete cascade
 );
 
 INSERT INTO thorario (horario_entrada,horario_salida,estatu_horario) VALUES('07:00AM','10:00AM','1');
