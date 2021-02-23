@@ -29,19 +29,32 @@ CREATE TABLE ttipotrabajador(
 INSERT INTO ttipotrabajador(id_tipo_trabajador,descripcion_tipo_trabajador,estatu_tipo_trabajador) VALUES('tipot-1','docente a','1');
 INSERT INTO ttipotrabajador(id_tipo_trabajador,descripcion_tipo_trabajador,estatu_tipo_trabajador) VALUES('tipot-2','docente b','1');
 
+CREATE TABLE thorario(
+    id_horario SERIAL,
+    horario_descripcion character varying(150) NOT NULL,
+    horario_entrada character varying(7) NOT NULL,
+    horario_salida character varying(7) NOT NULL,
+    estatu_horario character(1) NOT NULL,
+    constraint PK_id_horario primary key(id_horario)
+);
+
+INSERT INTO thorario (horario_descripcion,horario_entrada,horario_salida,estatu_horario) VALUES('horario estandar','07:00AM','10:00AM','1');
+
 CREATE TABLE tfunciontrabajador(
     id_funcion_trabajador character varying(10) NOT NULL,
     funcion_descripcion character varying(50) NOT NULL,
     id_tipo_trabajador character varying(8) NOT NULL,
     estatu_funcion_trabajador character(1) NOT NULL,
+    id_horario INTEGER NOT NULL,
     constraint PK_id_funcion_trabajador primary key(id_funcion_trabajador),
-    constraint FK_id_tipo_trabajador foreign key(id_tipo_trabajador) references ttipotrabajador(id_tipo_trabajador) on update cascade on delete cascade
+    constraint FK_id_tipo_trabajador foreign key(id_tipo_trabajador) references ttipotrabajador(id_tipo_trabajador) on update cascade on delete cascade,
+    constraint FK_id_horario foreign key(id_horario) references thorario(id_horario) on update cascade on delete cascade
 );
 
-INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador) VALUES('funt-1','funcion a','tipot-1','1');
-INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador) VALUES('funt-2','funcion b','tipot-1','1');
-INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador) VALUES('funt-3','funcion c','tipot-2','1');
-INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador) VALUES('funt-4','funcion d','tipot-2','1');
+INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador,id_horario) VALUES('funt-1','funcion a','tipot-1','1',1);
+INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador,id_horario) VALUES('funt-2','funcion b','tipot-1','1',1);
+INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador,id_horario) VALUES('funt-3','funcion c','tipot-2','1',1);
+INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador,id_horario) VALUES('funt-4','funcion d','tipot-2','1',1);
 
 CREATE TABLE ttrabajador(
     id_cedula character varying(8) NOT NULL,
@@ -97,7 +110,7 @@ CREATE TABLE tpermisotrabajador(
     constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
 );
 
-INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,id_permiso,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles) VALUES('pert-2020-06-18-1','27636392','per-1','2020-06-18','2020-06-20','A','1');
+-- INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,id_permiso,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles) VALUES('pert-2020-06-18-1','27636392','per-1','2020-06-18','2020-06-20','A','1');
 
 CREATE TABLE testado(
     id_estado character varying(6) NOT NULL,
@@ -174,7 +187,7 @@ CREATE TABLE tasignacionmedicoespecialidad(
     constraint FK_id_especialidad_tasignacionmedicoespecialidad foreign key(id_especialidad) references tespecialidad(id_especialidad) on update cascade on delete cascade
 );
 
-INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad) VALUES('ams-2020-06-15-1','med-1',1);
+INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad,estatu_asignacion) VALUES('ams-2020-06-15-1','med-1',1,'1');
 
 CREATE TABLE treposo( 
     id_reposo character varying(8) NOT NULL,
@@ -205,16 +218,6 @@ CREATE TABLE treposotrabajador(
 
 -- INSERT INTO treposotrabajador(id_reposo_trabajador,id_cedula,id_reposo,fecha_desde_reposo_trabajador,fecha_hasta_reposo_trabajador,estatu_reposo_trabajador,descripcion_reposo_trabajador,id_cam,id_asignacion_medico_especialidad) VALUES('repot-2020-05-25-25','27636392','repo-1','2020-06-17','2020-06-20','1','hola mundo SQL',1,'ams-2020-06-15-1');
 
-CREATE TABLE thorario(
-    id_horario SERIAL,
-    horario_entrada character varying(7) NOT NULL,
-    horario_salida character varying(7) NOT NULL,
-    estatu_horario character(1) NOT NULL,
-    constraint PK_id_horario primary key(id_horario),
-    constraint FK_id_funcion_trabajador foreign key (id_funcion_trabajador) references tfunciontrabajador(id_funcion_trabajador) on update cascade on delete cascade
-);
-
-INSERT INTO thorario (horario_entrada,horario_salida,estatu_horario) VALUES('07:00AM','10:00AM','1');
 -- asi-2020-06-27-25
 CREATE TABLE  tasistencia(
     id_asistencia character varying(17) NOT NULL,
