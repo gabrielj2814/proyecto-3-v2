@@ -38,6 +38,11 @@ class HorarioModelo extends DriverPostgre{
         return await this.query(SQL)
     }
 
+    async consultarHorario(){
+        const SQL=`SELECT * FROM thorario WHERE id_horario=${this.id_horario}`
+        return await this.query(SQL)
+    }
+
     async actualizarHorario(){
         const SQL=`
             UPDATE thorario SET

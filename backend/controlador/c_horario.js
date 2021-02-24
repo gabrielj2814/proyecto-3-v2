@@ -4,12 +4,12 @@ VitacoraControlador=require("./c_vitacora")
 
 const HorarioControlador={}
 
-HorarioControlador.consultarHoraioActivoControlador=async (req,res) => {
-    var respuesta_api={horaio:[],mensaje:"",estado_peticion:""}
+HorarioControlador.consultarHorarioActivoControlador=async (req,res) => {
+    var respuesta_api={horario:[],mensaje:"",estado_peticion:""}
     const horario_modelo=new HorarioModelo()
     const horario_result=await horario_modelo.consultarHorarioActivoModelo()
     if(HorarioControlador.verificarExistencia(horario_result)){
-        respuesta_api.horaio=horario_result.rows[0]
+        respuesta_api.horario=horario_result.rows[0]
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_peticion="200"
         res.writeHead(200,{"Content-Type":"application/json"})
@@ -70,6 +70,29 @@ HorarioControlador.consultarTodosLosHorarios = async (req,res) => {
     }
     else{
         respuesta_api.mensaje="error al consultar no hay horarios disponibles"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
+
+HorarioControlador.consultarHorario = async (req,res) => {
+    var respuesta_api={horarios:[],mensaje:"registro completado",estado_peticion:"200"}
+    const {id}= req.params
+    const horario=new HorarioModelo()
+    horario.setId(id)
+    const datosConsulta=await horario.consultarHorario()
+    if(datosConsulta.rowCount>0){
+        respuesta_api.horarios=datosConsulta.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="error al consultar este horario no esta disponible"
         respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))
