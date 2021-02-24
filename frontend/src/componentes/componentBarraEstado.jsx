@@ -32,7 +32,7 @@ const BarraEsatdo= (props) =>{
             <div className="col-auto">
                 <span className="nombre-usuario">{props.nombre_usuario}</span>
             </div>
-            <div className="hora">
+            <div className="hora-reloj">
                 <span className="fecha" id="fechaRelog">{props.fechaRelog}</span>
             </div>
             <div className="contenedorArrowLeft">
