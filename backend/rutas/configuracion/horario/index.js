@@ -7,7 +7,9 @@ VitacoraControaldor=require("../../../controlador/c_vitacora")
 router.use(bodyparser.json())
 
 router.get("/consultar-activo",HorarioControlador.consultarHoraioActivoControlador)
+router.get("/consultar-todos",HorarioControlador.consultarTodosLosHorarios)
 router.post("/agregar-horario",HorarioControlador.agregarNuevoHorarioControlador,VitacoraControaldor.capturaDatos)
+router.put("/actualizar/:id",HorarioControlador.actualizarHorario)
 const json={
     "horario":{
         "horario_entrada":"07:30AM",

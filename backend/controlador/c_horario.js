@@ -47,16 +47,59 @@ HorarioControlador.agregarNuevoHorarioControlador=async (req,res,next) => {
         res.end()
     }
     
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
+    // res.writeHead(200,{"Content-Type":"application/json"})
+    // res.write(JSON.stringify(respuesta_api))
+    // res.end()
 }
 
 HorarioControlador.verificarExistencia=(result)=>{
     return result.rows.length!=0
 }
 
+HorarioControlador.consultarTodosLosHorarios = async (req,res) => {
+    var respuesta_api={horarios:[],mensaje:"registro completado",estado_peticion:"200"}
+    const horario=new HorarioModelo()
+    const datosConsulta=await horario.consultarTodosLosHorarios()
+    if(datosConsulta.rowCount>0){
+        respuesta_api.horarios=datosConsulta.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="error al consultar no hay horarios disponibles"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
 
+HorarioControlador.actualizarHorario = async (req,res) => {
+    var respuesta_api={mensaje:"",estado_peticion:"200"}
+    const {horario,token} = req.body
+    const horarioModelo=new HorarioModelo()
+    horarioModelo.setDatos(horario)
+    const datosActualizacion=await horarioModelo.actualizarHorario()
+    if(datosActualizacion.rowCount>0){
+        respuesta_api.mensaje="actualización completada"
+        respuesta_api.estado_peticion="200"
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","thorario",horario.id_horario)
+        next()
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
+    }
+    else{
+        respuesta_api.mensaje="error al actualizar"
+        respuesta_api.estado_peticion="500"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
 
 // ------------------------------
 
