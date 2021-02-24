@@ -32,7 +32,7 @@ class ComponentHorarioFormulario extends React.Component {
             horario_descripcion:"",
             horario_entrada:"",
             horario_salida:"",
-            estatu_horario:"",
+            estatu_horario:"1",
             // -------------------
             horaEntrada:"01",
             minutoEntrada:"00",
@@ -174,7 +174,6 @@ class ComponentHorarioFormulario extends React.Component {
         let msj_horario_descripcion=JSON.parse(JSON.stringify(this.state.msj_horario_descripcion))
         if($descripcionHorario.value!==""){
             if(/[a-zA-Z]/.test($descripcionHorario.value) || /[0-9]/.test($descripcionHorario.value)){
-                alert("OK")
                 estado=true
                 msj_horario_descripcion.mensaje=""
                 msj_horario_descripcion.color_texto="rojo"
@@ -183,7 +182,6 @@ class ComponentHorarioFormulario extends React.Component {
                 })
             }
             else{
-                // alert("no solo puede tener espacion en blanco")
                 msj_horario_descripcion.mensaje="no solo puede tener espacion en blanco"
                 msj_horario_descripcion.color_texto="rojo"
                 this.setState({
@@ -192,7 +190,6 @@ class ComponentHorarioFormulario extends React.Component {
             }
         }
         else{
-            // alert("este campo no puede estar vacio")
             msj_horario_descripcion.mensaje="este campo no puede estar vacio"
             msj_horario_descripcion.color_texto="rojo"
             this.setState({
