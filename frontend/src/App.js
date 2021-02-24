@@ -70,6 +70,7 @@ import ComponentCam from "./componentes/componentCam"
 import ComponentCamConsultar from "./componentes/componentCamConsulta"
 // HORARIO
 import componentHorario from './componentes/componentHorario';
+import componentHorarioFormulario from './componentes/componentHorarioFormulario';
 // ASISTENCIA
 import ComponentAsistencia from './componentes/componentAsistencia';
 // REPOSO TRABAJADOR 
@@ -141,6 +142,8 @@ function App() {
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
         
         <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
+
+        <Route exact path="/dashboard/configuracion/horario/:operacion/:id?" component={componentHorarioFormulario}/>
 
         <Route exact path="/dashboard/configuracion/cintillo-home" component={ComponentCintillo}/>
         
