@@ -1,4 +1,6 @@
 /backend/node_modules
-/backend/upload/*
+/backend/upload/cintillo/*.jpg
+/backend/upload/cintillo/*.png
+/backend/upload/cintillo/*.jpeg
 /fronted/node_modules
 
