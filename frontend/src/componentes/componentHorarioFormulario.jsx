@@ -137,7 +137,8 @@ class ComponentHorarioFormulario extends React.Component {
 
     async consultarHorario(id){
         let datos=[]
-        await axios.get(`http://localhost:8080/configuracion/horario/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/configuracion/horario/consultar/${id}/${token}`)
         .then(repuesta => {
             const json=JSON.parse(JSON.stringify(repuesta.data))
             this.setState(json.horario)
@@ -185,7 +186,18 @@ class ComponentHorarioFormulario extends React.Component {
     }
 
     agregar(){
-        alert("nuevo formulario")
+        this.setState({
+            id_horario:"",
+            horario_descripcion:"",
+            estatu_horario:"1",
+            horaEntrada:"01",
+            minutoEntrada:"00",
+            horaSalida:"01",
+            minutoSalida:"00",
+            periodoEntrada:"PM",
+            periodoSalida:"AM",
+        })
+        this.props.history.push("/dashboard/configuracion/horario/registrar")
     }
 
     operacion(){

@@ -77,9 +77,9 @@ HorarioControlador.consultarTodosLosHorarios = async (req,res) => {
     }
 }
 
-HorarioControlador.consultarHorario = async (req,res) => {
+HorarioControlador.consultarHorario = async (req,res,next) => {
     var respuesta_api={horario:[],mensaje:"registro completado",estado_peticion:"200"}
-    const {id}= req.params
+    const {id,token}= req.params
     const horario=new HorarioModelo()
     horario.setId(id)
     const datosConsulta=await horario.consultarHorario()
@@ -87,9 +87,11 @@ HorarioControlador.consultarHorario = async (req,res) => {
         respuesta_api.horario=datosConsulta.rows[0]
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_peticion="200"
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"SELECT","thorario",horario.id_horario)
+        next()
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
     }
     else{
         respuesta_api.mensaje="error al consultar este horario no esta disponible"

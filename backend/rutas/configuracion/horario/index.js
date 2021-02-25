@@ -10,7 +10,7 @@ router.get("/consultar-activo",HorarioControlador.consultarHorarioActivoControla
 router.get("/consultar-todos",HorarioControlador.consultarTodosLosHorarios)
 router.post("/agregar-horario",HorarioControlador.agregarNuevoHorarioControlador,VitacoraControaldor.capturaDatos)
 router.put("/actualizar/:id",HorarioControlador.actualizarHorario,VitacoraControaldor.capturaDatos)
-router.get("/consultar/:id",HorarioControlador.consultarHorario)
+router.get("/consultar/:id/:token",HorarioControlador.consultarHorario,VitacoraControaldor.capturaDatos)
 const json={
     "horario":{
         "horario_entrada":"07:30AM",
