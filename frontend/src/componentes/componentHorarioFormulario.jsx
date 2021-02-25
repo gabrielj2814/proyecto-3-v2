@@ -152,16 +152,66 @@ class ComponentHorarioFormulario extends React.Component {
 
     operacion(){
         const {operacion}=this.props.match.params
-        alert("operacion")
+        // alert("operacion")
+        const token=localStorage.getItem('usuario')
         if(this.validarDescripcion()){
             if(operacion==="registrar"){
-                alert("registrando")
+                // alert("registrando")
+                let datosFormulario=new FormData(document.getElementById("formularioHoraio"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                // console.log(datosFormatiados)
+                const horaEntrada=`${datosFormatiados.horaEntrada}:${datosFormatiados.minutoEntrada}${datosFormatiados.periodoEntrada}`
+                const horaSalida=`${datosFormatiados.horaSalida}:${datosFormatiados.minutoSalida}${datosFormatiados.periodoSalida}`
+                let datos={
+                    horario:{
+                        id_horario:"",
+                        horario_descripcion:datosFormatiados.horario_descripcion,
+                        horario_entrada:horaEntrada,
+                        horario_salida:horaSalida,
+                        estatu_horario:datosFormatiados.estatu_horario
+                    },
+                    token
+                }
+                // console.log(datos)
+                axios.post("http://localhost:8080/configuracion/horario/agregar-horario",datos)
+                .then(repuesta => {
+                    const json=JSON.parse(JSON.stringify(repuesta.data))
+                    // console.log(json)
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    if(json.estado_peticion==="200"){
+                        alerta.color="success"
+                        alerta.mensaje="registro completado"
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.color="danger"
+                        alerta.mensaje="error al registrar"
+                        alerta.estado=true
+                        this.setState({alerta})
+
+                    }
+                })
+                .catch(error => {
+                    console.log("error al conectar con el servidor")
+                })
             }
             else if(operacion==="actualizar"){
                 
                 alert("actualizando")
             }
         }
+    }
+
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
     }
 
 
@@ -233,9 +283,9 @@ class ComponentHorarioFormulario extends React.Component {
                             nombreCampo="Codigo horario:"
                             activo="no"
                             type="text"
-                            value={this.state.id_cam}
-                            name="id_cam"
-                            id="id_cam"
+                            value={this.state.id_horario}
+                            name="id_horario"
+                            id="id_horario"
                             placeholder="Codigo Horario"
                             />
                             <ComponentFormCampo
