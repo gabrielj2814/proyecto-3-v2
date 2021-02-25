@@ -24,6 +24,7 @@ class ComponentHorarioFormulario extends React.Component {
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.agregar=this.agregar.bind(this);
         this.operacion=this.operacion.bind(this);
+        this.regresar=this.regresar.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
@@ -332,6 +333,10 @@ class ComponentHorarioFormulario extends React.Component {
             })
         }
         return estado
+    }
+
+    regresar(){
+        this.props.history.push("/dashboard/configuracion/horario")
     }
 
     render(){

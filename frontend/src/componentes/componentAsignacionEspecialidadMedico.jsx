@@ -157,20 +157,20 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
     verficarLista(json_server_response){
         if(json_server_response.length===0){
             json_server_response.push({
-              id_estado:"0",
-              nombre_medico:"vacio",
-              apellido_medico:"",
-              vacio:"vacio"
+            id_estado:"0",
+            nombre_medico:"vacio",
+            apellido_medico:"",
+            vacio:"vacio"
             })
             return {registros:json_server_response,numeros_registros:0}
-          }
-          else{
+        }
+        else{
             return {
-              registros:json_server_response,
-              numeros_registros:json_server_response.length
+            registros:json_server_response,
+            numeros_registros:json_server_response.length
             }
-          } 
-      }
+        } 
+    }
 
 
     /**

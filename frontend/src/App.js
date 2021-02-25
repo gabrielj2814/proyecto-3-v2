@@ -141,9 +141,8 @@ function App() {
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
         
-        <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
-
         <Route exact path="/dashboard/configuracion/horario/:operacion/:id?" component={componentHorarioFormulario}/>
+        <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
 
         <Route exact path="/dashboard/configuracion/cintillo-home" component={ComponentCintillo}/>
         
