@@ -74,9 +74,10 @@ class ComponentHorario extends React.Component{
         let datos=await this.consultarTodosLosHorarios()
         this.setState(this.verficarLista(datos))
         
-        // if(this.props.match.params.mensaje){
-
-        // }
+        if(this.props.match.params.mensaje){
+            let alerta=JSON.parse(this.props.match.params.mensaje)
+            this.setState({alerta})
+        }
     }
 
     async consultarTodosLosHorarios(){
@@ -126,11 +127,6 @@ class ComponentHorario extends React.Component{
         const boton=a.target
         this.props.history.push(`/dashboard/configuracion/horario/actualizar/${boton.id}`)
     }
-    // <Tabla 
-    // tabla_encabezado={jsx_tabla_encabezado}
-    // tabla_body={jsx_tabla_body}
-    // numeros_registros={this.state.numeros_registros}
-    // />
 
     render(){
         const jsx_tabla_encabezado=(
@@ -150,7 +146,6 @@ class ComponentHorario extends React.Component{
                     return(
                         <tr key={index}>
                             <td>{horario.id_horario}</td>
-                            <td>{horario.horario_descripcion}</td>
                             <td>{horario.horario_descripcion}</td>
                             <td>{horario.horario_entrada}</td>
                             <td>{horario.horario_salida}</td>

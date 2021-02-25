@@ -124,16 +124,6 @@ class ComponentHorarioFormulario extends React.Component {
                 periodoSalida:"AM",
             })
         }
-        // let respuesta=await this.consultarHorarioActivo();
-        // console.log("respuesta servidor ->>>",respuesta)
-        // if(respuesta.horario){
-        //     this.insertatHorarioActual(respuesta.horario)
-        // }
-        // else{
-           
-        // }
-
-        
     }
 
     async consultarHorario(id){
@@ -142,25 +132,42 @@ class ComponentHorarioFormulario extends React.Component {
         await axios.get(`http://localhost:8080/configuracion/horario/consultar/${id}/${token}`)
         .then(repuesta => {
             const json=JSON.parse(JSON.stringify(repuesta.data))
-            this.setState(json.horario)
-            this.setState({
-                horaEntrada:json.horario.horario_entrada.substr(0,2),
-                minutoEntrada:json.horario.horario_entrada.substr(3,2),
-                horaSalida:json.horario.horario_salida.substr(0,2),
-                minutoSalida:json.horario.horario_salida.substr(3,2),
-                periodoEntrada:json.horario.horario_entrada.substr(5,2),
-                periodoSalida:json.horario.horario_salida.substr(5,2),
-            })
-            document.getElementById("horaEntrada").value=json.horario.horario_entrada.substr(0,2)
-            document.getElementById("minutoEntrada").value=json.horario.horario_entrada.substr(3,2)
-            document.getElementById("periodoEntrada").value=json.horario.horario_entrada.substr(5,2)
-            document.getElementById("horaSalida").value=json.horario.horario_salida.substr(0,2)
-            document.getElementById("minutoSalida").value=json.horario.horario_salida.substr(3,2)
-            document.getElementById("periodoSalida").value=json.horario.horario_salida.substr(5,2)
+            if(json.estado_peticion==="200"){
+                this.setState(json.horario)
+                this.setState({
+                    horaEntrada:json.horario.horario_entrada.substr(0,2),
+                    minutoEntrada:json.horario.horario_entrada.substr(3,2),
+                    horaSalida:json.horario.horario_salida.substr(0,2),
+                    minutoSalida:json.horario.horario_salida.substr(3,2),
+                    periodoEntrada:json.horario.horario_entrada.substr(5,2),
+                    periodoSalida:json.horario.horario_salida.substr(5,2),
+                })
+                document.getElementById("horaEntrada").value=json.horario.horario_entrada.substr(0,2)
+                document.getElementById("minutoEntrada").value=json.horario.horario_entrada.substr(3,2)
+                document.getElementById("periodoEntrada").value=json.horario.horario_entrada.substr(5,2)
+                document.getElementById("horaSalida").value=json.horario.horario_salida.substr(0,2)
+                document.getElementById("minutoSalida").value=json.horario.horario_salida.substr(3,2)
+                document.getElementById("periodoSalida").value=json.horario.horario_salida.substr(5,2)
+            }
+            else{
+                let alerta={
+                    color:"danger",
+                    mensaje:"no se encontro el horario consultado",
+                    estado:true
+                }
+                this.props.history.push(`/dashboard/configuracion/horario${JSON.stringify(alerta)}`)
+            }
+            
 
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            // console.log("error al conectar con el servidor")
+            let alerta={
+                color:"danger",
+                mensaje:"error al conectar con el servidor",
+                estado:true
+            }
+            this.props.history.push(`/dashboard/configuracion/horario${JSON.stringify(alerta)}`)
         })
     }
 
