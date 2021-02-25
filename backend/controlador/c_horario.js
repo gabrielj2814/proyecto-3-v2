@@ -78,13 +78,13 @@ HorarioControlador.consultarTodosLosHorarios = async (req,res) => {
 }
 
 HorarioControlador.consultarHorario = async (req,res) => {
-    var respuesta_api={horarios:[],mensaje:"registro completado",estado_peticion:"200"}
+    var respuesta_api={horario:[],mensaje:"registro completado",estado_peticion:"200"}
     const {id}= req.params
     const horario=new HorarioModelo()
     horario.setId(id)
     const datosConsulta=await horario.consultarHorario()
     if(datosConsulta.rowCount>0){
-        respuesta_api.horarios=datosConsulta.rows
+        respuesta_api.horario=datosConsulta.rows[0]
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_peticion="200"
         res.writeHead(200,{"Content-Type":"application/json"})
@@ -100,7 +100,7 @@ HorarioControlador.consultarHorario = async (req,res) => {
     }
 }
 
-HorarioControlador.actualizarHorario = async (req,res) => {
+HorarioControlador.actualizarHorario = async (req,res,next) => {
     var respuesta_api={mensaje:"",estado_peticion:"200"}
     const {horario,token} = req.body
     const horarioModelo=new HorarioModelo()

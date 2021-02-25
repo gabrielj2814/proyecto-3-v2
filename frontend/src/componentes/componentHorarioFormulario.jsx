@@ -89,6 +89,7 @@ class ComponentHorarioFormulario extends React.Component {
 
     async componentWillMount(){
         // alert("hola")
+        const {operacion} = this.props.match.params
         let listHora=[];
         let listMinuto=[];
         let contandor=1;
@@ -105,6 +106,23 @@ class ComponentHorarioFormulario extends React.Component {
             listHora,
             listMinuto
         });
+
+        if(operacion==="actualizar"){
+            if(this.props.match.params.id){
+                const {id} = this.props.match.params
+                let datos =await this.consultarHorario(id)
+            }
+        }
+        else{
+            this.setState({
+                horaEntrada:"01",
+                minutoEntrada:"00",
+                horaSalida:"01",
+                minutoSalida:"00",
+                periodoEntrada:"PM",
+                periodoSalida:"AM",
+            })
+        }
         // let respuesta=await this.consultarHorarioActivo();
         // console.log("respuesta servidor ->>>",respuesta)
         // if(respuesta.horario){
@@ -114,13 +132,33 @@ class ComponentHorarioFormulario extends React.Component {
            
         // }
 
-        this.setState({
-            horaEntrada:"01",
-            minutoEntrada:"00",
-            horaSalida:"01",
-            minutoSalida:"00",
-            periodoEntrada:"PM",
-            periodoSalida:"AM",
+        
+    }
+
+    async consultarHorario(id){
+        let datos=[]
+        await axios.get(`http://localhost:8080/configuracion/horario/consultar/${id}`)
+        .then(repuesta => {
+            const json=JSON.parse(JSON.stringify(repuesta.data))
+            this.setState(json.horario)
+            this.setState({
+                horaEntrada:json.horario.horario_entrada.substr(0,2),
+                minutoEntrada:json.horario.horario_entrada.substr(3,2),
+                horaSalida:json.horario.horario_salida.substr(0,2),
+                minutoSalida:json.horario.horario_salida.substr(3,2),
+                periodoEntrada:json.horario.horario_entrada.substr(5,2),
+                periodoSalida:json.horario.horario_salida.substr(5,2),
+            })
+            document.getElementById("horaEntrada").value=json.horario.horario_entrada.substr(0,2)
+            document.getElementById("minutoEntrada").value=json.horario.horario_entrada.substr(3,2)
+            document.getElementById("periodoEntrada").value=json.horario.horario_entrada.substr(5,2)
+            document.getElementById("horaSalida").value=json.horario.horario_salida.substr(0,2)
+            document.getElementById("minutoSalida").value=json.horario.horario_salida.substr(3,2)
+            document.getElementById("periodoSalida").value=json.horario.horario_salida.substr(5,2)
+
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
         })
     }
 
@@ -197,8 +235,43 @@ class ComponentHorarioFormulario extends React.Component {
                 })
             }
             else if(operacion==="actualizar"){
-                
-                alert("actualizando")
+                let datosFormulario=new FormData(document.getElementById("formularioHoraio"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                // console.log(datosFormatiados)
+                const horaEntrada=`${datosFormatiados.horaEntrada}:${datosFormatiados.minutoEntrada}${datosFormatiados.periodoEntrada}`
+                const horaSalida=`${datosFormatiados.horaSalida}:${datosFormatiados.minutoSalida}${datosFormatiados.periodoSalida}`
+                let datos={
+                    horario:{
+                        id_horario:document.getElementById("id_horario").value,
+                        horario_descripcion:datosFormatiados.horario_descripcion,
+                        horario_entrada:horaEntrada,
+                        horario_salida:horaSalida,
+                        estatu_horario:datosFormatiados.estatu_horario
+                    },
+                    token
+                }
+                console.log(datos)
+                axios.put(`http://localhost:8080/configuracion/horario/actualizar/${this.state.id_horario}`,datos)
+                .then(repuesta => {
+                    const json=JSON.parse(JSON.stringify(repuesta.data))
+                    // console.log(json)
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    if(json.estado_peticion==="200"){
+                        alerta.color="success"
+                        alerta.mensaje="actualización completada"
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.color="danger"
+                        alerta.mensaje="error al actualizar"
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                })
+                .catch(error => {
+                    console.log("error al conectar con el servidor")
+                })
             }
         }
     }
