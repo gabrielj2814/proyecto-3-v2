@@ -75,6 +75,9 @@ router.put("/actualizar/:id",async (req,res,next)=>{
         FUNCION.actualizarControlador(funcion_form)
         req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","tfunciontrabajador",funcion_form.id_funcion_trabajador)
         next()
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
     }
     else{
         respuesta_api.estado_peticion="404"

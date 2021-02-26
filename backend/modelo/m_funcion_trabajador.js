@@ -8,6 +8,7 @@ class FuncionTrabajadorModelo extends DriverPostgre{
         this.funcion_descripcion=""
         this.id_tipo_trabajador=""
         this.estatu_funcion_trabajador=""
+        this.id_horario=""
     }
 
     set_datosModelo(funcion){
@@ -15,6 +16,7 @@ class FuncionTrabajadorModelo extends DriverPostgre{
         this.funcion_descripcion=funcion.funcion_descripcion
         this.id_tipo_trabajador=funcion.id_tipo_trabajador
         this.estatu_funcion_trabajador=funcion.estatu_funcion_trabajador
+        this.id_horario=funcion.id_horario
     }
 
     set_datoIdFuncionTrabajador(id){
@@ -26,19 +28,19 @@ class FuncionTrabajadorModelo extends DriverPostgre{
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador) VALUES('${this.id_funcion_trabajador}','${this.funcion_descripcion}','${this.id_tipo_trabajador}','${this.estatu_funcion_trabajador}')`
+        const SQL=`INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo_trabajador,estatu_funcion_trabajador,id_horario) VALUES('${this.id_funcion_trabajador}','${this.funcion_descripcion}','${this.id_tipo_trabajador}','${this.estatu_funcion_trabajador}',${this.id_horario})`
         //console.log(SQL)
         this.query(SQL)
     }
 
     actualizarModelo(){
-        const SQL=`UPDATE tfunciontrabajador SET funcion_descripcion='${this.funcion_descripcion}',id_tipo_trabajador='${this.id_tipo_trabajador}',estatu_funcion_trabajador='${this.estatu_funcion_trabajador}' WHERE id_funcion_trabajador='${this.id_funcion_trabajador}';`
+        const SQL=`UPDATE tfunciontrabajador SET funcion_descripcion='${this.funcion_descripcion}',id_tipo_trabajador='${this.id_tipo_trabajador}',estatu_funcion_trabajador='${this.estatu_funcion_trabajador}',id_horario=${this.id_horario} WHERE id_funcion_trabajador='${this.id_funcion_trabajador}';`
         //console.log(SQL)
         this.query(SQL)
     }
 
     async consultarModelo(){
-        const SQL=`SELECT * FROM tfunciontrabajador,ttipotrabajador WHERE tfunciontrabajador.id_funcion_trabajador='${this.id_funcion_trabajador}' AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador;`
+        const SQL=`SELECT * FROM tfunciontrabajador,ttipotrabajador,thorario WHERE tfunciontrabajador.id_funcion_trabajador='${this.id_funcion_trabajador}' AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador AND tfunciontrabajador.id_horario=thorario.id_horario;`
         //console.log(SQL)
         return await this.query(SQL)
     }
