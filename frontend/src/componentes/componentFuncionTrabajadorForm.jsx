@@ -25,6 +25,7 @@ class ComponentFuncionTrabajador extends React.Component{
         this.operacion=this.operacion.bind(this);
         this.regresar=this.regresar.bind(this);
         this.agregar= this.agregar.bind(this);
+        this.mostrarHorario= this.mostrarHorario.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -50,6 +51,8 @@ class ComponentFuncionTrabajador extends React.Component{
             tipos_trabajador:[],
             horarios:[],
             horariosHash:{},
+            hora_entrada:null,
+            hora_salida:null,
             //
             mensaje:{
                 texto:"",
@@ -123,7 +126,9 @@ class ComponentFuncionTrabajador extends React.Component{
                 tipos_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador,
                 id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
                 horarios:(horarios.length===0)?null:horarios,
-                id_horario:(horarios.length===0)?null:horarios[0].id
+                id_horario:(horarios.length===0)?null:horarios[0].id,
+                hora_entrada:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_entrada,
+                hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida,
             })
         }
         else{
@@ -415,7 +420,8 @@ class ComponentFuncionTrabajador extends React.Component{
                 id_funcion_trabajador:this.state.id_funcion_trabajador,
                 funcion_descripcion:this.state.funcion_descripcion,
                 id_tipo_trabajador:this.state.id_tipo_trabajador,
-                estatu_funcion_trabajador:this.state.estatu_funcion_trabajador
+                estatu_funcion_trabajador:this.state.estatu_funcion_trabajador,
+                id_horario:this.state.id_horario
             },
             token
         }
@@ -442,6 +448,16 @@ class ComponentFuncionTrabajador extends React.Component{
 
     regresar(){
         this.props.history.push("/dashboard/configuracion/funcion-trabajador");
+    }
+
+    mostrarHorario(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        this.setState({
+            hora_entrada:this.state.horariosHash[input.value].horario_entrada,
+            hora_salida:this.state.horariosHash[input.value].horario_salida
+        })
+        
     }
 
     render(){
@@ -528,20 +544,30 @@ class ComponentFuncionTrabajador extends React.Component{
                             clasesSelect="custom-select"
                             name="id_horario"
                             id="id_horario"
-                            eventoPadre={this.cambiarEstado}
+                            eventoPadre={this.mostrarHorario}
                             defaultValue={this.state.id_horario}
                             option={this.state.horarios}
                             />
                             <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                         </div>
-                        <div className="row justify-content-center mb-3">
-                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de entrada:</div>
-                            <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
-                        </div>
-                        <div className="row justify-content-center mb-3">
-                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de salida:</div>
-                            <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
-                        </div>
+                        {this.state.hora_entrada!==null &&
+                                (
+                                <div className="row justify-content-center mb-3">
+                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de entrada: {this.state.hora_entrada}</div>
+                                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
+                                </div>
+                                )
+
+                        }
+                        {this.state.hora_entrada!==null &&
+                            (
+                                <div className="row justify-content-center mb-3">
+                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de salida: {this.state.hora_salida}</div>
+                                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
+                                </div>
+                            )
+
+                        }
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
