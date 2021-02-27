@@ -33,6 +33,7 @@ class ComponentFuncionTrabajador extends React.Component{
             funcion_descripcion:"" ,
             id_tipo_trabajador:"",
             estatu_funcion_trabajador:"1",
+            id_horario:"",
             //
             msj_funcion_descripcion:{
                 mensaje:"",
@@ -42,7 +43,13 @@ class ComponentFuncionTrabajador extends React.Component{
                 mensaje:"",
                 color_texto:""
             },
+            msj_id_horario:{
+                mensaje:"",
+                color_texto:""
+            },
             tipos_trabajador:[],
+            horarios:[],
+            horariosHash:{},
             //
             mensaje:{
                 texto:"",
@@ -101,6 +108,7 @@ class ComponentFuncionTrabajador extends React.Component{
 
     async UNSAFE_componentWillMount(){
         const {operacion}=this.props.match.params
+        
         if(operacion==="registrar"){
             const {id}=await this.generarIdFuncionTrabajador();
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
@@ -109,10 +117,13 @@ class ComponentFuncionTrabajador extends React.Component{
             propiedad_descripcion="descripcion_tipo_trabajador",
             propiedad_estado="estatu_tipo_trabajador"
             const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+            const horarios=await this.consultarTodosLosHorarios()
             this.setState({
                 id_funcion_trabajador:id,
-                tipos_trabajador:tipo_trabajador,
-                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id
+                tipos_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador,
+                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
+                horarios:(horarios.length===0)?null:horarios,
+                id_horario:(horarios.length===0)?null:horarios[0].id
             })
         }
         else{
@@ -127,6 +138,33 @@ class ComponentFuncionTrabajador extends React.Component{
             funcion.tipos_trabajador=tipo_trabajador
             this.setState(funcion)
         }
+    }
+
+    async consultarTodosLosHorarios(){
+        let datos=[]
+        let horariosHash={}
+        await axios.get("http://localhost:8080/configuracion/horario/consultar-todos")
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log("lista de horarios =>>>>> ",json)
+            if(json.estado_peticion==="200"){
+                for(let horario of json.horarios){
+                    if(horario.estatu_horario==="1"){
+                        horariosHash[horario.id_horario]=horario
+                        datos.push({
+                            id:horario.id_horario,
+                            descripcion:horario.horario_descripcion
+                        })
+                    }
+                }
+            }
+
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+        this.setState({horariosHash})
+        return datos
     }
 
     async consultarFuncionTrabajador(id){
@@ -480,6 +518,29 @@ class ComponentFuncionTrabajador extends React.Component{
                             defaultValue={this.state.id_tipo_trabajador}
                             option={this.state.tipos_trabajador}
                             />
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormSelect
+                            clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_horario}
+                            nombreCampoSelect="horario:"
+                            clasesSelect="custom-select"
+                            name="id_horario"
+                            id="id_horario"
+                            eventoPadre={this.cambiarEstado}
+                            defaultValue={this.state.id_horario}
+                            option={this.state.horarios}
+                            />
+                            <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
+                        </div>
+                        <div className="row justify-content-center mb-3">
+                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de entrada:</div>
+                            <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
+                        </div>
+                        <div className="row justify-content-center mb-3">
+                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de salida:</div>
+                            <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                         </div>
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
