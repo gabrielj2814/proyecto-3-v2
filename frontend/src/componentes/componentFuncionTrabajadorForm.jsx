@@ -128,7 +128,7 @@ class ComponentFuncionTrabajador extends React.Component{
                 horarios:(horarios.length===0)?null:horarios,
                 id_horario:(horarios.length===0)?null:horarios[0].id,
                 hora_entrada:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_entrada,
-                hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida,
+                hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida
             })
         }
         else{
@@ -141,7 +141,15 @@ class ComponentFuncionTrabajador extends React.Component{
             propiedad_estado="estatu_tipo_trabajador"
             const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
             funcion.tipos_trabajador=tipo_trabajador
+            const horarios=await this.consultarTodosLosHorarios()
             this.setState(funcion)
+            // console.log("=>>>> ",funcion)
+            // console.log("=>>>> ",this.state.horariosHash[funcion.id_horario])
+            this.setState({
+                horarios:(horarios.length===0)?null:horarios,
+                hora_entrada:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_entrada,
+                hora_salida:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_salida
+            })
         }
     }
 
@@ -181,12 +189,7 @@ class ComponentFuncionTrabajador extends React.Component{
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
-                funcion={
-                    id_funcion_trabajador:respuesta_servidor.funciones.id_funcion_trabajador,
-                    funcion_descripcion:respuesta_servidor.funciones.funcion_descripcion,
-                    id_tipo_trabajador:respuesta_servidor.funciones.id_tipo_trabajador,
-                    estatu_funcion_trabajador:respuesta_servidor.funciones.estatu_funcion_trabajador,
-                }
+                funcion=respuesta_servidor.funciones
             }
             else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
@@ -436,14 +439,21 @@ class ComponentFuncionTrabajador extends React.Component{
         propiedad_descripcion="descripcion_tipo_trabajador",
         propiedad_estado="estatu_tipo_trabajador"
         const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+        const horarios=await this.consultarTodosLosHorarios()
         const formulario={
             id_funcion_trabajador:id,
             funcion_descripcion:"",
             id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
             estatu_funcion_trabajador:"1",
-            tipo_trabajador:tipo_trabajador
+            tipo_trabajador:tipo_trabajador,
+            horarios:(horarios.length===0)?null:horarios,
+            id_horario:(horarios.length===0)?null:horarios[0].id,
+            hora_entrada:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_entrada,
+            hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida
         }
         this.setState(formulario)
+        document.getElementById("id_tipo_trabajador").value=(tipo_trabajador.length===0)?null:tipo_trabajador[0].id
+        document.getElementById("id_horario").value=(horarios.length===0)?null:horarios[0].id
     }
 
     regresar(){
