@@ -85,7 +85,7 @@ class ComponentHorario extends React.Component{
         await axios.get("http://localhost:8080/configuracion/horario/consultar-todos")
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log("datos =>>>> ",json)
+            console.log("datos =>>>> ",json)
             datos=json.horarios
         })
         .catch(error => {

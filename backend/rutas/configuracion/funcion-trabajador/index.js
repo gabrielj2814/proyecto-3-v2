@@ -126,7 +126,7 @@ router.get("/consultar-id-tipo-trabajador/:id",async (req,res)=>{
             respuesta_api.mensaje="no hay funciones almacenadas con este id->"+id
             respuesta_api.estado_peticion="404"
             res.writeHead(200,{"Content-Type":"application/json"})
-            res.write(JSON.stringify({respuesta_api}))
+            res.write(JSON.stringify(respuesta_api))
             res.end()
         }
     }
@@ -134,7 +134,7 @@ router.get("/consultar-id-tipo-trabajador/:id",async (req,res)=>{
         respuesta_api.mensaje="error en el servidor"
         respuesta_api.estado_peticion="500"
         res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify({respuesta_api}))
+        res.write(JSON.stringify(respuesta_api))
         res.end()
     }
 })
@@ -155,7 +155,7 @@ router.get("/consultar-patron/:patron",async (req,res)=>{
         respuesta_api.mensaje="no hay funciones almacenadas"
         respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify({respuesta_api}))
+        res.write(JSON.stringify(respuesta_api))
         res.end()
     }
 })

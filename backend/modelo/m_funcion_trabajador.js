@@ -58,7 +58,7 @@ class FuncionTrabajadorModelo extends DriverPostgre{
     }
 
     async consultarPatronModelo(patron){
-        const SQL=`SELECT * FROM tfunciontrabajador WHERE id_funcion_trabajador LIKE '%${patron}%' OR funcion_descripcion LIKE '%${patron}%';`
+        const SQL=`SELECT * FROM tfunciontrabajador WHERE (id_funcion_trabajador LIKE '%${patron}%') OR (funcion_descripcion LIKE '%${patron}%');`
         //console.log(SQL)
         return await this.query(SQL)
     }

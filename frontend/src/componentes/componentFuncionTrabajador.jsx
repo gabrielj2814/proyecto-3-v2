@@ -31,6 +31,7 @@ class ComponentFuncionTrabajador extends React.Component{
             datoDeBusqueda:"",
             registros:[],
             numeros_registros:0,
+            horariosHash:{},
             mensaje:{
                 texto:"",
                 estado:""
@@ -71,6 +72,7 @@ class ComponentFuncionTrabajador extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+        await this.consultarTodosLosHorarios()
         var json_server_response=await this.consultarTodosFuncionTrabajador();
         var servidor=this.verficarLista(json_server_response);
         if(this.props.match.params.mensaje){
@@ -82,6 +84,33 @@ class ComponentFuncionTrabajador extends React.Component{
             servidor.mensaje=mensaje
         }
         this.setState(servidor)
+    }
+
+    async consultarTodosLosHorarios(){
+        let datos=[]
+        let horariosHash={}
+        await axios.get("http://localhost:8080/configuracion/horario/consultar-todos")
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log("lista de horarios =>>>>> ",json)
+            if(json.estado_peticion==="200"){
+                for(let horario of json.horarios){
+                    if(horario.estatu_horario==="1"){
+                        horariosHash[horario.id_horario]=horario
+                        datos.push({
+                            id:horario.id_horario,
+                            descripcion:horario.horario_descripcion
+                        })
+                    }
+                }
+            }
+
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+        this.setState({horariosHash})
+        return datos
     }
 
     async consultarTodosFuncionTrabajador(){
@@ -103,9 +132,10 @@ class ComponentFuncionTrabajador extends React.Component{
             json_server_response.push({
                 id_funcion_trabajador:"0",
                 funcion_descripcion:"vacio",
+                id_horario:"vacio",
                 vacio:"vacio"
             })
-            return {registros:json_server_response}
+            return {registros:json_server_response,numeros_registros:0}
         }
         else{
             return {
@@ -146,7 +176,7 @@ class ComponentFuncionTrabajador extends React.Component{
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
-                this.setState({registros:respuesta_servidor.funciones})
+                this.setState({registros:respuesta_servidor.funciones,numeros_registros:respuesta_servidor.funciones.length})
             })
             .catch(error=>{
                 console.log(error)
@@ -160,22 +190,23 @@ class ComponentFuncionTrabajador extends React.Component{
 
     async escribir_codigo(a){
         var input=a.target,
-        valor=input.value,
-        respuesta_servidor=""
+        valor=input.value
         if(valor!==""){
             await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar-patron/${valor}`)
-                .then(respuesta=>{
-                respuesta_servidor=respuesta.data
-                console.log(respuesta_servidor)
-                this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.funciones})
+            .then(respuesta=>{
+                    let respuesta_servidor=JSON.parse(JSON.stringify(respuesta.data))
+                    this.setState({registros:respuesta_servidor.funciones,numeros_registros:respuesta_servidor.funciones.length})
             })
             .catch(error=>{
-                console.log(error)
-                alert("error en el servidor")
+                    console.log(error)
+                    alert("error en el servidor")
             })
         }
         else{
             console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
+            var json_server_response=await this.consultarTodosFuncionTrabajador();
+            var servidor=this.verficarLista(json_server_response);
+            this.setState(servidor)
         }
     }
 
@@ -198,6 +229,9 @@ class ComponentFuncionTrabajador extends React.Component{
                 <tr> 
                     <th>Codigo</th> 
                     <th>Funcion Trabajador</th>
+                    <th>descripcion horario</th>
+                    <th>hora de entrada</th>
+                    <th>hora de salida</th>
                 </tr> 
             </thead>
         )
@@ -208,6 +242,10 @@ class ComponentFuncionTrabajador extends React.Component{
                         <tr key={funcion.id_funcion_trabajador}>
                             <td>{funcion.id_funcion_trabajador}</td>
                             <td>{funcion.funcion_descripcion}</td>
+                            <td>{(funcion.id_horario==="vacio")?"vacio":this.state.horariosHash[funcion.id_horario].horario_descripcion}</td>
+                            <td>{(funcion.id_horario==="vacio")?"vacio":this.state.horariosHash[funcion.id_horario].horario_entrada}</td>
+                            <td>{(funcion.id_horario==="vacio")?"vacio":this.state.horariosHash[funcion.id_horario].horario_salida}</td>
+                            
                         {!funcion.vacio &&
                             <td>
                                 <ButtonIcon 
@@ -220,17 +258,6 @@ class ComponentFuncionTrabajador extends React.Component{
                             </td>
                         }
                         
-                        {!funcion.vacio &&
-                            <td>
-                                <ButtonIcon 
-                                clasesBoton="btn btn-secondary btn-block" 
-                                value={funcion.id_funcion_trabajador}
-                                id={funcion.id_funcion_trabajador} 
-                                eventoPadre={this.consultarElementoTabla} 
-                                icon="icon-search"
-                                />
-                            </td>
-                        }
                         </tr>
                     )
                 })}
