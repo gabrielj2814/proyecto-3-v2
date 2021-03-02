@@ -13,6 +13,15 @@ router.get("/",(req,res)=>{
     res.end()
 })
 
+router.get("/fecha-servidor",(req,res)=>{
+    const Moment=require("moment")
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify({
+        fechaServidor:Moment().format("YYYY-MM-DD")
+    }))
+    res.end()
+})
+
 router.post("/registrar",async (req,res,next)=>{
     var respuesta_api={mensaje:"registro completado",estado_peticion:"200"}
     const trabajador_form=req.body.trabajador,

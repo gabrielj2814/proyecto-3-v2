@@ -30,6 +30,7 @@ class ComponentTrabajadorForm extends React.Component{
         this.validarTexto=this.validarTexto.bind(this);
         this.validarNumero=this.validarNumero.bind(this);
         this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
+        this.fechaNacimiento=this.fechaNacimiento.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -81,7 +82,9 @@ class ComponentTrabajadorForm extends React.Component{
             mensaje:{
                 texto:"",
                 estado:""
-            }
+            },
+            //
+            fechaServidor:null 
         }
     }
     // logica menu
@@ -118,6 +121,8 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+        await this.consultarFechaServidor()
+
         const operacion=this.props.match.params.operacion
         if(operacion==="registrar"){
             const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
@@ -167,6 +172,18 @@ class ComponentTrabajadorForm extends React.Component{
             const id=this.props.match.params.id
             await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
         }
+    }
+
+    async consultarFechaServidor(){
+        await axios.get("http://localhost:8080/configuracion/trabajador/fecha-servidor")
+        .then(respuesta => {
+            let fechaServidor=respuesta.data.fechaServidor
+            // alert(fechaServidor)
+            this.setState({fechaServidor})
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
     }
 
     async consultarTrabajador(tipo_trabajador,lista_perfiles,id){
@@ -347,6 +364,12 @@ class ComponentTrabajadorForm extends React.Component{
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
+    }
+
+    fechaNacimiento(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        console.log(input.value)
     }
 
     async consultarFuncionesTrabajador(a){
@@ -937,7 +960,7 @@ class ComponentTrabajadorForm extends React.Component{
                             value={this.state.fecha_nacimiento}
                             name="fecha_nacimiento"
                             id="fecha_nacimiento"
-                            eventoPadre={this.cambiarEstado}
+                            eventoPadre={this.fechaNacimiento}
                             />
                             <ComponentFormSelect
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -1036,11 +1059,11 @@ class ComponentTrabajadorForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="designación:"
                             name="designacion"
-                            nombreLabelRadioA="Activo"
+                            nombreLabelRadioA="interno"
                             idRadioA="activodesignacionA"
                             checkedRadioA={this.state.designacion}
                             valueRadioA="1"
-                            nombreLabelRadioB="Inactivo"
+                            nombreLabelRadioB="externo"
                             idRadioB="activodesignacionB"
                             valueRadioB="0"
                             eventoPadre={this.cambiarEstado}
