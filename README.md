@@ -41,6 +41,20 @@ El archivo sql se encuentra en la carpeta backend y dentro de la carpeta SQL se 
 
 ### configuración
 ----
+__*Nota:*__  se esta trabajando por el momento, que al instalar y ejecutar por primera ves el servidor del backend registre un usuario por defecto que seria un usuario del tipo admin, root o un web master para que la comunidad no tenga la obligación de crear un usuario por el shell de *postgreSQL*
+
+El archivo que hace de driver de conexion con la base de datos de prostgreSQL se llama 'driver_postgresql' y esta ubicada en la carpeta modelo dentro de la carpeta backend y solo tiene que cambiar lo siguiente
+
+```javascript
+
+    config={
+        user:"usuario db",
+        host:"host",
+        password:"clave",
+        database:"nombre de la DB"
+    }
+
+```
 
 ### backend
 ----
@@ -53,3 +67,5 @@ Ejecutar los siguientes comando en la carpeta backend
 Ejecutar los siguientes comando en la carpeta frontend 
 + npm install (para instalar las dependencias del proyecto)
 + yarn start o npm start (para ejecutar el servidor de react)
+
+
