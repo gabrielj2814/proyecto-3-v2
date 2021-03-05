@@ -84,7 +84,8 @@ class ComponentTrabajadorForm extends React.Component{
                 estado:""
             },
             //
-            fechaServidor:null 
+            fechaServidor:null,
+            edadTrabajador:null
         }
     }
     // logica menu
@@ -369,7 +370,10 @@ class ComponentTrabajadorForm extends React.Component{
     fechaNacimiento(a){
         let input=a.target
         this.cambiarEstado(a)
-        console.log(input.value)
+        // console.log(input.value)
+        let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
+        let edadTrabajador=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+        this.setState({edadTrabajador})
     }
 
     async consultarFuncionesTrabajador(a){
@@ -576,11 +580,11 @@ class ComponentTrabajadorForm extends React.Component{
         if(hora_ingreso.isSameOrAfter(hoy)){
             if(hora_ingreso.isBetween(hoy,manana)){
                 estado=true
-                alert("como son las "+fecha_ingreso.format("HH:mmA")+", la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
+                // alert("como son las "+fecha_ingreso.format("HH:mmA")+", la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
             }
             else{
                 fecha_ingreso.add(1,"d")
-                alert("como ya son mas de las 10:00AM, la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
+                // alert("como ya son mas de las 10:00AM, la fecha de ingreso del usuario sera -> "+fecha_ingreso.format("DD-MM-YYYY"))
                 estado=true
             }
         }
@@ -668,11 +672,13 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     validarEmail() {
+        let estado=false
         const correo=this.state.correo
         var msj_correo=this.state.msj_correo
         const exprecion=/^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/ 
         if(correo!==""){
             if (exprecion.test(correo)){
+                estado=true
                 msj_correo[0]={mensaje:"",color_texto:""}
                 this.setState({msj_correo: msj_correo})
             }
@@ -682,7 +688,7 @@ class ComponentTrabajadorForm extends React.Component{
             }
         }
         else{
-            msj_correo[0]={mensaje:"",color_texto:"rojo"}
+            msj_correo[0]={mensaje:"no puede estar vacio",color_texto:"rojo"}
             this.setState({msj_correo: msj_correo})
         }
     }
@@ -694,8 +700,9 @@ class ComponentTrabajadorForm extends React.Component{
         validar_cedula=this.validarCampoNumero("id_cedula"),
         validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_fecha_ingreso=this.validarFechaIngreso(),
+        validar_email=this.validarEmail(),
         validar_direccion=this.validarDireccion()
-        if(validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_fecha_ingreso.estado && validar_direccion){
+        if(validar_email && validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_fecha_ingreso.estado && validar_direccion){
             estado=true
             return {estado:estado,fecha:validar_fecha_ingreso.fecha}
         }
@@ -748,7 +755,7 @@ class ComponentTrabajadorForm extends React.Component{
         if(operacion==="registrar"){
             this.validarTelefono("telefono_movil")
             this.validarTelefono("telefono_local")
-            this.validarEmail()
+            
             const estado_validar_formulario=this.validarFormularioRegistrar()
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
@@ -939,6 +946,7 @@ class ComponentTrabajadorForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
+                            obligatorio="si"
                             nombreCampo="Correo:"
                             mensaje={this.state.msj_correo[0]}
                             activo="si"
@@ -962,6 +970,16 @@ class ComponentTrabajadorForm extends React.Component{
                             id="fecha_nacimiento"
                             eventoPadre={this.fechaNacimiento}
                             />
+                            {this.state.edadTrabajador!==null &&
+                                (
+                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div className="form-ground">
+                                            <label className="mb-3">Edad:</label>
+                                            <div >{this.state.edadTrabajador} Años</div>
+                                        </div>
+                                </div>
+                                )
+                            }
                             <ComponentFormSelect
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
@@ -974,7 +992,9 @@ class ComponentTrabajadorForm extends React.Component{
                             defaultValue={this.state.grado_instruccion}
                             option={this.state.grados_instruccion}
                             />
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                            {this.state.edadTrabajador===null &&
+                                (<div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"></div>)
+                            }
                         </div>
                         <div className="row justify-content-center">
                             <ComponentFormTextArea
