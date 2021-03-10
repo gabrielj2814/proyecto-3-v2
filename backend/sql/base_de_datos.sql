@@ -88,10 +88,11 @@ INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_mov
 CREATE TABLE tpermiso(
     id_permiso character varying(8) NOT NULL,
     nombre_permiso character varying(50) NOT NULL,
-    dias_permiso character varying(2) NOT NULL,
+    dias_permiso character varying(2) NULL,
     estatu_remunerado character(1) NOT NULL,
     estatu_dias_aviles character(1) NOT NULL,
     estatu_permiso character(1) NOT NULL,
+    estatu_tipo_permiso character(1) NULL,
     constraint PK_id_permiso primary key(id_permiso)
 );
 
@@ -101,10 +102,11 @@ CREATE TABLE tpermisotrabajador(
     id_permiso_trabajador character varying(19) NOT NULL,
     id_cedula character varying(8)  NOT NULL,
     id_permiso character varying(8) NOT NULL,
-    fecha_desde_permiso_trabajador DATE NOT NULL,
-    fecha_hasta_permiso_trabajador DATE NOT NULL,
+    fecha_desde_permiso_trabajador DATE NULL,
+    fecha_hasta_permiso_trabajador DATE NULL,
     estatu_permiso_trabajador character(1) NOT NULL,
     permiso_trabajador_dias_aviles character varying(2) NOT NULL,
+    permiso_trabajador_tipo character varying(2) NOT NULL, -- PN, PR / PN permiso normal / PR permiso de retiro para salir temprano
     constraint PK_id_permiso_trabajador primary key(id_permiso_trabajador),
     constraint FK_id_cedula_tpermisotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
@@ -226,8 +228,10 @@ CREATE TABLE  tasistencia(
     horario_salida_asistencia character varying(7) NOT NULL,
     estatu_asistencia character varying(3) NOT NULL,
     estatu_cumplimiento_horario character(1) NOT NULL,
+    id_permiso_trabajador character varying(19) NULL,
     constraint PK_id_asistencia primary key(id_asistencia),
-    constraint FK_id_cedula_tasistencia foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+    constraint FK_id_cedula_tasistencia foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
+    constraint FK_id_permiso_trabajador foreign key(id_permiso_trabajador) references tpermisotrabajador(id_permiso_trabajador) on update cascade on delete cascade
 );
 
 CREATE TABLE tvitacora(
