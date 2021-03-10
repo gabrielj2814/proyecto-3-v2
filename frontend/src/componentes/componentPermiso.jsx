@@ -179,6 +179,20 @@ class ComponentPermiso extends React.Component{
         }
       }
 
+      /**
+       * {!perfil.vacio &&
+                          <td>
+                              <ButtonIcon 
+                              clasesBoton="btn btn-secondary btn-block" 
+                              value={perfil.id_permiso}
+                              id={perfil.id_permiso} 
+                              eventoPadre={this.consultarElementoTabla} 
+                              icon="icon-search"
+                              />
+                          </td>
+                        }
+      */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -206,27 +220,7 @@ class ComponentPermiso extends React.Component{
                                   />
                               </td>
                           }
-                          {!perfil.vacio &&
-                            <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={perfil.id_permiso} 
-                              id={perfil.id_permiso}
-                              eventoPadre={this.eliminarElementoTabla} 
-                              icon="icon-bin"
-                              />
-                            </td>
-                          }
-                        {!perfil.vacio &&
-                          <td>
-                              <ButtonIcon 
-                              clasesBoton="btn btn-secondary btn-block" 
-                              value={perfil.id_permiso}
-                              id={perfil.id_permiso} 
-                              eventoPadre={this.consultarElementoTabla} 
-                              icon="icon-search"
-                              />
-                          </td>
-                        }
+                        
                       </tr>
                       )
                   })}

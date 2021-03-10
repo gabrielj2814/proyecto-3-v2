@@ -25,6 +25,7 @@ class ComponentPermisoForm extends React.Component{
         this.agregar=this.agregar.bind(this);
         this.validarTexto=this.validarTexto.bind(this);
         this.validarNumeroDias=this.validarNumeroDias.bind(this);
+        this.desactivarDiasPermiso=this.desactivarDiasPermiso.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -35,6 +36,7 @@ class ComponentPermisoForm extends React.Component{
             estatu_permiso:"1",
             estatu_remunerado:"1",
             estatu_dias_aviles:"1",
+            estatu_tipo_permiso:"1",
             //
             msj_nombre_permiso:{
                 mensaje:"",
@@ -68,7 +70,7 @@ class ComponentPermisoForm extends React.Component{
         return respuesta_servidor
     }
 
-    async UNSAFE_componentWillMount(){
+    async componentDidMount(){
         const formulario=this.props.match.params.operacion
         if(formulario==="registrar"){
             const id=await this.generarIdPerfil()
@@ -88,21 +90,14 @@ class ComponentPermisoForm extends React.Component{
         .then(respuesta=>{
         respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
-                const id_permiso=respuesta_servidor.permiso.id_permiso,
-                nombre_permiso=respuesta_servidor.permiso.nombre_permiso,
-                dias_permiso=respuesta_servidor.permiso.dias_permiso,
-                estatu_permiso=respuesta_servidor.permiso.estatu_permiso,
-                estatu_dias_aviles=respuesta_servidor.permiso.estatu_dias_aviles,
-                estatu_remunerado=respuesta_servidor.permiso.estatu_remunerado
-                this.setState({
-                    id_permiso:id_permiso,
-                    nombre_permiso:nombre_permiso,
-                    dias_permiso:dias_permiso,
-                    estatu_permiso:estatu_permiso,
-                    estatu_dias_aviles:estatu_dias_aviles,
-                    estatu_remunerado:estatu_remunerado
-                })
-                    
+                this.setState(respuesta_servidor.permiso)
+                const $inputDiasPermiso=document.getElementById("dias_permiso")
+                if(this.state.estatu_tipo_permiso==="1"){
+                    $inputDiasPermiso.removeAttribute("disabled")
+                }
+                else if(this.state.estatu_tipo_permiso==="0"){
+                    $inputDiasPermiso.setAttribute("disabled",true)
+                }
             }
             else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
@@ -165,10 +160,18 @@ class ComponentPermisoForm extends React.Component{
             estatu_permiso:"1",
             estatu_remunerado:"1",
             estatu_dias_aviles:"1",
+            estatu_tipo_permiso:"1",
             msj_dias_permiso:mensaje_campo,
             msj_nombre_permiso:mensaje_campo
 
         })
+        const $inputDiasPermiso=document.getElementById("dias_permiso")
+        if(this.state.estatu_tipo_permiso==="1"){
+            $inputDiasPermiso.removeAttribute("disabled")
+        }
+        else if(this.state.estatu_tipo_permiso==="0"){
+            $inputDiasPermiso.setAttribute("disabled",true)
+        }
         this.props.history.push("/dashboard/configuracion/permiso/registrar")
     }
 
@@ -246,7 +249,7 @@ class ComponentPermisoForm extends React.Component{
         var estado=false
         var msj_dias_permiso=this.state.msj_dias_permiso
         const dias_permiso=this.state.dias_permiso
-        if(dias_permiso!=="" && dias_permiso!=="0"){
+        if(dias_permiso!==""){
             estado=true
             console.log("campo dias permiso OK")
             msj_dias_permiso.mensaje=""
@@ -302,7 +305,7 @@ class ComponentPermisoForm extends React.Component{
             const estado_validar_fomrulario=this.validarFomrulario()
             if(estado_validar_fomrulario){
                 this.enviarDatos((objeto)=>{
-                    const mensaje =this.state.mensaje
+                    let mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.put(`http://localhost:8080/configuracion/permiso/actualizar/${this.state.id_permiso}`,objeto)
                     .then(respuesta=>{
@@ -334,7 +337,8 @@ class ComponentPermisoForm extends React.Component{
                 dias_permiso:this.state.dias_permiso,
                 estatu_permiso:this.state.estatu_permiso,
                 estatu_remunerado:this.state.estatu_remunerado,
-                estatu_dias_aviles:this.state.estatu_dias_aviles
+                estatu_dias_aviles:this.state.estatu_dias_aviles,
+                estatu_tipo_permiso:this.state.estatu_tipo_permiso
             },
             token
         }
@@ -344,6 +348,28 @@ class ComponentPermisoForm extends React.Component{
     regresar(){
         this.props.history.push("/dashboard/configuracion/permiso");
     }
+
+    desactivarDiasPermiso(a){
+        let input=a.target
+        this.cambiarEstado(a)
+        const $inputDiasPermiso=document.getElementById("dias_permiso")
+        if(input.value==="1"){
+            // alert("activar campo dias permiso")
+            $inputDiasPermiso.removeAttribute("disabled")
+            this.setState({
+                dias_permiso:""
+            })
+        }
+        else if(input.value==="0"){
+            // alert("desactivar campo dias permiso")
+            $inputDiasPermiso.setAttribute("disabled",true)
+            this.setState({
+                dias_permiso:0
+            })
+        }
+    }
+
+    
 
     render(){
         var jsx_permiso_form=(
@@ -470,6 +496,23 @@ class ComponentPermisoForm extends React.Component{
                             valueRadioB="0"
                             eventoPadre={this.cambiarEstado}
                             checkedRadioB={this.state.estatu_dias_aviles}
+                            />
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormRadioState
+                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="tipo de permiso:"
+                            name="estatu_tipo_permiso"
+                            nombreLabelRadioA="normal"
+                            idRadioA="tipoPermisoA"
+                            checkedRadioA={this.state.estatu_tipo_permiso}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Retiro"
+                            idRadioB="tipoPermisoB"
+                            valueRadioB="0"
+                            eventoPadre={this.desactivarDiasPermiso}
+                            checkedRadioB={this.state.estatu_tipo_permiso}
                             />
                         </div>
                         <div className="row justify-content-center">

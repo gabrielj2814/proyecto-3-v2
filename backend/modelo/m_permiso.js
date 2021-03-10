@@ -10,6 +10,7 @@ class PermisoModelo extends PostgreDriver{
         this.estatu_permiso=""
         this.estatu_remunerado=""
         this.estatu_dias_aviles=""
+        this.estatu_tipo_permiso=""
     }
 
     set_idPermiso(id){
@@ -23,10 +24,11 @@ class PermisoModelo extends PostgreDriver{
         this.estatu_permiso=permiso.estatu_permiso
         this.estatu_remunerado=permiso.estatu_remunerado
         this.estatu_dias_aviles=permiso.estatu_dias_aviles
+        this.estatu_tipo_permiso=permiso.estatu_tipo_permiso
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO tpermiso(id_permiso,nombre_permiso,dias_permiso,estatu_permiso,estatu_remunerado,estatu_dias_aviles) VALUES('${this.id_permiso}','${this.nombre_permiso}','${this.dias_permiso}','${this.estatu_permiso}','${this.estatu_remunerado}','${this.estatu_dias_aviles}');`
+        const SQL=`INSERT INTO tpermiso(id_permiso,nombre_permiso,dias_permiso,estatu_permiso,estatu_remunerado,estatu_dias_aviles,estatu_tipo_permiso) VALUES('${this.id_permiso}','${this.nombre_permiso}','${this.dias_permiso}','${this.estatu_permiso}','${this.estatu_remunerado}','${this.estatu_dias_aviles}','${this.estatu_tipo_permiso}');`
         //console.log(SQL)
         this.query(SQL)
     }
@@ -56,7 +58,7 @@ class PermisoModelo extends PostgreDriver{
     }
 
     actualizarModelo(){
-        const SQL=`UPDATE tpermiso SET nombre_permiso='${this.nombre_permiso}',dias_permiso='${this.dias_permiso}',estatu_permiso='${this.estatu_permiso}',estatu_remunerado='${this.estatu_remunerado}',estatu_dias_aviles='${this.estatu_dias_aviles}' WHERE id_permiso='${this.id_permiso}';`
+        const SQL=`UPDATE tpermiso SET nombre_permiso='${this.nombre_permiso}',dias_permiso='${this.dias_permiso}',estatu_permiso='${this.estatu_permiso}',estatu_remunerado='${this.estatu_remunerado}',estatu_dias_aviles='${this.estatu_dias_aviles}',estatu_tipo_permiso='${this.estatu_tipo_permiso}' WHERE id_permiso='${this.id_permiso}';`
         //console.log(SQL)
         return this.query(SQL)
     }
