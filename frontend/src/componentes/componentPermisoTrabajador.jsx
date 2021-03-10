@@ -156,7 +156,7 @@ class ComponentPermisoTrabajador extends React.Component{
         }
         else if(input.value==="A"){
             // /consultar-culminados
-            alert("hola")
+            // alert("hola")
             const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-aprovados`
             const permisos=await this.consultarAlServidor(ruta_permisos)
             const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)

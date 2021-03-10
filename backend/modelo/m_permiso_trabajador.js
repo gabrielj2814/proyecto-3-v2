@@ -11,6 +11,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 		this.fecha_hasta_permiso_trabajador=""
 		this.estatu_permiso_trabajador=""
 		this.permiso_trabajador_dias_aviles=""
+		this.permiso_trabajador_tipo=""
     }
 
     set_datoIdPermisoTrabajador(id){
@@ -38,6 +39,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 		this.fecha_hasta_permiso_trabajador=permiso_trabajador.fecha_hasta_permiso_trabajador,
 		this.estatu_permiso_trabajador=(permiso_trabajador.estatu_permiso_trabajador==="E")?"E":"E",
 		this.permiso_trabajador_dias_aviles="VC"
+		this.permiso_trabajador_tipo=permiso_trabajador.permiso_trabajador_tipo
     }
 
     async consultarTodosModelo(fecha){
@@ -78,8 +80,14 @@ class PermisoTrabajadorModelo extends DriverPostgre{
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.fecha_desde_permiso_trabajador}','${this.fecha_hasta_permiso_trabajador}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}');`
-        console.log(SQL)
+        // console.log(SQL)
+        let SQL=""
+        if(this.permiso_trabajador_tipo==="PR"){
+            SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
+        }
+        else{
+            SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.fecha_desde_permiso_trabajador}','${this.fecha_hasta_permiso_trabajador}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
+        }
         this.query(SQL)
     }
 

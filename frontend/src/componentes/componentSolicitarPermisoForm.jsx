@@ -16,6 +16,7 @@ import InputButton from '../subComponentes/input_button'
 //import ComponentFormRadioState from '../subComponentes/componentFormRadioState';
 import ComponentFormDate from '../subComponentes/componentFormDate'
 import ComponentFormSelect from '../subComponentes/componentFormSelect';
+import { Alert } from 'bootstrap';
 
 class ComponentSolicitarPermisoForm extends React.Component{
 
@@ -34,10 +35,11 @@ class ComponentSolicitarPermisoForm extends React.Component{
             //
             id_permiso_trabajador:"",
             id_cedula:"",
-            fecha_desde_permiso_trabajador:"",
+            fecha_desde_permiso_trabajador:null,
             fecha_hasta_permiso_trabajador:"",
             estatu_permiso_trabajador:"",
             permiso_trabajador_dias_aviles:"",
+            permiso_trabajador_tipo:"",
             //propiedades extras
             //permiso
             id_permiso:"",
@@ -46,6 +48,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             estatu_permiso:"",
             estatu_remunerado:"",
             estatu_dias_aviles:"",
+            estatu_tipo_permiso:"",
             estatu_formulario:"",
             //fomrulario
             lista_permisos:[],
@@ -129,7 +132,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
         return lista_vacia
     }
 
-    async UNSAFE_componentWillMount(){
+    async componentDidMount(){
         const id_cedula=await this.consultarSesion()
         const ruta_ultimo_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${id_cedula}`
         const ultimo_permiso=await this.consultarAlServidor(ruta_ultimo_permiso)
@@ -140,6 +143,9 @@ class ComponentSolicitarPermisoForm extends React.Component{
             var estatu_permiso_trabajador=""
             if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E"){
                 estatu_permiso_trabajador="En espera"
+            }
+            if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="C"){
+                estatu_permiso_trabajador="Culminada"
             }
             else if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="D"){
                 estatu_permiso_trabajador="Denegado"
@@ -249,14 +255,22 @@ class ComponentSolicitarPermisoForm extends React.Component{
         const ruta_permiso=`http://localhost:8080/configuracion/permiso/consultar/${input.value}/${token}`
         const permiso=await this.consultarAlServidor(ruta_permiso)
         console.log(permiso)
-        this.setState({
-            id_permiso:input.value,
-            nombre_permiso:permiso.permiso.nombre_permiso,
-            dias_permiso:permiso.permiso.dias_permiso,
-            estatu_permiso:permiso.permiso.estatu_permiso,
-            estatu_remunerado:permiso.permiso.estatu_remunerado,
-            estatu_dias_aviles:permiso.permiso.estatu_dias_aviles
-        })
+        this.setState(permiso.permiso)
+        const $fechaDesde=document.getElementById("fecha_desde_permiso_trabajador")
+        if(permiso.permiso.estatu_tipo_permiso==="0"){
+            this.setState({fecha_hasta_permiso_trabajador:null})
+            $fechaDesde.setAttribute("disabled",true)
+        }
+        else if(permiso.permiso.estatu_tipo_permiso==="1"){
+            $fechaDesde.removeAttribute("disabled")
+            if(document.getElementById("fecha_desde_permiso_trabajador").value!==""){
+                let input={
+                    target:document.getElementById("fecha_desde_permiso_trabajador")
+                }
+                this.calcularFechaHasta(input)
+            }
+            
+        }
     }
 
     calcularFechaHasta(a){
@@ -273,18 +287,23 @@ class ComponentSolicitarPermisoForm extends React.Component{
 
     validarFechaDesde(){
         var estado=false
-        var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
-        var hoy=Moment(new Date()).format("YYYY-MM-DD")
-        if(this.state.fecha_desde_permiso_trabajador!==""){
-            if(Moment(fecha_desde).isSameOrAfter(hoy)){
-                estado=true
+        if(this.state.estatu_tipo_permiso==="1"){
+            var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
+            var hoy=Moment(new Date()).format("YYYY-MM-DD")
+            if(this.state.fecha_desde_permiso_trabajador!==""){
+                if(Moment(fecha_desde).isSameOrAfter(hoy)){
+                    estado=true
+                }
+                else{
+                    this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso no puede ser antes que la de hoy"})
+                }
             }
             else{
-                this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso no puede ser antes que la de hoy"})
+                this.setState({msj_fecha_desde_permiso_trabajador:"no puede enviar una solicitud si no agrega una fecha"})
             }
         }
-        else{
-            this.setState({msj_fecha_desde_permiso_trabajador:"no puede enviar una solicitud si no agrega una fecha"})
+        else if(this.state.estatu_tipo_permiso==="0"){
+            estado=true
         }
         return estado
     }
@@ -294,18 +313,22 @@ class ComponentSolicitarPermisoForm extends React.Component{
             var respuesta_servidor=""
             var mensaje=this.state.mensaje
             const token=localStorage.getItem('usuario')
+            // fecha_desde_permiso_trabajador:Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD"),
+                    // fecha_hasta_permiso_trabajador:Moment(this.state.fecha_hasta_permiso_trabajador).format("YYYY-MM-DD"),
             const objeto={
                 permiso_trabajador:{
                     id_permiso_trabajador:this.state.id_permiso_trabajador,
                     id_cedula:this.state.id_cedula,
                     id_permiso:this.state.id_permiso,
-                    fecha_desde_permiso_trabajador:Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD"),
-                    fecha_hasta_permiso_trabajador:Moment(this.state.fecha_hasta_permiso_trabajador).format("YYYY-MM-DD"),
+                    fecha_desde_permiso_trabajador:(this.state.estatu_tipo_permiso==="0")?"":Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD"),
+                    fecha_hasta_permiso_trabajador:(this.state.estatu_tipo_permiso==="0")?"":Moment(this.state.fecha_hasta_permiso_trabajador).format("YYYY-MM-DD"),
                     estatu_permiso_trabajador:"E",
-                    permiso_trabajador_dias_aviles:""
+                    permiso_trabajador_dias_aviles:"",
+                    permiso_trabajador_tipo:(this.state.estatu_tipo_permiso==="0")?"PR":"PN"
                 },
                 token
             }
+            console.log("datos =>>> ",objeto)
             await axios.post("http://localhost:8080/transaccion/permiso-trabajador/registrar",objeto)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
@@ -345,7 +368,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             lista_permisos:lista,
 
             fecha_desde_permiso_trabajador:"",
-            fecha_hasta_permiso_trabajador:"",
+            fecha_hasta_permiso_trabajador:null,
             estatu_permiso_trabajador:"",
             permiso_trabajador_dias_aviles:"",
 
@@ -355,6 +378,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             estatu_permiso:"",
             estatu_remunerado:"",
             estatu_dias_aviles:"",
+            estatu_tipo_permiso:""
         })
         let objeto={
             target:{
@@ -435,14 +459,29 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                 eventoPadre={this.calcularFechaHasta}
                                 />
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 aliniar-fecha-hasta">
-                                    {(this.state.fecha_hasta_permiso_trabajador!=="")?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
+                                    {(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
                                 </div>
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
                         </div>
                     )
                 }
-                {this.state.fecha_hasta_permiso_trabajador!=="" &&
+                {this.state.fecha_hasta_permiso_trabajador!==null &&
+                    (
+                        <div className="row justify-content-center mt-2">
+                            <div className="col-auto">
+                                    <InputButton 
+                                    clasesBoton="btn btn-success"
+                                    id="boton-actualizar"
+                                    value="Enviar solicitud"
+                                    eventoPadre={this.solicitarNuvoPermiso}
+                                    />
+                            </div>  
+                        </div>
+                    )
+                }
+
+                {this.state.estatu_tipo_permiso==="0" &&
                     (
                         <div className="row justify-content-center mt-2">
                             <div className="col-auto">
@@ -471,10 +510,10 @@ class ComponentSolicitarPermisoForm extends React.Component{
                         <span>estatu del permiso trabajador: {this.state.estatu_permiso_trabajador}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">desde: {Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                        <span className="">desde: {(this.state.fecha_desde_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">hasta: {Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                        <span className="">hasta: {(this.state.fecha_hasta_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
                     </div>
                 </div>
                 {this.state.permiso_trabajador_dias_aviles!=="VC" &&
