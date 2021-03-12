@@ -1,6 +1,8 @@
+CREATE DATABASE proyecto_3;
+
 CREATE TABLE tperfil(
     id_perfil character varying(6) NOT NULL,
-    nombre_perfil character varying(50) NOT NULL,
+    nombre_perfil character varying(150) NOT NULL,
     estatu_perfil character(1) NOT NULL,
     constraint PK_id_perfil primary key(id_perfil)
 );
@@ -21,7 +23,7 @@ INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES(
 
 CREATE TABLE ttipotrabajador(
     id_tipo_trabajador character varying(8) NOT NULL,
-    descripcion_tipo_trabajador character varying(15) NOT NULL,
+    descripcion_tipo_trabajador character varying(150) NOT NULL,
     estatu_tipo_trabajador character(1) NOT NULL,
     constraint PK_id_tipo_trabajador primary key(id_tipo_trabajador)
 );
@@ -42,7 +44,7 @@ INSERT INTO thorario (horario_descripcion,horario_entrada,horario_salida,estatu_
 
 CREATE TABLE tfunciontrabajador(
     id_funcion_trabajador character varying(10) NOT NULL,
-    funcion_descripcion character varying(50) NOT NULL,
+    funcion_descripcion character varying(3000) NOT NULL,
     id_tipo_trabajador character varying(8) NOT NULL,
     estatu_funcion_trabajador character(1) NOT NULL,
     id_horario INTEGER NOT NULL,
@@ -58,15 +60,16 @@ INSERT INTO tfunciontrabajador(id_funcion_trabajador,funcion_descripcion,id_tipo
 
 CREATE TABLE ttrabajador(
     id_cedula character varying(8) NOT NULL,
-    nombres character varying(50) NOT NULL,
-    apellidos character varying(50) NOT NULL,
+    nombres character varying(150) NOT NULL,
+    apellidos character varying(150) NOT NULL,
     sexo_trabajador character(1) NOT NULL,
     telefono_movil character varying(11),
     telefono_local character varying(11),
     correo character varying(360) NOT NULL,
-    direccion character varying(300) NOT NULL,
+    direccion character varying(3000) NOT NULL,
     clave_trabajador character varying(300) NOT NULL,
-    grado_instruccion character varying(50) NOT NULL,
+    grado_instruccion character varying(150) NOT NULL,
+    titulo_grado_instruccion character varying(150) NOT NULL,
     fecha_nacimiento DATE NOT NULL,
     fecha_ingreso DATE NOT NULL,
     pregunta_1 character varying(250) NOT NULL,
@@ -83,12 +86,12 @@ CREATE TABLE ttrabajador(
     constraint FK_id_funcion_trabajador foreign key(id_funcion_trabajador) references tfunciontrabajador(id_funcion_trabajador) on update cascade on delete cascade
 );
 
-INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_movil,telefono_local,correo,direccion,grado_instruccion,designacion,fecha_nacimiento,fecha_ingreso,estatu_trabajador,id_perfil,id_funcion_trabajador,pregunta_1,pregunta_2,respuesta_1,respuesta_2,clave_trabajador,estatu_cuenta) VALUES('27636392','gabriel jesus','valera castillo','1','04160430565','04160430565','gabriel@gmail.com','barrio araguaney calle 7','TSU','1','2020-02-28','1998-02-28','1','prl-1','funt-1','no-tiene','no-tiene','no-tiene','no-tiene','no-tiene-clave','0');
+INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_movil,telefono_local,correo,direccion,grado_instruccion,titulo_grado_instruccion,designacion,fecha_nacimiento,fecha_ingreso,estatu_trabajador,id_perfil,id_funcion_trabajador,pregunta_1,pregunta_2,respuesta_1,respuesta_2,clave_trabajador,estatu_cuenta) VALUES('27636392','gabriel jesus','valera castillo','1','04160430565','04160430565','gabriel@gmail.com','barrio araguaney calle 7','tsu','informatica','1','1998-02-28','1998-02-28','1','prl-1','funt-1','no-tiene','no-tiene','no-tiene','no-tiene','no-tiene-clave','0');
 
 CREATE TABLE tpermiso(
     id_permiso character varying(8) NOT NULL,
-    nombre_permiso character varying(50) NOT NULL,
-    dias_permiso character varying(2) NULL,
+    nombre_permiso character varying(150) NOT NULL,
+    dias_permiso character varying(4) NULL,
     estatu_remunerado character(1) NOT NULL,
     estatu_dias_aviles character(1) NOT NULL,
     estatu_permiso character(1) NOT NULL,
@@ -116,7 +119,7 @@ CREATE TABLE tpermisotrabajador(
 
 CREATE TABLE testado(
     id_estado character varying(6) NOT NULL,
-    nombre_estado character varying(50) NOT NULL,
+    nombre_estado character varying(150) NOT NULL,
     estatu_estado character(1) NOT NULL,
     constraint PK_id_estado primary key(id_estado)
 );
@@ -126,7 +129,7 @@ INSERT INTO testado(id_estado,nombre_estado,estatu_estado) VALUES('est-2','lara'
 
 CREATE TABLE tciudad(
     id_ciudad character varying(8) NOT NULL,
-    nombre_ciudad character varying(50) NOT NULL,
+    nombre_ciudad character varying(150) NOT NULL,
     id_estado character varying(6) NOT NULL,
     estatu_ciudad character(1) NOT NULL,
     constraint PK_id_ciudad primary key(id_ciudad),
@@ -139,7 +142,7 @@ INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu
 
 CREATE TABLE ttipocam(
     id_tipo_cam character varying(7) NOT NULL,
-    nombre_tipo_cam character varying(50) NOT NULL,
+    nombre_tipo_cam character varying(150) NOT NULL,
     estatu_tipo_cam character(1) NOT NULL,
     constraint PK_id_tipo_cam primary key(id_tipo_cam)
 );
@@ -148,9 +151,9 @@ INSERT INTO ttipocam (id_tipo_cam,nombre_tipo_cam,estatu_tipo_cam) VALUES('tipc-
 
 CREATE TABLE tcam(
     id_cam SERIAL ,
-    nombre_cam character varying(50) NOT NULL,
+    nombre_cam character varying(150) NOT NULL,
     telefono_cam character varying(11) NOT NULL,
-    direccion_cam character varying(300) NOT NULL,
+    direccion_cam character varying(3000) NOT NULL,
     id_tipo_cam character varying(7) NOT NULL,
     id_ciudad character varying(8) NOT NULL,
     estatu_cam character(1) NOT NULL,
@@ -193,8 +196,8 @@ INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_m
 
 CREATE TABLE treposo( 
     id_reposo character varying(8) NOT NULL,
-    nombre_reposo character varying(50) NOT NULL,
-    dias_reposo character varying(2) NOT NULL,
+    nombre_reposo character varying(150) NOT NULL,
+    dias_reposo character varying(4) NOT NULL,
     estatu_reposo character(1) NOT NULL,
     constraint PK_id_reposo primary key(id_reposo)
 );
@@ -208,7 +211,7 @@ CREATE TABLE treposotrabajador(
     fecha_desde_reposo_trabajador DATE NOT NULL,
     fecha_hasta_reposo_trabajador DATE NOT NULL,
     estatu_reposo_trabajador character(1) NOT NULL,
-    descripcion_reposo_trabajador character varying(2000) NOT NULL,
+    descripcion_reposo_trabajador character varying(3000) NOT NULL,
     id_cam INTEGER NOT NULL,
     id_asignacion_medico_especialidad character varying(17) NOT NULL,
     constraint PK_id_reposo_trabajador primary key(id_reposo_trabajador),
@@ -238,16 +241,16 @@ CREATE TABLE tvitacora(
     id_vitacora SERIAL,
     id_cedula character varying(8) NOT NULL,
     operacion character varying(6) NOT NULL,
-    tabla character varying(50) NOT NULL,
+    tabla character varying(150) NOT NULL,
     fecha_operacion DATE NOT NULL,
-    aquien character varying(50),
+    aquien character varying(150),
     constraint PK_id_vitacora primary key(id_vitacora),
     constraint FK_id_cedula_tvitacora foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
 );
 
 CREATE TABLE tcintillo(
     id_foto_cintillo serial,
-    nombre_foto_cintillo character varying(145) NOT NULL,
+    nombre_foto_cintillo character varying(150) NOT NULL,
     extension_foto_cintillo character varying(5) ,
     fecha_subida_foto DATE NOT NULL,
     hora_subida_foto character varying(10) NOT NULL,-- 12-12-12AM

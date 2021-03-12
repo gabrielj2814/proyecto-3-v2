@@ -13,6 +13,7 @@ class TrabajadorModelo extends DriverPostgre{
         this.correo=""
         this.direccion=""
         this.grado_instruccion=""
+        this.titulo_grado_instruccion=""
         this.designacion=""
         this.fecha_nacimiento=""
         this.fecha_ingreso=""
@@ -37,6 +38,7 @@ class TrabajadorModelo extends DriverPostgre{
         this.correo=trabajador.correo
         this.direccion=trabajador.direccion
         this.grado_instruccion=trabajador.grado_instruccion
+        this.titulo_grado_instruccion=trabajador.titulo_grado_instruccion
         this.designacion=trabajador.designacion
         this.fecha_nacimiento=trabajador.fecha_nacimiento
         this.fecha_ingreso=trabajador.fecha_ingreso
@@ -60,7 +62,7 @@ class TrabajadorModelo extends DriverPostgre{
     }
 
     registrarModelo(trabajador){
-        const SQL=`INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_movil,telefono_local,correo,direccion,grado_instruccion,designacion,fecha_nacimiento,fecha_ingreso,estatu_trabajador,id_perfil,id_funcion_trabajador,pregunta_1,pregunta_2,respuesta_1,respuesta_2,clave_trabajador,estatu_cuenta) VALUES('${this.id_cedula}','${this.nombres}','${this.apellidos}','${this.sexo_trabajador}','${this.telefono_movil}','${this.telefono_local}','${this.correo}','${this.direccion}','${this.grado_instruccion}','${this.designacion}','${this.fecha_nacimiento}','${this.fecha_ingreso}','${this.estatu_trabajador}','${this.id_perfil}','${this.id_funcion_trabajador}','no-tiene','no-tiene','no-tiene','no-tiene','no-tiene-clave','0')`
+        const SQL=`INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_movil,telefono_local,correo,direccion,grado_instruccion,titulo_grado_instruccion,designacion,fecha_nacimiento,fecha_ingreso,estatu_trabajador,id_perfil,id_funcion_trabajador,pregunta_1,pregunta_2,respuesta_1,respuesta_2,clave_trabajador,estatu_cuenta) VALUES('${this.id_cedula}','${this.nombres}','${this.apellidos}','${this.sexo_trabajador}','${this.telefono_movil}','${this.telefono_local}','${this.correo}','${this.direccion}','${this.grado_instruccion}','${this.titulo_grado_instruccion}','${this.designacion}','${this.fecha_nacimiento}','${this.fecha_ingreso}','${this.estatu_trabajador}','${this.id_perfil}','${this.id_funcion_trabajador}','no-tiene','no-tiene','no-tiene','no-tiene','no-tiene-clave','0')`
         //console.log(SQL)
         this.query(SQL)
     }
@@ -97,7 +99,7 @@ class TrabajadorModelo extends DriverPostgre{
 
 
     actualizarModelo(){
-        const SQL=`UPDATE ttrabajador SET nombres='${this.nombres}',apellidos='${this.apellidos}',sexo_trabajador='${this.sexo_trabajador}',telefono_movil='${this.telefono_movil}',telefono_local='${this.telefono_local}',correo='${this.correo}',direccion='${this.direccion}',grado_instruccion='${this.grado_instruccion}',designacion='${this.designacion}',fecha_nacimiento='${this.fecha_nacimiento}',fecha_ingreso='${this.fecha_ingreso}',estatu_trabajador='${this.estatu_trabajador}',id_perfil='${this.id_perfil}',id_funcion_trabajador='${this.id_funcion_trabajador}' WHERE id_cedula='${this.id_cedula}'`
+        const SQL=`UPDATE ttrabajador SET nombres='${this.nombres}',apellidos='${this.apellidos}',sexo_trabajador='${this.sexo_trabajador}',telefono_movil='${this.telefono_movil}',telefono_local='${this.telefono_local}',correo='${this.correo}',direccion='${this.direccion}',grado_instruccion='${this.grado_instruccion}',titulo_grado_instruccion='${this.titulo_grado_instruccion}',designacion='${this.designacion}',fecha_nacimiento='${this.fecha_nacimiento}',fecha_ingreso='${this.fecha_ingreso}',estatu_trabajador='${this.estatu_trabajador}',id_perfil='${this.id_perfil}',id_funcion_trabajador='${this.id_funcion_trabajador}' WHERE id_cedula='${this.id_cedula}'`
         //console.log(SQL)
         this.query(SQL)
     }
