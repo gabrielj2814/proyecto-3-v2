@@ -134,9 +134,16 @@ HorarioControlador.consultarHorarioActivo=async () => {
     return horario_result
 }
 
-HorarioControlador.verificarCumplimentoDeHorario=async (hora) => {
+HorarioControlador.consultarHorarioAsistencia=async (id) => {
+    const horario_modelo=new HorarioModelo()
+    horario_modelo.setId(id)
+    const horario_result=await horario_modelo.consultarHorario()
+    return horario_result
+}
+
+HorarioControlador.verificarCumplimentoDeHorario=async (hora,id) => {
     var estado=false
-    const result =await HorarioControlador.consultarHorarioActivo()
+    const result =await HorarioControlador.consultarHorarioAsistencia(id)
     if(HorarioControlador.verificarExistencia(result)){
         const hora_entrada=Moment(result.rows[0].horario_entrada,"HH:mmA")
         if(Moment(hora,"HH:mmA").isSameOrBefore(hora_entrada)){

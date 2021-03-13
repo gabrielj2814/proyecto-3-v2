@@ -28,8 +28,17 @@ AsistenciaControlador.presenteControlador=async (req,res,next) => {
         res.end()
     }
     else{
-        const horario_result=await HorarioControlador.consultarHorarioActivo()
-        if(AsistenciaControlador.verificarExistencia(horario_result)){
+        let trabajador=new TrabajadorControlador()
+        let datosTrabajador=await trabajador.consultarControlador(asistencia.cedula)
+        console.log("datos =>>> ",datosTrabajador.rows)
+        const datosHorario=await HorarioControlador.consultarHorarioAsistencia(datosTrabajador.rows[0].id_horario)
+        console.log("datos =>>> ",datosHorario.rows)
+        // respuesta_api.mensaje="hola"
+        // respuesta_api.estado_peticion="404"
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
+        if(AsistenciaControlador.verificarExistencia(datosHorario)){
             const hoy=Moment().format("YYYY-MM-DD")
             const hora=Moment().format("HH:mmA")
             const json={
@@ -38,7 +47,8 @@ AsistenciaControlador.presenteControlador=async (req,res,next) => {
                 horario_entrada_asistencia:"",
                 horario_salida_asistencia:"",
                 estatu_asistencia:"",
-                estatu_cumplimiento_horario:""
+                estatu_cumplimiento_horario:"",
+                id_horario:datosHorario.rows[0].id_horario
             }
             AsistenciaControlador.asistir(res,hoy,hora,json,respuesta_api,next,req,token)
         }
@@ -49,7 +59,9 @@ AsistenciaControlador.presenteControlador=async (req,res,next) => {
             res.write(JSON.stringify(respuesta_api))
             res.end()
         }
+        
     }
+    
 }
 
 AsistenciaControlador.verificarInasistenciasJustificada= async (req,res) => {
@@ -138,7 +150,7 @@ AsistenciaControlador.asistir=async (res,hoy,hora,json,respuesta_api,next,req,to
             json.horario_entrada_asistencia=hora
             json.horario_salida_asistencia="--:--AM"
             json.estatu_asistencia="P"
-            json.estatu_cumplimiento_horario=await AsistenciaControlador.cumpliirHoraioAsistencia(hora)
+            json.estatu_cumplimiento_horario=await AsistenciaControlador.cumpliirHoraioAsistencia(hora,json.id_horario)
             asistencia_modelo.setDatos(json)
             asistencia_modelo.registrarModelo()
             respuesta_api.mensaje="que tenga un feliz dia de trabajo"
@@ -148,8 +160,8 @@ AsistenciaControlador.asistir=async (res,hoy,hora,json,respuesta_api,next,req,to
         }
 }
 
-AsistenciaControlador.cumpliirHoraioAsistencia=async (hora) => {
-    const cumpliir_horario=await HorarioControlador.verificarCumplimentoDeHorario(hora)
+AsistenciaControlador.cumpliirHoraioAsistencia=async (hora,id_horario) => {
+    const cumpliir_horario=await HorarioControlador.verificarCumplimentoDeHorario(hora,id_horario)
     if(cumpliir_horario){
         return "C"
         }
