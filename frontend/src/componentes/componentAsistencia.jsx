@@ -143,19 +143,20 @@ class ComponentAsistencia extends React.Component {
 
                 <h1 className="titulo_h1">Asistencia</h1>
 
-                <form id="formularioHorario" className="formularioHorario">
+                <form id="formularioHorario" className="formularioHorario ">
 
-                    <div className="asistencia_cedula">
-                        <div>Cedula</div>
-                        <input type="text" id="cedula" name="cedula" value={this.state.cedula} onChange={this.validarCampoCedula} placeholder="ingresce su cedula"/>
-                    
+                    <div className="row justify-content-center ">
+                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 asistencia_cedula">
+                            <div>Cedula</div>
+                            <input type="text"  className="form-control" id="cedula" name="cedula" value={this.state.cedula} onChange={this.validarCampoCedula} placeholder="ingresce su cedula"/>
+                        </div>
                     </div>
                 
             
             
                 </form>
 
-                <div className="contenedor_boton_guardar_horario">
+                <div className="contenedor_boton_guardar_horario mt-5">
 
                     <button id="botonEnviarDatos" onClick={this.enviarDatos} className="btn btn-primary btn-block" >Enviar</button>
                 

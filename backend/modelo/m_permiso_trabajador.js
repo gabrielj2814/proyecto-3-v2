@@ -98,7 +98,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
     }
 
     async consultarPermisoTrabajadorXCedulaActivolModelo(){
-        const SQL=`SELECT * FROM tpermisotrabajador WHERE id_cedula='${this.id_cedula}' AND estatu_permiso_trabajador='A' OR estatu_permiso_trabajador='E';`
+        const SQL=`SELECT * FROM tpermisotrabajador WHERE id_cedula='${this.id_cedula}' AND estatu_permiso_trabajador='A';`
         // console.log(SQL)
         return await this.query(SQL)
     }

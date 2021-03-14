@@ -284,6 +284,19 @@ AsistenciaControlador.verificarExistencia=(result) => {
     return result.rows.length!=0
 }
 
+AsistenciaControlador.asignarPermisoRetiroAsistencia= async (fecha,cedula,idPermiso,horaSalida) => {
+    let asistencia_modelo=new AsistenciaModelo()
+    let datos=await asistencia_modelo.consultarTrabajadorAsistenciaModelo(fecha,cedula)
+    if(datos.rowCount>0){
+        return await asistencia_modelo.asignarPermisoRetiroAsistenciaTrabajador(fecha,cedula,idPermiso,horaSalida)
+    }
+    else{
+        return datos
+    }
+
+    
+}
+
 module.exports= AsistenciaControlador
 
 // const AsistenciaModelo=require("../modelo/m_asistencia"),

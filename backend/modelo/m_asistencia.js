@@ -10,6 +10,7 @@ class AsistenciaModelo extends DriverPostgre {
         this.horario_salida_asistencia=""
         this.estatu_asistencia=""
         this.estatu_cumplimiento_horario=""
+        this.id_permiso_trabajador=""
     }
 
     setDatos(asistencia){
@@ -53,6 +54,11 @@ class AsistenciaModelo extends DriverPostgre {
     actualizarModelo(){
         const SQL=`UPDATE tasistencia SET horario_salida_asistencia='${this.horario_salida_asistencia}'  WHERE id_asistencia='${this.id_asistencia}'`
         this.query(SQL)
+    }
+
+    async asignarPermisoRetiroAsistenciaTrabajador(fecha,cedula,idPermiso,horaSalida){
+        const SQL=`UPDATE tasistencia SET id_permiso_trabajador='${idPermiso}',horario_salida_asistencia='${horaSalida}' WHERE id_cedula='${cedula}' AND id_asistencia LIKE '%${fecha}%' AND horario_salida_asistencia='--:--AM'`
+        return await this.query(SQL)
     }
 }
 

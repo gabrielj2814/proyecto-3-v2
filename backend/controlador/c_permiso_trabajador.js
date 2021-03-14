@@ -18,6 +18,7 @@ PermisoTrabajadorControlador.generarId=async (req,res)=>{
 
 PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
     ReposoTrabajadorControlador=require("./c_reposo_trabajador")
+    AsistenciaControlador=require("./c_asistencia")
     var respuesta_api={mensaje:"solicitud enviada con exito",estado_peticion:"200"}
     const {permiso_trabajador,token}=req.body,
     PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
@@ -173,9 +174,27 @@ PermisoTrabajadorControlador.actualizarEstatuPermisoControlador=async (req,res,n
     PERMISOTRABAJADOR.set_datosActualizarPermiso(permiso_trabajador)
     const permiso= await PERMISOTRABAJADOR.consultarPermisoTrabajadorModelo()
     if(permiso.rows.length===1){
-        PERMISOTRABAJADOR.actualizarEstatuPermisoModelo()
+        if(permiso_trabajador.estatu_permiso_trabajador==="A" && permiso.rows[0].permiso_trabajador_tipo==="PR"){
+            let datos = await AsistenciaControlador.asignarPermisoRetiroAsistencia(Moment().format("YYYY-MM-DD"),permiso.rows[0].id_cedula,permiso.rows[0].id_permiso_trabajador,Moment().format("HH:mmA"))
+            if(datos.rowCount>0){
+                // console.log("salida ok")
+                PERMISOTRABAJADOR.actualizarEstatuPermisoModelo()
+            }
+            else{
+                // console.log("no ok")
+                respuesta_api.mensaje="no se puedo aprobar el permiso por que el trabajador no esta en la asistencia de hoy"
+                respuesta_api.estado_peticion="404"
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
+            }
+        }
+        else{
+            PERMISOTRABAJADOR.actualizarEstatuPermisoModelo()
+        }
         req.vitacora=VitacoraControlador.json(respuesta_api,token,`UPDATE`,"tpermisotrabajador",permiso_trabajador.id_permiso_trabajador)
         next()
+        
     }
     else{
         respuesta_api.mensaje="el permiso consultado no existe en la base de datos"

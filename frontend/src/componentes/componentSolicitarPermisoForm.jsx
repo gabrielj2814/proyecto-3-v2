@@ -167,6 +167,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 fecha_desde_permiso_trabajador:ultimo_permiso.permiso_trabajador[0].fecha_desde_permiso_trabajador,
                 fecha_hasta_permiso_trabajador:ultimo_permiso.permiso_trabajador[0].fecha_hasta_permiso_trabajador,
                 permiso_trabajador_dias_aviles:ultimo_permiso.permiso_trabajador[0].permiso_trabajador_dias_aviles,
+                permiso_trabajador_tipo:ultimo_permiso.permiso_trabajador[0].permiso_trabajador_tipo,
                 mensaje:mensaje,
                 estatu_formulario:ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador
             })
@@ -552,6 +553,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                         <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <span className="">tipo de permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
                     </div>
                 </div>
                 {(this.state.estatu_formulario==="C" || this.state.estatu_formulario==="D") &&
