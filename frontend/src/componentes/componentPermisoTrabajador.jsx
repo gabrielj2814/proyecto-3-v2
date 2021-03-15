@@ -11,7 +11,7 @@ import ComponentDashboard from './componentDashboard'
 import TituloModulo from '../subComponentes/tituloModulo'
 import ComponentTablaDatosSinBarra from '../subComponentes/componentTablaDeDatosSinBarra'
 import ButtonIcon from '../subComponentes/buttonIcon'
-//import InputButton from '../subComponentes/input_button'
+import InputButton from '../subComponentes/input_button'
 
 
 class ComponentPermisoTrabajador extends React.Component{
@@ -25,6 +25,7 @@ class ComponentPermisoTrabajador extends React.Component{
         this.denegarPermiso=this.denegarPermiso.bind(this);
         this.consultarPermiso=this.consultarPermiso.bind(this);
         this.editarPermiso=this.editarPermiso.bind(this);
+        this.redirigirFormulario=this.redirigirFormulario.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
@@ -237,6 +238,11 @@ class ComponentPermisoTrabajador extends React.Component{
         this.props.history.push(`/dashboard/transaccion/permiso-trabajador/editar${input.id}`)
     }
 
+    redirigirFormulario(){
+        // alert("hola")
+        this.props.history.push("/dashboard/transaccion/permiso-trabajador/trabajador/solicitar")
+    }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -317,6 +323,15 @@ class ComponentPermisoTrabajador extends React.Component{
                     ventoConsultarPermiso={this.consultarPermisosXEstatu}
                     tabla={this.state.tabla}
                     />
+                <div className="row">
+                    <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                        <div className="row justify-content-center align-items-center contenedor-boton">
+                            <div className="col-auto">
+                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
 

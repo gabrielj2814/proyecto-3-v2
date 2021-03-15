@@ -12,6 +12,7 @@ import ComponentInicioDashboard from './componentes/componentInicioDashboard';
 //modulos transaccion
 //PERMISO TRABAJADOR
 import ComponentSolicitarPermisoForm from './componentes/componentSolicitarPermisoForm'
+import ComponentSolicitarPermisoTrabajadorForm from './componentes/componentSolicitarPermisoTrabajadorForm'
 import ComponentPermisoTrabajador from './componentes/componentPermisoTrabajador'
 import ComponentEditarPermisoTrabajador from './componentes/componentEditarPermisoTrabajadorForm'
 //modulos reporte
@@ -157,6 +158,7 @@ function App() {
 
 
         <Route exact path="/dashboard/transaccion/permiso-trabajador/solicitar" component={ComponentSolicitarPermisoForm}/>
+        <Route exact path="/dashboard/transaccion/permiso-trabajador/trabajador/solicitar" component={ComponentSolicitarPermisoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador:mensaje?" component={ComponentPermisoTrabajador}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador/editar:id" component={ComponentEditarPermisoTrabajador}/>
 
