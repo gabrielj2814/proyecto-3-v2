@@ -12,7 +12,7 @@ import ComponentDashboard from './componentDashboard'
 //sub componentes
 import InputButton from '../subComponentes/input_button'
 //import ButtonIcon from '../subComponentes/buttonIcon'
-//import ComponentFormCampo from '../subComponentes/componentFormCampo';
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 //import ComponentFormRadioState from '../subComponentes/componentFormRadioState';
 import ComponentFormDate from '../subComponentes/componentFormDate'
 import ComponentFormSelect from '../subComponentes/componentFormSelect';
@@ -29,6 +29,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         this.calcularFechaHasta=this.calcularFechaHasta.bind(this);
         this.solicitarNuvoPermiso=this.solicitarNuvoPermiso.bind(this);
         this.nuevoPermiso=this.nuevoPermiso.bind(this)
+        this.buscarTrabajador=this.buscarTrabajador.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -54,11 +55,14 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             lista_permisos:[],
             /// meensajes formularios
             msj_fecha_desde_permiso_trabajador:"",
+            msj_id_cedula:"",
+            hashTrabajadores:{},
+            estadoBusquedaTrabajador:false,
             ///
             mensaje:{
                 texto:"",
                 estado:""
-              },
+            },
         }
     }
 
@@ -133,73 +137,35 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async componentDidMount(){
-        const id_cedula=await this.consultarSesion()
-        const ruta_ultimo_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${id_cedula}`
-        const ultimo_permiso=await this.consultarAlServidor(ruta_ultimo_permiso)
-        //const ultimo_permiso=await this.buscarUltimoPermiso(id_cedula)
-        if(ultimo_permiso.permiso_trabajador.length===1 ){
-            //console.log(ultimo_permiso)
-            var mensaje=this.state.mensaje
-            var estatu_permiso_trabajador=""
-            if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E"){
-                estatu_permiso_trabajador="En espera"
-            }
-            if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="C"){
-                estatu_permiso_trabajador="Culminada"
-            }
-            else if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="D"){
-                estatu_permiso_trabajador="Denegado"
-            }
-            else if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="A"){
-                estatu_permiso_trabajador="Aprovado"
-            }
-            mensaje.texto=ultimo_permiso.mensaje
-            mensaje.estado=ultimo_permiso.estado_peticion
-            this.setState({
-                id_cedula:id_cedula,
-                id_permiso_trabajador:ultimo_permiso.permiso_trabajador[0].id_permiso_trabajador,
-                estatu_permiso_trabajador:estatu_permiso_trabajador,
-                nombre_permiso:ultimo_permiso.permiso_trabajador[0].nombre_permiso,
-                dias_permiso:ultimo_permiso.permiso_trabajador[0].dias_permiso,
-                estatu_permiso:ultimo_permiso.permiso_trabajador[0].estatu_permiso,
-                estatu_remunerado:ultimo_permiso.permiso_trabajador[0].estatu_remunerado,
-                estatu_dias_aviles:ultimo_permiso.permiso_trabajador[0].estatu_dias_aviles,
-                fecha_desde_permiso_trabajador:ultimo_permiso.permiso_trabajador[0].fecha_desde_permiso_trabajador,
-                fecha_hasta_permiso_trabajador:ultimo_permiso.permiso_trabajador[0].fecha_hasta_permiso_trabajador,
-                permiso_trabajador_dias_aviles:ultimo_permiso.permiso_trabajador[0].permiso_trabajador_dias_aviles,
-                permiso_trabajador_tipo:ultimo_permiso.permiso_trabajador[0].permiso_trabajador_tipo,
-                mensaje:mensaje,
-                estatu_formulario:ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador
-            })
+        // const id_cedula=await this.consultarSesion()
+        await this.consultarTodosLosTrabajadores()
+        const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
+        const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
+        const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
+        const lista_permisos=await this.consultarAlServidor(ruta_permisos)
+        const propiedades={
+            id:"id_permiso",
+            descripcion:"nombre_permiso"
         }
-        else{
-            //const id_fomrulario=await this.generarId()
-            //alert(id_fomrulario.id+" "+id_cedula)
-            const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
-            const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
-            const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
-            const lista_permisos=await this.consultarAlServidor(ruta_permisos)
-            const propiedades={
-                id:"id_permiso",
-                descripcion:"nombre_permiso"
+        var lista_vacia=[]
+        lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
+        const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
+        // console.log("->>>",lista_permisos.permisos);
+        this.setState({
+            id_cedula:"",
+            estatu_formulario:"nuevo",
+            id_permiso_trabajador:id_fomrulario.id,
+            lista_permisos:lista,
+            id_permiso:lista_permisos.permisos[0].id_permiso
+        })
+        let objeto={
+            target:{
+                value:lista_permisos.permisos[0].id_permiso
             }
-            var lista_vacia=[]
-            lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
-            const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
-            // console.log("->>>",lista_permisos.permisos);
-            this.setState({
-                id_cedula:id_cedula,
-                estatu_formulario:"nuevo",
-                id_permiso_trabajador:id_fomrulario.id,
-                lista_permisos:lista,
-                id_permiso:lista_permisos.permisos[0].id_permiso
-            })
-            let objeto={
-                target:{
-                    value:lista_permisos.permisos[0].id_permiso
-                }
-            }
-            this.buscarPermiso(objeto)
+        }
+        this.buscarPermiso(objeto)
+        if(this.state.estadoBusquedaTrabajador===false){
+            document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
         }
     }
 
@@ -210,6 +176,23 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             }
         }
         return permiso;
+    }
+
+    async consultarTodosLosTrabajadores(){
+        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos =>>> ",json)
+            let hash={}
+            for(let trabajador of json.trabajadores){
+                hash[trabajador.id_cedula]=trabajador
+            }
+            console.log("hash trabajador =>>> ",hash)
+            this.setState({hashTrabajadores:hash})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     // logica menu
@@ -389,6 +372,31 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         this.buscarPermiso(objeto)
     }
 
+    buscarTrabajador(a){
+        let input = a.target
+        this.cambiarEstado(a)
+        // console.log(input.value)
+        let hashTrabajadores=JSON.parse(JSON.stringify(this.state.hashTrabajadores))
+        if(hashTrabajadores[input.value]){
+            this.setState({
+                estadoBusquedaTrabajador:true
+            })
+            document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+        }
+        else{
+            this.setState({
+                estadoBusquedaTrabajador:false
+            })
+            document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
+        }
+    }
+
+    /*
+    
+    
+    
+    */
+
     render(){
         const nueva_solicitud=(
             <div>
@@ -397,6 +405,37 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         <span>Codigo del permiso: {this.state.id_permiso_trabajador}</span>
                     </div>
                     <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
+                </div>
+                <div className="row mt-3">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
+                        <span className="sub-titulo-form-solicitud-permiso">Trabajador</span>
+                    </div>
+                </div>
+                <div className="row justify-content-center">
+                <ComponentFormCampo
+                    clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                    clasesCampo="form-control"
+                    obligatorio="si"
+                    mensaje={this.state.msj_id_cedula}
+                    nombreCampo="Cedula:"
+                    activo="si"
+                    type="text"
+                    value={this.state.id_cedula}
+                    name="id_cedula"
+                    id="id_cedula"
+                    placeholder="CEDULA"
+                    eventoPadre={this.buscarTrabajador}
+                    />
+                    {this.state.estadoBusquedaTrabajador===true &&
+                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                            Nombre completo:
+                            <div className="mt-3 text-capitalize">{this.state.hashTrabajadores[this.state.id_cedula].nombres} {this.state.hashTrabajadores[this.state.id_cedula].apellidos}</div>
+                        </div>
+                    }
+                    {this.state.estadoBusquedaTrabajador===false &&
+                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                    }
+                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 </div>
                 <div className="row mt-3">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
@@ -467,109 +506,16 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         </div>
                     )
                 }
-                {this.state.fecha_hasta_permiso_trabajador!==null &&
-                    (
-                        <div className="row justify-content-center mt-2">
-                            <div className="col-auto">
-                                    <InputButton 
-                                    clasesBoton="btn btn-success"
-                                    id="boton-actualizar"
-                                    value="Enviar solicitud"
-                                    eventoPadre={this.solicitarNuvoPermiso}
-                                    />
-                            </div>  
-                        </div>
-                    )
-                }
-
-                {this.state.estatu_tipo_permiso==="0" &&
-                    (
-                        <div className="row justify-content-center mt-2">
-                            <div className="col-auto">
-                                    <InputButton 
-                                    clasesBoton="btn btn-success"
-                                    id="boton-actualizar"
-                                    value="Enviar solicitud"
-                                    eventoPadre={this.solicitarNuvoPermiso}
-                                    />
-                            </div>  
-                        </div>
-                    )
-                } 
-            </div>
-        )
-        const ver_solicitud=(
-            <div>
-                <div className="row justify-content-center">
-                    <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4 ">
-                        <span>Codigo del permiso: {this.state.id_permiso_trabajador}</span>
-                    </div>
-                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
-                </div>
                 <div className="row justify-content-center mt-2">
-                    <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
-                        <span>estatu del permiso trabajador: {this.state.estatu_permiso_trabajador}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">desde: {(this.state.fecha_desde_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">hasta: {(this.state.fecha_hasta_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
-                    </div>
+                    <div className="col-auto">
+                        <InputButton 
+                        clasesBoton="btn btn-success"
+                        id="botonEnviarSolicitud"
+                        value="Enviar solicitud"
+                        eventoPadre={this.solicitarNuvoPermiso}
+                        />
+                    </div>  
                 </div>
-                {this.state.permiso_trabajador_dias_aviles!=="VC" &&
-                    (
-                        <div className="row justify-content-center mt-2">
-                            <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
-                                <span>dias aviles: {this.state.permiso_trabajador_dias_aviles}</span>
-                            </div>
-                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 offset-3">
-                                
-                            </div>
-                        </div>
-                    )
-                }
-                <div className="row mt-3">
-                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
-                        <span className="sub-titulo-form-solicitud-permiso">Permiso</span>
-                    </div>
-                </div>
-                <div className="row justify-content-center">
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">nombre: {this.state.nombre_permiso}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">dias: {this.state.dias_permiso}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
-                    </div>
-                </div>
-                <div className="row justify-content-center row mt-2">
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">tipo de permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
-                    </div>
-                </div>
-                {(this.state.estatu_formulario==="C" || this.state.estatu_formulario==="D") &&
-                    (
-                        <div className="row justify-content-center mt-5">
-                            <div className="col-auto">
-                                    <InputButton 
-                                    clasesBoton="btn btn-success"
-                                    id="boton-actualizar"
-                                    value="Nuevo Permiso"
-                                    eventoPadre={this.nuevoPermiso}
-                                    />
-                            </div>  
-                        </div>
-                    )
-                }
             </div>
         )
         const jsx_solicitud_permiso=(
@@ -594,16 +540,10 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                             <span className="titulo-form-solicitud-permiso">Formulario de solicitud permiso</span>
                         </div>
                     </div>
-                    {this.state.estatu_formulario!=="nuevo"&&
-                        ver_solicitud
-                    }
-                    {this.state.estatu_formulario==="nuevo"&&
-                        (
-                            <form id="form-solicitud-permiso">
-                                {nueva_solicitud}
-                            </form>
-                        )
-                    }
+                    
+                    <form id="form-solicitud-permiso">
+                        {nueva_solicitud}
+                    </form>
                 </div>
             </div>
         )

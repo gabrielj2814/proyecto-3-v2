@@ -134,14 +134,14 @@ class ComponentTrabajadorForm extends React.Component{
             propiedad_descripcion_1="nombre_perfil",
             propiedad_estado_1="estatu_perfil"
             const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-            ///
+            //
             const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
             nombre_propiedad_lista="tipos_trabajador",
             propiedad_id="id_tipo_trabajador",
             propiedad_descripcion="descripcion_tipo_trabajador",
             propiedad_estado="estatu_tipo_trabajador"
             const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            ///
+            //
             // alert(tipo_trabajador[0].id)
             let listaFuncionTrabajador={
                 funcion_trabajador:[]
