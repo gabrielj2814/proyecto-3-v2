@@ -6,14 +6,12 @@ class ReposoModelo extends DriverPostgre {
         super()
         this.id_reposo="" //-- repo-121
         this.nombre_reposo=""
-        this.dias_reposo=""
         this.estatu_reposo=""
     }
 
     setDatos(reposos){
         this.id_reposo=reposos.id_reposo
         this.nombre_reposo=reposos.nombre_reposo
-        this.dias_reposo=reposos.dias_reposo
         this.estatu_reposo=reposos.estatu_reposo
     }
 
@@ -37,12 +35,12 @@ class ReposoModelo extends DriverPostgre {
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO treposo(id_reposo,nombre_reposo,dias_reposo,estatu_reposo) VALUES('${this.id_reposo}','${this.nombre_reposo}','${this.dias_reposo}','${this.estatu_reposo}');`
+        const SQL=`INSERT INTO treposo(id_reposo,nombre_reposo,estatu_reposo) VALUES('${this.id_reposo}','${this.nombre_reposo}','${this.estatu_reposo}');`
         this.query(SQL)
     }
 
     actualizarModelo(){
-        const SQL=`UPDATE treposo SET nombre_reposo='${this.nombre_reposo}',dias_reposo='${this.dias_reposo}',estatu_reposo='${this.estatu_reposo}' WHERE id_reposo='${this.id_reposo}';`
+        const SQL=`UPDATE treposo SET nombre_reposo='${this.nombre_reposo}',estatu_reposo='${this.estatu_reposo}' WHERE id_reposo='${this.id_reposo}';`
         this.query(SQL)
     }
 

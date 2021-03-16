@@ -31,7 +31,6 @@ class ComponentReposoForm extends React.Component{
             //formulario
             id_reposo:"",
             nombre_reposo:"",
-            dias_reposo:"",
             estatu_reposo:"1",
             //
             msj_nombre_reposo:{
@@ -93,7 +92,6 @@ class ComponentReposoForm extends React.Component{
                 this.setState({
                     id_reposo:id_reposo,
                     nombre_reposo:nombre_reposo,
-                    dias_reposo:dias_reposo,
                     estatu_reposo:estatu_reposo
                 })
                     
@@ -255,9 +253,8 @@ class ComponentReposoForm extends React.Component{
 
     validarFomrulario(){
         var estado=false
-        const respuesta_validar_campo_nombre=this.validarCampoNombreReposo(),
-        respuesta_validar_campo_dias_aviles=this.validarCampoDiasAviles()
-        if(respuesta_validar_campo_nombre && respuesta_validar_campo_dias_aviles){
+        const respuesta_validar_campo_nombre=this.validarCampoNombreReposo()
+        if(respuesta_validar_campo_nombre){
             estado=true
         }
         return estado
@@ -323,7 +320,6 @@ class ComponentReposoForm extends React.Component{
             reposo:{
                 id_reposo:this.state.id_reposo,
                 nombre_reposo:this.state.nombre_reposo,
-                dias_reposo:this.state.dias_reposo,
                 estatu_reposo:this.state.estatu_reposo
             },
             token
@@ -396,20 +392,7 @@ class ComponentReposoForm extends React.Component{
                             placeholder="Nombre Reposo"
                             eventoPadre={this.validarTexto}
                             />
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            obligatorio="si"
-                            mensaje={this.state.msj_dias_reposo}
-                            nombreCampo="Dias Reposo:"
-                            activo="si"
-                            type="text"
-                            value={this.state.dias_reposo}
-                            name="dias_reposo"
-                            id="dias_reposo"
-                            placeholder="Dias Reposo"
-                            eventoPadre={this.validarNumeroDias}
-                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
