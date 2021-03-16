@@ -197,12 +197,11 @@ INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_m
 CREATE TABLE treposo( 
     id_reposo character varying(8) NOT NULL,
     nombre_reposo character varying(150) NOT NULL,
-    dias_reposo character varying(4) NOT NULL,
     estatu_reposo character(1) NOT NULL,
     constraint PK_id_reposo primary key(id_reposo)
 );
 
-INSERT INTO treposo(id_reposo,nombre_reposo,dias_reposo,estatu_reposo) VALUES('repo-1','reposo uno','15','1');
+INSERT INTO treposo(id_reposo,nombre_reposo,dias_reposo,estatu_reposo) VALUES('repo-1','reposo uno','1');
 
 CREATE TABLE treposotrabajador(
     id_reposo_trabajador character varying(19) NOT NULL,-- repot-2020-05-25-25
@@ -213,7 +212,12 @@ CREATE TABLE treposotrabajador(
     estatu_reposo_trabajador character(1) NOT NULL,
     descripcion_reposo_trabajador character varying(3000) NOT NULL,
     id_cam INTEGER NOT NULL,
-    id_asignacion_medico_especialidad character varying(17) NOT NULL,
+    id_asignacion_medico_especialidad character varying(17) NOT NULL,--
+    total_dias_reposo_trabajador character varying(3),
+    cantidad_dias_entrega_reposo_trabajador character varying(2),
+    fecha_desde_entrega_reposo_trabajador DATE NOT NULL,
+    fecha_hasta_entrega_reposo_trabajador DATE NOT NULL,
+    estatu_entrega_reposo character(1),
     constraint PK_id_reposo_trabajador primary key(id_reposo_trabajador),
     constraint FK_id_cedula_treposotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_reposo_treposotrabajador foreign key(id_reposo) references treposo(id_reposo) on update cascade on delete cascade,
