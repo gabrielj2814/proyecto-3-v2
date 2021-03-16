@@ -58,6 +58,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             msj_id_cedula:"",
             hashTrabajadores:{},
             estadoBusquedaTrabajador:false,
+            fechaServidor:null,
             ///
             mensaje:{
                 texto:"",
@@ -138,6 +139,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
 
     async componentDidMount(){
         // const id_cedula=await this.consultarSesion()
+        await this.consultarFechaServidor()
         await this.consultarTodosLosTrabajadores()
         const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
         const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
@@ -167,6 +169,18 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         if(this.state.estadoBusquedaTrabajador===false){
             document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
         }
+    }
+    
+    async consultarFechaServidor(){
+        await axios.get("http://localhost:8080/transaccion/permiso-trabajador/fecha-servidor")
+        .then(respuesta => {
+            let fechaServidor=respuesta.data.fechaServidor
+            // alert(fechaServidor)
+            this.setState({fechaServidor})
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
     }
 
     eliminarPermisoInactivos(permiso){
@@ -273,9 +287,9 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         var estado=false
         if(this.state.estatu_tipo_permiso==="1"){
             var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
-            var hoy=Moment(new Date()).format("YYYY-MM-DD")
+            var hoy=Moment(this.state.fechaServidor).format("YYYY-MM-DD")
             if(this.state.fecha_desde_permiso_trabajador!==""){
-                if(Moment(fecha_desde).isSameOrAfter(hoy)){
+                if(Moment(fecha_desde).isAfter(hoy)){
                     estado=true
                 }
                 else{
@@ -329,7 +343,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             })
         }
         else{
-            alert("Error al eviar la solicitud de permiso")
+            alert("Error al enviar la solicitud por que el permiso no puede comenzar hoy")
         }
     }
 
@@ -372,7 +386,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         this.buscarPermiso(objeto)
     }
 
-    buscarTrabajador(a){
+    async buscarTrabajador(a){
         let input = a.target
         this.cambiarEstado(a)
         // console.log(input.value)
@@ -381,7 +395,21 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             this.setState({
                 estadoBusquedaTrabajador:true
             })
-            document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+            const ruta_ultimo_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${input.value}`
+            const ultimo_permiso=await this.consultarAlServidor(ruta_ultimo_permiso)
+            console.log("datos ultimo permiso =>>> ",ultimo_permiso)
+            if(ultimo_permiso.permiso_trabajador.length>0){
+                if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E" || ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="A"){
+                    document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
+                    alert(`este trabajador tiene un permiso ${(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E")?"en Espera":"Aprovado"}`)
+                }
+                else{
+                    document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+                }
+            }
+            else{
+                document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+            }
         }
         else{
             this.setState({

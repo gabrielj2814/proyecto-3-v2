@@ -6,6 +6,14 @@ Moment=require("moment")
 
 const PermisoTrabajadorControlador={}
 
+PermisoTrabajadorControlador.fechaActual=async (req,res)=>{
+    const Moment=require("moment")
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify({
+        fechaServidor:Moment().format("YYYY-MM-DD")
+    }))
+    res.end()
+}
 PermisoTrabajadorControlador.generarId=async (req,res)=>{
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     const hoy=Moment().format("DD-MM-YYYY")

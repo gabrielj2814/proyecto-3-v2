@@ -14,6 +14,7 @@ router.get("/",(req,res)=>{
 })
 
 router.get("/generar-id",PermisoTrabajadorControlador.generarId)
+router.get("/fecha-servidor",PermisoTrabajadorControlador.fechaActual)
 router.post("/registrar",PermisoTrabajadorControlador.registrarControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar/:id/:token",PermisoTrabajadorControlador.consultaPermisoTrabajadorControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar-ultimo/:id",PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador)

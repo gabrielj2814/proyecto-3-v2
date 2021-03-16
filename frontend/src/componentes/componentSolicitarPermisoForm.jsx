@@ -54,6 +54,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             lista_permisos:[],
             /// meensajes formularios
             msj_fecha_desde_permiso_trabajador:"",
+            fechaServidor:null,
             ///
             mensaje:{
                 texto:"",
@@ -133,6 +134,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
     }
 
     async componentDidMount(){
+        await this.consultarFechaServidor()
         const id_cedula=await this.consultarSesion()
         const ruta_ultimo_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${id_cedula}`
         const ultimo_permiso=await this.consultarAlServidor(ruta_ultimo_permiso)
@@ -201,6 +203,18 @@ class ComponentSolicitarPermisoForm extends React.Component{
             }
             this.buscarPermiso(objeto)
         }
+    }
+
+    async consultarFechaServidor(){
+        await axios.get("http://localhost:8080/transaccion/permiso-trabajador/fecha-servidor")
+        .then(respuesta => {
+            let fechaServidor=respuesta.data.fechaServidor
+            // alert(fechaServidor)
+            this.setState({fechaServidor})
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
     }
 
     eliminarPermisoInactivos(permiso){
@@ -290,9 +304,9 @@ class ComponentSolicitarPermisoForm extends React.Component{
         var estado=false
         if(this.state.estatu_tipo_permiso==="1"){
             var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
-            var hoy=Moment(new Date()).format("YYYY-MM-DD")
+            var hoy=Moment(this.state.fechaServidor).format("YYYY-MM-DD")
             if(this.state.fecha_desde_permiso_trabajador!==""){
-                if(Moment(fecha_desde).isSameOrAfter(hoy)){
+                if(Moment(fecha_desde).isAfter(hoy)){
                     estado=true
                 }
                 else{
