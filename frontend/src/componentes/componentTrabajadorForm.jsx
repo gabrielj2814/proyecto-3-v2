@@ -32,6 +32,7 @@ class ComponentTrabajadorForm extends React.Component{
         this.validarNumero=this.validarNumero.bind(this);
         this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
         this.fechaNacimiento=this.fechaNacimiento.bind(this);
+        this.buscarTrabajador=this.buscarTrabajador.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -80,6 +81,8 @@ class ComponentTrabajadorForm extends React.Component{
                 {id:"educacion basica",descripcion:"educación basica"}
             ],
             fecha_minimo:"",
+            hashTrabajadores:{},
+            estadoBusquedaTrabajador:false,
             ///
             mensaje:{
                 texto:"",
@@ -125,6 +128,7 @@ class ComponentTrabajadorForm extends React.Component{
 
     async UNSAFE_componentWillMount(){
         await this.consultarFechaServidor()
+        await this.consultarTodosLosTrabajadores()
 
         const operacion=this.props.match.params.operacion
         if(operacion==="registrar"){
@@ -175,6 +179,23 @@ class ComponentTrabajadorForm extends React.Component{
             const id=this.props.match.params.id
             await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
         }
+    }
+
+    async consultarTodosLosTrabajadores(){
+        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos =>>> ",json)
+            let hash={}
+            for(let trabajador of json.trabajadores){
+                hash[trabajador.id_cedula]=trabajador
+            }
+            console.log("hash trabajador =>>> ",hash)
+            this.setState({hashTrabajadores:hash})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     async consultarFechaServidor(){
@@ -324,11 +345,8 @@ class ComponentTrabajadorForm extends React.Component{
         exprecion=/\d$/
         if(input.value!==""){
             if(exprecion.test(input.value)){
-                console.log("OK")
+                // console.log("OK")
                 this.longitudCampo(input)
-            }
-            else{
-                console.log("NO")
             }
         }
         else{
@@ -341,7 +359,6 @@ class ComponentTrabajadorForm extends React.Component{
         exprecion=/[A-Za-z\s]$/
         if(input.value!==""){
             if(exprecion.test(input.value)){
-                console.log("OK")
                 this.cambiarEstadoDos(input)
             }
             else{
@@ -854,6 +871,25 @@ class ComponentTrabajadorForm extends React.Component{
         this.props.history.push("/dashboard/configuracion/trabajador");
     }
 
+    async buscarTrabajador(a){
+        let input = a.target
+        this.validarNumero(a)
+        // console.log(input.value)
+        let hashTrabajadores=JSON.parse(JSON.stringify(this.state.hashTrabajadores))
+        if(hashTrabajadores[input.value]){
+            this.setState({
+                estadoBusquedaTrabajador:true
+            })
+            alert("este trabajador ya esta resgistrado")
+        }
+        else{
+            // console.log("NO OK")
+            this.setState({
+                estadoBusquedaTrabajador:false
+            })
+        }
+    }
+
     render(){
         var jsx_permiso_form=(
             <div className="row justify-content-center">
@@ -902,7 +938,7 @@ class ComponentTrabajadorForm extends React.Component{
                             name="id_cedula"
                             id="id_cedula"
                             placeholder="CEDULA"
-                            eventoPadre={this.validarNumero}
+                            eventoPadre={this.buscarTrabajador}
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"

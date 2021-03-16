@@ -419,12 +419,6 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         }
     }
 
-    /*
-    
-    
-    
-    */
-
     render(){
         const nueva_solicitud=(
             <div>
