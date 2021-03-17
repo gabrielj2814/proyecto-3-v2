@@ -201,7 +201,7 @@ CREATE TABLE treposo(
     constraint PK_id_reposo primary key(id_reposo)
 );
 
-INSERT INTO treposo(id_reposo,nombre_reposo,dias_reposo,estatu_reposo) VALUES('repo-1','reposo uno','1');
+INSERT INTO treposo(id_reposo,nombre_reposo,estatu_reposo) VALUES('repo-1','reposo uno','1');
 
 CREATE TABLE treposotrabajador(
     id_reposo_trabajador character varying(19) NOT NULL,-- repot-2020-05-25-25
