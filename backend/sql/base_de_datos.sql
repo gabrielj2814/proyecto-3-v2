@@ -192,7 +192,7 @@ CREATE TABLE tasignacionmedicoespecialidad(
     constraint FK_id_especialidad_tasignacionmedicoespecialidad foreign key(id_especialidad) references tespecialidad(id_especialidad) on update cascade on delete cascade
 );
 
-INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad,estatu_asignacion) VALUES('ams-2020-06-15-1','med-1',1,'1');
+INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad,estatu_asignacion) VALUES('ams-2020-06-15-1','med-2021-03-17-1',1,'1');
 
 CREATE TABLE treposo( 
     id_reposo character varying(8) NOT NULL,
@@ -214,6 +214,7 @@ CREATE TABLE treposotrabajador(
     id_cam INTEGER NOT NULL,
     id_asignacion_medico_especialidad character varying(17) NOT NULL,--
     total_dias_reposo_trabajador character varying(3),
+    total_dias_no_aviles_reposo_trabajador character varying(3),
     cantidad_dias_entrega_reposo_trabajador character varying(2),
     fecha_desde_entrega_reposo_trabajador DATE NOT NULL,
     fecha_hasta_entrega_reposo_trabajador DATE NOT NULL,
