@@ -165,17 +165,17 @@ CREATE TABLE tcam(
 INSERT INTO tcam (nombre_cam,telefono_cam,direccion_cam,id_tipo_cam,id_ciudad,estatu_cam) VALUES('cam x','04160430565','ala verga','tipc-1','ciu-1','1');
 
 CREATE TABLE tmedico(
-    id_medico character varying(50) NOT NULL,
-    nombre_medico character varying(50) NOT NULL,
-    apellido_medico character varying(50) NOT NULL,
+    id_medico character varying(17) NOT NULL,-- med-2020-02-12-01
+    nombre_medico character varying(150) NOT NULL,
+    apellido_medico character varying(150) NOT NULL,
     constraint PK_id_medico primary key(id_medico)
 );
 
-INSERT INTO tmedico(id_medico,nombre_medico,apellido_medico) VALUES('med-1','el pelon','de brazzer');
+INSERT INTO tmedico(id_medico,nombre_medico,apellido_medico) VALUES('med-2021-03-17-1','el pelon','de brazzer');
 
 CREATE TABLE tespecialidad(
     id_especialidad SERIAL ,
-    nombre_especialidad character varying(50) NOT NULL,
+    nombre_especialidad character varying(150) NOT NULL,
     estatu_especialidad character(1) NOT NULL,
     constraint PK_id_especialidad primary key(id_especialidad)
 );

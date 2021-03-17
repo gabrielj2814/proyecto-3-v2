@@ -24,6 +24,12 @@ class MedicoModelo extends DriverPostgre{
         // console.log(SQL)
         return await this.query(SQL)
     }
+    
+    async consultarTodosModeloPatronId(fecha){
+        const SQL=`SELECT * FROM tmedico WHERE id_medico LIKE '%${fecha}%';`
+        // console.log(SQL)
+        return await this.query(SQL)
+    }
 
     async consultarModelo(){
         const SQL=`SELECT * FROM tmedico WHERE id_medico='${this.id_medico}';`

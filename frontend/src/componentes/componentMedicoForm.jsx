@@ -74,11 +74,28 @@ class ComponentMedicoForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+        
         const formulario=this.props.match.params.operacion
         if(formulario==="actualizar"){
             const id=this.props.match.params.id
             this.consultarIdMedico(id)
         }
+        else if(formulario==="registrar"){
+            await this.generarIdMedico()
+        }
+    }
+
+    async generarIdMedico(){
+        await axios.get("http://localhost:8080/configuracion/medico/generar-id")
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            this.setState({
+                id_medico:json.id
+            })
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     async consultarIdMedico(id){
@@ -269,9 +286,8 @@ class ComponentMedicoForm extends React.Component{
     }
     validar(){
         const respuesta_validar_nombre =this.validarNombre(),
-        respuesta_validar_apellido = this.validarApellido(),
-        respuestaIdMedico=this.validarIdMedico()
-        if(respuesta_validar_nombre && respuesta_validar_apellido && respuestaIdMedico){
+        respuesta_validar_apellido = this.validarApellido()
+        if(respuesta_validar_nombre && respuesta_validar_apellido){
             return true
         }
         else{
@@ -392,7 +408,7 @@ class ComponentMedicoForm extends React.Component{
                             nombreCampo="Codigo del Medico:"
                             obligatorio="si"
                             mensaje={this.state.msj_id_medico}
-                            activo="si"
+                            activo="no"
                             type="text"
                             value={this.state.id_medico}
                             name="id_medico"

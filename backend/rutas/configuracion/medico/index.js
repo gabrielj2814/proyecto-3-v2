@@ -6,6 +6,8 @@ VitacoraControlador=require("../../../controlador/c_vitacora")
 
 router.use(bodyparser.json())
 
+
+router.get("/generar-id",MedicoControlador.generarId)
 router.post("/registrar",MedicoControlador.registrarControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar/:id/:token",MedicoControlador.consultarControlador,VitacoraControlador.capturaDatos)
 router.put("/actualizar/:id",MedicoControlador.actualizarControlador,VitacoraControlador.capturaDatos)

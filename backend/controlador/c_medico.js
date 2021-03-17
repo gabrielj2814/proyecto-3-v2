@@ -1,8 +1,19 @@
 
 const MedicoModelo=require("../modelo/m_medico"),
-VitacoraControlador=require("./c_vitacora")
+VitacoraControlador=require("./c_vitacora"),
+Moment=require("moment")
 
 const MedicoControlador={}
+
+MedicoControlador.generarId= async (req,res) => {
+    const MEDICO=new MedicoModelo()
+    let fecha=Moment().format("YYYY-MM-DD")
+    let datosMedicos=await MEDICO.consultarTodosModeloPatronId(fecha)
+    res.writeHead(200,{"Content-Type":"application/json"})
+    let id=`med-${fecha}-${datosMedicos.rowCount+1}`
+    res.write(JSON.stringify({id}))
+    res.end()
+}
 
 MedicoControlador.registrarControlador=async (req,res,next) => {
     var respuesta_api={mensaje:"",estado_peticion:""}
