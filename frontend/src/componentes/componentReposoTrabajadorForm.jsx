@@ -47,7 +47,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
             id_cam:null,
             id_asignacion_medico_especialidad:null,
             // ---------
-            listaDeTrabajadoresActivos:[],
+            hashTrabajador:[],
             listaDeRepososActivos:[],
             listaDeCamsActivos:[],
             listaDeEspecialidadActivos:[],
@@ -133,190 +133,118 @@ class ComponetReposoTrabajadorForm extends React.Component{
         let {operacion} = this.props.match.params
         if(operacion==="registrar"){
             if(idRegistro!==null){
-                let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-                let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-                let listaDeTrabajadoresSelect=[]
-                for(let trabajador of listaDetrabajadoresActivos){
-                    listaDeTrabajadoresSelect.push({
-                        id:trabajador.id_cedula,
-                        descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
-                    })
-                }
+                await this.consultarTodosTrabajadores();
                 // ----- reposo
-                let listaDeTodosLosReposos=await this.consultarTodosReposo()
-                let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-                let listaDeReposoSelect=[];
-                let reposoTablaHash={}
-                for(let reposo of listaDeRepososActivos){
-                    listaDeReposoSelect.push({
-                        id:reposo.id_reposo,
-                        descripcion:reposo.nombre_reposo
-                    })
-                    reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
-                }
+                await this.consultarTodosReposo();
                 // -------- cam
-                let listaDeTodosLosCam=await this.consultarTodosLosCam()
-                let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-                let listaDeCamSelect=[]
-                let camTablaHash={}
-                for(let cam of listaDeCamActivos){
-                    listaDeCamSelect.push({
-                        id:cam.id_cam,
-                        descripcion:cam.nombre_cam
-                    })
-                    camTablaHash[cam.id_cam]=cam
-                }
-                if(listaDeCamSelect.length!==0){
-                    camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
-                    camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
-                    camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
-                }
+                await this.consultarTodosLosCam();
                 // ------ asignaciones medico
-                let listaDeEspecialidades= await this.consultarTodasEspecialidad()
-                // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
-                let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
-                console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
-                let listaDeEspecialidadesSelect=[]
-                let asigancionTablaHash={}
-                for(let especialidad of listaDeEspecialidadesActivas){
-                    listaDeEspecialidadesSelect.push({
-                        id:especialidad.id_especialidad,
-                        descripcion:especialidad.nombre_especialidad
-                    })
-                    asigancionTablaHash[especialidad.id_especialidad]=especialidad
-                }
-                if(listaDeEspecialidadesActivas.length!==0){
-                    asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
-                }
-                let listasDeMedicosSelect=[]
-                if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
-                    for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
-                        listasDeMedicosSelect.push({
-                            id:asignacion.id_asignacion_medico_especialidad,
-                            descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
-                        })
-                    }
-                }
+                await this.consultarTodasEspecialidad();
                 this.setState({
                     id_reposo_trabajador:idRegistro,
-                    listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
-                    id_cedula:(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id,
-                    listaDeRepososActivos:listaDeReposoSelect,
-                    id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id,
-                    listaDeReposos:reposoTablaHash,
-                    dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[listaDeReposoSelect[0].id].dias,
-                    listaDeCams:camTablaHash,
-                    listaDeCamsActivos:listaDeCamSelect,
-                    id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
-                    infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
-                    listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
-                    id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
-                    listaDeAsignaciones:asigancionTablaHash,
-                    id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad,
-                    listaDeMedico:listasDeMedicosSelect
                 })
-                // console.log(this.state.listaDeReposos[listaDeReposoSelect[0].id].dias)
             }
         }
         else if(operacion==="actualizar"){
-            // alert("actualizando")
-            let {id}=this.props.match.params
-            let datosReposotTrabajador=await this.consultarReposoTrabajador(id)
-            if(datosReposotTrabajador!==null){
-                // console.log("datos del reposo trabajador =>>>> ",datosReposotTrabajador)
-                // ------ trabajadores
-                let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-                let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-                let listaDeTrabajadoresSelect=[]
-                for(let trabajador of listaDetrabajadoresActivos){
-                    listaDeTrabajadoresSelect.push({
-                        id:trabajador.id_cedula,
-                        descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
-                    })
-                }
-                // ----- reposo
-                let listaDeTodosLosReposos=await this.consultarTodosReposo()
-                let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-                let listaDeReposoSelect=[];
-                let reposoTablaHash={}
-                for(let reposo of listaDeRepososActivos){
-                    listaDeReposoSelect.push({
-                        id:reposo.id_reposo,
-                        descripcion:reposo.nombre_reposo
-                    })
-                    reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
-                }
-                // -------- cam
-                let listaDeTodosLosCam=await this.consultarTodosLosCam()
-                let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-                let listaDeCamSelect=[]
-                let camTablaHash={}
-                for(let cam of listaDeCamActivos){
-                    listaDeCamSelect.push({
-                        id:cam.id_cam,
-                        descripcion:cam.nombre_cam
-                    })
-                    camTablaHash[cam.id_cam]=cam
-                }
-                if(listaDeCamSelect.length!==0){
-                    camTablaHash[datosReposotTrabajador.id_cam]["ciudad"]=await this.consultarCiudad(camTablaHash[datosReposotTrabajador.id_cam].id_ciudad)
-                    camTablaHash[datosReposotTrabajador.id_cam]["estado"]=await this.consultarEstado(camTablaHash[datosReposotTrabajador.id_cam].ciudad.id_estado)
-                    camTablaHash[datosReposotTrabajador.id_cam]["tipoCam"]=await this.consultarTipoCam(camTablaHash[datosReposotTrabajador.id_cam].id_tipo_cam)
-                }
-                // ------ asignaciones medico
-                let listaDeEspecialidades= await this.consultarTodasEspecialidad()
-                // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
-                let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
-                console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
-                let listaDeEspecialidadesSelect=[]
-                let asigancionTablaHash={}
-                for(let especialidad of listaDeEspecialidadesActivas){
-                    listaDeEspecialidadesSelect.push({
-                        id:especialidad.id_especialidad,
-                        descripcion:especialidad.nombre_especialidad
-                    })
-                    asigancionTablaHash[especialidad.id_especialidad]=especialidad
-                }
-                if(listaDeEspecialidadesActivas.length!==0){
-                    asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]=await this.consultarSignacionesPorEspecialidad(datosReposotTrabajador.id_especialidad)
-                }
-                let listasDeMedicosSelect=[]
-                if(asigancionTablaHash[datosReposotTrabajador.id_especialidad]){
-                    for(let asignacion of asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]){
-                        listasDeMedicosSelect.push({
-                            id:asignacion.id_asignacion_medico_especialidad,
-                            descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
-                        })
-                    }
-                }
-                this.setState({
-                    id_reposo_trabajador:datosReposotTrabajador.id_reposo_trabajador,
-                    listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
-                    id_cedula:datosReposotTrabajador.id_cedula,
-                    listaDeRepososActivos:listaDeReposoSelect,
-                    id_reposo:datosReposotTrabajador.id_reposo,
-                    listaDeReposos:reposoTablaHash,
-                    dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[datosReposotTrabajador.id_reposo].dias,
-                    listaDeCams:camTablaHash,
-                    listaDeCamsActivos:listaDeCamSelect,
-                    id_cam:datosReposotTrabajador.id_cam,
-                    infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[datosReposotTrabajador.id_cam],
-                    listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
-                    id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_especialidad,
-                    listaDeAsignaciones:asigancionTablaHash,
-                    id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_asignacion_medico_especialidad,
-                    listaDeMedico:listasDeMedicosSelect,
-                    fecha_desde_reposo_trabajador:Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("YYYY-MM-DD"),
-                    fecha_hasta_reposo_trabajador:datosReposotTrabajador.fecha_hasta_reposo_trabajador,
-                    descripcion_reposo_trabajador:datosReposotTrabajador.descripcion_reposo_trabajador,
-                    estatu_reposo_trabajador:datosReposotTrabajador.estatu_reposo_trabajador
-                })
-                // document.getElementById("fecha_desde_reposo_trabajador").value=Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("DD-MM-YYYY")
+            alert("actualizando")
+            // let {id}=this.props.match.params
+            // let datosReposotTrabajador=await this.consultarReposoTrabajador(id)
+            // if(datosReposotTrabajador!==null){
+            //     // console.log("datos del reposo trabajador =>>>> ",datosReposotTrabajador)
+            //     // ------ trabajadores
+            //     let listaDeTrabajadores=await this.consultarTodosTrabajadores();
+            //     let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
+            //     let listaDeTrabajadoresSelect=[]
+            //     for(let trabajador of listaDetrabajadoresActivos){
+            //         listaDeTrabajadoresSelect.push({
+            //             id:trabajador.id_cedula,
+            //             descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
+            //         })
+            //     }
+            //     // ----- reposo
+            //     let listaDeTodosLosReposos=await this.consultarTodosReposo()
+            //     let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
+            //     let listaDeReposoSelect=[];
+            //     let reposoTablaHash={}
+            //     for(let reposo of listaDeRepososActivos){
+            //         listaDeReposoSelect.push({
+            //             id:reposo.id_reposo,
+            //             descripcion:reposo.nombre_reposo
+            //         })
+            //         reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
+            //     }
+            //     // -------- cam
+            //     let listaDeTodosLosCam=await this.consultarTodosLosCam()
+            //     let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
+            //     let listaDeCamSelect=[]
+            //     let camTablaHash={}
+            //     for(let cam of listaDeCamActivos){
+            //         listaDeCamSelect.push({
+            //             id:cam.id_cam,
+            //             descripcion:cam.nombre_cam
+            //         })
+            //         camTablaHash[cam.id_cam]=cam
+            //     }
+            //     if(listaDeCamSelect.length!==0){
+            //         camTablaHash[datosReposotTrabajador.id_cam]["ciudad"]=await this.consultarCiudad(camTablaHash[datosReposotTrabajador.id_cam].id_ciudad)
+            //         camTablaHash[datosReposotTrabajador.id_cam]["estado"]=await this.consultarEstado(camTablaHash[datosReposotTrabajador.id_cam].ciudad.id_estado)
+            //         camTablaHash[datosReposotTrabajador.id_cam]["tipoCam"]=await this.consultarTipoCam(camTablaHash[datosReposotTrabajador.id_cam].id_tipo_cam)
+            //     }
+            //     // ------ asignaciones medico
+            //     let listaDeEspecialidades= await this.consultarTodasEspecialidad()
+            //     // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
+            //     let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
+            //     console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
+            //     let listaDeEspecialidadesSelect=[]
+            //     let asigancionTablaHash={}
+            //     for(let especialidad of listaDeEspecialidadesActivas){
+            //         listaDeEspecialidadesSelect.push({
+            //             id:especialidad.id_especialidad,
+            //             descripcion:especialidad.nombre_especialidad
+            //         })
+            //         asigancionTablaHash[especialidad.id_especialidad]=especialidad
+            //     }
+            //     if(listaDeEspecialidadesActivas.length!==0){
+            //         asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]=await this.consultarSignacionesPorEspecialidad(datosReposotTrabajador.id_especialidad)
+            //     }
+            //     let listasDeMedicosSelect=[]
+            //     if(asigancionTablaHash[datosReposotTrabajador.id_especialidad]){
+            //         for(let asignacion of asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]){
+            //             listasDeMedicosSelect.push({
+            //                 id:asignacion.id_asignacion_medico_especialidad,
+            //                 descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
+            //             })
+            //         }
+            //     }
+            //     this.setState({
+            //         id_reposo_trabajador:datosReposotTrabajador.id_reposo_trabajador,
+            //         listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
+            //         id_cedula:datosReposotTrabajador.id_cedula,
+            //         listaDeRepososActivos:listaDeReposoSelect,
+            //         id_reposo:datosReposotTrabajador.id_reposo,
+            //         listaDeReposos:reposoTablaHash,
+            //         dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[datosReposotTrabajador.id_reposo].dias,
+            //         listaDeCams:camTablaHash,
+            //         listaDeCamsActivos:listaDeCamSelect,
+            //         id_cam:datosReposotTrabajador.id_cam,
+            //         infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[datosReposotTrabajador.id_cam],
+            //         listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
+            //         id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_especialidad,
+            //         listaDeAsignaciones:asigancionTablaHash,
+            //         id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_asignacion_medico_especialidad,
+            //         listaDeMedico:listasDeMedicosSelect,
+            //         fecha_desde_reposo_trabajador:Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("YYYY-MM-DD"),
+            //         fecha_hasta_reposo_trabajador:datosReposotTrabajador.fecha_hasta_reposo_trabajador,
+            //         descripcion_reposo_trabajador:datosReposotTrabajador.descripcion_reposo_trabajador,
+            //         estatu_reposo_trabajador:datosReposotTrabajador.estatu_reposo_trabajador
+            //     })
+            //     // document.getElementById("fecha_desde_reposo_trabajador").value=Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("DD-MM-YYYY")
 
-            }
+            // }
         }
 
     }
+    
 
     async consultarReposoTrabajador(id){
         let mensaje={texto:"",estado:""}
@@ -361,6 +289,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
         await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.trabajadores
+            let trabajadoresActivos=respuesta_servidor.filter(trabajador => trabajador.estatu_trabajador==="1")
+            let hashTrabajador={}
+            for(let trabajador of trabajadoresActivos){
+                hashTrabajador[trabajador.id_cedula]=trabajador
+            }
+            this.setState({hashTrabajador})
             // console.log(respuesta.data)
         })
         .catch(error=>{
@@ -375,6 +309,15 @@ class ComponetReposoTrabajadorForm extends React.Component{
         await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.reposos
+            let listaDeRepososActivos= respuesta_servidor.filter(reposo => reposo.estatu_reposo==="1")
+            let listaDeReposoSelect=[];
+            for(let reposo of listaDeRepososActivos){
+                    listaDeReposoSelect.push({
+                        id:reposo.id_reposo,
+                        descripcion:reposo.nombre_reposo
+                    })
+            }
+            this.setState({listaDeRepososActivos:listaDeReposoSelect})
         })
         .catch(error=>{
             alert("No se pudo conectar con el servidor")
@@ -386,8 +329,27 @@ class ComponetReposoTrabajadorForm extends React.Component{
     async consultarTodosLosCam(){
         let datos=null
         await axios.get("http://localhost:8080/configuracion/cam/consultar-todos")
-        .then(respuesta => {
+        .then(async respuesta => {
             datos=respuesta.data.cams
+            let listaDeCamActivos=datos.filter( cam => cam.estatu_cam==="1")
+            let listaDeCamSelect=[]
+            let camTablaHash={}
+            for(let cam of listaDeCamActivos){
+                    listaDeCamSelect.push({
+                    id:cam.id_cam,
+                    descripcion:cam.nombre_cam
+                })
+                camTablaHash[cam.id_cam]=cam
+                camTablaHash[cam.id_cam]["ciudad"]=await this.consultarCiudad(camTablaHash[cam.id_cam].id_ciudad)
+                camTablaHash[cam.id_cam]["estado"]=await this.consultarEstado(camTablaHash[cam.id_cam].ciudad.id_estado)
+                camTablaHash[cam.id_cam]["tipoCam"]=await this.consultarTipoCam(camTablaHash[cam.id_cam].id_tipo_cam)
+            }
+            this.setState({
+                listaDeCamsActivos:listaDeCamSelect,
+                listaDeCams:camTablaHash,
+                id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
+                infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
+            })
         })
         .catch(error => {
             alert("No se pudo conectar con el servidor")
@@ -460,9 +422,40 @@ class ComponetReposoTrabajadorForm extends React.Component{
     async consultarTodasEspecialidad(){
         var respuesta_servidor=null
         await axios.get("http://localhost:8080/configuracion/especialidad/consultar-todos")
-        .then(respuesta=>{
+        .then(async respuesta=>{
             respuesta_servidor=respuesta.data.especialidades
             // console.log(respuesta.data)
+            // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
+            let listaDeEspecialidadesActivas=respuesta_servidor.filter(especialidad => especialidad.estatu_especialidad==="1")
+            console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
+            let listaDeEspecialidadesSelect=[]
+            let asigancionTablaHash={}
+            for(let especialidad of listaDeEspecialidadesActivas){
+                listaDeEspecialidadesSelect.push({
+                    id:especialidad.id_especialidad,
+                    descripcion:especialidad.nombre_especialidad
+                })
+                asigancionTablaHash[especialidad.id_especialidad]=especialidad
+            }
+            if(listaDeEspecialidadesActivas.length!==0){
+                asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
+            }
+            let listasDeMedicosSelect=[]
+            if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
+                for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
+                    listasDeMedicosSelect.push({
+                        id:asignacion.id_asignacion_medico_especialidad,
+                        descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
+                    })
+                }
+            }
+            this.setState({
+                listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
+                id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
+                listaDeAsignaciones:asigancionTablaHash,
+                id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad,
+                listaDeMedico:listasDeMedicosSelect
+            })
         })
         .catch(error=>{
             alert("No se pudo conectar con el servidor")
@@ -516,100 +509,100 @@ class ComponetReposoTrabajadorForm extends React.Component{
     }
 
     async agregar(){
-        let idRegistro=await this.generarId()
-        let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-        let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-        let listaDeTrabajadoresSelect=[]
-        for(let trabajador of listaDetrabajadoresActivos){
-            listaDeTrabajadoresSelect.push({
-                id:trabajador.id_cedula,
-                descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
-            })
-        }
-        // ----- reposo
-        let listaDeTodosLosReposos=await this.consultarTodosReposo()
-        let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-        let listaDeReposoSelect=[];
-        let reposoTablaHash={}
-        for(let reposo of listaDeRepososActivos){
-            listaDeReposoSelect.push({
-                id:reposo.id_reposo,
-                descripcion:reposo.nombre_reposo
-            })
-            reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
-        }
-        // -------- cam
-        let listaDeTodosLosCam=await this.consultarTodosLosCam()
-        let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-        let listaDeCamSelect=[]
-        let camTablaHash={}
-        for(let cam of listaDeCamActivos){
-            listaDeCamSelect.push({
-                id:cam.id_cam,
-                descripcion:cam.nombre_cam
-            })
-            camTablaHash[cam.id_cam]=cam
-        }
-        if(listaDeCamSelect.length!==0){
-            camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
-            camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
-            camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
-        }
-        // ------ asignaciones medico
-        let listaDeEspecialidades= await this.consultarTodasEspecialidad()
-        // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
-        let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
-        console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
-        let listaDeEspecialidadesSelect=[]
-        let asigancionTablaHash={}
-        for(let especialidad of listaDeEspecialidadesActivas){
-            listaDeEspecialidadesSelect.push({
-                id:especialidad.id_especialidad,
-                descripcion:especialidad.nombre_especialidad
-            })
-            asigancionTablaHash[especialidad.id_especialidad]=especialidad
-        }
-        if(listaDeEspecialidadesActivas.length!==0){
-            asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
-        }
-        let listasDeMedicosSelect=[]
-        if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
-            for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
-                listasDeMedicosSelect.push({
-                id:asignacion.id_asignacion_medico_especialidad,
-                descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
-                })
-            }
-        }
-        this.setState({
-            id_reposo_trabajador:idRegistro,
-            listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
-            id_cedula:(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id,
-            listaDeRepososActivos:listaDeReposoSelect,
-            id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id,
-            listaDeReposos:reposoTablaHash,
-            dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[listaDeReposoSelect[0].id].dias,
-            listaDeCams:camTablaHash,
-            listaDeCamsActivos:listaDeCamSelect,
-            id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
-            infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
-            listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
-            id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
-            listaDeAsignaciones:asigancionTablaHash,
-            id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad,
-            listaDeMedico:listasDeMedicosSelect,
-            fecha_desde_reposo_trabajador:"",
-            fecha_hasta_reposo_trabajador:"",
-            descripcion_reposo_trabajador:"",
-            estatu_reposo_trabajador:"1"
-        })
-        // console.log(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad)
-        document.getElementById("id_cedula").value=(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id
-        document.getElementById("id_reposo").value=(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id
-        document.getElementById("id_cam").value=(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id
-        document.getElementById("id_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id
-        document.getElementById("id_asignacion_medico_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad
-        this.props.history.push("/dashboard/transaccion/reposo-trabajador/registrar")
+        // let idRegistro=await this.generarId()
+        // let listaDeTrabajadores=await this.consultarTodosTrabajadores();
+        // let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
+        // let listaDeTrabajadoresSelect=[]
+        // for(let trabajador of listaDetrabajadoresActivos){
+        //     listaDeTrabajadoresSelect.push({
+        //         id:trabajador.id_cedula,
+        //         descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
+        //     })
+        // }
+        // // ----- reposo
+        // let listaDeTodosLosReposos=await this.consultarTodosReposo()
+        // let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
+        // let listaDeReposoSelect=[];
+        // let reposoTablaHash={}
+        // for(let reposo of listaDeRepososActivos){
+        //     listaDeReposoSelect.push({
+        //         id:reposo.id_reposo,
+        //         descripcion:reposo.nombre_reposo
+        //     })
+        //     reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
+        // }
+        // // -------- cam
+        // let listaDeTodosLosCam=await this.consultarTodosLosCam()
+        // let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
+        // let listaDeCamSelect=[]
+        // let camTablaHash={}
+        // for(let cam of listaDeCamActivos){
+        //     listaDeCamSelect.push({
+        //         id:cam.id_cam,
+        //         descripcion:cam.nombre_cam
+        //     })
+        //     camTablaHash[cam.id_cam]=cam
+        // }
+        // if(listaDeCamSelect.length!==0){
+        //     camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
+        //     camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
+        //     camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
+        // }
+        // // ------ asignaciones medico
+        // let listaDeEspecialidades= await this.consultarTodasEspecialidad()
+        // // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
+        // let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
+        // console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
+        // let listaDeEspecialidadesSelect=[]
+        // let asigancionTablaHash={}
+        // for(let especialidad of listaDeEspecialidadesActivas){
+        //     listaDeEspecialidadesSelect.push({
+        //         id:especialidad.id_especialidad,
+        //         descripcion:especialidad.nombre_especialidad
+        //     })
+        //     asigancionTablaHash[especialidad.id_especialidad]=especialidad
+        // }
+        // if(listaDeEspecialidadesActivas.length!==0){
+        //     asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
+        // }
+        // let listasDeMedicosSelect=[]
+        // if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
+        //     for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
+        //         listasDeMedicosSelect.push({
+        //         id:asignacion.id_asignacion_medico_especialidad,
+        //         descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
+        //         })
+        //     }
+        // }
+        // this.setState({
+        //     id_reposo_trabajador:idRegistro,
+        //     listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
+        //     id_cedula:(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id,
+        //     listaDeRepososActivos:listaDeReposoSelect,
+        //     id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id,
+        //     listaDeReposos:reposoTablaHash,
+        //     dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[listaDeReposoSelect[0].id].dias,
+        //     listaDeCams:camTablaHash,
+        //     listaDeCamsActivos:listaDeCamSelect,
+        //     id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
+        //     infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
+        //     listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
+        //     id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
+        //     listaDeAsignaciones:asigancionTablaHash,
+        //     id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad,
+        //     listaDeMedico:listasDeMedicosSelect,
+        //     fecha_desde_reposo_trabajador:"",
+        //     fecha_hasta_reposo_trabajador:"",
+        //     descripcion_reposo_trabajador:"",
+        //     estatu_reposo_trabajador:"1"
+        // })
+        // // console.log(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad)
+        // document.getElementById("id_cedula").value=(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id
+        // document.getElementById("id_reposo").value=(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id
+        // document.getElementById("id_cam").value=(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id
+        // document.getElementById("id_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id
+        // document.getElementById("id_asignacion_medico_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad
+        // this.props.history.push("/dashboard/transaccion/reposo-trabajador/registrar")
     }
 
     mostarDias(a){
@@ -634,10 +627,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
         let input=a.target
         this.cambiarEstado(a)
         let cam=this.state.listaDeCams[input.value]
-        // console.log(cam)
-        cam["ciudad"]=await this.consultarCiudad(cam.id_ciudad)
-        cam["estado"]=await this.consultarEstado(cam.ciudad.id_estado)
-        cam["tipoCam"]=await this.consultarTipoCam(cam.id_tipo_cam)
+        console.log(cam)
+        // cam["ciudad"]=await this.consultarCiudad(cam.id_ciudad)
+        // cam["estado"]=await this.consultarEstado(cam.ciudad.id_estado)
+        // cam["tipoCam"]=await this.consultarTipoCam(cam.id_tipo_cam)
         this.setState({
             infoCam:cam
         })
@@ -878,18 +871,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             </div>
                         </div>
                         <div className="row justify-content-center">
-                            <ComponentFormSelect
-                            clasesColumna="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"
-                            obligatorio="si"
-                            mensaje={this.state.msj_cedula}
-                            nombreCampoSelect="Trabajadores:"
-                            clasesSelect="custom-select"
-                            name="id_cedula"
-                            id="id_cedula"
-                            eventoPadre={this.cambiarEstado}
-                            defaultValue={this.state.id_cedula}
-                            option={this.state.listaDeTrabajadoresActivos}
-                            />
+                            
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
 
@@ -909,7 +891,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 clasesSelect="custom-select"
                                 name="id_reposo"
                                 id="id_reposo"
-                                eventoPadre={this.mostarDias}
+                                eventoPadre={this.cambiarEstado}
                                 defaultValue={this.state.id_reposo}
                                 option={this.state.listaDeRepososActivos}
                                 />
