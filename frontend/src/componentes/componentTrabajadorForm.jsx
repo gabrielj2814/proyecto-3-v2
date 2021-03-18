@@ -871,7 +871,7 @@ class ComponentTrabajadorForm extends React.Component{
         this.props.history.push("/dashboard/configuracion/trabajador");
     }
 
-    async buscarTrabajador(a){
+    buscarTrabajador(a){
         let input = a.target
         this.validarNumero(a)
         // console.log(input.value)

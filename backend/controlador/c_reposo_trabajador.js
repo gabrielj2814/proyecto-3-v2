@@ -316,6 +316,21 @@ ReposoTrabajadorControlador.consultarRepososTrabajadorFechaDesdeHasta=async (req
     }
 }
 
+ReposoTrabajadorControlador.consultarReposoActivoTrabajdor=async (req,res) => {
+    let {id_cedula} =req.params
+    let datos= await ReposoTrabajadorControlador.consultarReposoActivo(id_cedula)
+    if(datos.rowCount>0){
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify({estado:true}))
+        res.end()
+    }
+    else{
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify({estado:false}))
+        res.end()
+    }
+}
+
 
 
 ReposoTrabajadorControlador.verificarExistencia= (result) => {

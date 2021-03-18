@@ -7,6 +7,7 @@ VitacoraControlador=require("../../../controlador/c_vitacora")
 router.use(bodyparser.json())
 // localhost:8080/transaccion/reposo-trabajador/consultar/repot-2020-05-25-25
 router.get("/generar-id",ReposoTrabajadorControlador.generarId)
+router.get("/consultar-reposo-activos/:id_cedula",ReposoTrabajadorControlador.consultarReposoActivoTrabajdor)
 router.post("/registrar",ReposoTrabajadorControlador.registrarControlador,VitacoraControlador.capturaDatos)
 router.get("/consultar/:id/:token",ReposoTrabajadorControlador.consultarControlador,VitacoraControlador.capturaDatos)
 router.put("/actualizar/:id",ReposoTrabajadorControlador.actualizarControlador,VitacoraControlador.capturaDatos)

@@ -33,6 +33,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.agregar=this.agregar.bind(this)
         this.mostrarAsignacionMedico=this.mostrarAsignacionMedico.bind(this)
         this.mostrarFechaHasta=this.mostrarFechaHasta.bind(this)
+        this.buscarTrabajador=this.buscarTrabajador.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -88,6 +89,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 mensaje:"",
                 color_texto:""
             },
+            estadoBusquedaTrabajador:false,
             alerta:{
                 color:null,
                 mensaje:null,
@@ -143,6 +145,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.setState({
                     id_reposo_trabajador:idRegistro,
                 })
+            }
+            if(this.state.estadoBusquedaTrabajador===true){
+                document.getElementById("boton-registrar").removeAttribute("disabled")
+            }
+            else{
+                document.getElementById("boton-registrar").setAttribute("disabled",true)
             }
         }
         else if(operacion==="actualizar"){
@@ -244,6 +252,53 @@ class ComponetReposoTrabajadorForm extends React.Component{
         }
 
     }
+
+    async buscarTrabajador(a){
+        const input=a.target,
+        exprecion=/[0-9]$/
+        if(exprecion.test(input.value)){
+            // console.log("OK")
+            if(input.value.length<=8){
+                this.cambiarEstado(a)
+                let hashTrabajador=JSON.parse(JSON.stringify(this.state.hashTrabajador))
+                if(hashTrabajador[input.value]){
+                    this.setState({
+                        estadoBusquedaTrabajador:true
+                    })
+                    await this.consultarReposoActivoTrabajador(input.value)
+                }
+                else{
+                    // console.log("NO OK")
+                    this.setState({
+                        estadoBusquedaTrabajador:false
+                    })
+                }
+            }
+            else{
+                document.getElementById("boton-registrar").setAttribute("disabled",true)
+            }
+        }
+        else if(input.value===""){
+            this.cambiarEstado(a)
+        }
+    }
+
+    async consultarReposoActivoTrabajador(id_cedula){
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar-reposo-activos/${id_cedula}`)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            if(json.estado===true){
+                alert(`èste trabajador =>>> ${id_cedula} tiene un reposo activo`)
+                document.getElementById("boton-registrar").setAttribute("disabled",true)
+            }
+            else{
+                document.getElementById("boton-registrar").removeAttribute("disabled")
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
     
 
     async consultarReposoTrabajador(id){
@@ -317,7 +372,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
                         descripcion:reposo.nombre_reposo
                     })
             }
-            this.setState({listaDeRepososActivos:listaDeReposoSelect})
+            this.setState({
+                listaDeRepososActivos:listaDeReposoSelect,
+                id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id
+            })
         })
         .catch(error=>{
             alert("No se pudo conectar con el servidor")
@@ -871,8 +929,21 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             </div>
                         </div>
                         <div className="row justify-content-center">
-                            
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            obligatorio="si"
+                            mensaje={this.state.msj_id_cedula}
+                            nombreCampo="Cedula:"
+                            activo="si"
+                            type="text"
+                            value={this.state.id_cedula}
+                            name="id_cedula"
+                            id="id_cedula"
+                            placeholder="CEDULA"
+                            eventoPadre={this.buscarTrabajador}
+                            />
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                         </div>
 
 
