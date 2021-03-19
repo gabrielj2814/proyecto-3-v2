@@ -34,6 +34,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.mostrarAsignacionMedico=this.mostrarAsignacionMedico.bind(this)
         this.mostrarFechaHasta=this.mostrarFechaHasta.bind(this)
         this.buscarTrabajador=this.buscarTrabajador.bind(this)
+        this.campoDiasReposo=this.campoDiasReposo.bind(this)
+        this.campoDiasNoAvilesReposo=this.campoDiasNoAvilesReposo.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -47,6 +49,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
             descripcion_reposo_trabajador:"",
             id_cam:null,
             id_asignacion_medico_especialidad:null,
+            total_dias_reposo_trabajador:0,
+            total_dias_no_aviles_reposo_trabajador:0,
+            cantidad_dias_entrega_reposo_trabajador:"",
+            fecha_desde_entrega_reposo_trabajador:"",
+            fecha_hasta_entrega_reposo_trabajador:"",
+            estatu_entrega_reposo:0,
             // ---------
             hashTrabajador:[],
             listaDeRepososActivos:[],
@@ -86,6 +94,14 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 color_texto:""
             },
             msj_fecha_desde_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_total_dias_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_total_dias_no_aviles_reposo_trabajador:{
                 mensaje:"",
                 color_texto:""
             },
@@ -698,11 +714,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
         let input=a.target
         this.cambiarEstado(a)
         // alert(this.state.dias_reposo)
-        if(this.state.dias_reposo!==""){
-            let dias=parseInt(this.state.dias_reposo)
+        if(this.state.total_dias_reposo_trabajador!==""){
+            let sumaDias=(this.state.total_dias_no_aviles_reposo_trabajador==="")?parseInt(this.state.total_dias_reposo_trabajador):parseInt(this.state.total_dias_reposo_trabajador)+parseInt(this.state.total_dias_no_aviles_reposo_trabajador)
+            // let dias=sumaDias
             let fecha_hasta=Moment(input.value)
             // alert(input.value)
-            fecha_hasta.add(dias,"days")
+            fecha_hasta.add(sumaDias,"days")
             // alert(fecha_hasta)
             this.setState({
                 fecha_hasta_reposo_trabajador:fecha_hasta
@@ -877,8 +894,38 @@ class ComponetReposoTrabajadorForm extends React.Component{
         return json   
     }
 
+    
+
     regresar(){
         this.props.history.push("/dashboard/transaccion/reposo-trabajador")
+    }
+
+    campoDiasReposo(a){
+        let input=a.target
+        if(/[0-9]$/.test(input.value)){
+            if(input.value.length<=3){
+                this.cambiarEstado(a)
+            }
+        }
+        else{
+            if(input.value===""){
+                this.cambiarEstado(a)
+            }
+        }
+    }
+
+    campoDiasNoAvilesReposo(a){
+        let input=a.target
+        if(/[0-9]$/.test(input.value)){
+            if(input.value.length<=3){
+                this.cambiarEstado(a)
+            }
+        }
+        else{
+            if(input.value===""){
+                this.cambiarEstado(a)
+            }
+        }
     }
 
     render(){
@@ -966,10 +1013,21 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 defaultValue={this.state.id_reposo}
                                 option={this.state.listaDeRepososActivos}
                                 />
-                            
-                                <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                    dias del reposo:<span id="diasReposo">{(this.state.dias_reposo===null)?"":this.state.dias_reposo}</span>
-                                </div>
+
+                                <ComponentFormCampo
+                                clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"
+                                clasesCampo="form-control"
+                                obligatorio="si"
+                                mensaje={this.state.msj_total_dias_reposo_trabajador}
+                                nombreCampo="Dias de Reposo:"
+                                activo="si"
+                                type="text"
+                                value={this.state.total_dias_reposo_trabajador}
+                                name="total_dias_reposo_trabajador"
+                                id="total_dias_reposo_trabajador"
+                                placeholder="Dias"
+                                eventoPadre={this.campoDiasReposo}
+                                />
                         </div>
 
                         <div className="row mt-3">
@@ -1053,11 +1111,28 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             </div>
                         </div>
                         <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            obligatorio="si"
+                            mensaje={this.state.msj_total_dias_reposo_trabajador}
+                            nombreCampo="Dias no aviles:"
+                            activo="si"
+                            type="text"
+                            value={this.state.total_dias_no_aviles_reposo_trabajador}
+                            name="total_dias_no_aviles_reposo_trabajador"
+                            id="total_dias_no_aviles_reposo_trabajador"
+                            placeholder="Dias"
+                            eventoPadre={this.campoDiasNoAvilesReposo}
+                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
+                        </div>
+                        <div className="row justify-content-center">
                             <ComponentFormDate
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_fecha_desde_reposo_trabajador}
-                            nombreCampoDate="desde:"
+                            nombreCampoDate="Fecha Inicio Reposo:"
                             clasesCampo="form-control"
                             value={this.state.fecha_desde_reposo_trabajador}
                             name="fecha_desde_reposo_trabajador"
@@ -1065,9 +1140,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             eventoPadre={this.mostrarFechaHasta}
                             />
                             <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                fecha hasta: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
+                                Fecha Fin Reposo: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
                             </div>
                         </div>
+                        
                         <div className="row justify-content-center">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
