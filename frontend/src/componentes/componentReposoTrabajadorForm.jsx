@@ -50,13 +50,16 @@ class ComponetReposoTrabajadorForm extends React.Component{
             descripcion_reposo_trabajador:"",
             id_cam:null,
             id_asignacion_medico_especialidad:null,
-            
+
             total_dias_reposo_trabajador:0,
             total_dias_no_aviles_reposo_trabajador:0,
-            cantidad_dias_entrega_reposo_trabajador:"",
+            cantidad_dias_entrega_reposo_trabajador:15,
             fecha_desde_entrega_reposo_trabajador:"",
             fecha_hasta_entrega_reposo_trabajador:"",
-            estatu_entrega_reposo:0,
+            estatu_entrega_reposo:"P",
+            //  P -> en espera
+            //  E -> en espera
+            //  N -> en espera
             // --------
             diasParaEntregarReposo:15,
             diasNoAviles:0,
@@ -725,16 +728,18 @@ class ComponetReposoTrabajadorForm extends React.Component{
         // alert(this.state.dias_reposo)
         if(this.state.total_dias_reposo_trabajador!==""){
             let sumaDias=(this.state.total_dias_reposo_trabajador==="")?0:parseInt(this.state.total_dias_reposo_trabajador)
-            // let dias=sumaDias
             let fecha_hasta=Moment(input.value)
             let fecha_inicio_entrega=Moment(input.value)
-            // alert(input.value)
             fecha_hasta.add(sumaDias,"days")
-            fecha_inicio_entrega.add(sumaDias+1,"days")
+            fecha_inicio_entrega.add(1,"days")
+            while(fecha_inicio_entrega.format("dd")==="Su" || fecha_inicio_entrega.format("dd")==="Sa"){
+                fecha_inicio_entrega.add(1,"days")
+            }
             let fecha_fin_entrega=Moment(fecha_inicio_entrega.format("YYYY-MM-DD"),"YYYY-MM-DD")
             let totalDias=this.state.diasParaEntregarReposo
             let diasNoAviles=0
             let cont=0
+            
             while(cont<totalDias || (fecha_fin_entrega.format("dd")==="Su" || fecha_fin_entrega.format("dd")==="Sa")){
                 if(fecha_fin_entrega.format("dd")==="Su" || fecha_fin_entrega.format("dd")==="Sa"){
                     fecha_fin_entrega.add(1,"days");
@@ -783,7 +788,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         let estado=false
         let fechaDesde=document.getElementById("fecha_desde_reposo_trabajador").value
         let msj=JSON.parse(JSON.stringify(this.state["msj_fecha_desde_reposo_trabajador"]));
-        if(fechaDesde!=="" && this.state.dias_reposo!==null){
+        if(fechaDesde!=="" && this.state.total_dias_reposo_trabajador!==null){
             estado=true
             msj.mensaje="";
             msj.color_texto="";
@@ -853,63 +858,65 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 reposo_trabajador:this.extrarDatosDelFormData(datosFormulario),
                 token
             }
+            
             datos.reposo_trabajador["fecha_hasta_reposo_trabajador"]=Moment(this.state.fecha_hasta_reposo_trabajador).format("YYYY-MM-DD")
             console.log("datos que se enviaran al servidor =>>> ",datos)
-            if(operacion==="registrar"){
-                // alert("registrando")
-                axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
-                .then(respuesta => {
-                    let json=JSON.parse(JSON.stringify(respuesta.data))
-                    console.log("repuesta =>>> ",json)
-                    if(json.estado_peticion==="200"){
-                        alerta.estado=true
-                        alerta.color="success"
-                        alerta.mensaje=json.mensaje
-                        this.setState({alerta})
-                    }
-                    else{
-                        alerta.estado=true
-                        alerta.color="danger"
-                        alerta.mensaje=json.mensaje
-                        this.setState({alerta})
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                    alerta.estado=true
-                    alerta.color="danger"
-                    alerta.mensaje="error al conectar con el servidor"
-                    this.setState({alerta})
-                })
-            }
-            else if(operacion==="actualizar"){
-                // alert("actualizando")
-                let {id} = this.props.match.params
-                axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
-                .then(respuesta => {
-                    let json=JSON.parse(JSON.stringify(respuesta.data))
-                    console.log("repuesta =>>> ",json)
-                    if(json.estado_peticion==="200"){
-                        alerta.estado=true
-                        alerta.color="success"
-                        alerta.mensaje=json.mensaje
-                        this.setState({alerta})
-                    }
-                    else{
-                        alerta.estado=true
-                        alerta.color="danger"
-                        alerta.mensaje=json.mensaje
-                        this.setState({alerta})
-                    }
-                })
-                .catch(error => {
-                    console.log(error)
-                    alerta.estado=true
-                    alerta.color="danger"
-                    alerta.mensaje="error al conectar con el servidor"
-                    this.setState({alerta})
-                })
-            }
+
+            // if(operacion==="registrar"){
+            //     // alert("registrando")
+            //     axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
+            //     .then(respuesta => {
+            //         let json=JSON.parse(JSON.stringify(respuesta.data))
+            //         console.log("repuesta =>>> ",json)
+            //         if(json.estado_peticion==="200"){
+            //             alerta.estado=true
+            //             alerta.color="success"
+            //             alerta.mensaje=json.mensaje
+            //             this.setState({alerta})
+            //         }
+            //         else{
+            //             alerta.estado=true
+            //             alerta.color="danger"
+            //             alerta.mensaje=json.mensaje
+            //             this.setState({alerta})
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //         alerta.estado=true
+            //         alerta.color="danger"
+            //         alerta.mensaje="error al conectar con el servidor"
+            //         this.setState({alerta})
+            //     })
+            // }
+            // else if(operacion==="actualizar"){
+            //     // alert("actualizando")
+            //     let {id} = this.props.match.params
+            //     axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
+            //     .then(respuesta => {
+            //         let json=JSON.parse(JSON.stringify(respuesta.data))
+            //         console.log("repuesta =>>> ",json)
+            //         if(json.estado_peticion==="200"){
+            //             alerta.estado=true
+            //             alerta.color="success"
+            //             alerta.mensaje=json.mensaje
+            //             this.setState({alerta})
+            //         }
+            //         else{
+            //             alerta.estado=true
+            //             alerta.color="danger"
+            //             alerta.mensaje=json.mensaje
+            //             this.setState({alerta})
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.log(error)
+            //         alerta.estado=true
+            //         alerta.color="danger"
+            //         alerta.mensaje="error al conectar con el servidor"
+            //         this.setState({alerta})
+            //     })
+            // }
 
         }
     }
@@ -1267,8 +1274,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             eventoPadre={this.campoDiasNoAvilesReposo}
                             />
                             <div className=" col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                <buttom className="btn btn-success" onClick={this.calcularDiasNoAviles}>
-                                    calcular dias no aviles
+                                <buttom className="boton-calcular-dias-aviles btn btn-success" onClick={this.calcularDiasNoAviles}>
+                                    calcular dias
                                 </buttom>
                             </div>
                         </div>
@@ -1293,24 +1300,15 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             eventoPadre={this.cambiarEstado}
                             />
                         </div>
-                        <div className="row justify-content-center">
-                            <ComponentFormRadioState
-                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            extra="custom-control-inline"
-                            nombreCampoRadio="Estatus:"
-                            name="estatu_reposo_trabajador"
-                            nombreLabelRadioA="Activo"
-                            idRadioA="activoA"
-                            checkedRadioA={this.state.estatu_reposo_trabajador}
-                            valueRadioA="1"
-                            nombreLabelRadioB="Inactivo"
-                            idRadioB="activoB"
-                            valueRadioB="0"
-                            eventoPadre={this.cambiarEstado}
-                            checkedRadioB={this.state.estatu_reposo_trabajador}
-                            />
-                        </div>
-                        <div className="row justify-content-center">
+                        <input type="hidden" id="cantidad_dias_entrega_reposo_trabajador" name="cantidad_dias_entrega_reposo_trabajador" value={this.state.cantidad_dias_entrega_reposo_trabajador}/>
+                        <input type="hidden" id="estatu_entrega_reposo" name="estatu_entrega_reposo" value={this.state.estatu_entrega_reposo}/>
+                        <input type="hidden" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" value={this.state.estatu_reposo_trabajador}/>
+                        <input type="hidden" id="fecha_desde_entrega_reposo_trabajador" name="fecha_desde_entrega_reposo_trabajador" value={(this.state.fecha_desde_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_desde_entrega_reposo_trabajador).format("YYYY-MM-DD")}/>
+                        <input type="hidden" id="fecha_hasta_entrega_reposo_trabajador" name="fecha_hasta_entrega_reposo_trabajador" value={(this.state.fecha_hasta_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_entrega_reposo_trabajador).format("YYYY-MM-DD")}/>
+
+
+
+                        <div className="row mt-3 justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
                                     <InputButton 
