@@ -108,7 +108,7 @@ CREATE TABLE tpermisotrabajador(
     fecha_desde_permiso_trabajador DATE NULL,
     fecha_hasta_permiso_trabajador DATE NULL,
     estatu_permiso_trabajador character(1) NOT NULL,
-    permiso_trabajador_dias_aviles character varying(2) NOT NULL,
+    permiso_trabajador_dias_aviles character varying(3) NOT NULL,
     permiso_trabajador_tipo character varying(2) NOT NULL, -- PN, PR / PN permiso normal / PR permiso de retiro para salir temprano
     constraint PK_id_permiso_trabajador primary key(id_permiso_trabajador),
     constraint FK_id_cedula_tpermisotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,

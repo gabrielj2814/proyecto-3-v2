@@ -24,6 +24,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
         this.modificarDiasAviles=this.modificarDiasAviles.bind(this);
         this.actualizarPermiso=this.actualizarPermiso.bind(this);
         this.regresar=this.regresar.bind(this);
+        this.calcularDiasNoAviles=this.calcularDiasNoAviles.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -45,6 +46,8 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             estatu_remunerado:"",
             estatu_dias_aviles:"",
             //
+            estadoCalcular:true,
+            diasNoAviles:0,
             mensaje:{
                 texto:"",
                 estado:""
@@ -86,6 +89,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             fecha_hasta_permiso_trabajador:permiso_trabajador.permiso_trabajador.fecha_hasta_permiso_trabajador,
             estatu_permiso_trabajador:(permiso_trabajador.permiso_trabajador.estatu_permiso_trabajador==="A")?"Aprovado":"",
             permiso_trabajador_dias_aviles:(permiso_trabajador.permiso_trabajador.permiso_trabajador_dias_aviles==="VC")?0:permiso_trabajador.permiso_trabajador.permiso_trabajador_dias_aviles,
+            diasNoAviles:(permiso_trabajador.permiso_trabajador.permiso_trabajador_dias_aviles==="VC")?0:permiso_trabajador.permiso_trabajador.permiso_trabajador_dias_aviles,
         })
         console.log(this.state)
     }
@@ -133,7 +137,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             dias+=1
             this.setState({
                 permiso_trabajador_dias_aviles:dias,
-                fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD")
+                // fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD")
             })
         }
         else{
@@ -142,8 +146,62 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                 dias-=1
                 this.setState({
                     permiso_trabajador_dias_aviles:dias,
-                    fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD")
+                    // fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD")
                 })
+            }
+        }
+        this.setState({estadoCalcular:false})
+    }
+
+    calcularDiasNoAviles(){
+        // let numeroDiasNoAviles=this.state.total_dias_no_aviles_reposo_trabajador
+        for(let contador=0;contador<2;contador++){
+            // this.setState({total_dias_no_aviles_reposo_trabajador:numeroDiasNoAviles})
+            if(this.state.permiso_trabajador_dias_aviles!==""){
+                if(this.state.fecha_desde_reposo_trabajador!==""){
+                    let fecha=Moment(Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD"),"YYYY-MM-DD")
+                    let suma=parseInt(this.state.dias_permiso)
+                    let diasNoAvilesUsuario=((parseInt(this.state.permiso_trabajador_dias_aviles)-this.state.diasNoAviles>0)?parseInt(this.state.permiso_trabajador_dias_aviles)-this.state.diasNoAviles:0)
+                    console.clear()
+                    let diasNoAviles=0
+                    let diasNoAvilesAgregados=0
+                    let cont=0
+                    // let n=0
+                    while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
+                        if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
+                            fecha.add(1,"days");
+                            diasNoAviles++
+                        }
+                        else{
+                            if(diasNoAvilesUsuario>0){
+                                diasNoAvilesUsuario--
+                                // diasNoAviles++
+                                diasNoAvilesAgregados++
+                                fecha.add(1,"days");
+                            }
+                            else{
+                                cont++
+                                fecha.add(1,"days");
+                            }
+                        }
+                        // n++
+                    }
+                    // console.log(n)
+                    console.log(cont)
+                    console.log(diasNoAviles)
+                    console.log(diasNoAvilesAgregados)
+                    console.log(diasNoAviles+diasNoAvilesAgregados)
+                    let sumaDiasNoAviles=diasNoAviles+diasNoAvilesAgregados
+                    this.setState({
+                        permiso_trabajador_dias_aviles:sumaDiasNoAviles,
+                        diasNoAviles
+                    })
+                    this.setState({
+                        fecha_hasta_permiso_trabajador:fecha,
+                        // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+                    })
+                    this.setState({estadoCalcular:true})
+                }
             }
         }
     }
@@ -159,26 +217,31 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             token
         }
         //axios
-        var respuesta_servidor=""
-        var mensaje=this.state.mensaje
-        await axios.patch(`http://localhost:8080/transaccion/permiso-trabajador/actualizar-dias-aviles/${this.state.id_permiso_trabajador}`,objeto)
-        .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            console.log(respuesta_servidor)
-            mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado_peticion
-            this.setState({
-                mensaje:mensaje
+        if(this.state.estadoCalcular===true){
+            var respuesta_servidor=""
+            var mensaje=this.state.mensaje
+            await axios.patch(`http://localhost:8080/transaccion/permiso-trabajador/actualizar-dias-aviles/${this.state.id_permiso_trabajador}`,objeto)
+            .then(respuesta=>{
+                respuesta_servidor=respuesta.data
+                console.log(respuesta_servidor)
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_peticion
+                this.setState({
+                    mensaje:mensaje
+                })
             })
-        })
-        .catch(error=>{
-            console.log(error)
-            mensaje.texto="no hay conexion al servidor"
-            mensaje.estado="500"
-            this.setState({
-                mensaje:mensaje
+            .catch(error=>{
+                console.log(error)
+                mensaje.texto="no hay conexion al servidor"
+                mensaje.estado="500"
+                this.setState({
+                    mensaje:mensaje
+                })
             })
-        })
+        }
+        else{
+            alert("por favor calcular primero los dias no aviles")
+        }
     }
 
     regresar(){
@@ -220,7 +283,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                         {this.state.estatu_dias_aviles==="1" &&
                         (
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span>dias aviles: {this.state.permiso_trabajador_dias_aviles}</span>
+                                    <span>dias no aviles: {this.state.permiso_trabajador_dias_aviles}</span>
                                 </div>
                         )
                         }
@@ -264,6 +327,13 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                             </div>
                         )
                     }
+                    
+                    <div className="row mt-3 justify-content-center">
+                        <div className="col-2 col-ms-2 col-md-2 col-lg-2 col-xl-2 ">
+                            <input className="btn btn-success btn-block" type="button" value="calcular" onClick={this.calcularDiasNoAviles}/>
+                        </div>
+                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 offset-4 offset-ms-4 offset-lg-4 offset-xl-4"></div>
+                    </div>
                     <div className="row mt-3">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso-editar">
                             <span className="sub-titulo-form-solicitud-permiso">Permiso</span>

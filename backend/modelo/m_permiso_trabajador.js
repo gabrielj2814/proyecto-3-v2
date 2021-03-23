@@ -38,7 +38,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
 		this.fecha_desde_permiso_trabajador=permiso_trabajador.fecha_desde_permiso_trabajador,
 		this.fecha_hasta_permiso_trabajador=permiso_trabajador.fecha_hasta_permiso_trabajador,
 		this.estatu_permiso_trabajador=(permiso_trabajador.estatu_permiso_trabajador==="E")?"E":"E",
-		this.permiso_trabajador_dias_aviles="VC"
+		this.permiso_trabajador_dias_aviles=(permiso_trabajador.permiso_trabajador_dias_aviles==="")?"VC":permiso_trabajador.permiso_trabajador_dias_aviles
 		this.permiso_trabajador_tipo=permiso_trabajador.permiso_trabajador_tipo
     }
 

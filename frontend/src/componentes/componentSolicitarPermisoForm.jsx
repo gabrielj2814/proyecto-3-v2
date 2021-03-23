@@ -292,12 +292,43 @@ class ComponentSolicitarPermisoForm extends React.Component{
         var input=a.target;
         const dias_permiso=parseInt(this.state.dias_permiso)
         //fecha_desde=Moment(input.value)
-        var fecha_hasta=Moment(input.value)
-        fecha_hasta.add(dias_permiso,"days")
-        this.setState({
-            fecha_desde_permiso_trabajador:input.value,
-            fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD")
-        })
+        // permiso_trabajador_dias_aviles
+        if(this.state.estatu_dias_aviles==="0"){
+            var fecha_hasta=Moment(input.value)
+            fecha_hasta.add(dias_permiso,"days")
+            this.setState({
+                fecha_desde_permiso_trabajador:input.value,
+                fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD"),
+                permiso_trabajador_dias_aviles:""
+            })
+        }
+        else{
+            let fecha_desde=Moment(input.value)
+            let fecha_hasta=Moment(input.value)
+            while(fecha_desde.format("dd")==="Su" || fecha_desde.format("dd")==="Sa"){
+                fecha_desde.add(1,"days")
+            }
+
+            let cont=0
+            let diasNoAviles=0
+            while(cont<dias_permiso || (fecha_hasta.format("dd")==="Su" || fecha_hasta.format("dd")==="Sa")){
+                if(fecha_hasta.format("dd")==="Su" || fecha_hasta.format("dd")==="Sa"){
+                    fecha_hasta.add(1,"days");
+                    diasNoAviles++
+                }
+                else{
+                    // totalDias--
+                    cont++
+                    fecha_hasta.add(1,"days");
+                }
+            }
+
+            this.setState({
+                fecha_desde_permiso_trabajador:fecha_desde.format("YYYY-MM-DD"),
+                fecha_hasta_permiso_trabajador:fecha_hasta.format("YYYY-MM-DD"),
+                permiso_trabajador_dias_aviles:diasNoAviles
+            })
+        }
     }
 
     validarFechaDesde(){
