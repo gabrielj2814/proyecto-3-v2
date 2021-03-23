@@ -36,6 +36,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.buscarTrabajador=this.buscarTrabajador.bind(this)
         this.campoDiasReposo=this.campoDiasReposo.bind(this)
         this.campoDiasNoAvilesReposo=this.campoDiasNoAvilesReposo.bind(this)
+        this.calcularDiasNoAviles=this.calcularDiasNoAviles.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -49,12 +50,16 @@ class ComponetReposoTrabajadorForm extends React.Component{
             descripcion_reposo_trabajador:"",
             id_cam:null,
             id_asignacion_medico_especialidad:null,
+            
             total_dias_reposo_trabajador:0,
             total_dias_no_aviles_reposo_trabajador:0,
             cantidad_dias_entrega_reposo_trabajador:"",
             fecha_desde_entrega_reposo_trabajador:"",
             fecha_hasta_entrega_reposo_trabajador:"",
             estatu_entrega_reposo:0,
+            // --------
+            diasParaEntregarReposo:15,
+            diasNoAviles:0,
             // ---------
             hashTrabajador:[],
             listaDeRepososActivos:[],
@@ -102,6 +107,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 color_texto:""
             },
             msj_total_dias_no_aviles_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_fecha_desde_entrega_reposo_trabajador:{
                 mensaje:"",
                 color_texto:""
             },
@@ -715,14 +724,36 @@ class ComponetReposoTrabajadorForm extends React.Component{
         this.cambiarEstado(a)
         // alert(this.state.dias_reposo)
         if(this.state.total_dias_reposo_trabajador!==""){
-            let sumaDias=(this.state.total_dias_no_aviles_reposo_trabajador==="")?parseInt(this.state.total_dias_reposo_trabajador):parseInt(this.state.total_dias_reposo_trabajador)+parseInt(this.state.total_dias_no_aviles_reposo_trabajador)
+            let sumaDias=(this.state.total_dias_reposo_trabajador==="")?0:parseInt(this.state.total_dias_reposo_trabajador)
             // let dias=sumaDias
             let fecha_hasta=Moment(input.value)
+            let fecha_inicio_entrega=Moment(input.value)
             // alert(input.value)
             fecha_hasta.add(sumaDias,"days")
+            fecha_inicio_entrega.add(sumaDias+1,"days")
+            let fecha_fin_entrega=Moment(fecha_inicio_entrega.format("YYYY-MM-DD"),"YYYY-MM-DD")
+            let totalDias=this.state.diasParaEntregarReposo
+            let diasNoAviles=0
+            let cont=0
+            while(cont<totalDias || (fecha_fin_entrega.format("dd")==="Su" || fecha_fin_entrega.format("dd")==="Sa")){
+                if(fecha_fin_entrega.format("dd")==="Su" || fecha_fin_entrega.format("dd")==="Sa"){
+                    fecha_fin_entrega.add(1,"days");
+                    diasNoAviles++
+                }
+                else{
+                    // totalDias--
+                    cont++
+                    fecha_fin_entrega.add(1,"days");
+                }
+            }
+            // fecha_fin_entrega.add((this.state.diasParaEntregarReposo+((this.state.total_dias_no_aviles_reposo_trabajador==="")?0:parseInt(this.state.total_dias_no_aviles_reposo_trabajador))),"days")
             // alert(fecha_hasta)
             this.setState({
-                fecha_hasta_reposo_trabajador:fecha_hasta
+                fecha_hasta_reposo_trabajador:fecha_hasta,
+                fecha_desde_entrega_reposo_trabajador:fecha_inicio_entrega,
+                fecha_hasta_entrega_reposo_trabajador:fecha_fin_entrega,
+                total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+                diasNoAviles
             })
         }
         else{
@@ -926,6 +957,99 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.cambiarEstado(a)
             }
         }
+        // if(input.value!==""){
+        //     if(this.state.fecha_desde_reposo_trabajador!==""){
+        //         let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
+        //         let suma=this.state.diasParaEntregarReposo
+        //         let diasNoAvilesUsuario=((parseInt(input.value)-this.state.diasNoAviles>0)?parseInt(input.value)-this.state.diasNoAviles:0)
+        //         console.clear()
+        //         let diasNoAviles=0
+        //         let cont=0
+        //         let n=0
+        //         while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
+        //             if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
+        //                 fecha.add(1,"days");
+        //                 diasNoAviles++
+        //             }
+        //             else{
+        //                 if(diasNoAvilesUsuario>0){
+        //                     diasNoAvilesUsuario--
+        //                     diasNoAviles++
+        //                     fecha.add(1,"days");
+        //                 }
+        //                 else{
+        //                     cont++
+        //                     fecha.add(1,"days");
+        //                 }
+        //             }
+        //             n++
+        //         }
+        //         console.log(n)
+        //         console.log(cont)
+        //         console.log(diasNoAviles)
+        //         document.getElementById("total_dias_no_aviles_reposo_trabajador").removeAttribute("disabled")
+        //         this.setState({
+        //             total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+        //         })
+        //         this.setState({
+        //             fecha_hasta_entrega_reposo_trabajador:fecha,
+        //             // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+        //         })
+        //     }
+        // }
+        
+    }
+
+    calcularDiasNoAviles(){
+        // let numeroDiasNoAviles=this.state.total_dias_no_aviles_reposo_trabajador
+        for(let contador=0;contador<2;contador++){
+            // this.setState({total_dias_no_aviles_reposo_trabajador:numeroDiasNoAviles})
+            if(this.state.total_dias_no_aviles_reposo_trabajador!==""){
+                if(this.state.fecha_desde_reposo_trabajador!==""){
+                    let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
+                    let suma=this.state.diasParaEntregarReposo
+                    let diasNoAvilesUsuario=((parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles>0)?parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles:0)
+                    console.clear()
+                    let diasNoAviles=0
+                    let diasNoAvilesAgregados=0
+                    let cont=0
+                    // let n=0
+                    while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
+                        if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
+                            fecha.add(1,"days");
+                            diasNoAviles++
+                        }
+                        else{
+                            if(diasNoAvilesUsuario>0){
+                                diasNoAvilesUsuario--
+                                // diasNoAviles++
+                                diasNoAvilesAgregados++
+                                fecha.add(1,"days");
+                            }
+                            else{
+                                cont++
+                                fecha.add(1,"days");
+                            }
+                        }
+                        // n++
+                    }
+                    // console.log(n)
+                    console.log(cont)
+                    console.log(diasNoAviles)
+                    console.log(diasNoAvilesAgregados)
+                    console.log(diasNoAviles+diasNoAvilesAgregados)
+                    let sumaDiasNoAviles=diasNoAviles+diasNoAvilesAgregados
+                    this.setState({
+                        total_dias_no_aviles_reposo_trabajador:sumaDiasNoAviles,
+                        diasNoAviles
+                    })
+                    this.setState({
+                        fecha_hasta_entrega_reposo_trabajador:fecha,
+                        // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+                    })
+                }
+            }
+        }
     }
 
     render(){
@@ -1110,23 +1234,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <span className="sub-titulo-form-reposo-trabajador">Detalles</span>
                             </div>
                         </div>
-                        <div className="row justify-content-center">
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            obligatorio="si"
-                            mensaje={this.state.msj_total_dias_reposo_trabajador}
-                            nombreCampo="Dias no aviles:"
-                            activo="si"
-                            type="text"
-                            value={this.state.total_dias_no_aviles_reposo_trabajador}
-                            name="total_dias_no_aviles_reposo_trabajador"
-                            id="total_dias_no_aviles_reposo_trabajador"
-                            placeholder="Dias"
-                            eventoPadre={this.campoDiasNoAvilesReposo}
-                            />
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
-                        </div>
+                        
                         <div className="row justify-content-center">
                             <ComponentFormDate
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1143,7 +1251,35 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 Fecha Fin Reposo: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
                             </div>
                         </div>
-                        
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            obligatorio="si"
+                            mensaje={this.state.msj_total_dias_reposo_trabajador}
+                            nombreCampo="Dias no aviles:"
+                            activo="si"
+                            type="text"
+                            value={this.state.total_dias_no_aviles_reposo_trabajador}
+                            name="total_dias_no_aviles_reposo_trabajador"
+                            id="total_dias_no_aviles_reposo_trabajador"
+                            placeholder="Dias"
+                            eventoPadre={this.campoDiasNoAvilesReposo}
+                            />
+                            <div className=" col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                <buttom className="btn btn-success" onClick={this.calcularDiasNoAviles}>
+                                    calcular dias no aviles
+                                </buttom>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3">
+                                Fecha Inicio Entrega: {(this.state.fecha_desde_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_desde_entrega_reposo_trabajador).format("DD-MM-YYYY")}
+                            </div>
+                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                Fecha Fin Entrega: {(this.state.fecha_hasta_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_entrega_reposo_trabajador).format("DD-MM-YYYY")}
+                            </div>
+                        </div>
                         <div className="row justify-content-center">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
