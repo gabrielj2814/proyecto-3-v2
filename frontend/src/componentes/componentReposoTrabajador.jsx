@@ -218,6 +218,22 @@ class ComponentReposoTrabajador extends React.Component{
         this.props.history.push(`/dashboard/transaccion/reposo-trabajador/consultar/${boton.id}`)
     }
 
+    /*
+    
+    {!reposoTrabajador.vacio &&
+                          <td>
+                              <ButtonIcon 
+                              clasesBoton="btn btn-secondary btn-block" 
+                              value={reposoTrabajador.id_reposo_trabajador}
+                              id={reposoTrabajador.id_reposo_trabajador} 
+                              eventoPadre={this.consultarElementoTabla} 
+                              icon="icon-search"
+                              />
+                          </td>
+                        }
+
+    */
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -251,17 +267,7 @@ class ComponentReposoTrabajador extends React.Component{
                               </td>
                            }
                           
-                         {!reposoTrabajador.vacio &&
-                          <td>
-                              <ButtonIcon 
-                              clasesBoton="btn btn-secondary btn-block" 
-                              value={reposoTrabajador.id_reposo_trabajador}
-                              id={reposoTrabajador.id_reposo_trabajador} 
-                              eventoPadre={this.consultarElementoTabla} 
-                              icon="icon-search"
-                              />
-                          </td>
-                        }
+                         
                     </tr>
                     )
                 })}

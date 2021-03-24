@@ -58,8 +58,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
             fecha_hasta_entrega_reposo_trabajador:"",
             estatu_entrega_reposo:"P",
             //  P -> en espera
-            //  E -> en espera
-            //  N -> en espera
+            //  E -> entregado
+            //  N -> no entregado
             // --------
             diasParaEntregarReposo:15,
             diasNoAviles:0,
@@ -72,6 +72,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
             listaDeReposos:{},
             listaDeCams:{},
             listaDeAsignaciones:{},
+            estadoCalcula:false,
             // -----
             dias_reposo:null,
             infoCam:{},
@@ -760,10 +761,11 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 total_dias_no_aviles_reposo_trabajador:diasNoAviles,
                 diasNoAviles
             })
+            this.setState({estadoCalcula:true})
         }
-        else{
-            alert("por favor selecione un reposo")
-        }
+        // else{
+        //     alert("por favor selecione un reposo")
+        // }
     }
 
     validarSelectNull(valorSelect){
@@ -831,6 +833,31 @@ class ComponetReposoTrabajadorForm extends React.Component{
         return estado
     }
 
+    validarDiasReposo(){
+        let estado=false
+        let $diasReposo=document.getElementById("total_dias_reposo_trabajador")
+        let msj_total_dias_reposo_trabajador=JSON.parse(JSON.stringify(this.state.msj_total_dias_reposo_trabajador))
+        if($diasReposo.value!=""){
+            if(parseInt($diasReposo.value)>0){
+                estado=true
+                msj_total_dias_reposo_trabajador.mensaje="";
+                msj_total_dias_reposo_trabajador.color_texto="rojo";
+                this.setState({msj_total_dias_reposo_trabajador});
+            }
+            else{
+                msj_total_dias_reposo_trabajador.mensaje="tiene que ser mayor a 0";
+                msj_total_dias_reposo_trabajador.color_texto="rojo";
+                this.setState({msj_total_dias_reposo_trabajador});
+            }
+        }
+        else{
+            msj_total_dias_reposo_trabajador.mensaje="esta campo no puede estar vacio";
+            msj_total_dias_reposo_trabajador.color_texto="rojo";
+            this.setState({msj_total_dias_reposo_trabajador});
+        }
+        return estado
+    }
+
     validarFormulario(){
         let estado=false
         let validacionCedulaTrabajador=this.validarSelectNull("cedula")
@@ -839,7 +866,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
         let validacionAsignacion=this.validarSelectNull("asignacion_medico_especialidad")
         let validacionFechaDesde=this.validarFechaDesde()
         let validacionDetalle=this.validarDetalleDelReposo()
-        if(validacionCedulaTrabajador && validacionReposo && validacionCam && validacionAsignacion && validacionFechaDesde && validacionDetalle){
+        let validacionDiasReposo=this.validarDiasReposo()
+        if(validacionDiasReposo && validacionCedulaTrabajador && validacionReposo && validacionCam && validacionAsignacion && validacionFechaDesde && validacionDetalle){
             estado =true
         }
         return estado
@@ -862,61 +890,67 @@ class ComponetReposoTrabajadorForm extends React.Component{
             datos.reposo_trabajador["fecha_hasta_reposo_trabajador"]=Moment(this.state.fecha_hasta_reposo_trabajador).format("YYYY-MM-DD")
             console.log("datos que se enviaran al servidor =>>> ",datos)
 
-            // if(operacion==="registrar"){
-            //     // alert("registrando")
-            //     axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
-            //     .then(respuesta => {
-            //         let json=JSON.parse(JSON.stringify(respuesta.data))
-            //         console.log("repuesta =>>> ",json)
-            //         if(json.estado_peticion==="200"){
-            //             alerta.estado=true
-            //             alerta.color="success"
-            //             alerta.mensaje=json.mensaje
-            //             this.setState({alerta})
-            //         }
-            //         else{
-            //             alerta.estado=true
-            //             alerta.color="danger"
-            //             alerta.mensaje=json.mensaje
-            //             this.setState({alerta})
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error)
-            //         alerta.estado=true
-            //         alerta.color="danger"
-            //         alerta.mensaje="error al conectar con el servidor"
-            //         this.setState({alerta})
-            //     })
-            // }
-            // else if(operacion==="actualizar"){
-            //     // alert("actualizando")
-            //     let {id} = this.props.match.params
-            //     axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
-            //     .then(respuesta => {
-            //         let json=JSON.parse(JSON.stringify(respuesta.data))
-            //         console.log("repuesta =>>> ",json)
-            //         if(json.estado_peticion==="200"){
-            //             alerta.estado=true
-            //             alerta.color="success"
-            //             alerta.mensaje=json.mensaje
-            //             this.setState({alerta})
-            //         }
-            //         else{
-            //             alerta.estado=true
-            //             alerta.color="danger"
-            //             alerta.mensaje=json.mensaje
-            //             this.setState({alerta})
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.log(error)
-            //         alerta.estado=true
-            //         alerta.color="danger"
-            //         alerta.mensaje="error al conectar con el servidor"
-            //         this.setState({alerta})
-            //     })
-            // }
+            if(this.state.estadoCalcula===true){
+                // alert("si")
+                if(operacion==="registrar"){
+                    alert("registrando")
+                    axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
+                    .then(respuesta => {
+                        let json=JSON.parse(JSON.stringify(respuesta.data))
+                        console.log("repuesta =>>> ",json)
+                        if(json.estado_peticion==="200"){
+                            alerta.estado=true
+                            alerta.color="success"
+                            alerta.mensaje=json.mensaje
+                            this.setState({alerta})
+                        }
+                        else{
+                            alerta.estado=true
+                            alerta.color="danger"
+                            alerta.mensaje=json.mensaje
+                            this.setState({alerta})
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        alerta.estado=true
+                        alerta.color="danger"
+                        alerta.mensaje="error al conectar con el servidor"
+                        this.setState({alerta})
+                    })
+                }
+                else if(operacion==="actualizar"){
+                    alert("actualizando")
+                    // let {id} = this.props.match.params
+                    // axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
+                    // .then(respuesta => {
+                    //     let json=JSON.parse(JSON.stringify(respuesta.data))
+                    //     console.log("repuesta =>>> ",json)
+                    //     if(json.estado_peticion==="200"){
+                    //         alerta.estado=true
+                    //         alerta.color="success"
+                    //         alerta.mensaje=json.mensaje
+                    //         this.setState({alerta})
+                    //     }
+                    //     else{
+                    //         alerta.estado=true
+                    //         alerta.color="danger"
+                    //         alerta.mensaje=json.mensaje
+                    //         this.setState({alerta})
+                    //     }
+                    // })
+                    // .catch(error => {
+                    //     console.log(error)
+                    //     alerta.estado=true
+                    //     alerta.color="danger"
+                    //     alerta.mensaje="error al conectar con el servidor"
+                    //     this.setState({alerta})
+                    // })
+                }
+            }
+            else{
+                alert("porfavor calcula los dias no aviles")
+            }
 
         }
     }
@@ -950,6 +984,16 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.cambiarEstado(a)
             }
         }
+        // if(input.value!=""){
+        //     if(this.state.fecha_desde_reposo_trabajador!=""){
+        //         let a={
+        //             target:{
+        //                 value:this.state.fecha_desde_reposo_trabajador
+        //             }
+        //         }
+        //         this.mostrarFechaHasta(a)
+        //     }
+        // }
     }
 
     campoDiasNoAvilesReposo(a){
@@ -964,6 +1008,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.cambiarEstado(a)
             }
         }
+        this.setState({estadoCalcula:false})
         // if(input.value!==""){
         //     if(this.state.fecha_desde_reposo_trabajador!==""){
         //         let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
@@ -1009,53 +1054,56 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
     calcularDiasNoAviles(){
         // let numeroDiasNoAviles=this.state.total_dias_no_aviles_reposo_trabajador
-        for(let contador=0;contador<2;contador++){
-            // this.setState({total_dias_no_aviles_reposo_trabajador:numeroDiasNoAviles})
-            if(this.state.total_dias_no_aviles_reposo_trabajador!==""){
-                if(this.state.fecha_desde_reposo_trabajador!==""){
-                    let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
-                    let suma=this.state.diasParaEntregarReposo
-                    let diasNoAvilesUsuario=((parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles>0)?parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles:0)
-                    console.clear()
-                    let diasNoAviles=0
-                    let diasNoAvilesAgregados=0
-                    let cont=0
-                    // let n=0
-                    while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
-                        if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
+        // for(let contador=0;contador<2;contador++){
+        //     // this.setState({total_dias_no_aviles_reposo_trabajador:numeroDiasNoAviles})
+            
+        // }
+        if(this.state.total_dias_no_aviles_reposo_trabajador!==""){
+            if(this.state.fecha_desde_reposo_trabajador!==""){
+                let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
+                let suma=this.state.diasParaEntregarReposo
+                let diasNoAvilesUsuario=((parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles>0)?parseInt(this.state.total_dias_no_aviles_reposo_trabajador)-this.state.diasNoAviles:0)
+                console.clear()
+                let diasNoAviles=0
+                let diasNoAvilesAgregados=0
+                let cont=0
+                // let n=0
+                while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
+                    if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
+                        fecha.add(1,"days");
+                        diasNoAviles++
+                    }
+                    else{
+                        if(diasNoAvilesUsuario>0){
+                            diasNoAvilesUsuario--
+                            // diasNoAviles++
+                            diasNoAvilesAgregados++
                             fecha.add(1,"days");
-                            diasNoAviles++
                         }
                         else{
-                            if(diasNoAvilesUsuario>0){
-                                diasNoAvilesUsuario--
-                                // diasNoAviles++
-                                diasNoAvilesAgregados++
-                                fecha.add(1,"days");
-                            }
-                            else{
-                                cont++
-                                fecha.add(1,"days");
-                            }
+                            cont++
+                            fecha.add(1,"days");
                         }
-                        // n++
                     }
-                    // console.log(n)
-                    console.log(cont)
-                    console.log(diasNoAviles)
-                    console.log(diasNoAvilesAgregados)
-                    console.log(diasNoAviles+diasNoAvilesAgregados)
-                    let sumaDiasNoAviles=diasNoAviles+diasNoAvilesAgregados
-                    this.setState({
-                        total_dias_no_aviles_reposo_trabajador:sumaDiasNoAviles,
-                        diasNoAviles
-                    })
-                    this.setState({
-                        fecha_hasta_entrega_reposo_trabajador:fecha,
-                        // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
-                    })
+                    // n++
                 }
+                // console.log(n)
+                console.log(cont)
+                console.log(diasNoAviles)
+                console.log(diasNoAvilesAgregados)
+                console.log(diasNoAviles+diasNoAvilesAgregados)
+                let sumaDiasNoAviles=diasNoAviles+diasNoAvilesAgregados
+                this.setState({
+                    total_dias_no_aviles_reposo_trabajador:sumaDiasNoAviles,
+                    diasNoAviles
+                })
+                this.setState({
+                    fecha_hasta_entrega_reposo_trabajador:fecha,
+                    // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
+                })
+                this.setState({estadoCalcula:true})
             }
+
         }
     }
 
@@ -1263,7 +1311,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             obligatorio="si"
-                            mensaje={this.state.msj_total_dias_reposo_trabajador}
+                            mensaje={this.state.msj_total_dias_no_aviles_reposo_trabajador}
                             nombreCampo="Dias no aviles:"
                             activo="si"
                             type="text"

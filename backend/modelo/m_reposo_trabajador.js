@@ -13,6 +13,12 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         this.descripcion_reposo_trabajador=""
         this.id_cam=""
         this.id_asignacion_medico_especialidad=""
+        this.total_dias_reposo_trabajador=""
+        this.total_dias_no_aviles_reposo_trabajador=""
+        this.cantidad_dias_entrega_reposo_trabajador=""
+        this.fecha_desde_entrega_reposo_trabajador=""
+        this.fecha_hasta_entrega_reposo_trabajador=""
+        this.estatu_entrega_reposo=""
     }
 
     setDatos(reposo_trabajador){
@@ -25,6 +31,12 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         this.descripcion_reposo_trabajador=reposo_trabajador.descripcion_reposo_trabajador
         this.id_cam=reposo_trabajador.id_cam
         this.id_asignacion_medico_especialidad=reposo_trabajador.id_asignacion_medico_especialidad
+        this.total_dias_reposo_trabajador=reposo_trabajador.total_dias_reposo_trabajador
+        this.total_dias_no_aviles_reposo_trabajador=reposo_trabajador.total_dias_no_aviles_reposo_trabajador
+        this.cantidad_dias_entrega_reposo_trabajador=reposo_trabajador.cantidad_dias_entrega_reposo_trabajador
+        this.fecha_desde_entrega_reposo_trabajador=reposo_trabajador.fecha_desde_entrega_reposo_trabajador
+        this.fecha_hasta_entrega_reposo_trabajador=reposo_trabajador.fecha_hasta_entrega_reposo_trabajador
+        this.estatu_entrega_reposo=reposo_trabajador.estatu_entrega_reposo
     }
 
     setIdReposoTrabajador(id){
@@ -86,7 +98,39 @@ class ReposoTrabajadorModelo extends DriverPostgre {
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO treposotrabajador(id_reposo_trabajador,id_cedula,id_reposo,fecha_desde_reposo_trabajador,fecha_hasta_reposo_trabajador,estatu_reposo_trabajador,descripcion_reposo_trabajador,id_cam,id_asignacion_medico_especialidad) VALUES('${this.id_reposo_trabajador}','${this.id_cedula}','${this.id_reposo}','${this.fecha_desde_reposo_trabajador}','${this.fecha_hasta_reposo_trabajador}','${this.estatu_reposo_trabajador}','${this.descripcion_reposo_trabajador}',${this.id_cam},'${this.id_asignacion_medico_especialidad}');  `
+        const SQL=`INSERT INTO treposotrabajador(
+            id_reposo_trabajador,
+            id_cedula,
+            id_reposo,
+            fecha_desde_reposo_trabajador,
+            fecha_hasta_reposo_trabajador,
+            estatu_reposo_trabajador,
+            descripcion_reposo_trabajador,
+            id_cam,
+            id_asignacion_medico_especialidad,
+            total_dias_reposo_trabajador,
+            total_dias_no_aviles_reposo_trabajador,
+            cantidad_dias_entrega_reposo_trabajador,
+            fecha_desde_entrega_reposo_trabajador,
+            fecha_hasta_entrega_reposo_trabajador,
+            estatu_entrega_reposo
+            ) VALUES(
+                '${this.id_reposo_trabajador}',
+                '${this.id_cedula}',
+                '${this.id_reposo}',
+                '${this.fecha_desde_reposo_trabajador}',
+                '${this.fecha_hasta_reposo_trabajador}',
+                '${this.estatu_reposo_trabajador}',
+                '${this.descripcion_reposo_trabajador}',
+                ${this.id_cam},
+                '${this.id_asignacion_medico_especialidad}',
+                '${this.total_dias_reposo_trabajador}',
+                '${this.total_dias_no_aviles_reposo_trabajador}',
+                '${this.cantidad_dias_entrega_reposo_trabajador}',
+                '${this.fecha_desde_entrega_reposo_trabajador}',
+                '${this.fecha_hasta_entrega_reposo_trabajador}',
+                '${this.estatu_entrega_reposo}'
+                );`
         this.query(SQL)
     }
 

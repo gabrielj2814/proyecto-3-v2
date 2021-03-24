@@ -24,6 +24,7 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
     var respuesta_api={mensaje:"",estado_peticion:""}
     const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
     const {reposo_trabajador,token} = req.body
+    console.log(reposo_trabajador)
     reposo_trabajador_modelo.setDatos(reposo_trabajador)
     const reposo_trabajador_result=await reposo_trabajador_modelo.consultarModelo()
     if(!ReposoTrabajadorControlador.verificarExistencia(reposo_trabajador_result)){
