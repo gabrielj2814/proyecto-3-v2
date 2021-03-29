@@ -355,6 +355,13 @@ PermisoTrabajadorControlador.verificarExistencia= (result) => {
 }
 
 //consultarPermisoTrabajadorXCedulaActivolModelo
+PermisoTrabajadorControlador.tumbarPermisoPorReposo=async  (permiso) => {
+    console.log(permiso)
+    let Permsio=new PermisoTrabajadorModelo()
+    Permsio.set_datos(permiso.rows[0])
+    return await Permsio.tumbarPermisoPorReposo()
+}
+
 PermisoTrabajadorControlador.consultarPermisosActivos=async () => {
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     const permiso_result=await PERMISOTRABAJADOR.consultarTodosActivoModelo()

@@ -144,6 +144,12 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         //console.log(SQL)
         return await this.query(SQL)
     }
+
+    async tumbarPermisoPorReposo(){
+        const SQL=`UPDATE tpermisotrabajador SET estatu_permiso_trabajador='C' WHERE  id_permiso_trabajador='${this.id_permiso_trabajador}'`
+        //console.log(SQL)
+        return await this.query(SQL)
+    }
 }
 
 module.exports = PermisoTrabajadorModelo

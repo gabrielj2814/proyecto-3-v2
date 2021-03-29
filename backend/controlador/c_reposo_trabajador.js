@@ -47,11 +47,23 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                                 // res.end()
                             }
                             else{
-                                respuesta_api.mensaje=`error al registrar, el trabajador tiene un permiso activo por ende no puede registrar este reposo`
-                                respuesta_api.estado_peticion="404"
-                                res.writeHead(200,{"Content-Type":"application/json"})
-                                res.write(JSON.stringify(respuesta_api))
-                                res.end()
+                                // -------
+                                let result_permiso=await PermisoTrabajadorControlador.tumbarPermisoPorReposo(permiso_trabajador_result)
+                                if(result_permiso.rowCount===1){
+                                    reposo_trabajador_modelo.registrarModelo()
+                                    respuesta_api.mensaje="registro completado"
+                                    respuesta_api.estado_peticion="200"
+                                    req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","treposotrabajador",reposo_trabajador.id_reposo_trabajador)
+                                    next()
+                                    
+                                }
+                                else{
+                                    respuesta_api.mensaje=`no se pudo registrar el reposo`
+                                    respuesta_api.estado_peticion="404"
+                                    res.writeHead(200,{"Content-Type":"application/json"})
+                                    res.write(JSON.stringify(respuesta_api))
+                                    res.end()
+                                }
                             }
                         }
                         else{
