@@ -52,10 +52,6 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         this.id_cedula=cedula
     }
 
-    setIdReposoTrabajador(id){
-        this.id_reposo_trabajador=id
-    }
-
     async consultarRepososActivos(){
         const SQL=`SELECT * FROM treposotrabajador WHERE estatu_reposo_trabajador='1';`
         return await this.query(SQL)
@@ -144,6 +140,11 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         const SQL=`UPDATE treposotrabajador SET estatu_reposo_trabajador='0' WHERE id_reposo_trabajador='${this.id_reposo_trabajador}' AND estatu_reposo_trabajador='1';`
         this.query(SQL)
         // estatu_reposo_trabajador='${this.estatu_reposo_trabajador}'
+    }
+
+    async actualizarEstadoEntregaReposo(id,estadoEntrega){
+        const SQL=`UPDATE treposotrabajador SET estatu_entrega_reposo='${estadoEntrega}' WHERE id_reposo_trabajador='${id}'`
+        return await this.query(SQL)
     }
 
     async consultarTodosRepososFechaHastaModelo(fecha){

@@ -984,16 +984,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.cambiarEstado(a)
             }
         }
-        // if(input.value!=""){
-        //     if(this.state.fecha_desde_reposo_trabajador!=""){
-        //         let a={
-        //             target:{
-        //                 value:this.state.fecha_desde_reposo_trabajador
-        //             }
-        //         }
-        //         this.mostrarFechaHasta(a)
-        //     }
-        // }
     }
 
     campoDiasNoAvilesReposo(a){
@@ -1009,55 +999,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
             }
         }
         this.setState({estadoCalcula:false})
-        // if(input.value!==""){
-        //     if(this.state.fecha_desde_reposo_trabajador!==""){
-        //         let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")
-        //         let suma=this.state.diasParaEntregarReposo
-        //         let diasNoAvilesUsuario=((parseInt(input.value)-this.state.diasNoAviles>0)?parseInt(input.value)-this.state.diasNoAviles:0)
-        //         console.clear()
-        //         let diasNoAviles=0
-        //         let cont=0
-        //         let n=0
-        //         while(cont<suma || (fecha.format("dd")==="Su" || fecha.format("dd")==="Sa")){
-        //             if(fecha.format("dd")==="Su" || fecha.format("dd")==="Sa"){
-        //                 fecha.add(1,"days");
-        //                 diasNoAviles++
-        //             }
-        //             else{
-        //                 if(diasNoAvilesUsuario>0){
-        //                     diasNoAvilesUsuario--
-        //                     diasNoAviles++
-        //                     fecha.add(1,"days");
-        //                 }
-        //                 else{
-        //                     cont++
-        //                     fecha.add(1,"days");
-        //                 }
-        //             }
-        //             n++
-        //         }
-        //         console.log(n)
-        //         console.log(cont)
-        //         console.log(diasNoAviles)
-        //         document.getElementById("total_dias_no_aviles_reposo_trabajador").removeAttribute("disabled")
-        //         this.setState({
-        //             total_dias_no_aviles_reposo_trabajador:diasNoAviles,
-        //         })
-        //         this.setState({
-        //             fecha_hasta_entrega_reposo_trabajador:fecha,
-        //             // total_dias_no_aviles_reposo_trabajador:diasNoAviles,
-        //         })
-        //     }
-        // }
         
     }
 
     calcularDiasNoAviles(){
-        // let numeroDiasNoAviles=this.state.total_dias_no_aviles_reposo_trabajador
-        // for(let contador=0;contador<2;contador++){
-        //     // this.setState({total_dias_no_aviles_reposo_trabajador:numeroDiasNoAviles})
-            
-        // }
         if(this.state.total_dias_no_aviles_reposo_trabajador!==""){
             if(this.state.fecha_desde_reposo_trabajador!==""){
                 let fecha=Moment(this.state.fecha_desde_entrega_reposo_trabajador.format("YYYY-MM-DD"),"YYYY-MM-DD")

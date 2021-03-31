@@ -16,7 +16,9 @@ router.get("/consultar-patron/:patron",ReposoTrabajadorControlador.consultarRepo
 router.get("/consultar-reposo/:desde/:hasta",ReposoTrabajadorControlador.consultarRepososXFechaControlador)
 router.get("/caducar-reposos/:hasta",ReposoTrabajadorControlador.caducarRepososControlador)
 router.get("/consultar-reposo-trabajador/:cedula/:desde/:hasta/:token",ReposoTrabajadorControlador.consultarRepososTrabajadorFechaDesdeHasta,VitacoraControlador.capturaDatos)
-// 
+//
+
+router.get("/actualizar-entrega-reposo/:id/:estado",ReposoTrabajadorControlador.actualizarEstadoEntregaReposo)
 router.get("/verifircar-vencimiento",ReposoTrabajadorControlador.verificarVencimiento)
 
 

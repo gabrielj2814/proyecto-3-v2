@@ -115,6 +115,12 @@ CREATE TABLE tpermisotrabajador(
     constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
 );
 
+-- estado del id_permis
+-- E -> espera
+-- A -> aprovado
+-- C -> culminado
+-- D -> denegado
+
 -- INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,id_permiso,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles) VALUES('pert-2020-06-18-1','27636392','per-1','2020-06-18','2020-06-20','A','1');
 
 CREATE TABLE testado(
@@ -225,6 +231,10 @@ CREATE TABLE treposotrabajador(
     constraint FK_id_cam_treposotrabajador foreign key(id_cam) references tcam(id_cam) on update cascade on delete cascade,
     constraint FK_id_asignacion_medico_especialidad_treposotrabajador foreign key(id_asignacion_medico_especialidad) references tasignacionmedicoespecialidad(id_asignacion_medico_especialidad) on update cascade on delete cascade
 );
+--  estado de entrega del reposo 
+-- estado P en espera
+-- estado E entrego
+-- estado N no entrego
 
 -- INSERT INTO treposotrabajador(id_reposo_trabajador,id_cedula,id_reposo,fecha_desde_reposo_trabajador,fecha_hasta_reposo_trabajador,estatu_reposo_trabajador,descripcion_reposo_trabajador,id_cam,id_asignacion_medico_especialidad) VALUES('repot-2020-05-25-25','27636392','repo-1','2020-06-17','2020-06-20','1','hola mundo SQL',1,'ams-2020-06-15-1');
 

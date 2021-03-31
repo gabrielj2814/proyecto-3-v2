@@ -1,4 +1,3 @@
-
 const ReposoTrabajadorModelo=require("../modelo/m_reposo_trabajador"),
 TrabajadorControlador=require("./c_trabajador"),
 CamControlador=require("./c_cam"),
@@ -340,6 +339,40 @@ ReposoTrabajadorControlador.consultarReposoActivoTrabajdor=async (req,res) => {
     else{
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify({estado:false}))
+        res.end()
+    }
+}
+
+ReposoTrabajadorControlador.actualizarEstadoEntregaReposo=async (req,res) => {
+    var respuesta_api={mensaje:"",estado_peticion:""}
+    let {id,estado} =req.params
+    let reposo=new ReposoTrabajadorModelo()
+    reposo.setIdReposoTrabajador(id)
+    let result_reposo=await reposo.consultarModelo()
+    if(result_reposo.rowCount>0){
+        if(estado==="E"){
+            reposo.actualizarEstadoEntregaReposo(id,estado)
+            reposo.actualizarEstadoEntregaReposo(id,estado)
+            respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
+            respuesta_api.estado_peticion="200"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        else if(estado==="N"){
+            reposo.actualizarEstadoEntregaReposo(id,estado)
+            respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
+            respuesta_api.estado_peticion="200"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+    }
+    else{
+        respuesta_api.mensaje=`error al cambiar el estado de entrega de este reposos ${id}, el reposo no exite`
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
         res.end()
     }
 }

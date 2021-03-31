@@ -31,6 +31,8 @@ class ComponentReposoTrabajador extends React.Component{
         this.buscarReposos=this.buscarReposos.bind(this);
         this.actualizarElementoTabla=this.actualizarElementoTabla.bind(this);
         this.consultarElementoTabla=this.consultarElementoTabla.bind(this);
+        this.reposoEntregado=this.reposoEntregado.bind(this);
+        this.reposoNoEntregado=this.reposoNoEntregado.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -233,6 +235,48 @@ class ComponentReposoTrabajador extends React.Component{
                         }
 
     */
+    async reposoEntregado(a){
+        let boton=a.target
+        // alert("Reposo entregado "+boton.id)
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"E"}`)
+        .then(repuesta => {
+            let json=repuesta.data
+            if(json.mensaje!=""){
+                var alerta=this.state.alerta
+                alerta.mensaje=json.mensaje
+                alerta.estado=true
+                alerta.color="success"
+                this.setState({
+                    alerta
+                })
+            }
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+
+    }
+
+    async reposoNoEntregado(a){
+        let boton=a.target
+        // alert("Reposo no entregado "+boton.id)
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"N"}`)
+        .then(repuesta => {
+            let json=repuesta.data
+            if(json.mensaje!=""){
+                var alerta=this.state.alerta
+                alerta.mensaje=json.mensaje
+                alerta.estado=true
+                alerta.color="success"
+                this.setState({
+                    alerta
+                })
+            }
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+    }
 
     render(){
         const jsx_tabla_encabezado=(
@@ -255,6 +299,28 @@ class ComponentReposoTrabajador extends React.Component{
                             <td>{(reposoTrabajador.id_cedula==="vacio")?"vacio":this.state.trabajadores[reposoTrabajador.id_cedula].nombres} {(reposoTrabajador.id_cedula==="vacio")?"":this.state.trabajadores[reposoTrabajador.id_cedula].apellidos}</td>
                             <td>{(reposoTrabajador.id_reposo==="vacio")?"vacio":this.state.reposos[reposoTrabajador.id_reposo].nombre_reposo}</td>
                             <td>{(reposoTrabajador.estatu_reposo_trabajador==="vacio")?"vacio":(reposoTrabajador.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</td>
+                           {!reposoTrabajador.vacio &&
+                              <td>
+                                  <ButtonIcon 
+                                  clasesBoton="btn btn-success btn-block" 
+                                  value={reposoTrabajador.id_reposo_trabajador} 
+                                  id={reposoTrabajador.id_reposo_trabajador}
+                                  eventoPadre={this.reposoEntregado} 
+                                  icon="icon-checkmark"
+                                  />
+                              </td>
+                           }
+                           {!reposoTrabajador.vacio &&
+                              <td>
+                                  <ButtonIcon 
+                                  clasesBoton="btn btn-danger btn-block" 
+                                  value={reposoTrabajador.id_reposo_trabajador} 
+                                  id={reposoTrabajador.id_reposo_trabajador}
+                                  eventoPadre={this.reposoNoEntregado} 
+                                  icon="icon-cross"
+                                  />
+                              </td>
+                           }
                            {!reposoTrabajador.vacio &&
                               <td>
                                   <ButtonIcon 
