@@ -1,5 +1,5 @@
 const DriverPostgre=require("./driver_postgresql")
-
+const Moment=require("moment")
 class AsistenciaModelo extends DriverPostgre {
 
     constructor(){
@@ -47,7 +47,8 @@ class AsistenciaModelo extends DriverPostgre {
     }
 
     registrarModelo(){
-        const SQL=`INSERT INTO tasistencia(id_asistencia,id_cedula,horario_entrada_asistencia,horario_salida_asistencia,estatu_asistencia,estatu_cumplimiento_horario) VALUES('${this.id_asistencia}','${this.id_cedula}','${this.horario_entrada_asistencia}','${this.horario_salida_asistencia}','${this.estatu_asistencia}','${this.estatu_cumplimiento_horario}');`
+        let fecha_asistencia=Moment()
+        const SQL=`INSERT INTO tasistencia(id_asistencia,id_cedula,horario_entrada_asistencia,horario_salida_asistencia,estatu_asistencia,estatu_cumplimiento_horario,fecha_asistencia) VALUES('${this.id_asistencia}','${this.id_cedula}','${this.horario_entrada_asistencia}','${this.horario_salida_asistencia}','${this.estatu_asistencia}','${this.estatu_cumplimiento_horario}','${fecha_asistencia.format("YYYY-MM-DD")}');`
         this.query(SQL)
     }
 
@@ -58,6 +59,12 @@ class AsistenciaModelo extends DriverPostgre {
 
     async asignarPermisoRetiroAsistenciaTrabajador(fecha,cedula,idPermiso,horaSalida){
         const SQL=`UPDATE tasistencia SET id_permiso_trabajador='${idPermiso}',horario_salida_asistencia='${horaSalida}' WHERE id_cedula='${cedula}' AND id_asistencia LIKE '%${fecha}%' AND horario_salida_asistencia='--:--AM'`
+        return await this.query(SQL)
+    }
+
+    async sustituirDiasInasistenciaJRPorInasistenciaI(cedula,fechaDesde,fechaHasta){
+        // IJR
+        const SQL=`UPDATE tasistencia SET estatu_asistencia='II' WHERE id_cedula='${cedula}' AND  estatu_asistencia='IJR' AND (fecha_asistencia BETWEEN '${fechaDesde}' AND '${fechaHasta}') ;`
         return await this.query(SQL)
     }
 }

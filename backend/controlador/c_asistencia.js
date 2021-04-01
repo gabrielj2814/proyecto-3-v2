@@ -297,6 +297,11 @@ AsistenciaControlador.asignarPermisoRetiroAsistencia= async (fecha,cedula,idPerm
     
 }
 
+AsistenciaControlador.sustituirDiasInasistenciaJRPorInasistenciaI = async (reposo) => {
+    let asistencia=new AsistenciaModelo()
+    return await asistencia.sustituirDiasInasistenciaJRPorInasistenciaI(reposo.id_cedula,reposo.fecha_desde_reposo_trabajador,reposo.fecha_hasta_reposo_trabajador)
+}
+
 module.exports= AsistenciaControlador
 
 // const AsistenciaModelo=require("../modelo/m_asistencia"),

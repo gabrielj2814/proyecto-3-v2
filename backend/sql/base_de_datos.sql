@@ -242,6 +242,7 @@ CREATE TABLE treposotrabajador(
 CREATE TABLE  tasistencia(
     id_asistencia character varying(17) NOT NULL,
     id_cedula character varying(8) NOT NULL,
+    fecha_asistencia DATE NOT NULL,
     horario_entrada_asistencia character varying(7) NOT NULL,
     horario_salida_asistencia character varying(7) NOT NULL,
     estatu_asistencia character varying(3) NOT NULL,

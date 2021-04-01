@@ -3,6 +3,7 @@ TrabajadorControlador=require("./c_trabajador"),
 CamControlador=require("./c_cam"),
 AsignacionMedicoEspecialidadControlador=require("./c_asignacion_medico_especialidad"),
 ReposoControlador=require("./c_reposo"),
+AsistenciaControlador=require("../controlador/c_asistencia"),
 Moment=require("moment"),
 VitacoraControlador=require("./c_vitacora")
 
@@ -352,7 +353,6 @@ ReposoTrabajadorControlador.actualizarEstadoEntregaReposo=async (req,res) => {
     if(result_reposo.rowCount>0){
         if(estado==="E"){
             reposo.actualizarEstadoEntregaReposo(id,estado)
-            reposo.actualizarEstadoEntregaReposo(id,estado)
             respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
             respuesta_api.estado_peticion="200"
             res.writeHead(200,{"Content-Type":"application/json"})
@@ -360,12 +360,17 @@ ReposoTrabajadorControlador.actualizarEstadoEntregaReposo=async (req,res) => {
             res.end()
         }
         else if(estado==="N"){
-            reposo.actualizarEstadoEntregaReposo(id,estado)
-            respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
-            respuesta_api.estado_peticion="200"
-            res.writeHead(200,{"Content-Type":"application/json"})
-            res.write(JSON.stringify(respuesta_api))
-            res.end()
+            console.log(result_reposo.rows[0])
+            let result_reposo_actualizado=await reposo.actualizarEstadoEntregaReposo(id,estado)
+            if(result_reposo_actualizado.rowCount>0){
+                let asistencia_result=await AsistenciaControlador.sustituirDiasInasistenciaJRPorInasistenciaI(result_reposo_actualizado.rows[0])
+                respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
+                respuesta_api.estado_peticion="200"
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
+            }
+            
         }
     }
     else{
