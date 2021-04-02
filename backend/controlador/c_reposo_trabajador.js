@@ -3,7 +3,6 @@ TrabajadorControlador=require("./c_trabajador"),
 CamControlador=require("./c_cam"),
 AsignacionMedicoEspecialidadControlador=require("./c_asignacion_medico_especialidad"),
 ReposoControlador=require("./c_reposo"),
-AsistenciaControlador=require("../controlador/c_asistencia"),
 Moment=require("moment"),
 VitacoraControlador=require("./c_vitacora")
 
@@ -345,6 +344,7 @@ ReposoTrabajadorControlador.consultarReposoActivoTrabajdor=async (req,res) => {
 }
 
 ReposoTrabajadorControlador.actualizarEstadoEntregaReposo=async (req,res) => {
+    let AsistenciaControlador=require("../controlador/c_asistencia")
     var respuesta_api={mensaje:"",estado_peticion:""}
     let {id,estado} =req.params
     let reposo=new ReposoTrabajadorModelo()
@@ -360,10 +360,10 @@ ReposoTrabajadorControlador.actualizarEstadoEntregaReposo=async (req,res) => {
             res.end()
         }
         else if(estado==="N"){
-            console.log(result_reposo.rows[0])
+            // console.log(result_reposo.rows[0])
             let result_reposo_actualizado=await reposo.actualizarEstadoEntregaReposo(id,estado)
             if(result_reposo_actualizado.rowCount>0){
-                let asistencia_result=await AsistenciaControlador.sustituirDiasInasistenciaJRPorInasistenciaI(result_reposo_actualizado.rows[0])
+                let asistencia_result=await AsistenciaControlador.sustituirDiasInasistenciaJRPorInasistenciaI(result_reposo.rows[0])
                 respuesta_api.mensaje=`el estado de la entrega del reposo a sido cambiado de forma exitosa`
                 respuesta_api.estado_peticion="200"
                 res.writeHead(200,{"Content-Type":"application/json"})

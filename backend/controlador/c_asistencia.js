@@ -299,7 +299,7 @@ AsistenciaControlador.asignarPermisoRetiroAsistencia= async (fecha,cedula,idPerm
 
 AsistenciaControlador.sustituirDiasInasistenciaJRPorInasistenciaI = async (reposo) => {
     let asistencia=new AsistenciaModelo()
-    return await asistencia.sustituirDiasInasistenciaJRPorInasistenciaI(reposo.id_cedula,reposo.fecha_desde_reposo_trabajador,reposo.fecha_hasta_reposo_trabajador)
+    return await asistencia.sustituirDiasInasistenciaJRPorInasistenciaI(reposo.id_cedula,Moment(reposo.fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD"),Moment(reposo.fecha_hasta_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD"))
 }
 
 module.exports= AsistenciaControlador
