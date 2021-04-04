@@ -137,6 +137,8 @@ class ComponentReposoTrabajador extends React.Component{
                 id_cedula:"vacio",
                 id_reposo:"vacio",
                 estatu_reposo_trabajador:"vacio",
+                estatu_reposo_trabajador:"vacio",
+                estatu_entrega_reposo:"vacio",
                 vacio:"vacio"
             })
             return {registros:json_server_response,numeros_registros:0}
@@ -239,7 +241,7 @@ class ComponentReposoTrabajador extends React.Component{
         let boton=a.target
         // alert("Reposo entregado "+boton.id)
         await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"E"}`)
-        .then(repuesta => {
+        .then(async repuesta => {
             let json=repuesta.data
             if(json.mensaje!=""){
                 var alerta=this.state.alerta
@@ -249,6 +251,7 @@ class ComponentReposoTrabajador extends React.Component{
                 this.setState({
                     alerta
                 })
+                await this.actualizarTabla()
             }
         })
         .catch(error => {
@@ -261,7 +264,7 @@ class ComponentReposoTrabajador extends React.Component{
         let boton=a.target
         // alert("Reposo no entregado "+boton.id)
         await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"N"}`)
-        .then(repuesta => {
+        .then(async repuesta => {
             let json=repuesta.data
             if(json.mensaje!=""){
                 var alerta=this.state.alerta
@@ -271,11 +274,42 @@ class ComponentReposoTrabajador extends React.Component{
                 this.setState({
                     alerta
                 })
+                await this.actualizarTabla()
+                
             }
         })
         .catch(error => {
             console.log("error al conectar con el servidor")
         })
+    }
+
+    async actualizarTabla(){
+        let listaDeTrabajadores=await this.consultarTodosTrabajadores();
+        let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
+        let trabajadores={}
+        for(let trabajador of listaDetrabajadoresActivos){
+            trabajadores[trabajador.id_cedula]=trabajador
+        }
+        // reposos
+        let listaDeTodosLosReposos=await this.consultarTodosReposo()
+        let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
+        let reposos={}
+        for(let reposo of listaDeRepososActivos){
+            reposos[reposo.id_reposo]=reposo
+        }
+
+        let fechaDesde=Moment(new Date()).format("YYYY-MM-DD")
+        let fechaHasta=Moment(new Date()).format("YYYY-MM-DD")
+        this.setState({
+            fecha_desde_reposo_trabajador:fechaDesde,
+            fecha_hasta_reposo_trabajador:fechaHasta,
+            reposos,
+            trabajadores
+        })
+        let datosResposos=await this.consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta)
+        console.log("datos reposos =>>> ",datosResposos)
+        let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
+        this.setState(datosTabla)
     }
 
     render(){
@@ -299,7 +333,19 @@ class ComponentReposoTrabajador extends React.Component{
                             <td>{(reposoTrabajador.id_cedula==="vacio")?"vacio":this.state.trabajadores[reposoTrabajador.id_cedula].nombres} {(reposoTrabajador.id_cedula==="vacio")?"":this.state.trabajadores[reposoTrabajador.id_cedula].apellidos}</td>
                             <td>{(reposoTrabajador.id_reposo==="vacio")?"vacio":this.state.reposos[reposoTrabajador.id_reposo].nombre_reposo}</td>
                             <td>{(reposoTrabajador.estatu_reposo_trabajador==="vacio")?"vacio":(reposoTrabajador.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</td>
-                           {!reposoTrabajador.vacio &&
+                            
+                            {reposoTrabajador.estatu_entrega_reposo==="N" &&
+                              <td>
+                                  <button className="btn btn-danger btn-block">No fue entregado</button>
+                              </td>
+                           }
+                            {reposoTrabajador.estatu_entrega_reposo==="E" &&
+                              <td>
+                                  <button className="btn btn-success btn-block">Entregado</button>
+                              </td>
+                           }
+                           
+                           {reposoTrabajador.estatu_entrega_reposo==="P" &&
                               <td>
                                   <ButtonIcon 
                                   clasesBoton="btn btn-success btn-block" 
@@ -310,7 +356,7 @@ class ComponentReposoTrabajador extends React.Component{
                                   />
                               </td>
                            }
-                           {!reposoTrabajador.vacio &&
+                           {reposoTrabajador.estatu_entrega_reposo==="P" &&
                               <td>
                                   <ButtonIcon 
                                   clasesBoton="btn btn-danger btn-block" 
@@ -322,7 +368,7 @@ class ComponentReposoTrabajador extends React.Component{
                               </td>
                            }
                            {!reposoTrabajador.vacio &&
-                              <td>
+                              <td colSpan="2">
                                   <ButtonIcon 
                                   clasesBoton="btn btn-warning btn-block" 
                                   value={reposoTrabajador.id_reposo_trabajador} 

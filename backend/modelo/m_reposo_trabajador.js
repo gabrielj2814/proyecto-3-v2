@@ -143,7 +143,14 @@ class ReposoTrabajadorModelo extends DriverPostgre {
     }
 
     async actualizarEstadoEntregaReposo(id,estadoEntrega){
-        const SQL=`UPDATE treposotrabajador SET estatu_entrega_reposo='${estadoEntrega}',estatu_reposo_trabajador='0' WHERE id_reposo_trabajador='${id}'`
+        let SQL=``
+        if(estadoEntrega==="E"){
+            SQL=`UPDATE treposotrabajador SET estatu_entrega_reposo='${estadoEntrega}' WHERE id_reposo_trabajador='${id}'`
+        }
+        else if(estadoEntrega==="N"){
+            
+            SQL=`UPDATE treposotrabajador SET estatu_entrega_reposo='${estadoEntrega}',estatu_reposo_trabajador='0' WHERE id_reposo_trabajador='${id}'`
+        }
         return await this.query(SQL)
     }
 

@@ -418,7 +418,7 @@ ReposoTrabajadorControlador.verificarVencimiento= async (req,res) => {
         // reposo.fecha_hasta_reposo_trabajador=Moment(reposo.fecha_hasta_reposo_trabajador,"YYYY-MM-DD")
         let fechaReposo=Moment(reposo.fecha_hasta_reposo_trabajador)
         // let fechaReposo=Moment(new Date("2021-2-1"))
-        if(!hoy.isBefore(fechaReposo)){
+        if(hoy.isAfter(fechaReposo)){
             // console.log("OK")
             info.repososCaducados.push(reposo)
             info.numeroDeRepososCaducados+= 1

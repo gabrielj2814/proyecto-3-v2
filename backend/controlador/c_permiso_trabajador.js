@@ -390,7 +390,7 @@ PermisoTrabajadorControlador.verificarVencimiento=async (req,res) => {
     for(let permiso of permisos){
         
         let fechaPermiso=Moment(permiso.fecha_hasta_permiso_trabajador)
-        if(!hoy.isBefore(fechaPermiso)){
+        if(hoy.isAfter(fechaPermiso)){
             console.log("OK")
             info.permisosCaducados.push(permiso)
             info.numeroDePermisosCaducados+= 1
