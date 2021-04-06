@@ -195,7 +195,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
             await this.consultarRepososTrabajador(id);
             document.getElementById("id_reposo").value=this.state.id_reposo;
-            
             document.getElementById("id_cam").value=this.state.id_cam;
             this.mostrarDatosCam({
                 target:{
@@ -578,7 +577,109 @@ class ComponetReposoTrabajadorForm extends React.Component{
     }
 
     async agregar(){
-        
+        this.setState({
+            modulo:"",// modulo menu
+            estado_menu:false,
+            //---------- 
+            id_reposo_trabajador:"",
+            id_cedula:"",
+            id_reposo:null,
+            fecha_desde_reposo_trabajador:"",
+            fecha_hasta_reposo_trabajador:"",
+            estatu_reposo_trabajador:"1",
+            descripcion_reposo_trabajador:"",
+            id_cam:null,
+            id_asignacion_medico_especialidad:null,
+
+            total_dias_reposo_trabajador:0,
+            total_dias_no_aviles_reposo_trabajador:0,
+            cantidad_dias_entrega_reposo_trabajador:15,
+            fecha_desde_entrega_reposo_trabajador:"",
+            fecha_hasta_entrega_reposo_trabajador:"",
+            estatu_entrega_reposo:"P",
+            //  P -> en espera
+            //  E -> entregado
+            //  N -> no entregado
+            // --------
+            diasParaEntregarReposo:15,
+            diasNoAviles:0,
+            // ---------
+            hashTrabajador:[],
+            listaDeRepososActivos:[],
+            listaDeCamsActivos:[],
+            listaDeEspecialidadActivos:[],
+            listaDeMedico:[],
+            listaDeReposos:{},
+            listaDeCams:{},
+            listaDeAsignaciones:{},
+            estadoCalcula:false,
+            // -----
+            dias_reposo:null,
+            infoCam:{},
+            id_especialidad:"",
+            // ----
+            msj_cedula:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_reposo:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_cam:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_especialidad:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_asignacion_medico_especialidad:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_descripcion_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_fecha_desde_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_total_dias_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_total_dias_no_aviles_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_fecha_desde_entrega_reposo_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            estadoBusquedaTrabajador:false,
+            alerta:{
+                color:null,
+                mensaje:null,
+                estado:false
+            }
+        })
+        let idRegistro=await this.generarId()
+        if(idRegistro!==null){
+            await this.consultarTodosTrabajadores();
+            // ----- reposo
+            await this.consultarTodosReposo();
+            // -------- cam
+            await this.consultarTodosLosCam();
+            // ------ asignaciones medico
+            await this.consultarTodasEspecialidad();
+            this.setState({
+                id_reposo_trabajador:idRegistro,
+            })
+        }
+        this.props.history.push("/dashboard/transaccion/reposo-trabajador/registrar")
+
     }
 
     mostarDias(a){
