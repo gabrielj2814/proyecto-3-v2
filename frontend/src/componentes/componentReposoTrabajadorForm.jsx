@@ -193,101 +193,26 @@ class ComponetReposoTrabajadorForm extends React.Component{
             // ------ asignaciones medico
             await this.consultarTodasEspecialidad();
 
-            await this.consultarRepososTrabajador(id)
-            // let {id}=this.props.match.params
-            // let datosReposotTrabajador=await this.consultarReposoTrabajador(id)
-            // if(datosReposotTrabajador!==null){
-            //     // console.log("datos del reposo trabajador =>>>> ",datosReposotTrabajador)
-            //     // ------ trabajadores
-            //     let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-            //     let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-            //     let listaDeTrabajadoresSelect=[]
-            //     for(let trabajador of listaDetrabajadoresActivos){
-            //         listaDeTrabajadoresSelect.push({
-            //             id:trabajador.id_cedula,
-            //             descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
-            //         })
-            //     }
-            //     // ----- reposo
-            //     let listaDeTodosLosReposos=await this.consultarTodosReposo()
-            //     let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-            //     let listaDeReposoSelect=[];
-            //     let reposoTablaHash={}
-            //     for(let reposo of listaDeRepososActivos){
-            //         listaDeReposoSelect.push({
-            //             id:reposo.id_reposo,
-            //             descripcion:reposo.nombre_reposo
-            //         })
-            //         reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
-            //     }
-            //     // -------- cam
-            //     let listaDeTodosLosCam=await this.consultarTodosLosCam()
-            //     let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-            //     let listaDeCamSelect=[]
-            //     let camTablaHash={}
-            //     for(let cam of listaDeCamActivos){
-            //         listaDeCamSelect.push({
-            //             id:cam.id_cam,
-            //             descripcion:cam.nombre_cam
-            //         })
-            //         camTablaHash[cam.id_cam]=cam
-            //     }
-            //     if(listaDeCamSelect.length!==0){
-            //         camTablaHash[datosReposotTrabajador.id_cam]["ciudad"]=await this.consultarCiudad(camTablaHash[datosReposotTrabajador.id_cam].id_ciudad)
-            //         camTablaHash[datosReposotTrabajador.id_cam]["estado"]=await this.consultarEstado(camTablaHash[datosReposotTrabajador.id_cam].ciudad.id_estado)
-            //         camTablaHash[datosReposotTrabajador.id_cam]["tipoCam"]=await this.consultarTipoCam(camTablaHash[datosReposotTrabajador.id_cam].id_tipo_cam)
-            //     }
-            //     // ------ asignaciones medico
-            //     let listaDeEspecialidades= await this.consultarTodasEspecialidad()
-            //     // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
-            //     let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
-            //     console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
-            //     let listaDeEspecialidadesSelect=[]
-            //     let asigancionTablaHash={}
-            //     for(let especialidad of listaDeEspecialidadesActivas){
-            //         listaDeEspecialidadesSelect.push({
-            //             id:especialidad.id_especialidad,
-            //             descripcion:especialidad.nombre_especialidad
-            //         })
-            //         asigancionTablaHash[especialidad.id_especialidad]=especialidad
-            //     }
-            //     if(listaDeEspecialidadesActivas.length!==0){
-            //         asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]=await this.consultarSignacionesPorEspecialidad(datosReposotTrabajador.id_especialidad)
-            //     }
-            //     let listasDeMedicosSelect=[]
-            //     if(asigancionTablaHash[datosReposotTrabajador.id_especialidad]){
-            //         for(let asignacion of asigancionTablaHash[datosReposotTrabajador.id_especialidad]["asignacion"]){
-            //             listasDeMedicosSelect.push({
-            //                 id:asignacion.id_asignacion_medico_especialidad,
-            //                 descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
-            //             })
-            //         }
-            //     }
-            //     this.setState({
-            //         id_reposo_trabajador:datosReposotTrabajador.id_reposo_trabajador,
-            //         listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
-            //         id_cedula:datosReposotTrabajador.id_cedula,
-            //         listaDeRepososActivos:listaDeReposoSelect,
-            //         id_reposo:datosReposotTrabajador.id_reposo,
-            //         listaDeReposos:reposoTablaHash,
-            //         dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[datosReposotTrabajador.id_reposo].dias,
-            //         listaDeCams:camTablaHash,
-            //         listaDeCamsActivos:listaDeCamSelect,
-            //         id_cam:datosReposotTrabajador.id_cam,
-            //         infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[datosReposotTrabajador.id_cam],
-            //         listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
-            //         id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_especialidad,
-            //         listaDeAsignaciones:asigancionTablaHash,
-            //         id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:datosReposotTrabajador.id_asignacion_medico_especialidad,
-            //         listaDeMedico:listasDeMedicosSelect,
-            //         fecha_desde_reposo_trabajador:Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("YYYY-MM-DD"),
-            //         fecha_hasta_reposo_trabajador:datosReposotTrabajador.fecha_hasta_reposo_trabajador,
-            //         descripcion_reposo_trabajador:datosReposotTrabajador.descripcion_reposo_trabajador,
-            //         estatu_reposo_trabajador:datosReposotTrabajador.estatu_reposo_trabajador
-            //     })
-            //     // document.getElementById("fecha_desde_reposo_trabajador").value=Moment(datosReposotTrabajador.fecha_desde_reposo_trabajador).format("DD-MM-YYYY")
-
-            // }
+            await this.consultarRepososTrabajador(id);
+            document.getElementById("id_reposo").value=this.state.id_reposo;
+            
+            document.getElementById("id_cam").value=this.state.id_cam;
+            this.mostrarDatosCam({
+                target:{
+                    id:"id_cam",
+                    name:"id_cam",
+                    value:this.state.id_cam
+                }
+            })
+            document.getElementById("id_especialidad").value=this.state.id_especialidad;
+            this.mostrarAsignacionMedico({
+                target:{
+                    id:"id_especialidad",
+                    name:"id_especialidad",
+                    value:this.state.id_especialidad
+                }
+            })
+            document.getElementById("id_asignacion_medico_especialidad").value=this.state.id_asignacion_medico_especialidad;
         }
 
     }
@@ -306,6 +231,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
             this.mostrarFechaHasta(
                 {
                     target:{
+                        id:"fecha_desde_reposo_trabajador",
+                        name:"fecha_desde_reposo_trabajador",
                         value:Moment(respuesta_servidor.reposo_trabajador.fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
                     }
                 }
@@ -651,100 +578,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
     }
 
     async agregar(){
-        // let idRegistro=await this.generarId()
-        // let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-        // let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-        // let listaDeTrabajadoresSelect=[]
-        // for(let trabajador of listaDetrabajadoresActivos){
-        //     listaDeTrabajadoresSelect.push({
-        //         id:trabajador.id_cedula,
-        //         descripcion:trabajador.id_cedula+" - "+trabajador.nombres+" "+trabajador.apellidos
-        //     })
-        // }
-        // // ----- reposo
-        // let listaDeTodosLosReposos=await this.consultarTodosReposo()
-        // let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-        // let listaDeReposoSelect=[];
-        // let reposoTablaHash={}
-        // for(let reposo of listaDeRepososActivos){
-        //     listaDeReposoSelect.push({
-        //         id:reposo.id_reposo,
-        //         descripcion:reposo.nombre_reposo
-        //     })
-        //     reposoTablaHash[reposo.id_reposo]={dias:reposo.dias_reposo}
-        // }
-        // // -------- cam
-        // let listaDeTodosLosCam=await this.consultarTodosLosCam()
-        // let listaDeCamActivos=listaDeTodosLosCam.filter( cam => cam.estatu_cam==="1")
-        // let listaDeCamSelect=[]
-        // let camTablaHash={}
-        // for(let cam of listaDeCamActivos){
-        //     listaDeCamSelect.push({
-        //         id:cam.id_cam,
-        //         descripcion:cam.nombre_cam
-        //     })
-        //     camTablaHash[cam.id_cam]=cam
-        // }
-        // if(listaDeCamSelect.length!==0){
-        //     camTablaHash[listaDeCamSelect[0].id]["ciudad"]=await this.consultarCiudad(camTablaHash[listaDeCamSelect[0].id].id_ciudad)
-        //     camTablaHash[listaDeCamSelect[0].id]["estado"]=await this.consultarEstado(camTablaHash[listaDeCamSelect[0].id].ciudad.id_estado)
-        //     camTablaHash[listaDeCamSelect[0].id]["tipoCam"]=await this.consultarTipoCam(camTablaHash[listaDeCamSelect[0].id].id_tipo_cam)
-        // }
-        // // ------ asignaciones medico
-        // let listaDeEspecialidades= await this.consultarTodasEspecialidad()
-        // // console.log("listas de especialidades =>>> ",listaDeEspecialidades)
-        // let listaDeEspecialidadesActivas=listaDeEspecialidades.filter(especialidad => especialidad.estatu_especialidad==="1")
-        // console.log("listas de especialidades activas =>>> ",listaDeEspecialidadesActivas)
-        // let listaDeEspecialidadesSelect=[]
-        // let asigancionTablaHash={}
-        // for(let especialidad of listaDeEspecialidadesActivas){
-        //     listaDeEspecialidadesSelect.push({
-        //         id:especialidad.id_especialidad,
-        //         descripcion:especialidad.nombre_especialidad
-        //     })
-        //     asigancionTablaHash[especialidad.id_especialidad]=especialidad
-        // }
-        // if(listaDeEspecialidadesActivas.length!==0){
-        //     asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]=await this.consultarSignacionesPorEspecialidad(listaDeEspecialidadesSelect[0].id)
-        // }
-        // let listasDeMedicosSelect=[]
-        // if(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]){
-        //     for(let asignacion of asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"]){
-        //         listasDeMedicosSelect.push({
-        //         id:asignacion.id_asignacion_medico_especialidad,
-        //         descripcion:asignacion.nombre_medico+" "+asignacion.apellido_medico
-        //         })
-        //     }
-        // }
-        // this.setState({
-        //     id_reposo_trabajador:idRegistro,
-        //     listaDeTrabajadoresActivos:listaDeTrabajadoresSelect,
-        //     id_cedula:(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id,
-        //     listaDeRepososActivos:listaDeReposoSelect,
-        //     id_reposo:(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id,
-        //     listaDeReposos:reposoTablaHash,
-        //     dias_reposo:(listaDeReposoSelect.length===0)?null:reposoTablaHash[listaDeReposoSelect[0].id].dias,
-        //     listaDeCams:camTablaHash,
-        //     listaDeCamsActivos:listaDeCamSelect,
-        //     id_cam:(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id,
-        //     infoCam:(listaDeCamSelect.length===0)?null:camTablaHash[listaDeCamSelect[0].id],
-        //     listaDeEspecialidadActivos:listaDeEspecialidadesSelect,
-        //     id_especialidad:(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id,
-        //     listaDeAsignaciones:asigancionTablaHash,
-        //     id_asignacion_medico_especialidad:(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad,
-        //     listaDeMedico:listasDeMedicosSelect,
-        //     fecha_desde_reposo_trabajador:"",
-        //     fecha_hasta_reposo_trabajador:"",
-        //     descripcion_reposo_trabajador:"",
-        //     estatu_reposo_trabajador:"1"
-        // })
-        // // console.log(asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad)
-        // document.getElementById("id_cedula").value=(listaDeTrabajadoresSelect.length===0)?null:listaDeTrabajadoresSelect[0].id
-        // document.getElementById("id_reposo").value=(listaDeReposoSelect.length===0)?null:listaDeReposoSelect[0].id
-        // document.getElementById("id_cam").value=(listaDeCamSelect.length===0)?null:listaDeCamSelect[0].id
-        // document.getElementById("id_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:listaDeEspecialidadesSelect[0].id
-        // document.getElementById("id_asignacion_medico_especialidad").value=(listaDeEspecialidadesSelect.length===0)?null:asigancionTablaHash[listaDeEspecialidadesSelect[0].id]["asignacion"][0].id_asignacion_medico_especialidad
-        // this.props.history.push("/dashboard/transaccion/reposo-trabajador/registrar")
+        
     }
 
     mostarDias(a){
@@ -948,7 +782,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
             if(this.state.estadoCalcula===true){
                 // alert("si")
                 if(operacion==="registrar"){
-                    alert("registrando")
                     axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
                     .then(respuesta => {
                         let json=JSON.parse(JSON.stringify(respuesta.data))
@@ -975,7 +808,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
                     })
                 }
                 else if(operacion==="actualizar"){
-                    alert("actualizando")
                     let {id} = this.props.match.params
                     axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
                     .then(respuesta => {
@@ -1335,7 +1167,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 Fecha Fin Entrega: {(this.state.fecha_hasta_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_entrega_reposo_trabajador).format("DD-MM-YYYY")}
                             </div>
                         </div>
-                        <div className="row justify-content-center">
+                        <div className="row justify-content-center mb-3">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
                             nombreCampoTextArea="Detalle del reposo:"
@@ -1348,6 +1180,18 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             eventoPadre={this.cambiarEstado}
                             />
                         </div>
+                        { this.props.match.params.operacion==="actualizar" &&
+                            <div className="row justify-content-center mb-3">
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Estatu del reposo: {(this.state.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</div>
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
+                            </div>
+                        }
+                        { this.props.match.params.operacion==="actualizar" &&
+                            <div className="row justify-content-center mb-3">
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">Estatu de la entrega del reposo: {(this.state.estatu_entrega_reposo==="E")?"Entregado":((this.state.estatu_entrega_reposo==="N")?"No fue entregado":"En espera")}</div>
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                            </div>
+                        }
                         <input type="hidden" id="cantidad_dias_entrega_reposo_trabajador" name="cantidad_dias_entrega_reposo_trabajador" value={this.state.cantidad_dias_entrega_reposo_trabajador}/>
                         <input type="hidden" id="estatu_entrega_reposo" name="estatu_entrega_reposo" value={this.state.estatu_entrega_reposo}/>
                         <input type="hidden" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" value={this.state.estatu_reposo_trabajador}/>
