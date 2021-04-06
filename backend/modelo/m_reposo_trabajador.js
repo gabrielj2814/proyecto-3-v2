@@ -131,7 +131,22 @@ class ReposoTrabajadorModelo extends DriverPostgre {
     }
 
     actualizarModelo(){
-        const SQL=`UPDATE treposotrabajador SET id_cedula='${this.id_cedula}',id_reposo='${this.id_reposo}',fecha_desde_reposo_trabajador='${this.fecha_desde_reposo_trabajador}',fecha_hasta_reposo_trabajador='${this.fecha_hasta_reposo_trabajador}',descripcion_reposo_trabajador='${this.descripcion_reposo_trabajador}',id_cam=${this.id_cam},id_asignacion_medico_especialidad='${this.id_asignacion_medico_especialidad}',estatu_reposo_trabajador=${this.estatu_reposo_trabajador} WHERE id_reposo_trabajador='${this.id_reposo_trabajador}' ;`
+        const SQL=`UPDATE treposotrabajador SET 
+            id_cedula='${this.id_cedula}',
+            id_reposo='${this.id_reposo}',
+            fecha_desde_reposo_trabajador='${this.fecha_desde_reposo_trabajador}',
+            fecha_hasta_reposo_trabajador='${this.fecha_hasta_reposo_trabajador}',
+            descripcion_reposo_trabajador='${this.descripcion_reposo_trabajador}',
+            id_cam=${this.id_cam},
+            id_asignacion_medico_especialidad='${this.id_asignacion_medico_especialidad}',
+            estatu_reposo_trabajador=${this.estatu_reposo_trabajador},
+            total_dias_reposo_trabajador='${this.total_dias_reposo_trabajador}',
+            total_dias_no_aviles_reposo_trabajador='${this.total_dias_no_aviles_reposo_trabajador}',
+            cantidad_dias_entrega_reposo_trabajador='${this.cantidad_dias_entrega_reposo_trabajador}',
+            fecha_desde_entrega_reposo_trabajador='${this.fecha_desde_entrega_reposo_trabajador}',
+            fecha_hasta_entrega_reposo_trabajador='${this.fecha_hasta_entrega_reposo_trabajador}',
+            estatu_entrega_reposo='${this.estatu_entrega_reposo}'
+            WHERE id_reposo_trabajador='${this.id_reposo_trabajador}' ;`
         this.query(SQL)
         // estatu_reposo_trabajador='${this.estatu_reposo_trabajador}'
     }

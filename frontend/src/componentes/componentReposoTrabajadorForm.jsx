@@ -183,7 +183,17 @@ class ComponetReposoTrabajadorForm extends React.Component{
             }
         }
         else if(operacion==="actualizar"){
-            alert("actualizando")
+            // alert("actualizando")
+            let {id} = this.props.match.params
+            await this.consultarTodosTrabajadores();
+            // ----- reposo
+            await this.consultarTodosReposo();
+            // -------- cam
+            await this.consultarTodosLosCam();
+            // ------ asignaciones medico
+            await this.consultarTodasEspecialidad();
+
+            await this.consultarRepososTrabajador(id)
             // let {id}=this.props.match.params
             // let datosReposotTrabajador=await this.consultarReposoTrabajador(id)
             // if(datosReposotTrabajador!==null){
@@ -280,6 +290,51 @@ class ComponetReposoTrabajadorForm extends React.Component{
             // }
         }
 
+    }
+
+    async consultarRepososTrabajador(id){
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            let respuesta_servidor=JSON.parse(JSON.stringify(respuesta.data))
+
+            console.log(respuesta_servidor)
+            this.setState(respuesta_servidor.reposo_trabajador)
+            this.setState({
+                fecha_desde_reposo_trabajador:Moment(respuesta_servidor.reposo_trabajador.fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+            })
+            this.mostrarFechaHasta(
+                {
+                    target:{
+                        value:Moment(respuesta_servidor.reposo_trabajador.fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+                    }
+                }
+            )
+            // if(respuesta_servidor.estado_peticion==="200"){
+            //         const id_estado=respuesta_servidor.estado.id_estado,
+            //         nombre_estado=respuesta_servidor.estado.nombre_estado,
+            //         estatu_estado=(respuesta_servidor.estado.estatu_estado==="1")?"Activo":"Inactivo"
+
+            //         this.setState({
+            //             id_estado:id_estado,
+            //             nombre_estado:nombre_estado,
+            //             estatu_estado:estatu_estado
+            //         })
+                    
+            // }
+            // else if(respuesta_servidor.estado_peticion==="404"){
+            //         mensaje.texto=respuesta_servidor.mensaje
+            //         mensaje.estado=respuesta_servidor.estado_peticion
+            //         this.props.history.push(`/dashboard/configuracion/estado${JSON.stringify(mensaje)}`)
+            // }
+
+        })
+        .catch(error=>{
+            console.log(error)
+            // mensaje.texto="No se puedo conectar con el servidor"
+            // mensaje.estado="500"
+            // this.props.history.push(`/dashboard/configuracion/estado${JSON.stringify(mensaje)}`)
+        })
     }
 
     async buscarTrabajador(a){
@@ -921,31 +976,31 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 }
                 else if(operacion==="actualizar"){
                     alert("actualizando")
-                    // let {id} = this.props.match.params
-                    // axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
-                    // .then(respuesta => {
-                    //     let json=JSON.parse(JSON.stringify(respuesta.data))
-                    //     console.log("repuesta =>>> ",json)
-                    //     if(json.estado_peticion==="200"){
-                    //         alerta.estado=true
-                    //         alerta.color="success"
-                    //         alerta.mensaje=json.mensaje
-                    //         this.setState({alerta})
-                    //     }
-                    //     else{
-                    //         alerta.estado=true
-                    //         alerta.color="danger"
-                    //         alerta.mensaje=json.mensaje
-                    //         this.setState({alerta})
-                    //     }
-                    // })
-                    // .catch(error => {
-                    //     console.log(error)
-                    //     alerta.estado=true
-                    //     alerta.color="danger"
-                    //     alerta.mensaje="error al conectar con el servidor"
-                    //     this.setState({alerta})
-                    // })
+                    let {id} = this.props.match.params
+                    axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
+                    .then(respuesta => {
+                        let json=JSON.parse(JSON.stringify(respuesta.data))
+                        console.log("repuesta =>>> ",json)
+                        if(json.estado_peticion==="200"){
+                            alerta.estado=true
+                            alerta.color="success"
+                            alerta.mensaje=json.mensaje
+                            this.setState({alerta})
+                        }
+                        else{
+                            alerta.estado=true
+                            alerta.color="danger"
+                            alerta.mensaje=json.mensaje
+                            this.setState({alerta})
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        alerta.estado=true
+                        alerta.color="danger"
+                        alerta.mensaje="error al conectar con el servidor"
+                        this.setState({alerta})
+                    })
                 }
             }
             else{
