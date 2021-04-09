@@ -48,7 +48,7 @@ PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
                         next()
                     }
                     else{
-                        respuesta_api.mensaje="al rgistrar , por que el trabajador tiene un reposo activo"
+                        respuesta_api.mensaje="al registrar , por que el trabajador tiene un reposo activo"
                         respuesta_api.estado_peticion="500"
                         res.writeHead(200,{"Content-Type":"application/json"})
                         res.write(JSON.stringify(respuesta_api))
