@@ -337,11 +337,11 @@ class ComponentSolicitarPermisoForm extends React.Component{
             var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
             var hoy=Moment(this.state.fechaServidor).format("YYYY-MM-DD")
             if(this.state.fecha_desde_permiso_trabajador!==""){
-                if(Moment(fecha_desde).isAfter(hoy)){
+                if(Moment(hoy).isSameOrBefore(fecha_desde)){
                     estado=true
                 }
                 else{
-                    this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso no puede ser antes que la de hoy"})
+                    this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso solo pueden ser apartir de hoy en adelanta"})
                 }
             }
             else{

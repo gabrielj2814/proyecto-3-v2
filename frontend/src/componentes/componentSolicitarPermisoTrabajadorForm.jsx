@@ -37,7 +37,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             id_permiso_trabajador:"",
             id_cedula:"",
             fecha_desde_permiso_trabajador:null,
-            fecha_hasta_permiso_trabajador:"",
+            fecha_hasta_permiso_trabajador:null,
             estatu_permiso_trabajador:"",
             permiso_trabajador_dias_aviles:"",
             permiso_trabajador_tipo:"",
@@ -320,11 +320,11 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             var fecha_desde=Moment(this.state.fecha_desde_permiso_trabajador).format("YYYY-MM-DD")
             var hoy=Moment(this.state.fechaServidor).format("YYYY-MM-DD")
             if(this.state.fecha_desde_permiso_trabajador!==""){
-                if(Moment(fecha_desde).isAfter(hoy)){
+                if(Moment(hoy).isSameOrBefore(fecha_desde)){
                     estado=true
                 }
                 else{
-                    this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso no puede ser antes que la de hoy"})
+                    this.setState({msj_fecha_desde_permiso_trabajador:"la fecha desde del permiso solo pueden ser apartir de hoy en adelanta"})
                 }
             }
             else{
@@ -542,7 +542,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                                 eventoPadre={this.calcularFechaHasta}
                                 />
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 aliniar-fecha-hasta">
-                                    {(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
+                                    hasta: {(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
                                 </div>
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
