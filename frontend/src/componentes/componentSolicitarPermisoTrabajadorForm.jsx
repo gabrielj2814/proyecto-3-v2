@@ -515,23 +515,13 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         <div>
                             <div className="row justify-content-center">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">nombre: {this.state.nombre_permiso}</span>
-                                </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                                     <span className="">dias: {this.state.dias_permiso}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                                     <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                                 </div>
-                            </div>
-                            <div className="row justify-content-center row mt-2">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                                     <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
-                                </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
-                                </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                                 </div>
                             </div>
                             <div className="row mt-3">

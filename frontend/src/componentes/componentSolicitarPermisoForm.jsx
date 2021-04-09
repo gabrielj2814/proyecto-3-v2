@@ -36,7 +36,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             id_permiso_trabajador:"",
             id_cedula:"",
             fecha_desde_permiso_trabajador:null,
-            fecha_hasta_permiso_trabajador:"",
+            fecha_hasta_permiso_trabajador:null,
             estatu_permiso_trabajador:"",
             permiso_trabajador_dias_aviles:"",
             permiso_trabajador_tipo:"",
@@ -468,25 +468,16 @@ class ComponentSolicitarPermisoForm extends React.Component{
                         <div>
                             <div className="row justify-content-center">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">nombre: {this.state.nombre_permiso}</span>
-                                </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                                     <span className="">dias: {this.state.dias_permiso}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                                     <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                                 </div>
-                            </div>
-                            <div className="row justify-content-center row mt-2">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                                     <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
                                 </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
-                                </div>
-                                <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                </div>
                             </div>
+                            
                             <div className="row mt-3">
                                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
                                     <span className="sub-titulo-form-solicitud-permiso">Fecha del permiso</span>
@@ -505,7 +496,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                 eventoPadre={this.calcularFechaHasta}
                                 />
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 aliniar-fecha-hasta">
-                                    {(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
+                                    hasta :{(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
                                 </div>
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
@@ -593,9 +584,6 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 <div className="row justify-content-center row mt-2">
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                         <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
-                    </div>
-                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                         <span className="">tipo de permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
