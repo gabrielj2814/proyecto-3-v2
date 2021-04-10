@@ -13,6 +13,7 @@ router.get("/verificar-inasistencias-injustificada",AsistenciaControlador.verifi
 router.get("/consultar-asistencias-trabajador/:cedula",AsistenciaControlador.consultarAsistenciasTrabajadorControlador)
 router.get("/consultar-asistencias-por-fecha/:fecha",AsistenciaControlador.consultarAsistenciasFechaControlador)
 router.get("/consultar-todas-las-asistencias",AsistenciaControlador.consultarTodasLasAsistenciasControlador)
+router.get("/consultar-asistencia-hoy",AsistenciaControlador.consultarAsistenciaHoy)
 
 
 

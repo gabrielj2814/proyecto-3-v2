@@ -280,6 +280,27 @@ AsistenciaControlador.consultarTodasLasAsistenciasControlador= async (req,res,ne
 }
 
 
+AsistenciaControlador.consultarAsistenciaHoy= async (req,res) => {
+    var respuesta_api={asistencias:[],mensaje:"",estado_peticion:""}
+    asistencia_modelo=new AsistenciaModelo()
+    let result_asistencia=await asistencia_modelo.consultarAsistenciaHoy()
+    if(result_asistencia.rowCount>0){
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        respuesta_api.asistencias=result_asistencia.rows
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        respuesta_api.mensaje="no hay ninguna asistencia el dia de hoy"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
+
 AsistenciaControlador.verificarExistencia=(result) => {
     return result.rows.length!=0
 }

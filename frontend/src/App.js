@@ -74,6 +74,7 @@ import componentHorario from './componentes/componentHorario';
 import componentHorarioFormulario from './componentes/componentHorarioFormulario';
 // ASISTENCIA
 import ComponentAsistencia from './componentes/componentAsistencia';
+import ComponentListaAsistencia from './componentes/componentListaAsistencia';
 // REPOSO TRABAJADOR 
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
 import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
@@ -163,6 +164,7 @@ function App() {
         <Route exact path="/dashboard/transaccion/permiso-trabajador/editar:id" component={ComponentEditarPermisoTrabajador}/>
 
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
+        <Route exact path="/dashboard/transaccion/asistencia/lista" component={ComponentListaAsistencia}/>
 
         <Route  path="*" component={ComponentError404}/>
         </Switch>

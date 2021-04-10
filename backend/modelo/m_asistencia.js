@@ -67,6 +67,12 @@ class AsistenciaModelo extends DriverPostgre {
         const SQL=`UPDATE tasistencia SET estatu_asistencia='II' WHERE id_cedula='${cedula}' AND  estatu_asistencia='IJR' AND (fecha_asistencia BETWEEN '${fechaDesde}' AND '${fechaHasta}') ;`
         return await this.query(SQL)
     }
+
+    async consultarAsistenciaHoy(){
+        let fechaHoy=Moment().format("YYYY-MM-DD")
+        const SQL=`SELECT * FROM tasistencia,ttrabajador WHERE  tasistencia.fecha_asistencia='${fechaHoy}' AND (tasistencia.id_cedula=ttrabajador.id_cedula);`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = AsistenciaModelo
