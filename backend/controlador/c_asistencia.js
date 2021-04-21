@@ -182,6 +182,19 @@ AsistenciaControlador.verificarInasistenciaInjustificada=async (req,res) => {
         if(!AsistenciaControlador.verificarExistencia(reposo_result) && !AsistenciaControlador.verificarExistencia(permiso_result)){
             AsistenciaControlador.registrarInasistencia(trabajador,"II")
         }
+        else{
+            let tipo=""
+            if(AsistenciaControlador.verificarExistencia(reposo_result)){
+                tipo="IJR"
+                console.log("hola")
+                
+            }
+            else if(AsistenciaControlador.verificarExistencia(permiso_result)){
+                
+                tipo="IJP"
+            }
+            AsistenciaControlador.registrarInasistencia(trabajador,tipo)
+        }
         contador++
     }
     respuesta_api.mensaje="escaneo completado"
