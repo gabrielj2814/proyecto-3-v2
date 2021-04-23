@@ -113,12 +113,12 @@ class ComponentTipoCamConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tipo_cam_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-tipo-cam-consulta">
-                            <span className="titulo-tipo-cam-consulta">Tipo CAM consultado: {this.state.nombre_tipo_cam}</span>
+                            <span className="titulo-tipo-cam-consulta">Tipo CAM Consultado: {this.state.nombre_tipo_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo Tipo CAM: </span>
+                            <span className="propiedad">Código Tipo CAM: </span>
                             <span className="valor">{this.state.id_tipo_cam}</span>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ class ComponentTipoCamConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
-                                value="actualizar"
+                                value="Actualizar"
                                 eventoPadre={this.actualizar}
                                 />
                             </div>
@@ -147,7 +147,7 @@ class ComponentTipoCamConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

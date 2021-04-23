@@ -132,10 +132,10 @@ class ComponentHorario extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                  <th>Codigo</th> 
-                  <th>descripción</th>
-                  <th>horario entrada</th>
-                  <th>horario salida</th>
+                  <th>Código</th> 
+                  <th>Descripción</th>
+                  <th>Horario Entrada</th>
+                  <th>Horario Salida</th>
                   </tr> 
             </thead>
         )
@@ -176,7 +176,7 @@ class ComponentHorario extends React.Component{
                         
                     </div>)
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo Horario"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Horario"/>
                 
 
                 <div className="row component-tabla-de-datos">
@@ -195,7 +195,7 @@ class ComponentHorario extends React.Component{
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
-                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
                     </div>

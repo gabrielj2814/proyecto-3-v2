@@ -117,7 +117,7 @@ class ComponentMedico extends React.Component {
 
     redirigirFormulario(a){
         const input = a.target;
-        if(input.value==="registrar"){
+        if(input.value==="Registrar"){
             this.props.history.push("/dashboard/configuracion/medico/registrar")
         }
     }
@@ -184,7 +184,7 @@ class ComponentMedico extends React.Component {
 		const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                    <th>Codigo</th> 
+                    <th>Código</th> 
                     <th>Nombre</th>
                 </tr> 
             </thead>
@@ -254,7 +254,7 @@ class ComponentMedico extends React.Component {
                         </div>
                       </div>
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Medico"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Médico"/>
                 
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}
@@ -268,7 +268,7 @@ class ComponentMedico extends React.Component {
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
-                          <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                          <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                         </div>
                       </div>
                     </div>

@@ -118,13 +118,13 @@ class ComponentEspecialidadConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo del Especialidad: </span>
+                            <span className="propiedad">Código del Especialidad: </span>
                             <span className="valor">{this.state.id_especialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Descripcion del Especialidad: </span>
+                            <span className="propiedad">Descripción del Especialidad: </span>
                             <span className="valor">{this.state.nombre_especialidad}</span>
                         </div>
                     </div>
@@ -139,7 +139,7 @@ class ComponentEspecialidadConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
-                                value="actualizar"
+                                value="Actualizar"
                                 eventoPadre={this.actualizar}
                                 />
                             </div>
@@ -147,7 +147,7 @@ class ComponentEspecialidadConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

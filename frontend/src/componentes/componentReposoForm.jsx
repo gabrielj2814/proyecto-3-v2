@@ -370,13 +370,13 @@ class ComponentReposoForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Reposo:"
+                            nombreCampo="Código Reposo:"
                             activo="no"
                             type="text"
                             value={this.state.id_reposo}
                             name="id_reposo"
                             id="id_reposo"
-                            placeholder="Codigo Reposo"
+                            placeholder="Código Reposo"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -398,7 +398,7 @@ class ComponentReposoForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu Reposo:"
+                            nombreCampoRadio="Estatus Reposo:"
                             name="estatu_reposo"
                             nombreLabelRadioA="Activo"
                             idRadioA="activoreposoA"
@@ -418,7 +418,7 @@ class ComponentReposoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -426,7 +426,7 @@ class ComponentReposoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -435,7 +435,7 @@ class ComponentReposoForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

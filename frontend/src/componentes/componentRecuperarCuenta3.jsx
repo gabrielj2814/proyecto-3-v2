@@ -5,7 +5,7 @@ import axios from 'axios'
 // css
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-grid.css';
-import '../css/componentLogin.css';
+import '../css/componentRecuperarCuenta.css';
 //SubComponent
 import CintilloComponent from '../subComponentes/cintilloComponent';
 import ComponentFormCampo from '../subComponentes/componentFormCampo';
@@ -157,19 +157,19 @@ class ComponentLogin extends React.Component{
 
     render(){
         return(
-            <div className="containter-fluid component_login">
-            <CintilloComponent/>
-                <div className="contenedor-icon-row-left-login" onClick={this.irAlHomePage}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left-circle icon-row-left-login" viewBox="0 0 16 16">
+            <div className="containter-fluid component_recuperar">
+            
+                <div className="contenedor-icon-row-left-recuperar" onClick={this.irAlHomePage}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left-circle icon-row-left-recuperar" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
                     </svg>
                 </div>
-                <div className="row align-items-center justify-content-center fila_login">
-                    <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 contenedor_login">
-                        <form id="form_login">
+                <div className="row align-items-center justify-content-center fila_recuperar">
+                    <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5 contenedor_recuperar">
+                        <form id="form_recuperar">
                             <div className="row">
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 titulo_formulario">
-                                    Login
+                                    Recuperar Cuenta
                                 </div>
                             </div>
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
@@ -189,49 +189,43 @@ class ComponentLogin extends React.Component{
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
                                 clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
-                                nombreCampo="Usuario"
+                                nombreCampo="Nueva contraseña"
                                 activo="si"
                                 clasesCampo="form-control"
                                 type="text"
                                 value={this.state.id_cedula}
-                                name="id_cedula"
-                                id="id_cedula"
-                                placeholder="Cédula trabajador"
+                                name="id_nueva_clave"
+                                id="id_nueva_clave"
+                                placeholder="INGRESE NUEVA CONTRASEÑA"
                                 eventoPadre={this.validarNumero}
                                 />
                             </div>
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
-                                clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7  text-center"
-                                nombreCampo={`Clave: ${this.state.clave_trabajador.length}/6`}
+                                clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
+                                nombreCampo="Confirmar contraseña"
                                 activo="si"
                                 clasesCampo="form-control"
-                                type="password"
-                                value={this.state.clave_trabajador}
-                                name="clave_trabajador"
-                                id="clave_trabajador"
-                                placeholder="Clave"
-                                eventoPadre={this.cambiarEstado}
+                                type="text"
+                                value={this.state.id_cedula}
+                                name="id_confirmar_clave "
+                                id="id_confirmar_clave"
+                                placeholder="CONFIRME NUEVA CONTRASEÑA"
+                                eventoPadre={this.validarNumero}
                                 />
                             </div>
+                            
                             <div className="row row justify-content-center margen_bottom_10">    
                                 <div className="col-auto">
                                     <InputButton 
                                     clasesBoton="btn btn-success"
-                                    id="boton-registrar"
-                                    value="Iniciar Sesion"
+                                    id="boton-recuperar_aceptar"
+                                    value="Aceptar"
                                     eventoPadre={this.iniciarSesion}
                                     />   
                                 </div>
                             </div>
-                            <div className="row justify-content-between">
-                                <div className="col-auto">
-                                    <LinkButton clases="btn btn-primary" ruta="/registrar/trabajador" texto="Registrate"/>
-                                </div>
-                                <div className="col-auto">
-                                    <LinkButton clases="btn btn-primary" ruta="/recuperar-cuenta" texto="Recuperar Cuenta"/>
-                                </div>
-                            </div>
+                            
                         </form>
                     </div>
                 </div>

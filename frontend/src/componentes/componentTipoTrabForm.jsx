@@ -325,26 +325,26 @@ class ComponentTipoTrabForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Tipo Trabajador:"
+                            nombreCampo="Código Tipo Trabajador:"
                             activo="no"
                             type="text"
                             value={this.state.id_tipo_trabajador}
                             name="id_tipo_trabajador"
                             id="id_tipo_trabajador"
-                            placeholder="Codigo Tipo Trabajador"
+                            placeholder="Código Tipo Trabajador"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_descripcion_tipo_trabajador}
-                            nombreCampo="Descripcion Tipo Trabajador:"
+                            nombreCampo="Descripción Tipo Trabajador:"
                             activo="si"
                             type="text"
                             value={this.state.descripcion_tipo_trabajador}
                             name="descripcion_tipo_trabajador"
                             id="descripcion_tipo_trabajador"
-                            placeholder="Descripcion Tipo Trabajador"
+                            placeholder="Descripción Tipo Trabajador"
                             eventoPadre={this.validarTexto}
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
@@ -373,7 +373,7 @@ class ComponentTipoTrabForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -381,7 +381,7 @@ class ComponentTipoTrabForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -390,7 +390,7 @@ class ComponentTipoTrabForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

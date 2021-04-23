@@ -1,0 +1,68 @@
+:root{
+    --color_fondo_login:#fff;
+    --color_fondo_formulario_login:rgba(49, 49, 49, 0.815);
+    --color_texto:#fff;
+}
+
+.component_recuperar{
+    height: 100%;
+    background-color: var(--color_fondo_login);
+    position: relative;
+    
+}
+
+.contenedor-icon-row-left-recuperar{
+    box-sizing: border-box;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.icon-row-left-recuperar{
+    width: 30px;
+    height: 30px;
+    color:#111;
+    transition: transform 1s,
+                color 1s;
+    cursor: pointer;
+}
+.icon-row-left-recuperar:hover{
+    transform:scale(1.2);
+    color: #0069d9;
+}
+
+.fila_recuperar{
+    height: 100%;
+    width: 100%;
+
+}
+
+.contenedor_recuperar{
+    height: auto;
+    background-color: var(--color_fondo_formulario_login);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius:10px;
+    margin-top: -3rem;
+}
+
+.titulo_formulario{
+    color:var(--color_texto);
+    margin-bottom:30px;
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+#form_recuperar label{
+    color:var(--color_texto);
+}
+
+.margen_bottom_10{
+    margin-bottom:10px;
+}
+
+/*
+.margen_bottom_10{
+    margin-bottom:10px;
+}
+*/

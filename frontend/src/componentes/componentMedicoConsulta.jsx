@@ -115,24 +115,24 @@ class ComponentMedicoConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_medico_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-medico-consulta">
-                            <span className="titulo-medico-consulta">Medico Consultado: {this.state.nombre_medico}</span>
+                            <span className="titulo-medico-consulta">Médico Consultado: {this.state.nombre_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo del Medico: </span>
+                            <span className="propiedad">Código del Médico: </span>
                             <span className="valor">{this.state.id_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Nombre del Medico: </span>
+                            <span className="propiedad">Nombre del Médico: </span>
                             <span className="valor">{this.state.nombre_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Apellido del Medico: </span>
+                            <span className="propiedad">Apellido del Médico: </span>
                             <span className="valor">{this.state.apellido_medico}</span>
                         </div>
                     </div>
@@ -141,7 +141,7 @@ class ComponentMedicoConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
-                                value="actualizar"
+                                value="Actualizar"
                                 eventoPadre={this.actualizar}
                                 />
                             </div>
@@ -149,7 +149,7 @@ class ComponentMedicoConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

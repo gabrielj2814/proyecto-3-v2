@@ -133,7 +133,7 @@ class ComponentListaAsistencia extends React.Component{
                                 </button>
                             </div>
                             <div class="modal-body">
-                               <p>esta seguro de pasar la asistenica</p>
+                               <p>Esta Seguro de Pasar la Asistenica</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
@@ -146,7 +146,7 @@ class ComponentListaAsistencia extends React.Component{
                     <table className="table table-bordered table-hover table-dark">
                         <thead>
                             <tr>
-                            <th scope="col">cedula</th>
+                            <th scope="col">Cédula</th>
                             <th scope="col">Nombre Trabajador</th>
                             <th scope="col">Cumplimiento H.</th>
                             <th scope="col">Estado Asistencia</th>
@@ -159,7 +159,7 @@ class ComponentListaAsistencia extends React.Component{
                                     <td>{asistencia.id_cedula}</td>
                                     <td>{asistencia.nombres} {asistencia.apellidos}</td>
                                     <td className={(asistencia.estatu_cumplimiento_horario==="C")?"bg-success":"bg-danger"}>{(asistencia.estatu_cumplimiento_horario==="C")?"cumplio con el horario":"no cumplio con el horario"}</td>
-                                    <td className={(asistencia.estatu_asistencia==="P")?"bg-success":(asistencia.estatu_asistencia==="II")?"bg-danger":"bg-primary"}>{(asistencia.estatu_asistencia==="P")?"Presente":(asistencia.estatu_asistencia==="II")?"Inasistencia injustificada":(asistencia.estatu_asistencia==="IJP")?"Inasistencia justificada por permiso":"Inasistencia justificada por reposo"}</td>
+                                    <td className={(asistencia.estatu_asistencia==="P")?"bg-success":(asistencia.estatu_asistencia==="II")?"bg-danger":"bg-primary"}>{(asistencia.estatu_asistencia==="P")?"Presente":(asistencia.estatu_asistencia==="II")?"Inasistencia injustificada":(asistencia.estatu_asistencia==="IJP")?"Inasistencia justificada por Permiso":"Inasistencia justificada por Reposo"}</td>
                                 </tr>
                                )
                             })

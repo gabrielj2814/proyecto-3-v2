@@ -247,7 +247,7 @@ class ComponentPermisoTrabajador extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                   <tr> 
-                    <th>Codigo</th> 
+                    <th>Código</th> 
                     <th>Trabajador</th>
                     <th>Permiso</th>
                   </tr> 
@@ -327,7 +327,7 @@ class ComponentPermisoTrabajador extends React.Component{
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
-                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
                     </div>

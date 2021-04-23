@@ -646,7 +646,7 @@ class ComponentCintillo extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cintillo">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-cintillo">
-                            <span className="titulo-form-cintillo">Modulo de Cintillo</span>
+                            <span className="titulo-form-cintillo">Módulo de Cintillo</span>
                         </div>
                     </div>
 
@@ -755,7 +755,7 @@ class ComponentCintillo extends React.Component{
                             <div className="row mb-2 vista-editar">
                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                     <div className="form-groud">
-                                        <label className="label-input-nombre-archivo-editar">Nombre del archivo:</label>
+                                        <label className="label-input-nombre-archivo-editar">Nombre del Archivo:</label>
                                         <input type="text" onChange={this.cambiarEstado} value={this.state.nombre_foto_cintillo} className="form-control" id="nombre_foto_cintillo_editar" name="nombre_foto_cintillo" placeholder="nombre del archivo"/>
                                         <span id="mensaje_nombre_foto_cintillo_editar" className="span-mensaje"></span>
                                     </div>

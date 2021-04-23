@@ -316,10 +316,10 @@ class ComponentReposoTrabajador extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                    <th>Codigo</th> 
-                    <th>Nombre trabajador</th>
-                    <th>Tipo de reposo</th>
-                    <th>Estatu del reposo</th>
+                    <th>Código</th> 
+                    <th>Nombre Trabajador</th>
+                    <th>Tipo de Reposo</th>
+                    <th>Estatus del Reposo</th>
                 </tr> 
             </thead>
         )
@@ -397,7 +397,7 @@ class ComponentReposoTrabajador extends React.Component{
                     </div>)
                 }
                 
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Reposo Trabajador"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Reposo Trabajador"/>
                 
                 <div className="row component-tabla-de-datos">
                     <div className="col-12 col-ms-12 col-md-12 contenedor-tabla-de-datos">
@@ -406,7 +406,7 @@ class ComponentReposoTrabajador extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="no"
                             mensaje={this.state.msj_fecha_desde_reposo_trabajador}
-                            nombreCampoDate="desde:"
+                            nombreCampoDate="Desde:"
                             clasesCampo="form-control"
                             value={this.state.fecha_desde_reposo_trabajador}
                             name="fecha_desde_reposo_trabajador"
@@ -417,7 +417,7 @@ class ComponentReposoTrabajador extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="no"
                             mensaje={this.state.msj_fecha_hasta_reposo_trabajador}
-                            nombreCampoDate="hasta:"
+                            nombreCampoDate="Hasta:"
                             clasesCampo="form-control"
                             value={this.state.fecha_hasta_reposo_trabajador}
                             name="fecha_hasta_reposo_trabajador"
@@ -440,7 +440,7 @@ class ComponentReposoTrabajador extends React.Component{
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
-                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                                <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
                     </div>

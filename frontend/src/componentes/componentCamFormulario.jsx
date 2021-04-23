@@ -573,7 +573,7 @@ class ComponentCamFormulario extends React.Component {
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cam">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-cam">
-                            <span className="titulo-form-cam">Formulario de CAM (Centro de Asistencia Medica)</span>
+                            <span className="titulo-form-cam">Formulario de CAM (Centro de Asistencia Médica)</span>
                         </div>
                     </div>
                     <div className="row">
@@ -591,13 +591,13 @@ class ComponentCamFormulario extends React.Component {
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Registro:"
+                            nombreCampo="Código Registro:"
                             activo="no"
                             type="text"
                             value={this.state.id_cam}
                             name="id_cam"
                             id="id_cam"
-                            placeholder="Codigo Cam"
+                            placeholder="Código CAM"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -618,13 +618,13 @@ class ComponentCamFormulario extends React.Component {
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_telefono_cam}
-                            nombreCampo="Telefono:"
+                            nombreCampo="Teléfono:"
                             activo="si"
                             type="text"
                             value={this.state.telefono_cam}
                             name="telefono_cam"
                             id="telefono_cam"
-                            placeholder="Telefono"
+                            placeholder="Teléfono"
                             eventoPadre={this.cambiarEstado}
                             />
                         </div>
@@ -648,7 +648,7 @@ class ComponentCamFormulario extends React.Component {
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_id_tipo_cam}
-                            nombreCampoSelect="Tipo de centro:"
+                            nombreCampoSelect="Tipo de Centro:"
                             clasesSelect="custom-select"
                             name="id_tipo_cam"
                             id="id_tipo_cam"
@@ -705,7 +705,7 @@ class ComponentCamFormulario extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -713,7 +713,7 @@ class ComponentCamFormulario extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -722,7 +722,7 @@ class ComponentCamFormulario extends React.Component {
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

@@ -101,30 +101,30 @@ class ComponentAsignacionEspecialidadMedicoConsulta extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_asignacion_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-asignacion-consulta">
-                            <span className="titulo-cam-consulta">Asignacion del medico consultado: {this.state.nombre_medico} {this.state.apellido_medico}</span>
+                            <span className="titulo-cam-consulta">Asignación del Médico Consultado: {this.state.nombre_medico} {this.state.apellido_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo de asignacion: </span>
+                            <span className="propiedad">Código de Asignación: </span>
                             <span className="valor">{this.state.id_asignacion_medico_especialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Nombre medico: </span>
+                            <span className="propiedad">Nombre Médico: </span>
                             <span className="valor">{this.state.nombre_medico} {this.state.apellido_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Especialidad medico: </span>
+                            <span className="propiedad">Especialidad Médico: </span>
                             <span className="valor">{this.state.nombre_especialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu: </span>
+                            <span className="propiedad">Estatus: </span>
                             <span className="valor">{(this.state.estatu_asignacion==="1")?"Activo":"Inactivo"}</span>
                         </div>
                     </div>
@@ -133,7 +133,7 @@ class ComponentAsignacionEspecialidadMedicoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -141,7 +141,7 @@ class ComponentAsignacionEspecialidadMedicoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

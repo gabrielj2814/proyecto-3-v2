@@ -229,9 +229,9 @@ class ComponentFuncionTrabajador extends React.Component{
                 <tr> 
                     <th>Codigo</th> 
                     <th>Funcion Trabajador</th>
-                    <th>descripcion horario</th>
-                    <th>hora de entrada</th>
-                    <th>hora de salida</th>
+                    <th>Descripcion Horario</th>
+                    <th>Hora de Entrada</th>
+                    <th>Hora de Salida</th>
                 </tr> 
             </thead>
         )

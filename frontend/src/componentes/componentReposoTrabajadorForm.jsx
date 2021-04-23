@@ -1054,7 +1054,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_reposo_trabajador">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo-trabajador">
-                            <span className="titulo-form-reposo-trabajador">Formulario reposo trabajador</span>
+                            <span className="titulo-form-reposo-trabajador">Formulario Reposo Trabajador</span>
                         </div>
                     </div>
                     <div className="row">
@@ -1072,13 +1072,13 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo transacción:"
+                            nombreCampo="Código Transacción:"
                             activo="no"
                             type="text"
                             value={this.state.id_reposo_trabajador}
                             name="id_reposo_trabajador"
                             id="id_reposo_trabajador"
-                            placeholder="Codigo reposo"
+                            placeholder="Código Reposo"
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
                         </div>
@@ -1093,13 +1093,13 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_id_cedula}
-                            nombreCampo="Cedula:"
+                            nombreCampo="Cédula:"
                             activo="si"
                             type="text"
                             value={this.state.id_cedula}
                             name="id_cedula"
                             id="id_cedula"
-                            placeholder="CEDULA"
+                            placeholder="Cédula"
                             eventoPadre={this.buscarTrabajador}
                             />
                             <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
@@ -1117,7 +1117,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 obligatorio="si"
                                 mensaje={this.state.msj_reposo}
-                                nombreCampoSelect="Lista de reposos:"
+                                nombreCampoSelect="Lista de Reposos:"
                                 clasesSelect="custom-select"
                                 name="id_reposo"
                                 id="id_reposo"
@@ -1131,20 +1131,20 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 clasesCampo="form-control"
                                 obligatorio="si"
                                 mensaje={this.state.msj_total_dias_reposo_trabajador}
-                                nombreCampo="Dias de Reposo:"
+                                nombreCampo="Días de Reposo:"
                                 activo="si"
                                 type="text"
                                 value={this.state.total_dias_reposo_trabajador}
                                 name="total_dias_reposo_trabajador"
                                 id="total_dias_reposo_trabajador"
-                                placeholder="Dias"
+                                placeholder="Días"
                                 eventoPadre={this.campoDiasReposo}
                                 />
                         </div>
 
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
-                                <span className="sub-titulo-form-reposo-trabajador">Cam</span>
+                                <span className="sub-titulo-form-reposo-trabajador">CAM</span>
                             </div>                            
                         </div>
                         <div className="row justify-content-center">
@@ -1167,8 +1167,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             (
                                 <div>
                                     <div className="row justify-content-center">
-                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Telefono: {this.state.infoCam.telefono_cam}</div>
-                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">Tipo de centro: {this.state.infoCam.tipoCam.nombre_tipo_cam}</div>
+                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Teléfono: {this.state.infoCam.telefono_cam}</div>
+                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">Tipo de Centro: {this.state.infoCam.tipoCam.nombre_tipo_cam}</div>
                                     </div>
                                     <div className="row mt-3 justify-content-center">
                                         <div className="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9">Ubicación: Esta ubicado en el estado {this.state.infoCam.estado.nombre_estado}, en la ciudad de {this.state.infoCam.ciudad.nombre_ciudad}</div>
@@ -1187,7 +1187,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
-                                <span className="sub-titulo-form-reposo-trabajador">Medico</span>
+                                <span className="sub-titulo-form-reposo-trabajador">Médico</span>
                             </div>
                         </div>
                         <div className="row justify-content-center">
@@ -1195,7 +1195,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_especialidad}
-                            nombreCampoSelect="Lista de especialidades:"
+                            nombreCampoSelect="Lista de Especialidades:"
                             clasesSelect="custom-select"
                             name="id_especialidad"
                             id="id_especialidad"
@@ -1207,7 +1207,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_asignacion_medico_especialidad}
-                            nombreCampoSelect="Lista de medicos:"
+                            nombreCampoSelect="Lista de Médicos:"
                             clasesSelect="custom-select"
                             name="id_asignacion_medico_especialidad"
                             id="id_asignacion_medico_especialidad"
@@ -1245,18 +1245,18 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_total_dias_no_aviles_reposo_trabajador}
-                            nombreCampo="Dias no aviles:"
+                            nombreCampo="Días no Habiles:"
                             activo="si"
                             type="text"
                             value={this.state.total_dias_no_aviles_reposo_trabajador}
                             name="total_dias_no_aviles_reposo_trabajador"
                             id="total_dias_no_aviles_reposo_trabajador"
-                            placeholder="Dias"
+                            placeholder="Días"
                             eventoPadre={this.campoDiasNoAvilesReposo}
                             />
                             <div className=" col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
                                 <buttom className="boton-calcular-dias-aviles btn btn-success" onClick={this.calcularDiasNoAviles}>
-                                    calcular dias
+                                    Calcular Días
                                 </buttom>
                             </div>
                         </div>
@@ -1271,7 +1271,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                         <div className="row justify-content-center mb-3">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
-                            nombreCampoTextArea="Detalle del reposo:"
+                            nombreCampoTextArea="Detalle del Reposo:"
                             clasesTextArear="form-control"
                             obligatorio="si"
                             value={this.state.descripcion_reposo_trabajador}
@@ -1283,13 +1283,13 @@ class ComponetReposoTrabajadorForm extends React.Component{
                         </div>
                         { this.props.match.params.operacion==="actualizar" &&
                             <div className="row justify-content-center mb-3">
-                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Estatu del reposo: {(this.state.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</div>
+                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Estatus del Reposo: {(this.state.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</div>
                                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
                             </div>
                         }
                         { this.props.match.params.operacion==="actualizar" &&
                             <div className="row justify-content-center mb-3">
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">Estatu de la entrega del reposo: {(this.state.estatu_entrega_reposo==="E")?"Entregado":((this.state.estatu_entrega_reposo==="N")?"No fue entregado":"En espera")}</div>
+                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">Estatus de la Entrega del Reposo: {(this.state.estatu_entrega_reposo==="E")?"Entregado":((this.state.estatu_entrega_reposo==="N")?"No fue entregado":"En espera")}</div>
                                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
                         }
@@ -1307,7 +1307,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -1315,7 +1315,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -1324,7 +1324,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

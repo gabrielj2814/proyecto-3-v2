@@ -5,6 +5,7 @@ import 'bootstrap/dist/css/bootstrap-grid.css';
 import '../css/componentNosotros.css'
 //imagenes
 import UbicacionComunidad from '../galeria/imagenes/ubicacion-comunidad.png';
+import OrganigramaComunidad from '../galeria/imagenes/organigrama-comunidad.jpg';
 //JS
 import $ from 'jquery';
 import popper from 'popper.js';
@@ -25,17 +26,20 @@ class ComponentNosotros extends React.Component{
                             <div className="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 fila_menu_pills">
                                 <ul className="nav flex-column nav-pills">
                                     <li className="nav-item">
-                                        <a className="nav-link active"  data-toggle="tab" href="#mision" >Mision</a>
+                                        <a className="nav-link active"  data-toggle="tab" href="#mision" >Misión</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link"  data-toggle="tab" href="#vision">Vision</a>
+                                        <a className="nav-link"  data-toggle="tab" href="#vision">Visión</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link"  data-toggle="tab" href="#historia">Reseña Historica</a>
                                     </li>
                                     <li className="nav-item">
                                         <a className="nav-link"  data-toggle="tab" href="#organigrama">Organigrama</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link"  data-toggle="tab" href="#historia">Reseña Historica</a>
-                                    </li>
+                                        <a className="nav-link"  data-toggle="tab" href="#ubicacion">Ubicación</a>
+                                    </li> 
                                 </ul>
                             </div>
                             <div className="col-12 col-sm-9 col-md-9 col-lg-9 col-xl-9 columna">
@@ -60,7 +64,7 @@ class ComponentNosotros extends React.Component{
                                             asertiva.
                                         </p>
                                     </div>
-                                    <div className="tab-pane fade" id="organigrama">
+                                    <div className="tab-pane fade" id="ubicacion">
                                         <div className="row fila_imagen_ubicacion_comunidad">
                                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 contenedor_imagen_comunidad">
                                                 <img className="imagen_comunidad" src={UbicacionComunidad} alt="ubicacion comunidad"/>
@@ -118,6 +122,13 @@ class ComponentNosotros extends React.Component{
                                             (Rivas, y de carácter social: Misión José Gregorio Hernández, Hijos de Venezuela, Comité Maizanta,Amor Mayor
                                             , Madres del barrio que contribuye a fortalecer la integración y cohesión de triada: Escuela-familia-comunidad.
                                         </p>
+                                    </div>
+                                    <div className="tab-pane fade" id="organigrama" >
+                                        <div className="row fila_imagen_organigrama_comunidad">
+                                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 contenedor_imagen_comunidad">
+                                                <img className="organigrama_comunidad" src={OrganigramaComunidad} alt="organigrama comunidad"/>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -536,7 +536,7 @@ class ComponentFuncionTrabajador extends React.Component{
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_id_tipo_trabajador}
-                            nombreCampoSelect="tipo de trabajador:"
+                            nombreCampoSelect="Tipo de Trabajador:"
                             clasesSelect="custom-select"
                             name="id_tipo_trabajador"
                             id="id_tipo_trabajador"
@@ -550,7 +550,7 @@ class ComponentFuncionTrabajador extends React.Component{
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_id_horario}
-                            nombreCampoSelect="horario:"
+                            nombreCampoSelect="Horario:"
                             clasesSelect="custom-select"
                             name="id_horario"
                             id="id_horario"
@@ -563,7 +563,7 @@ class ComponentFuncionTrabajador extends React.Component{
                         {this.state.hora_entrada!==null &&
                                 (
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de entrada: {this.state.hora_entrada}</div>
+                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">Horario de Entrada: {this.state.hora_entrada}</div>
                                     <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                                 </div>
                                 )
@@ -572,7 +572,7 @@ class ComponentFuncionTrabajador extends React.Component{
                         {this.state.hora_entrada!==null &&
                             (
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">horario de salida: {this.state.hora_salida}</div>
+                                    <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">Horario de Salida: {this.state.hora_salida}</div>
                                     <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                                 </div>
                             )
@@ -582,7 +582,7 @@ class ComponentFuncionTrabajador extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu:"
+                            nombreCampoRadio="Estatus:"
                             name="estatu_funcion_trabajador"
                             nombreLabelRadioA="Activo"
                             idRadioA="activotrabajadorA"

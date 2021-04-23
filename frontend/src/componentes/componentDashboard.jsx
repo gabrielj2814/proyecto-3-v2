@@ -215,7 +215,7 @@ class ComponentDashboard extends React.Component{
         render(){
             const mesajeAlertaExtenderSesion=(
                 <div>
-                    <span className="mensaje_alerta_estender_sesion">estimado usuario la sesion esta a punto de caducar desea exterderla </span>
+                    <span className="mensaje_alerta_estender_sesion">Estimado usuario la sesion esta a punto de caducar desea exterderla </span>
                     <InputButton 
                     clasesBoton="btn btn-warning"
                     id="boton-extender-sesion"

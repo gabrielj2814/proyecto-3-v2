@@ -110,7 +110,7 @@ class ComponentFuncionTrabajadorConsulta extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_funcion_trabajador_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-funcion-trabajador-consulta">
-                            <span className="titulo-funcion-trabajador-consulta">funcion Trabajador : {this.state.id_funcion_trabajador} </span>
+                            <span className="titulo-funcion-trabajador-consulta">Funcion Trabajador : {this.state.id_funcion_trabajador} </span>
                         </div>
                     </div>
                     <div className="row">
@@ -127,13 +127,13 @@ class ComponentFuncionTrabajadorConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">tipo de trabajador: </span>
+                            <span className="propiedad">Tipo de Trabajador: </span>
                             <span className="valor">{this.state.descripcion_tipo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">EStatu funcion: </span>
+                            <span className="propiedad">Estatus Funcion: </span>
                             <span className="valor">{this.state.estatu_funcion_trabajador}</span>
                         </div>
                     </div>

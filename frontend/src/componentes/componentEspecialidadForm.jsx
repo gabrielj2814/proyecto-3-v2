@@ -322,26 +322,26 @@ class ComponentEspecialidadForm extends React.Component{
                                 <ComponentFormCampo
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 clasesCampo="form-control"
-                                nombreCampo="Codigo Especialidad:"
+                                nombreCampo="Código Especialidad:"
                                 activo="no"
                                 type="text"
                                 value={this.state.id_especialidad}
                                 name="id_especialidad"
                                 id="id_especialidad"
-                                placeholder="Codigo Especialidad"
+                                placeholder="Código Especialidad"
                                 />
                                 <ComponentFormCampo
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 clasesCampo="form-control"
                                 obligatorio="si"
                                 mensaje={this.state.msj_nombre_especialidad}
-                                nombreCampo="Descripcion Especialidad:"
+                                nombreCampo="Descripción Especialidad:"
                                 activo="si"
                                 type="text"
                                 value={this.state.nombre_especialidad}
                                 name="nombre_especialidad"
                                 id="nombre_especialidad"
-                                placeholder="Descripcion Especialidad"
+                                placeholder="Descripción Especialidad"
                                 eventoPadre={this.validarTexto}
                                 />
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
@@ -370,7 +370,7 @@ class ComponentEspecialidadForm extends React.Component{
                                         <InputButton 
                                         clasesBoton="btn btn-primary"
                                         id="boton-registrar"
-                                        value="registrar"
+                                        value="Registrar"
                                         eventoPadre={this.operacion}
                                         />
                                     }
@@ -378,7 +378,7 @@ class ComponentEspecialidadForm extends React.Component{
                                         <InputButton 
                                         clasesBoton="btn btn-warning"
                                         id="boton-actualizar"
-                                        value="actualizar"
+                                        value="Actualizar"
                                         eventoPadre={this.operacion}
                                         />   
                                     }
@@ -387,7 +387,7 @@ class ComponentEspecialidadForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-danger"
                                     id="boton-cancelar"
-                                    value="cancelar"
+                                    value="Cancelar"
                                     eventoPadre={this.regresar}
                                     />   
                                 </div>

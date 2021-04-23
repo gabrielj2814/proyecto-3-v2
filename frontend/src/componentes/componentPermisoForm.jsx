@@ -392,7 +392,7 @@ class ComponentPermisoForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_permiso">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-permiso">
-                            <span className="titulo-form-permiso">Formulario de permiso</span>
+                            <span className="titulo-form-permiso">Formulario de Permiso</span>
                         </div>
                     </div>
                     <div className="row">
@@ -416,7 +416,7 @@ class ComponentPermisoForm extends React.Component{
                             value={this.state.id_permiso}
                             name="id_permiso"
                             id="id_permiso"
-                            placeholder="Codigo Permiso"
+                            placeholder="Código Permiso"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -437,7 +437,7 @@ class ComponentPermisoForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_dias_permiso}
-                            nombreCampo="Dias Permiso:"
+                            nombreCampo="Días Permiso:"
                             activo="si"
                             type="text"
                             value={this.state.dias_permiso}
@@ -451,9 +451,9 @@ class ComponentPermisoForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu Permiso:"
+                            nombreCampoRadio="Estatus Permiso:"
                             name="estatu_permiso"
-                            nombreLabelRadioA="Activo"
+                            nombreLabelRadioA="Activó"
                             idRadioA="activopermisoA"
                             checkedRadioA={this.state.estatu_permiso}
                             valueRadioA="1"
@@ -468,9 +468,9 @@ class ComponentPermisoForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu Remunerado:"
+                            nombreCampoRadio="Estatus Remunerado:"
                             name="estatu_remunerado"
-                            nombreLabelRadioA="Activo"
+                            nombreLabelRadioA="Activó"
                             idRadioA="activoremuneradoA"
                             checkedRadioA={this.state.estatu_remunerado}
                             valueRadioA="1"
@@ -485,9 +485,9 @@ class ComponentPermisoForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu Dias Aviles:"
+                            nombreCampoRadio="Estatus Dias Hábiles:"
                             name="estatu_dias_aviles"
-                            nombreLabelRadioA="Activo"
+                            nombreLabelRadioA="Activó"
                             idRadioA="activodiasavilesA"
                             checkedRadioA={this.state.estatu_dias_aviles}
                             valueRadioA="1"
@@ -502,9 +502,9 @@ class ComponentPermisoForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="tipo de permiso:"
+                            nombreCampoRadio="Tipo de Permiso:"
                             name="estatu_tipo_permiso"
-                            nombreLabelRadioA="normal"
+                            nombreLabelRadioA="Normal"
                             idRadioA="tipoPermisoA"
                             checkedRadioA={this.state.estatu_tipo_permiso}
                             valueRadioA="1"
@@ -522,7 +522,7 @@ class ComponentPermisoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -530,7 +530,7 @@ class ComponentPermisoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -539,7 +539,7 @@ class ComponentPermisoForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

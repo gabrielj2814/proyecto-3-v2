@@ -187,7 +187,7 @@ constructor(){
 		const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                    <th>Codigo</th> 
+                    <th>Código</th> 
                     <th>Nombre</th>
                 </tr> 
             </thead>
@@ -258,7 +258,7 @@ constructor(){
                         </div>
                       </div>
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Tipo CAM"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Mdulo de Tipo CAM"/>
                 
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}

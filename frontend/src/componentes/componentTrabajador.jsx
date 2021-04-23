@@ -137,7 +137,7 @@ class ComponentTrabajador extends React.Component{
 
     redirigirFormulario(a){
         const input = a.target;
-        if(input.value==="registrar"){
+        if(input.value==="Registrar"){
           this.props.history.push("/dashboard/configuracion/trabajador/registrar")
         }
     }
@@ -199,7 +199,7 @@ class ComponentTrabajador extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                   <tr> 
-                    <th>Cedula</th> 
+                    <th>Cédula</th> 
                     <th>Nombre trabajador</th>
                   </tr> 
               </thead>
@@ -267,7 +267,7 @@ class ComponentTrabajador extends React.Component{
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
-                          <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="registrar"/>
+                          <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                         </div>
                       </div>
                     </div>

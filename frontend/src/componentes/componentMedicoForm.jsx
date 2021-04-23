@@ -386,7 +386,7 @@ class ComponentMedicoForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_medico">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-medico">
-                        <span className="titulo-form-medico">Formulario de Medico</span>
+                        <span className="titulo-form-medico">Formulario de Médico</span>
                     </div>
                 </div>
                 <div className="row">
@@ -405,7 +405,7 @@ class ComponentMedicoForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo del Medico:"
+                            nombreCampo="Código del Médico:"
                             obligatorio="si"
                             mensaje={this.state.msj_id_medico}
                             activo="no"
@@ -413,7 +413,7 @@ class ComponentMedicoForm extends React.Component{
                             value={this.state.id_medico}
                             name="id_medico"
                             id="id_medico"
-                            placeholder="Codigo Medico"
+                            placeholder="Código Médico"
                             eventoPadre={this.cambiarEstado}
                             />
                             <ComponentFormCampo
@@ -421,13 +421,13 @@ class ComponentMedicoForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_nombre_medico}
-                            nombreCampo="Nombre del Medico:"
+                            nombreCampo="Nombre del Médico:"
                             activo="si"
                             type="text"
                             value={this.state.nombre_medico}
                             name="nombre_medico"
                             id="nombre_medico"
-                            placeholder="Nombre Medico"
+                            placeholder="Nombre Médico"
                             eventoPadre={this.validarTexto}
                             />
                             <ComponentFormCampo
@@ -435,13 +435,13 @@ class ComponentMedicoForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_apellido_medico}
-                            nombreCampo="Apellido del Medico:"
+                            nombreCampo="Apellido del Médico:"
                             activo="si"
                             type="text"
                             value={this.state.apellido_medico}
                             name="apellido_medico"
                             id="apellido_medico"
-                            placeholder="Apellido Medico"
+                            placeholder="Apellido Médico"
                             eventoPadre={this.validarTexto}
                             />
                         </div>
@@ -453,7 +453,7 @@ class ComponentMedicoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -461,7 +461,7 @@ class ComponentMedicoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -470,7 +470,7 @@ class ComponentMedicoForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

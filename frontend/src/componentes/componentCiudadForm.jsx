@@ -452,13 +452,13 @@ class ComponentCiudadForm extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             obligatorio="si"
-                            nombreCampo="Codigo:"
+                            nombreCampo="Código:"
                             activo="no"
                             type="text"
                             value={this.state.id_ciudad}
                             name="id_ciudad"
                             id="id_ciudad"
-                            placeholder="CODIGO CIUDAD"
+                            placeholder="Código Ciudad"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -491,7 +491,7 @@ class ComponentCiudadForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu:"
+                            nombreCampoRadio="Estatus:"
                             name="estatu_ciudad"
                             nombreLabelRadioA="Activo"
                             idRadioA="activotrabajadorA"
@@ -510,7 +510,7 @@ class ComponentCiudadForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -518,7 +518,7 @@ class ComponentCiudadForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -527,7 +527,7 @@ class ComponentCiudadForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

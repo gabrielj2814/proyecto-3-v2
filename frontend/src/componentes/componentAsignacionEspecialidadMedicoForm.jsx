@@ -370,7 +370,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_asignacion_form">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-asignacion-form">
-                            <span className="titulo-asignacion-form">Formulario de asignacion de especialidad medico</span>
+                            <span className="titulo-asignacion-form">Formulario de Asignación de Especialidad Médico</span>
                         </div>
                     </div>
                     <div className="row">
@@ -388,19 +388,19 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Registro:"
+                            nombreCampo="Código Registro:"
                             activo="no"
                             type="text"
                             value={this.state.id_asignacion_medico_especialidad}
                             name="id_asignacion_medico_especialidad"
                             id="id_asignacion_medico_especialidad"
-                            placeholder="Codigo aisgnacion"
+                            placeholder="Código Asignación"
                             />
                             <ComponentFormSelect
                             clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="si"
                             mensaje={this.state.msj_id_medico}
-                            nombreCampoSelect="Medico:"
+                            nombreCampoSelect="Médico:"
                             clasesSelect="custom-select"
                             name="id_medico"
                             id="id_medico"
@@ -444,7 +444,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -452,7 +452,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -461,7 +461,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

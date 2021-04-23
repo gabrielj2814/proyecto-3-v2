@@ -187,12 +187,12 @@ class ComponentCamConsultar extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_cam_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-cam-consulta">
-                            <span className="titulo-cam-consulta">Cam consultado: {this.state.nombre_cam}</span>
+                            <span className="titulo-cam-consulta">CAM Consultado: {this.state.nombre_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo de cam: </span>
+                            <span className="propiedad">Código de CAM: </span>
                             <span className="valor">{this.state.id_cam}</span>
                         </div>
                     </div>
@@ -204,7 +204,7 @@ class ComponentCamConsultar extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Telefono: </span>
+                            <span className="propiedad">Teléfono: </span>
                             <span className="valor">{this.state.telefono_cam}</span>
                         </div>
                     </div>
@@ -216,19 +216,19 @@ class ComponentCamConsultar extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Direccion: </span>
+                            <span className="propiedad">Dirección: </span>
                             <span className="valor">{this.state.direccion_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Tipo de centro: </span>
+                            <span className="propiedad">Tipo de Centro: </span>
                             <span className="valor">{this.state.nombre_tipo_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu: </span>
+                            <span className="propiedad">Estatus: </span>
                             <span className="valor">{(this.state.estatu_cam==="1")?"Activo":"Inactivo"}</span>
                         </div>
                     </div>
@@ -238,7 +238,7 @@ class ComponentCamConsultar extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -246,7 +246,7 @@ class ComponentCamConsultar extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

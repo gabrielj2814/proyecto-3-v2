@@ -112,18 +112,18 @@ class ComponentEstadoConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_estado_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-estado-consulta">
-                            <span className="titulo-estado-consulta">Estado consultado: {this.state.nombre_estado}</span>
+                            <span className="titulo-estado-consulta">Estado Consultado: {this.state.nombre_estado}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Codigo del Estado: </span>
+                            <span className="propiedad">Código del Estado: </span>
                             <span className="valor">{this.state.id_estado}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
-                            <span className="propiedad">Descripcion del Estado: </span>
+                            <span className="propiedad">Descripción del Estado: </span>
                             <span className="valor">{this.state.nombre_estado}</span>
                         </div>
                     </div>
@@ -138,7 +138,7 @@ class ComponentEstadoConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
-                                value="actualizar"
+                                value="Actualizar"
                                 eventoPadre={this.actualizar}
                                 />
                             </div>
@@ -146,7 +146,7 @@ class ComponentEstadoConsulta extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

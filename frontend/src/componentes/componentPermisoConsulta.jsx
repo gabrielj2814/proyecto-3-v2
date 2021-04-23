@@ -126,7 +126,7 @@ class ComponentPermisoConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo Permiso: </span>
+                            <span className="propiedad">Código Permiso: </span>
                             <span className="valor">{this.state.id_permiso}</span>
                         </div>
                     </div>
@@ -138,25 +138,25 @@ class ComponentPermisoConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu Permiso: </span>
+                            <span className="propiedad">Estatus Permiso: </span>
                             <span className="valor">{this.state.estatu_permiso}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Dias Permiso: </span>
+                            <span className="propiedad">Días Permiso: </span>
                             <span className="valor">{this.state.dias_permiso}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu Dias Aviles: </span>
+                            <span className="propiedad">Estatus Dias Hábiles: </span>
                             <span className="valor">{this.state.estatu_dias_aviles}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu Remunerado: </span>
+                            <span className="propiedad">Estatus Remunerado: </span>
                             <span className="valor">{this.state.estatu_remunerado}</span>
                         </div>
                     </div>
@@ -165,7 +165,7 @@ class ComponentPermisoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -173,7 +173,7 @@ class ComponentPermisoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

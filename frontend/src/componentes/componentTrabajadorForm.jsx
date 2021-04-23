@@ -931,13 +931,13 @@ class ComponentTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_id_cedula[0]}
-                            nombreCampo="Cedula:"
+                            nombreCampo="Cédula:"
                             activo="si"
                             type="text"
                             value={this.state.id_cedula}
                             name="id_cedula"
                             id="id_cedula"
-                            placeholder="CEDULA"
+                            placeholder="Cédula"
                             eventoPadre={this.buscarTrabajador}
                             />
                             <ComponentFormCampo
@@ -945,13 +945,13 @@ class ComponentTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_nombres[0]}
-                            nombreCampo="nombres:"
+                            nombreCampo="Nombres:"
                             activo="si"
                             type="text"
                             value={this.state.nombres}
                             name="nombres"
                             id="nombres"
-                            placeholder="NOMBRE"
+                            placeholder="Nombre"
                             eventoPadre={this.validarTexto}
                             />
                             <ComponentFormCampo
@@ -959,13 +959,13 @@ class ComponentTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_apellidos[0]}
-                            nombreCampo="apellidos:"
+                            nombreCampo="Apellidos:"
                             activo="si"
                             type="text"
                             value={this.state.apellidos}
                             name="apellidos"
                             id="apellidos"
-                            placeholder="APELLIDO"
+                            placeholder="Apellido"
                             eventoPadre={this.validarTexto}
                             />
                         </div>
@@ -973,27 +973,27 @@ class ComponentTrabajadorForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Telefono Movil:"
+                            nombreCampo="Teléfono Móvil:"
                             mensaje={this.state.msj_telefono_movil[0]}
                             activo="si"
                             type="text"
                             value={this.state.telefono_movil}
                             name="telefono_movil"
                             id="telefono_movil"
-                            placeholder="TELEFONO MOVIL"
+                            placeholder="Teléfono Movil"
                             eventoPadre={this.validarNumero}
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             mensaje={this.state.msj_telefono_local[0]}
-                            nombreCampo="Telefono Local:"
+                            nombreCampo="Teléfono Local:"
                             activo="si"
                             type="text"
                             value={this.state.telefono_local}
                             name="telefono_local"
                             id="telefono_local"
-                            placeholder="TELEFONO LOCAL"
+                            placeholder="Teléfono Local"
                             eventoPadre={this.validarNumero}
                             />
                             <ComponentFormCampo
@@ -1007,7 +1007,7 @@ class ComponentTrabajadorForm extends React.Component{
                             value={this.state.correo}
                             name="correo"
                             id="correo"
-                            placeholder="CORREO"
+                            placeholder="Correo"
                             eventoPadre={this.cambiarEstado}
                             />
                         </div>
@@ -1055,13 +1055,13 @@ class ComponentTrabajadorForm extends React.Component{
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_titulo_grado_instruccion[0]}
-                            nombreCampo="Titulo:"
+                            nombreCampo="Título:"
                             activo="si"
                             type="text"
                             value={this.state.titulo_grado_instruccion}
                             name="titulo_grado_instruccion"
                             id="titulo_grado_instruccion"
-                            placeholder="titulo"
+                            placeholder="Título"
                             eventoPadre={this.validarTexto}
                             />
                             <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
@@ -1071,7 +1071,7 @@ class ComponentTrabajadorForm extends React.Component{
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             obligatorio="si"
                             mensaje={this.state.msj_direccion[0]}
-                            nombreCampoTextArea="dirección:"
+                            nombreCampoTextArea="Dirección:"
                             clasesTextArear="form-control"
                             name="direccion"
                             id="direccion"
@@ -1110,7 +1110,7 @@ class ComponentTrabajadorForm extends React.Component{
                                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                                     obligatorio="si"
                                     mensaje={this.state.msj_id_funcion_trabajador[0]}
-                                    nombreCampoSelect="función:"
+                                    nombreCampoSelect="Función:"
                                     clasesSelect="custom-select"
                                     name="id_funcion_trabajador"
                                     id="id_funcion_trabajador"
@@ -1147,13 +1147,13 @@ class ComponentTrabajadorForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="designación:"
+                            nombreCampoRadio="Designación:"
                             name="designacion"
-                            nombreLabelRadioA="interno"
+                            nombreLabelRadioA="Interno"
                             idRadioA="activodesignacionA"
                             checkedRadioA={this.state.designacion}
                             valueRadioA="1"
-                            nombreLabelRadioB="externo"
+                            nombreLabelRadioB="Externo"
                             idRadioB="activodesignacionB"
                             valueRadioB="0"
                             eventoPadre={this.cambiarEstado}
@@ -1164,9 +1164,9 @@ class ComponentTrabajadorForm extends React.Component{
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
-                            nombreCampoRadio="Estatu:"
+                            nombreCampoRadio="Estatus:"
                             name="estatu_trabajador"
-                            nombreLabelRadioA="Activo"
+                            nombreLabelRadioA="Activó"
                             idRadioA="activotrabajadorA"
                             checkedRadioA={this.state.estatu_trabajador}
                             valueRadioA="1"
@@ -1183,7 +1183,7 @@ class ComponentTrabajadorForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -1191,7 +1191,7 @@ class ComponentTrabajadorForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -1200,7 +1200,7 @@ class ComponentTrabajadorForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

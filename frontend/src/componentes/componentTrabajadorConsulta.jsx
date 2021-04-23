@@ -164,108 +164,108 @@ class ComponentTrabajadorConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_trabajador_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-trabajador-consulta">
-                            <span className="titulo-trabajador-consulta">Trabajador consultado: {this.state.nombres+" "+this.state.apellidos}</span>
+                            <span className="titulo-trabajador-consulta">Trabajador Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Cedula: </span>
+                            <span className="propiedad">Cédula: </span>
                             <span className="valor">{this.state.id_cedula}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">nombre: </span>
+                            <span className="propiedad">Nombre: </span>
                             <span className="valor">{this.state.nombres}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">apellido: </span>
+                            <span className="propiedad">Apellido: </span>
                             <span className="valor">{this.state.apellidos}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">telefono movil: </span>
+                            <span className="propiedad">Teléfono Movil: </span>
                             <span className="valor">{this.state.telefono_movil}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">telefono local: </span>
+                            <span className="propiedad">Teléfono Local: </span>
                             <span className="valor">{this.state.telefono_local}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">correo: </span>
+                            <span className="propiedad">Correo: </span>
                             <span className="valor">{this.state.correo}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">sexo: </span>
+                            <span className="propiedad">Sexo: </span>
                             <span className="valor">{this.state.sexo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">fecha de nacimiento: </span>
+                            <span className="propiedad">Fecha de Nacimiento: </span>
                             <span className="valor">{this.state.fecha_nacimiento}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">fecha de ingreso: </span>
+                            <span className="propiedad">Fecha de Ingresó: </span>
                             <span className="valor">{this.state.fecha_ingreso}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">estatu trabajador: </span>
+                            <span className="propiedad">Estatus Trabajador: </span>
                             <span className="valor">{this.state.estatu_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">estatu cuenta: </span>
+                            <span className="propiedad">Estatus Cuenta: </span>
                             <span className="valor">{this.state.estatu_cuenta}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">estatu designacion: </span>
+                            <span className="propiedad">Estatu Designación: </span>
                             <span className="valor">{this.state.designacion}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">perfil de usuario: </span>
+                            <span className="propiedad">Perfil de Usuario: </span>
                             <span className="valor">{this.state.nombre_perfil}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">tipo de trabajador: </span>
+                            <span className="propiedad">Tipo de Trabajador: </span>
                             <span className="valor">{this.state.descripcion_tipo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">funcion del trabajador: </span>
+                            <span className="propiedad">Función del Trabajador: </span>
                             <span className="valor">{this.state.funcion_descripcion}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">grado de instrucción: </span>
+                            <span className="propiedad">Grado de Instrucción: </span>
                             <span className="valor">{this.state.grado_instruccion}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">dirección: </span>
+                            <span className="propiedad">Dirección: </span>
                             <span className="valor">{this.state.direccion}</span>
                         </div>
                     </div>
@@ -274,7 +274,7 @@ class ComponentTrabajadorConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -282,7 +282,7 @@ class ComponentTrabajadorConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

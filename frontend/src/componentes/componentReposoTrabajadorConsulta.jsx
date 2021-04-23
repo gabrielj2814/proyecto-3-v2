@@ -235,36 +235,36 @@ class ComponentReposoTrabajadorConsulta extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_reposo_trabajador_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-reposo-trabajador-consulta">
-                            <span className="titulo-cam-consulta">Consulta del reposo: {this.state.id_reposo_trabajador}</span>
+                            <span className="titulo-cam-consulta">Consulta del Reposo: {this.state.id_reposo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo del reposo: </span>
+                            <span className="propiedad">Código del Reposo: </span>
                             <span className="valor">{this.state.id_reposo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Cedula del trabajador: </span>
+                            <span className="propiedad">Cédula del Trabajador: </span>
                             <span className="valor">{this.state.id_cedula}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Nombre del trabajador: </span>
+                            <span className="propiedad">Nombre del Trabajador: </span>
                             <span className="valor">{this.state.nombreCompletoTrabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Tipo de reposo: </span>
+                            <span className="propiedad">Tipo de Reposo: </span>
                             <span className="valor">{this.state.nombreReposo}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Dias del reposo: </span>
+                            <span className="propiedad">Días del Reposo: </span>
                             <span className="valor">{this.state.diasReposo} dias</span>
                         </div>
                     </div>
@@ -276,49 +276,49 @@ class ComponentReposoTrabajadorConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">tipo de centro: </span>
+                            <span className="propiedad">Tipo de Centro: </span>
                             <span className="valor">{this.state.nombreTipoCam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Telefono del centro: </span>
+                            <span className="propiedad">Teléfono del Centro: </span>
                             <span className="valor">{this.state.telefonoCam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Ubicacion del centro: </span>
-                            <span className="valor">esta ubicado en el estado {this.state.nombreEstado}, en la ciudad de {this.state.nombreCiudad}</span>
+                            <span className="propiedad">Ubicación del Centro: </span>
+                            <span className="valor">Esta ubicado en el Estado {this.state.nombreEstado}, en la Ciudad de {this.state.nombreCiudad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Direccion del centro: </span>
+                            <span className="propiedad">Dirección del Centro: </span>
                             <span className="valor">{this.state.direccionCam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Info. del Medico: </span>
-                            <span className="valor">atendido por el medico {this.state.nombreMedico}, en su especialidad como {this.state.nombreEspecialidad}</span>
+                            <span className="propiedad">Info. del Médico: </span>
+                            <span className="valor">Atendido por el Médico {this.state.nombreMedico}, en su Especialidad como {this.state.nombreEspecialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Fecha inicio del reposo: </span>
+                            <span className="propiedad">Fecha inicio del Reposo: </span>
                             <span className="valor">{this.state.fecha_desde_reposo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Fecha fin del reposo: </span>
+                            <span className="propiedad">Fecha fin del Reposo: </span>
                             <span className="valor">{this.state.fecha_hasta_reposo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Detalle del reposo: </span>
+                            <span className="propiedad">Detalle del Reposo: </span>
                             <span className="valor">{this.state.descripcion_reposo_trabajador}</span>
                         </div>
                     </div>
@@ -333,7 +333,7 @@ class ComponentReposoTrabajadorConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -341,7 +341,7 @@ class ComponentReposoTrabajadorConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

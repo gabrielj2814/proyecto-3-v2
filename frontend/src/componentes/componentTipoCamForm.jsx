@@ -325,13 +325,13 @@ class ComponentTipoCamForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Tipo CAM:"
+                            nombreCampo="Código Tipo CAM:"
                             activo="no"
                             type="text"
                             value={this.state.id_tipo_cam}
                             name="id_tipo_cam"
                             id="id_tipo_cam"
-                            placeholder="Codigo Tipo CAM"
+                            placeholder="Código Tipo CAM"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -344,7 +344,7 @@ class ComponentTipoCamForm extends React.Component{
                             value={this.state.nombre_tipo_cam}
                             name="nombre_tipo_cam"
                             id="nombre_tipo_cam"
-                            placeholder="Descripcion Tipo CAM"
+                            placeholder="Descripción Tipo CAM"
                             eventoPadre={this.validarTexto}
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
@@ -373,7 +373,7 @@ class ComponentTipoCamForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -381,7 +381,7 @@ class ComponentTipoCamForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -390,7 +390,7 @@ class ComponentTipoCamForm extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

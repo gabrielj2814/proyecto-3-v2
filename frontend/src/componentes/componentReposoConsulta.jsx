@@ -114,7 +114,7 @@ class ComponentReposoConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo Reposo: </span>
+                            <span className="propiedad">Código Reposo: </span>
                             <span className="valor">{this.state.id_reposo}</span>
                         </div>
                     </div>
@@ -126,13 +126,7 @@ class ComponentReposoConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Dias Reposo: </span>
-                            <span className="valor">{this.state.dias_reposo}</span>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu Reposo: </span>
+                            <span className="propiedad">Estatus Reposo: </span>
                             <span className="valor">{this.state.estatu_reposo}</span>
                         </div>
                     </div>
@@ -141,7 +135,7 @@ class ComponentReposoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -149,7 +143,7 @@ class ComponentReposoConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

@@ -240,7 +240,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             })
         }
         else{
-            alert("por favor calcular primero los dias no aviles")
+            alert("Por favor calcular primero los días no Habiles")
         }
     }
 
@@ -268,30 +268,30 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_solicitud_permiso_editar">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-solicitud-permiso">
-                            <span className="titulo-form-solicitud-permiso">Editar solicitud permiso</span>
+                            <span className="titulo-form-solicitud-permiso">Editar Solicitud Permiso</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span>Codigo: {this.state.id_permiso_trabajador}</span>
+                            <span>Código: {this.state.id_permiso_trabajador}</span>
                         </div>
                         <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6">
-                            <span>estatu del permiso trabajador: {this.state.estatu_permiso_trabajador}</span>
+                            <span>Estatus del Permiso Trabajador: {this.state.estatu_permiso_trabajador}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center mt-2">
                         {this.state.estatu_dias_aviles==="1" &&
                         (
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span>dias no aviles: {this.state.permiso_trabajador_dias_aviles}</span>
+                                    <span>Días no Habiles: {this.state.permiso_trabajador_dias_aviles}</span>
                                 </div>
                         )
                         }
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            <span className="">desde: {Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                            <span className="">Desde: {Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="">hasta: {Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                            <span className="">Hasta: {Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
                         </div>
                         {this.state.estatu_dias_aviles==="0" &&
                         (
@@ -341,21 +341,21 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="">nombre: {this.state.nombre_permiso}</span>
+                            <span className="">Nombre: {this.state.nombre_permiso}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="">dias: {this.state.dias_permiso}</span>
+                            <span className="">Días: {this.state.dias_permiso}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
+                            <span className="">Remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center row mt-2">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
+                            <span className="">Habiles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="">estatu permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
+                            <span className="">Estatus Permiso: {(this.state.estatu_permiso==="1")?"Activo":"Inactivo"}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"></div>
                     </div>
@@ -366,7 +366,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                     </div>
                     <div className="row justify-content-center row mt-2">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            <span className="">Cedula: {this.state.id_cedula}</span>
+                            <span className="">Cédula: {this.state.id_cedula}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                             <span className="">Nombre: {`${this.state.nombres} ${this.state.apellidos}`}</span>

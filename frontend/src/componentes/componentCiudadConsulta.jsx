@@ -131,7 +131,7 @@ class ComponentCiudadConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Codigo Ciudad: </span>
+                            <span className="propiedad">Código Ciudad: </span>
                             <span className="valor">{this.state.id_ciudad}</span>
                         </div>
                     </div>
@@ -149,7 +149,7 @@ class ComponentCiudadConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatu Ciudad: </span>
+                            <span className="propiedad">Estatus Ciudad: </span>
                             <span className="valor">{this.state.estatu_ciudad}</span>
                         </div>
                     </div>
@@ -158,7 +158,7 @@ class ComponentCiudadConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="actualizar"
+                            value="Actualizar"
                             eventoPadre={this.actualizar}
                             />
                         </div>
@@ -166,7 +166,7 @@ class ComponentCiudadConsulta extends React.Component{
                             <InputButton 
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
-                            value="cancelar"
+                            value="Cancelar"
                             eventoPadre={this.regresar}
                             />   
                         </div>

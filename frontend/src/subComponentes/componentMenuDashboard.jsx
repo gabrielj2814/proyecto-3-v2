@@ -72,19 +72,19 @@ const MenuDashboard = (props) =>{
                         <div id="configuracion">
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/acceso" texto="Acceso"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-trabajador" texto="Tipo de Trabajador"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/funcion-trabajador" texto="Función del trabajado"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/funcion-trabajador" texto="Función del Trabajador"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
 
                             
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignacion medico especialidad"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Medico"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignación Médico Especialidad"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Médico"/>
                             
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de centro de asistencia Medica"/>
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Medica"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de Centro de Asistencia Médica"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Médica"/>
                             
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
@@ -93,7 +93,7 @@ const MenuDashboard = (props) =>{
                     }
                     {modulo[1]==="seguridad"&&
                         <div id="seguridad">
-                            <span className="item-sub-menu">Bitacora</span>
+                            <span className="item-sub-menu">Bitácora</span>
                         </div>
                     }
                 </div>

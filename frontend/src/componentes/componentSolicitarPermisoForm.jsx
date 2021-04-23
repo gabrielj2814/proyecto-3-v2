@@ -439,7 +439,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             <div>
                 <div className="row justify-content-center">
                     <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4 ">
-                        <span>Codigo del permiso: {this.state.id_permiso_trabajador}</span>
+                        <span>Código del Permiso: {this.state.id_permiso_trabajador}</span>
                     </div>
                     <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                 </div>
@@ -453,7 +453,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                     obligatorio="si"
                     //mensaje={this.state.msj_id_funcion_trabajador}
-                    nombreCampoSelect="permiso:"
+                    nombreCampoSelect="Permiso:"
                     clasesSelect="custom-select"
                     name="id_permiso"
                     id="id_permiso"
@@ -468,19 +468,19 @@ class ComponentSolicitarPermisoForm extends React.Component{
                         <div>
                             <div className="row justify-content-center">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">dias: {this.state.dias_permiso}</span>
+                                    <span className="">Días: {this.state.dias_permiso}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                                    <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
+                                    <span className="">Remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                                    <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
+                                    <span className="">Habiles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
                                 </div>
                             </div>
                             
                             <div className="row mt-3">
                                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
-                                    <span className="sub-titulo-form-solicitud-permiso">Fecha del permiso</span>
+                                    <span className="sub-titulo-form-solicitud-permiso">Fecha del Permiso</span>
                                 </div>
                             </div>
                             <div className="row justify-content-center">
@@ -488,7 +488,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 obligatorio="si"
                                 mensaje={this.state.msj_fecha_desde_permiso_trabajador}
-                                nombreCampoDate="desde:"
+                                nombreCampoDate="Desde:"
                                 clasesCampo="form-control"
                                 value={this.state.fecha_desde_permiso_trabajador}
                                 name="fecha_desde_permiso_trabajador"
@@ -496,7 +496,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                 eventoPadre={this.calcularFechaHasta}
                                 />
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 aliniar-fecha-hasta">
-                                    hasta :{(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
+                                    Hasta :{(this.state.fecha_hasta_permiso_trabajador!==null)?Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY"):""}
                                 </div>
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
@@ -510,7 +510,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-success"
                                     id="boton-actualizar"
-                                    value="Enviar solicitud"
+                                    value="Enviar Solicitud"
                                     eventoPadre={this.solicitarNuvoPermiso}
                                     />
                             </div>  
@@ -525,7 +525,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-success"
                                     id="boton-actualizar"
-                                    value="Enviar solicitud"
+                                    value="Enviar Solicitud"
                                     eventoPadre={this.solicitarNuvoPermiso}
                                     />
                             </div>  
@@ -538,26 +538,26 @@ class ComponentSolicitarPermisoForm extends React.Component{
             <div>
                 <div className="row justify-content-center">
                     <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4 ">
-                        <span>Codigo del permiso: {this.state.id_permiso_trabajador}</span>
+                        <span>Código del Permiso: {this.state.id_permiso_trabajador}</span>
                     </div>
                     <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                 </div>
                 <div className="row justify-content-center mt-2">
                     <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
-                        <span>estatu del permiso trabajador: {this.state.estatu_permiso_trabajador}</span>
+                        <span>Estatus del Permiso Trabajador: {this.state.estatu_permiso_trabajador}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">desde: {(this.state.fecha_desde_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                        <span className="">Desde: {(this.state.fecha_desde_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">hasta: {(this.state.fecha_hasta_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                        <span className="">Hasta: {(this.state.fecha_hasta_permiso_trabajador===null)?"sin fecha":Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>
                     </div>
                 </div>
                 {this.state.permiso_trabajador_dias_aviles!=="VC" &&
                     (
                         <div className="row justify-content-center mt-2">
                             <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
-                                <span>dias aviles: {this.state.permiso_trabajador_dias_aviles}</span>
+                                <span>Días Habiles: {this.state.permiso_trabajador_dias_aviles}</span>
                             </div>
                             <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 offset-3">
                                 
@@ -572,21 +572,21 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 </div>
                 <div className="row justify-content-center">
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">nombre: {this.state.nombre_permiso}</span>
+                        <span className="">Nombre: {this.state.nombre_permiso}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">dias: {this.state.dias_permiso}</span>
+                        <span className="">Días: {this.state.dias_permiso}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
+                        <span className="">Remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                     </div>
                 </div>
                 <div className="row justify-content-center row mt-2">
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                        <span className="">aviles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
+                        <span className="">Habiles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
                     </div>
                     <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                        <span className="">tipo de permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
+                        <span className="">Tipo de Permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
                     </div>
                 </div>
                 {(this.state.estatu_formulario==="C" || this.state.estatu_formulario==="D") &&
@@ -624,7 +624,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_solicitud_permiso">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-solicitud-permiso">
-                            <span className="titulo-form-solicitud-permiso">Formulario de solicitud permiso</span>
+                            <span className="titulo-form-solicitud-permiso">Formulario de Solicitud Permiso</span>
                         </div>
                     </div>
                     {this.state.estatu_formulario!=="nuevo"&&

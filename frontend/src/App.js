@@ -4,7 +4,8 @@ import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import ComponentInicio from './componentes/componentInicio';
 import ComponentNosotros from './componentes/componentNosotros';
 import ComponentLogin from './componentes/componentLogin';
-import ComponentRecuperarCuenta from './componentes/componentRecuperarCuenta';
+import ComponentRecuperarCuenta from './componentes/componentRecuperarCuenta1';
+import ComponentRecuperarCuenta1 from './componentes/componentRecuperarCuenta2';
 import ComponentTrabajadorRegistrar from './componentes/componentTrabajadorRegistro'
 //APP
 //import ComponentDashboard from './componentes/componentDashboard';
@@ -94,6 +95,7 @@ function App() {
         <Route exact path="/login:mensaje?" component={ComponentLogin}/>
         <Route exact path="/registrar/trabajador:mensaje?" component={ComponentTrabajadorRegistrar}/>
         <Route exact path="/recuperar-cuenta" component={ComponentRecuperarCuenta}/>
+        <Route exact path="/recuperar-cuenta1" component={ComponentRecuperarCuenta1}/>
         <Route exact path="/dashboard" component={ComponentInicioDashboard}/>
         <Route exact path="/dashboard/configuracion/acceso/consultar/:id" component={ComponentAccesoConsulta}/>
         <Route exact path="/dashboard/configuracion/acceso/:operacion/:id?" component={ComponentAccesoForm}/>

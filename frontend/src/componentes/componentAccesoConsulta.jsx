@@ -143,12 +143,12 @@ class ComponentAccesoConsulta extends React.Component {
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_acceso_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-acceso-consulta">
-                            <span className="titulo-acceso-consulta">Perfil consultado: {this.state.nombre_perfil}</span>
+                            <span className="titulo-acceso-consulta">Perfil Consultado: {this.state.nombre_perfil}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                            <span className="propiedad">Codigo Perfil: </span>
+                            <span className="propiedad">Código Perfil: </span>
                             <span className="valor">{this.state.id_perfil}</span>
                         </div>
                     </div>
@@ -166,18 +166,18 @@ class ComponentAccesoConsulta extends React.Component {
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-acceso-consulta">
-                            <span className="sub-titulo-acceso-consulta">Modulos</span>
+                            <span className="sub-titulo-acceso-consulta">Módulos</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            Modulo Principal
+                            Módulo Principal
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            Sub Modulo
+                            Sub Módulo
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            Estatus Modulo
+                            Estatus Módulo
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"></div>
                     </div>
@@ -201,7 +201,7 @@ class ComponentAccesoConsulta extends React.Component {
                     </div>
                     <div className="row justify-content-center mb-4">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            Modulos en total: {this.state.lista_modulos.length}
+                            Módulos en Total: {this.state.lista_modulos.length}
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"></div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-ms-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
@@ -212,7 +212,7 @@ class ComponentAccesoConsulta extends React.Component {
                                 <InputButton 
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
-                                value="actualizar"
+                                value="Actualizar"
                                 eventoPadre={this.actualizar}
                                 /> 
                             </div>
@@ -220,7 +220,7 @@ class ComponentAccesoConsulta extends React.Component {
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

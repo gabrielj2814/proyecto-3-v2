@@ -359,7 +359,7 @@ class ComponentHorarioFormulario extends React.Component {
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_horario">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-horario">
-                            <span className="titulo-form-horario">Formulario horario</span>
+                            <span className="titulo-form-horario">Formulario Horario</span>
                         </div>
                     </div>
                     <div className="row">
@@ -377,7 +377,7 @@ class ComponentHorarioFormulario extends React.Component {
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo horario:"
+                            nombreCampo="Código Horario:"
                             activo="no"
                             type="text"
                             value={this.state.id_horario}
@@ -390,13 +390,13 @@ class ComponentHorarioFormulario extends React.Component {
                             clasesCampo="form-control"
                             obligatorio="si"
                             mensaje={this.state.msj_horario_descripcion}
-                            nombreCampo="Descripcion:"
+                            nombreCampo="Descripción:"
                             activo="si"
                             type="text"
                             value={this.state.horario_descripcion}
                             name="horario_descripcion"
                             id="horario_descripcion"
-                            placeholder="descripcion"
+                            placeholder="Descripción"
                             eventoPadre={this.cambiarEstado}
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
@@ -479,7 +479,7 @@ class ComponentHorarioFormulario extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -487,7 +487,7 @@ class ComponentHorarioFormulario extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -496,7 +496,7 @@ class ComponentHorarioFormulario extends React.Component {
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

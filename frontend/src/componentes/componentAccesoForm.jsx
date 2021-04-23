@@ -700,13 +700,13 @@ class ComponentAccesoForm extends React.Component {
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Perfil:"
+                            nombreCampo="Código Perfil:"
                             activo="no"
                             type="text"
                             value={this.state.id_perfil}
                             name="id_perfil"
                             id="id_perfil"
-                            placeholder="Codigo Perfil"
+                            placeholder="Código Perfil"
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -743,7 +743,7 @@ class ComponentAccesoForm extends React.Component {
                         </div>
                         <div className="row justify-content-center">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-acceso">
-                                <span className="sub-titulo-form-acceso">Modulos</span>
+                                <span className="sub-titulo-form-acceso">Módulos</span>
                             </div>
                         </div>
                         <div className="row">
@@ -772,7 +772,7 @@ class ComponentAccesoForm extends React.Component {
                                             return(
                                                     <ComponentFormSelect
                                                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                                                    nombreCampoSelect="Modulo Principal"
+                                                    nombreCampoSelect="Módulo Principal"
                                                     clasesSelect="custom-select"
                                                     name={"modulo-"+modulo_principal.id}
                                                     id={"modulo-"+modulo_principal.id}
@@ -787,7 +787,7 @@ class ComponentAccesoForm extends React.Component {
                                             return(
                                                     <ComponentFormSelect
                                                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                                                    nombreCampoSelect="Sub Modulo"
+                                                    nombreCampoSelect="Sub Módulo"
                                                     clasesSelect="custom-select"
                                                     name={"sub-modulo-"+sub_modulo.id}
                                                     id={"sub-modulo-"+sub_modulo.id}
@@ -845,7 +845,7 @@ class ComponentAccesoForm extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -853,7 +853,7 @@ class ComponentAccesoForm extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -862,7 +862,7 @@ class ComponentAccesoForm extends React.Component {
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>
