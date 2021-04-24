@@ -1141,6 +1141,22 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 eventoPadre={this.campoDiasReposo}
                                 />
                         </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormDate
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            obligatorio="si"
+                            mensaje={this.state.msj_fecha_desde_reposo_trabajador}
+                            nombreCampoDate="Fecha Inicio Reposo:"
+                            clasesCampo="form-control"
+                            value={this.state.fecha_desde_reposo_trabajador}
+                            name="fecha_desde_reposo_trabajador"
+                            id="fecha_desde_reposo_trabajador"
+                            eventoPadre={this.mostrarFechaHasta}
+                            />
+                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                Fecha Fin Reposo: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
+                            </div>
+                        </div>
 
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
@@ -1219,26 +1235,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
-                                <span className="sub-titulo-form-reposo-trabajador">Detalles</span>
+                                <span className="sub-titulo-form-reposo-trabajador">Fecha de Entrega del Reposo</span>
                             </div>
                         </div>
-                        
-                        <div className="row justify-content-center">
-                            <ComponentFormDate
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            obligatorio="si"
-                            mensaje={this.state.msj_fecha_desde_reposo_trabajador}
-                            nombreCampoDate="Fecha Inicio Reposo:"
-                            clasesCampo="form-control"
-                            value={this.state.fecha_desde_reposo_trabajador}
-                            name="fecha_desde_reposo_trabajador"
-                            id="fecha_desde_reposo_trabajador"
-                            eventoPadre={this.mostrarFechaHasta}
-                            />
-                            <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                Fecha Fin Reposo: {(this.state.fecha_hasta_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_reposo_trabajador).format("DD-MM-YYYY")}
-                            </div>
-                        </div>
+
                         <div className="row justify-content-center">
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1262,12 +1262,21 @@ class ComponetReposoTrabajadorForm extends React.Component{
                         </div>
                         <div className="row justify-content-center">
                             <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3">
-                                Fecha Inicio Entrega: {(this.state.fecha_desde_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_desde_entrega_reposo_trabajador).format("DD-MM-YYYY")}
+                                Fecha Inicio: {(this.state.fecha_desde_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_desde_entrega_reposo_trabajador).format("DD-MM-YYYY")}
                             </div>
                             <div className="diasReposo col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                Fecha Fin Entrega: {(this.state.fecha_hasta_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_entrega_reposo_trabajador).format("DD-MM-YYYY")}
+                                Fecha Fin: {(this.state.fecha_hasta_entrega_reposo_trabajador==="")?"":Moment(this.state.fecha_hasta_entrega_reposo_trabajador).format("DD-MM-YYYY")}
                             </div>
                         </div>
+
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
+                                <span className="sub-titulo-form-reposo-trabajador">Detalles</span>
+                            </div>
+                        </div>
+                        
+                        
+                        
                         <div className="row justify-content-center mb-3">
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
