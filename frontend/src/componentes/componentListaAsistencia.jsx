@@ -147,10 +147,11 @@ class ComponentListaAsistencia extends React.Component{
                         <thead>
                             <tr>
                             <th scope="col">Cédula</th>
-                            <th scope="col">Nombre Trabajador</th>
+                            <th scope="col">Nombre trabajador</th>
                             <th scope="col">hora de llegada</th>
                             <th scope="col">Cumplimiento H.</th>
-                            <th scope="col">Estado Asistencia</th>
+                            <th scope="col">Estado asistencia</th>
+                            <th scope="col">Estado trabajador</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -162,6 +163,7 @@ class ComponentListaAsistencia extends React.Component{
                                     <td>{(asistencia.horario_entrada_asistencia==="--:--AM")?"--:--":asistencia.horario_entrada_asistencia}</td>
                                     <td className={(asistencia.estatu_cumplimiento_horario==="C")?"bg-success":"bg-danger"}>{(asistencia.estatu_cumplimiento_horario==="C")?"cumplio con el horario":"no cumplio con el horario"}</td>
                                     <td className={(asistencia.estatu_asistencia==="P")?"bg-success":(asistencia.estatu_asistencia==="II")?"bg-danger":"bg-primary"}>{(asistencia.estatu_asistencia==="P")?"Presente":(asistencia.estatu_asistencia==="II")?"Inasistencia injustificada":(asistencia.estatu_asistencia==="IJP")?"Inasistencia justificada por Permiso":"Inasistencia justificada por Reposo"}</td>
+                                    <td >{(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador===null)?"Laborando":(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador!==null)?"vino pero se retiro":"-"}</td>
                                 </tr>
                                )
                             })
