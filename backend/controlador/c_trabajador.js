@@ -72,6 +72,10 @@ class TrabajadorControlador extends TrabajadorModelo{
         this.activarCuentaModelo()
     }
 
+    async cambiarClaveControlador(id,claveNueva,respuesta1,respuesta2){
+        return await this.cambiarClaveModelo(id,claveNueva,respuesta1,respuesta2)
+    }
+
 }
 
 module.exports = TrabajadorControlador

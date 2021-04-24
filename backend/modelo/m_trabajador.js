@@ -109,6 +109,11 @@ class TrabajadorModelo extends DriverPostgre{
         //console.log(SQL)
         this.query(SQL)
     }
+
+    async cambiarClaveModelo(id,claveNueva,respuesta1,respuesta2){
+        const SQL=`UPDATE ttrabajador SET clave_trabajador='${claveNueva}' WHERE id_cedula='${id}' AND respuesta_1='${respuesta1}' AND respuesta_2='${respuesta2}'`
+        return await this.query(SQL)
+    }
     
 }
 

@@ -150,6 +150,57 @@ router.get("/consultar-patron/:patron",async (req,res)=>{
     res.end()
 })
 
+// 
+
+router.get("/consultar-trabajador/:id",async (req,res)=>{
+    const {id}= req.params
+    var respuesta_api={trabajador:"",mensaje:"",estado_peticion:""}
+    const TRABAJADOR=new TrabajadorControlador()
+    const trabajador=await TRABAJADOR.consultarControlador(id)
+    if(trabajador.rows.length!=0){
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        respuesta_api.trabajador=trabajador.rows[0]
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+        // req.vitacora=VitacoraControlador.json(respuesta_api,token,'SELECT',"ttrabajador",id)
+        // next()
+    }
+    else{
+        respuesta_api.mensaje="el trabajador consultado no existe en la base de datos"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+})
+
+router.get("/cambiar-clave/:id/:claveNueva/:respuesta1/:respuesta2",async (req,res)=>{
+    let {id,claveNueva,respuesta1,respuesta2}= req.params
+    var respuesta_api={mensaje:"",estado_peticion:""}
+    const TRABAJADOR=new TrabajadorControlador()
+    claveNueva=await TRABAJADOR.encriptarClave(bcrypt,claveNueva)           
+    const trabajador=await TRABAJADOR.cambiarClaveControlador(id,claveNueva,respuesta1,respuesta2)
+    if(trabajador.rowCount>0){
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_peticion="200"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+        // req.vitacora=VitacoraControlador.json(respuesta_api,token,'SELECT',"ttrabajador",id)
+        // next()
+    }
+    else{
+        respuesta_api.mensaje="el trabajador consultado no existe en la base de datos o las respuestas de las preguntas de seguridad son incorrectas"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+})
+
+
 module.exports = router
 
 
