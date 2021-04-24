@@ -272,6 +272,8 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 this.cambiarEstado(a)
                 let hashTrabajador=JSON.parse(JSON.stringify(this.state.hashTrabajador))
                 if(hashTrabajador[input.value]){
+                    console.log(hashTrabajador[input.value])
+                    document.getElementById("nombreCompletoTrabajador").textContent=`${hashTrabajador[input.value].nombres} ${hashTrabajador[input.value].apellidos}`
                     this.setState({
                         estadoBusquedaTrabajador:true
                     })
@@ -279,16 +281,19 @@ class ComponetReposoTrabajadorForm extends React.Component{
                 }
                 else{
                     // console.log("NO OK")
+                    document.getElementById("nombreCompletoTrabajador").textContent=""
                     this.setState({
                         estadoBusquedaTrabajador:false
                     })
                 }
             }
             else{
+                document.getElementById("nombreCompletoTrabajador").textContent=""
                 document.getElementById("boton-registrar").setAttribute("disabled",true)
             }
         }
         else if(input.value===""){
+            document.getElementById("nombreCompletoTrabajador").textContent=""
             this.cambiarEstado(a)
         }
     }
@@ -1057,7 +1062,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <span className="titulo-form-reposo-trabajador">Formulario Reposo Trabajador</span>
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row ">
                         <div className="col-auto">
                             <ButtonIcon 
                             clasesBoton="btn btn-outline-success"
@@ -1069,6 +1074,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                     </div>
                     <form  id="formulario_reposo_trabajador" >
                         <div className="row justify-content-center">
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
@@ -1080,7 +1086,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             id="id_reposo_trabajador"
                             placeholder="Código Reposo"
                             />
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
@@ -1102,7 +1107,10 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             placeholder="Cédula"
                             eventoPadre={this.buscarTrabajador}
                             />
-                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
+                                <label>Nombre Completo:</label>
+                                <div id="nombreCompletoTrabajador"></div>
+                            </div>
                         </div>
 
 

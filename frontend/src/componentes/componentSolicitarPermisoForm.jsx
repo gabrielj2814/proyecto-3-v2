@@ -438,10 +438,10 @@ class ComponentSolicitarPermisoForm extends React.Component{
         const nueva_solicitud=(
             <div>
                 <div className="row justify-content-center">
+                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                     <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4 ">
                         <span>Código del Permiso: {this.state.id_permiso_trabajador}</span>
                     </div>
-                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                 </div>
                 <div className="row mt-3">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">

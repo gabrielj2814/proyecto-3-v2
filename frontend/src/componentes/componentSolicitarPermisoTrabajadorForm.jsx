@@ -27,9 +27,10 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.buscarPermiso=this.buscarPermiso.bind(this);
         this.calcularFechaHasta=this.calcularFechaHasta.bind(this);
-        this.solicitarNuvoPermiso=this.solicitarNuvoPermiso.bind(this);
+        // this.solicitarNuvoPermiso=this.solicitarNuvoPermiso.bind(this);
         this.nuevoPermiso=this.nuevoPermiso.bind(this)
         this.buscarTrabajador=this.buscarTrabajador.bind(this)
+        this.regresar=this.regresar.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -337,6 +338,10 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         return estado
     }
 
+    regresar(){
+        this.props.history.push("/dashboard/transaccion/permiso-trabajador")
+    }
+
     async solicitarNuvoPermiso(){
         if(this.validarFechaDesde()){
             var respuesta_servidor=""
@@ -454,10 +459,10 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         const nueva_solicitud=(
             <div>
                 <div className="row justify-content-center">
+                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                     <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4 ">
                         <span>Código del Permiso: {this.state.id_permiso_trabajador}</span>
                     </div>
-                    <div className="col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6"></div>
                 </div>
                 <div className="row mt-3">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-solicitud-permiso">
@@ -556,6 +561,14 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         id="botonEnviarSolicitud"
                         value="Enviar Solicitud"
                         eventoPadre={this.solicitarNuvoPermiso}
+                        />
+                    </div>  
+                    <div className="col-auto">
+                        <InputButton 
+                        clasesBoton="btn btn-danger"
+                        id="cancelarSolicitud"
+                        value="Cancelar"
+                        eventoPadre={this.regresar}
                         />
                     </div>  
                 </div>
