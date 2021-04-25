@@ -174,6 +174,11 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         return await this.query(SQL)
     }
 
+    async verificarReposoTrabajadorActivo(cedula){
+        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${cedula}' AND estatu_reposo_trabajador='1';`
+        return await this.query(SQL)
+    }
+
 }
 
 module.exports = ReposoTrabajadorModelo

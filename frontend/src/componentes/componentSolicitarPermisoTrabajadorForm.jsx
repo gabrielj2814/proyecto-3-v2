@@ -440,11 +440,11 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                     alert(`este trabajador tiene un permiso ${(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E")?"en Espera":"Aprovado"}`)
                 }
                 else{
-                    document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+                    this.verificarReposoTrabajador(input.value)
                 }
             }
             else{
-                document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+                this.verificarReposoTrabajador(input.value)
             }
         }
         else{
@@ -453,6 +453,23 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             })
             document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
         }
+    }
+
+    async verificarReposoTrabajador(cedula){
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/verifircar-reposo-trabajador/${cedula}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            if(json.estado===true){
+                alert("este trabajdor tiene un reposo activo")
+                document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
+            }
+            else{
+                document.getElementById("botonEnviarSolicitud").removeAttribute("disabled")
+            }
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
     }
 
     render(){
