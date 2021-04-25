@@ -22,6 +22,7 @@ class ComponentListaAsistencia extends React.Component{
         this.pasarAsistencia=this.pasarAsistencia.bind(this);
         this.mostrarModalObservacion=this.mostrarModalObservacion.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
+        this.enviarObservacion=this.enviarObservacion.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -104,7 +105,8 @@ class ComponentListaAsistencia extends React.Component{
 
     enviarObservacion(){
         alert(this.state.id_asistencia)
-        alert(this.state.id_asistencia)
+        let $inputObservacion=document.getElementById("observacion_asistencia")
+        alert($inputObservacion.value)
     }
 
     cambiarEstado(input){
@@ -179,7 +181,7 @@ class ComponentListaAsistencia extends React.Component{
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" >guardar</button>
+                                <button type="button" class="btn btn-primary" onClick={this.enviarObservacion}>guardar</button>
                             </div>
                             </div>
                         </div>

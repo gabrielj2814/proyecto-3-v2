@@ -248,10 +248,13 @@ CREATE TABLE  tasistencia(
     estatu_asistencia character varying(3) NOT NULL,
     estatu_cumplimiento_horario character(1) NOT NULL,
     id_permiso_trabajador character varying(19) NULL,
+    observacion_asistencia character varying(3000) NULL,
     constraint PK_id_asistencia primary key(id_asistencia),
     constraint FK_id_cedula_tasistencia foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_permiso_trabajador foreign key(id_permiso_trabajador) references tpermisotrabajador(id_permiso_trabajador) on update cascade on delete cascade
 );
+
+-- ALTER TABLE tasistencia ADD COLUMN observacion_asistencia character varying(3000) NULL;
 
 CREATE TABLE tvitacora(
     id_vitacora SERIAL,
