@@ -21,3 +21,15 @@
 .titulo-form-lista-asistencia{
     font-size: 2.5rem; 
 }
+
+.filaTabla{
+    cursor: pointer;
+}
+
+textarea{
+    resize: none;
+}
+
+.observacion{
+    height: 180px !important;
+}

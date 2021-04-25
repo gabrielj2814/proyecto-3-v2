@@ -20,10 +20,14 @@ class ComponentListaAsistencia extends React.Component{
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.pasarAsistencia=this.pasarAsistencia.bind(this);
+        this.mostrarModalObservacion=this.mostrarModalObservacion.bind(this);
+        this.cambiarEstado=this.cambiarEstado.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //----------
+            id_asistencia:null,
+            observacion_asistencia:"",
             asistencias:[],
             alerta:{
                 color:null,
@@ -90,6 +94,23 @@ class ComponentListaAsistencia extends React.Component{
         window.location.href = window.location.href;
     }
 
+    mostrarModalObservacion(fila){
+        // alert("observacion")
+        let idAsistencia=fila.target.getAttribute("data-id-asistencia")
+        this.setState({id_asistencia:idAsistencia})
+        $("#modalObservacion").modal("show")
+        // document.querySelector("#modalObservacion").classList.toggle("show")
+    }
+
+    enviarObservacion(){
+        alert(this.state.id_asistencia)
+        alert(this.state.id_asistencia)
+    }
+
+    cambiarEstado(input){
+        this.setState({[input.name]:input.value})
+    }
+
     render(){
 
         const component=(
@@ -143,6 +164,27 @@ class ComponentListaAsistencia extends React.Component{
                         </div>
                     </div>
 
+                    <div class="modal fade" id="modalObservacion" tabindex="-1" role="dialog" aria-labelledby="modalObservacionLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modalObservacionLabel">Asistencia</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                               <h3 className="text-center mb-3">Agrege una observación</h3>
+                               <textarea className="form-control observacion" id="observacion_asistencia" name="observacion_asistencia" value={this.state.observacion} onChange={this.cambiarEstado}></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                                <button type="button" class="btn btn-primary" >guardar</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <table className="table table-bordered table-hover table-dark">
                         <thead>
                             <tr>
@@ -157,13 +199,13 @@ class ComponentListaAsistencia extends React.Component{
                         <tbody>
                            {this.state.asistencias.map((asistencia,index) => {
                                return(
-                                <tr key={index}>
-                                    <td>{asistencia.id_cedula}</td>
-                                    <td>{asistencia.nombres} {asistencia.apellidos}</td>
-                                    <td>{(asistencia.horario_entrada_asistencia==="--:--AM")?"--:--":asistencia.horario_entrada_asistencia}</td>
-                                    <td className={(asistencia.estatu_cumplimiento_horario==="C")?"bg-success":"bg-danger"}>{(asistencia.estatu_cumplimiento_horario==="C")?"cumplio con el horario":"no cumplio con el horario"}</td>
-                                    <td className={(asistencia.estatu_asistencia==="P")?"bg-success":(asistencia.estatu_asistencia==="II")?"bg-danger":"bg-primary"}>{(asistencia.estatu_asistencia==="P")?"Presente":(asistencia.estatu_asistencia==="II")?"Inasistencia injustificada":(asistencia.estatu_asistencia==="IJP")?"Inasistencia justificada por Permiso":"Inasistencia justificada por Reposo"}</td>
-                                    <td >{(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador===null)?"Laborando":(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador!==null)?"vino pero se retiro":"-"}</td>
+                                <tr key={index} className="filaTabla" data-id-asistencia={asistencia.id_asistencia} onClick={this.mostrarModalObservacion}>
+                                    <td data-id-asistencia={asistencia.id_asistencia} >{asistencia.id_cedula}</td>
+                                    <td data-id-asistencia={asistencia.id_asistencia} >{asistencia.nombres} {asistencia.apellidos}</td>
+                                    <td data-id-asistencia={asistencia.id_asistencia} >{(asistencia.horario_entrada_asistencia==="--:--AM")?"--:--":asistencia.horario_entrada_asistencia}</td>
+                                    <td data-id-asistencia={asistencia.id_asistencia}  className={(asistencia.estatu_cumplimiento_horario==="C")?"bg-success":"bg-danger"}>{(asistencia.estatu_cumplimiento_horario==="C")?"cumplio con el horario":"no cumplio con el horario"}</td>
+                                    <td data-id-asistencia={asistencia.id_asistencia}  className={(asistencia.estatu_asistencia==="P")?"bg-success":(asistencia.estatu_asistencia==="II")?"bg-danger":"bg-primary"}>{(asistencia.estatu_asistencia==="P")?"Presente":(asistencia.estatu_asistencia==="II")?"Inasistencia injustificada":(asistencia.estatu_asistencia==="IJP")?"Inasistencia justificada por Permiso":"Inasistencia justificada por Reposo"}</td>
+                                    <td data-id-asistencia={asistencia.id_asistencia}  >{(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador===null)?"Laborando":(asistencia.horario_entrada_asistencia!="--:--AM" && asistencia.id_permiso_trabajador!==null)?"vino pero se retiro":"-"}</td>
                                 </tr>
                                )
                             })
