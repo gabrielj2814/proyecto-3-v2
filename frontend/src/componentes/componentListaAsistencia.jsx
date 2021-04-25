@@ -27,6 +27,7 @@ class ComponentListaAsistencia extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //----------
+            hashAsistencia:{},
             id_asistencia:null,
             observacion_asistencia:"",
             asistencias:[],
@@ -80,7 +81,14 @@ class ComponentListaAsistencia extends React.Component{
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             console.log(json)
-            this.setState({asistencias:json.asistencias})
+            
+            let hash={}
+            for(let asistencia of json.asistencias){
+                hash[asistencia.id_asistencia]=asistencia
+            }
+            // console.log(hash)
+            this.setState({asistencias:json.asistencias,hashAsistencia:hash})
+
         })
         .catch(error => {
             console.log("error al conectar con el servidor")
@@ -90,8 +98,6 @@ class ComponentListaAsistencia extends React.Component{
     async pasarAsistencia(){
         await axios.get(`http://localhost:8080/transaccion/asistencia/verificar-inasistencias-justificada`)
         await axios.get(`http://localhost:8080/transaccion/asistencia/verificar-inasistencias-injustificada`)
-        // await this.consultarAsistencia()
-        // this.props.history.push("/dashboard/transaccion/asistencia/lista")
         window.location.href = window.location.href;
     }
 
@@ -99,6 +105,10 @@ class ComponentListaAsistencia extends React.Component{
         let idAsistencia=fila.target.getAttribute("data-id-asistencia")
         this.setState({id_asistencia:idAsistencia})
         $("#modalObservacion").modal("show")
+        let asistencias=JSON.parse(JSON.stringify(this.state.hashAsistencia))
+        let asistencia=asistencias[idAsistencia]
+        console.log(asistencia)
+        this.setState({observacion_asistencia:(asistencia.observacion_asistencia===null)?"":asistencia.observacion_asistencia})
     }
 
     async enviarObservacion(){
@@ -118,7 +128,7 @@ class ComponentListaAsistencia extends React.Component{
         }
         console.log("datos =>>>> ",datos)
         await axios.put(`http://localhost:8080/transaccion/asistencia/agregar-observacion`,datos)
-        .then(respuesta => {
+        .then(async respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log("repuesta servidor =>>> ",json)
             $("#modalObservacion").modal("hide")
@@ -132,7 +142,8 @@ class ComponentListaAsistencia extends React.Component{
                 alerta.mensaje=json.mensaje
                 alerta.color="danger"
             }
-            this.setState({alerta})
+            this.setState({alerta,observacion_asistencia:""})
+            await this.consultarAsistencia()
         })
         .catch(error => { 
             console.log("error  al conectarse con el servidor")
@@ -143,7 +154,8 @@ class ComponentListaAsistencia extends React.Component{
         })
     }
 
-    cambiarEstado(input){
+    cambiarEstado(a){
+        let input = a.target
         this.setState({[input.name]:input.value})
     }
 
@@ -211,7 +223,7 @@ class ComponentListaAsistencia extends React.Component{
                             </div>
                             <div class="modal-body">
                                <h3 className="text-center mb-3">Agrege una observación</h3>
-                               <textarea className="form-control observacion" id="observacion_asistencia" name="observacion_asistencia" value={this.state.observacion} onChange={this.cambiarEstado}></textarea>
+                               <textarea className="form-control observacion" id="observacion_asistencia" name="observacion_asistencia" value={this.state.observacion_asistencia} onChange={this.cambiarEstado}></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
