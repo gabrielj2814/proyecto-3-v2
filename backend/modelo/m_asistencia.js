@@ -73,6 +73,11 @@ class AsistenciaModelo extends DriverPostgre {
         const SQL=`SELECT * FROM tasistencia,ttrabajador WHERE  tasistencia.fecha_asistencia='${fechaHoy}' AND (tasistencia.id_cedula=ttrabajador.id_cedula);`
         return await this.query(SQL)
     }
+
+    async agregarObservacion(id,observacion){
+        const SQL=`UPDATE tasistencia SET observacion_asistencia='${observacion}' WHERE id_asistencia='${id}';`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = AsistenciaModelo

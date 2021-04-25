@@ -14,6 +14,7 @@ router.get("/consultar-asistencias-trabajador/:cedula",AsistenciaControlador.con
 router.get("/consultar-asistencias-por-fecha/:fecha",AsistenciaControlador.consultarAsistenciasFechaControlador)
 router.get("/consultar-todas-las-asistencias",AsistenciaControlador.consultarTodasLasAsistenciasControlador)
 router.get("/consultar-asistencia-hoy",AsistenciaControlador.consultarAsistenciaHoy)
+router.put("/agregar-observacion",AsistenciaControlador.agregarObservacionAsistencia,VitacoraControlador.capturaDatos)
 
 
 

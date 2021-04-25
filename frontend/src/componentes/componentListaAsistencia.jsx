@@ -96,17 +96,51 @@ class ComponentListaAsistencia extends React.Component{
     }
 
     mostrarModalObservacion(fila){
-        // alert("observacion")
         let idAsistencia=fila.target.getAttribute("data-id-asistencia")
         this.setState({id_asistencia:idAsistencia})
         $("#modalObservacion").modal("show")
-        // document.querySelector("#modalObservacion").classList.toggle("show")
     }
 
-    enviarObservacion(){
-        alert(this.state.id_asistencia)
+    async enviarObservacion(){
+        let  alerta={
+            color:null,
+            mensaje:null,
+            estado:false
+        }
         let $inputObservacion=document.getElementById("observacion_asistencia")
-        alert($inputObservacion.value)
+        let token=localStorage.getItem("usuario")
+        const datos={
+            asistencia:{
+                id_asistencia:this.state.id_asistencia,
+                observacion_asistencia:$inputObservacion.value,
+                token
+            }
+        }
+        console.log("datos =>>>> ",datos)
+        await axios.put(`http://localhost:8080/transaccion/asistencia/agregar-observacion`,datos)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("repuesta servidor =>>> ",json)
+            $("#modalObservacion").modal("hide")
+            if(json.estado_peticion==="200"){
+                alerta.mensaje=json.mensaje
+                alerta.color="success"
+                alerta.estado=true
+            }
+            else{
+                
+                alerta.mensaje=json.mensaje
+                alerta.color="danger"
+            }
+            this.setState({alerta})
+        })
+        .catch(error => { 
+            console.log("error  al conectarse con el servidor")
+            alerta.mensaje="error al conectarse con el servidor"
+            alerta.color="danger"
+            alerta.estado=true
+            this.setState({alerta})
+        })
     }
 
     cambiarEstado(input){
