@@ -71,6 +71,18 @@ class ComponentTrabajadorRegistro extends React.Component{
               },
         }
     }
+
+    // UNSAFE_componentWillMount(){
+    //     const exprecion=/[A-Z]{2}/g
+    //     const exprecion2=/[a-z]{2}/g
+    //     if(exprecion.test("hVRT") && exprecion2.test("hVRT")){
+    //         alert("si")
+
+    //     }
+    //     else{
+    //         alert("no")
+    //     }
+    // }
         
 
     validarNumero(a){
@@ -172,20 +184,33 @@ class ComponentTrabajadorRegistro extends React.Component{
         var mensaje_clave=this.state["msj_clave_confirmar"]
         const validar_clave=this.validarCampoTexto("clave_trabajador")
         if(this.validarMinimoClave(validar_clave,"clave_trabajador")){
-            const validar_clave_confirmar=this.validarCampoTexto("clave_confirmar")
-            if(this.validarMinimoClave(validar_clave_confirmar,"clave_confirmar")){
-                if(this.state.clave_trabajador===this.state.clave_confirmar){
-                    estado=true
-                    mensaje_clave.mensaje=""
-                    mensaje_clave.color_texto="blanco"
-                    this.setState({msj_clave_confirmar:mensaje_clave})
+            const exprecion=/[A-Z]{2}/g
+            const exprecion2=/[a-z]{2}/g
+            let clave=document.getElementById("clave_trabajador").value
+            if(exprecion.test(clave) && exprecion2.test(clave)){
+                alert("si")
+                const validar_clave_confirmar=this.validarCampoTexto("clave_confirmar")
+                if(this.validarMinimoClave(validar_clave_confirmar,"clave_confirmar")){
+                    if(this.state.clave_trabajador===this.state.clave_confirmar){
+                        estado=true
+                        mensaje_clave.mensaje=""
+                        mensaje_clave.color_texto="blanco"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
+                    else{
+                        mensaje_clave.mensaje="* las claves no coinciden"
+                        mensaje_clave.color_texto="blanco"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
                 }
-                else{
-                    mensaje_clave.mensaje="* las claves no coinciden"
-                    mensaje_clave.color_texto="blanco"
-                    this.setState({msj_clave_confirmar:mensaje_clave})
-                }
+
             }
+            else{
+                mensaje_clave.mensaje="la clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
+                mensaje_clave.color_texto="blanco"
+                this.setState({msj_clave_confirmar:mensaje_clave})
+            }
+            
         }
         return estado
     }
@@ -349,7 +374,6 @@ class ComponentTrabajadorRegistro extends React.Component{
                                                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                                     <div className={"alert alert-"+((this.state.mensaje.estado==="200")?"success":"danger")+" alert-dismissible "}>
                                                         <p>Mensaje: {this.state.mensaje.texto}</p>
-                                                        <p>Estado: {this.state.mensaje.estado}</p>
                                                         <button className="close" data-dismiss="alert">
                                                             <span>X</span>
                                                         </button>
