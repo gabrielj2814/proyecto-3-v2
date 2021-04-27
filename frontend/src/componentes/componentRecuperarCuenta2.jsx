@@ -11,6 +11,7 @@ import CintilloComponent from '../subComponentes/cintilloComponent';
 import ComponentFormCampo from '../subComponentes/componentFormCampo';
 import LinkButton from '../subComponentes/link_button';
 import InputButton from '../subComponentes/input_button'
+import ComponentFormSelect from '../subComponentes/componentFormSelect';
 
 class ComponentRecuperarCuenta1 extends React.Component{
 
@@ -21,8 +22,8 @@ class ComponentRecuperarCuenta1 extends React.Component{
         this.iniciarSesion=this.iniciarSesion.bind(this)
         this.irAlHomePage=this.irAlHomePage.bind(this)
         this.state={
-            id_cedula:"",
-            clave_trabajador:"",
+            pregunta_1:"",
+            pregunta_2:"",
             mensaje:{
                 texto:"",
                 estado:""
@@ -172,19 +173,9 @@ class ComponentRecuperarCuenta1 extends React.Component{
                                     Recuperar Cuenta
                                 </div>
                             </div>
-                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404" || this.state.mensaje.estado==="401" || this.state.mensaje.estado==="500") &&
-                                    <div className="row">
-                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div className={`alert alert-${(this.state.mensaje.estado==="200" || this.state.mensaje.estado==="401")?"success":"danger"} alert-dismissible`} >
-                                                <p>Mensaje: {this.state.mensaje.texto}</p>
-                                                <button className="close" data-dismiss="alert">
-                                                    <span>X</span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
+                            <div className="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center">
+                                <span className="propiedad">Pregunta 1</span>
+                                <span className="valor">{this.state.pregunta_1}</span>
                             </div>
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
@@ -193,12 +184,16 @@ class ComponentRecuperarCuenta1 extends React.Component{
                                 activo="si"
                                 clasesCampo="form-control"
                                 type="text"
-                                value={this.state.id_cedula}
+                                value={this.state.id_respuesta_1}
                                 name="id_pregunta_1"
                                 id="id_pregunta_1"
                                 placeholder="RESPUESTA NRO 1"
                                 eventoPadre={this.validarNumero}
                                 />
+                            </div>
+                            <div className="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center">
+                                <span className="propiedad">Pregunta 2</span>
+                                <span className="valor">{this.state.pregunta_2}</span>
                             </div>
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
@@ -207,7 +202,7 @@ class ComponentRecuperarCuenta1 extends React.Component{
                                 activo="si"
                                 clasesCampo="form-control"
                                 type="text"
-                                value={this.state.id_cedula}
+                                value={this.state.id_respuesta_2}
                                 name="id_pregunta_2 "
                                 id="id_pregunta_2"
                                 placeholder="RESPUESTA NRO 2"
