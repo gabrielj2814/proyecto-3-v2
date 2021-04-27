@@ -85,6 +85,9 @@ import ComponentCintillo from "./componentes/componentCintillo"
 // error
 import ComponentError404 from "./componentes/componentError404"
 
+// vista reportes
+
+import ComponentReporteMedico from './componentes/componentReporteMedico'
 
 function App() {
   return (
@@ -167,6 +170,9 @@ function App() {
 
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
         <Route exact path="/dashboard/transaccion/asistencia/lista" component={ComponentListaAsistencia}/>
+
+
+        <Route exact path="/dashboard/reporte/medico" component={ComponentReporteMedico}/>
 
         <Route  path="*" component={ComponentError404}/>
         </Switch>
