@@ -26,10 +26,12 @@ class ComponentListaAsistencia extends React.Component{
         this.enviarObservacion=this.enviarObservacion.bind(this);
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
         this.mostrarFiltros=this.mostrarFiltros.bind(this);
+        this.generarPdf=this.generarPdf.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //----------
+            id_cedula:null,
             hashAsistencia:{},
             id_asistencia:null,
             observacion_asistencia:"",
@@ -196,6 +198,38 @@ class ComponentListaAsistencia extends React.Component{
         }
       }
 
+      generarPdf(){
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+        let datos=null
+        if(this.state.tipoPdf==="0"){
+          datos=$("#formListaEspecifico").serializeArray()
+        }
+        else if(this.state.tipoPdf==="1"){
+          datos=$("#formLista").serializeArray()
+        }
+  
+        console.log(datos)
+  
+        if(datos!==null){
+          alert("generar pdf")
+          // $.ajax({
+          //   url: 'ruta',
+          //   type:"post",
+          //   data:[],
+          //   success: function(respuesta) {
+          //     alert("OK")
+          //   },
+          //   error: function() {
+          //     alert("error")
+          //   }
+          // });
+        }
+        
+  
+      }
+
     render(){
 
         const component=(
@@ -257,21 +291,71 @@ class ComponentListaAsistencia extends React.Component{
                                   </div>
                                 </div>
                               </div>
-                              <form id="formListaEspecifico" class="ocultarFormulario">
+                              <form id="formListaEspecifico" class="ocultarFormulario mb-3">
+                              <div className="row justify-content-center">
+                                    <ComponentFormCampo
+                                    clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                    clasesCampo="form-control"
+                                    obligatorio="no"
+                                    nombreCampo="Cedula del trabajador"
+                                    activo="si"
+                                    type="text"
+                                    value={this.state.id_cedula}
+                                    name="id_cedula"
+                                    id="id_cedula"
+                                    placeholder="cedula"
+                                    eventoPadre={this.cambiarEstado}
+                                    />
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado de asistencia</label>
+                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="P" >Presente</option>
+                                        <option value="II" >Inasistencia injustificada</option>
+                                        <option value="IJR" >Inasistencia justificada por reposo</option>
+                                        <option value="IJP" >Inasistencia justificada por permsio</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado del trabajador</label>
+                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="1" >Laborando</option>
+                                        <option value="0" >Retiro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
                                 <div className="row justify-content-center">
-                                  <ComponentFormCampo
-                                  clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                                  clasesCampo="form-control"
-                                  obligatorio="no"
-                                  nombreCampo="Cedula del trabajador"
-                                  activo="si"
-                                  type="text"
-                                  value={this.state.id_cedula}
-                                  name="id_cedula"
-                                  id="id_cedula"
-                                  placeholder="cedula"
-                                  eventoPadre={this.cambiarEstado}
-                                  />
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Cumplimiento Horario</label>
+                                        <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                            <option value="null" >seleccione</option>
+                                            <option value="C" >Cumplio</option>
+                                            <option value="N" >No cumplio</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="desde" name="desde"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="hasta" name="hasta"/>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                               </form>
 
@@ -312,6 +396,21 @@ class ComponentListaAsistencia extends React.Component{
                                   </div>
                                   
 
+                                </div>
+                                <div className="row justify-content-center">
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="desde" name="desde"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="hasta" name="hasta"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                                 </div>
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
