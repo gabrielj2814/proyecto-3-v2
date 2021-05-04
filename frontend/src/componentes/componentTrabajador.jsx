@@ -40,7 +40,8 @@ class ComponentTrabajador extends React.Component{
             id_cedula:"",
             nombrePdf:null,
             tipoPdf:null,
-
+            tiposTrabajadores:[],
+            funcionesTrabajadores:[],
             numeros_registros:0,
             mensaje:{
               texto:"",
@@ -50,6 +51,7 @@ class ComponentTrabajador extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+        await this.consultarTodosTiposTrabajador()
         var json_server_response=await this.consultarTodosTrabajadores();
         var servidor=this.verficarLista(json_server_response);
         if(this.props.match.params.mensaje){
@@ -205,6 +207,18 @@ class ComponentTrabajador extends React.Component{
                             </td>
                           }
     */
+
+    async consultarTodosTiposTrabajador(){
+      await axios.get("http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador")
+      .then(respuesta => {
+        let json=JSON.parse(JSON.stringify(respuesta.data))
+        console.log("datos => ",json)
+        this.setState({tiposTrabajadores:json.tipos_trabajador})
+      })
+      .catch(error => {
+        alert("error al conectar con el servidor")
+      })
+    }
 
     mostrarModalPdf(){
       // alert("hola")
@@ -380,8 +394,8 @@ class ComponentTrabajador extends React.Component{
                                     <div class="form-groud">
                                       <label>Tipo de trabajador</label>
                                       <select class="form-select custom-select" id="id_tipo_trabajador" name="id_tipo_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                        <option value="1" >Masculino</option>
-                                        <option value="0" >Femenino</option>
+                                        <option value="null" >seleccione</option>
+                                        {this.state.tiposTrabajadores.map((tipoTrabajador,index) => (<option key={"tipo-trabajador"+index} value={tipoTrabajador.id_tipo_trabajador}  >{tipoTrabajador.descripcion_tipo_trabajador}</option>))}
                                       </select>
                                     </div>
                                   </div>
