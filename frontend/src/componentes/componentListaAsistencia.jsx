@@ -13,6 +13,7 @@ import ComponentDashboard from './componentDashboard'
 //sub componentes
 import InputButton from '../subComponentes/input_button'
 import AlertBootstrap from "../subComponentes/alertBootstrap"
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 class ComponentListaAsistencia extends React.Component{
 
@@ -23,6 +24,8 @@ class ComponentListaAsistencia extends React.Component{
         this.mostrarModalObservacion=this.mostrarModalObservacion.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.enviarObservacion=this.enviarObservacion.bind(this);
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
+        this.mostrarFiltros=this.mostrarFiltros.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -159,6 +162,40 @@ class ComponentListaAsistencia extends React.Component{
         this.setState({[input.name]:input.value})
     }
 
+
+    mostrarModalPdf(){
+        // alert("hola")
+        $("#modalPdfAsistencia").modal("show")
+    }
+
+    mostrarFiltros(a){
+        let $select=a.target
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.add("ocultarFormulario")
+        // alert($select.value)
+        let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+        let $formListaEspecifico=document.getElementById("formListaEspecifico")
+        let $formLista=document.getElementById("formLista")
+        if($select.value==="0"){
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          this.setState({tipoPdf:"0"})
+        }
+        else if($select.value==="1"){
+          this.setState({tipoPdf:"1"})
+          $formLista.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+        }
+        else{
+          this.setState({tipoPdf:null})
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+          $botonGenerarPdf.classList.add("ocultarFormulario")
+        }
+      }
+
     render(){
 
         const component=(
@@ -178,7 +215,7 @@ class ComponentListaAsistencia extends React.Component{
                     </div>
 
                     <div className="row  mb-3">
-                        <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
+                        <div className="col-auto">
 
                             <button class="btn btn-success"  data-toggle="modal" data-target="#exampleModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
@@ -190,7 +227,106 @@ class ComponentListaAsistencia extends React.Component{
 
                         </div>
 
+                        <div className="col-auto">
+
+                            <button class="btn btn-danger" onClick={this.mostrarModalPdf} >pdf</button>
+
+                        </div>
+
                     </div>
+
+                    <div class="modal fade" id="modalPdfAsistencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                  <div class="form-groud">
+                                    <label>Tipo de reporte</label>
+                                    <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <option value="null" >seleccione un tipo de reporte</option>
+                                      <option value="1" >generar una lista</option>
+                                      <option value="0" >generar un especifico</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <form id="formListaEspecifico" class="ocultarFormulario">
+                                <div className="row justify-content-center">
+                                  <ComponentFormCampo
+                                  clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                  clasesCampo="form-control"
+                                  obligatorio="no"
+                                  nombreCampo="Cedula del trabajador"
+                                  activo="si"
+                                  type="text"
+                                  value={this.state.id_cedula}
+                                  name="id_cedula"
+                                  id="id_cedula"
+                                  placeholder="cedula"
+                                  eventoPadre={this.cambiarEstado}
+                                  />
+                                </div>
+                              </form>
+
+
+                              <form id="formLista" class="ocultarFormulario mb-3">
+                                <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado de asistencia</label>
+                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="P" >Presente</option>
+                                        <option value="II" >Inasistencia injustificada</option>
+                                        <option value="IJR" >Inasistencia justificada por reposo</option>
+                                        <option value="IJP" >Inasistencia justificada por permsio</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado del trabajador</label>
+                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="1" >Laborando</option>
+                                        <option value="0" >Retiro</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Cumplimiento Horario</label>
+                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="C" >Cumplio</option>
+                                        <option value="N" >No cumplio</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+
+                                </div>
+                              </form>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
 
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
