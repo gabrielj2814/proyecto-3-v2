@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -12,6 +13,7 @@ import TituloModulo from '../subComponentes/tituloModulo'
 import ComponentTablaDatosSinBarra from '../subComponentes/componentTablaDeDatosSinBarra'
 import ButtonIcon from '../subComponentes/buttonIcon'
 import InputButton from '../subComponentes/input_button'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 
 class ComponentPermisoTrabajador extends React.Component{
@@ -26,13 +28,18 @@ class ComponentPermisoTrabajador extends React.Component{
         this.consultarPermiso=this.consultarPermiso.bind(this);
         this.editarPermiso=this.editarPermiso.bind(this);
         this.redirigirFormulario=this.redirigirFormulario.bind(this);
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
+        this.mostrarFiltros=this.mostrarFiltros.bind(this);
+        this.generarPdf=this.generarPdf.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
             //////
             tabla:"",
+            tipoPdf:null,
             datoDeBusqueda:"",
             registros:[],
+            tiposPermiso:[],
             numeros_registros:0,
             mensaje:{
               texto:"",
@@ -62,6 +69,7 @@ class ComponentPermisoTrabajador extends React.Component{
       }
 
       async UNSAFE_componentWillMount(){
+          await this.consultarTodosPermiso()
         const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${"E"}`
         const permisos=await this.consultarAlServidor(ruta_permisos)
         const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
@@ -243,6 +251,89 @@ class ComponentPermisoTrabajador extends React.Component{
         this.props.history.push("/dashboard/transaccion/permiso-trabajador/trabajador/solicitar")
     }
 
+    async consultarTodosPermiso(){
+        await axios.get("http://localhost:8080/configuracion/permiso/consultar-permisos")
+        .then(respuesta=>{
+          let json=JSON.parse(JSON.stringify(respuesta.data.permisos))
+          let datosSelect=json.filter(permiso => {
+              if(permiso.estatu_permiso==="1"){
+                  return permiso
+              }
+          })
+          console.log("datos permiso => ",datosSelect)
+          this.setState({tiposPermiso:datosSelect})
+        })
+        .catch(error=>{
+          alert("No se pudo conectar con el servidor")
+          console.log(error)
+        })
+    }
+
+    mostrarModalPdf(){
+        // alert("hola")
+        $("#modalPdf").modal("show")
+    }
+
+    mostrarFiltros(a){
+        let $select=a.target
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.add("ocultarFormulario")
+        // alert($select.value)
+        let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+        let $formListaEspecifico=document.getElementById("formListaEspecifico")
+        let $formLista=document.getElementById("formLista")
+        if($select.value==="0"){
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          this.setState({tipoPdf:"0"})
+        }
+        else if($select.value==="1"){
+          this.setState({tipoPdf:"1"})
+          $formLista.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+        }
+        else{
+          this.setState({tipoPdf:null})
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+          $botonGenerarPdf.classList.add("ocultarFormulario")
+        }
+      }
+
+      generarPdf(){
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+        let datos=null
+        if(this.state.tipoPdf==="0"){
+          datos=$("#formListaEspecifico").serializeArray()
+        }
+        else if(this.state.tipoPdf==="1"){
+          datos=$("#formLista").serializeArray()
+        }
+  
+        console.log(datos)
+  
+        if(datos!==null){
+          alert("generar pdf")
+          // $.ajax({
+          //   url: 'ruta',
+          //   type:"post",
+          //   data:[],
+          //   success: function(respuesta) {
+          //     alert("OK")
+          //   },
+          //   error: function() {
+          //     alert("error")
+          //   }
+          // });
+        }
+        
+  
+      }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -314,6 +405,168 @@ class ComponentPermisoTrabajador extends React.Component{
                     </div>
                 </div>
                 }
+
+                    <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                  <div class="form-groud">
+                                    <label>Tipo de reporte</label>
+                                    <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <option value="null" >seleccione un tipo de reporte</option>
+                                      <option value="1" >generar una lista</option>
+                                      <option value="0" >generar un especifico</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <form id="formListaEspecifico" class="ocultarFormulario mb-3">
+                                    <div className="row justify-content-center">
+                                    <ComponentFormCampo
+                                    clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                    clasesCampo="form-control"
+                                    obligatorio="no"
+                                    nombreCampo="Cedula del trabajador"
+                                    activo="si"
+                                    type="text"
+                                    value={this.state.id_cedula}
+                                    name="id_cedula"
+                                    id="id_cedula"
+                                    placeholder="cedula"
+                                    />
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado permiso</label>
+                                      <select class="form-select custom-select" id="estatu_permiso_trabajador	" name="estatu_permiso_trabajador	" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="E" >En espera</option>
+                                        <option value="A" >Aprovado</option>
+                                        <option value="C" >Culminado</option>
+                                        <option value="D" >Denegado</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Tipo de pemriso</label>
+                                      <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="PR" >Permiso de retiro</option>
+                                        <option value="PN" >Permiso normal</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
+                                <div className="row justify-content-center">
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Permiso</label>
+                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
+                                        <option value="null" >Selecciones</option>
+                                        {this.state.tiposPermiso.map((tipoPermiso,index) => (<option key={index} value={tipoPermiso.id_permiso}  >{tipoPermiso.nombre_permiso}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_desde_permiso_trabajador" name="fecha_desde_permiso_trabajador"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_hasta_permiso_trabajador" name="fecha_hasta_permiso_trabajador"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                              </form>
+
+
+                              <form id="formLista" class="ocultarFormulario mb-3">
+
+                                <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado permiso</label>
+                                      <select class="form-select custom-select" id="estatu_permiso_trabajador	" name="estatu_permiso_trabajador	" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="E" >En espera</option>
+                                        <option value="A" >Aprovado</option>
+                                        <option value="C" >Culminado</option>
+                                        <option value="D" >Denegado</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Tipo de pemriso</label>
+                                      <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="PR" >Permiso de retiro</option>
+                                        <option value="PN" >Permiso normal</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Permiso</label>
+                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
+                                        <option value="null" >Selecciones</option>
+                                        {this.state.tiposPermiso.map((tipoPermiso,index) => (<option key={index} value={tipoPermiso.id_permiso}  >{tipoPermiso.nombre_permiso}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
+                                <div className="row justify-content-center">
+                                    
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_desde_permiso_trabajador" name="fecha_desde_permiso_trabajador"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_hasta_permiso_trabajador" name="fecha_hasta_permiso_trabajador"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                    
+                                </div>
+                                
+                              </form>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
+
                 <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Permiso Trabajador"/>
                     <ComponentTablaDatosSinBarra 
                     eventoEscribirCodigo={this.escribir_codigo}
@@ -323,13 +576,20 @@ class ComponentPermisoTrabajador extends React.Component{
                     ventoConsultarPermiso={this.consultarPermisosXEstatu}
                     tabla={this.state.tabla}
                     />
-                <div className="row">
+                <div className="row justify-content-between">
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
                                 <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                      <div className="row justify-content-center align-items-center contenedor-boton">
+                        <div className="col-auto">
+                          <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
