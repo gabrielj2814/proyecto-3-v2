@@ -445,7 +445,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado permiso</label>
-                                      <select class="form-select custom-select" id="estatu_permiso_trabajador	" name="estatu_permiso_trabajador	" aria-label="Default se0lec0t example">
+                                      <select class="form-select custom-select" id="estatu_permiso_trabajador" name="estatu_permiso_trabajador" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="E" >En espera</option>
                                         <option value="A" >Aprovado</option>
@@ -501,7 +501,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado permiso</label>
-                                      <select class="form-select custom-select" id="estatu_permiso_trabajador	" name="estatu_permiso_trabajador	" aria-label="Default se0lec0t example">
+                                      <select class="form-select custom-select" id="estatu_permiso_trabajador" name="estatu_permiso_trabajador" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="E" >En espera</option>
                                         <option value="A" >Aprovado</option>

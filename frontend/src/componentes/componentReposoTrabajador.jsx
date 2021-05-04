@@ -4,6 +4,7 @@ import {withRouter} from "react-router-dom"
 //JS
 import axios from 'axios'
 import Moment from 'moment'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -19,6 +20,7 @@ import ComponentFormDate from '../subComponentes/componentFormDate'
 // --
 import TituloModulo from '../subComponentes/tituloModulo'
 import Tabla from '../subComponentes/componentTabla'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 class ComponentReposoTrabajador extends React.Component{
 
@@ -33,10 +35,15 @@ class ComponentReposoTrabajador extends React.Component{
         this.consultarElementoTabla=this.consultarElementoTabla.bind(this);
         this.reposoEntregado=this.reposoEntregado.bind(this);
         this.reposoNoEntregado=this.reposoNoEntregado.bind(this);
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
+        this.mostrarFiltros=this.mostrarFiltros.bind(this);
+        this.generarPdf=this.generarPdf.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            listaReposos:[],
+            tipoPdf:null,
             fecha_desde_reposo_trabajador:"",
             fecha_hasta_reposo_trabajador:"",
             msj_fecha_desde_reposo_trabajador:{
@@ -90,6 +97,7 @@ class ComponentReposoTrabajador extends React.Component{
     }
 
     async componentWillMount(){
+        await this.consultarTodosReposo2()
         let listaDeTrabajadores=await this.consultarTodosTrabajadores();
         let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
         let trabajadores={}
@@ -243,7 +251,7 @@ class ComponentReposoTrabajador extends React.Component{
         await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"E"}`)
         .then(async repuesta => {
             let json=repuesta.data
-            if(json.mensaje!=""){
+            if(json.mensaje!==""){
                 var alerta=this.state.alerta
                 alerta.mensaje=json.mensaje
                 alerta.estado=true
@@ -266,7 +274,7 @@ class ComponentReposoTrabajador extends React.Component{
         await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"N"}`)
         .then(async repuesta => {
             let json=repuesta.data
-            if(json.mensaje!=""){
+            if(json.mensaje!==""){
                 var alerta=this.state.alerta
                 alerta.mensaje=json.mensaje
                 alerta.estado=true
@@ -311,6 +319,89 @@ class ComponentReposoTrabajador extends React.Component{
         let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
         this.setState(datosTabla)
     }
+
+    async consultarTodosReposo2(){
+        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
+        .then(respuesta=>{
+          let json=JSON.parse(JSON.stringify(respuesta.data.reposos))
+            let listaReposos=json.filter(reposo => {
+                if(reposo.estatu_reposo==="1"){
+                    return reposo
+                }
+            })
+            this.setState({listaReposos})
+            // console.log("datos reposo =>>>>>>>>>>>>>>>>>> ",listaReposos)
+        })
+        .catch(error=>{
+          alert("No se pudo conectar con el servidor")
+          console.log(error)
+        })
+    }
+
+    mostrarModalPdf(){
+        // alert("hola")
+        $("#modalPdf").modal("show")
+    }
+
+    mostrarFiltros(a){
+        let $select=a.target
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.add("ocultarFormulario")
+        // alert($select.value)
+        let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+        let $formListaEspecifico=document.getElementById("formListaEspecifico")
+        let $formLista=document.getElementById("formLista")
+        if($select.value==="0"){
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          this.setState({tipoPdf:"0"})
+        }
+        else if($select.value==="1"){
+          this.setState({tipoPdf:"1"})
+          $formLista.classList.remove("ocultarFormulario")
+          $botonGenerarPdf.classList.remove("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+        }
+        else{
+          this.setState({tipoPdf:null})
+          $formLista.classList.add("ocultarFormulario")
+          $formListaEspecifico.classList.add("ocultarFormulario")
+          $botonGenerarPdf.classList.add("ocultarFormulario")
+        }
+      }
+
+      generarPdf(){
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+        let datos=null
+        if(this.state.tipoPdf==="0"){
+          datos=$("#formListaEspecifico").serializeArray()
+        }
+        else if(this.state.tipoPdf==="1"){
+          datos=$("#formLista").serializeArray()
+        }
+  
+        console.log(datos)
+  
+        if(datos!==null){
+          alert("generar pdf")
+          // $.ajax({
+          //   url: 'ruta',
+          //   type:"post",
+          //   data:[],
+          //   success: function(respuesta) {
+          //     alert("OK")
+          //   },
+          //   error: function() {
+          //     alert("error")
+          //   }
+          // });
+        }
+        
+  
+      }
 
     render(){
         const jsx_tabla_encabezado=(
@@ -396,6 +487,148 @@ class ComponentReposoTrabajador extends React.Component{
                         
                     </div>)
                 }
+
+
+                <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                  <div class="form-groud">
+                                    <label>Tipo de reporte</label>
+                                    <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <option value="null" >seleccione un tipo de reporte</option>
+                                      <option value="1" >generar una lista</option>
+                                      <option value="0" >generar un especifico</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <form id="formListaEspecifico" class="ocultarFormulario mb-3">
+                                    <div className="row justify-content-center">
+                                    <ComponentFormCampo
+                                    clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                    clasesCampo="form-control"
+                                    obligatorio="no"
+                                    nombreCampo="Cedula del trabajador"
+                                    activo="si"
+                                    type="text"
+                                    value={this.state.id_cedula}
+                                    name="id_cedula"
+                                    id="id_cedula"
+                                    placeholder="cedula"
+                                    />
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado Reposo</label>
+                                      <select class="form-select custom-select" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="1" >Activo</option>
+                                        <option value="0" >Inactivo</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Reposo</label>
+                                      <select class="form-select custom-select" id="id_reposo" name="id_reposo" aria-label="Default select example" >
+                                        <option value="null" >Selecciones</option>
+                                        {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
+                                <div className="row justify-content-center">
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                    
+                                </div>
+                              </form>
+
+
+                              <form id="formLista" class="ocultarFormulario mb-3">
+                              <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado Reposo</label>
+                                      <select class="form-select custom-select" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        <option value="1" >Activo</option>
+                                        <option value="0" >Inactivo</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Reposo</label>
+                                      <select class="form-select custom-select" id="id_reposo" name="id_reposo" aria-label="Default select example" >
+                                        <option value="null" >Selecciones</option>
+                                        {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+                                  
+                                  
+
+                                </div>
+                                <div className="row justify-content-center">
+                                   
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+
+                                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                                    
+                                </div>
+                                
+                              </form>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
                 
                 <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Reposo Trabajador"/>
                 
@@ -436,13 +669,20 @@ class ComponentReposoTrabajador extends React.Component{
                 
                 </div>
                 
-                <div className="row">
+                <div className="row justify-content-between">
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
                                 <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                      <div className="row justify-content-center align-items-center contenedor-boton">
+                        <div className="col-auto">
+                          <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                        </div>
+                      </div>
                     </div>
                 </div>
             </div>
