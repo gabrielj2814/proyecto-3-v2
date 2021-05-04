@@ -17,3 +17,7 @@
 .contenedor-boton{
     height: 100%;
 }
+
+.ocultarFormulario{
+    display: none;
+}

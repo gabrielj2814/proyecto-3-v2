@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -12,6 +13,7 @@ import TituloModulo from '../subComponentes/tituloModulo'
 import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 import ButtonIcon from '../subComponentes/buttonIcon'
 import InputButton from '../subComponentes/input_button'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 class ComponentTrabajador extends React.Component{
 
@@ -24,12 +26,21 @@ class ComponentTrabajador extends React.Component{
         this.escribir_codigo=this.escribir_codigo.bind(this)
         this.redirigirFormulario=this.redirigirFormulario.bind(this)
         this.mostrarModulo=this.mostrarModulo.bind(this);
+        this.cambiarEstado=this.cambiarEstado.bind(this);
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
+        this.mostrarFiltros=this.mostrarFiltros.bind(this);
+        this.generarPdf=this.generarPdf.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
             //////
             datoDeBusqueda:"",
             registros:[],
+
+            id_cedula:"",
+            nombrePdf:null,
+            tipoPdf:null,
+
             numeros_registros:0,
             mensaje:{
               texto:"",
@@ -195,6 +206,75 @@ class ComponentTrabajador extends React.Component{
                           }
     */
 
+    mostrarModalPdf(){
+      // alert("hola")
+      $("#exampleModal").modal("show")
+    }
+
+    mostrarFiltros(a){
+      let $select=a.target
+      let $filaVerPdf=document.getElementById("filaVerPdf")
+      $filaVerPdf.classList.add("ocultarFormulario")
+      // alert($select.value)
+      let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+      let $fromFiltroCedula=document.getElementById("fromFiltroCedula")
+      let $fromListar=document.getElementById("fromListar")
+      if($select.value==="0"){
+        $fromListar.classList.add("ocultarFormulario")
+        $fromFiltroCedula.classList.remove("ocultarFormulario")
+        $botonGenerarPdf.classList.remove("ocultarFormulario")
+        this.setState({tipoPdf:"0"})
+      }
+      else if($select.value==="1"){
+        this.setState({tipoPdf:"1"})
+        $fromListar.classList.remove("ocultarFormulario")
+        $botonGenerarPdf.classList.remove("ocultarFormulario")
+        $fromFiltroCedula.classList.add("ocultarFormulario")
+      }
+      else{
+        this.setState({tipoPdf:null})
+        $fromListar.classList.add("ocultarFormulario")
+        $fromFiltroCedula.classList.add("ocultarFormulario")
+        $botonGenerarPdf.classList.add("ocultarFormulario")
+      }
+    }
+    generarPdf(){
+      let $filaVerPdf=document.getElementById("filaVerPdf")
+      $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+      // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+      let datos=null
+      if(this.state.tipoPdf==="0"){
+        datos=$("#fromFiltroCedula").serializeArray()
+      }
+      else if(this.state.tipoPdf==="1"){
+        datos=$("#fromListar").serializeArray()
+      }
+
+      console.log(datos)
+
+      if(datos!==null){
+        alert("generar pdf")
+        // $.ajax({
+        //   url: 'ruta',
+        //   type:"post",
+        //   data:[],
+        //   success: function(respuesta) {
+        //     alert("OK")
+        //   },
+        //   error: function() {
+        //     alert("error")
+        //   }
+        // });
+      }
+      
+
+    }
+
+    cambiarEstado(a){
+      var input=a.target;
+      this.setState({[input.name]:input.value})
+  }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -255,6 +335,111 @@ class ComponentTrabajador extends React.Component{
                 </div>
                 </div>
                 }
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                  <div class="form-groud">
+                                    <label>Tipo de reporte</label>
+                                    <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <option value="null" >seleccione un tipo de reporte</option>
+                                      <option value="1" >generar una lista</option>
+                                      <option value="0" >generar un especifico</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <form id="fromFiltroCedula" class="ocultarFormulario">
+                                <div className="row justify-content-center">
+                                  <ComponentFormCampo
+                                  clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                                  clasesCampo="form-control"
+                                  obligatorio="no"
+                                  nombreCampo="Cedula del trabajador"
+                                  activo="si"
+                                  type="text"
+                                  value={this.state.id_cedula}
+                                  name="id_cedula"
+                                  id="id_cedula"
+                                  placeholder="cedula"
+                                  eventoPadre={this.cambiarEstado}
+                                  />
+                                </div>
+                              </form>
+                              <form id="fromListar" class="ocultarFormulario mb-3">
+                                <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Tipo de trabajador</label>
+                                      <select class="form-select custom-select" id="id_tipo_trabajador" name="id_tipo_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                        <option value="1" >Masculino</option>
+                                        <option value="0" >Femenino</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Funcion del trabajador</label>
+                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                        <option value="1" >Masculino</option>
+                                        <option value="0" >Femenino</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Sexo</label>
+                                      <select class="form-select custom-select" id="sexo" name="sexo" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                        <option value="1" >Masculino</option>
+                                        <option value="0" >Femenino</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Designación</label>
+                                      <select class="form-select custom-select" id="designacion" name="designacion" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                        <option value="1" >Interno</option>
+                                        <option value="0" >Externo</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estatus</label>
+                                      <select class="form-select custom-select" id="estatu_trabajador" name="estatu_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                        <option value="1" >Activo</option>
+                                        <option value="0" >Inactivo</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+
+                                </div>
+                              </form>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
                 <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo Trabajador"/>
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}
@@ -263,7 +448,7 @@ class ComponentTrabajador extends React.Component{
                     tabla_body={jsx_tabla_body}
                     numeros_registros={this.state.numeros_registros}
                 />
-                <div className="row">
+                <div className="row justify-content-between">
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
@@ -271,7 +456,15 @@ class ComponentTrabajador extends React.Component{
                         </div>
                       </div>
                     </div>
+                    <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                      <div className="row justify-content-center align-items-center contenedor-boton">
+                        <div className="col-auto">
+                          <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                        </div>
+                      </div>
+                    </div>
                 </div>
+               
             </div>
         )
 
