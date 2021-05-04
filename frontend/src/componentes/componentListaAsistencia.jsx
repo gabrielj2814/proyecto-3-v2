@@ -32,6 +32,7 @@ class ComponentListaAsistencia extends React.Component{
             estado_menu:false,
             //----------
             id_cedula:null,
+            tipoPdf:null,
             hashAsistencia:{},
             id_asistencia:null,
             observacion_asistencia:"",
