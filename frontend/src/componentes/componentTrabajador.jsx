@@ -27,6 +27,7 @@ class ComponentTrabajador extends React.Component{
         this.redirigirFormulario=this.redirigirFormulario.bind(this)
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
+        this.cambiarEstadoTipoTrabajador=this.cambiarEstadoTipoTrabajador.bind(this);
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
         this.mostrarFiltros=this.mostrarFiltros.bind(this);
         this.generarPdf=this.generarPdf.bind(this);
@@ -210,15 +211,36 @@ class ComponentTrabajador extends React.Component{
 
     async consultarTodosTiposTrabajador(){
       await axios.get("http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador")
-      .then(respuesta => {
+      .then(async respuesta => {
         let json=JSON.parse(JSON.stringify(respuesta.data))
-        console.log("datos => ",json)
+        // console.log("datos => ",json)
         this.setState({tiposTrabajadores:json.tipos_trabajador})
+        // if(json.tipos_trabajador.length>0){
+        //   await this.buscarFuncionTrabajador(json.tipos_trabajador[0].id_tipo_trabajador)
+        // }
       })
       .catch(error => {
-        alert("error al conectar con el servidor")
+        console.log(error)
       })
     }
+    async buscarFuncionTrabajador(id){
+      await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar-id-tipo-trabajador/${id}`)
+      .then(respuesta=>{
+          let json=JSON.parse(JSON.stringify(respuesta.data))
+          console.log("datos funcion trabajador => ",json)
+          this.setState({funcionesTrabajadores:json.funciones})
+          
+      })
+      .catch(error=>{
+          console.log(error)
+      })
+  }
+
+  async cambiarEstadoTipoTrabajador(a){
+    let $select=a.target
+    this.cambiarEstado(a)
+    await this.buscarFuncionTrabajador($select.value)
+  }
 
     mostrarModalPdf(){
       // alert("hola")
@@ -393,7 +415,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Tipo de trabajador</label>
-                                      <select class="form-select custom-select" id="id_tipo_trabajador" name="id_tipo_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <select class="form-select custom-select" id="id_tipo_trabajador" name="id_tipo_trabajador" aria-label="Default se0lec0t example" onChange={this.cambiarEstadoTipoTrabajador}>
                                         <option value="null" >seleccione</option>
                                         {this.state.tiposTrabajadores.map((tipoTrabajador,index) => (<option key={"tipo-trabajador"+index} value={tipoTrabajador.id_tipo_trabajador}  >{tipoTrabajador.descripcion_tipo_trabajador}</option>))}
                                       </select>
@@ -402,16 +424,16 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Funcion del trabajador</label>
-                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                        <option value="1" >Masculino</option>
-                                        <option value="0" >Femenino</option>
+                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
+                                        <option value="null" >Selecciones</option>
+                                        {this.state.funcionesTrabajadores.map((funcionTrabajador,index) => (<option key={"funcion-trabajador"+index} value={funcionTrabajador.id_funcion_trabajador}  >{funcionTrabajador.funcion_descripcion}</option>))}
                                       </select>
                                     </div>
                                   </div>
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Sexo</label>
-                                      <select class="form-select custom-select" id="sexo" name="sexo" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <select class="form-select custom-select" id="sexo" name="sexo" aria-label="Default select example" >
                                         <option value="1" >Masculino</option>
                                         <option value="0" >Femenino</option>
                                       </select>
@@ -422,7 +444,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Designación</label>
-                                      <select class="form-select custom-select" id="designacion" name="designacion" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <select class="form-select custom-select" id="designacion" name="designacion" aria-label="Default select example" >
                                         <option value="1" >Interno</option>
                                         <option value="0" >Externo</option>
                                       </select>
@@ -431,7 +453,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estatus</label>
-                                      <select class="form-select custom-select" id="estatu_trabajador" name="estatu_trabajador" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <select class="form-select custom-select" id="estatu_trabajador" name="estatu_trabajador" aria-label="Default select example" >
                                         <option value="1" >Activo</option>
                                         <option value="0" >Inactivo</option>
                                       </select>
