@@ -2,5 +2,6 @@
 /backend/upload/cintillo/*.jpg
 /backend/upload/cintillo/*.png
 /backend/upload/cintillo/*.jpeg
+/backend/upload/reporte/*.pdf
 /fronted/node_modules
 
