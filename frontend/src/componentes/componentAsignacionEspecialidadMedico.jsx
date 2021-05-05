@@ -1,6 +1,7 @@
 import React from "react"
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+import $ from 'jquery'
 
 // css
 import 'bootstrap/dist/css/bootstrap.css'
@@ -14,6 +15,7 @@ import ButtonIcon from '../subComponentes/buttonIcon'
 import ComponentFormSelect from '../subComponentes/componentFormSelect';
 import InputButton from '../subComponentes/input_button'
 import Tabla from '../subComponentes/componentTabla'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 class ComponentAsignacionEspecialidadMedico extends React.Component{
 
@@ -26,10 +28,16 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
         this.eliminarElementoTabla=this.eliminarElementoTabla.bind(this)
         this.actualizarElementoTabla=this.actualizarElementoTabla.bind(this)
         this.consultarElementoTabla=this.consultarElementoTabla.bind(this)
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this)
+        this.mostrarFiltros=this.mostrarFiltros.bind(this)
+        this.generarPdf=this.generarPdf.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
-            //------------ 
+            //------------
+            listaMedicos:[], 
+            listaEspecialidades:[], 
+            tipoPdf:null,
             medicos:[],
             registros:[],
             id_medico:"",
@@ -78,6 +86,8 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+        await this.consultarTodosLosMedicos2()
+        await this.consultarTodasEspecialidad2()
         let medicos=await this.consultarTodosLosMedicos()
         let listaMedico=this.formatoOptionSelect(medicos)
         this.setState({
@@ -202,6 +212,103 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
       this.props.history.push("/dashboard/configuracion/asignacion-especialidad-medico/consultar/"+input.id);
   }
 
+    async consultarTodosLosMedicos2(){
+        await axios.get("http://localhost:8080/configuracion/medico/consultar-todos")
+        .then(respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data.medicos))
+            console.log("datos medicos =>>>>",json)
+            this.setState({listaMedicos:json})
+            
+        })
+        .catch(error=>{
+            alert("No se pudo conectar con el servidor")
+            console.log(error)
+        })
+    }
+
+    async consultarTodasEspecialidad2(){
+        await axios.get("http://localhost:8080/configuracion/especialidad/consultar-todos")
+        .then(respuesta=>{
+          let json=JSON.parse(JSON.stringify(respuesta.data.especialidades))
+        //   console.log("datos especialidades =>>> ",json)
+          let especialidades=json.filter(especialidad => {
+            if(especialidad.estatu_especialidad==="1"){
+                return especialidad
+            }
+        })
+        this.setState({listaEspecialidades:especialidades})
+        })
+        .catch(error=>{
+          alert("No se pudo conectar con el servidor")
+          console.log(error)
+        })
+    }
+
+  mostrarModalPdf(){
+    // alert("hola")
+    $("#modalPdf").modal("show")
+}
+    mostrarFiltros(a){
+        let $select=a.target
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.add("ocultarFormulario")
+        // alert($select.value)
+        let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+        let $formListaMedico=document.getElementById("formListaMedico")
+        let $formListaEspecialidad=document.getElementById("formListaEspecialidad")
+        if($select.value==="0"){
+        $formListaEspecialidad.classList.add("ocultarFormulario")
+        $formListaMedico.classList.remove("ocultarFormulario")
+        $botonGenerarPdf.classList.remove("ocultarFormulario")
+        this.setState({tipoPdf:"0"})
+        }
+        else if($select.value==="1"){
+        this.setState({tipoPdf:"1"})
+        $formListaEspecialidad.classList.remove("ocultarFormulario")
+        $botonGenerarPdf.classList.remove("ocultarFormulario")
+        $formListaMedico.classList.add("ocultarFormulario")
+        }
+        else{
+        this.setState({tipoPdf:null})
+        $formListaEspecialidad.classList.add("ocultarFormulario")
+        $formListaMedico.classList.add("ocultarFormulario")
+        $botonGenerarPdf.classList.add("ocultarFormulario")
+        }
+    }
+
+    generarPdf(){
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+        let datos=null
+        if(this.state.tipoPdf==="0"){
+          datos=$("#formListaMedico").serializeArray()
+        }
+        else if(this.state.tipoPdf==="1"){
+          datos=$("#formListaEspecialidad").serializeArray()
+        }
+  
+        console.log(datos)
+  
+        if(datos!==null){
+          alert("generar pdf")
+          // $.ajax({
+          //   url: 'ruta',
+          //   type:"post",
+          //   data:[],
+          //   success: function(respuesta) {
+          //     alert("OK")
+          //   },
+          //   error: function() {
+          //     alert("error")
+          //   }
+          // });
+        }
+        
+  
+      }
+
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -264,6 +371,80 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                     </div>
                 }
 
+
+<div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                  <div class="form-groud">
+                                    <label>Tipo de reporte</label>
+                                    <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                      <option value="null" >seleccione un tipo de reporte</option>
+                                      <option value="1" >Por especialidad</option>
+                                      <option value="0" >Por medico</option>
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                              <form id="formListaMedico" class="ocultarFormulario mb-3">
+                                    <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Medico</label>
+                                      <select class="form-select custom-select" id="id_medico" name="id_medico" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        {this.state.listaMedicos.map((medico,index) => (<option key={"medico-"+index} value={medico.id_medico}  >{medico.nombre_medico} {medico.apellido_medico}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
+                              </form>
+
+
+                              <form id="formListaEspecialidad" class="ocultarFormulario mb-3">
+                              <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Especialidad</label>
+                                      <select class="form-select custom-select" id="id_especialidad" name="id_especialidad" aria-label="Default se0lec0t example">
+                                        <option value="null" >seleccione</option>
+                                        {this.state.listaEspecialidades.map((especialidad,index) => (<option key={"especialidad-"+index} value={especialidad.id_especialidad}  >{especialidad.nombre_especialidad}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  
+                                  
+
+                                </div>
+                                
+                              </form>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
+
                 <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Asignación Especialidad Médico"/>
                 <div className="row component-tabla-de-datos">
                     <div className="col-12 col-ms-12 col-md-12 contenedor-tabla-de-datos">
@@ -291,13 +472,20 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                 </div>
                 
 
-                <div className="row">
+                <div className="row justify-content-between">
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                         <div className="row justify-content-center align-items-center contenedor-boton">
                             <div className="col-auto">
                                 <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                             </div>
                         </div>
+                    </div>
+                    <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                      <div className="row justify-content-center align-items-center contenedor-boton">
+                        <div className="col-auto">
+                          <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                        </div>
+                      </div>
                     </div>
                 </div>
             
