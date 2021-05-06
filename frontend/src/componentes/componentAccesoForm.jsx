@@ -52,7 +52,7 @@ class ComponentAccesoForm extends React.Component {
             // modulos del sistema
             modulos_principales:[
                 {descripcion:"configuracion",id:"/dashboard/configuracion"}, 
-                {descripcion:"reporte",id:"/dashboard/reporte"},
+                // {descripcion:"reporte",id:"/dashboard/reporte"},
                 {descripcion:"transaccion",id:"/dashboard/transaccion"},
                 {descripcion:"seguridad",id:"/dashboard/seguridad"}
             ],
@@ -63,16 +63,28 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"medico",id:"/medico"}, 
                     {descripcion:"cam",id:"/cam"}, 
                     {descripcion:"tipo cam",id:"/tipo-cam"}, 
+                    {descripcion:"permiso",id:"/permiso"}, 
+                    {descripcion:"reposo",id:"/reposo"}, 
+                    {descripcion:"tipo trabajador",id:"/tipo-trabajador"}, 
+                    {descripcion:"funcion trabajador",id:"/funcion-trabajador"}, 
+                    {descripcion:"estado",id:"/estado"}, 
+                    {descripcion:"ciudad",id:"/ciudad"}, 
+                    {descripcion:"especialidad",id:"/especialidad"}, 
+                    {descripcion:"asignacion especialidad medico",id:"/asignacion-especialidad-medico"}, 
+                    {descripcion:"horario",id:"/horario"}, 
+                    {descripcion:"cintillo home",id:"/cintillo-home"}, 
                 ],
-                reporte:[
-                    {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
-                ],
+                // reporte:[
+                //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
+                // ],
                 transaccion:[
-                    {descripcion:"reposo trabajador",id:"/reposo"},
-                    {descripcion:"permiso trabajador",id:"/permiso"}
+                    {descripcion:"reposo trabajador",id:"/reposo-trabajador"},
+                    {descripcion:"permiso trabajador",id:"/permiso-trabajador"},
+                    {descripcion:"asistencia",id:"/asistencia"},
+                    {descripcion:"lista asistencia",id:"/asistencia/lista"}
                 ],
                 seguridad:[
-                    {descripcion:"vitacora",id:"/vitacora"},
+                    {descripcion:"vitacora",id:"/Bitacora"},
                 ]
             }
         }
@@ -845,7 +857,7 @@ class ComponentAccesoForm extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="Registrar"
+                                    value="registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -853,7 +865,7 @@ class ComponentAccesoForm extends React.Component {
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="Actualizar"
+                                    value="actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }

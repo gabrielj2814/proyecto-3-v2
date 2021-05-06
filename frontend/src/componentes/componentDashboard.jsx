@@ -233,6 +233,7 @@ class ComponentDashboard extends React.Component{
                     <div className="row contenedor_app">
                     
                         <MenuDashboard
+                        idPerfil={this.state.id_perfil}
                         modulo={this.props.modulo}
                         eventoPadreMenu={this.props.eventoPadreMenu}
                         estado_menu={this.props.estado_menu}
