@@ -79,76 +79,140 @@ class ComponentCamFormulario extends React.Component {
     }
 
     async UNSAFE_componentWillMount(){
-        const {operacion}=this.props.match.params
-        if(operacion==="registrar"){
-            const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
-            nombre_propiedad_lista="estados",
-            propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado",
-            propiedad_estado="estatu_estado"
-            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            console.log("lista de estados ->>>",estados)
-            const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
-            nombre_propiedad_lista_2="ciudades",
-            propiedad_id_2="id_ciudad",
-            propiedad_descripcion_2="nombre_ciudad",
-            propiedad_estado_2="estatu_ciudad"
-            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-            console.log("lista de de ciudades por estado ->>>",ciudades)
-            const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
-            nombre_propiedad_lista_3="tipo_cams",
-            propiedad_id_3="id_tipo_cam",
-            propiedad_descripcion_3="nombre_tipo_cam",
-            propiedad_estado_3="estatu_tipo_cam"
-            const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
-            console.log("lista todos los tipo cam ->>>",tipo_cams)
-            this.setState({
-                tipo_cams,
-                estados,
-                ciudades,
-                id_estado:(estados.length===0)?null:estados[0].id,
-                id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-                id_tipo_cam:(tipo_cams.length===0)?null:tipo_cams[0].id
-            })
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/cam")
+        if(acessoModulo){
+            const {operacion}=this.props.match.params
+            if(operacion==="registrar"){
+                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                nombre_propiedad_lista="estados",
+                propiedad_id="id_estado",
+                propiedad_descripcion="nombre_estado",
+                propiedad_estado="estatu_estado"
+                const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                console.log("lista de estados ->>>",estados)
+                const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
+                nombre_propiedad_lista_2="ciudades",
+                propiedad_id_2="id_ciudad",
+                propiedad_descripcion_2="nombre_ciudad",
+                propiedad_estado_2="estatu_ciudad"
+                const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+                console.log("lista de de ciudades por estado ->>>",ciudades)
+                const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+                nombre_propiedad_lista_3="tipo_cams",
+                propiedad_id_3="id_tipo_cam",
+                propiedad_descripcion_3="nombre_tipo_cam",
+                propiedad_estado_3="estatu_tipo_cam"
+                const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+                console.log("lista todos los tipo cam ->>>",tipo_cams)
+                this.setState({
+                    tipo_cams,
+                    estados,
+                    ciudades,
+                    id_estado:(estados.length===0)?null:estados[0].id,
+                    id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+                    id_tipo_cam:(tipo_cams.length===0)?null:tipo_cams[0].id
+                })
+            }
+            else if(operacion==="actualizar"){
+                const {id}=this.props.match.params
+                let datos = await this.consultarIdConsultar(id)
+                console.log(datos)
+                let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
+                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                nombre_propiedad_lista="estados",
+                propiedad_id="id_estado",
+                propiedad_descripcion="nombre_estado",
+                propiedad_estado="estatu_estado"
+                const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                console.log("lista de estados ->>>",estados)
+                const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
+                nombre_propiedad_lista_2="ciudades",
+                propiedad_id_2="id_ciudad",
+                propiedad_descripcion_2="nombre_ciudad",
+                propiedad_estado_2="estatu_ciudad"
+                const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+                console.log("lista de de ciudades por estado ->>>",ciudades)
+                const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+                nombre_propiedad_lista_3="tipo_cams",
+                propiedad_id_3="id_tipo_cam",
+                propiedad_descripcion_3="nombre_tipo_cam",
+                propiedad_estado_3="estatu_tipo_cam"
+                const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+                console.log("lista todos los tipo cam ->>>",tipo_cams)
+                this.setState({
+                    tipo_cams,
+                    estados,
+                    ciudades,
+                    id_estado:datosCiudad.id_estado
+                })
+                document.getElementById("id_estado").value=datosCiudad.id_estado
+                document.getElementById("id_ciudad").value=datos.id_ciudad
+                document.getElementById("id_tipo_cam").value=datos.id_tipo_cam
+                
+            }
         }
-        else if(operacion==="actualizar"){
-            const {id}=this.props.match.params
-            let datos = await this.consultarIdConsultar(id)
-            console.log(datos)
-            let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
-            const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
-            nombre_propiedad_lista="estados",
-            propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado",
-            propiedad_estado="estatu_estado"
-            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            console.log("lista de estados ->>>",estados)
-            const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
-            nombre_propiedad_lista_2="ciudades",
-            propiedad_id_2="id_ciudad",
-            propiedad_descripcion_2="nombre_ciudad",
-            propiedad_estado_2="estatu_ciudad"
-            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-            console.log("lista de de ciudades por estado ->>>",ciudades)
-            const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
-            nombre_propiedad_lista_3="tipo_cams",
-            propiedad_id_3="id_tipo_cam",
-            propiedad_descripcion_3="nombre_tipo_cam",
-            propiedad_estado_3="estatu_tipo_cam"
-            const tipo_cams=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
-            console.log("lista todos los tipo cam ->>>",tipo_cams)
-            this.setState({
-                tipo_cams,
-                estados,
-                ciudades,
-                id_estado:datosCiudad.id_estado
-            })
-            document.getElementById("id_estado").value=datosCiudad.id_estado
-            document.getElementById("id_ciudad").value=datos.id_ciudad
-            document.getElementById("id_tipo_cam").value=datos.id_tipo_cam
-            
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
         }
 
+
+
+        
+
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarCiudad(id){
