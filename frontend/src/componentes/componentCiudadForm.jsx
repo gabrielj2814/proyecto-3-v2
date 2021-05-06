@@ -101,34 +101,97 @@ class ComponentCiudadForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        const {operacion}=this.props.match.params
-        if(operacion==="registrar"){
-            const {id}=await this.generarIdCiudad();
-            const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
-            nombre_propiedad_lista="estados",
-            propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado",
-            propiedad_estado="estatu_estado"
-            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            // console.log("->>>>",estado)
-            this.setState({
-                id_ciudad:id,
-                estados:estado,
-                id_estado:(estado.length===0)?null:estado[0].id
-            })
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/ciudad")
+        if(acessoModulo){
+            const {operacion}=this.props.match.params
+            if(operacion==="registrar"){
+                const {id}=await this.generarIdCiudad();
+                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                nombre_propiedad_lista="estados",
+                propiedad_id="id_estado",
+                propiedad_descripcion="nombre_estado",
+                propiedad_estado="estatu_estado"
+                const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                // console.log("->>>>",estado)
+                this.setState({
+                    id_ciudad:id,
+                    estados:estado,
+                    id_estado:(estado.length===0)?null:estado[0].id
+                })
+            }
+            else{
+                const {id}=this.props.match.params
+                const ciudad=await this.consultarCiudad(id)
+                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                nombre_propiedad_lista="estados",
+                propiedad_id="id_estado",
+                propiedad_descripcion="nombre_estado",
+                propiedad_estado="estatu_estado"
+                const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                ciudad.estados=estado
+                this.setState(ciudad)
+            }
         }
         else{
-            const {id}=this.props.match.params
-            const ciudad=await this.consultarCiudad(id)
-            const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
-            nombre_propiedad_lista="estados",
-            propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado",
-            propiedad_estado="estatu_estado"
-            const estado=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            ciudad.estados=estado
-            this.setState(ciudad)
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
         }
+
+
+        
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarCiudad(id){
