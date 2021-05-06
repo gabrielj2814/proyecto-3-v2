@@ -110,47 +110,107 @@ class ComponentFuncionTrabajador extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        const {operacion}=this.props.match.params
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/funcion-trabajador")
+        if(acessoModulo){
+            const {operacion}=this.props.match.params
         
-        if(operacion==="registrar"){
-            const {id}=await this.generarIdFuncionTrabajador();
-            const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-            nombre_propiedad_lista="tipos_trabajador",
-            propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador",
-            propiedad_estado="estatu_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            const horarios=await this.consultarTodosLosHorarios()
-            this.setState({
-                id_funcion_trabajador:id,
-                tipos_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador,
-                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
-                horarios:(horarios.length===0)?null:horarios,
-                id_horario:(horarios.length===0)?null:horarios[0].id,
-                hora_entrada:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_entrada,
-                hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida
-            })
+            if(operacion==="registrar"){
+                const {id}=await this.generarIdFuncionTrabajador();
+                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                nombre_propiedad_lista="tipos_trabajador",
+                propiedad_id="id_tipo_trabajador",
+                propiedad_descripcion="descripcion_tipo_trabajador",
+                propiedad_estado="estatu_tipo_trabajador"
+                const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                const horarios=await this.consultarTodosLosHorarios()
+                this.setState({
+                    id_funcion_trabajador:id,
+                    tipos_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador,
+                    id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
+                    horarios:(horarios.length===0)?null:horarios,
+                    id_horario:(horarios.length===0)?null:horarios[0].id,
+                    hora_entrada:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_entrada,
+                    hora_salida:(horarios.length===0)?null:this.state.horariosHash[horarios[0].id].horario_salida
+                })
+            }
+            else{
+                const {id}=this.props.match.params
+                const funcion=await this.consultarFuncionTrabajador(id)
+                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                nombre_propiedad_lista="tipos_trabajador",
+                propiedad_id="id_tipo_trabajador",
+                propiedad_descripcion="descripcion_tipo_trabajador",
+                propiedad_estado="estatu_tipo_trabajador"
+                const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                funcion.tipos_trabajador=tipo_trabajador
+                const horarios=await this.consultarTodosLosHorarios()
+                this.setState(funcion)
+                // console.log("=>>>> ",funcion)
+                // console.log("=>>>> ",this.state.horariosHash[funcion.id_horario])
+                this.setState({
+                    horarios:(horarios.length===0)?null:horarios,
+                    hora_entrada:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_entrada,
+                    hora_salida:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_salida
+                })
+            }
         }
         else{
-            const {id}=this.props.match.params
-            const funcion=await this.consultarFuncionTrabajador(id)
-            const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-            nombre_propiedad_lista="tipos_trabajador",
-            propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador",
-            propiedad_estado="estatu_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            funcion.tipos_trabajador=tipo_trabajador
-            const horarios=await this.consultarTodosLosHorarios()
-            this.setState(funcion)
-            // console.log("=>>>> ",funcion)
-            // console.log("=>>>> ",this.state.horariosHash[funcion.id_horario])
-            this.setState({
-                horarios:(horarios.length===0)?null:horarios,
-                hora_entrada:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_entrada,
-                hora_salida:(horarios.length===0)?null:this.state.horariosHash[funcion.id_horario].horario_salida
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
             })
         }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarTodosLosHorarios(){
