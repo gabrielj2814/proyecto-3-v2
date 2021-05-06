@@ -101,44 +101,104 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
 
 
     async UNSAFE_componentWillMount(){
-        const {operacion,id}=this.props.match.params
-        if(operacion==="registrar"){
-            this.generarId();
-            let medicos=await this.consultarTodosLosMedicos()
-            console.log("lista de medicos ->>> ",medicos)
-            let listaMedicos=this.formatoOptionSelect(medicos)
-            let especialidades=await  this.consultarTodasEspecialidad()
-            console.log("lista de especialidades ->>> ",especialidades )
-            let listaEspecialidades=this.formatoOptionSelect2(especialidades)
-            console.log(listaEspecialidades)
-            this.setState({
-                medicos:listaMedicos,
-                especialidades:listaEspecialidades,
-                id_medico:(listaMedicos.length===0)?null:listaMedicos[0].id,
-                id_especialidad:(especialidades.length===0)?null:especialidades[0].id,
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/asignacion-especialidad-medico")
+        if(acessoModulo){
+            const {operacion,id}=this.props.match.params
+            if(operacion==="registrar"){
+                this.generarId();
+                let medicos=await this.consultarTodosLosMedicos()
+                console.log("lista de medicos ->>> ",medicos)
+                let listaMedicos=this.formatoOptionSelect(medicos)
+                let especialidades=await  this.consultarTodasEspecialidad()
+                console.log("lista de especialidades ->>> ",especialidades )
+                let listaEspecialidades=this.formatoOptionSelect2(especialidades)
+                console.log(listaEspecialidades)
+                this.setState({
+                    medicos:listaMedicos,
+                    especialidades:listaEspecialidades,
+                    id_medico:(listaMedicos.length===0)?null:listaMedicos[0].id,
+                    id_especialidad:(especialidades.length===0)?null:especialidades[0].id,
+                })
+            }
+            else if(operacion==="actualizar"){
+                let asignacion=await this.consultarAsignacion(id)
+                if(asignacion!==null){
+                    console.log("asignacion ->>> ",asignacion)
+                    let medicos=await this.consultarTodosLosMedicos()
+                    console.log("lista de medicos ->>> ",medicos)
+                    let listaMedicos=this.formatoOptionSelect(medicos)
+                    let especialidades=await  this.consultarTodasEspecialidad()
+                    console.log("lista de especialidades ->>> ",especialidades )
+                    let listaEspecialidades=this.formatoOptionSelect2(especialidades)
+                    console.log(listaEspecialidades)
+                    this.setState({
+                        id_asignacion_medico_especialidad:asignacion.id_asignacion_medico_especialidad,
+                        medicos:listaMedicos,
+                        especialidades:listaEspecialidades,
+                        estatu_asignacion:asignacion.estatu_asignacion
+                    })
+                    document.getElementById("id_medico").value=asignacion.id_medico
+                    document.getElementById("id_especialidad").value=asignacion.id_especialidad
+                }
+            }
+        }
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
             })
         }
-        else if(operacion==="actualizar"){
-            let asignacion=await this.consultarAsignacion(id)
-           if(asignacion!==null){
-            console.log("asignacion ->>> ",asignacion)
-            let medicos=await this.consultarTodosLosMedicos()
-            console.log("lista de medicos ->>> ",medicos)
-            let listaMedicos=this.formatoOptionSelect(medicos)
-            let especialidades=await  this.consultarTodasEspecialidad()
-            console.log("lista de especialidades ->>> ",especialidades )
-            let listaEspecialidades=this.formatoOptionSelect2(especialidades)
-            console.log(listaEspecialidades)
-            this.setState({
-                id_asignacion_medico_especialidad:asignacion.id_asignacion_medico_especialidad,
-                medicos:listaMedicos,
-                especialidades:listaEspecialidades,
-                estatu_asignacion:asignacion.estatu_asignacion
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
             })
-            document.getElementById("id_medico").value=asignacion.id_medico
-            document.getElementById("id_especialidad").value=asignacion.id_especialidad
-           }
-        }
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarAsignacion(id){
