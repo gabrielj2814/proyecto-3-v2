@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 include_once("../reporte_pdf/reporte_listado_especialidad.php");
+include_once("../reporte_pdf/reporte_listado_medico.php");
 include_once("./driverPostgresql.php");
 $driver=new DriverPostgreSql();
 $respuesta=[];
@@ -27,7 +28,7 @@ if(array_key_exists("id_medico",$_POST)){
         $respuesta["nombrePdf"]=$nombrePdf;
     }
     else{
-        $respuesta["nombrePdf"]=null;
+        $respuesta["nombrePdf"]="false";
     }
 }
 else if(array_key_exists("id_especialidad",$_POST)){
@@ -43,13 +44,13 @@ else if(array_key_exists("id_especialidad",$_POST)){
         $datosConsulta[]=$row;
     }
     if(count($datosConsulta)>0){
-        $PDF=new PdfListaEspecialidades($datosConsulta);
+        $PDF=new PdfListaMedico($datosConsulta);
         $nombrePdf=$PDF->generarPdf();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
     }
     else{
-        $respuesta["nombrePdf"]=null;
+        $respuesta["nombrePdf"]="false";
     }
     // print_r($datosConsulta);
     

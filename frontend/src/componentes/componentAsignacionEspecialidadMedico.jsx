@@ -357,10 +357,20 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
             type:"post",
             data:datos,
             success: function(respuesta) {
-              console.log(respuesta)
+                console.log(respuesta)
+                let json=JSON.parse(respuesta)
+                if(json.nombrePdf!=="false"){
+                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                }
+                else{
+                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                }
             },
             error: function() {
               alert("error")
+              $filaVerPdf.classList.add("ocultarFormulario") 
             }
           });
         }
@@ -492,7 +502,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
-                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                    <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
                               
