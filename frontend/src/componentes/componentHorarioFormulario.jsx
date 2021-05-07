@@ -89,41 +89,103 @@ class ComponentHorarioFormulario extends React.Component {
     }
 
     async componentWillMount(){
-        // alert("hola")
-        const {operacion} = this.props.match.params
-        let listHora=[];
-        let listMinuto=[];
-        let contandor=1;
-        while(contandor<=12){
-            listHora.push((contandor<=9)?"0"+contandor:contandor);
-            contandor++
-        }
-        let contandor2=0;
-        while(contandor2<=59){
-            listMinuto.push((contandor2<=9)?"0"+contandor2:contandor2);
-            contandor2++
-        }
-        this.setState({
-            listHora,
-            listMinuto
-        });
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/horario")
+        if(acessoModulo){
 
-        if(operacion==="actualizar"){
-            if(this.props.match.params.id){
-                const {id} = this.props.match.params
-                let datos =await this.consultarHorario(id)
+            // alert("hola")
+            const {operacion} = this.props.match.params
+            let listHora=[];
+            let listMinuto=[];
+            let contandor=1;
+            while(contandor<=12){
+                listHora.push((contandor<=9)?"0"+contandor:contandor);
+                contandor++
             }
+            let contandor2=0;
+            while(contandor2<=59){
+                listMinuto.push((contandor2<=9)?"0"+contandor2:contandor2);
+                contandor2++
+            }
+            this.setState({
+                listHora,
+                listMinuto
+            });
+
+            if(operacion==="actualizar"){
+                if(this.props.match.params.id){
+                    const {id} = this.props.match.params
+                    let datos =await this.consultarHorario(id)
+                }
+            }
+            else{
+                this.setState({
+                    horaEntrada:"01",
+                    minutoEntrada:"00",
+                    horaSalida:"01",
+                    minutoSalida:"00",
+                    periodoEntrada:"PM",
+                    periodoSalida:"AM",
+                })
+            }
+
         }
         else{
-            this.setState({
-                horaEntrada:"01",
-                minutoEntrada:"00",
-                horaSalida:"01",
-                minutoSalida:"00",
-                periodoEntrada:"PM",
-                periodoSalida:"AM",
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
             })
         }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarHorario(id){
