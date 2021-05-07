@@ -261,7 +261,7 @@ class ComponentListaAsistencia extends React.Component{
 
       generarPdf(){
         let $filaVerPdf=document.getElementById("filaVerPdf")
-        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=null
         if(this.state.tipoPdf==="0"){
@@ -274,18 +274,29 @@ class ComponentListaAsistencia extends React.Component{
         console.log(datos)
   
         if(datos!==null){
-          alert("generar pdf")
-          // $.ajax({
-          //   url: 'ruta',
-          //   type:"post",
-          //   data:[],
-          //   success: function(respuesta) {
-          //     alert("OK")
-          //   },
-          //   error: function() {
-          //     alert("error")
-          //   }
-          // });
+        //   alert("generar pdf")
+          $.ajax({
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_asistencia.php',
+            type:"post",
+            data:datos,
+            success: function(respuesta) {
+              alert("OK")
+                console.log(respuesta)
+                let json=JSON.parse(respuesta)
+                if(json.nombrePdf!=="false"){
+                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                }
+                else{
+                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                }
+            },
+            error: function() {
+              alert("error")
+              $filaVerPdf.classList.add("ocultarFormulario")
+            }
+          });
         }
         
   
@@ -382,7 +393,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado del trabajador</label>
-                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                      <select class="form-select custom-select" id="id_permiso_trabajador" name="id_permiso_trabajador" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="1" >Laborando</option>
                                         <option value="0" >Retiro</option>
@@ -397,7 +408,7 @@ class ComponentListaAsistencia extends React.Component{
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
                                         <label>Cumplimiento Horario</label>
-                                        <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                        <select class="form-select custom-select" id="estatu_cumplimiento_horario" name="estatu_cumplimiento_horario" aria-label="Default se0lec0t example">
                                             <option value="null" >seleccione</option>
                                             <option value="C" >Cumplio</option>
                                             <option value="N" >No cumplio</option>
@@ -438,7 +449,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado del trabajador</label>
-                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                      <select class="form-select custom-select" id="id_permiso_trabajador" name="id_permiso_trabajador" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="1" >Laborando</option>
                                         <option value="0" >Retiro</option>
@@ -448,7 +459,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Cumplimiento Horario</label>
-                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
+                                      <select class="form-select custom-select" id="estatu_cumplimiento_horario" name="estatu_cumplimiento_horario" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="C" >Cumplio</option>
                                         <option value="N" >No cumplio</option>
@@ -476,7 +487,7 @@ class ComponentListaAsistencia extends React.Component{
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
-                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                    <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
                               

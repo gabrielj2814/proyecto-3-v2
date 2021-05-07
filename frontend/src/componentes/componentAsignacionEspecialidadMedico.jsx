@@ -338,7 +338,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
 
     generarPdf(){
         let $filaVerPdf=document.getElementById("filaVerPdf")
-        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=null
         if(this.state.tipoPdf==="0"){
@@ -351,9 +351,9 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
         console.log(datos)
   
         if(datos!==null){
-          alert("generar pdf")
+        //   alert("generar pdf")
           $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlaodor_medico_especialidad.php',
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_medico_especialidad.php',
             type:"post",
             data:datos,
             success: function(respuesta) {
@@ -369,7 +369,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                 }
             },
             error: function() {
-              alert("error")
+            //   alert("error")
               $filaVerPdf.classList.add("ocultarFormulario") 
             }
           });
