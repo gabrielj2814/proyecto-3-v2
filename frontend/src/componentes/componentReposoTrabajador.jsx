@@ -97,45 +97,105 @@ class ComponentReposoTrabajador extends React.Component{
     }
 
     async componentWillMount(){
-        await this.consultarTodosReposo2()
-        let listaDeTrabajadores=await this.consultarTodosTrabajadores();
-        let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
-        let trabajadores={}
-        for(let trabajador of listaDetrabajadoresActivos){
-            trabajadores[trabajador.id_cedula]=trabajador
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/reposo-trabajador")
+        if(acessoModulo){
+            await this.consultarTodosReposo2()
+            let listaDeTrabajadores=await this.consultarTodosTrabajadores();
+            let listaDetrabajadoresActivos=listaDeTrabajadores.filter( trabajador =>  trabajador.estatu_trabajador==="1" && trabajador.estatu_cuenta==="1")
+            let trabajadores={}
+            for(let trabajador of listaDetrabajadoresActivos){
+                trabajadores[trabajador.id_cedula]=trabajador
+            }
+            // reposos
+            let listaDeTodosLosReposos=await this.consultarTodosReposo()
+            let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
+            let reposos={}
+            for(let reposo of listaDeRepososActivos){
+                reposos[reposo.id_reposo]=reposo
+            }
+    
+            let fechaDesde=Moment(new Date()).format("YYYY-MM-DD")
+            let fechaHasta=Moment(new Date()).format("YYYY-MM-DD")
+            this.setState({
+                fecha_desde_reposo_trabajador:fechaDesde,
+                fecha_hasta_reposo_trabajador:fechaHasta,
+                reposos,
+                trabajadores
+            })
+            let datosResposos=await this.consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta)
+            console.log("datos reposos =>>> ",datosResposos)
+            let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
+            this.setState(datosTabla)
+            if(this.props.match.params.mensaje){
+                const msj=JSON.parse(this.props.match.params.mensaje)
+                //alert("OK "+msj.texto)
+                var alerta=this.state.alerta
+                alerta.mensaje=msj.texto
+                alerta.estado=true
+                alerta.color="danger"
+                this.setState({
+                    alerta
+                })
+            }
         }
-        // reposos
-        let listaDeTodosLosReposos=await this.consultarTodosReposo()
-        let listaDeRepososActivos= listaDeTodosLosReposos.filter(reposo => reposo.estatu_reposo==="1")
-        let reposos={}
-        for(let reposo of listaDeRepososActivos){
-            reposos[reposo.id_reposo]=reposo
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
         }
 
-        let fechaDesde=Moment(new Date()).format("YYYY-MM-DD")
-        let fechaHasta=Moment(new Date()).format("YYYY-MM-DD")
-        this.setState({
-            fecha_desde_reposo_trabajador:fechaDesde,
-            fecha_hasta_reposo_trabajador:fechaHasta,
-            reposos,
-            trabajadores
-        })
-        let datosResposos=await this.consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta)
-        console.log("datos reposos =>>> ",datosResposos)
-        let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
-        this.setState(datosTabla)
-        if(this.props.match.params.mensaje){
-            const msj=JSON.parse(this.props.match.params.mensaje)
-            //alert("OK "+msj.texto)
-            var alerta=this.state.alerta
-            alerta.mensaje=msj.texto
-            alerta.estado=true
-            alerta.color="danger"
-            this.setState({
-                alerta
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
             })
         }
-
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     verficarLista(json_server_response){
