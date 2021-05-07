@@ -280,7 +280,7 @@ class ComponentListaAsistencia extends React.Component{
             type:"post",
             data:datos,
             success: function(respuesta) {
-              alert("OK")
+            //   alert("OK")
                 console.log(respuesta)
                 let json=JSON.parse(respuesta)
                 if(json.nombrePdf!=="false"){
