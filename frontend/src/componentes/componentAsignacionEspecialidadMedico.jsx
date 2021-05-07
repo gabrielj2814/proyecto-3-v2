@@ -352,17 +352,17 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
   
         if(datos!==null){
           alert("generar pdf")
-          // $.ajax({
-          //   url: 'ruta',
-          //   type:"post",
-          //   data:[],
-          //   success: function(respuesta) {
-          //     alert("OK")
-          //   },
-          //   error: function() {
-          //     alert("error")
-          //   }
-          // });
+          $.ajax({
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlaodor_medico_especialidad.php',
+            type:"post",
+            data:datos,
+            success: function(respuesta) {
+              console.log(respuesta)
+            },
+            error: function() {
+              alert("error")
+            }
+          });
         }
         
   
