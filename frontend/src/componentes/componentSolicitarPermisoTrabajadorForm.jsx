@@ -139,37 +139,97 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async componentDidMount(){
-        // const id_cedula=await this.consultarSesion()
-        await this.consultarFechaServidor()
-        await this.consultarTodosLosTrabajadores()
-        const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
-        const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
-        const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
-        const lista_permisos=await this.consultarAlServidor(ruta_permisos)
-        const propiedades={
-            id:"id_permiso",
-            descripcion:"nombre_permiso"
-        }
-        var lista_vacia=[]
-        lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
-        const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
-        // console.log("->>>",lista_permisos.permisos);
-        this.setState({
-            id_cedula:"",
-            estatu_formulario:"nuevo",
-            id_permiso_trabajador:id_fomrulario.id,
-            lista_permisos:lista,
-            id_permiso:lista_permisos.permisos[0].id_permiso
-        })
-        let objeto={
-            target:{
-                value:lista_permisos.permisos[0].id_permiso
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/permiso-trabajador")
+        if(acessoModulo){
+            // const id_cedula=await this.consultarSesion()
+            await this.consultarFechaServidor()
+            await this.consultarTodosLosTrabajadores()
+            const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
+            const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
+            const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
+            const lista_permisos=await this.consultarAlServidor(ruta_permisos)
+            const propiedades={
+                id:"id_permiso",
+                descripcion:"nombre_permiso"
+            }
+            var lista_vacia=[]
+            lista_permisos.permisos=this.eliminarPermisoInactivos(lista_permisos.permisos);
+            const lista=this.formatoOptionSelect(lista_permisos.permisos,lista_vacia,propiedades)
+            // console.log("->>>",lista_permisos.permisos);
+            this.setState({
+                id_cedula:"",
+                estatu_formulario:"nuevo",
+                id_permiso_trabajador:id_fomrulario.id,
+                lista_permisos:lista,
+                id_permiso:lista_permisos.permisos[0].id_permiso
+            })
+            let objeto={
+                target:{
+                    value:lista_permisos.permisos[0].id_permiso
+                }
+            }
+            this.buscarPermiso(objeto)
+            if(this.state.estadoBusquedaTrabajador===false){
+                document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
             }
         }
-        this.buscarPermiso(objeto)
-        if(this.state.estadoBusquedaTrabajador===false){
-            document.getElementById("botonEnviarSolicitud").setAttribute("disabled","true")
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
         }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
     
     async consultarFechaServidor(){
