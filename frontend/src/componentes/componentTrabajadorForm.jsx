@@ -127,58 +127,118 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        await this.consultarFechaServidor()
-        await this.consultarTodosLosTrabajadores()
-
-        const operacion=this.props.match.params.operacion
-        if(operacion==="registrar"){
-            const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
-            nombre_propiedad_lista_1="perfiles",
-            propiedad_id_1="id_perfil",
-            propiedad_descripcion_1="nombre_perfil",
-            propiedad_estado_1="estatu_perfil"
-            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-            //
-            const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-            nombre_propiedad_lista="tipos_trabajador",
-            propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador",
-            propiedad_estado="estatu_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            //
-            // alert(tipo_trabajador[0].id)
-            let listaFuncionTrabajador={
-                funcion_trabajador:[]
-            }
-            if(tipo_trabajador.length!==0){
-                listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
-            }
-            this.setState({
-                perfiles:lista_perfiles,
-                tipos_trabajador:tipo_trabajador,
-                id_perfil:(lista_perfiles.length===0)?null:lista_perfiles[0].id,
-                id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
-                id_funcion_trabajador:(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id,
-                funcion_trabajador:listaFuncionTrabajador.funcion_trabajador
-            })
-    }
-    else if(operacion==="actualizar"){
-            const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
-            nombre_propiedad_lista_1="perfiles",
-            propiedad_id_1="id_perfil",
-            propiedad_descripcion_1="nombre_perfil",
-            propiedad_estado_1="estatu_perfil"
-            const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-            const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-            nombre_propiedad_lista="tipos_trabajador",
-            propiedad_id="id_tipo_trabajador",
-            propiedad_descripcion="descripcion_tipo_trabajador",
-            propiedad_estado="estatu_tipo_trabajador"
-            const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-
-            const id=this.props.match.params.id
-            await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/trabajador")
+        if(acessoModulo){
+            await this.consultarFechaServidor()
+            await this.consultarTodosLosTrabajadores()
+    
+            const operacion=this.props.match.params.operacion
+            if(operacion==="registrar"){
+                const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
+                nombre_propiedad_lista_1="perfiles",
+                propiedad_id_1="id_perfil",
+                propiedad_descripcion_1="nombre_perfil",
+                propiedad_estado_1="estatu_perfil"
+                const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
+                //
+                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                nombre_propiedad_lista="tipos_trabajador",
+                propiedad_id="id_tipo_trabajador",
+                propiedad_descripcion="descripcion_tipo_trabajador",
+                propiedad_estado="estatu_tipo_trabajador"
+                const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+                //
+                // alert(tipo_trabajador[0].id)
+                let listaFuncionTrabajador={
+                    funcion_trabajador:[]
+                }
+                if(tipo_trabajador.length!==0){
+                    listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
+                }
+                this.setState({
+                    perfiles:lista_perfiles,
+                    tipos_trabajador:tipo_trabajador,
+                    id_perfil:(lista_perfiles.length===0)?null:lista_perfiles[0].id,
+                    id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
+                    id_funcion_trabajador:(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id,
+                    funcion_trabajador:listaFuncionTrabajador.funcion_trabajador
+                })
         }
+        else if(operacion==="actualizar"){
+                const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
+                nombre_propiedad_lista_1="perfiles",
+                propiedad_id_1="id_perfil",
+                propiedad_descripcion_1="nombre_perfil",
+                propiedad_estado_1="estatu_perfil"
+                const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
+                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                nombre_propiedad_lista="tipos_trabajador",
+                propiedad_id="id_tipo_trabajador",
+                propiedad_descripcion="descripcion_tipo_trabajador",
+                propiedad_estado="estatu_tipo_trabajador"
+                const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+    
+                const id=this.props.match.params.id
+                await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
+            }
+        }
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     async consultarTodosLosTrabajadores(){
