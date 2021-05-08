@@ -44,8 +44,8 @@ class ComponentReposoTrabajador extends React.Component{
             //---------- 
             listaReposos:[],
             tipoPdf:null,
-            fecha_desde_reposo_trabajador:"",
-            fecha_hasta_reposo_trabajador:"",
+            fecha_desde_reposo_trabajador_filtro_tabla:"",
+            fecha_hasta_reposo_trabajador_filtro_tabla:"",
             msj_fecha_desde_reposo_trabajador:{
                 mensaje:"",
                 color_texto:""
@@ -117,8 +117,8 @@ class ComponentReposoTrabajador extends React.Component{
             let fechaDesde=Moment(new Date()).format("YYYY-MM-DD")
             let fechaHasta=Moment(new Date()).format("YYYY-MM-DD")
             this.setState({
-                fecha_desde_reposo_trabajador:fechaDesde,
-                fecha_hasta_reposo_trabajador:fechaHasta,
+                fecha_desde_reposo_trabajador_filtro_tabla:fechaDesde,
+                fecha_hasta_reposo_trabajador_filtro_tabla:fechaHasta,
                 reposos,
                 trabajadores
             })
@@ -244,8 +244,8 @@ class ComponentReposoTrabajador extends React.Component{
 
     async buscarReposos(a){
         this.cambiarEstado(a)
-        let fechaDesde=document.getElementById("fecha_desde_reposo_trabajador").value
-        let fechaHasta=document.getElementById("fecha_hasta_reposo_trabajador").value
+        let fechaDesde=document.getElementById("fecha_desde_reposo_trabajador_filtro_tabla").value
+        let fechaHasta=document.getElementById("fecha_hasta_reposo_trabajador_filtro_tabla").value
         let datosResposos = await this.consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta)
         console.log("datos reposos =>>> ",datosResposos)
         let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
@@ -711,9 +711,9 @@ class ComponentReposoTrabajador extends React.Component{
                             mensaje={this.state.msj_fecha_desde_reposo_trabajador}
                             nombreCampoDate="Desde:"
                             clasesCampo="form-control"
-                            value={this.state.fecha_desde_reposo_trabajador}
-                            name="fecha_desde_reposo_trabajador"
-                            id="fecha_desde_reposo_trabajador"
+                            value={this.state.fecha_desde_reposo_trabajador_filtro_tabla}
+                            name="fecha_desde_reposo_trabajador_filtro_tabla"
+                            id="fecha_desde_reposo_trabajador_filtro_tabla"
                             eventoPadre={this.buscarReposos}
                             />
                             <ComponentFormDate
@@ -722,9 +722,9 @@ class ComponentReposoTrabajador extends React.Component{
                             mensaje={this.state.msj_fecha_hasta_reposo_trabajador}
                             nombreCampoDate="Hasta:"
                             clasesCampo="form-control"
-                            value={this.state.fecha_hasta_reposo_trabajador}
-                            name="fecha_hasta_reposo_trabajador"
-                            id="fecha_hasta_reposo_trabajador"
+                            value={this.state.fecha_hasta_reposo_trabajador_filtro_tabla}
+                            name="fecha_hasta_reposo_trabajador_filtro_tabla"
+                            id="fecha_hasta_reposo_trabajador_filtro_tabla"
                             eventoPadre={this.buscarReposos}
                             />
                         
