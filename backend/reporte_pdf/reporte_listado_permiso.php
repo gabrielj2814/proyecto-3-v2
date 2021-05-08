@@ -63,18 +63,16 @@ class PdfListadoPermiso{
             $pdf->Cell(30,10,"Remunerado",1,0,"C");
             $pdf->Cell(30,10,"Havil",1,0,"C");
             $pdf->Cell(22,10,"Estatus",1,0,"C");
-            $pdf->Cell(30,10,"Estatus",1,0,"C");
+            $pdf->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
         else{
             $pdf->ln(15);
-            $pdf->SetX(40);
+            $pdf->SetX(70);
             $pdf->Cell(21,10,"Cedula",1,0,"C");
             $pdf->Cell(31,10,"Nombre permiso",1,0,"C");
             $pdf->Cell(35,10,"Fecha de solicitud",1,0,"C");
-            $pdf->Cell(30,10,"Remunerado",1,0,"C");
-            $pdf->Cell(30,10,"Havil",1,0,"C");
             $pdf->Cell(22,10,"Estatus",1,0,"C");
-            $pdf->Cell(30,10,"Estatus",1,0,"C");
+            $pdf->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
         $contador=0;
         while($contador<count($this->datosPdf)){
@@ -108,7 +106,7 @@ class PdfListadoPermiso{
                 $pdf->Cell(30,10,"Permiso normal",1,0,"C");
            }
            else{
-            $pdf->SetX(40);
+            $pdf->SetX(70);
             $fecha= date("d-m-Y",strtotime($this->datosPdf[$contador]["fecha_asistencia"]));
             // nombre_reposo
             $estadoPermiso=null;
@@ -127,8 +125,6 @@ class PdfListadoPermiso{
             $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_permiso"]),1,0,"C");
             $pdf->Cell(35,10,$fecha,1,0,"C");
-            $pdf->Cell(30,10,(($this->datosPdf[$contador]["estatu_remunerado"]==="1")?"SI":"NO"),1,0,"C");
-            $pdf->Cell(30,10,(($this->datosPdf[$contador]["estatu_dias_aviles"]==="1")?"SI":"NO"),1,0,"C");
             $pdf->Cell(22,10,$estadoPermiso,1,0,"C");
             $pdf->Cell(30,10,"Permiso normal",1,0,"C");
            }
@@ -210,20 +206,18 @@ class PdfListadoPermiso{
             $pdf->Cell(30,10,"Remunerado",1,0,"C");
             $pdf->Cell(30,10,"Havil",1,0,"C");
             $pdf->Cell(22,10,"Estatus",1,0,"C");
-            $pdf->Cell(30,10,"Estatus",1,0,"C");
+            $pdf->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
         else{
             $pdf->ln(15);
-            $pdf->SetX(10);
+            $pdf->SetX(40);
             $pdf->Cell(21,10,"Cedula",1,0,"C");
             $pdf->Cell(31,10,"Nombre",1,0,"C");
             $pdf->Cell(31,10,"Apellido",1,0,"C");
             $pdf->Cell(31,10,"Nombre permiso",1,0,"C");
             $pdf->Cell(35,10,"Fecha de solicitud",1,0,"C");
-            $pdf->Cell(30,10,"Remunerado",1,0,"C");
-            $pdf->Cell(30,10,"Havil",1,0,"C");
             $pdf->Cell(22,10,"Estatus",1,0,"C");
-            $pdf->Cell(30,10,"Estatus",1,0,"C");
+            $pdf->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
         $contador=0;
         while($contador<count($this->datosPdf)){
@@ -259,7 +253,7 @@ class PdfListadoPermiso{
                 $pdf->Cell(30,10,"Permiso normal",1,0,"C");
            }
            else{
-            $pdf->SetX(10);
+            $pdf->SetX(40);
             $fecha= date("d-m-Y",strtotime($this->datosPdf[$contador]["fecha_asistencia"]));
             // nombre_reposo
             $estadoPermiso=null;
@@ -280,10 +274,8 @@ class PdfListadoPermiso{
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["apellidos"]),1,0,"C");
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_permiso"]),1,0,"C");
             $pdf->Cell(35,10,$fecha,1,0,"C");
-            $pdf->Cell(30,10,(($this->datosPdf[$contador]["estatu_remunerado"]==="1")?"SI":"NO"),1,0,"C");
-            $pdf->Cell(30,10,(($this->datosPdf[$contador]["estatu_dias_aviles"]==="1")?"SI":"NO"),1,0,"C");
             $pdf->Cell(22,10,$estadoPermiso,1,0,"C");
-            $pdf->Cell(30,10,"Permiso normal",1,0,"C");
+            $pdf->Cell(30,10,"Permiso retiro",1,0,"C");
            }
             $contador++;
         }
