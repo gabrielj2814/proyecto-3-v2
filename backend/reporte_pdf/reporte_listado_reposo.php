@@ -19,7 +19,7 @@ class PdfListadoReposo{
         $pdf->SetFont("Arial","B",10);
         $pdf->ln(15);
 
-        $pdf->Cell(0,10,"REPOSOS DE LOS TRABAJADORES",0,0,"C");
+        $pdf->Cell(0,10,"REPOSO DEL TRABAJADOR",0,0,"C");
 
         $pdf->ln(12);
 

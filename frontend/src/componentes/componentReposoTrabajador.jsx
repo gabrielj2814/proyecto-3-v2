@@ -433,7 +433,7 @@ class ComponentReposoTrabajador extends React.Component{
 
       generarPdf(){
         let $filaVerPdf=document.getElementById("filaVerPdf")
-        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=null
         if(this.state.tipoPdf==="0"){
@@ -452,7 +452,7 @@ class ComponentReposoTrabajador extends React.Component{
             type:"post",
             data:datos,
             success: function(respuesta) {
-              alert("OK")
+            //   alert("OK")
               console.log(respuesta)
               let json=JSON.parse(respuesta)
               if(json.nombrePdf!=="false"){

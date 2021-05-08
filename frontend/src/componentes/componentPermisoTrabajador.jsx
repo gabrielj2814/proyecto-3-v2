@@ -364,7 +364,7 @@ class ComponentPermisoTrabajador extends React.Component{
 
       generarPdf(){
         let $filaVerPdf=document.getElementById("filaVerPdf")
-        $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+        // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=null
         if(this.state.tipoPdf==="0"){
@@ -377,18 +377,28 @@ class ComponentPermisoTrabajador extends React.Component{
         console.log(datos)
   
         if(datos!==null){
-          alert("generar pdf")
-          // $.ajax({
-          //   url: 'ruta',
-          //   type:"post",
-          //   data:[],
-          //   success: function(respuesta) {
-          //     alert("OK")
-          //   },
-          //   error: function() {
-          //     alert("error")
-          //   }
-          // });
+          // alert("generar pdf")
+          $.ajax({
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_permiso_trabajador.php',
+            type:"post",
+            data:datos,
+            success: function(respuesta) {
+              alert("OK")
+              console.log(respuesta)
+              let json=JSON.parse(respuesta)
+              if(json.nombrePdf!=="false"){
+                  $filaVerPdf.classList.remove("ocultarFormulario") 
+                  document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+              }
+              else{
+                  $filaVerPdf.classList.add("ocultarFormulario") 
+                  alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+              }
+            },
+            error: function() {
+              alert("error")
+            }
+          });
         }
         
   
@@ -516,7 +526,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                   </div>
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Tipo de pemriso</label>
+                                      <label>Tipo de permiso</label>
                                       <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="PR" >Permiso de retiro</option>
@@ -572,7 +582,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                   </div>
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Tipo de pemriso</label>
+                                      <label>Tipo de permiso</label>
                                       <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
                                         <option value="null" >seleccione</option>
                                         <option value="PR" >Permiso de retiro</option>
@@ -614,7 +624,7 @@ class ComponentPermisoTrabajador extends React.Component{
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
-                                    <a className="btn btn-success" target="_blank" href="http://localhost:8080/reporte/test.pdf">Ver pdf</a>
+                                    <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
                               
