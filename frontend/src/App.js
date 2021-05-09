@@ -4,6 +4,7 @@ import {BrowserRouter as Router,Route,Switch} from 'react-router-dom';
 import ComponentInicio from './componentes/componentInicio';
 import ComponentNosotros from './componentes/componentNosotros';
 import ComponentLogin from './componentes/componentLogin';
+import ComponentRecuperarCuenta from './componentes/componentRecuperarCuenta';
 import ComponentTrabajadorRegistrar from './componentes/componentTrabajadorRegistro'
 //APP
 //import ComponentDashboard from './componentes/componentDashboard';
@@ -94,6 +95,7 @@ function App() {
         <Route exact path="/" component={ComponentInicio}/>
         <Route exact path="/nosotros" component={ComponentNosotros}/>
         <Route exact path="/login:mensaje?" component={ComponentLogin}/>
+        <Route exact path="/recuperar-cuenta" component={ComponentRecuperarCuenta}/>
         <Route exact path="/registrar/trabajador:mensaje?" component={ComponentTrabajadorRegistrar}/>
         <Route exact path="/dashboard" component={ComponentInicioDashboard}/>
         <Route exact path="/dashboard/configuracion/acceso/consultar/:id" component={ComponentAccesoConsulta}/>
