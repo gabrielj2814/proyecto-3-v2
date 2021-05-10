@@ -1,0 +1,17 @@
+.contendor-form-asistencia{
+    height: 300px;
+    background-color: rgba(87,87,87,0.82);
+    border-radius: 15px;
+}
+
+.titulo-asistencia-publica{
+    color: white;
+}
+
+.color-blanco{
+    color: white;
+}
+
+.height-100x100{
+    height: 100%;
+}
