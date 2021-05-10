@@ -9,6 +9,7 @@ import ComponentTrabajadorRegistrar from './componentes/componentTrabajadorRegis
 //APP
 //import ComponentDashboard from './componentes/componentDashboard';
 import ComponentInicioDashboard from './componentes/componentInicioDashboard';
+import ComponentPerfilTrabajador from './componentes/componentPerfilTrabajador';
 //modulos transaccion
 //PERMISO TRABAJADOR
 import ComponentSolicitarPermisoForm from './componentes/componentSolicitarPermisoForm'
@@ -98,6 +99,7 @@ function App() {
         <Route exact path="/recuperar-cuenta" component={ComponentRecuperarCuenta}/>
         <Route exact path="/registrar/trabajador:mensaje?" component={ComponentTrabajadorRegistrar}/>
         <Route exact path="/dashboard" component={ComponentInicioDashboard}/>
+        <Route exact path="/dashboard/perfil" component={ComponentPerfilTrabajador}/>
         <Route exact path="/dashboard/configuracion/acceso/consultar/:id" component={ComponentAccesoConsulta}/>
         <Route exact path="/dashboard/configuracion/acceso/:operacion/:id?" component={ComponentAccesoForm}/>
         <Route exact path="/dashboard/configuracion/acceso:mensaje?" component={ComponentAcceso}/>
