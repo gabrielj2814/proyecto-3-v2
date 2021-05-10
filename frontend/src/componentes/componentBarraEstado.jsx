@@ -23,6 +23,10 @@ const BarraEsatdo= (props) =>{
             props.history.push("/login")
         }
     }
+
+    function irHaPerfil(){
+        props.history.push("/dashboard/perfil")
+    }
     // <span className="fecha" id="fechaRelog">{props.fechaRelog}</span>
     return (
         <div className="row justify-content-start align-items-center contenedor_barra_estado">
@@ -39,7 +43,7 @@ const BarraEsatdo= (props) =>{
                 <div className="dropdown dropleft">
                     <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdown1" data-toggle="dropdown"></button>
                     <div className="dropdown-menu">
-                        <span className="dropdown-item boton-cabecera" ><span className="icon-user"></span> Perfil</span>
+                        <span className="dropdown-item boton-cabecera" onClick={irHaPerfil}><span className="icon-user"></span> Perfil</span>
                         <span className="dropdown-item boton-cabecera" onClick={salirDelSistema}><span className="icon-exit"></span>  Salir</span>
                     </div>
                 </div>
