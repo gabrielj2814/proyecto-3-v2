@@ -39,7 +39,10 @@ const ComponentMenuHomePage = () => {
                             <LinkButton clases="nav-link" ruta="/nosotros" texto="Nosotros"/>
                         </li>
                         <li className="nav-item">
-                        <LinkButton clases="nav-link" ruta="/login" texto="Iniciar Sesion"/>
+                            <LinkButton clases="nav-link" ruta="/asistencia" texto="Asistencia"/>
+                        </li>
+                        <li className="nav-item">
+                            <LinkButton clases="nav-link" ruta="/login" texto="Iniciar Sesion"/>
                         </li>            
                     </ul>
                 </div>
