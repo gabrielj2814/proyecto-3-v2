@@ -11,6 +11,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import "../css/componentPerfilTrabajador.css"
 //componentes
 import ComponentDashboard from './componentDashboard'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
+import InputButton from '../subComponentes/input_button'
 //sub componentes
 import AlertBootstrap from "../subComponentes/alertBootstrap"
 
@@ -19,9 +21,14 @@ class ComponentPerfilTrabajador extends React.Component{
 
     constructor(){
         super()
+        this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.compararRespuesta=this.compararRespuesta.bind(this)
+        this.compararClaveTrabajador=this.compararClaveTrabajador.bind(this)
+        this.validarClave=this.validarClave.bind(this)
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.mostarModalCambiarContraseña=this.mostarModalCambiarContraseña.bind(this)
         this.state={
+            paso:0,
             modulo:"",// modulo menu
             estado_menu:false,
             // -------------
@@ -54,6 +61,56 @@ class ComponentPerfilTrabajador extends React.Component{
             nombre_perfil:null,
             estatu_perfil:null,
 
+            pregunta_1:"",
+            pregunta_2:"",
+            respuesta_1:"",
+            respuesta_2:"",
+
+            respuesta_usuario_1:"",
+            respuesta_usuario_2:"",
+
+            clave_trabajador:"",
+            confirmar_clave_trabajador:"",
+
+            nueva_clave_trabajador:"",
+            confirmar_nueva_clave:"",
+
+            msj_respuesta_1:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_respuesta_2:{
+                mensaje:"",
+                color_texto:""
+            },
+            
+            msj_confirmar_nueva_clave:{
+                mensaje:"",
+                color_texto:""
+            },
+
+            msj_respuesta_usuario_1:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_respuesta_usuario_2:{
+                mensaje:"",
+                color_texto:""
+            },
+
+            msj_clave_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            // msj_clave_confirmar:{
+            //     mensaje:"",
+            //     color_texto:""
+            // },
+
+            mensaje:{
+                texto:"",
+                estado:""
+              },
         }
     }
 
@@ -76,7 +133,7 @@ class ComponentPerfilTrabajador extends React.Component{
     async consultarTrabajador(id){
         var respuesta_servidor=""
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar/${id}/${token}`)
+        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar-trabajador/${id}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
@@ -124,6 +181,185 @@ class ComponentPerfilTrabajador extends React.Component{
         }
     }
 
+    cambiarEstadoInput(input){
+        this.setState({[input.name]:input.value});
+    }
+
+    cambiarEstado(a){
+        const input=a.target;
+        this.setState({[input.name]:input.value})
+    }
+
+    
+
+    validarCampoTexto(nombre_campo){// validar la clave como texto
+        var estado=false
+        const campo=this.state[nombre_campo],
+        exprecion=/[A-Za-z]|[0-9]/
+        // alert(nombre_campo)
+        var mensaje_campo=this.state["msj_"+nombre_campo]
+        if(campo!==""){
+            if(exprecion.test(campo)){
+                estado=true
+                console.log("campo nombre "+nombre_campo+" OK")
+                mensaje_campo.mensaje=""
+                mensaje_campo.color_texto="blanco"
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
+            }
+            else{
+                mensaje_campo.mensaje="* este campo solo permite letras"
+                mensaje_campo.color_texto="blanco"
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
+            } 
+        }
+        else{
+            mensaje_campo.mensaje="* este campo no puede estar vacio"
+            mensaje_campo.color_texto="blanco"
+            this.setState({["msj_"+nombre_campo]:mensaje_campo})
+        }
+        return estado
+    }
+
+    async compararClaveTrabajador(){
+        if(this.state.nueva_clave_trabajador=== this.state.confirmar_nueva_clave){
+            //alert("La clave fue validada con exito.(ツ)")
+            await this.compararClaveTrabajador(this.state.id_cedula)
+        }
+        else{
+            alert("La clave introducida no coincide, Por favor verifique")
+        }
+    }
+
+    compararRespuesta(){
+        if(this.state.respuesta_usuario_1=== this.state.respuesta_1 && this.state.respuesta_usuario_2===this.state.respuesta_2){
+            //alert("Las respuestas validadas con exito.(ツ)")
+            this.setState({
+                paso:1
+            })
+        }
+        else{
+            alert("Las respuestas no coinciden, por favor verifique sus Respuestas")
+        }
+    }
+
+
+    validarMinimoClave(validar_clave,propiedad){
+        var estado=false
+        var mensaje_clave=this.state["msj_"+propiedad]
+        if(validar_clave){
+            if(this.state[propiedad].length>=6){
+                estado=true
+                mensaje_clave.mensaje=""
+                mensaje_clave.color_texto="blanco"
+                this.setState({["msj_"+propiedad]:mensaje_clave})
+            }
+            else{
+                mensaje_clave.mensaje="* la clave tiene que tener como minimo 6 caracteres"
+                mensaje_clave.color_texto="blanco"
+                this.setState({["msj_"+propiedad]:mensaje_clave})
+            }
+        }
+        return estado
+    }
+
+    validarTexto(a){
+        const input=a.target,
+        exprecion=/[A-Za-z\s]$/
+        if(input.value!==""){
+            if(exprecion.test(input.value)){
+                console.log("OK")
+                this.cambiarEstado(input)
+            }
+            else{
+                console.log("NO se acepta valores numericos")
+            }
+        }
+        else{
+            this.cambiarEstado(input)
+        }
+    }
+
+    validarContraseña(){
+        var estado=false
+        var mensaje_clave=this.state["msj_confirmar_nueva_clave"]
+        const validar_clave=this.validarCampoTexto("confirmar_nueva_clave")
+        if(this.validarMinimoClave(validar_clave,"confirmar_nueva_clave")){
+            const exprecion=/[A-Z]{2}/g
+            const exprecion2=/[a-z]{2}/g
+            let clave=document.getElementById("confirmar_nueva_clave").value
+            if(exprecion.test(clave) && exprecion2.test(clave)){
+                // alert("si")
+                const validar_clave_confirmar=this.validarCampoTexto("confirmar_nueva_clave")
+                if(this.validarMinimoClave(validar_clave_confirmar,"confirmar_nueva_clave")){
+                    if(this.state.nueva_clave_trabajador===this.state.confirmar_nueva_clave){
+                        estado=true
+                        mensaje_clave.mensaje=""
+                        mensaje_clave.color_texto="negro"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
+                    else{
+                        mensaje_clave.mensaje="* las claves no coinciden"
+                        mensaje_clave.color_texto="negro"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
+                }
+
+            }
+            else{
+                mensaje_clave.mensaje="la clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
+                mensaje_clave.color_texto="blanco"
+                this.setState({msj_clave_confirmar:mensaje_clave})
+            }
+            
+        }
+        return estado
+    }
+
+    validarFormulario(){
+        var estado=false
+        const validar_respuesta_1=this.validarCampoTexto("respuesta_usuario_1"),
+        validar_respuesta_2=this.validarCampoTexto("respuesta_usuario_2"),
+        validar_clave=this.validarContraseña()
+        if(validar_respuesta_1 && validar_respuesta_2 && validar_clave){
+            estado=true
+        }
+        return estado
+    }
+
+    validarClave(){
+        if(this.validarFormulario()){
+        var respuesta_servidor=""
+        var mensaje=this.state.mensaje
+        axios.get(`http://localhost:8080/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.nueva_clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            console.log(respuesta_servidor)
+            if(respuesta_servidor.estado_peticion==="200"){
+                mensaje.texto="la clave a sido cambiada exitosamente"
+                mensaje.estado=respuesta_servidor.estado_peticion
+                $("#modalCambiarContaseña").modal("hide")
+                this.setState({
+                    paso:0
+                })
+            }
+            else if(respuesta_servidor.estado_peticion==="404"){
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_peticion
+                this.setState(mensaje)
+            }
+        })
+        .catch(error=>{
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.estado="500"
+            console.log(error)
+            this.setState({mensaje:mensaje})
+        })
+    }
+    else{
+        alert("error al validar el formulario")
+    }
+}
+
     /*
     <div className="col-auto">
                                 <button class="btn btn-info">Ver el historial de mis permisos</button>
@@ -164,7 +400,20 @@ class ComponentPerfilTrabajador extends React.Component{
     render(){
         const vista=(
             <div className="row justify-content-center">
-
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404" || this.state.mensaje.estado==="401" || this.state.mensaje.estado==="500") &&
+                        <div className="row">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div className={`alert alert-${(this.state.mensaje.estado==="200" || this.state.mensaje.estado==="401")?"success":"danger"} alert-dismissible`} >
+                                    <p>Mensaje: {this.state.mensaje.texto}</p>
+                                    <button className="close" data-dismiss="alert">
+                                        <span>X</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
                 
                 <div class="modal fade" id="modalCambiarContaseña" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -175,13 +424,116 @@ class ComponentPerfilTrabajador extends React.Component{
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body">
-                             
-                              
+                            
+                            {this.state.paso===0 &&
+                    <>
+                        <div className="modal-body">
                             </div>
-                            <div class="modal-footer ">
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                <div className="styleFont_2">
+                                    {this.state.pregunta_1}
+                                </div> 
+                            </div>
+                            <div className="row justify-content-center margen_bottom_10 ">
+                                <ComponentFormCampo
+                                clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
+                                nombreCampo=""
+                                activo="si"
+                                mensaje={this.state.msj_respuesta_usuario_1}
+                                clasesCampo="form-control"
+                                type="text"
+                                value={this.state.respuesta_usuario_1}
+                                name="respuesta_usuario_1"
+                                id="respuesta_usuario_1"
+                                placeholder="RESPUESTA NRO 1"
+                                eventoPadre={this.cambiarEstado}
+                                />
+                            </div>
+                            <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                <div className="styleFont_2">
+                                    {this.state.pregunta_2}
+                                    </div>
+                            </div>
+                            <div className="row justify-content-center margen_bottom_10 ">
+                                <ComponentFormCampo
+                                clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
+                                nombreCampo=""
+                                activo="si"
+                                mensaje={this.state.msj_respuesta_usuario_2}
+                                clasesCampo="form-control"
+                                type="text"
+                                value={this.state.respuesta_usuario_2}
+                                name="respuesta_usuario_2"
+                                id="respuesta_usuario_2"
+                                placeholder="RESPUESTA NRO 2"
+                                eventoPadre={this.cambiarEstado}
+                                />
+                            </div>
+
+                            <div className="modal-footer">    
+                                <div className="col-auto">
+                                    <InputButton 
+                                    clasesBoton="btn btn-success"
+                                    id="boton-recuperar_siguiente"
+                                    value="Siguiente"
+                                    eventoPadre={this.compararRespuesta}
+                                    />   
+                                </div>
+                            </div>
+                    </>
+                }
+                            {this.state.paso===1 &&
+                            <>
+                                <div class="modal-body">
+                                
+                                <div className="row justify-content-center margen_bottom_10 ">
+                                    <ComponentFormCampo
+                                    clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
+                                    nombreCampo={`Nueva Contraseña ${this.state.nueva_clave_trabajador.length}/6`}
+                                    mensaje={this.state.msj_clave_trabajador}
+                                    activo="si"
+                                    clasesCampo="form-control"
+                                    type="text"
+                                    value={this.state.nueva_clave_trabajador}
+                                    name="nueva_clave_trabajador"
+                                    id="nueva_clave_trabajador"
+                                    placeholder="INGRESE NUEVA CONTRASEÑA"
+                                    eventoPadre={this.cambiarEstado}
+                                    />
+                                </div>
+                                <div className="row justify-content-center margen_bottom_10 ">
+                                    <ComponentFormCampo
+                                    clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
+                                    nombreCampo={`Confirmar Contraseña ${this.state.confirmar_nueva_clave.length}/6`}
+                                    mensaje={this.state.msj_clave_confirmar}
+                                    activo="si"
+                                    clasesCampo="form-control"
+                                    type="password"
+                                    value={this.state.confirmar_nueva_clave}
+                                    name="confirmar_nueva_clave"
+                                    id="confirmar_nueva_clave"
+                                    placeholder="CONFIRME NUEVA CONTRASEÑA"
+                                    eventoPadre={this.cambiarEstado}
+                                    />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <div className="row row justify-content-center margen_bottom_10">    
+                                <div className="col-auto">
+                                    <InputButton 
+                                    clasesBoton="btn btn-success"
+                                    id="boton-recuperar"
+                                    value="Cambiar Contraseña"
+                                    eventoPadre={this.validarClave}
+                                    />   
+                                </div>
+                            </div>
+                            
                                 <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                
                             </div>
+                            </>
+                            }
                             </div>
                         </div>
                   </div>
@@ -310,12 +662,6 @@ class ComponentPerfilTrabajador extends React.Component{
                             <button class="btn btn-warning" onClick={this.mostarModalCambiarContraseña}>Cambiar mi contraseña</button>
                         </div>
                     </div>
-
-
-
-
-
-
 
                 </div>
  

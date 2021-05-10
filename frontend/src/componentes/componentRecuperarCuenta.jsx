@@ -38,8 +38,25 @@ class ComponentRecuperarCuenta extends React.Component{
             respuesta_usuario_2:"",
 
             clave_trabajador:"",
-            confirmar_clave_trabajador:"",
+            confirmar_nueva_clave:"",
 
+            msj_respuesta_usuario_1:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_respuesta_usuario_2:{
+                mensaje:"",
+                color_texto:""
+            },
+
+            msj_clave_trabajador:{
+                mensaje:"",
+                color_texto:""
+            },
+            msj_confirmar_nueva_clave:{
+                mensaje:"",
+                color_texto:""
+            },
             mensaje:{
                 texto:"",
                 estado:""
@@ -120,6 +137,88 @@ validarNumero(a){
         this.setState({[input.name]:input.value})
     }
 
+    validarCampoTexto(nombre_campo){// validar la clave como texto
+        var estado=false
+        const campo=this.state[nombre_campo],
+        exprecion=/[A-Za-z]|[0-9]/
+        var mensaje_campo=this.state["msj_"+nombre_campo]
+        if(campo!==""){
+            if(exprecion.test(campo)){
+                estado=true
+                console.log("campo nombre "+nombre_campo+" OK")
+                mensaje_campo.mensaje=""
+                mensaje_campo.color_texto="blanco"
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
+            }
+            else{
+                mensaje_campo.mensaje="* este campo solo permite letras"
+                mensaje_campo.color_texto="blanco"
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
+            } 
+        }
+        else{
+            mensaje_campo.mensaje="* este campo no puede estar vacio"
+            mensaje_campo.color_texto="blanco"
+            this.setState({["msj_"+nombre_campo]:mensaje_campo})
+        }
+        return estado
+    }
+
+    validarContraseña(){
+        var estado=false
+        var mensaje_clave=this.state["msj_confirmar_nueva_clave"]
+        const validar_clave=this.validarCampoTexto("confirmar_nueva_clave")
+        if(this.validarMinimoClave(validar_clave,"confirmar_nueva_clave")){
+            const exprecion=/[A-Z]{2}/g
+            const exprecion2=/[a-z]{2}/g
+            let clave=document.getElementById("confirmar_nueva_clave").value
+            if(exprecion.test(clave) && exprecion2.test(clave)){
+                //alert("si")
+                const validar_clave_confirmar=this.validarCampoTexto("confirmar_nueva_clave")
+                if(this.validarMinimoClave(validar_clave_confirmar,"confirmar_nueva_clave")){
+                    if(this.state.clave_trabajador===this.state.confirmar_nueva_clave){
+                        estado=true
+                        mensaje_clave.mensaje=""
+                        mensaje_clave.color_texto="negro"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
+                    else{
+                        mensaje_clave.mensaje="* las claves no coinciden"
+                        mensaje_clave.color_texto="negro"
+                        this.setState({msj_clave_confirmar:mensaje_clave})
+                    }
+                }
+
+            }
+            else{
+                mensaje_clave.mensaje="la clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
+                mensaje_clave.color_texto="blanco"
+                this.setState({msj_clave_confirmar:mensaje_clave})
+            }
+            
+        }
+        return estado
+    }
+
+    validarMinimoClave(validar_clave,propiedad){
+        var estado=false
+        var mensaje_clave=this.state["msj_"+propiedad]
+        if(validar_clave){
+            if(this.state[propiedad].length>=6){
+                estado=true
+                mensaje_clave.mensaje=""
+                mensaje_clave.color_texto="blanco"
+                this.setState({["msj_"+propiedad]:mensaje_clave})
+            }
+            else{
+                mensaje_clave.mensaje="* la clave tiene que tener como minimo 6 caracteres"
+                mensaje_clave.color_texto="blanco"
+                this.setState({["msj_"+propiedad]:mensaje_clave})
+            }
+        }
+        return estado
+    }
+
     async validarCedulaUsuario(){
         if(this.state.id_cedula!==""){
             if(this.state.id_cedula.length===8){
@@ -182,8 +281,19 @@ validarNumero(a){
         this.props.history.push("/recuperar-cuenta1")
     }
 
+    validarFormulario(){
+        var estado=false
+        const validar_respuesta_1=this.validarCampoTexto("respuesta_usuario_1"),
+        validar_respuesta_2=this.validarCampoTexto("respuesta_usuario_2"),
+        validar_clave=this.validarContraseña()
+        if(validar_respuesta_1 && validar_respuesta_2 && validar_clave){
+            estado=true
+        }
+        return estado
+    }
+
     async validarClave(){
-        var respuesta_servidor=""
+        if(this.validarFormulario()){var respuesta_servidor=""
         var mensaje=this.state.mensaje
         axios.get(`http://localhost:8080/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
         .then(respuesta=>{
@@ -206,6 +316,10 @@ validarNumero(a){
             console.log(error)
             this.setState({mensaje:mensaje})
         })
+    }
+    else{
+        alert("error al validar el formulario")
+    }
 }
 
     render(){
@@ -282,6 +396,7 @@ validarNumero(a){
                                 clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
                                 nombreCampo=""
                                 activo="si"
+                                ensaje={this.state.msj_respuesta_usuario_1}
                                 clasesCampo="form-control"
                                 type="text"
                                 value={this.state.respuesta_usuario_1}
@@ -301,6 +416,7 @@ validarNumero(a){
                                 clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
                                 nombreCampo=""
                                 activo="si"
+                                ensaje={this.state.msj_respuesta_usuario_2}
                                 clasesCampo="form-control"
                                 type="text"
                                 value={this.state.respuesta_usuario_2}
@@ -348,29 +464,30 @@ validarNumero(a){
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
                                 clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
-                                nombreCampo="Nueva contraseña"
+                                nombreCampo={`Nueva Contraseña ${this.state.clave_trabajador.length}/6`}
                                 activo="si"
+                                mensaje={this.state.msj_clave_trabajador}
                                 clasesCampo="form-control"
                                 type="text"
                                 value={this.state.clave_trabajador}
                                 name="clave_trabajador"
                                 id="clave_trabajador"
                                 placeholder="INGRESE NUEVA CONTRASEÑA"
-                                eventoPadre={this.validarNumero}
+                                eventoPadre={this.cambiarEstado}
                                 />
                             </div>
                             <div className="row justify-content-center margen_bottom_10 ">
                                 <ComponentFormCampo
                                 clasesColumna="col-7 col-sm-7 col-md-7 col-lg-7 col-xl-7 text-center"
-                                nombreCampo="Confirmar contraseña"
+                                nombreCampo={`Confirmar Contraseña ${this.state.confirmar_nueva_clave.length}/6`}
                                 activo="si"
                                 clasesCampo="form-control"
-                                type="text"
-                                value={this.state.confirmar_clave_trabajador}
-                                name="confirmar_clave_trabajador"
-                                id="confirmar_clave_trabajador"
+                                type="password"
+                                value={this.state.confirmar_nueva_clave}
+                                name="confirmar_nueva_clave"
+                                id="confirmar_nueva_clave"
                                 placeholder="CONFIRME NUEVA CONTRASEÑA"
-                                eventoPadre={this.validarNumero}
+                                eventoPadre={this.cambiarEstado}
                                 />
                             </div>
                             
