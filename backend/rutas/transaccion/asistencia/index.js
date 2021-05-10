@@ -7,6 +7,7 @@ VitacoraControlador=require("../../../controlador/c_vitacora")
 router.use(bodyparser.json())
 
 router.post("/presente",AsistenciaControlador.presenteControlador,VitacoraControlador.capturaDatos)
+router.post("/presente-2",AsistenciaControlador.presenteControladorSintoken)
 router.get("/consultar-asistencia-trabajador/:cedula/:token",AsistenciaControlador.consultarAsistenciaControlador,VitacoraControlador.capturaDatos)
 router.get("/verificar-inasistencias-justificada",AsistenciaControlador.verificarInasistenciasJustificada)
 router.get("/verificar-inasistencias-injustificada",AsistenciaControlador.verificarInasistenciaInjustificada)

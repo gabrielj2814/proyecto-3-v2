@@ -64,6 +64,55 @@ AsistenciaControlador.presenteControlador=async (req,res,next) => {
     
 }
 
+AsistenciaControlador.presenteControladorSintoken=async (req,res) => {
+    var respuesta_api={mensaje:"",estado_peticion:""}
+    const {asistencia}= req.body
+    const reposo_result=await ReposoTrabajadorControlador.consultarReposoActivo(asistencia.cedula)
+    const permiso_result=await PermisoTrabajadorControlador.consultarPermisoActivos(asistencia.cedula)
+    if( AsistenciaControlador.verificarExistencia(reposo_result) || AsistenciaControlador.verificarExistencia(permiso_result)){
+        respuesta_api.mensaje="error al registrar la asistencia del trabajador, por que el trabajador tiene actualmente un permiso o un reposo activo "
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        let trabajador=new TrabajadorControlador()
+        let datosTrabajador=await trabajador.consultarControlador(asistencia.cedula)
+        console.log("datos =>>> ",datosTrabajador.rows)
+        const datosHorario=await HorarioControlador.consultarHorarioAsistencia(datosTrabajador.rows[0].id_horario)
+        console.log("datos =>>> ",datosHorario.rows)
+        // respuesta_api.mensaje="hola"
+        // respuesta_api.estado_peticion="404"
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
+        if(AsistenciaControlador.verificarExistencia(datosHorario)){
+            const hoy=Moment().format("YYYY-MM-DD")
+            const hora=Moment().format("HH:mmA")
+            const json={
+                id_asistencia:"",
+                id_cedula:asistencia.cedula,
+                horario_entrada_asistencia:"",
+                horario_salida_asistencia:"",
+                estatu_asistencia:"",
+                estatu_cumplimiento_horario:"",
+                id_horario:datosHorario.rows[0].id_horario
+            }
+            AsistenciaControlador.asistirSintoken(res,hoy,hora,json,respuesta_api,req)
+        }
+        else{
+            respuesta_api.mensaje="error al registrar la asistencia del trabajador, no se a registrado horario de entrada en el sistema"
+            respuesta_api.estado_peticion="404"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        
+    }
+    
+}
+
 AsistenciaControlador.verificarInasistenciasJustificada= async (req,res) => {
     var respuesta_api={mensaje:"",estado_peticion:""}
     const horario_result=await HorarioControlador.consultarHorarioActivo()
@@ -157,6 +206,50 @@ AsistenciaControlador.asistir=async (res,hoy,hora,json,respuesta_api,next,req,to
             respuesta_api.estado_peticion="200"//////////////
             req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tasistencia",id)
             next()
+        }
+}
+
+AsistenciaControlador.asistirSintoken=async (res,hoy,hora,json,respuesta_api,req) => {
+        const asistencia_modelo=new AsistenciaModelo()
+        const asistencia_result=await asistencia_modelo.consultarTrabajadorAsistenciaModelo(hoy,json.id_cedula)
+        if(AsistenciaControlador.verificarExistencia(asistencia_result)){
+            if(asistencia_result.rows[0].horario_salida_asistencia==="--:--AM" && asistencia_result.rows[0].estatu_asistencia==="P"){
+                json.id_asistencia=asistencia_result.rows[0].id_asistencia
+                json.horario_salida_asistencia=hora
+                asistencia_modelo.setDatos(json)
+                asistencia_modelo.actualizarModelo()
+                respuesta_api.mensaje="adios que tenga un buen dia"
+                respuesta_api.estado_peticion="200"///////////////////////
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify({json,respuesta_api}))
+                res.end()
+                // req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","tasistencia",json.id_asistencia)
+                // next()
+            }
+            else{
+                respuesta_api.mensaje="ya este trabajador se retiro"
+                respuesta_api.estado_peticion="200"
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify({json,respuesta_api}))
+                res.end()
+            }
+        }
+        else{
+            const id=await AsistenciaControlador.generarId(hoy)
+            json.id_asistencia=id
+            json.horario_entrada_asistencia=hora
+            json.horario_salida_asistencia="--:--AM"
+            json.estatu_asistencia="P"
+            json.estatu_cumplimiento_horario=await AsistenciaControlador.cumpliirHoraioAsistencia(hora,json.id_horario)
+            asistencia_modelo.setDatos(json)
+            asistencia_modelo.registrarModelo()
+            respuesta_api.mensaje="que tenga un feliz dia de trabajo"
+            respuesta_api.estado_peticion="200"//////////////
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({json,respuesta_api}))
+            res.end()
+            // req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tasistencia",id)
+            // next()
         }
 }
 
