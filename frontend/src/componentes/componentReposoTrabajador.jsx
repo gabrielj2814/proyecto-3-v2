@@ -225,6 +225,7 @@ class ComponentReposoTrabajador extends React.Component{
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             datos=json
+            console.log(datos)
         })
         .catch(error => {
             console.log(error)
@@ -476,10 +477,9 @@ class ComponentReposoTrabajador extends React.Component{
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
-                <tr> 
-                    <th>Código</th> 
+                <tr>
                     <th>Nombre Trabajador</th>
-                    <th>Tipo de Reposo</th>
+                    <th>Reposo</th>
                     <th>Estatus del Reposo</th>
                 </tr> 
             </thead>
@@ -490,7 +490,6 @@ class ComponentReposoTrabajador extends React.Component{
                   {this.state.registros.map((reposoTrabajador)=>{
                       return(
                           <tr key={reposoTrabajador.id_reposo_trabajador}>
-                            <td>{reposoTrabajador.id_reposo_trabajador}</td>
                             <td>{(reposoTrabajador.id_cedula==="vacio")?"vacio":this.state.trabajadores[reposoTrabajador.id_cedula].nombres} {(reposoTrabajador.id_cedula==="vacio")?"":this.state.trabajadores[reposoTrabajador.id_cedula].apellidos}</td>
                             <td>{(reposoTrabajador.id_reposo==="vacio")?"vacio":this.state.reposos[reposoTrabajador.id_reposo].nombre_reposo}</td>
                             <td>{(reposoTrabajador.estatu_reposo_trabajador==="vacio")?"vacio":(reposoTrabajador.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</td>

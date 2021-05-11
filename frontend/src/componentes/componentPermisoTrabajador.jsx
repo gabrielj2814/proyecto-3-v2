@@ -181,6 +181,7 @@ class ComponentPermisoTrabajador extends React.Component{
         await axios.get(ruta)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
+            // console.log(respuesta_servidor)
         })
         .catch(error=>{
             console.log(error)
@@ -408,9 +409,11 @@ class ComponentPermisoTrabajador extends React.Component{
         const jsx_tabla_encabezado=(
             <thead> 
                   <tr> 
-                    <th>Código</th> 
                     <th>Trabajador</th>
                     <th>Permiso</th>
+                    <th>Remunerado</th>
+                    <th>Hábil</th>
+                    <th>Tipo de permiso</th>
                   </tr> 
               </thead>
           )
@@ -420,9 +423,11 @@ class ComponentPermisoTrabajador extends React.Component{
                       
                       return(
                           <tr key={permiso.id_permiso_trabajador}>
-                            <td>{permiso.id_permiso_trabajador}</td>
                             <td>{(permiso.nombres!=="vacio" && permiso.apellidos!=="vacio")?permiso.nombres+" "+permiso.apellidos:"vacio"}</td>
                             <td>{permiso.nombre_permiso}</td>
+                            <td>{(permiso.estatu_remunerado==="1")?"Si":"No"}</td>
+                            <td>{(permiso.estatu_dias_aviles==="1")?"Si":"No"}</td>
+                            <td>{(permiso.permiso_trabajador_tipo==="PR")?"Permiso de retiro":"Permiso normal"}</td>
                            {(!permiso.vacio && this.state.tabla==="E") &&
                               <td>
                                   <ButtonIcon 
