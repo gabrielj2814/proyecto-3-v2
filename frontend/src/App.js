@@ -78,6 +78,7 @@ import componentHorarioFormulario from './componentes/componentHorarioFormulario
 import ComponentAsistencia from './componentes/componentAsistencia';
 import ComponentListaAsistencia from './componentes/componentListaAsistencia';
 // REPOSO TRABAJADOR 
+import ComponentReposoTrabajadorFormDirecto from "./componentes/componentReposoTrabajadorFormDirecto"
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
 import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
 import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
@@ -160,6 +161,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
         
+        <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorConsulta}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/:operacion/:id?" component={ComponentReposoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador:mensaje?" component={ComponentReposoTrabajador}/>

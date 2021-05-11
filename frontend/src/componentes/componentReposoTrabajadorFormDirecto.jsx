@@ -20,7 +20,7 @@ import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
 import AlertBootstrap from "../subComponentes/alertBootstrap"
 import ComponentFormDate from '../subComponentes/componentFormDate'
 
-class ComponetReposoTrabajadorForm extends React.Component{
+class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     constructor(){
         super()
@@ -160,68 +160,37 @@ class ComponetReposoTrabajadorForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/reposo-trabajador")
-        if(acessoModulo){
-            let idRegistro=await this.generarId()
-            let {operacion} = this.props.match.params
-            if(operacion==="registrar"){
-                if(idRegistro!==null){
-                    await this.consultarTodosTrabajadores();
-                    // ----- reposo
-                    await this.consultarTodosReposo();
-                    // -------- cam
-                    await this.consultarTodosLosCam();
-                    // ------ asignaciones medico
-                    await this.consultarTodasEspecialidad();
-                    this.setState({
-                        id_reposo_trabajador:idRegistro,
-                    })
-                }
-                if(this.state.estadoBusquedaTrabajador===true){
-                    document.getElementById("boton-registrar").removeAttribute("disabled")
-                }
-                else{
-                    document.getElementById("boton-registrar").setAttribute("disabled",true)
-                }
-            }
-            else if(operacion==="actualizar"){
-                // alert("actualizando")
-                let {id} = this.props.match.params
-                await this.consultarTodosTrabajadores();
-                // ----- reposo
-                await this.consultarTodosReposo();
-                // -------- cam
-                await this.consultarTodosLosCam();
-                // ------ asignaciones medico
-                await this.consultarTodasEspecialidad();
-    
-                await this.consultarRepososTrabajador(id);
-                document.getElementById("id_reposo").value=this.state.id_reposo;
-                document.getElementById("id_cam").value=this.state.id_cam;
-                this.mostrarDatosCam({
-                    target:{
-                        id:"id_cam",
-                        name:"id_cam",
-                        value:this.state.id_cam
-                    }
-                })
-                document.getElementById("id_especialidad").value=this.state.id_especialidad;
-                this.mostrarAsignacionMedico({
-                    target:{
-                        id:"id_especialidad",
-                        name:"id_especialidad",
-                        value:this.state.id_especialidad
-                    }
-                })
-                document.getElementById("id_asignacion_medico_especialidad").value=this.state.id_asignacion_medico_especialidad;
-            }
-        }
-        else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-            this.props.history.goBack()
+        await this.obtenerSesionTrabajador()
+        let idRegistro=await this.generarId()
+        if(idRegistro!==null){
+            await this.consultarTodosTrabajadores();
+            // ----- reposo
+            await this.consultarTodosReposo();
+            // -------- cam
+            await this.consultarTodosLosCam();
+            // ------ asignaciones medico
+            await this.consultarTodasEspecialidad();
+            this.setState({
+                id_reposo_trabajador:idRegistro,
+            })
         }
 
     }
+
+    async obtenerSesionTrabajador(){
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                    this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
+                }  
+            })
+        }
+      }
 
     async validarAccesoDelModulo(modulo,subModulo){
         // /dashboard/configuracion/acceso
@@ -296,6 +265,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                     }
                 }
             )
+
 
         })
         .catch(error=>{
@@ -485,9 +455,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
         })
         .catch(error=>{
             console.log(error)
-            // mensaje.texto="No se puedo conectar con el servidor"
-            // mensaje.estado="500"
-            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
         })
         return ciudad
     }
@@ -505,9 +472,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
         })
         .catch(error=>{
             console.log(error)
-            // mensaje.texto="No se puedo conectar con el servidor"
-            // mensaje.estado="500"
-            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
         })
         return estado
     }
@@ -525,9 +489,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
         })
         .catch(error=>{
             console.log(error)
-            // mensaje.texto="No se puedo conectar con el servidor"
-            // mensaje.estado="500"
-            // this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
         })
         return tipoCam
     }
@@ -627,7 +588,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
             estado_menu:false,
             //---------- 
             id_reposo_trabajador:"",
-            id_cedula:"",
             id_reposo:null,
             fecha_desde_reposo_trabajador:"",
             fecha_hasta_reposo_trabajador:"",
@@ -913,7 +873,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
         // alert("operacion")
         let alerta=JSON.parse(JSON.stringify(this.state.alerta))
         const token=localStorage.getItem('usuario')
-        const {operacion}=this.props.match.params
         if(this.validarFormulario()){
             // alert("ok al validar el formulario")
             let datosFormulario=new FormData(document.getElementById("formulario_reposo_trabajador"))
@@ -927,8 +886,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
             if(this.state.estadoCalcula===true){
                 // alert("si")
-                if(operacion==="registrar"){
-                    axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
+                axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
                     .then(respuesta => {
                         let json=JSON.parse(JSON.stringify(respuesta.data))
                         console.log("repuesta =>>> ",json)
@@ -952,34 +910,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
                         alerta.mensaje="error al conectar con el servidor"
                         this.setState({alerta})
                     })
-                }
-                else if(operacion==="actualizar"){
-                    let {id} = this.props.match.params
-                    axios.put(`http://localhost:8080/transaccion/reposo-trabajador/actualizar/${id}`,datos)
-                    .then(respuesta => {
-                        let json=JSON.parse(JSON.stringify(respuesta.data))
-                        console.log("repuesta =>>> ",json)
-                        if(json.estado_peticion==="200"){
-                            alerta.estado=true
-                            alerta.color="success"
-                            alerta.mensaje=json.mensaje
-                            this.setState({alerta})
-                        }
-                        else{
-                            alerta.estado=true
-                            alerta.color="danger"
-                            alerta.mensaje=json.mensaje
-                            this.setState({alerta})
-                        }
-                    })
-                    .catch(error => {
-                        console.log(error)
-                        alerta.estado=true
-                        alerta.color="danger"
-                        alerta.mensaje="error al conectar con el servidor"
-                        this.setState({alerta})
-                    })
-                }
             }
             else{
                 alert("porfavor calcula los dias no aviles")
@@ -1102,7 +1032,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             <span className="titulo-form-reposo-trabajador">Formulario Reposo Trabajador</span>
                         </div>
                     </div>
-                    <div className="row ">
+                    {/* <div className="row ">
                         <div className="col-auto">
                             <ButtonIcon 
                             clasesBoton="btn btn-outline-success"
@@ -1111,7 +1041,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             eventoPadre={this.agregar}
                             />
                         </div>
-                    </div>
+                    </div> */}
                     <form  id="formulario_reposo_trabajador" >
                         <div className="row justify-content-center">
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
@@ -1126,31 +1056,6 @@ class ComponetReposoTrabajadorForm extends React.Component{
                             id="id_reposo_trabajador"
                             placeholder="Código Reposo"
                             />
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-reposo-trabajador">
-                                <span className="sub-titulo-form-reposo-trabajador">Trabajador</span>
-                            </div>
-                        </div>
-                        <div className="row justify-content-center">
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            obligatorio="si"
-                            mensaje={this.state.msj_id_cedula}
-                            nombreCampo="Cédula:"
-                            activo="si"
-                            type="text"
-                            value={this.state.id_cedula}
-                            name="id_cedula"
-                            id="id_cedula"
-                            placeholder="Cédula"
-                            eventoPadre={this.buscarTrabajador}
-                            />
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                <label>Nombre Completo:</label>
-                                <div id="nombreCompletoTrabajador"></div>
-                            </div>
                         </div>
 
 
@@ -1350,6 +1255,7 @@ class ComponetReposoTrabajadorForm extends React.Component{
                                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             </div>
                         }
+                        <input type="hidden" id="id_cedula" name="id_cedula" value={this.state.id_cedula}/>
                         <input type="hidden" id="cantidad_dias_entrega_reposo_trabajador" name="cantidad_dias_entrega_reposo_trabajador" value={this.state.cantidad_dias_entrega_reposo_trabajador}/>
                         <input type="hidden" id="estatu_entrega_reposo" name="estatu_entrega_reposo" value={this.state.estatu_entrega_reposo}/>
                         <input type="hidden" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" value={this.state.estatu_reposo_trabajador}/>
@@ -1360,22 +1266,12 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
                         <div className="row mt-3 justify-content-center">
                             <div className="col-auto">
-                                {this.props.match.params.operacion==="registrar" &&
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
-                                }
-                                {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
-                                    clasesBoton="btn btn-warning"
-                                    id="boton-actualizar"
-                                    value="Actualizar"
-                                    eventoPadre={this.operacion}
-                                    />   
-                                }
                             </div>
                             <div className="col-auto">
                                 <InputButton 
@@ -1411,4 +1307,4 @@ class ComponetReposoTrabajadorForm extends React.Component{
 
 }
 
-export default withRouter(ComponetReposoTrabajadorForm)
+export default withRouter(ComponetReposoTrabajadorFormDirecto)
