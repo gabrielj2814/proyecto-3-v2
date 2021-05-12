@@ -116,11 +116,12 @@ class PdfListadoAsistencia{
         
         //TABLA
         $pdf->SetX(20);
-        $pdf->Cell(80,10,"Nombre del trabajador",1,0,'C');
+        $pdf->Cell(60,10,"Nombre del trabajador",1,0,'C');
         $pdf->Cell(30,10,'Fecha',1,0,'C');
         $pdf->Cell(30,10,'Hora de entrada',1,0,'C');
         $pdf->Cell(30,10,'Hora de Salida',1,0,'C');
-        $pdf->Cell(60,10,'Estado',1,0,'C');
+        $pdf->Cell(35,10,'Estado',1,0,'C');
+        $pdf->Cell(60,10,utf8_decode('Observación'),1,0,'C');
         
         // $pdf->ln(10);
         
@@ -128,18 +129,19 @@ class PdfListadoAsistencia{
         // $pdf->Cell(30,10,'26/04/2021',1,0,'C');
         // $pdf->Cell(30,10,'7:00 AM',1,0,'C');
         // $pdf->Cell(30,10,'4:00 PM',1,0,'C');
-        // $pdf->Cell(60,10,'Retiro antes de la hora',1,0,'C');
+        // $pdf->Cell(35,10,'Retiro antes de la hora',1,0,'C');
         
         $contador=0;
         while($contador<count($this->datosPdf)){
             $fecha= date("d-m-Y",strtotime($this->datosPdf[$contador]["fecha_asistencia"]));
             $pdf->ln(10);
             $pdf->SetX(20);
-            $pdf->Cell(80,10,utf8_decode($this->datosPdf[$contador]["nombres"]." ".$this->datosPdf[$contador]["apellidos"]),1,0,'C');
+            $pdf->Cell(60,10,utf8_decode($this->datosPdf[$contador]["nombres"]." ".$this->datosPdf[$contador]["apellidos"]),1,0,'C');
             $pdf->Cell(30,10,$fecha,1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_salida_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
-            $pdf->Cell(60,10,(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $this->datosPdf[$contador]["id_permiso_trabajador"]===null)?"Laboro":(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $this->datosPdf[$contador]["id_permiso_trabajador"]!==null)?"Vino pero se retiro":"-")),1,0,'C');
+            $pdf->Cell(35,10,(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $this->datosPdf[$contador]["id_permiso_trabajador"]===null)?"Laboro":(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $this->datosPdf[$contador]["id_permiso_trabajador"]!==null)?"Vino pero se retiro":"-")),1,0,'C');
+            $pdf->Cell(60,10,utf8_decode($this->datosPdf[$contador]["observacion_asistencia"]),1,0,'C');
             $contador++;
         }
         
