@@ -31,6 +31,7 @@ class MenuDashboard extends React.Component{
         super()
         this.irASolicitudPermiso=this.irASolicitudPermiso.bind(this)
         this.irASolicitudReposo=this.irASolicitudReposo.bind(this)
+        this.irHaBitacora=this.irHaBitacora.bind(this)
         this.state={
             modulosSistema:{}
         }
@@ -90,6 +91,10 @@ class MenuDashboard extends React.Component{
     irASolicitudReposo(){
         this.props.history.push("/dashboard/transaccion/reposo-trabajador/solicitar")
     }
+    
+    irHaBitacora(){
+        this.props.history.push("/dashboard/seguridad/bitacora")
+    }
 
     render(){
         // alert()
@@ -121,6 +126,14 @@ class MenuDashboard extends React.Component{
                         <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-thermometer-half" viewBox="0 0 16 16">
                             <path d="M9.5 12.5a1.5 1.5 0 1 1-2-1.415V6.5a.5.5 0 0 1 1 0v4.585a1.5 1.5 0 0 1 1 1.415z"/>
                             <path d="M5.5 2.5a2.5 2.5 0 0 1 5 0v7.55a3.5 3.5 0 1 1-5 0V2.5zM8 1a1.5 1.5 0 0 0-1.5 1.5v7.987l-.167.15a2.5 2.5 0 1 0 3.333 0l-.166-.15V2.5A1.5 1.5 0 0 0 8 1z"/>
+                        </svg>
+
+                    </div>
+                    <div className="col-12 nvl_1 item_menu_nvl_1" onClick={this.irHaBitacora} id="solicitar-reposo">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-journal-bookmark" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M6 8V1h1v6.117L8.743 6.07a.5.5 0 0 1 .514 0L11 7.117V1h1v7a.5.5 0 0 1-.757.429L9 7.083 6.757 8.43A.5.5 0 0 1 6 8z"/>
+                            <path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2z"/>
+                            <path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1H1z"/>
                         </svg>
 
                     </div>

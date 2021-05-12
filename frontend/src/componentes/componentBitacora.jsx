@@ -195,7 +195,7 @@ class ComponentBitacora extends React.Component {
                         </div>
                     </div>
 
-                    <table className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl">
+                    <table className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ocultar">
                         <thead> 
                             <tr> 
                                 <th>Cedula</th> 
