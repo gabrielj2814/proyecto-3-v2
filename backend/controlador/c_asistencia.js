@@ -65,15 +65,16 @@ AsistenciaControlador.presenteControlador=async (req,res,next) => {
 }
 
 AsistenciaControlador.presenteControladorSintoken=async (req,res) => {
-    var respuesta_api={mensaje:"",estado_peticion:""}
+    let respuesta_api={mensaje:"",estado_peticion:""}
     const {asistencia}= req.body
     const reposo_result=await ReposoTrabajadorControlador.consultarReposoActivo(asistencia.cedula)
     const permiso_result=await PermisoTrabajadorControlador.consultarPermisoActivos(asistencia.cedula)
     if( AsistenciaControlador.verificarExistencia(reposo_result) || AsistenciaControlador.verificarExistencia(permiso_result)){
-        respuesta_api.mensaje="error al registrar la asistencia del trabajador, por que el trabajador tiene actualmente un permiso o un reposo activo "
+        console.log("ok")
+        respuesta_api.mensaje="error al registrar la asistencia del trabajador, por que el trabajador tiene actualmente un permiso o un reposo activo"
         respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
+        res.write(JSON.stringify({respuesta_api}))
         res.end()
     }
     else{
@@ -105,7 +106,7 @@ AsistenciaControlador.presenteControladorSintoken=async (req,res) => {
             respuesta_api.mensaje="error al registrar la asistencia del trabajador, no se a registrado horario de entrada en el sistema"
             respuesta_api.estado_peticion="404"
             res.writeHead(200,{"Content-Type":"application/json"})
-            res.write(JSON.stringify(respuesta_api))
+            res.write(JSON.stringify({respuesta_api}))
             res.end()
         }
         

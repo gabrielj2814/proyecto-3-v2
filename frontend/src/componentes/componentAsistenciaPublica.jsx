@@ -32,7 +32,7 @@ class ComponentAsistenciaPublica extends React.Component{
     async enviarDatos(){
         let alerta=JSON.parse(JSON.stringify(this.state.alerta))
         let $cedula=document.getElementById("id_cedula")
-        alert($cedula.value)
+        // alert($cedula.value)
         let json={
             asistencia:{
                 cedula:$cedula.value
