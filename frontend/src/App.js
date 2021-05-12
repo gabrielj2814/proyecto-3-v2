@@ -86,8 +86,10 @@ import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrab
 import ComponentCintillo from "./componentes/componentCintillo"
 // error
 import ComponentError404 from "./componentes/componentError404"
+// seguridad
+import ComponentBitacora from "./componentes/componentBitacora"
 
-// vista reportes
+
 
 import ComponentReporteMedico from './componentes/componentReporteMedico'
 
@@ -175,6 +177,7 @@ function App() {
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
         <Route exact path="/dashboard/transaccion/asistencia/lista" component={ComponentListaAsistencia}/>
 
+        <Route exact path="/dashboard/seguridad/bitacora" component={ComponentBitacora}/>
 
         <Route exact path="/dashboard/reporte/medico" component={ComponentReporteMedico}/>
 
