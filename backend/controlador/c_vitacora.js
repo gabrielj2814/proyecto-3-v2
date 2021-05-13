@@ -50,7 +50,7 @@ VitacoraControlador.consultarRegistros= async (req,res) => {
     const {vitacora}= req.body
     let lista_sql=[]
     let lista_vitacora=[]
-    let SQL=`SELECT * FROM tvitacora WHERE (fecha_operacion BETWEEN '${vitacora.fecha_desde}' AND '${vitacora.fecha_hasta}')`
+    let SQL=`SELECT * FROM tvitacora WHERE (fecha_operacion BETWEEN '${vitacora.fecha_desde}' AND '${vitacora.fecha_desde}')`
     if(vitacora["id_cedula"] && vitacora["id_cedula"].length==8){
         SQL+=` AND (id_cedula='${vitacora.id_cedula}')`
     }

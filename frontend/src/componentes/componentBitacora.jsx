@@ -4,6 +4,7 @@ import {withRouter} from "react-router-dom"
 
 //JS
 import axios from 'axios'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -25,10 +26,30 @@ class ComponentBitacora extends React.Component {
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.mostrarFiltros=this.mostrarFiltros.bind(this)
+        this.conultarOperaciones=this.conultarOperaciones.bind(this)
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            tablas:[
+                {name:"ttipotrabajador",value:"tipo de trabajador"},
+                {name:"thorario",value:"horario"},
+                {name:"tfunciontrabajador",value:"funcipon trabajador"},
+                {name:"ttrabajador",value:"trabajador"},
+                {name:"tpermiso",value:"permiso"},
+                {name:"tpermisotrabajador",value:"permiso trabajador"},
+                {name:"testado",value:"estado"},
+                {name:"tciudad",value:"ciudad"},
+                {name:"ttipocam",value:"tipo cam"},
+                {name:"tcam",value:"cam"},
+                {name:"tmedico",value:"medico"},
+                {name:"tespecialidad",value:"especialidad"},
+                {name:"tasignacionmedicoespecialidad",value:"asignación especialidad medico"},
+                {name:"treposo",value:"reposo"},
+                {name:"treposotrabajador",value:"reposo del trabajador"},
+                {name:"tasistencia",value:"asistencia"},
+                {name:"tcintillo",value:"cintillo"},
+            ],
             alerta:{
                 color:null,
                 mensaje:null,
@@ -89,6 +110,74 @@ class ComponentBitacora extends React.Component {
         }
     }
 
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
+    }
+
+    buscar(nombre,lista){
+        let contador=0
+        let listaNueva=[]
+        while(contador<lista.length){
+            if(lista[contador].name===nombre){
+                listaNueva.push(lista[contador].value)
+            }
+            contador++
+        }
+        return listaNueva
+    }
+
+    conultarOperaciones(){
+        let $tipoDeConsulta=document.getElementById("tipoDeConsulta")
+        let $tablaBitacora=document.getElementById("tablaBitacora")
+        // $tablaBitacora.classList.remove("ocultar")
+        let datos=null;
+        let datosFinales={}
+        if($tipoDeConsulta.value==="1"){
+            // datos=this.extrarDatosDelFormData(new FormData(document.getElementById("bitacoraLista")))
+            datos=$("#bitacoraLista").serializeArray()
+            
+        }
+        else if($tipoDeConsulta.value==="0"){
+            // datos=this.extrarDatosDelFormData(new FormData(document.getElementById("bitacoraEspecifico")))
+            datos=$("#bitacoraEspecifico").serializeArray()
+            datosFinales["id_cedula"]=datos[0].value
+        }
+        datosFinales["fecha_desde"]=datos[datos.length-1].value
+        
+        let tablas=(this.buscar("tablas",datos).length>0)?this.buscar("tablas",datos):false
+        let operaciones=(this.buscar("operaciones",datos).length>0)?this.buscar("operaciones",datos):false
+        // console.log(tablas)
+        // console.log(operaciones)
+        if(tablas.length>0){
+            datosFinales["tablas"]=tablas
+        }
+        if(operaciones.length>0){
+            datosFinales["operaciones"]=operaciones
+        }
+        
+        console.log(datosFinales)
+        let json={
+            vitacora:datosFinales
+        }
+
+        axios.post("http://localhost:8080/transaccion/bitacora/consultar",json)
+        .then(respuesta => {
+            // alert("ok")
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(json)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
     render(){
         const vista=(
             <div className="row justify-content-center">
@@ -109,7 +198,7 @@ class ComponentBitacora extends React.Component {
                         <div className="col-auto text-center">
                             <div className="form-groud">
                                 <label>Tipo de bitacora</label>
-                                <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
+                                <select class="form-select custom-select" id="tipoDeConsulta" aria-label="Default select example" onChange={this.mostrarFiltros}>
                                     <option value="null" >seleccione</option>
                                     <option value="1" >generar una lista</option>
                                     <option value="0" >generar un especifico</option>
@@ -122,10 +211,10 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Modulo</label>
-                                    <select class="form-select custom-select" id="tabla" name="tabla" aria-label="Default select example" >
-                                        <option value="null" >Todos</option>
-                                        <option value="1" >generar una lista</option>
-                                        <option value="0" >generar un especifico</option>
+                                    <select class="form-select custom-select" multiple id="tablas" name="tablas" aria-label="Default select example" >
+                                        {this.state.tablas.map((tabla,index) => {
+                                            return (<option key={"lista-"+index} value={tabla.name}>{tabla.value}</option>)
+                                        })}
                                     </select>
                                 </div>
                             </div>
@@ -133,8 +222,7 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Operacion</label>
-                                    <select class="form-select custom-select" id="operacion" name="operacion" aria-label="Default select example" >
-                                        <option value="null" >seleccione</option>
+                                    <select class="form-select custom-select" multiple id="operaciones" name="operaciones" aria-label="Default select example" >
                                         <option value="INSERT" >Registrar</option>
                                         <option value="UPDATE" >Actualizar</option>
                                         <option value="SELECT" >Consulta</option>
@@ -145,7 +233,7 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Fecha</label>
-                                    <input type="date" id="fecha" name="fecha" className="form-control" />
+                                    <input type="date" id="fecha_desde" name="fecha_desde" className="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -161,10 +249,10 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Modulo</label>
-                                    <select class="form-select custom-select" id="tabla" name="tabla" aria-label="Default select example" >
-                                        <option value="null" >Todos</option>
-                                        <option value="1" >generar una lista</option>
-                                        <option value="0" >generar un especifico</option>
+                                    <select class="form-select custom-select" multiple id="tablas" name="tablas" aria-label="Default select example" >
+                                        {this.state.tablas.map((tabla,index) => {
+                                            return (<option key={"especifico-"+index} value={tabla.name}>{tabla.value}</option>)
+                                        })}
                                     </select>
                                 </div>
                             </div>
@@ -172,8 +260,7 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Operacion</label>
-                                    <select class="form-select custom-select" id="operacion" name="operacion" aria-label="Default select example" >
-                                        <option value="null" >seleccione</option>
+                                    <select class="form-select custom-select " multiple id="operaciones" name="operaciones" aria-label="Default select example" >
                                         <option value="INSERT" >Registrar</option>
                                         <option value="UPDATE" >Actualizar</option>
                                         <option value="SELECT" >Consulta</option>
@@ -184,18 +271,18 @@ class ComponentBitacora extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
                                     <label>Fecha</label>
-                                    <input type="date" id="fecha" name="fecha" className="form-control" />
+                                    <input type="date" id="fecha_desde" name="fecha_desde" className="form-control" />
                                 </div>
                             </div>
                         </div>
                     </form>
                     <div id="filaBotonGenerar" className="row justify-content-center ocultar mb-3">
                         <div className="col-auto">
-                            <button className="btn btn-success">Consultar</button>
+                            <button className="btn btn-success" onClick={this.conultarOperaciones}>Consultar</button>
                         </div>
                     </div>
 
-                    <table className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ocultar">
+                    <table id="tablaBitacora" className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ocultar">
                         <thead> 
                             <tr> 
                                 <th>Cedula</th> 
