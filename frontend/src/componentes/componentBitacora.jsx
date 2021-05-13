@@ -30,11 +30,36 @@ class ComponentBitacora extends React.Component {
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
+            datosBitacora:[],
             //---------- 
+            operaciones:{
+                INSERT:"registro",
+                UPDATE:"actualizo",
+                SELECT:"consulto",
+            },
+            nombresTablas:{
+                ttipotrabajador:"tipo de trabajador",
+                thorario:"horaio",
+                tfunciontrabajador:"función trabajador",
+                ttrabajador:"trabajador",
+                tpermiso:"permiso",
+                tpermisotrabajador:"permiso trabajador",
+                testado:"estado",
+                tciudad:"ciudad",
+                ttipocam:"tipo cam",
+                tmedico:"medico",
+                tcam:"cam",
+                treposo:"reposo",
+                treposotrabajador:"reposo trabajador",
+                tasistencia:"asistencia",
+                tcintillo:"cintillo",
+                tespecialidad:"especialidad",
+                tasignacionmedicoespecialidad:"asignación especialidad medico",
+            },
             tablas:[
                 {name:"ttipotrabajador",value:"tipo de trabajador"},
                 {name:"thorario",value:"horario"},
-                {name:"tfunciontrabajador",value:"funcipon trabajador"},
+                {name:"tfunciontrabajador",value:"función trabajador"},
                 {name:"ttrabajador",value:"trabajador"},
                 {name:"tpermiso",value:"permiso"},
                 {name:"tpermisotrabajador",value:"permiso trabajador"},
@@ -56,6 +81,67 @@ class ComponentBitacora extends React.Component {
                 estado:false
             }
         }
+    }
+
+    async UNSAFE_componentWillMount(){
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/seguridad","/bitacora")
+        if(!acessoModulo){
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
     }
 
     mostrarModulo(a){// esta funcion tiene la logica del menu no tocar si no quieres que el menu no te responda como es devido
@@ -166,12 +252,23 @@ class ComponentBitacora extends React.Component {
         let json={
             vitacora:datosFinales
         }
-
+        $tablaBitacora.classList.add("ocultar")
         axios.post("http://localhost:8080/transaccion/bitacora/consultar",json)
         .then(respuesta => {
             // alert("ok")
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(json)
+            if(json.vitacora.estado_peticion="200"){
+                $tablaBitacora.classList.remove("ocultar")
+                console.log(json)
+                let contador=0
+                let lista=[]
+                while(contador<json.vitacora.length){
+                    lista=lista.concat(json.vitacora[contador])
+                    contador++
+                }
+                console.log(lista)
+                this.setState({datosBitacora:lista})
+            }
         })
         .catch(error => {
             console.log(error)
@@ -286,30 +383,24 @@ class ComponentBitacora extends React.Component {
                         <thead> 
                             <tr> 
                                 <th>Cedula</th> 
+                                <th>Nombre trabajador</th> 
                                 <th>Modulo</th>
                                 <th>Operacion</th>
                                 <th>Aquien</th>
                             </tr> 
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                            </tr>
-                            <tr>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                                <td>a</td>
-                            </tr>
+                                {this.state.datosBitacora.map((datos,index) => {
+                                    return(
+                                        <tr key={index}>
+                                            <td>{datos.id_cedula}</td>
+                                            <td>{datos.nombres} {datos.apellidos}</td>
+                                            <td>{this.state.nombresTablas[datos.tabla]}</td>
+                                            <td>{this.state.operaciones[datos.operacion]}</td>
+                                            <td>{datos.aquien}</td>
+                                        </tr>
+                                    )
+                                })}
                         </tbody>
 
 

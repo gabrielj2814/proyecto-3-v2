@@ -84,7 +84,7 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"lista asistencia",id:"/asistencia/lista"}
                 ],
                 seguridad:[
-                    {descripcion:"vitacora",id:"/Bitacora"},
+                    {descripcion:"Bitacora",id:"/bitacora"},
                 ]
             }
         }
@@ -666,7 +666,7 @@ class ComponentAccesoForm extends React.Component {
         else if(operacion.value==="actualizar"){
             const respuesta_validaciones=this.validar()
             if(respuesta_validaciones){
-                alert("validaciones OK")
+                // alert("validaciones OK")
                 const objeto={
                     perfil:{
                         id_perfil:this.state.id_perfil,

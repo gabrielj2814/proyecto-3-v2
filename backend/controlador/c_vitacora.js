@@ -50,17 +50,17 @@ VitacoraControlador.consultarRegistros= async (req,res) => {
     const {vitacora}= req.body
     let lista_sql=[]
     let lista_vitacora=[]
-    let SQL=`SELECT * FROM tvitacora WHERE (fecha_operacion BETWEEN '${vitacora.fecha_desde}' AND '${vitacora.fecha_desde}')`
+    let SQL=`SELECT * FROM tvitacora,ttrabajador WHERE tvitacora.id_cedula=ttrabajador.id_cedula AND (fecha_operacion BETWEEN '${vitacora.fecha_desde}' AND '${vitacora.fecha_desde}')`
     if(vitacora["id_cedula"] && vitacora["id_cedula"].length==8){
-        SQL+=` AND (id_cedula='${vitacora.id_cedula}')`
+        SQL+=` AND (tvitacora.id_cedula='${vitacora.id_cedula}')`
     }
     if(vitacora["tablas"]){
         let contador=0
         while(contador<vitacora.tablas.length){
             let lista_operaciones=vitacora.operaciones.map(operacion=> {
-                return `operacion='${operacion}'`
+                return `tvitacora.operacion='${operacion}'`
             })
-            const sql_completo=`${SQL} AND (tabla='${vitacora.tablas[contador]}') AND (${lista_operaciones.join(" OR ")}) ;`
+            const sql_completo=`${SQL} AND (tvitacora.tabla='${vitacora.tablas[contador]}') AND (${lista_operaciones.join(" OR ")}) ;`
             lista_sql.push(sql_completo)
             contador++
         }

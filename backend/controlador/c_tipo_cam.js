@@ -22,7 +22,7 @@ TipoCamControlador.registrarControlador=async (req,res,next) => {
         TIPOCAM.registrarModelo()
         respuesta_api.mensaje=`registro completado`
         respuesta_api.estado_peticion="200"
-        req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","ttipocan",tipo_cam.id_tipo_cam)
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","ttipocam",tipo_cam.id_tipo_cam)
         next()
         // res.writeHead(200,{"Content-Type":"application/json"})
         // res.write(JSON.stringify(respuesta_api))
@@ -47,7 +47,7 @@ TipoCamControlador.consultarControlador=async (req,res,next) => {
         respuesta_api.tipo_cam=tipo_cam_result.rows[0]
         respuesta_api.mensaje=`consulta completada`
         respuesta_api.estado_peticion="200"
-        req.vitacora=VitacoraControlador.json(respuesta_api,token,"SELECT","ttipocan",id)
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"SELECT","ttipocam",id)
         next()
         // res.writeHead(200,{"Content-Type":"application/json"})
         // res.write(JSON.stringify(respuesta_api))
@@ -72,7 +72,7 @@ TipoCamControlador.actualizarControlador=async (req,res,next) => {
         TIPOCAM.actualizarModelo()
         respuesta_api.mensaje=`actualización completada`
         respuesta_api.estado_peticion="200"
-        req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","ttipocan",tipo_cam.id_tipo_cam)
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","ttipocam",tipo_cam.id_tipo_cam)
         next()
         // res.writeHead(200,{"Content-Type":"application/json"})
         // res.write(JSON.stringify(respuesta_api))
