@@ -219,6 +219,15 @@ class ComponentBitacora extends React.Component {
         return listaNueva
     }
 
+    buscarEspecifico(nombres,lista){
+        let busqueda= lista.filter(dato => {
+            if(dato.name===nombres){
+                return dato
+            }
+        })
+        return busqueda[0].value
+    }
+
     conultarOperaciones(){
         let $tipoDeConsulta=document.getElementById("tipoDeConsulta")
         let $tablaBitacora=document.getElementById("tablaBitacora")
@@ -233,7 +242,8 @@ class ComponentBitacora extends React.Component {
         else if($tipoDeConsulta.value==="0"){
             // datos=this.extrarDatosDelFormData(new FormData(document.getElementById("bitacoraEspecifico")))
             datos=$("#bitacoraEspecifico").serializeArray()
-            datosFinales["id_cedula"]=datos[0].value
+            // datosFinales["id_cedula"]=datos[0].value
+            datosFinales["id_cedula"]=this.buscarEspecifico("id_cedula",datos)
         }
         datosFinales["fecha_desde"]=datos[datos.length-1].value
         

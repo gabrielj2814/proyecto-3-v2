@@ -259,28 +259,64 @@ class ComponentListaAsistencia extends React.Component{
         }
       }
 
+    buscar(nombre,lista){
+        let contador=0
+        let listaNueva=[]
+        while(contador<lista.length){
+            if(lista[contador].name===nombre){
+                listaNueva.push(lista[contador].value)
+            }
+            contador++
+        }
+        return listaNueva
+    }
+
+    buscarEspecifico(nombres,lista){
+        let busqueda= lista.filter(dato => {
+            if(dato.name===nombres){
+                return dato
+            }
+        })
+        return busqueda[0].value
+    }
+
       generarPdf(){
         let $filaVerPdf=document.getElementById("filaVerPdf")
         // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=null
+        let datosFinales={}
         if(this.state.tipoPdf==="0"){
           datos=$("#formListaEspecifico").serializeArray()
+          console.log(datos)
+        //   datosFinales["id_cedula"]=this.buscarEspecifico("id_cedula",datos)
+        //   datosFinales["desde"]=this.buscarEspecifico("desde",datos)
+        //   datosFinales["hasta"]=this.buscarEspecifico("hasta",datos)
         }
         else if(this.state.tipoPdf==="1"){
           datos=$("#formLista").serializeArray()
         }
+        // let estatu_asistencia=(this.buscar("estatu_asistencia",datos).length>0)?this.buscar("estatu_asistencia",datos):false
+        // let id_permiso_trabajador=(this.buscar("id_permiso_trabajador",datos).length>0)?this.buscar("id_permiso_trabajador",datos):false
+        // let estatu_cumplimiento_horario=(this.buscar("estatu_cumplimiento_horario",datos).length>0)?this.buscar("estatu_cumplimiento_horario",datos):false
+        // if(estatu_asistencia.length>0){
+        //     datosFinales["estatu_asistencia"]=estatu_asistencia
+        // }
+        // if(id_permiso_trabajador.length>0){
+        //     datosFinales["id_permiso_trabajador"]=id_permiso_trabajador
+        // }
+        // if(estatu_cumplimiento_horario.length>0){
+        //     datosFinales["estatu_cumplimiento_horario"]=estatu_cumplimiento_horario
+        // }
   
-        console.log(datos)
+        // console.log(datosFinales)
   
         if(datos!==null){
-        //   alert("generar pdf")
           $.ajax({
             url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_asistencia.php',
             type:"post",
             data:datos,
             success: function(respuesta) {
-            //   alert("OK")
                 console.log(respuesta)
                 let json=JSON.parse(respuesta)
                 if(json.nombrePdf!=="false"){
@@ -381,8 +417,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado de asistencia</label>
-                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="array_estatu_asistencia[]" name="array_estatu_asistencia[]" aria-label="Default se0lec0t example">
                                         <option value="P" >Presente</option>
                                         <option value="II" >Inasistencia injustificada</option>
                                         <option value="IJR" >Inasistencia justificada por reposo</option>
@@ -393,8 +428,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado del trabajador</label>
-                                      <select class="form-select custom-select" id="id_permiso_trabajador" name="id_permiso_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="array_id_permiso_trabajador[]" name="array_id_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="1" >Laborando</option>
                                         <option value="0" >Retiro</option>
                                       </select>
@@ -404,12 +438,33 @@ class ComponentListaAsistencia extends React.Component{
                                   
 
                                 </div>
+                                
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
+                                        <label>Mes</label>
+                                        <select class="form-select custom-select" multiple id="array_mes[]" name="array_mes[]" aria-label="Default se0lec0t example">
+                                            <option value="null" >Custom</option>
+                                            <option value="01" >Enero</option>
+                                            <option value="02" >Febrero</option>
+                                            <option value="03" >Marzo</option>
+                                            <option value="04" >Abril</option>
+                                            <option value="05" >Mayo</option>
+                                            <option value="06" >Junio</option>
+                                            <option value="07" >Julio</option>
+                                            <option value="08" >Agosto</option>
+                                            <option value="09" >Septiembre</option>
+                                            <option value="10" >Octubre</option>
+                                            <option value="11" >Noviembre</option>
+                                            <option value="12" >Diciembre</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
                                         <label>Cumplimiento Horario</label>
-                                        <select class="form-select custom-select" id="estatu_cumplimiento_horario" name="estatu_cumplimiento_horario" aria-label="Default se0lec0t example">
-                                            <option value="null" >seleccione</option>
+                                        <select class="form-select custom-select" multiple id="array_estatu_cumplimiento_horario[]" name="array_estatu_cumplimiento_horario[]" aria-label="Default se0lec0t example">
+
                                             <option value="C" >Cumplio</option>
                                             <option value="N" >No cumplio</option>
                                         </select>
@@ -421,13 +476,17 @@ class ComponentListaAsistencia extends React.Component{
                                         <input type="date" class="form-control" id="desde" name="desde"/>
                                         </div>
                                     </div>
+                                    
+                                    
+                                </div>
+                                <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="hasta" name="hasta"/>
                                         </div>
                                     </div>
-                                    
+                                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                                 </div>
                               </form>
 
@@ -437,8 +496,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado de asistencia</label>
-                                      <select class="form-select custom-select" id="estatu_asistencia" name="estatu_asistencia" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="array_estatu_asistencia[]" name="array_estatu_asistencia[]" aria-label="Default se0lec0t example">
                                         <option value="P" >Presente</option>
                                         <option value="II" >Inasistencia injustificada</option>
                                         <option value="IJR" >Inasistencia justificada por reposo</option>
@@ -449,8 +507,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado del trabajador</label>
-                                      <select class="form-select custom-select" id="id_permiso_trabajador" name="id_permiso_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="array_id_permiso_trabajador[]" name="array_id_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="1" >Laborando</option>
                                         <option value="0" >Retiro</option>
                                       </select>
@@ -459,8 +516,7 @@ class ComponentListaAsistencia extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Cumplimiento Horario</label>
-                                      <select class="form-select custom-select" id="estatu_cumplimiento_horario" name="estatu_cumplimiento_horario" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="array_estatu_cumplimiento_horario[]" name="array_estatu_cumplimiento_horario[]" aria-label="Default se0lec0t example">
                                         <option value="C" >Cumplio</option>
                                         <option value="N" >No cumplio</option>
                                       </select>
@@ -472,17 +528,36 @@ class ComponentListaAsistencia extends React.Component{
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
+                                        <label>Mes</label>
+                                        <select class="form-select custom-select" multiple id="array_mes[]" name="array_mes[]" aria-label="Default se0lec0t example">
+                                            <option value="null" >Custom</option>
+                                            <option value="01" >Enero</option>
+                                            <option value="02" >Febrero</option>
+                                            <option value="03" >Marzo</option>
+                                            <option value="04" >Abril</option>
+                                            <option value="05" >Mayo</option>
+                                            <option value="06" >Junio</option>
+                                            <option value="07" >Julio</option>
+                                            <option value="08" >Agosto</option>
+                                            <option value="09" >Septiembre</option>
+                                            <option value="10" >Octubre</option>
+                                            <option value="11" >Noviembre</option>
+                                            <option value="12" >Diciembre</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
                                         <label>Fecha desde</label>
                                         <input type="date" class="form-control" id="desde" name="desde"/>
                                         </div>
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="hasta" name="hasta"/>
                                         </div>
                                     </div>
-                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                                 </div>
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
