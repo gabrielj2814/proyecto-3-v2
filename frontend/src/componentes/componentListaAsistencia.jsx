@@ -31,6 +31,7 @@ class ComponentListaAsistencia extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //----------
+            tiposTrabajadores:[],
             id_cedula:null,
             tipoPdf:null,
             hashAsistencia:{},
@@ -82,6 +83,7 @@ class ComponentListaAsistencia extends React.Component{
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asistencia/lista")
         if(acessoModulo){
             await this.consultarAsistencia()
+            await this.consultarTipoTrabajador()
         }
         else{
             alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
@@ -140,6 +142,18 @@ class ComponentListaAsistencia extends React.Component{
             console.log(error)
         })
         return estado
+    }
+
+    async consultarTipoTrabajador(){
+        await axios.get("http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador")
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(json)
+            this.setState({tiposTrabajadores:json.tipos_trabajador})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     async consultarAsistencia(){
@@ -289,27 +303,10 @@ class ComponentListaAsistencia extends React.Component{
         if(this.state.tipoPdf==="0"){
           datos=$("#formListaEspecifico").serializeArray()
           console.log(datos)
-        //   datosFinales["id_cedula"]=this.buscarEspecifico("id_cedula",datos)
-        //   datosFinales["desde"]=this.buscarEspecifico("desde",datos)
-        //   datosFinales["hasta"]=this.buscarEspecifico("hasta",datos)
         }
         else if(this.state.tipoPdf==="1"){
           datos=$("#formLista").serializeArray()
         }
-        // let estatu_asistencia=(this.buscar("estatu_asistencia",datos).length>0)?this.buscar("estatu_asistencia",datos):false
-        // let id_permiso_trabajador=(this.buscar("id_permiso_trabajador",datos).length>0)?this.buscar("id_permiso_trabajador",datos):false
-        // let estatu_cumplimiento_horario=(this.buscar("estatu_cumplimiento_horario",datos).length>0)?this.buscar("estatu_cumplimiento_horario",datos):false
-        // if(estatu_asistencia.length>0){
-        //     datosFinales["estatu_asistencia"]=estatu_asistencia
-        // }
-        // if(id_permiso_trabajador.length>0){
-        //     datosFinales["id_permiso_trabajador"]=id_permiso_trabajador
-        // }
-        // if(estatu_cumplimiento_horario.length>0){
-        //     datosFinales["estatu_cumplimiento_horario"]=estatu_cumplimiento_horario
-        // }
-  
-        // console.log(datosFinales)
   
         if(datos!==null){
           $.ajax({
@@ -442,6 +439,16 @@ class ComponentListaAsistencia extends React.Component{
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
+                                        <label>Cumplimiento Horario</label>
+                                        <select class="form-select custom-select" multiple id="array_estatu_cumplimiento_horario[]" name="array_estatu_cumplimiento_horario[]" aria-label="Default se0lec0t example">
+
+                                            <option value="C" >Cumplio</option>
+                                            <option value="N" >No cumplio</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
                                         <label>Mes</label>
                                         <select class="form-select custom-select" multiple id="array_mes[]" name="array_mes[]" aria-label="Default se0lec0t example">
                                             <option value="null" >Custom</option>
@@ -460,33 +467,35 @@ class ComponentListaAsistencia extends React.Component{
                                         </select>
                                         </div>
                                     </div>
+                                    
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Cumplimiento Horario</label>
-                                        <select class="form-select custom-select" multiple id="array_estatu_cumplimiento_horario[]" name="array_estatu_cumplimiento_horario[]" aria-label="Default se0lec0t example">
-
-                                            <option value="C" >Cumplio</option>
-                                            <option value="N" >No cumplio</option>
+                                        <label>Tipo de trabajador</label>
+                                        <select class="form-select custom-select" multiple id="array_tipos_trabajador[]" name="array_tipos_trabajador[]" aria-label="Default se0lec0t example">
+                                            {this.state.tiposTrabajadores.map((tipo,index) => {
+                                                return (<option key={"lista-"+tipo.id_tipo_trabajador} value={tipo.id_tipo_trabajador} >{tipo.descripcion_tipo_trabajador}</option>)
+                                            })}
                                         </select>
                                         </div>
                                     </div>
-                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                        <div class="form-groud">
-                                        <label>Fecha desde</label>
-                                        <input type="date" class="form-control" id="desde" name="desde"/>
-                                        </div>
-                                    </div>
+                                   
                                     
                                     
                                 </div>
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="desde" name="desde"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
                                         <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="hasta" name="hasta"/>
                                         </div>
                                     </div>
-                                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                                 </div>
                               </form>
 
@@ -548,16 +557,30 @@ class ComponentListaAsistencia extends React.Component{
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
+                                        <label>Tipo de trabajador</label>
+                                        <select class="form-select custom-select" multiple id="array_tipos_trabajador[]" name="array_tipos_trabajador[]" aria-label="Default se0lec0t example">
+                                            {this.state.tiposTrabajadores.map((tipo,index) => {
+                                                return (<option key={"lista-"+tipo.id_tipo_trabajador} value={tipo.id_tipo_trabajador} >{tipo.descripcion_tipo_trabajador}</option>)
+                                            })}
+                                        </select>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
                                         <label>Fecha desde</label>
                                         <input type="date" class="form-control" id="desde" name="desde"/>
                                         </div>
                                     </div>
+                                    
+                                </div>
+                                <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
                                         <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="hasta" name="hasta"/>
                                         </div>
                                     </div>
+                                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                                 </div>
                               </form>
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">

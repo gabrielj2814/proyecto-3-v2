@@ -113,15 +113,39 @@ if(array_key_exists("id_cedula",$_POST)){
         }
         $trosos[]=$joinEstadoPermiso;
     }
+    if(array_key_exists("array_tipos_trabajador",$_POST)){
+        $contador=0;
+        $trososTipoTrabajador=[];
+        $tipoTrabajador="";
+        while($contador<count($_POST["array_tipos_trabajador"])){
+            $tipoTrabajador="tfunciontrabajador.id_tipo_trabajador='".$_POST["array_tipos_trabajador"][$contador]."' AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador ";
+            $trososTipoTrabajador[]=$tipoTrabajador;
+            $contador++;
+        }
+        $joinTipoTrabajador="";
+        if(count($trososTipoTrabajador)>1){
+            $joinTipoTrabajador="(".join(" OR ",$trososTipoTrabajador)." )";
+            
+        }
+        // AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador
+        else if(count($trososTipoTrabajador)===0){
+            $joinTipoTrabajador="(tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador)";
+            
+        }
+        else{
+            $joinTipoTrabajador="(".$trososTipoTrabajador[0].")";
+        }
+        $trosos[]=$joinTipoTrabajador;
+    }
 
 
 
     if(count($trosos)>0){
         $unirTodo=join(" AND ",$trosos);
-        $SQL="SELECT * FROM tasistencia,ttrabajador WHERE tasistencia.id_cedula='".$_POST["id_cedula"]."' AND tasistencia.id_cedula=ttrabajador.id_cedula AND ".$unirTodo;
+        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador WHERE tasistencia.id_cedula='".$_POST["id_cedula"]."' AND tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND ".$unirTodo;
     }
     else{
-        $SQL="SELECT * FROM tasistencia,ttrabajador WHERE tasistencia.id_cedula='".$_POST["id_cedula"]."' AND tasistencia.id_cedula=ttrabajador.id_cedula ";
+        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador WHERE tasistencia.id_cedula='".$_POST["id_cedula"]."' AND tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
     }
 
     $result=$driver->query($SQL);
@@ -200,6 +224,7 @@ else{
     if(array_key_exists("array_estatu_cumplimiento_horario",$_POST)){
         $contador=0;
         $trososConsultaCumplimientoH=[];
+        $consultacumplimientoHorario="";
         while($contador<count($_POST["array_estatu_cumplimiento_horario"])){
             if($_POST["array_estatu_cumplimiento_horario"][$contador]==="N"){
                 $consultacumplimientoHorario="tasistencia.estatu_cumplimiento_horario='N'";
@@ -223,14 +248,15 @@ else{
     if(array_key_exists("array_id_permiso_trabajador",$_POST)){
         $contador=0;
         $trososEstadoPermiso=[];
+        $EstadoPermisHorario="";
         while($contador<count($_POST["array_id_permiso_trabajador"])){
             if($_POST["array_id_permiso_trabajador"][$contador]==="0"){
-                $EstadoPermisoorario="tasistencia.id_permiso_trabajador is not null";
+                $EstadoPermisHorario="tasistencia.id_permiso_trabajador is not null";
             }
             else{
-                $EstadoPermisoorario="tasistencia.id_permiso_trabajador is null";
+                $EstadoPermisHorario="tasistencia.id_permiso_trabajador is null";
             }
-            $trososEstadoPermiso[]=$EstadoPermisoorario;
+            $trososEstadoPermiso[]=$EstadoPermisHorario;
             $contador++;
         }
         $joinEstadoPermiso="";
@@ -243,15 +269,39 @@ else{
         }
         $trosos[]=$joinEstadoPermiso;
     }
+    if(array_key_exists("array_tipos_trabajador",$_POST)){
+        $contador=0;
+        $trososTipoTrabajador=[];
+        $tipoTrabajador="";
+        while($contador<count($_POST["array_tipos_trabajador"])){
+            $tipoTrabajador="tfunciontrabajador.id_tipo_trabajador='".$_POST["array_tipos_trabajador"][$contador]."' AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador ";
+            $trososTipoTrabajador[]=$tipoTrabajador;
+            $contador++;
+        }
+        $joinTipoTrabajador="";
+        if(count($trososTipoTrabajador)>1){
+            $joinTipoTrabajador="(".join(" OR ",$trososTipoTrabajador)." )";
+            
+        }
+        // AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador
+        else if(count($trososTipoTrabajador)===0){
+            $joinTipoTrabajador="(tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador)";
+            
+        }
+        else{
+            $joinTipoTrabajador="(".$trososTipoTrabajador[0].")";
+        }
+        $trosos[]=$joinTipoTrabajador;
+    }
 
 
 
     if(count($trosos)>0){
         $unirTodo=join(" AND ",$trosos);
-        $SQL="SELECT * FROM tasistencia,ttrabajador  WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ".$unirTodo;
+        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador  WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND ".$unirTodo;
     }
     else{
-        $SQL="SELECT * FROM tasistencia,ttrabajador WHERE tasistencia.id_cedula=ttrabajador.id_cedula ";
+        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
     }
 
 
