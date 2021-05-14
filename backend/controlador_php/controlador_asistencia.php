@@ -127,15 +127,13 @@ if(array_key_exists("id_cedula",$_POST)){
             $joinTipoTrabajador="(".join(" OR ",$trososTipoTrabajador)." )";
             
         }
-        // AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador
-        else if(count($trososTipoTrabajador)===0){
-            $joinTipoTrabajador="(tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador)";
-            
-        }
         else{
             $joinTipoTrabajador="(".$trososTipoTrabajador[0].")";
         }
         $trosos[]=$joinTipoTrabajador;
+    }
+    else{
+        $trosos[]="tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
     }
 
 
@@ -283,22 +281,20 @@ else{
             $joinTipoTrabajador="(".join(" OR ",$trososTipoTrabajador)." )";
             
         }
-        // AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador
-        else if(count($trososTipoTrabajador)===0){
-            $joinTipoTrabajador="(tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador)";
-            
-        }
         else{
             $joinTipoTrabajador="(".$trososTipoTrabajador[0].")";
         }
         $trosos[]=$joinTipoTrabajador;
+    }
+    else{
+        $trosos[]="tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
     }
 
 
 
     if(count($trosos)>0){
         $unirTodo=join(" AND ",$trosos);
-        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador  WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND ".$unirTodo;
+        $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND ".$unirTodo;
     }
     else{
         $SQL="SELECT * FROM tasistencia,ttrabajador,ttipotrabajador,tfunciontrabajador WHERE tasistencia.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
