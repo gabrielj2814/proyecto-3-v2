@@ -12,7 +12,7 @@ class PdfListadoAsistencia{
     function generarPdf(){
         include_once("../librerias_php/fpdf/fpdf.php");
         $nombrePdf="listado de asistencia de [".$this->datosPdf[0]["nombres"]." ".$this->datosPdf[0]["apellidos"]."] .pdf";
-        $pdf = new FPDF("L","mm","letter");
+        $pdf = new FPDF("P","mm",array(325,325));
         $pdf->Addpage();
         $pdf->Image("http://localhost:80/proyecto/backend/reporte_pdf/imagenes_pdf/encabezado1.jpg",40,5,200,10);
 
@@ -39,6 +39,7 @@ class PdfListadoAsistencia{
         
         //TABLA
         $pdf->SetX(20);
+        $pdf->Cell(60,10,"Tipo de trabajador",1,0,'C');
         $pdf->Cell(30,10,'Fecha',1,0,'C');
         $pdf->Cell(30,10,'Hora de entrada',1,0,'C');
         $pdf->Cell(30,10,'Hora de Salida',1,0,'C');
@@ -72,6 +73,7 @@ class PdfListadoAsistencia{
             }
             $pdf->ln(10);
             $pdf->SetX(20);
+            $pdf->Cell(60,10,utf8_decode($this->datosPdf[$contador]["descripcion_tipo_trabajador"]),1,0,'C');
             $pdf->Cell(30,10,$fecha,1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_salida_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
@@ -104,7 +106,7 @@ class PdfListadoAsistencia{
     function generarPdf2(){
         include_once("../librerias_php/fpdf/fpdf.php");
         $nombrePdf="listado de asistencia general de trabajadores.pdf";
-        $pdf = new FPDF("P","mm",array(340,340));
+        $pdf = new FPDF("P","mm",array(400,400));
         $pdf->Addpage();
         $pdf->Image("http://localhost:80/proyecto/backend/reporte_pdf/imagenes_pdf/encabezado1.jpg",40,5,200,10);
 
@@ -132,6 +134,7 @@ class PdfListadoAsistencia{
         //TABLA
         $pdf->SetX(20);
         $pdf->Cell(60,10,"Nombre del trabajador",1,0,'C');
+        $pdf->Cell(60,10,"Tipo de trabajador",1,0,'C');
         $pdf->Cell(30,10,'Fecha',1,0,'C');
         $pdf->Cell(30,10,'Hora de entrada',1,0,'C');
         $pdf->Cell(30,10,'Hora de Salida',1,0,'C');
@@ -167,6 +170,7 @@ class PdfListadoAsistencia{
             $pdf->ln(10);
             $pdf->SetX(20);
             $pdf->Cell(60,10,utf8_decode($this->datosPdf[$contador]["nombres"]." ".$this->datosPdf[$contador]["apellidos"]),1,0,'C');
+            $pdf->Cell(60,10,utf8_decode($this->datosPdf[$contador]["descripcion_tipo_trabajador"]),1,0,'C');
             $pdf->Cell(30,10,$fecha,1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
             $pdf->Cell(30,10,(($this->datosPdf[$contador]["horario_salida_asistencia"]!=="--:--AM")?$this->datosPdf[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
