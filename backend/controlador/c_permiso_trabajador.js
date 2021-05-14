@@ -27,17 +27,17 @@ PermisoTrabajadorControlador.generarId=async (req,res)=>{
 PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
     let ano=Moment().format("YYYY")
     let mes=Moment().format("MM-YYYY")
+    const {permiso_trabajador,token}=req.body
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     var respuesta_api={mensaje:"solicitud enviada con exito",estado_peticion:"200"}
-    let numerosPermisosAno=await PERMISOTRABAJADOR.consultarNumerosDePermiso(ano)
-    let numerosPermisosMes=await PERMISOTRABAJADOR.consultarNumerosDePermiso(mes)
-    console.log("=>>> ",numerosPermisosAno.rowCount)
-    console.log("=>>> ",numerosPermisosMes.rowCount)
+    let numerosPermisosAno=await PERMISOTRABAJADOR.consultarNumerosDePermiso(ano,permiso_trabajador.id_cedula)
+    let numerosPermisosMes=await PERMISOTRABAJADOR.consultarNumerosDePermiso(mes,permiso_trabajador.id_cedula)
+    // console.log("=>>> ",numerosPermisosAno.rowCount)
+    // console.log("=>>> ",numerosPermisosMes.rowCount)
     if(numerosPermisosAno.rowCount<=10){
         if(numerosPermisosMes.rowCount<=3){
             ReposoTrabajadorControlador=require("./c_reposo_trabajador")
                 AsistenciaControlador=require("./c_asistencia")
-                const {permiso_trabajador,token}=req.body
                 PERMISOTRABAJADOR.set_datos(permiso_trabajador)
                 const permiso=await PERMISOTRABAJADOR.consultarPermisoTrabajadorModelo()
                 if(permiso.rows.length===0){
