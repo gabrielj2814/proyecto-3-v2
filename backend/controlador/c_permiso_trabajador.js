@@ -25,30 +25,69 @@ PermisoTrabajadorControlador.generarId=async (req,res)=>{
 }
 
 PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
-    ReposoTrabajadorControlador=require("./c_reposo_trabajador")
-    AsistenciaControlador=require("./c_asistencia")
+    let ano=Moment().format("YYYY")
+    let mes=Moment().format("MM-YYYY")
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     var respuesta_api={mensaje:"solicitud enviada con exito",estado_peticion:"200"}
-    const {permiso_trabajador,token}=req.body,
-    PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
-    PERMISOTRABAJADOR.set_datos(permiso_trabajador)
-    const permiso=await PERMISOTRABAJADOR.consultarPermisoTrabajadorModelo()
-    if(permiso.rows.length===0){
-        const permiso_2=await PERMISOTRABAJADOR.consultarPermisoTrabajadorXCedulaActivolModelo()
-        if(permiso_2.rows.length===0){
-            const trabajador_controlador=new TrabajadorControlador()
-            const respuesta_trabajador=await trabajador_controlador.consultar(permiso_trabajador.id_cedula)
-            if(respuesta_trabajador){
-                const permiso_controlador=new PermisoControlador()
-                const respuesta_permiso=await permiso_controlador.consultar(permiso_trabajador.id_permiso)
-                if(respuesta_permiso){
-                    const reposo_trabajador_result=await ReposoTrabajadorControlador.consultarReposoActivo(permiso_trabajador.id_cedula)
-                    if(!PermisoTrabajadorControlador.verificarExistencia(reposo_trabajador_result)){
-                        PERMISOTRABAJADOR.registrarModelo()
-                        req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tpermisotrabajador",permiso_trabajador.id_permiso_trabajador)
-                        next()
+    let numerosPermisosAno=await PERMISOTRABAJADOR.consultarNumerosDePermiso(ano)
+    let numerosPermisosMes=await PERMISOTRABAJADOR.consultarNumerosDePermiso(mes)
+    console.log("=>>> ",numerosPermisosAno.rowCount)
+    console.log("=>>> ",numerosPermisosMes.rowCount)
+    if(numerosPermisosAno.rowCount<=10){
+        if(numerosPermisosMes.rowCount<=3){
+            ReposoTrabajadorControlador=require("./c_reposo_trabajador")
+                AsistenciaControlador=require("./c_asistencia")
+                const {permiso_trabajador,token}=req.body
+                PERMISOTRABAJADOR.set_datos(permiso_trabajador)
+                const permiso=await PERMISOTRABAJADOR.consultarPermisoTrabajadorModelo()
+                if(permiso.rows.length===0){
+                        const permiso_2=await PERMISOTRABAJADOR.consultarPermisoTrabajadorXCedulaActivolModelo()
+                    if(permiso_2.rows.length===0){
+                        const trabajador_controlador=new TrabajadorControlador()
+                        const respuesta_trabajador=await trabajador_controlador.consultar(permiso_trabajador.id_cedula)
+                        if(respuesta_trabajador){
+                            const permiso_controlador=new PermisoControlador()
+                            const respuesta_permiso=await permiso_controlador.consultar(permiso_trabajador.id_permiso)
+                            if(respuesta_permiso){
+                                const reposo_trabajador_result=await ReposoTrabajadorControlador.consultarReposoActivo(permiso_trabajador.id_cedula)
+                                if(!PermisoTrabajadorControlador.verificarExistencia(reposo_trabajador_result)){
+                                    PERMISOTRABAJADOR.registrarModelo()
+                                    req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tpermisotrabajador",permiso_trabajador.id_permiso_trabajador)
+                                    next()
+                                }
+                                else{
+                                    respuesta_api.mensaje="error al registrar , por que el trabajador tiene un reposo activo"
+                                    respuesta_api.estado_peticion="500"
+                                    res.writeHead(200,{"Content-Type":"application/json"})
+                                    res.write(JSON.stringify(respuesta_api))
+                                    res.end()
+                                }
+                            }
+                            else{
+                                respuesta_api.mensaje="no esta el permiso registrado o no esta activo"
+                                respuesta_api.estado_peticion="500"
+                                res.writeHead(200,{"Content-Type":"application/json"})
+                                res.write(JSON.stringify(respuesta_api))
+                                res.end()
+                            }
+                        }
+                        else{
+                            respuesta_api.mensaje="el trabajador no esta registrrado o no esta activo"
+                            respuesta_api.estado_peticion="500"
+                            res.writeHead(200,{"Content-Type":"application/json"})
+                            res.write(JSON.stringify(respuesta_api))
+                            res.end()
+                        }
                     }
-                    else{
-                        respuesta_api.mensaje="al registrar , por que el trabajador tiene un reposo activo"
+                    else if(permiso_2.rows.length===1){
+                        respuesta_api.mensaje="este usuario ya tiene un permiso activo"
+                        respuesta_api.estado_peticion="500"
+                        res.writeHead(200,{"Content-Type":"application/json"})
+                        res.write(JSON.stringify(respuesta_api))
+                        res.end()
+                    }
+                    else if(permiso_2.rows.length>=1){
+                        respuesta_api.mensaje="por alguna razon este usuario tiene mas de un permis activo porfavor notificar al personal de sistema"
                         respuesta_api.estado_peticion="500"
                         res.writeHead(200,{"Content-Type":"application/json"})
                         res.write(JSON.stringify(respuesta_api))
@@ -56,44 +95,31 @@ PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
                     }
                 }
                 else{
-                    respuesta_api.mensaje="no esta el permiso registrado o no esta activo"
+                    respuesta_api.mensaje="ya hay un registro con este id"
                     respuesta_api.estado_peticion="500"
                     res.writeHead(200,{"Content-Type":"application/json"})
                     res.write(JSON.stringify(respuesta_api))
                     res.end()
                 }
-            }
-            else{
-                respuesta_api.mensaje="el trabajador no esta registrrado o no esta activo"
-                respuesta_api.estado_peticion="500"
-                res.writeHead(200,{"Content-Type":"application/json"})
-                res.write(JSON.stringify(respuesta_api))
-                res.end()
-            }
         }
-        else if(permiso_2.rows.length===1){
-            respuesta_api.mensaje="este usuario ya tiene un permiso activo"
-            respuesta_api.estado_peticion="500"
-            res.writeHead(200,{"Content-Type":"application/json"})
-            res.write(JSON.stringify(respuesta_api))
-            res.end()
-        }
-        else if(permiso_2.rows.length>=1){
-            respuesta_api.mensaje="por alguna razon este usuario tiene mas de un permis activo porfavor notificar al personal de sistema"
-            respuesta_api.estado_peticion="500"
+        else{
+            respuesta_api.mensaje="llegaste al minimo de permiso por mes e los cuales son 3"
+            respuesta_api.estado_peticion="404"
             res.writeHead(200,{"Content-Type":"application/json"})
             res.write(JSON.stringify(respuesta_api))
             res.end()
         }
     }
     else{
-        respuesta_api.mensaje="ya hay un registro con este id"
-        respuesta_api.estado_peticion="500"
+        respuesta_api.mensaje="llegaste al minimo de permiso por año de los cuales son 10"
+        respuesta_api.estado_peticion="404"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))
         res.end()
     }
 }
+    
+        
 
 PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador=async (req,res)=>{
     var respuesta_api={permiso_trabajador:[],mensaje:"solicitud enviada con exito",estado_peticion:"200"}
