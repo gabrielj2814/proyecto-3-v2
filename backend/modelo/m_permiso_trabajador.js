@@ -155,6 +155,11 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         const SQL=`SELECT * FROM tpermisotrabajador WHERE id_cedula='${cedula}' AND id_permiso_trabajador LIKE '%${fecha}%' AND permiso_trabajador_tipo<>'PR'`
         return await this.query(SQL)
     }
+
+    async consultarNumerosDePermiso2(fecha){
+        const SQL=`SELECT * FROM tpermisotrabajador WHERE id_permiso_trabajador LIKE '%${fecha}%' AND permiso_trabajador_tipo<>'PR'`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = PermisoTrabajadorModelo

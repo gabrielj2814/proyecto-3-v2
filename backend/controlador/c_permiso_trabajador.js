@@ -31,7 +31,7 @@ PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     var respuesta_api={mensaje:"solicitud enviada con exito",estado_peticion:"200"}
     let numerosPermisosAno=await PERMISOTRABAJADOR.consultarNumerosDePermiso(ano,permiso_trabajador.id_cedula)
-    let numerosPermisosMes=await PERMISOTRABAJADOR.consultarNumerosDePermiso(mes,permiso_trabajador.id_cedula)
+    let numerosPermisosMes=await PERMISOTRABAJADOR.consultarNumerosDePermiso2(mes)
     // console.log("=>>> ",numerosPermisosAno.rowCount)
     // console.log("=>>> ",numerosPermisosMes.rowCount)
     if(numerosPermisosAno.rowCount<=10){
