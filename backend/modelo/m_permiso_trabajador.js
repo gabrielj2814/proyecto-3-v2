@@ -160,6 +160,11 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         const SQL=`SELECT * FROM tpermisotrabajador WHERE id_permiso_trabajador LIKE '%${fecha}%' AND permiso_trabajador_tipo<>'PR'`
         return await this.query(SQL)
     }
+
+    async interumpirPermiso(id){
+        const SQL=`UPDATE tpermisotrabajador SET estatu_permiso_trabajador='I' WHERE id_permiso_trabajador='${id}';`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = PermisoTrabajadorModelo

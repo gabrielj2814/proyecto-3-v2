@@ -472,6 +472,29 @@ PermisoTrabajadorControlador.consultarPermisosAprovadosTodos= async (req,res) =>
     }
 }
 
+PermisoTrabajadorControlador.interumpirPermisoTrabajador= async (req,res,next) => {
+    let {id,token}=req.body
+    var respuesta_api={mensaje:"actualizacion de estatu permiso completada",estado_peticion:"200"}
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
+    let permiso_result=await PERMISOTRABAJADOR.interumpirPermiso(id)
+    if(permiso_result.rowCount>0){
+        respuesta_api.mensaje="El permiso a sido interumpido exitosamente"
+        respuesta_api.estado_peticion="200"
+        req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","tpermisotrabajador",id)
+        next()
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify(respuesta_api))
+        // res.end()
+    }
+    else{
+        respuesta_api.mensaje="error al interumpir el permiso"
+        respuesta_api.estado_peticion="404"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+}
+
 module.exports= PermisoTrabajadorControlador
 
 

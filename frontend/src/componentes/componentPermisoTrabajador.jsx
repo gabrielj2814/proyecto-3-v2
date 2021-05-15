@@ -415,14 +415,49 @@ class ComponentPermisoTrabajador extends React.Component{
       $("#modalInterumpirPermiso").modal("show")
     }
     
-    cerrarModalInterrumpiPermiso(a){
-      let boton=a.target
+    cerrarModalInterrumpiPermiso(){
+      // let boton=a.target
       this.setState({id_permiso_trabajador_interumpir:null})
       $("#modalInterumpirPermiso").modal("hide")
     }
 
-    interumpirPermiso(){
-      alert(this.state.id_permiso_trabajador_interumpir)
+    async interumpirPermiso(){
+      // alert(this.state.id_permiso_trabajador_interumpir)
+      // UPDATE tpermisotrabajador set estatu_permiso_trabajador='A' WHERE id_permiso_trabajador='pert-1-07-05-2021' OR id_permiso_trabajador='pert-1-08-05-2021' ;
+      let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
+      const token=localStorage.getItem('usuario')
+      let json={
+        id:this.state.id_permiso_trabajador_interumpir,
+        token
+      }
+      await axios.post(`http://localhost:8080/transaccion/permiso-trabajador/interumpir`,json)
+      .then(async repuesta => {
+        let json=JSON.parse(JSON.stringify(repuesta.data))
+        console.log(json)
+        if(json.estado_peticion==="200"){
+          const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-aprovados`
+          const permisos=await this.consultarAlServidor(ruta_permisos)
+          const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
+          permisos_verificado.tabla="A"
+          if(!permisos_verificado.numeros_registros){
+              permisos_verificado.numeros_registros=0
+          }
+          this.cerrarModalInterrumpiPermiso()
+          mensaje.estado="200"
+          mensaje.texto=json.mensaje
+          this.setState(permisos_verificado)
+          this.setState({mensaje})
+          
+        }
+        else{
+          mensaje.estado=json.estado_peticion
+          mensaje.texto=json.mensaje
+          this.setState({mensaje})
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
     }
 
     render(){

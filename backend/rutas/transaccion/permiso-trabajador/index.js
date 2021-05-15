@@ -30,6 +30,7 @@ router.get("/consultar-permiso-trabajador/:cedula/:desde/:hasta/:token",PermisoT
 router.get("/verifircar-vencimiento",PermisoTrabajadorControlador.verificarVencimiento)
 router.get("/consultar-culminados",PermisoTrabajadorControlador.consultarPermisosCulminadosHoy)
 router.get("/consultar-aprovados",PermisoTrabajadorControlador.consultarPermisosAprovadosTodos)
+router.post("/interumpir",PermisoTrabajadorControlador.interumpirPermisoTrabajador,VitacoraControlador.capturaDatos)
 
 const json={
 
