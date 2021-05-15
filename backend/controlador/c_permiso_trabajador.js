@@ -240,11 +240,12 @@ PermisoTrabajadorControlador.actualizarEstatuPermisoControlador=async (req,res,n
 }
 
 PermisoTrabajadorControlador.consultarPermisoHoyControlador=async (req,res)=>{
-    const hoy=Moment().format("MM-YYYY"),
+    const mesActual=Moment().format("MM-YYYY")
+    const mesAnterios=Moment().subtract(1,"months").format("MM-YYYY"),
     estatu=req.params.estatu
     var respuesta_api={permisos_trabajador:[],mensaje:"actualizacion de estatu permiso completada",estado_peticion:"200"}
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
-    const permiso=await PERMISOTRABAJADOR.consultarPermisoHoyModelo(hoy,estatu)
+    const permiso=await PERMISOTRABAJADOR.consultarPermisoHoyModelo(mesActual,mesAnterios,estatu)
     if(permiso.rows.length!=0){
         respuesta_api.permisos_trabajador=permiso.rows
         respuesta_api.mensaje="consulta completada"

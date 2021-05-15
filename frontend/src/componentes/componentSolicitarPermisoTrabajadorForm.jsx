@@ -636,7 +636,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         <InputButton 
                         clasesBoton="btn btn-success"
                         id="botonEnviarSolicitud"
-                        value="Enviar Solicitud"
+                        value="Registrar"
                         eventoPadre={this.solicitarNuvoPermiso}
                         />
                     </div>  

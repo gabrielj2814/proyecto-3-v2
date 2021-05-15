@@ -60,8 +60,8 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         return await this.query(SQL)
     }
 
-    async consultarPermisoHoyModelo(hoy,estatu){
-        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.id_permiso_trabajador LIKE '%${hoy}%' AND tpermisotrabajador.estatu_permiso_trabajador='${estatu}' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`//Moment
+    async consultarPermisoHoyModelo(mesActual,mesAnterios,estatu){
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE (tpermisotrabajador.id_permiso_trabajador LIKE '%${mesActual}%' OR tpermisotrabajador.id_permiso_trabajador LIKE '%${mesAnterios}%') AND tpermisotrabajador.estatu_permiso_trabajador='${estatu}' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`//Moment
         //console.log(SQL)
         return await this.query(SQL)
     }
