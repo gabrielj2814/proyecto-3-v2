@@ -124,41 +124,55 @@ PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
 PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador=async (req,res)=>{
     var respuesta_api={permiso_trabajador:[],mensaje:"solicitud enviada con exito",estado_peticion:"200"}
     const id_cedula=req.params.id
-    const permiso_en_espera=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"E")
-    const permiso_apropavado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"A")
-    const permiso_denegado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"D")
-    const permiso_culminado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"C")
-    if(permiso_en_espera.length===1){
-        respuesta_api.mensaje="su permiso todavia esta en espera"
-        respuesta_api.estado_peticion="404"
-        respuesta_api.permiso_trabajador=permiso_en_espera
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
-    }
-    else if(permiso_apropavado.length===1){
-        respuesta_api.mensaje="su permiso a sido aprovado"
-        respuesta_api.estado_peticion="200"
-        respuesta_api.permiso_trabajador=permiso_apropavado
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
-    }
-    else if(permiso_denegado.length===1){
-        respuesta_api.mensaje="su permiso a sido denegado"
-        respuesta_api.estado_peticion="200"
-        respuesta_api.permiso_trabajador=permiso_denegado
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
-    }
-    else if(permiso_culminado.length===1){
-        respuesta_api.mensaje="su permiso a culminado"
-        respuesta_api.estado_peticion="200"
-        respuesta_api.permiso_trabajador=permiso_culminado
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
+    const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
+    let permiso_result=await PERMISOTRABAJADOR.consultarPermisosTrabajadorSolofechas(id_cedula)
+    // console.log(permiso_result)
+    if(permiso_result.rowCount>0){
+        const ultimoPermiso=permiso_result.rows[(permiso_result.rows.length-1)]
+        console.log(ultimoPermiso)
+        let fecha=Moment(ultimoPermiso.fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+        let permiso_result2=await PERMISOTRABAJADOR.consultarPermisosPorFechaYCedula(id_cedula,fecha)
+        console.log(permiso_result2)
+        if(permiso_result2.rows[0].estatu_permiso_trabajador==="E"){
+            respuesta_api.mensaje="su permiso todavia esta en espera"
+            respuesta_api.estado_peticion="404"
+            respuesta_api.permiso_trabajador=permiso_result2.rows
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        else if(permiso_result2.rows[0].estatu_permiso_trabajador==="A"){
+            respuesta_api.mensaje="su permiso a sido aprovado"
+            respuesta_api.estado_peticion="200"
+            respuesta_api.permiso_trabajador=permiso_result2.rows
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        else if(permiso_result2.rows[0].estatu_permiso_trabajador==="D"){
+            respuesta_api.mensaje="su permiso a sido denegado"
+            respuesta_api.estado_peticion="200"
+            respuesta_api.permiso_trabajador=permiso_result2.rows
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        else if(permiso_result2.rows[0].estatu_permiso_trabajador==="C"){
+            respuesta_api.mensaje="su permiso a culminado"
+            respuesta_api.estado_peticion="200"
+            respuesta_api.permiso_trabajador=permiso_result2.rows
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        else if(permiso_result2.rows[0].estatu_permiso_trabajador==="I"){
+            respuesta_api.mensaje="su permiso fue interumpido"
+            respuesta_api.estado_peticion="404"
+            respuesta_api.permiso_trabajador=permiso_result2.rows
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
     }
     else{
         respuesta_api.mensaje="no a solicitado nigun permiso"
@@ -167,6 +181,13 @@ PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador=
         res.write(JSON.stringify(respuesta_api))
         res.end()
     }
+    
+    // const permiso_en_espera=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"E")
+    // const permiso_apropavado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"A")
+    // const permiso_denegado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"D")
+    // const permiso_culminado=await PermisoTrabajadorControlador.buscarUltimoPermiso(id_cedula,"C")
+    
+    
 }
 
 PermisoTrabajadorControlador.buscarUltimoPermiso=async (cedula,estatu)=>{

@@ -155,6 +155,9 @@ class ComponentSolicitarPermisoForm extends React.Component{
             else if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="A"){
                 estatu_permiso_trabajador="Aprovado"
             }
+            else if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="I"){
+                estatu_permiso_trabajador="Interumpido"
+            }
             mensaje.texto=ultimo_permiso.mensaje
             mensaje.estado=ultimo_permiso.estado_peticion
             this.setState({
@@ -589,7 +592,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
                         <span className="">Tipo de Permiso: {(this.state.permiso_trabajador_tipo==="PR")?"retiro":"normal"}</span>
                     </div>
                 </div>
-                {(this.state.estatu_formulario==="C" || this.state.estatu_formulario==="D") &&
+                {(this.state.estatu_formulario==="C" || this.state.estatu_formulario==="D" || this.state.estatu_formulario==="I") &&
                     (
                         <div className="row justify-content-center mt-5">
                             <div className="col-auto">
