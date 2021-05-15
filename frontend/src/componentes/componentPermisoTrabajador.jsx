@@ -31,10 +31,14 @@ class ComponentPermisoTrabajador extends React.Component{
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
         this.mostrarFiltros=this.mostrarFiltros.bind(this);
         this.generarPdf=this.generarPdf.bind(this);
+        this.mostrarModalInterrumpiPermiso=this.mostrarModalInterrumpiPermiso.bind(this);
+        this.cerrarModalInterrumpiPermiso=this.cerrarModalInterrumpiPermiso.bind(this);
+        this.interumpirPermiso=this.interumpirPermiso.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
             //////
+            id_permiso_trabajador_interumpir:null,
             tabla:"",
             tipoPdf:null,
             datoDeBusqueda:"",
@@ -405,6 +409,22 @@ class ComponentPermisoTrabajador extends React.Component{
   
       }
 
+    mostrarModalInterrumpiPermiso(a){
+      let boton=a.target
+      this.setState({id_permiso_trabajador_interumpir:boton.id})
+      $("#modalInterumpirPermiso").modal("show")
+    }
+    
+    cerrarModalInterrumpiPermiso(a){
+      let boton=a.target
+      this.setState({id_permiso_trabajador_interumpir:null})
+      $("#modalInterumpirPermiso").modal("hide")
+    }
+
+    interumpirPermiso(){
+      alert(this.state.id_permiso_trabajador_interumpir)
+    }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -460,6 +480,15 @@ class ComponentPermisoTrabajador extends React.Component{
                                   />
                               </td>
                            }
+                          {(!permiso.vacio && this.state.tabla==="A") &&
+                              <td>
+                                 <button className="btn btn-danger btn-block" id={permiso.id_permiso_trabajador} onClick={this.mostrarModalInterrumpiPermiso}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16" id={permiso.id_permiso_trabajador}>
+                                    <path id={permiso.id_permiso_trabajador} d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                                  </svg>
+                                 </button>
+                              </td>
+                           }
                       </tr>
                       )
                   })}
@@ -480,6 +509,33 @@ class ComponentPermisoTrabajador extends React.Component{
                     </div>
                 </div>
                 }
+
+                  <div class="modal fade" id="modalInterumpirPermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Interumpir el permiso</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>
+                                Esta seguro que desea interumpir este permiso
+                              </p>
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" class="btn btn-danger mr-3" onClick={this.cerrarModalInterrumpiPermiso}>No</button>
+                                <button type="button" class="btn btn-success" onClick={this.interumpirPermiso}>Si</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
+
+
+
+
 
                     <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
