@@ -470,11 +470,47 @@ class ComponentReposoTrabajador extends React.Component{
     }
 
     cerrarModalInterumpirReposo(){
+        this.setState({id_reposo_trabajador_interumpir:null})
         $("#modalInterumpirReposo").modal("hide")
     }
 
-    interumpirReposo(){
-        alert(this.state.id_reposo_trabajador_interumpir)
+    async interumpirReposo(){
+        // alert(this.state.id_reposo_trabajador_interumpir)
+        // UPDATE treposotrabajador SET estatu_reposo_trabajador='1' WHERE id_cedula='22222222';
+        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+        const token=localStorage.getItem('usuario')
+        let json={
+            id_reposo_trabajador:this.state.id_reposo_trabajador_interumpir,
+            token
+        }
+        // this.setState({
+        //     registros:[],
+        //       numeros_registros:0
+        // })
+        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/interumpir`,json)
+        .then(async respuesta => {
+            let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
+            if(jsonResponse.estado===true){
+                alerta.color="success"
+                alerta.mensaje="reposo interumpido exitosamente"
+                alerta.estado=true
+                this.setState({alerta})
+                let datosResposos=await this.consultarRepososTrabajadoresFechaDesdeHasta(this.state.fecha_desde_reposo_trabajador_filtro_tabla,this.state.fecha_hasta_reposo_trabajador_filtro_tabla)
+                let datosTabla=this.verficarLista(datosResposos.reposo_trabajadores)
+                this.cerrarModalInterumpirReposo()
+                this.setState(datosTabla)
+            }
+            else{
+                alerta.color="danger"
+                alerta.mensaje="reposo no pudo ser interumpido"
+                alerta.estado=true
+                this.setState({alerta})
+
+            }
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     render(){
@@ -495,7 +531,7 @@ class ComponentReposoTrabajador extends React.Component{
                           <tr key={reposoTrabajador.id_reposo_trabajador}>
                             <td>{(reposoTrabajador.id_cedula==="vacio")?"vacio":this.state.trabajadores[reposoTrabajador.id_cedula].nombres} {(reposoTrabajador.id_cedula==="vacio")?"":this.state.trabajadores[reposoTrabajador.id_cedula].apellidos}</td>
                             <td>{(reposoTrabajador.id_reposo==="vacio")?"vacio":this.state.reposos[reposoTrabajador.id_reposo].nombre_reposo}</td>
-                            <td>{(reposoTrabajador.estatu_reposo_trabajador==="vacio")?"vacio":(reposoTrabajador.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</td>
+                            <td>{(reposoTrabajador.estatu_reposo_trabajador==="vacio")?"vacio":(reposoTrabajador.estatu_reposo_trabajador==="1")?"Activo":(reposoTrabajador.estatu_reposo_trabajador==="2")?"Interumpido":"Inactivo"}</td>
                             
                             {reposoTrabajador.estatu_entrega_reposo==="N" &&
                               <td>
@@ -531,7 +567,7 @@ class ComponentReposoTrabajador extends React.Component{
                               </td>
                            }
                            
-                           {!reposoTrabajador.vacio &&
+                           {reposoTrabajador.estatu_reposo_trabajador==="1"  &&
                               <td colSpan="2">
                                   <ButtonIcon 
                                   clasesBoton="btn btn-warning btn-block" 
@@ -542,7 +578,7 @@ class ComponentReposoTrabajador extends React.Component{
                                   />
                               </td>
                            }
-                           {!reposoTrabajador.vacio &&
+                           {reposoTrabajador.estatu_reposo_trabajador==="1" &&
                             <td>
                                 <button className="btn btn-danger btn-block" id={reposoTrabajador.id_reposo_trabajador} onClick={this.mostrarModalInterumpirReposo}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16" id={reposoTrabajador.id_reposo_trabajador}>

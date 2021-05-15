@@ -449,6 +449,24 @@ ReposoTrabajadorControlador.verificarReposoTrabajadorActivo= async (req,res) => 
     }
 }
 
+ReposoTrabajadorControlador.interumpirReposo=async (req,res,next) => {
+    let {id_reposo_trabajador,token} =req.body
+    const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
+    let permiso_reposos_trabajador_result=await reposo_trabajador_modelo.interumpirReposo(id_reposo_trabajador)
+    if(permiso_reposos_trabajador_result.rowCount>0){
+        // res.writeHead(200,{"Content-Type":"application/json"})
+        // res.write(JSON.stringify({estado:true}))
+        // res.end()
+        req.vitacora=VitacoraControlador.json({estado:true},token,"UPDATE","treposotrabajador",id_reposo_trabajador)
+        next()
+    }
+    else{
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify({estado:false}))
+        res.end()
+    }
+}
+
 
 
 module.exports = ReposoTrabajadorControlador

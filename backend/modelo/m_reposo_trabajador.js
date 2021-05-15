@@ -179,6 +179,11 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         return await this.query(SQL)
     }
 
+    async interumpirReposo(id){
+        const SQL=`UPDATE treposotrabajador SET estatu_reposo_trabajador='2' WHERE id_reposo_trabajador='${id}';`
+        return await this.query(SQL)
+    }
+
 }
 
 module.exports = ReposoTrabajadorModelo
