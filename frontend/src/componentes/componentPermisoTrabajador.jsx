@@ -556,7 +556,7 @@ class ComponentPermisoTrabajador extends React.Component{
                             </div>
                             <div class="modal-body">
                               <p>
-                                Esta seguro que desea interumpir este permiso
+                                Esta seguro que deseaa interumpir este permiso
                               </p>
                             </div>
                             <div class="modal-footer ">

@@ -38,10 +38,14 @@ class ComponentReposoTrabajador extends React.Component{
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
         this.mostrarFiltros=this.mostrarFiltros.bind(this);
         this.generarPdf=this.generarPdf.bind(this);
+        this.mostrarModalInterumpirReposo=this.mostrarModalInterumpirReposo.bind(this);
+        this.cerrarModalInterumpirReposo=this.cerrarModalInterumpirReposo.bind(this);
+        this.interumpirReposo=this.interumpirReposo.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            id_reposo_trabajador_interumpir:null,
             listaReposos:[],
             tipoPdf:null,
             fecha_desde_reposo_trabajador_filtro_tabla:"",
@@ -291,21 +295,6 @@ class ComponentReposoTrabajador extends React.Component{
         this.props.history.push(`/dashboard/transaccion/reposo-trabajador/consultar/${boton.id}`)
     }
 
-    /*
-    
-    {!reposoTrabajador.vacio &&
-                          <td>
-                              <ButtonIcon 
-                              clasesBoton="btn btn-secondary btn-block" 
-                              value={reposoTrabajador.id_reposo_trabajador}
-                              id={reposoTrabajador.id_reposo_trabajador} 
-                              eventoPadre={this.consultarElementoTabla} 
-                              icon="icon-search"
-                              />
-                          </td>
-                        }
-
-    */
     async reposoEntregado(a){
         let boton=a.target
         // alert("Reposo entregado "+boton.id)
@@ -474,6 +463,20 @@ class ComponentReposoTrabajador extends React.Component{
   
       }
 
+    mostrarModalInterumpirReposo(a){
+        let boton=a.target
+        this.setState({id_reposo_trabajador_interumpir:boton.id})
+        $("#modalInterumpirReposo").modal("show")
+    }
+
+    cerrarModalInterumpirReposo(){
+        $("#modalInterumpirReposo").modal("hide")
+    }
+
+    interumpirReposo(){
+        alert(this.state.id_reposo_trabajador_interumpir)
+    }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -527,6 +530,7 @@ class ComponentReposoTrabajador extends React.Component{
                                   />
                               </td>
                            }
+                           
                            {!reposoTrabajador.vacio &&
                               <td colSpan="2">
                                   <ButtonIcon 
@@ -537,6 +541,15 @@ class ComponentReposoTrabajador extends React.Component{
                                   icon="icon-pencil"
                                   />
                               </td>
+                           }
+                           {!reposoTrabajador.vacio &&
+                            <td>
+                                <button className="btn btn-danger btn-block" id={reposoTrabajador.id_reposo_trabajador} onClick={this.mostrarModalInterumpirReposo}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16" id={reposoTrabajador.id_reposo_trabajador}>
+                                        <path id={reposoTrabajador.id_reposo_trabajador} d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                                    </svg>
+                                </button>
+                            </td>
                            }
                           
                          
@@ -556,6 +569,28 @@ class ComponentReposoTrabajador extends React.Component{
                         
                     </div>)
                 }
+
+                    <div class="modal fade" id="modalInterumpirReposo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Interumpir el reposo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>
+                                Esta seguro que deseaa interumpir este reposo
+                              </p>
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" class="btn btn-danger mr-3" onClick={this.cerrarModalInterumpirReposo}>No</button>
+                                <button type="button" class="btn btn-success" onClick={this.interumpirReposo}>Si</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
 
 
                 <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
