@@ -110,7 +110,7 @@ CREATE TABLE tpermisotrabajador(
     estatu_permiso_trabajador character(1) NOT NULL,-- E significa en espera, A significa aprovado, C significa culminado, D significa denegado, I significa interumpido 
     permiso_trabajador_dias_aviles character varying(3) NOT NULL,
     permiso_trabajador_tipo character varying(2) NOT NULL, -- PN, PR / PN permiso normal / PR permiso de retiro para salir temprano
-    numero_permiso INTEGER NULL,
+    numero_permiso INTEGER NOT NULL,
     constraint PK_id_permiso_trabajador primary key(id_permiso_trabajador),
     constraint FK_id_cedula_tpermisotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
@@ -231,6 +231,7 @@ CREATE TABLE treposotrabajador(
     fecha_desde_entrega_reposo_trabajador DATE NOT NULL,
     fecha_hasta_entrega_reposo_trabajador DATE NOT NULL,
     estatu_entrega_reposo character(1),
+    numero_reposo INTEGER NOT NULL,
     constraint PK_id_reposo_trabajador primary key(id_reposo_trabajador),
     constraint FK_id_cedula_treposotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_reposo_treposotrabajador foreign key(id_reposo) references treposo(id_reposo) on update cascade on delete cascade,
@@ -241,6 +242,7 @@ CREATE TABLE treposotrabajador(
 -- estado P en espera
 -- estado E entrego
 -- estado N no entrego
+-- ALTER TABLE treposotrabajador ADD COLUMN numero_reposo INTEGER NULL;
 
 -- INSERT INTO treposotrabajador(id_reposo_trabajador,id_cedula,id_reposo,fecha_desde_reposo_trabajador,fecha_hasta_reposo_trabajador,estatu_reposo_trabajador,descripcion_reposo_trabajador,id_cam,id_asignacion_medico_especialidad) VALUES('repot-2020-05-25-25','27636392','repo-1','2020-06-17','2020-06-20','1','hola mundo SQL',1,'ams-2020-06-15-1');
 
