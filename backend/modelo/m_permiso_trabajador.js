@@ -79,14 +79,14 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         return await this.query(SQL)
     }
 
-    registrarModelo(){
+    registrarModelo(numeroPermiso){
         // console.log(SQL)
         let SQL=""
         if(this.permiso_trabajador_tipo==="PR"){
-            SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
+            SQL=`INSERT INTO tpermisotrabajador(numero_permiso,id_permiso_trabajador,id_cedula,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES(${numeroPermiso},'${this.id_permiso_trabajador}','${this.id_cedula}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
         }
         else{
-            SQL=`INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES('${this.id_permiso_trabajador}','${this.id_cedula}','${this.fecha_desde_permiso_trabajador}','${this.fecha_hasta_permiso_trabajador}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
+            SQL=`INSERT INTO tpermisotrabajador(numero_permiso,id_permiso_trabajador,id_cedula,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles,id_permiso,permiso_trabajador_tipo) VALUES(${numeroPermiso},'${this.id_permiso_trabajador}','${this.id_cedula}','${this.fecha_desde_permiso_trabajador}','${this.fecha_hasta_permiso_trabajador}','${this.estatu_permiso_trabajador}','${this.permiso_trabajador_dias_aviles}','${this.id_permiso}','${this.permiso_trabajador_tipo}');`
         }
         this.query(SQL)
     }
@@ -166,39 +166,29 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         return await this.query(SQL)
     }
 
-    async consultarPermisosTrabajadorSolofechas(id_cedula){
-        const SQL=`SELECT fecha_desde_permiso_trabajador  FROM tpermisotrabajador WHERE id_cedula='${id_cedula}' AND permiso_trabajador_tipo='PN' GROUP BY fecha_desde_permiso_trabajador;`
+    async consultarPermisosTrabajadorPorNumeroPermiso(id_cedula){
+        const SQL=`SELECT numero_permiso  FROM tpermisotrabajador WHERE id_cedula='${id_cedula}' AND permiso_trabajador_tipo='PN' GROUP BY numero_permiso;`
         return await this.query(SQL)
     }
 
-    async consultarPermisosPorFechaYCedula(id_cedula,fecha){
-        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador  WHERE tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.permiso_trabajador_tipo='PN' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso AND (tpermisotrabajador.fecha_desde_permiso_trabajador BETWEEN '${fecha}' AND '${fecha}');`
+    async consultarPermisosPorNumeroPermisoYCedula(id_cedula,numero){
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador  WHERE tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.numero_permiso=${numero}  AND tpermisotrabajador.permiso_trabajador_tipo='PN' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`
         return await this.query(SQL)
     }
     
-    async consultarPermisosTrabajadorSolofechas2(id_cedula){
-        const SQL=`SELECT 
-        fecha_desde_permiso_trabajador
-        FROM 
-        tpermisotrabajador
-        WHERE 
-        id_cedula='${id_cedula}'  GROUP BY tpermisotrabajador.fecha_desde_permiso_trabajador;`
+    async consultarPermisosTrabajadorPorNumeroPermiso2(id_cedula){
+        const SQL=`SELECT numero_permiso  FROM tpermisotrabajador WHERE id_cedula='${id_cedula}' AND permiso_trabajador_tipo='PN' GROUP BY numero_permiso;`
         return await this.query(SQL)
     }
 
-    async consultarPermisosPorFechaYCedula2(id_cedula,fecha){
-        const SQL=`
-        SELECT 
-        *
-        FROM 
-        tpermisotrabajador,
-        tpermiso,
-        ttrabajador
-        WHERE 
-        (tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula) AND
-        (tpermisotrabajador.id_permiso=tpermiso.id_permiso) AND
-        (tpermisotrabajador.permiso_trabajador_tipo='PN') AND
-        (tpermisotrabajador.fecha_desde_permiso_trabajador BETWEEN '${fecha}' AND '${fecha}');`
+    async consultarPermisosPorNumeroPermisoYCedula2(id_cedula,numero){
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador  WHERE tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.numero_permiso=${numero}  AND tpermisotrabajador.permiso_trabajador_tipo='PN' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`
+        return await this.query(SQL)
+    }
+
+
+    async consultarTodosLosPermisosTrabajador(){
+        const SQL=`SELECT * FROM tpermisotrabajador WHERE id_cedula='${this.id_cedula}';`
         return await this.query(SQL)
     }
 }

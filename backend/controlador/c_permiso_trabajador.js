@@ -51,7 +51,9 @@ PermisoTrabajadorControlador.registrarControlador=async (req,res,next)=>{
                             if(respuesta_permiso){
                                 const reposo_trabajador_result=await ReposoTrabajadorControlador.consultarReposoActivo(permiso_trabajador.id_cedula)
                                 if(!PermisoTrabajadorControlador.verificarExistencia(reposo_trabajador_result)){
-                                    PERMISOTRABAJADOR.registrarModelo()
+                                    let permiso_result3=await PERMISOTRABAJADOR.consultarTodosLosPermisosTrabajador()
+                                    let numeroPermiso=permiso_result3.rowCount+1
+                                    PERMISOTRABAJADOR.registrarModelo(numeroPermiso)
                                     req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tpermisotrabajador",permiso_trabajador.id_permiso_trabajador)
                                     next()
                                 }
@@ -125,13 +127,13 @@ PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador=
     var respuesta_api={permiso_trabajador:[],mensaje:"solicitud enviada con exito",estado_peticion:"200"}
     const id_cedula=req.params.id
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
-    let permiso_result=await PERMISOTRABAJADOR.consultarPermisosTrabajadorSolofechas(id_cedula)
-    // console.log(permiso_result)
+    let permiso_result=await PERMISOTRABAJADOR.consultarPermisosTrabajadorPorNumeroPermiso(id_cedula)
+    console.log(permiso_result)
     if(permiso_result.rowCount>0){
         const ultimoPermiso=permiso_result.rows[(permiso_result.rows.length-1)]
         // console.log(ultimoPermiso)
-        let fecha=Moment(ultimoPermiso.fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
-        let permiso_result2=await PERMISOTRABAJADOR.consultarPermisosPorFechaYCedula(id_cedula,fecha)
+        let numeroPermiso=ultimoPermiso.numero_permiso
+        let permiso_result2=await PERMISOTRABAJADOR.consultarPermisosPorNumeroPermisoYCedula(id_cedula,numeroPermiso)
         console.log(permiso_result2)
         if(permiso_result2.rows[0].estatu_permiso_trabajador==="E"){
             respuesta_api.mensaje="su permiso todavia esta en espera"
@@ -522,13 +524,13 @@ PermisoTrabajadorControlador.consultarTodoLosPermisos= async (req,res) => {
     const {id_cedula} = req.body
     var respuesta_api={datos:[],mensaje:"",estado_peticion:"200"}
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
-    let permisosoResult=await PERMISOTRABAJADOR.consultarPermisosTrabajadorSolofechas2(id_cedula)
+    let permisosoResult=await PERMISOTRABAJADOR.consultarPermisosTrabajadorPorNumeroPermiso2(id_cedula)
     // console.log(permisosoResult.rows)
     let permisos=[]
     if(permisosoResult.rowCount>0){
         for(let permiso of permisosoResult.rows){
-            let fecha=Moment(permiso.fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
-            let permisosoResult2=await PERMISOTRABAJADOR.consultarPermisosPorFechaYCedula2(id_cedula,fecha)
+            let numeroPermiso=permiso.numero_permiso
+            let permisosoResult2=await PERMISOTRABAJADOR.consultarPermisosPorNumeroPermisoYCedula2(id_cedula,numeroPermiso)
             permisos.push(permisosoResult2.rows[0])
         }
         respuesta_api.datos=permisos.reverse()
