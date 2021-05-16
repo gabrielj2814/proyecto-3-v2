@@ -183,7 +183,16 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         const SQL=`UPDATE treposotrabajador SET estatu_reposo_trabajador='2' WHERE id_reposo_trabajador='${id}';`
         return await this.query(SQL)
     }
-
+    
+    async consultarRepososPorTrabajador(id_cedula){
+        const SQL=`SELECT fecha_desde_reposo_trabajador FROM treposotrabajador WHERE id_cedula='${id_cedula}' GROUP BY fecha_desde_reposo_trabajador;`
+        return await this.query(SQL)
+    }
+    
+    async consultarRepososPorTrabajadorYFecha(id_cedula,fecha){
+        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${id_cedula}' AND (fecha_desde_reposo_trabajador BETWEEN '${fecha}' AND '${fecha}');`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = ReposoTrabajadorModelo

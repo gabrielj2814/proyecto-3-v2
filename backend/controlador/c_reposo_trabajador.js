@@ -452,8 +452,8 @@ ReposoTrabajadorControlador.verificarReposoTrabajadorActivo= async (req,res) => 
 ReposoTrabajadorControlador.interumpirReposo=async (req,res,next) => {
     let {id_reposo_trabajador,token} =req.body
     const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
-    let permiso_reposos_trabajador_result=await reposo_trabajador_modelo.interumpirReposo(id_reposo_trabajador)
-    if(permiso_reposos_trabajador_result.rowCount>0){
+    let reposos_trabajador_result=await reposo_trabajador_modelo.interumpirReposo(id_reposo_trabajador)
+    if(reposos_trabajador_result.rowCount>0){
         // res.writeHead(200,{"Content-Type":"application/json"})
         // res.write(JSON.stringify({estado:true}))
         // res.end()
@@ -463,6 +463,99 @@ ReposoTrabajadorControlador.interumpirReposo=async (req,res,next) => {
     else{
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify({estado:false}))
+        res.end()
+    }
+}
+
+ReposoTrabajadorControlador.consultarUltimoReposo= async (req,res) => {
+    let {id_cedula} =req.body
+    const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
+    let reposos_trabajador_result=await reposo_trabajador_modelo.consultarRepososPorTrabajador(id_cedula)
+    if(reposos_trabajador_result.rowCount>0){
+        let fecha=Moment(reposos_trabajador_result.rows[0].fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+        let fecha2=Moment(reposos_trabajador_result.rows[0].fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")
+        let reposos_trabajador_result2=await reposo_trabajador_modelo.consultarRepososPorTrabajadorYFecha(id_cedula,fecha)
+        let mensaje=null
+        let colorAlert=null
+        console.log(reposos_trabajador_result2)
+        if(reposos_trabajador_result2.rows[0].estatu_reposo_trabajador==="1" && reposos_trabajador_result2.rows[0].estatu_entrega_reposo==="P"){
+            mensaje="tienes un reposo activo, pero no has entregado el comprobante de tu reposo tienes asta el "+fecha2+" para entregarlo"
+            colorAlert="warning"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje,
+                estado:true,
+                colorAlert
+            }))
+            res.end()
+        }
+        if(reposos_trabajador_result2.rows[0].estatu_reposo_trabajador==="1" && reposos_trabajador_result2.rows[0].estatu_entrega_reposo==="E"){
+            mensaje="tienes un reposo activo"
+            colorAlert="success"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje,
+                estado:true,
+                colorAlert
+            }))
+            res.end()
+        }
+        if(reposos_trabajador_result2.rows[0].estatu_entrega_reposo==="N"){
+            mensaje="No entregaste el comprobante de tu reposo, por ende han baniado tu reposo por no entregarlo en la fecha establecida "+fecha2
+            colorAlert="danger"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje,
+                estado:true,
+                colorAlert,
+                nuevoReposo:true
+            }))
+            res.end()
+        }
+        if(reposos_trabajador_result2.rows[0].estatu_reposo_trabajador==="0" && reposos_trabajador_result2.rows[0].estatu_entrega_reposo==="E"){
+            mensaje="Tu reposo a culminado "
+            colorAlert="success"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje,
+                estado:true,
+                colorAlert,
+                nuevoReposo:true
+            }))
+            res.end()
+        }
+        if(reposos_trabajador_result2.rows[0].estatu_reposo_trabajador==="2" ){
+            mensaje="tu reposo a sido interumpido"
+            colorAlert="success"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje,
+                estado:true,
+                colorAlert,
+                nuevoReposo:true
+            }))
+            res.end()
+        }
+        else{
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify({
+                mensaje:"no tiene ningun reposo",
+                estado:true,
+                colorAlert:"success"
+            }))
+            res.end()
+        }
+        
+
+    }
+    else{
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify({
+            mensaje:"no tiene ningun reposo",
+            estado:true,
+            colorAlert:"success",
+            nuevoReposo:true
+        }))
         res.end()
     }
 }

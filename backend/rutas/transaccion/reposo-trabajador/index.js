@@ -22,6 +22,7 @@ router.get("/actualizar-entrega-reposo/:id/:estado",ReposoTrabajadorControlador.
 router.get("/verifircar-vencimiento",ReposoTrabajadorControlador.verificarVencimiento)
 router.get("/verifircar-reposo-trabajador/:cedula",ReposoTrabajadorControlador.verificarReposoTrabajadorActivo)
 router.post("/interumpir",ReposoTrabajadorControlador.interumpirReposo,VitacoraControlador.capturaDatos)
+router.post("/consultar-ultimo",ReposoTrabajadorControlador.consultarUltimoReposo)
 
 
 const json={

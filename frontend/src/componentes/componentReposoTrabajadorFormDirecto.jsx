@@ -27,7 +27,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.operacion=this.operacion.bind(this)
-        this.regresar=this.regresar.bind(this);
+        // this.regresar=this.regresar.bind(this);
         this.mostarDias=this.mostarDias.bind(this)
         this.mostrarDatosCam=this.mostrarDatosCam.bind(this)
         this.agregar=this.agregar.bind(this)
@@ -41,6 +41,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //---------- 
+            estadoBotonRegistro:false,
             id_reposo_trabajador:"",
             id_cedula:null,
             id_reposo:null,
@@ -160,22 +161,72 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
+
+
+        
         await this.obtenerSesionTrabajador()
-        let idRegistro=await this.generarId()
-        if(idRegistro!==null){
-            await this.consultarTodosTrabajadores();
-            // ----- reposo
-            await this.consultarTodosReposo();
-            // -------- cam
-            await this.consultarTodosLosCam();
-            // ------ asignaciones medico
-            await this.consultarTodasEspecialidad();
-            this.setState({
-                id_reposo_trabajador:idRegistro,
-            })
-        }
+        await this.consultarUltimoReposo()
 
     }
+
+    async consultarUltimoReposo(){
+        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+        let json={
+            id_cedula:this.state.id_cedula
+        }
+        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/consultar-ultimo`,json)
+        .then(async respuesta => {
+            let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(jsonResponse)
+            alerta.color=jsonResponse.colorAlert
+            alerta.mensaje=jsonResponse.mensaje
+            alerta.estado=jsonResponse.estado
+            this.setState({alerta})
+            if(jsonResponse.nuevoReposo){
+                let idRegistro=await this.generarId()
+                if(idRegistro!==null){
+                    await this.consultarTodosTrabajadores();
+                    // ----- reposo
+                    await this.consultarTodosReposo();
+                    // -------- cam
+                    await this.consultarTodosLosCam();
+                    // ------ asignaciones medico
+                    await this.consultarTodasEspecialidad();
+                    this.setState({
+                        estadoBotonRegistro:true,
+                        id_reposo_trabajador:idRegistro,
+                    })
+                    let boton=document.getElementById("boton-registrar")
+                    if(this.state.estadoBotonRegistro===true){
+                        boton.removeAttribute("disabled")
+                    }
+                    
+                }
+            }
+            else{
+                this.setState({
+                    estadoBotonRegistro:false,
+                })
+                let boton=document.getElementById("boton-registrar")
+                boton.setAttribute("disabled","disabled")
+            }
+            
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    // componentDidMount(){
+    //     let boton=document.getElementById("boton-registrar")
+    //     alert(this.state.estadoBotonRegistro)
+    //     if(this.state.estadoBotonRegistro===true){
+    //         boton.removeAttribute("disabled")
+    //     }
+    //     else{
+    //         boton.setAttribute("disabled","disabled")
+    //     }
+    // }
 
     async obtenerSesionTrabajador(){
         let estado = false
@@ -931,9 +982,9 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     
 
-    regresar(){
-        this.props.history.push("/dashboard/transaccion/reposo-trabajador")
-    }
+    // regresar(){
+    //     this.props.history.push("/dashboard/transaccion/reposo-trabajador")
+    // }
 
     campoDiasReposo(a){
         let input=a.target
@@ -1047,7 +1098,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
+                            clasesCampo="form-control "
                             nombreCampo="Código Transacción:"
                             activo="no"
                             type="text"
@@ -1071,7 +1122,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                                 obligatorio="si"
                                 mensaje={this.state.msj_reposo}
                                 nombreCampoSelect="Lista de Reposos:"
-                                clasesSelect="custom-select"
+                                clasesSelect="custom-select "
                                 name="id_reposo"
                                 id="id_reposo"
                                 eventoPadre={this.cambiarEstado}
@@ -1081,7 +1132,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
                                 <ComponentFormCampo
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"
-                                clasesCampo="form-control"
+                                clasesCampo="form-control bloquiar-campo"
                                 obligatorio="si"
                                 mensaje={this.state.msj_total_dias_reposo_trabajador}
                                 nombreCampo="Días de Reposo:"
@@ -1195,7 +1246,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                         <div className="row justify-content-center">
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
+                            clasesCampo="form-control bloquiar-campo"
                             obligatorio="si"
                             mensaje={this.state.msj_total_dias_no_aviles_reposo_trabajador}
                             nombreCampo="Días no Habiles:"
@@ -1207,8 +1258,8 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                             placeholder="Días"
                             eventoPadre={this.campoDiasNoAvilesReposo}
                             />
-                            <div className=" col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3">
-                                <buttom className="boton-calcular-dias-aviles btn btn-success" onClick={this.calcularDiasNoAviles}>
+                            <div className=" col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 offset-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3 ">
+                                <buttom className="boton-calcular-dias-aviles btn btn-success bloquiar-campo" onClick={this.calcularDiasNoAviles}>
                                     Calcular Días
                                 </buttom>
                             </div>
@@ -1234,7 +1285,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                             <ComponentFormTextArea
                             clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
                             nombreCampoTextArea="Detalle del Reposo:"
-                            clasesTextArear="form-control"
+                            clasesTextArear="form-control bloquiar-campo"
                             obligatorio="si"
                             value={this.state.descripcion_reposo_trabajador}
                             name="descripcion_reposo_trabajador"
@@ -1243,18 +1294,6 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                             eventoPadre={this.cambiarEstado}
                             />
                         </div>
-                        { this.props.match.params.operacion==="actualizar" &&
-                            <div className="row justify-content-center mb-3">
-                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Estatus del Reposo: {(this.state.estatu_reposo_trabajador==="1")?"Activo":"Inactivo"}</div>
-                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 col-3 offset-sm-3 offset-md-3 offset-lg-3 offset-xl-3"></div>
-                            </div>
-                        }
-                        { this.props.match.params.operacion==="actualizar" &&
-                            <div className="row justify-content-center mb-3">
-                                <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">Estatus de la Entrega del Reposo: {(this.state.estatu_entrega_reposo==="E")?"Entregado":((this.state.estatu_entrega_reposo==="N")?"No fue entregado":"En espera")}</div>
-                                <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
-                            </div>
-                        }
                         <input type="hidden" id="id_cedula" name="id_cedula" value={this.state.id_cedula}/>
                         <input type="hidden" id="cantidad_dias_entrega_reposo_trabajador" name="cantidad_dias_entrega_reposo_trabajador" value={this.state.cantidad_dias_entrega_reposo_trabajador}/>
                         <input type="hidden" id="estatu_entrega_reposo" name="estatu_entrega_reposo" value={this.state.estatu_entrega_reposo}/>
@@ -1267,20 +1306,20 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
                         <div className="row mt-3 justify-content-center">
                             <div className="col-auto">
                                     <InputButton 
-                                    clasesBoton="btn btn-primary"
+                                    clasesBoton="btn btn-primary bloquiar-campo"
                                     id="boton-registrar"
                                     value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                             </div>
-                            <div className="col-auto">
+                            {/* <div className="col-auto">
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
-                            </div>
+                            </div> */}
                         </div>
                         
                     
