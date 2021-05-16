@@ -110,6 +110,7 @@ CREATE TABLE tpermisotrabajador(
     estatu_permiso_trabajador character(1) NOT NULL,-- E significa en espera, A significa aprovado, C significa culminado, D significa denegado, I significa interumpido 
     permiso_trabajador_dias_aviles character varying(3) NOT NULL,
     permiso_trabajador_tipo character varying(2) NOT NULL, -- PN, PR / PN permiso normal / PR permiso de retiro para salir temprano
+    numero_permiso INTEGER NOT NULL,
     constraint PK_id_permiso_trabajador primary key(id_permiso_trabajador),
     constraint FK_id_cedula_tpermisotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
     constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
@@ -120,6 +121,10 @@ CREATE TABLE tpermisotrabajador(
 -- A -> aprovado
 -- C -> culminado
 -- D -> denegado
+DELETE FROM tasistencia; 
+DELETE FROM tpermisotrabajador; 
+DELETE FROM treposotrabajador; 
+
 
 -- INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,id_permiso,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles) VALUES('pert-2020-06-18-1','27636392','per-1','2020-06-18','2020-06-20','A','1');
 
