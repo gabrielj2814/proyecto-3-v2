@@ -143,6 +143,7 @@ class ComponentSolicitarPermisoForm extends React.Component{
             //console.log(ultimo_permiso)
             var mensaje=this.state.mensaje
             var estatu_permiso_trabajador=""
+            console.log(ultimo_permiso.permiso_trabajador[0])
             if(ultimo_permiso.permiso_trabajador[0].estatu_permiso_trabajador==="E"){
                 estatu_permiso_trabajador="En espera"
             }

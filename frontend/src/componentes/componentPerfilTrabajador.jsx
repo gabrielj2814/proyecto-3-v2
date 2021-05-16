@@ -27,6 +27,9 @@ class ComponentPerfilTrabajador extends React.Component{
         this.validarClave=this.validarClave.bind(this)
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.mostarModalCambiarContraseña=this.mostarModalCambiarContraseña.bind(this)
+        this.mostarModalMisPermisos=this.mostarModalMisPermisos.bind(this)
+        this.solicitarPermiso=this.solicitarPermiso.bind(this)
+        this.cerrarModalPermiso=this.cerrarModalPermiso.bind(this)
         this.state={
             paso:0,
             modulo:"",// modulo menu
@@ -107,6 +110,17 @@ class ComponentPerfilTrabajador extends React.Component{
             //     color_texto:""
             // },
 
+            // ----------------
+            listaPermisos:[],
+            listaReposos:[],
+            estadosPermiso:{
+                I:"Interumpido",
+                E:"En espera",
+                A:"Aprovado",
+                D:"Denegado",
+                C:"culminado",
+            },
+
             mensaje:{
                 texto:"",
                 estado:""
@@ -116,6 +130,23 @@ class ComponentPerfilTrabajador extends React.Component{
 
     async UNSAFE_componentWillMount(){
         await this.consultarDatosDeLaSesion()
+        await this.consultarTodosLosPermisos()
+        
+    }
+
+    async consultarTodosLosPermisos(){
+        let json={
+            id_cedula:this.state.id_cedula
+        }
+        await axios.post("http://localhost:8080/transaccion/permiso-trabajador/consultar-todos-permisos",json)
+        .then(respuesta => {
+            let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(jsonResponse)
+            this.setState({listaPermisos:jsonResponse.datos})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     async consultarDatosDeLaSesion(){
@@ -361,7 +392,7 @@ class ComponentPerfilTrabajador extends React.Component{
 }
 
     /*
-    <div className="col-auto">
+                            <div className="col-auto">
                                 <button class="btn btn-info">Ver el historial de mis permisos</button>
                             </div>
                             <div className="col-auto">
@@ -391,10 +422,76 @@ class ComponentPerfilTrabajador extends React.Component{
                                     </div>
                                 </div>
                         </div>
+
+                        ----------------
+                        <div class="modal fade" id="modalHistorialPermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Mis Permisos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    
+                                    <table id="tablaPermisos" className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ">
+                                        <thead> 
+                                            <tr> 
+                                                <th>N°</th> 
+                                                <th>Permiso</th> 
+                                                <th>Desde</th> 
+                                                <th>Hasta</th>
+                                                <th>Estado</th>
+                                                <th>Remunerado</th>
+                                                <th>habil</th>
+                                            </tr> 
+                                        </thead>
+                                        <tbody>
+
+                                            <tr> 
+                                                <td>1</td> 
+                                                <td>Permiso</td> 
+                                                <td>Desde</td> 
+                                                <td>Hasta</td>
+                                                <td>Estado</td>
+                                                <td>Remunerado</td>
+                                                <td>habil</td>
+                                            </tr> 
+                                                
+                                        </tbody>
+
+
+                                    </table>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                                        <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
+
+
+
+
     */
 
     mostarModalCambiarContraseña(){
         $("#modalCambiarContaseña").modal("show")
+    }
+    
+    mostarModalMisPermisos(){
+        $("#modalHistorialPermiso").modal("show")
+    }
+
+    cerrarModalPermiso(){
+        $("#modalHistorialPermiso").modal("hide")
+    }
+
+    solicitarPermiso(){
+        this.cerrarModalPermiso()
+        this.props.history.push("/dashboard/transaccion/permiso-trabajador/solicitar")
     }
 
     render(){
@@ -414,6 +511,64 @@ class ComponentPerfilTrabajador extends React.Component{
                         </div>
                     }
                 </div>
+
+                <div class="modal fade" id="modalHistorialPermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Mis Permisos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <button class="btn btn-outline-primary mb-3" onClick={this.solicitarPermiso}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                                        </svg>
+                                    </button>
+                                    <table id="tablaPermisos" className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ">
+                                        <thead> 
+                                            <tr> 
+                                                <th>N°</th> 
+                                                <th>Permiso</th> 
+                                                <th>Desde</th> 
+                                                <th>Hasta</th>
+                                                <th>Estado</th>
+                                                <th>Remunerado</th>
+                                                <th>habil</th>
+                                            </tr> 
+                                        </thead>
+                                        <tbody>
+
+                                            {this.state.listaPermisos.map((permiso,index) => {
+                                                return(
+                                                    <tr key={"permiso-"+index}> 
+                                                        <td>{index+1}</td> 
+                                                        <td>{permiso.nombre_permiso}</td> 
+                                                        <td>{Moment(permiso.fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")}</td> 
+                                                        <td>{Moment(permiso.fecha_hasta_permiso_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")}</td>
+                                                        <td>{this.state.estadosPermiso[permiso.estatu_permiso_trabajador]}</td>
+                                                        <td>{(permiso.estatu_remunerado==="1")?"Si":"No"}</td>
+                                                        <td>{(permiso.estatu_dias_aviles==="1")?"Si":"No"}</td>
+                                                    </tr> 
+                                                )
+                                            })
+
+                                            }
+                                                
+                                        </tbody>
+
+
+                                    </table>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                                        <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
                 
                 <div class="modal fade" id="modalCambiarContaseña" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -656,11 +811,18 @@ class ComponentPerfilTrabajador extends React.Component{
                         </div>
                         <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                     </div>
-                    <div className="row justify-content-center mb-2">
-                        
+                    <div className="row justify-content-center mb-4">
                         <div className="col-auto">
                             <button class="btn btn-warning" onClick={this.mostarModalCambiarContraseña}>Cambiar mi contraseña</button>
                         </div>
+                    </div>
+                    <div className="row justify-content-center mb-2">
+                            <div className="col-auto" onClick={this.mostarModalMisPermisos}>
+                                <button class="btn btn-info">Ver el historial de mis permisos</button>
+                            </div>
+                            <div className="col-auto">
+                                <button class="btn btn-info">Ver el historial de mis reposos</button>
+                            </div>
                     </div>
 
                 </div>

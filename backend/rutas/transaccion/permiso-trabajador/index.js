@@ -31,6 +31,7 @@ router.get("/verifircar-vencimiento",PermisoTrabajadorControlador.verificarVenci
 router.get("/consultar-culminados",PermisoTrabajadorControlador.consultarPermisosCulminadosHoy)
 router.get("/consultar-aprovados",PermisoTrabajadorControlador.consultarPermisosAprovadosTodos)
 router.post("/interumpir",PermisoTrabajadorControlador.interumpirPermisoTrabajador,VitacoraControlador.capturaDatos)
+router.post("/consultar-todos-permisos",PermisoTrabajadorControlador.consultarTodoLosPermisos)
 
 const json={
 

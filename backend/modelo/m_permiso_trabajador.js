@@ -175,6 +175,32 @@ class PermisoTrabajadorModelo extends DriverPostgre{
         const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador  WHERE tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.permiso_trabajador_tipo='PN' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso AND (tpermisotrabajador.fecha_desde_permiso_trabajador BETWEEN '${fecha}' AND '${fecha}');`
         return await this.query(SQL)
     }
+    
+    async consultarPermisosTrabajadorSolofechas2(id_cedula){
+        const SQL=`SELECT 
+        fecha_desde_permiso_trabajador
+        FROM 
+        tpermisotrabajador
+        WHERE 
+        id_cedula='${id_cedula}'  GROUP BY tpermisotrabajador.fecha_desde_permiso_trabajador;`
+        return await this.query(SQL)
+    }
+
+    async consultarPermisosPorFechaYCedula2(id_cedula,fecha){
+        const SQL=`
+        SELECT 
+        *
+        FROM 
+        tpermisotrabajador,
+        tpermiso,
+        ttrabajador
+        WHERE 
+        (tpermisotrabajador.id_cedula='${id_cedula}' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula) AND
+        (tpermisotrabajador.id_permiso=tpermiso.id_permiso) AND
+        (tpermisotrabajador.permiso_trabajador_tipo='PN') AND
+        (tpermisotrabajador.fecha_desde_permiso_trabajador BETWEEN '${fecha}' AND '${fecha}');`
+        return await this.query(SQL)
+    }
 }
 
 module.exports = PermisoTrabajadorModelo
