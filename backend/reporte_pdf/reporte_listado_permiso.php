@@ -96,6 +96,9 @@ class PdfListadoPermiso{
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="D"){
                     $estadoPermiso="Denegado";
                 }
+                if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
+                    $estadoPermiso="Interumpido";
+                }
                 $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
                 $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_permiso"]),1,0,"C");
                 $pdf->Cell(20,10,$fechaDesde,1,0,"C");
@@ -121,6 +124,9 @@ class PdfListadoPermiso{
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="D"){
                 $estadoPermiso="Denegado";
+            }
+            if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
+                $estadoPermiso="Interumpido";
             }
             $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_permiso"]),1,0,"C");
@@ -241,6 +247,9 @@ class PdfListadoPermiso{
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="D"){
                     $estadoPermiso="Denegado";
                 }
+                if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
+                    $estadoPermiso="Interumpido";
+                }
                 $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
                 $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombres"]),1,0,"C");
                 $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["apellidos"]),1,0,"C");
@@ -268,6 +277,9 @@ class PdfListadoPermiso{
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="D"){
                 $estadoPermiso="Denegado";
+            }
+            if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
+                $estadoPermiso="Interumpido";
             }
             $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombres"]),1,0,"C");

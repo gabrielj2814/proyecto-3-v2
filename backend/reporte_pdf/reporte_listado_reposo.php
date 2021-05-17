@@ -80,13 +80,24 @@ class PdfListadoReposo{
             if($this->datosPdf[$contador]["estatu_entrega_reposo"]==="N"){
                 $estadoEntrega="No Entregado";
             }
+            $estadoReposo=null;
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="1"){
+                $estadoReposo="Activo";
+            }
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="0"){
+                $estadoReposo="Inactivo";
+            }
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="2"){
+                $estadoReposo="Interumpido";
+            }
+
             $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $pdf->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_reposo"]),1,0,"C");
             $pdf->Cell(20,10,$fechaDesde,1,0,"C");
             $pdf->Cell(20,10,$fechaHasta,1,0,"C");
             $pdf->Cell(40,10,$fechEntrega,1,0,"C");
             $pdf->Cell(40,10,"$estadoEntrega",1,0,"C");
-            $pdf->Cell(22,10,(($this->datosPdf[$contador]["estatu_entrega_reposo"]==="1")?"Activo":"Inactivo"),1,0,"C");
+            $pdf->Cell(22,10,$estadoReposo,1,0,"C");
             $contador++;
         }
         
@@ -178,6 +189,16 @@ class PdfListadoReposo{
             if($this->datosPdf[$contador]["estatu_entrega_reposo"]==="N"){
                 $estadoEntrega="No Entregado";
             }
+            $estadoReposo=null;
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="1"){
+                $estadoReposo="Activo";
+            }
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="0"){
+                $estadoReposo="Inactivo";
+            }
+            if($this->datosPdf[$contador]["estatu_reposo_trabajador"]==="2"){
+                $estadoReposo="Interumpido";
+            }
             $pdf->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $pdf->Cell(35,10,utf8_decode($this->datosPdf[$contador]["nombres"]),1,0,"C");
             $pdf->Cell(35,10,utf8_decode($this->datosPdf[$contador]["apellidos"]),1,0,"C");
@@ -186,7 +207,7 @@ class PdfListadoReposo{
             $pdf->Cell(20,10,$fechaHasta,1,0,"C");
             $pdf->Cell(40,10,$fechEntrega,1,0,"C");
             $pdf->Cell(40,10,"$estadoEntrega",1,0,"C");
-            $pdf->Cell(22,10,(($this->datosPdf[$contador]["estatu_entrega_reposo"]==="1")?"Activo":"Inactivo"),1,0,"C");
+            $pdf->Cell(22,10,$estadoReposo,1,0,"C");
             $contador++;
         }
         

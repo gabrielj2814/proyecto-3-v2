@@ -85,6 +85,9 @@ if(array_key_exists("id_cedula",$_POST)){
         $unirTodo=join(" AND ",$trosos);
         $SQL="SELECT * FROM ttrabajador,treposo,treposotrabajador WHERE treposotrabajador.id_cedula='".$_POST["id_cedula"]."' AND treposotrabajador.id_cedula=ttrabajador.id_cedula AND treposotrabajador.id_reposo=treposo.id_reposo AND ".$unirTodo;
     }
+    else{
+        $SQL="SELECT * FROM ttrabajador,treposo,treposotrabajador WHERE treposotrabajador.id_cedula='".$_POST["id_cedula"]."' AND treposotrabajador.id_cedula=ttrabajador.id_cedula AND treposotrabajador.id_reposo=treposo.id_reposo";
+    }
 
      $result=$driver->query($SQL);
      while($row = pg_fetch_array($result)){

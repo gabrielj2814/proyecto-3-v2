@@ -611,12 +611,12 @@ class ComponentPermisoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado permiso</label>
-                                      <select class="form-select custom-select" id="estatu_permiso_trabajador" name="estatu_permiso_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="estatu_permiso_trabajador" name="array_estatu_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="E" >En espera</option>
                                         <option value="A" >Aprovado</option>
                                         <option value="C" >Culminado</option>
                                         <option value="D" >Denegado</option>
+                                        <option value="I" >Interumpido</option>
                                       </select>
                                     </div>
                                   </div>
@@ -624,7 +624,6 @@ class ComponentPermisoTrabajador extends React.Component{
                                     <div class="form-groud">
                                       <label>Tipo de permiso</label>
                                       <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
                                         <option value="PR" >Permiso de retiro</option>
                                         <option value="PN" >Permiso normal</option>
                                       </select>
@@ -638,8 +637,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Permiso</label>
-                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
-                                        <option value="null" >Selecciones</option>
+                                      <select class="form-select custom-select" multiple id="id_permiso" name="array_id_permiso[]" aria-label="Default select example" >
                                         {this.state.tiposPermiso.map((tipoPermiso,index) => (<option key={index} value={tipoPermiso.id_permiso}  >{tipoPermiso.nombre_permiso}</option>))}
                                       </select>
                                     </div>
@@ -667,12 +665,12 @@ class ComponentPermisoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado permiso</label>
-                                      <select class="form-select custom-select" id="estatu_permiso_trabajador" name="estatu_permiso_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="estatu_permiso_trabajador" name="array_estatu_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="E" >En espera</option>
                                         <option value="A" >Aprovado</option>
                                         <option value="C" >Culminado</option>
                                         <option value="D" >Denegado</option>
+                                        <option value="I" >Interumpido</option>
                                       </select>
                                     </div>
                                   </div>
@@ -680,7 +678,6 @@ class ComponentPermisoTrabajador extends React.Component{
                                     <div class="form-groud">
                                       <label>Tipo de permiso</label>
                                       <select class="form-select custom-select" id="permiso_trabajador_tipo" name="permiso_trabajador_tipo" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
                                         <option value="PR" >Permiso de retiro</option>
                                         <option value="PN" >Permiso normal</option>
                                       </select>
@@ -689,8 +686,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Permiso</label>
-                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
-                                        <option value="null" >Selecciones</option>
+                                      <select class="form-select custom-select" multiple id="id_permiso" name="array_id_permiso[]" aria-label="Default select example" >
                                         {this.state.tiposPermiso.map((tipoPermiso,index) => (<option key={index} value={tipoPermiso.id_permiso}  >{tipoPermiso.nombre_permiso}</option>))}
                                       </select>
                                     </div>
