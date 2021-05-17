@@ -692,7 +692,7 @@ class ComponentReposoTrabajador extends React.Component{
                                 <div className="row justify-content-center">
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Estado Reposo</label>
+                                      <label>Estado de Entrega</label>
                                       <select class="form-select custom-select" multiple id="estado_entrega" name="array_estado_entrega[]" aria-label="Default se0lec0t example">
                                         <option value="P" >En espera</option>
                                         <option value="E" >Entregado</option>
@@ -740,7 +740,7 @@ class ComponentReposoTrabajador extends React.Component{
                                   </div>
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Estado Reposo</label>
+                                      <label>Estado de Entrega</label>
                                       <select class="form-select custom-select" multiple id="estado_entrega" name="array_estado_entrega[]" aria-label="Default se0lec0t example">
                                         <option value="P" >En espera</option>
                                         <option value="E" >Entregado</option>
