@@ -668,10 +668,10 @@ class ComponentReposoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estado Reposo</label>
-                                      <select class="form-select custom-select" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                      <select class="form-select custom-select" multiple id="estatu_reposo_trabajador" name="array_estatu_reposo_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="1" >Activo</option>
                                         <option value="0" >Inactivo</option>
+                                        <option value="2" >Interumpido</option>
                                       </select>
                                     </div>
                                   </div>
@@ -679,9 +679,72 @@ class ComponentReposoTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Reposo</label>
-                                      <select class="form-select custom-select" id="id_reposo" name="id_reposo" aria-label="Default select example" >
+                                      <select class="form-select custom-select" multiple id="id_reposo" name="array_id_reposo[]" aria-label="Default select example" >
                                         <option value="null" >Selecciones</option>
                                         {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  
+                                  
+
+                                </div>
+                                <div className="row justify-content-center">
+                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado Reposo</label>
+                                      <select class="form-select custom-select" multiple id="estado_entrega" name="array_estado_entrega[]" aria-label="Default se0lec0t example">
+                                        <option value="P" >En espera</option>
+                                        <option value="E" >Entregado</option>
+                                        <option value="N" >No entregado</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                        <div class="form-groud">
+                                        <label>Fecha desde</label>
+                                        <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                              </form>
+
+
+                              <form id="formLista" class="ocultarFormulario mb-3">
+                              <div className="row justify-content-center">
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado Reposo</label>
+                                      <select class="form-select custom-select" multiple id="estatu_reposo_trabajador" name="array_estatu_reposo_trabajador[]" aria-label="Default se0lec0t example">
+                                        <option value="1" >Activo</option>
+                                        <option value="0" >Inactivo</option>
+                                        <option value="2" >Interumpido</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Reposo</label>
+                                      <select class="form-select custom-select" multiple id="id_reposo" name="array_id_reposo[]" aria-label="Default select example" >
+                                        {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
+                                      </select>
+                                    </div>
+                                  </div>
+                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <div class="form-groud">
+                                      <label>Estado Reposo</label>
+                                      <select class="form-select custom-select" multiple id="estado_entrega" name="array_estado_entrega[]" aria-label="Default se0lec0t example">
+                                        <option value="P" >En espera</option>
+                                        <option value="E" >Entregado</option>
+                                        <option value="N" >No entregado</option>
                                       </select>
                                     </div>
                                   </div>
@@ -704,53 +767,6 @@ class ComponentReposoTrabajador extends React.Component{
                                     </div>
 
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
-                                    
-                                </div>
-                              </form>
-
-
-                              <form id="formLista" class="ocultarFormulario mb-3">
-                              <div className="row justify-content-center">
-                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-groud">
-                                      <label>Estado Reposo</label>
-                                      <select class="form-select custom-select" id="estatu_reposo_trabajador" name="estatu_reposo_trabajador" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
-                                        <option value="1" >Activo</option>
-                                        <option value="0" >Inactivo</option>
-                                      </select>
-                                    </div>
-                                  </div>
-
-                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                    <div class="form-groud">
-                                      <label>Reposo</label>
-                                      <select class="form-select custom-select" id="id_reposo" name="id_reposo" aria-label="Default select example" >
-                                        <option value="null" >Selecciones</option>
-                                        {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
-                                      </select>
-                                    </div>
-                                  </div>
-                                  <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                        <div class="form-groud">
-                                        <label>Fecha desde</label>
-                                        <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
-                                        </div>
-                                    </div>
-                                  
-                                  
-
-                                </div>
-                                <div className="row justify-content-center">
-                                   
-                                    <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                        <div class="form-groud">
-                                        <label>Fecha desde</label>
-                                        <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                                     
                                 </div>
                                 
