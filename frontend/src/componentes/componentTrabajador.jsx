@@ -485,7 +485,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Tipo de trabajador</label>
-                                      <select class="form-select custom-select" id="id_tipo_trabajador" name="id_tipo_trabajador" aria-label="Default se0lec0t example" onChange={this.cambiarEstadoTipoTrabajador}>
+                                      <select class="form-select custom-select" multiple id="id_tipo_trabajador" name="array_id_tipo_trabajador[]" aria-label="Default se0lec0t example" onChange={this.cambiarEstadoTipoTrabajador}>
                                         <option value="null" >seleccione</option>
                                         {this.state.tiposTrabajadores.map((tipoTrabajador,index) => (<option key={"tipo-trabajador"+index} value={tipoTrabajador.id_tipo_trabajador}  >{tipoTrabajador.descripcion_tipo_trabajador}</option>))}
                                       </select>
@@ -494,8 +494,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Funcion del trabajador</label>
-                                      <select class="form-select custom-select" id="id_funcion_trabajador" name="id_funcion_trabajador" aria-label="Default select example" >
-                                        <option value="null" >Selecciones</option>
+                                      <select class="form-select custom-select" multiple id="id_funcion_trabajador" name="array_id_funcion_trabajador[]" aria-label="Default select example" >
                                         {this.state.funcionesTrabajadores.map((funcionTrabajador,index) => (<option key={"funcion-trabajador"+index} value={funcionTrabajador.id_funcion_trabajador}  >{funcionTrabajador.funcion_descripcion}</option>))}
                                       </select>
                                     </div>
@@ -503,7 +502,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Sexo</label>
-                                      <select class="form-select custom-select" id="sexo" name="sexo" aria-label="Default select example" >
+                                      <select class="form-select custom-select" multiple id="sexo" name="array_sexo[]" aria-label="Default select example" >
                                         <option value="1" >Masculino</option>
                                         <option value="0" >Femenino</option>
                                       </select>
@@ -514,7 +513,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Designación</label>
-                                      <select class="form-select custom-select" id="designacion" name="designacion" aria-label="Default select example" >
+                                      <select class="form-select custom-select" multiple id="designacion" name="array_designacion[]" aria-label="Default select example" >
                                         <option value="1" >Interno</option>
                                         <option value="0" >Externo</option>
                                       </select>
@@ -523,7 +522,7 @@ class ComponentTrabajador extends React.Component{
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
                                       <label>Estatus</label>
-                                      <select class="form-select custom-select" id="estatu_trabajador" name="estatu_trabajador" aria-label="Default select example" >
+                                      <select class="form-select custom-select" multiple id="estatu_trabajador" name="array_estatu_trabajador[]" aria-label="Default select example" >
                                         <option value="1" >Activo</option>
                                         <option value="0" >Inactivo</option>
                                       </select>

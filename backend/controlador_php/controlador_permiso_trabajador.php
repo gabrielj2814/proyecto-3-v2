@@ -11,6 +11,8 @@ $datosConsulta=[];
 // print_r($_POST);
 if(array_key_exists("id_cedula",$_POST)){
     // print("es");
+    $SQL="";
+    $trosos=[];
     if(array_key_exists("array_estatu_permiso_trabajador",$_POST)){
 
         $contador=0;
