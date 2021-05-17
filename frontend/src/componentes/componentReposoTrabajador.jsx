@@ -225,7 +225,7 @@ class ComponentReposoTrabajador extends React.Component{
 
     async consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta){
         let datos=null
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar-reposo/:${fechaDesde}/${fechaHasta}`)
+        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar-reposo/${fechaDesde}/${fechaHasta}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             datos=json

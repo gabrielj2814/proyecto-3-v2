@@ -93,7 +93,7 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         return await this.query(SQL)
     }
 
-    registrarModelo(numeroReposo){
+    async registrarModelo(numeroReposo){
         const SQL=`INSERT INTO treposotrabajador(
             numero_reposo,
             id_reposo_trabajador,
@@ -129,7 +129,9 @@ class ReposoTrabajadorModelo extends DriverPostgre {
                 '${this.fecha_hasta_entrega_reposo_trabajador}',
                 '${this.estatu_entrega_reposo}'
                 );`
-        this.query(SQL)
+        await this.query(SQL)
+        const SQL2=`UPDATE tasistencia SET estatu_asistencia='IJR' WHERE id_cedula='${this.id_cedula}' AND (fecha_asistencia BETWEEN '${this.fecha_desde_reposo_trabajador}' AND '${this.fecha_hasta_reposo_trabajador}')`
+        await this.query(SQL2)
     }
 
     actualizarModelo(){
