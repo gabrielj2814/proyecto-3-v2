@@ -41,7 +41,7 @@ class PdfListaMedico extends FPDF{
         // $this->Image("imagenes/encabezado1.jpg",40,5,200,10);
         
 
-        $this->ln(30);
+        $this->ln(20);
 
         //TITULO
         $this->SetFont("Arial","B",10);

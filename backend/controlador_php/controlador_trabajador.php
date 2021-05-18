@@ -9,6 +9,9 @@ $respuesta=[];
 $SQL="";
 $datosConsulta=[];
 // print_r($_POST);
+$result=$driver->query("SELECT * FROM tcintillo WHERE estatu_foto_cintillo='1'");
+$result_cifrado=$driver->resultDatos($result);
+
 if(array_key_exists("id_cedula",$_POST)){
     // print("medico");
     $SQL="SELECT * FROM ttrabajador,tfunciontrabajador,ttipotrabajador WHERE ttrabajador.id_cedula='".$_POST["id_cedula"]."' AND 
@@ -22,7 +25,7 @@ if(array_key_exists("id_cedula",$_POST)){
     }
     // print_r($datosConsulta);
     if(count($datosConsulta)>0){
-        $PDF=new PdfTrabajador($datosConsulta);
+        $PDF=new PdfTrabajador($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
         $nombrePdf=$PDF->generarPdf();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
@@ -34,14 +37,6 @@ if(array_key_exists("id_cedula",$_POST)){
 else{
     $SQL="";
     $trosos=[];
-    // print("medico");
-    // $SQL="SELECT * FROM ttrabajador,tfunciontrabajador,ttipotrabajador WHERE ttrabajador.id_funcion_trabajador='".$_POST["id_funcion_trabajador"]."' AND 
-    // ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND
-    // tfunciontrabajador.id_tipo_trabajador='".$_POST["id_tipo_trabajador"]."' AND
-    // tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador AND 
-    // ttrabajador.sexo_trabajador='".$_POST["sexo"]."' AND 
-    // ttrabajador.designacion='".$_POST["designacion"]."' AND 
-    // ttrabajador.estatu_trabajador='".$_POST["estatu_trabajador"]."'";
 
     if(array_key_exists("array_id_tipo_trabajador",$_POST)){
 
@@ -164,7 +159,7 @@ else{
     }
     // print_r($datosConsulta);
     if(count($datosConsulta)>0){
-        $PDF=new PdfTrabajador($datosConsulta);
+        $PDF=new PdfTrabajador($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
         $nombrePdf=$PDF->generarPdf2();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
