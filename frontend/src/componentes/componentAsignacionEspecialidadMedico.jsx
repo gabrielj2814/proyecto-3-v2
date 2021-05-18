@@ -35,6 +35,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
             modulo:"",
             estado_menu:false,
             //------------
+            nombre_usuario:null,
             listaMedicos:[], 
             listaEspecialidades:[], 
             tipoPdf:null,
@@ -128,6 +129,8 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
             await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
+                console.log(respuesta_servior.usuario)
+                this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
                 }  
@@ -349,7 +352,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
         }
   
         console.log(datos)
-  
+        datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
         if(datos!==null){
         //   alert("generar pdf")
           $.ajax({

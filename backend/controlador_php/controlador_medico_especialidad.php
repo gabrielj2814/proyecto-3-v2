@@ -10,6 +10,9 @@ $respuesta=[];
 $SQL="";
 $datosConsulta=[];
 // print_r($_POST);
+$result=$driver->query("SELECT * FROM tcintillo WHERE estatu_foto_cintillo='1'");
+$result_cifrado=$driver->resultDatos($result);
+
 if(array_key_exists("id_medico",$_POST)){
     // print("medico");
     $SQL="SELECT * FROM tasignacionmedicoespecialidad,tespecialidad,tmedico WHERE tasignacionmedicoespecialidad.id_medico='".$_POST["id_medico"]."' AND
@@ -22,7 +25,7 @@ if(array_key_exists("id_medico",$_POST)){
         $datosConsulta[]=$row;
     }
     if(count($datosConsulta)>0){
-        $PDF=new PdfListaEspecialidades($datosConsulta);
+        $PDF=new PdfListaEspecialidades($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
         $nombrePdf=$PDF->generarPdf();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
@@ -44,7 +47,7 @@ else if(array_key_exists("id_especialidad",$_POST)){
         $datosConsulta[]=$row;
     }
     if(count($datosConsulta)>0){
-        $PDF=new PdfListaMedico($datosConsulta);
+        $PDF=new PdfListaMedico($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
         $nombrePdf=$PDF->generarPdf();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
