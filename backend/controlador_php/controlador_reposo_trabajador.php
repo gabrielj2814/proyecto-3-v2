@@ -9,6 +9,9 @@ $respuesta=[];
 $SQL="";
 $datosConsulta=[];
 // print_r($_POST);
+$result=$driver->query("SELECT * FROM tcintillo WHERE estatu_foto_cintillo='1'");
+$result_cifrado=$driver->resultDatos($result);
+
 if(array_key_exists("id_cedula",$_POST)){
     $SQL="";
     $trosos=[];
@@ -97,7 +100,7 @@ if(array_key_exists("id_cedula",$_POST)){
     }
     // print_r($datosConsulta);
      if(count($datosConsulta)>0){
-         $PDF=new PdfListadoReposo($datosConsulta);
+         $PDF=new PdfListadoReposo($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
          $nombrePdf=$PDF->generarPdf();
          // print($nombrePdf);
          $respuesta["nombrePdf"]=$nombrePdf;
@@ -199,7 +202,7 @@ else{
    }
 //    print_r($datosConsulta);
     if(count($datosConsulta)>0){
-        $PDF=new PdfListadoReposo($datosConsulta);
+        $PDF=new PdfListadoReposo($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
         $nombrePdf=$PDF->generarPdf2();
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
