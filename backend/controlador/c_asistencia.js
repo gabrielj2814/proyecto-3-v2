@@ -132,7 +132,12 @@ AsistenciaControlador.verificarInasistenciasJustificada= async (req,res) => {
         while(contador_permiso<permiso_result.rows.length){
             const permiso=permiso_result.rows[contador_permiso]
             // console.log(reposo)
-            AsistenciaControlador.registrarInasistencia(permiso,"IJP")
+            let fecha=Moment().format("YYYY-MM-DD")
+            let fecha_permiso=Moment(permiso.fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+            console.log("=>>>>>>",fecha_permiso)
+            if(Moment(fecha).isSameOrAfter(fecha_permiso)){
+                AsistenciaControlador.registrarInasistencia(permiso,"IJP")
+            }
             contador_permiso++
         }
         respuesta_api.mensaje="trabajando"
@@ -277,17 +282,20 @@ AsistenciaControlador.verificarInasistenciaInjustificada=async (req,res) => {
             AsistenciaControlador.registrarInasistencia(trabajador,"II")
         }
         else{
-            let tipo=""
-            if(AsistenciaControlador.verificarExistencia(reposo_result)){
-                tipo="IJR"
-                console.log("hola")
+            // let tipo=""
+            // if(AsistenciaControlador.verificarExistencia(reposo_result)){
+            //     tipo="IJR"
                 
+            // }
+            if(AsistenciaControlador.verificarExistencia(permiso_result)){
+                let fecha=Moment().format("YYYY-MM-DD")
+                let fecha_permiso=Moment(permiso_result.rows[0].fecha_desde_permiso_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
+                if(Moment(fecha).isBefore(fecha_permiso)){
+                    AsistenciaControlador.registrarInasistencia(trabajador,"II")
+                }
+                // tipo="IJP"
+                // AsistenciaControlador.registrarInasistencia(trabajador,tipo)
             }
-            else if(AsistenciaControlador.verificarExistencia(permiso_result)){
-                
-                tipo="IJP"
-            }
-            AsistenciaControlador.registrarInasistencia(trabajador,tipo)
         }
         contador++
     }

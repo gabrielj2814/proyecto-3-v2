@@ -55,7 +55,7 @@ class PermisoTrabajadorModelo extends DriverPostgre{
     }
 
     async consultarTodosActivoModelo(){
-        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.estatu_permiso_trabajador='1' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`
+        const SQL=`SELECT * FROM tpermisotrabajador,tpermiso,ttrabajador WHERE tpermisotrabajador.estatu_permiso_trabajador='A' AND tpermisotrabajador.id_cedula=ttrabajador.id_cedula AND tpermisotrabajador.id_permiso=tpermiso.id_permiso;`
         //console.log(SQL)
         return await this.query(SQL)
     }
