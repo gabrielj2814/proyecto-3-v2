@@ -8,7 +8,7 @@ class PdfTrabajador extends FPDF{
     private $datosCintillo;
     private $nombreCintillo;
     function __construct($datos,$generado,$datosCintillo){
-        parent::__construct("L","mm","letter");
+        parent::__construct("L","mm",array(325,325));
         $this->datosPdf=$datos;
         $this->generado=$generado;
         $this->datosCintillo=$datosCintillo;
@@ -29,7 +29,7 @@ class PdfTrabajador extends FPDF{
         $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
     }
 
-    function generarPdf(){
+    function generarPdf($datosConsultaAsistencia){
         
         $nombrePdf="ficha del trabajador [".$this->datosPdf[0]["nombres"]." ".$this->datosPdf[0]["apellidos"]."] .pdf";
         $this->AliasNbPages();
@@ -42,7 +42,7 @@ class PdfTrabajador extends FPDF{
         $this->Cell(0,10,"FICHA DEL TRABAJADOR",0,0,"C");
 
         $this->ln(10);
-        $this->SetX(50);
+        $this->SetX(95);
         $this->SetFont("Arial","",10);
         $this->Cell(127,10,"",0,0,"L");
         $this->Cell(12,10,"Araure",0,0,"C");$this->Cell(1,10,"",0,0,"L");$this->Cell(10,6,date("d"),'B',0,"C");$this->Cell(1,10,"",0,0,"L");
@@ -144,11 +144,47 @@ class PdfTrabajador extends FPDF{
         $this->Cell(12,10,"",0,0,"C");
         $this->Cell(20,10,"Estatus:",0,0,"L");$this->Cell(3,10,(($this->datosPdf[0]["estatu_trabajador"]==="1")?"Activo":"Inactivo"),0,0,"C");
 
+        $this->ln(25);
+        
+        //TABLA
+        $this->SetX(40);
+        $this->Cell(30,10,'Fecha',1,0,'C');
+        $this->Cell(30,10,'Hora de entrada',1,0,'C');
+        $this->Cell(30,10,'Hora de Salida',1,0,'C');
+        $this->Cell(35,10,'Estado',1,0,'C');
+        $this->Cell(60,10,utf8_decode('Estado asistencia'),1,0,'C');
+        $this->Cell(60,10,utf8_decode('Observación'),1,0,'C');
+        
+        // $this->ln(10);
+        
+        // $this->SetX(39);
+        // $this->Cell(30,10,'26/04/2021',1,0,'C');
+        // $this->Cell(30,10,'7:00 AM',1,0,'C');
+        // $this->Cell(30,10,'4:00 PM',1,0,'C');
+        // $this->Cell(35,10,'Retiro antes de la hora',1,0,'C');
+        
+        $contador=0;
+        while($contador<count($datosConsultaAsistencia)){
+            $estadoAsistencia="";
+            if($datosConsultaAsistencia[$contador]["estatu_asistencia"]==="P"){
+                $estadoAsistencia="Presente";
+            }
+            
+            $fecha= date("d-m-Y",strtotime($datosConsultaAsistencia[$contador]["fecha_asistencia"]));
+            $this->ln(10);
+            $this->SetX(40);
+            $this->Cell(30,10,$fecha,1,0,'C');
+            $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
+            $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_salida_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
+            $this->Cell(35,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]===null)?"Laboro":(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]!==null)?"Vino pero se retiro":"-")),1,0,'C');
+            $this->Cell(60,10,utf8_decode($estadoAsistencia),1,0,'C');
+            $this->Cell(60,10,utf8_decode($datosConsultaAsistencia[$contador]["observacion_asistencia"]),1,0,'C');
+            $contador++;
+        }
 
 
-
-        $this->ln(22);
-
+        $this->ln(30);
+        $this->SetX(40);
         $this->Cell(17,10,"",0,0,"C");
         $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
 

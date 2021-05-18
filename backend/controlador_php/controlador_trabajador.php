@@ -14,6 +14,17 @@ $result_cifrado=$driver->resultDatos($result);
 
 if(array_key_exists("id_cedula",$_POST)){
     // print("medico");
+    $SQL_asistencia="SELECT * FROM tasistencia WHERE id_cedula='".$_POST["id_cedula"]."' AND horario_salida_asistencia='--:--AM' AND estatu_asistencia='P' ;";
+    // print($SQL_asistencia);
+    $result_asistencia=$driver->query($SQL_asistencia);
+    $datosConsultaAsistencia=[];
+    while($rowAsistencia = pg_fetch_array($result_asistencia)){
+        // print("-------");
+        // print_r($row);
+        $datosConsultaAsistencia[]=$rowAsistencia;
+    }
+
+
     $SQL="SELECT * FROM ttrabajador,tfunciontrabajador,ttipotrabajador WHERE ttrabajador.id_cedula='".$_POST["id_cedula"]."' AND 
     ttrabajador.id_funcion_trabajador=tfunciontrabajador.id_funcion_trabajador AND
     tfunciontrabajador.id_tipo_trabajador=ttipotrabajador.id_tipo_trabajador";
@@ -26,7 +37,7 @@ if(array_key_exists("id_cedula",$_POST)){
     // print_r($datosConsulta);
     if(count($datosConsulta)>0){
         $PDF=new PdfTrabajador($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
-        $nombrePdf=$PDF->generarPdf();
+        $nombrePdf=$PDF->generarPdf($datosConsultaAsistencia);
         // print($nombrePdf);
         $respuesta["nombrePdf"]=$nombrePdf;
     }
