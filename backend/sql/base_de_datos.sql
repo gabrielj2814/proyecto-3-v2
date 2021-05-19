@@ -19,7 +19,26 @@ CREATE TABLE tmodulo(
     constraint FK_id_perfil foreign key(id_perfil) references tperfil(id_perfil) on update cascade on delete cascade
 );
 
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/acceso','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/tipo-trabajador','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/funcion-trabajador','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/horario','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/trabajador','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/medico','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/especialidad','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/asignacion-especialidad-medico','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/estado','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/ciudad','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/tipo-cam','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/cam','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/reposo','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/permiso','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/cintillo-home','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/permiso-trabajador','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/reposo-trabajador','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/asistencia/lista','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/asistencia','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/seguridad','/bitacora','1');
 
 CREATE TABLE ttipotrabajador(
     id_tipo_trabajador character varying(8) NOT NULL,
