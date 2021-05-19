@@ -34,6 +34,7 @@ class ComponentTrabajadorForm extends React.Component{
         this.fechaNacimiento=this.fechaNacimiento.bind(this);
         this.buscarTrabajador=this.buscarTrabajador.bind(this);
         this.state={
+            // ------------------
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
@@ -54,6 +55,7 @@ class ComponentTrabajadorForm extends React.Component{
             estatu_trabajador:"1",
             sexo_trabajador:"1",
             designacion:"1",
+            fecha_inactividad:"",
             //MSJ
             msj_id_cedula:[{mensaje:"",color_texto:""}],
             msj_nombres:[{mensaje:"",color_texto:""}],
@@ -165,6 +167,7 @@ class ComponentTrabajadorForm extends React.Component{
                 })
         }
         else if(operacion==="actualizar"){
+            // this.setState({fecha_inactividad:Moment().format("YYYY-MM-DD")})
                 const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
                 nombre_propiedad_lista_1="perfiles",
                 propiedad_id_1="id_perfil",
@@ -289,7 +292,8 @@ class ComponentTrabajadorForm extends React.Component{
         estatu_trabajador="",
         id_perfil="",
         id_tipo_trabajador="",
-        id_funcion_trabajador=""
+        id_funcion_trabajador="",
+        fecha_inactividad=""
         const token=localStorage.getItem('usuario')
         await axios.get(`http://localhost:8080/configuracion/trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
@@ -313,6 +317,13 @@ class ComponentTrabajadorForm extends React.Component{
                 id_perfil=respuesta_servidor.trabajador.id_perfil
                 id_tipo_trabajador=respuesta_servidor.trabajador.id_tipo_trabajador
                 id_funcion_trabajador=respuesta_servidor.trabajador.id_funcion_trabajador
+                fecha_inactividad=null
+                if(respuesta_servidor.trabajador.fecha_inactividad===null){
+                    fecha_inactividad=Moment(this.state.fechaServidor,"YYYY-MM-DD").format("YYYY-MM-DD")
+                }
+                else{
+                    fecha_inactividad=respuesta_servidor.trabajador.fecha_inactividad
+                }
                 
             }
             else if(respuesta_servidor.estado_peticion==="404"){
@@ -350,6 +361,7 @@ class ComponentTrabajadorForm extends React.Component{
             perfiles:lista_perfiles,
             tipos_trabajador:tipo_trabajador,
             funcion_trabajador:objeto_estado.funcion_trabajador,
+            fecha_inactividad:fecha_inactividad,
             mensaje:objeto_estado.mensaje
         })
         let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
@@ -903,6 +915,7 @@ class ComponentTrabajadorForm extends React.Component{
 
     enviarDatos(estado_validar_formulario,petion){
         const token=localStorage.getItem('usuario')
+        // this.state.fecha_inactividad
         const objeto={
             trabajador:{
                 id_cedula:this.state.id_cedula,
@@ -920,7 +933,8 @@ class ComponentTrabajadorForm extends React.Component{
                 fecha_ingreso:estado_validar_formulario.fecha,
                 estatu_trabajador:this.state.estatu_trabajador,
                 id_perfil:this.state.id_perfil,
-                id_funcion_trabajador:this.state.id_funcion_trabajador
+                id_funcion_trabajador:this.state.id_funcion_trabajador,
+                fecha_inactividad:Moment(this.state.fecha_inactividad,"YYYY-MM-DD")
             },
             token:token
         }
@@ -1237,6 +1251,14 @@ class ComponentTrabajadorForm extends React.Component{
                             checkedRadioB={this.state.estatu_trabajador}
                             />
                         </div>
+                        {(this.state.estatu_trabajador==="0" && this.props.match.params.operacion==="actualizar")&&
+                            <div className="row justify-content-center">
+                                <div className="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9">
+                                    Fecha de inactividad:{Moment(this.state.fecha_inactividad,"YYYY-MM-DD").format("DD-MM-YYYY")}
+                                </div>
+                            </div>
+
+                        }
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&

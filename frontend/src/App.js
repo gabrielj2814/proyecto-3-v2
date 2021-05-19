@@ -99,7 +99,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={ComponentInicio}/>
         <Route exact path="/nosotros" component={ComponentNosotros}/>
-        {/* <Route exact path="/asistencia" component={ComponentAsistenciaPublica}/> */}
+        <Route exact path="/asistencia" component={ComponentAsistenciaPublica}/>
         <Route exact path="/login:mensaje?" component={ComponentLogin}/>
         <Route exact path="/recuperar-cuenta" component={ComponentRecuperarCuenta}/>
         <Route exact path="/registrar/trabajador:mensaje?" component={ComponentTrabajadorRegistrar}/>

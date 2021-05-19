@@ -100,12 +100,15 @@ CREATE TABLE ttrabajador(
     estatu_trabajador character(1) NOT NULL,
     designacion character(1) NOT NULL,
     estatu_cuenta character(1) NOT NULL,
+    fecha_inactividad DATE NULL,
     constraint PK_id_cedula primary key(id_cedula),
     constraint FK_id_perfil_trabajador foreign key(id_perfil) references tperfil(id_perfil) on update cascade on delete cascade,
     constraint FK_id_funcion_trabajador foreign key(id_funcion_trabajador) references tfunciontrabajador(id_funcion_trabajador) on update cascade on delete cascade
 );
 
 INSERT INTO ttrabajador(id_cedula,nombres,apellidos,sexo_trabajador,telefono_movil,telefono_local,correo,direccion,grado_instruccion,titulo_grado_instruccion,designacion,fecha_nacimiento,fecha_ingreso,estatu_trabajador,id_perfil,id_funcion_trabajador,pregunta_1,pregunta_2,respuesta_1,respuesta_2,clave_trabajador,estatu_cuenta) VALUES('27636392','gabriel jesus','valera castillo','1','04160430565','04160430565','gabriel@gmail.com','barrio araguaney calle 7','tsu','informatica','1','1998-02-28','1998-02-28','1','prl-1','funt-1','no-tiene','no-tiene','no-tiene','no-tiene','no-tiene-clave','0');
+
+-- ALTER TABLE ttrabajador ADD COLUMN fecha_inactividad DATE NULL;
 
 CREATE TABLE tpermiso(
     id_permiso character varying(8) NOT NULL,

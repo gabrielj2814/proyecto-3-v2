@@ -3,13 +3,20 @@ router=express.Router(),
 bcrypt=require("bcrypt"),
 bodyparser=require("body-parser"),
 TrabajadorControlador=require("../../../controlador/c_trabajador"),
-VitacoraControlador=require("../../../controlador/c_vitacora")
+VitacoraControlador=require("../../../controlador/c_vitacora"),
+Moment=require("moment")
 
 router.use(bodyparser.json())
 
 router.get("/",(req,res)=>{
     res.writeHead(200,{"Content-Type":"application/json"})
     res.write(JSON.stringify({msj:"hola mundo"}))
+    res.end()
+})
+
+router.get("/fecha",(req,res)=>{
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify({hoy:Moment().format("YYYY-MM-DD")}))
     res.end()
 })
 
