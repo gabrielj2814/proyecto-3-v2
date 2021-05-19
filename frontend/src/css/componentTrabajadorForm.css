@@ -22,3 +22,8 @@
 .titulo-form-trabajador{
     font-size: 2.5rem; 
 }
+
+table{
+    text-transform: uppercase;
+    /* font-weight: bold; */
+}
