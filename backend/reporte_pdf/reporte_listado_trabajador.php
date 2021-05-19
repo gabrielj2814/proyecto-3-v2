@@ -143,6 +143,12 @@ class PdfTrabajador extends FPDF{
         $this->SetFont("Arial","",10);
         $this->Cell(12,10,"",0,0,"C");
         $this->Cell(20,10,"Estatus:",0,0,"L");$this->Cell(3,10,(($this->datosPdf[0]["estatu_trabajador"]==="1")?"Activo":"Inactivo"),0,0,"C");
+        if($this->datosPdf[0]["estatu_trabajador"]==="0"){
+            $this->ln(8);
+            $this->SetFont("Arial","",10);
+            $this->Cell(12,10,"",0,0,"C");
+            $this->Cell(20,10,"Fecha inactividad:",0,0,"L");$this->Cell(59,10,date("d-m-Y",strtotime($this->datosPdf[0]["fecha_inactividad"])),0,0,"C");
+        }
 
         $this->ln(25);
         
