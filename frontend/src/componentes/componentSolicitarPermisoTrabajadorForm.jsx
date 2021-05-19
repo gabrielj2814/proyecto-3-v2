@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -403,6 +404,9 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async solicitarNuvoPermiso(){
+        $(".columna-modulo").animate({
+            scrollTop: 0
+            }, 1000)
         if(this.validarFechaDesde()){
             var respuesta_servidor=""
             var mensaje=this.state.mensaje

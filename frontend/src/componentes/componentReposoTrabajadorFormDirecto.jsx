@@ -1,5 +1,6 @@
 import React from "react"
 import {withRouter} from "react-router-dom"
+import $ from "jquery"
 
 //JS
 import axios from 'axios'
@@ -922,6 +923,9 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     operacion(){
         // alert("operacion")
+        $(".columna-modulo").animate({
+            scrollTop: 0
+            }, 1000)
         let alerta=JSON.parse(JSON.stringify(this.state.alerta))
         const token=localStorage.getItem('usuario')
         if(this.validarFormulario()){

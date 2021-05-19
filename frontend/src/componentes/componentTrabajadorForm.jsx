@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
+import $ from "jquery"
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -840,6 +841,9 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     operacion(){
+        $(".columna-modulo").animate({
+            scrollTop: 0
+            }, 1000)
         const operacion=this.props.match.params.operacion
         const mensaje_formulario={
             mensaje:"",
