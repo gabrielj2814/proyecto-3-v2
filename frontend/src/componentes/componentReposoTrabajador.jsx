@@ -41,6 +41,7 @@ class ComponentReposoTrabajador extends React.Component{
         this.mostrarModalInterumpirReposo=this.mostrarModalInterumpirReposo.bind(this);
         this.cerrarModalInterumpirReposo=this.cerrarModalInterumpirReposo.bind(this);
         this.interumpirReposo=this.interumpirReposo.bind(this);
+        this.mostrarModalAyuda=this.mostrarModalAyuda.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -515,6 +516,10 @@ class ComponentReposoTrabajador extends React.Component{
         })
     }
 
+    mostrarModalAyuda(){
+        $("#modalAyuda").modal("show")
+    }
+
     render(){
         const jsx_tabla_encabezado=(
             <thead> 
@@ -629,6 +634,75 @@ class ComponentReposoTrabajador extends React.Component{
                             </div>
                         </div>
                   </div>
+
+
+                  <div class="modal fade" id="modalAyuda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Info</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                    <button class="btn btn-danger mr-3">pdf</button>
+                                    Este boton activa una modal que te permitira generar reportes en formato pdf
+                                   </div>
+                               </div>
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                        <ButtonIcon clasesBoton="btn btn-danger mr-3" 
+                                        value="" 
+                                        id=""
+                                        eventoPadre=""
+                                        icon="icon-cross"
+                                        />
+                                        Este boton cambia el estado de entrega del reposo a 'no entregado'
+                                   </div>
+                               </div>
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                        <ButtonIcon clasesBoton="btn btn-success mr-3" 
+                                        value="" 
+                                        id=""
+                                        eventoPadre=""
+                                        icon="icon-checkmark"
+                                        />
+                                        Este boton cambia el estado de entrega del reposo a 'entregado'
+                                   </div>
+                               </div>
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                        <ButtonIcon clasesBoton="btn btn-warning mr-3" 
+                                        value="" 
+                                        id=""
+                                        eventoPadre=""
+                                        icon="icon-pencil"
+                                        />
+                                        Este boton te permite editar el reposo del trabajador
+                                   </div>
+                               </div>
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                        <button className="btn btn-danger mr-3">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-scissors" viewBox="0 0 16 16" >
+                                            <path  d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                                          </svg>
+                                        </button>
+                                        Este boton te permite interumpir el reposo del trabajador
+                                   </div>
+                               </div>
+                            </div>
+                            {/* <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-success" onClick={this.pasarAsistencia}>Si</button>
+                            </div> */}
+                            </div>
+                        </div>
+                    </div>
 
 
                 <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -787,7 +861,18 @@ class ComponentReposoTrabajador extends React.Component{
                         </div>
                   </div>
 
-                
+                  <div className="row justify-content-end  mb-3">
+                        <div className="col-auto">
+                            <button class="btn btn-info"  data-toggle="modal" onClick={this.mostrarModalAyuda}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                    </div>
                 <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Reposo Trabajador"/>
                 
                 <div className="row component-tabla-de-datos">

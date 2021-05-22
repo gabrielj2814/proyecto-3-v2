@@ -597,7 +597,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                         eventoPadre=""
                                         icon="icon-cross"
                                         />
-                                        Este boton denega el permiso del trabajador
+                                        Este boton cambia el estado del permiso de espera a "denegado"
                                    </div>
                                </div>
                                <div className="row mb-3">
@@ -608,7 +608,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                         eventoPadre=""
                                         icon="icon-checkmark"
                                         />
-                                        Este boton aprueva el permiso del trabajador
+                                        Este boton cambia el estado del permiso de espera a "aprovado"
                                    </div>
                                </div>
                                <div className="row mb-3">
