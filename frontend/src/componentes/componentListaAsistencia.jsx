@@ -27,6 +27,7 @@ class ComponentListaAsistencia extends React.Component{
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this);
         this.mostrarFiltros=this.mostrarFiltros.bind(this);
         this.generarPdf=this.generarPdf.bind(this);
+        this.mostrarModalAyuda=this.mostrarModalAyuda.bind(this);
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
@@ -339,6 +340,10 @@ class ComponentListaAsistencia extends React.Component{
   
       }
 
+    mostrarModalAyuda(){
+        $("#modalAyuda").modal("show")
+    }
+
     render(){
 
         const component=(
@@ -357,6 +362,18 @@ class ComponentListaAsistencia extends React.Component{
                         </div>
                     </div>
 
+                    <div className="row justify-content-end  mb-3">
+                        <div className="col-auto">
+                            <button class="btn btn-info"  data-toggle="modal" onClick={this.mostrarModalAyuda}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                    <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                </svg>
+                            </button>
+
+                        </div>
+
+                    </div>
                     <div className="row  mb-3">
                         <div className="col-auto">
 
@@ -376,6 +393,43 @@ class ComponentListaAsistencia extends React.Component{
 
                         </div>
 
+                    </div>
+
+                    <div class="modal fade" id="modalAyuda" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Info</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                    <button class="btn btn-danger mr-3">pdf</button>
+                                    Este boton activa una modal que te permitira generar reportes de las asistencia en formato pdf
+                                   </div>
+                               </div>
+                               <div className="row mb-3">
+                                   <div className="col-auto">
+                                        <button class="btn btn-success mr-3"  data-toggle="modal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check" viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                                                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                                                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                                            </svg>
+                                        </button>
+                                        Este boton te mostrar una modal perguntandote si estas seguro de pasar la asistencia
+                                   </div>
+                               </div>
+                            </div>
+                            {/* <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-success" onClick={this.pasarAsistencia}>Si</button>
+                            </div> */}
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal fade" id="modalPdfAsistencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
