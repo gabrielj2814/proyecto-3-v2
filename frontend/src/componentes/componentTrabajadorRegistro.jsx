@@ -188,7 +188,7 @@ class ComponentTrabajadorRegistro extends React.Component{
             const exprecion2=/[a-z]{2}/g
             let clave=document.getElementById("clave_trabajador").value
             if(exprecion.test(clave) && exprecion2.test(clave)){
-                alert("si")
+                // alert("si")
                 const validar_clave_confirmar=this.validarCampoTexto("clave_confirmar")
                 if(this.validarMinimoClave(validar_clave_confirmar,"clave_confirmar")){
                     if(this.state.clave_trabajador===this.state.clave_confirmar){
