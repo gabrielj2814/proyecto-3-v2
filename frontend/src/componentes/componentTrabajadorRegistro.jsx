@@ -346,6 +346,7 @@ class ComponentTrabajadorRegistro extends React.Component{
                                 </div>
                             </div>
                             
+                            
                             <div className="row margen_bottom_10">
                                 <div className="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className="row">
@@ -386,7 +387,7 @@ class ComponentTrabajadorRegistro extends React.Component{
                                 <div className="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
                                     <div className="row">
                                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 sub_titulo_formulario">
-                                            preguntas de seguridad
+                                            Preguntas de seguridad
                                         </div>
                                     </div>
                                     <div className="row">
@@ -449,9 +450,14 @@ class ComponentTrabajadorRegistro extends React.Component{
                                     </div>
                                 </div>
                                 <div className="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 ">
-                                    <div className="row">
+                                    <div className="row mb-2">
                                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 sub_titulo_formulario">
                                             Clave del usuario
+                                        </div>
+                                    </div>
+                                    <div className="row mb-2">
+                                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 color-blanco">
+                                            La clave debe de tener minimo 6 caracteres, dos letras en mayusculas y en miniscula
                                         </div>
                                     </div>
                                     <div className="row">
