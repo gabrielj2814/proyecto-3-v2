@@ -458,27 +458,27 @@ class ComponentPerfilTrabajador extends React.Component{
         alert(boton.id)
         let $filaVerPdf=document.getElementById("filaVerPdfReposo")
         $filaVerPdf.classList.add("ocultarFormulario") 
-        // $.ajax({
-        //     url: 'http://localhost:80/proyecto/backend/controlador_php/---.php',
-        //     type:"post",
-        //     data:[{name:"id_reposo_trabajador",value:boton.id}],
-        //     success: function(respuesta) {
-        //       // alert("OK")
-        //       console.log(respuesta)
-        //         // let json=JSON.parse(respuesta)
-        //         // if(json.nombrePdf!=="false"){
-        //         //     $filaVerPdf.classList.remove("ocultarFormulario") 
-        //         //     document.getElementById("linkPdfReposo").href=`http://localhost:8080/reporte/${json.nombrePdf}`
-        //         // }
-        //         // else{
-        //         //     $filaVerPdf.classList.add("ocultarFormulario") 
-        //         //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-        //         // }
-        //     },
-        //     error: function() {
-        //       alert("error")
-        //     }
-        //   });
+        $.ajax({
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_reposo_especifico.php',
+            type:"post",
+            data:[{name:"id_reposo_trabajador",value:boton.id}],
+            success: function(respuesta) {
+              // alert("OK")
+              console.log(respuesta)
+                // let json=JSON.parse(respuesta)
+                // if(json.nombrePdf!=="false"){
+                //     $filaVerPdf.classList.remove("ocultarFormulario") 
+                //     document.getElementById("linkPdfReposo").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                // }
+                // else{
+                //     $filaVerPdf.classList.add("ocultarFormulario") 
+                //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                // }
+            },
+            error: function() {
+              alert("error")
+            }
+          });
     }
     generarPdfPermisoEspecifico(a){
         let boton=a.target
@@ -486,27 +486,27 @@ class ComponentPerfilTrabajador extends React.Component{
         let $filaVerPdf=document.getElementById("filaVerPdfPermiso")
         $filaVerPdf.classList.add("ocultarFormulario") 
 
-        // $.ajax({
-        //     url: 'http://localhost:80/proyecto/backend/controlador_php/---.php',
-        //     type:"post",
-        //     data:[{name:"id_permiso_trabajador",value:boton.id}],
-        //     success: function(respuesta) {
-        //       // alert("OK")
-        //       console.log(respuesta)
-        //         // let json=JSON.parse(respuesta)
-        //         // if(json.nombrePdf!=="false"){
-        //         //     $filaVerPdf.classList.remove("ocultarFormulario") 
-        //         //     document.getElementById("linkPdfPermiso").href=`http://localhost:8080/reporte/${json.nombrePdf}`
-        //         // }
-        //         // else{
-        //         //     $filaVerPdf.classList.add("ocultarFormulario") 
-        //         //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-        //         // }
-        //     },
-        //     error: function() {
-        //       alert("error")
-        //     }
-        //   });
+        $.ajax({
+            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_permiso_especifico.php',
+            type:"post",
+            data:[{name:"id_permiso_trabajador",value:boton.id}],
+            success: function(respuesta) {
+              // alert("OK")
+              console.log(respuesta)
+                // let json=JSON.parse(respuesta)
+                // if(json.nombrePdf!=="false"){
+                //     $filaVerPdf.classList.remove("ocultarFormulario") 
+                //     document.getElementById("linkPdfPermiso").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                // }
+                // else{
+                //     $filaVerPdf.classList.add("ocultarFormulario") 
+                //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                // }
+            },
+            error: function() {
+              alert("error")
+            }
+          });
     }
     
     render(){
