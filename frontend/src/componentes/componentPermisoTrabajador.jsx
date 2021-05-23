@@ -669,6 +669,9 @@ class ComponentPermisoTrabajador extends React.Component{
                                 </div>
                               </div>
                               <form id="formListaEspecifico" class="ocultarFormulario mb-3">
+                                  <div className="row justify-content-center mb-3">
+                                      <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                  </div>
                                     <div className="row justify-content-center">
                                     <ComponentFormCampo
                                     clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -734,7 +737,9 @@ class ComponentPermisoTrabajador extends React.Component{
 
 
                               <form id="formLista" class="ocultarFormulario mb-3">
-
+                                <div className="row justify-content-center mb-3">
+                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                </div>
                                 <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
