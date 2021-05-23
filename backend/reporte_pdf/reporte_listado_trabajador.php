@@ -152,14 +152,14 @@ class PdfTrabajador extends FPDF{
 
         $this->ln(25);
         
-        //TABLA
-        $this->SetX(40);
-        $this->Cell(30,10,'Fecha',1,0,'C');
-        $this->Cell(30,10,'Hora de entrada',1,0,'C');
-        $this->Cell(30,10,'Hora de Salida',1,0,'C');
-        $this->Cell(35,10,'Estado',1,0,'C');
-        $this->Cell(60,10,utf8_decode('Estado asistencia'),1,0,'C');
-        $this->Cell(60,10,utf8_decode('Observación'),1,0,'C');
+        // //TABLA
+        // $this->SetX(40);
+        // $this->Cell(30,10,'Fecha',1,0,'C');
+        // $this->Cell(30,10,'Hora de entrada',1,0,'C');
+        // $this->Cell(30,10,'Hora de Salida',1,0,'C');
+        // $this->Cell(35,10,'Estado',1,0,'C');
+        // $this->Cell(60,10,utf8_decode('Estado asistencia'),1,0,'C');
+        // $this->Cell(60,10,utf8_decode('Observación'),1,0,'C');
         
         // $this->ln(10);
         
@@ -169,24 +169,24 @@ class PdfTrabajador extends FPDF{
         // $this->Cell(30,10,'4:00 PM',1,0,'C');
         // $this->Cell(35,10,'Retiro antes de la hora',1,0,'C');
         
-        $contador=0;
-        while($contador<count($datosConsultaAsistencia)){
-            $estadoAsistencia="";
-            if($datosConsultaAsistencia[$contador]["estatu_asistencia"]==="P"){
-                $estadoAsistencia="Presente";
-            }
+        // $contador=0;
+        // while($contador<count($datosConsultaAsistencia)){
+        //     $estadoAsistencia="";
+        //     if($datosConsultaAsistencia[$contador]["estatu_asistencia"]==="P"){
+        //         $estadoAsistencia="Presente";
+        //     }
             
-            $fecha= date("d-m-Y",strtotime($datosConsultaAsistencia[$contador]["fecha_asistencia"]));
-            $this->ln(10);
-            $this->SetX(40);
-            $this->Cell(30,10,$fecha,1,0,'C');
-            $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
-            $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_salida_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
-            $this->Cell(35,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]===null)?"Laboro":(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]!==null)?"Vino pero se retiro":"-")),1,0,'C');
-            $this->Cell(60,10,utf8_decode($estadoAsistencia),1,0,'C');
-            $this->Cell(60,10,utf8_decode($datosConsultaAsistencia[$contador]["observacion_asistencia"]),1,0,'C');
-            $contador++;
-        }
+        //     $fecha= date("d-m-Y",strtotime($datosConsultaAsistencia[$contador]["fecha_asistencia"]));
+        //     $this->ln(10);
+        //     $this->SetX(40);
+        //     $this->Cell(30,10,$fecha,1,0,'C');
+        //     $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]:"--:--"),1,0,'C');
+        //     $this->Cell(30,10,(($datosConsultaAsistencia[$contador]["horario_salida_asistencia"]!=="--:--AM")?$datosConsultaAsistencia[$contador]["horario_salida_asistencia"]:"--:--"),1,0,'C');
+        //     $this->Cell(35,10,(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]===null)?"Laboro":(($datosConsultaAsistencia[$contador]["horario_entrada_asistencia"]!=="--:--AM" && $datosConsultaAsistencia[$contador]["id_permiso_trabajador"]!==null)?"Vino pero se retiro":"-")),1,0,'C');
+        //     $this->Cell(60,10,utf8_decode($estadoAsistencia),1,0,'C');
+        //     $this->Cell(60,10,utf8_decode($datosConsultaAsistencia[$contador]["observacion_asistencia"]),1,0,'C');
+        //     $contador++;
+        // }
 
 
         $this->ln(30);
