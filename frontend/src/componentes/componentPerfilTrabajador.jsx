@@ -455,9 +455,9 @@ class ComponentPerfilTrabajador extends React.Component{
 
     generarPdfReposoEspecifico(a){
         let boton=a.target
-        alert(boton.id)
+        // alert(boton.id)
         let $filaVerPdf=document.getElementById("filaVerPdfReposo")
-        $filaVerPdf.classList.add("ocultarFormulario") 
+        $filaVerPdf.classList.add("ocultarFormulario")
         $.ajax({
             url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_reposo_especifico.php',
             type:"post",
@@ -465,15 +465,15 @@ class ComponentPerfilTrabajador extends React.Component{
             success: function(respuesta) {
               // alert("OK")
               console.log(respuesta)
-                // let json=JSON.parse(respuesta)
-                // if(json.nombrePdf!=="false"){
-                //     $filaVerPdf.classList.remove("ocultarFormulario") 
-                //     document.getElementById("linkPdfReposo").href=`http://localhost:8080/reporte/${json.nombrePdf}`
-                // }
-                // else{
-                //     $filaVerPdf.classList.add("ocultarFormulario") 
-                //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-                // }
+                let json=JSON.parse(respuesta)
+                if(json.nombrePdf!=="false"){
+                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    document.getElementById("linkPdfReposo").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                }
+                else{
+                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                }
             },
             error: function() {
               alert("error")
@@ -482,7 +482,7 @@ class ComponentPerfilTrabajador extends React.Component{
     }
     generarPdfPermisoEspecifico(a){
         let boton=a.target
-        alert(boton.id)
+        // alert(boton.id)
         let $filaVerPdf=document.getElementById("filaVerPdfPermiso")
         $filaVerPdf.classList.add("ocultarFormulario") 
 
@@ -493,15 +493,15 @@ class ComponentPerfilTrabajador extends React.Component{
             success: function(respuesta) {
               // alert("OK")
               console.log(respuesta)
-                // let json=JSON.parse(respuesta)
-                // if(json.nombrePdf!=="false"){
-                //     $filaVerPdf.classList.remove("ocultarFormulario") 
-                //     document.getElementById("linkPdfPermiso").href=`http://localhost:8080/reporte/${json.nombrePdf}`
-                // }
-                // else{
-                //     $filaVerPdf.classList.add("ocultarFormulario") 
-                //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-                // }
+                let json=JSON.parse(respuesta)
+                if(json.nombrePdf!=="false"){
+                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    document.getElementById("linkPdfPermiso").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                }
+                else{
+                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                }
             },
             error: function() {
               alert("error")
@@ -583,7 +583,7 @@ class ComponentPerfilTrabajador extends React.Component{
                                     <div class="modal-footer ">
                                         
                                         <div class="row justify-content-center ocultarFormulario" id="filaVerPdfReposo">
-                                            <a className="btn btn-success" id="linkPdfReposo" href="#">Ver pdf</a>
+                                            <a className="btn btn-success mr-5" id="linkPdfReposo" target="_blank" href="#">Ver pdf</a>
                                         </div>
                                     </div>
                                     </div>
@@ -646,7 +646,7 @@ class ComponentPerfilTrabajador extends React.Component{
                                     </div>
                                     <div class="modal-footer ">
                                         <div class="row justify-content-center ocultarFormulario" id="filaVerPdfPermiso">
-                                            <a className="btn btn-success" id="linkPdfPermiso" href="#">Ver pdf</a>
+                                            <a className="btn btn-success mr-5" id="linkPdfPermiso" target="_blank" href="#">Ver pdf</a>
 
                                         </div>
                                     </div>
