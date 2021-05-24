@@ -55,7 +55,7 @@ class ComponentInicioDashboard extends React.Component{
                         <div className="row justify-content-center align-items-center content height-100x100">
                             <div className="col-auto content__containers">
                                 <p className="text-center titulo-bienvenidos mb-3">Bienvenidos al Portal Web de La escuela Bolivariana “Villas del Pilar”</p>
-                                <h5 className="text-center mb-3">“El pasado es historia, el futuro un misterio, pero hoy es un regalo, por eso se llama presente. Recibe este día con mucho amor ¡Bienvenido!”</h5>
+                                <h5 className="text-center mb-3 titulo-bienvenida">“El pasado es historia, el futuro un misterio, pero hoy es un regalo, por eso se llama presente. Recibe este día con mucho amor ¡Bienvenido!”</h5>
                             </div>
 
                     </div>

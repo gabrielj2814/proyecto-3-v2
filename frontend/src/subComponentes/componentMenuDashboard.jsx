@@ -32,6 +32,7 @@ class MenuDashboard extends React.Component{
         this.irASolicitudPermiso=this.irASolicitudPermiso.bind(this)
         this.irASolicitudReposo=this.irASolicitudReposo.bind(this)
         this.irHaBitacora=this.irHaBitacora.bind(this)
+        this.irHaHome=this.irHaHome.bind(this)
         this.state={
             modulosSistema:{}
         }
@@ -96,6 +97,10 @@ class MenuDashboard extends React.Component{
         this.props.history.push("/dashboard/seguridad/bitacora")
     }
 
+    irHaHome(){
+        this.props.history.push("/dashboard")
+    }
+
     render(){
         // alert()
         // console.log(this.props.idPerfil)
@@ -111,7 +116,7 @@ class MenuDashboard extends React.Component{
 <>
             <div className="col-1 col-sm-1 col-md-1 col-lg-1 col-xl-1 columna-menu">
                 <div className="row text-center align-items-center justify-content-center contendor-menu">
-                    <span className="col-12 nvl_1 item_menu_nvl_1 encabezado_menu icon-home"></span>
+                    <span className="col-12 nvl_1 item_menu_nvl_1 encabezado_menu icon-home" onClick={this.irHaHome}></span>
                     {this.state.modulosSistema["/dashboard/configuracion"]&&
                         <span className={(modulo[1]==="configuracion" ? this.props.modulo : "false-configuracion")+" col-12 nvl_1 item_menu_nvl_1 icon-cog"} onClick={this.props.eventoPadreMenu} id="configuracion"></span>
                     }
