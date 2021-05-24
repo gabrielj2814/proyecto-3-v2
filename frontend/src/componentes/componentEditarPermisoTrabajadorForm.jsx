@@ -348,7 +348,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
                         )
                         }
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                            <span className="">Desde: {Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
+                            <span className="">Desdé: {Moment(this.state.fecha_desde_permiso_trabajador).format("DD-MM-YYYY")}</span>
                         </div>
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                             <span className="">Hasta: {Moment(this.state.fecha_hasta_permiso_trabajador).format("DD-MM-YYYY")}</span>

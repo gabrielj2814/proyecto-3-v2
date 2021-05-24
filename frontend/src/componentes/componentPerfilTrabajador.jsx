@@ -548,9 +548,9 @@ class ComponentPerfilTrabajador extends React.Component{
                                             <tr> 
                                                 <th>N°</th> 
                                                 <th>Reposo</th> 
-                                                <th>Desde</th> 
+                                                <th>Desdé</th> 
                                                 <th>Hasta</th>
-                                                <th>Ultimo dia de Entrega</th>
+                                                <th>Ultimo día de Entrega</th>
                                                 <th>Estado</th>
                                                 <th>Estado de entrega</th>
                                             </tr> 
@@ -610,11 +610,11 @@ class ComponentPerfilTrabajador extends React.Component{
                                             <tr> 
                                                 <th>N°</th> 
                                                 <th>Permiso</th> 
-                                                <th>Desde</th> 
+                                                <th>Desdé</th> 
                                                 <th>Hasta</th>
                                                 <th>Estado</th>
                                                 <th>Remunerado</th>
-                                                <th>habil</th>
+                                                <th>hábil</th>
                                             </tr> 
                                         </thead>
                                         <tbody>
@@ -786,7 +786,7 @@ class ComponentPerfilTrabajador extends React.Component{
                     <div className="row justify-content-center mb-2">
                         <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                             <div className="form-groud">
-                                <label>Cedula</label>
+                                <label>Cédula</label>
                                 <input type="text" class="form-control" disabled value={this.state.id_cedula}/>
                             </div>
                         </div>
@@ -818,7 +818,7 @@ class ComponentPerfilTrabajador extends React.Component{
                         </div>
                         <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                             <div className="form-groud">
-                                <label>Telefono movil</label>
+                                <label>Teléfono móvil</label>
                                 <input type="text" class="form-control" disabled value={this.state.telefono_movil}/>
                             </div>
                         </div>
@@ -826,7 +826,7 @@ class ComponentPerfilTrabajador extends React.Component{
                     <div className="row justify-content-center mb-2">
                         <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                             <div className="form-groud">
-                                <label>Telefono local</label>
+                                <label>Teléfono local</label>
                                 <input type="text" class="form-control" disabled value={this.state.telefono_local}/>
                             </div>
                         </div>
@@ -852,7 +852,7 @@ class ComponentPerfilTrabajador extends React.Component{
                         </div>
                         <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                             <div className="form-groud">
-                                <label>Titulo</label>
+                                <label>Título</label>
                                 <input type="text" class="form-control" disabled value={this.state.titulo_grado_instruccion}/>
                             </div>
                         </div>

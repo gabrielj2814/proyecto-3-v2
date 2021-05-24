@@ -720,23 +720,23 @@ class ComponentReposoTrabajador extends React.Component{
                                   <div class="form-groud">
                                     <label>Tipo de reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >seleccione un tipo de reporte</option>
-                                      <option value="1" >generar una lista</option>
-                                      <option value="0" >generar un especifico</option>
+                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="1" >Generar una Lista</option>
+                                      <option value="0" >Generar un Específico</option>
                                     </select>
                                   </div>
                                 </div>
                               </div>
                               <form id="formListaEspecifico" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar mas de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                                     <div className="row justify-content-center">
                                     <ComponentFormCampo
                                     clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                     clasesCampo="form-control"
                                     obligatorio="no"
-                                    nombreCampo="Cedula del trabajador"
+                                    nombreCampo="Cédula del trabajador"
                                     activo="si"
                                     type="text"
                                     value={this.state.id_cedula}
@@ -759,7 +759,7 @@ class ComponentReposoTrabajador extends React.Component{
                                     <div class="form-groud">
                                       <label>Reposo</label>
                                       <select class="form-select custom-select" multiple id="id_reposo" name="array_id_reposo[]" aria-label="Default select example" >
-                                        <option value="null" >Selecciones</option>
+                                        <option value="null" >Seleccione</option>
                                         {this.state.listaReposos.map((reposo,index) => (<option key={index} value={reposo.id_reposo}  >{reposo.nombre_reposo}</option>))}
                                       </select>
                                     </div>
@@ -781,13 +781,13 @@ class ComponentReposoTrabajador extends React.Component{
                                   </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
                                         </div>
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
                                         </div>
                                     </div>
@@ -798,7 +798,7 @@ class ComponentReposoTrabajador extends React.Component{
 
                               <form id="formLista" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar mas de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                               <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -837,13 +837,13 @@ class ComponentReposoTrabajador extends React.Component{
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="fecha_desde_reposo_trabajador" name="fecha_desde_reposo_trabajador"/>
                                         </div>
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="fecha_hasta_reposo_trabajador" name="fecha_hasta_reposo_trabajador"/>
                                         </div>
                                     </div>
@@ -888,7 +888,7 @@ class ComponentReposoTrabajador extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             obligatorio="no"
                             mensaje={this.state.msj_fecha_desde_reposo_trabajador}
-                            nombreCampoDate="Desde:"
+                            nombreCampoDate="Desdé:"
                             clasesCampo="form-control"
                             value={this.state.fecha_desde_reposo_trabajador_filtro_tabla}
                             name="fecha_desde_reposo_trabajador_filtro_tabla"

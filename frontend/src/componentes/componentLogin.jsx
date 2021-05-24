@@ -219,14 +219,14 @@ class ComponentLogin extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-success"
                                     id="boton-registrar"
-                                    value="Iniciar Sesion"
+                                    value="Iniciar Sesión"
                                     eventoPadre={this.iniciarSesion}
                                     />   
                                 </div>
                             </div>
                             <div className="row justify-content-between">
                                 <div className="col-auto">
-                                    <LinkButton clases="btn btn-primary" ruta="/registrar/trabajador" texto="Registrate"/>
+                                    <LinkButton clases="btn btn-primary" ruta="/registrar/trabajador" texto="Regístrate"/>
                                 </div>
                                 <div className="col-auto">
                                     <LinkButton clases="btn btn-primary" ruta="/recuperar-cuenta" texto="Recuperar Cuenta"/>

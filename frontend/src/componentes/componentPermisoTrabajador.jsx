@@ -562,7 +562,7 @@ class ComponentPermisoTrabajador extends React.Component{
                             </div>
                             <div class="modal-body">
                               <p>
-                                Esta seguro que deseaa interumpir este permiso
+                                Esta seguro que deseaa interrumpir este permiso
                               </p>
                             </div>
                             <div class="modal-footer ">
@@ -608,7 +608,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                         eventoPadre=""
                                         icon="icon-checkmark"
                                         />
-                                        Este boton cambia el estado del permiso de espera a "aprovado"
+                                        Este boton cambia el estado del permiso de espera a "aprobado"
                                    </div>
                                </div>
                                <div className="row mb-3">
@@ -629,7 +629,7 @@ class ComponentPermisoTrabajador extends React.Component{
                                             <path  d="M3.5 3.5c-.614-.884-.074-1.962.858-2.5L8 7.226 11.642 1c.932.538 1.472 1.616.858 2.5L8.81 8.61l1.556 2.661a2.5 2.5 0 1 1-.794.637L8 9.73l-1.572 2.177a2.5 2.5 0 1 1-.794-.637L7.19 8.61 3.5 3.5zm2.5 10a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0zm7 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
                                           </svg>
                                         </button>
-                                        Este boton te permite interumpir el permiso del trabajador
+                                        Este boton te permite interrumpir el permiso del trabajador
                                    </div>
                                </div>
                             </div>
@@ -659,18 +659,18 @@ class ComponentPermisoTrabajador extends React.Component{
                               <div className="row justify-content-center mb-3">
                                 <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
                                   <div class="form-groud">
-                                    <label>Tipo de reporte</label>
+                                    <label>Tipo de Reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >seleccione un tipo de reporte</option>
-                                      <option value="1" >generar una lista</option>
-                                      <option value="0" >generar un especifico</option>
+                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="1" >Generar una Lista</option>
+                                      <option value="0" >Generar un Específico</option>
                                     </select>
                                   </div>
                                 </div>
                               </div>
                               <form id="formListaEspecifico" class="ocultarFormulario mb-3">
                                   <div className="row justify-content-center mb-3">
-                                      <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                      <div className="col-auto">Para seleccionar más de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                   </div>
                                     <div className="row justify-content-center">
                                     <ComponentFormCampo
@@ -690,10 +690,10 @@ class ComponentPermisoTrabajador extends React.Component{
                                       <label>Estado permiso</label>
                                       <select class="form-select custom-select" multiple id="estatu_permiso_trabajador" name="array_estatu_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="E" >En espera</option>
-                                        <option value="A" >Aprovado</option>
+                                        <option value="A" >Aprobado</option>
                                         <option value="C" >Culminado</option>
                                         <option value="D" >Denegado</option>
-                                        <option value="I" >Interumpido</option>
+                                        <option value="I" >Interrumpido</option>
                                       </select>
                                     </div>
                                   </div>
@@ -721,13 +721,13 @@ class ComponentPermisoTrabajador extends React.Component{
                                   </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="fecha_desde_permiso_trabajador" name="fecha_desde_permiso_trabajador"/>
                                         </div>
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="fecha_hasta_permiso_trabajador" name="fecha_hasta_permiso_trabajador"/>
                                         </div>
                                     </div>
@@ -738,7 +738,7 @@ class ComponentPermisoTrabajador extends React.Component{
 
                               <form id="formLista" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar más de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                                 <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -746,10 +746,10 @@ class ComponentPermisoTrabajador extends React.Component{
                                       <label>Estado permiso</label>
                                       <select class="form-select custom-select" multiple id="estatu_permiso_trabajador" name="array_estatu_permiso_trabajador[]" aria-label="Default se0lec0t example">
                                         <option value="E" >En espera</option>
-                                        <option value="A" >Aprovado</option>
+                                        <option value="A" >Aprobado</option>
                                         <option value="C" >Culminado</option>
                                         <option value="D" >Denegado</option>
-                                        <option value="I" >Interumpido</option>
+                                        <option value="I" >Interrumpido</option>
                                       </select>
                                     </div>
                                   </div>
@@ -778,13 +778,13 @@ class ComponentPermisoTrabajador extends React.Component{
                                     
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="fecha_desde_permiso_trabajador" name="fecha_desde_permiso_trabajador"/>
                                         </div>
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha hasta</label>
                                         <input type="date" class="form-control" id="fecha_hasta_permiso_trabajador" name="fecha_hasta_permiso_trabajador"/>
                                         </div>
                                     </div>
@@ -819,7 +819,7 @@ class ComponentPermisoTrabajador extends React.Component{
                         </div>
 
                     </div>
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Permiso Trabajador"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Permiso Trabajador"/>
                     <ComponentTablaDatosSinBarra 
                     eventoEscribirCodigo={this.escribir_codigo}
                     tabla_encabezado={jsx_tabla_encabezado}

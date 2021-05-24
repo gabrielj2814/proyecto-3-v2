@@ -470,7 +470,7 @@ class ComponentPermisoForm extends React.Component{
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Codigo Permiso:"
+                            nombreCampo="Código Permiso:"
                             activo="no"
                             type="text"
                             value={this.state.id_permiso}
@@ -513,7 +513,7 @@ class ComponentPermisoForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus Permiso:"
                             name="estatu_permiso"
-                            nombreLabelRadioA="Activó"
+                            nombreLabelRadioA="Activo"
                             idRadioA="activopermisoA"
                             checkedRadioA={this.state.estatu_permiso}
                             valueRadioA="1"
@@ -530,7 +530,7 @@ class ComponentPermisoForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus Remunerado:"
                             name="estatu_remunerado"
-                            nombreLabelRadioA="Activó"
+                            nombreLabelRadioA="Activo"
                             idRadioA="activoremuneradoA"
                             checkedRadioA={this.state.estatu_remunerado}
                             valueRadioA="1"
@@ -547,7 +547,7 @@ class ComponentPermisoForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus Dias Hábiles:"
                             name="estatu_dias_aviles"
-                            nombreLabelRadioA="Activó"
+                            nombreLabelRadioA="Activo"
                             idRadioA="activodiasavilesA"
                             checkedRadioA={this.state.estatu_dias_aviles}
                             valueRadioA="1"

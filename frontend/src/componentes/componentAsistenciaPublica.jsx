@@ -90,8 +90,8 @@ class ComponentAsistenciaPublica extends React.Component{
                                 <div className="row justify-content-center mb-4">
                                     <div className="col-auto">
                                         <div className="form-groud">
-                                            <div className="text-center color-blanco">Cedula</div>
-                                            <input type="text" className="form-control" id="id_cedula" name="id_cedula" placeholder="cedula de identidad"/>
+                                            <div className="text-center color-blanco">Cédula</div>
+                                            <input type="text" className="form-control" id="id_cedula" name="id_cedula" placeholder="Cédula de identidad"/>
                                         </div>
                                     </div>
                                 </div>

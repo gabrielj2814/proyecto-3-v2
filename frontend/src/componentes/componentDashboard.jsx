@@ -224,6 +224,8 @@ class ComponentDashboard extends React.Component{
                     /> 
                 </div>
             )
+
+
             return(
                 <div className="container-fluid component_dashboard">
                     <div id="alerta_extender_sesion" className="contenedor_alerta_extender_sesion">

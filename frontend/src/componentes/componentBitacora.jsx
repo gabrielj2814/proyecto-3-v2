@@ -298,17 +298,17 @@ class ComponentBitacora extends React.Component {
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_bitacora">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-cam">
-                            <span className="titulo-form-cam">Bitacora</span>
+                            <span className="titulo-form-cam">Bitácora</span>
                         </div>
                     </div>
                     <div className="row justify-content-center mb-3">
                         <div className="col-auto text-center">
                             <div className="form-groud">
-                                <label>Tipo de bitacora</label>
+                                <label>Tipo de bitácora</label>
                                 <select class="form-select custom-select" id="tipoDeConsulta" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                    <option value="null" >seleccione</option>
-                                    <option value="1" >generar una lista</option>
-                                    <option value="0" >generar un especifico</option>
+                                    <option value="null" >Seleccione</option>
+                                    <option value="1" >Generar una Lista</option>
+                                    <option value="0" >Generar un Específico</option>
                                 </select>
                             </div>
                         </div>
@@ -317,7 +317,7 @@ class ComponentBitacora extends React.Component {
                         <div className="row justify-content-center">
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
-                                    <label>Modulo</label>
+                                    <label>Módulo</label>
                                     <select class="form-select custom-select" multiple id="tablas" name="tablas" aria-label="Default select example" >
                                         {this.state.tablas.map((tabla,index) => {
                                             return (<option key={"lista-"+index} value={tabla.name}>{tabla.value}</option>)
@@ -328,11 +328,11 @@ class ComponentBitacora extends React.Component {
 
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
-                                    <label>Operacion</label>
+                                    <label>Operación</label>
                                     <select class="form-select custom-select" multiple id="operaciones" name="operaciones" aria-label="Default select example" >
                                         <option value="INSERT" >Registrar</option>
                                         <option value="UPDATE" >Actualizar</option>
-                                        <option value="SELECT" >Consulta</option>
+                                        <option value="SELECT" >Consultar</option>
                                     </select>
                                 </div>
                             </div>
@@ -349,13 +349,13 @@ class ComponentBitacora extends React.Component {
                         <div className="row justify-content-center">
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
-                                    <label>Modulo</label>
+                                    <label>Módulo</label>
                                     <input type="text" id="id_cedula" name="id_cedula" className="form-control" placeholder="cedula"/>
                                 </div>
                             </div>
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
-                                    <label>Modulo</label>
+                                    <label>Módulo</label>
                                     <select class="form-select custom-select" multiple id="tablas" name="tablas" aria-label="Default select example" >
                                         {this.state.tablas.map((tabla,index) => {
                                             return (<option key={"especifico-"+index} value={tabla.name}>{tabla.value}</option>)
@@ -366,11 +366,11 @@ class ComponentBitacora extends React.Component {
 
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div className="form-groud">
-                                    <label>Operacion</label>
+                                    <label>Operación</label>
                                     <select class="form-select custom-select " multiple id="operaciones" name="operaciones" aria-label="Default select example" >
                                         <option value="INSERT" >Registrar</option>
                                         <option value="UPDATE" >Actualizar</option>
-                                        <option value="SELECT" >Consulta</option>
+                                        <option value="SELECT" >Consultar</option>
                                     </select>
                                 </div>
                             </div>
@@ -392,11 +392,11 @@ class ComponentBitacora extends React.Component {
                     <table id="tablaBitacora" className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ocultar">
                         <thead> 
                             <tr> 
-                                <th>Cedula</th> 
+                                <th>Cédula</th> 
                                 <th>Nombre trabajador</th> 
-                                <th>Modulo</th>
-                                <th>Operacion</th>
-                                <th>Aquien</th>
+                                <th>Módulo</th>
+                                <th>Operación</th>
+                                <th>A quién</th>
                             </tr> 
                         </thead>
                         <tbody>

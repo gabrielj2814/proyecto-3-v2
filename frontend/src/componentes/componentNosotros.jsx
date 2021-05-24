@@ -72,7 +72,7 @@ class ComponentNosotros extends React.Component{
                                         </div>
                                         <p>Rif:    j407604104</p>
                                         <p>Dirección:    Urb. Villas del Pilar, Av. Sucre con calles 2 y 4. Araure, Estado Portuguesa.</p>
-                                        <p>Telefono de contacto:    0255 - 6654230</p>
+                                        <p>Teléfono de Contacto:    0255 - 6654230</p>
                                     </div>
                                     <div className="panel_historia tab-pane fade " id="historia" >
                                         <p>

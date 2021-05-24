@@ -51,7 +51,7 @@ class ComponentInicioDashboard extends React.Component{
     render(){
         var jsx_inicio_dashboard=(
             <div>
-                component inicio dashboard
+                component inicio dashboard hollllllll
             </div>
         )
         return(

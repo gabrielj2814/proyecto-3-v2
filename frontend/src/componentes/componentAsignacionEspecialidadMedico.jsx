@@ -458,11 +458,11 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                               <div className="row justify-content-center mb-3">
                                 <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
                                   <div class="form-groud">
-                                    <label>Tipo de reporte</label>
+                                    <label>Tipo de Reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >seleccione un tipo de reporte</option>
-                                      <option value="1" >Por especialidad</option>
-                                      <option value="0" >Por medico</option>
+                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="1" >Por Especialidad</option>
+                                      <option value="0" >Por Médico</option>
                                     </select>
                                   </div>
                                 </div>
@@ -471,9 +471,9 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                                     <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Medico</label>
+                                      <label>Médico</label>
                                       <select class="form-select custom-select" id="id_medico" name="id_medico" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                        <option value="null" >Seleccione</option>
                                         {this.state.listaMedicos.map((medico,index) => (<option key={"medico-"+index} value={medico.id_medico}  >{medico.nombre_medico} {medico.apellido_medico}</option>))}
                                       </select>
                                     </div>
@@ -491,7 +491,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                                     <div class="form-groud">
                                       <label>Especialidad</label>
                                       <select class="form-select custom-select" id="id_especialidad" name="id_especialidad" aria-label="Default se0lec0t example">
-                                        <option value="null" >seleccione</option>
+                                        <option value="null" >Seleccione</option>
                                         {this.state.listaEspecialidades.map((especialidad,index) => (<option key={"especialidad-"+index} value={especialidad.id_especialidad}  >{especialidad.nombre_especialidad}</option>))}
                                       </select>
                                     </div>

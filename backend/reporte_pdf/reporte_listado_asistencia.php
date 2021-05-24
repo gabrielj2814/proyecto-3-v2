@@ -72,8 +72,8 @@ class PdfListadoAsistencia extends FPDF{
         $this->Cell(30,10,'Hora de entrada',1,0,'C');
         $this->Cell(30,10,'Hora de Salida',1,0,'C');
         $this->Cell(40,10,'Estado',1,0,'C');
-        $this->Cell(45,10,utf8_decode('Estado asistencia'),1,0,'C');
-        $this->Cell(60,10,utf8_decode('observación'),1,0,'C');
+        $this->Cell(45,10,utf8_decode('Estado Asistencia'),1,0,'C');
+        $this->Cell(60,10,utf8_decode('Observación'),1,0,'C');
         
         // $this->ln(10);
         
@@ -115,10 +115,10 @@ class PdfListadoAsistencia extends FPDF{
         $this->ln(30);
         $this->SetX(30);
         $this->Cell(17,10,"",0,0,"C");
-        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
+        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(45,6,utf8_decode($this->generado),'B',0,"C");
         
         $this->Cell(20,10,"",0,0,"C");
-        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(40,6,"",'B',0,"C");
+        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(45,6,"",'B',0,"C");
         
         
         

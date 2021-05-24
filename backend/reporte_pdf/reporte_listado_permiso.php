@@ -81,7 +81,7 @@ class PdfListadoPermiso extends FPDF{
             $this->Cell(20,10,"Desde",1,0,"C");
             $this->Cell(20,10,"Hasta",1,0,"C");
             $this->Cell(30,10,"Remunerado",1,0,"C");
-            $this->Cell(30,10,"Havil",1,0,"C");
+            $this->Cell(30,10,"Habil",1,0,"C");
             $this->Cell(22,10,"Estatus",1,0,"C");
             $this->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
@@ -108,7 +108,7 @@ class PdfListadoPermiso extends FPDF{
                     $estadoPermiso="En Espera";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="A"){
-                    $estadoPermiso="Aprovado";
+                    $estadoPermiso="Aprobado";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="C"){
                     $estadoPermiso="Culminado";
@@ -117,7 +117,7 @@ class PdfListadoPermiso extends FPDF{
                     $estadoPermiso="Denegado";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
-                    $estadoPermiso="Interumpido";
+                    $estadoPermiso="Interrumpido";
                 }
                 $this->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
                 $this->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombre_permiso"]),1,0,"C");
@@ -137,7 +137,7 @@ class PdfListadoPermiso extends FPDF{
                 $estadoPermiso="En Espera";
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="A"){
-                $estadoPermiso="Aprovado";
+                $estadoPermiso="Aprobado";
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="C"){
                 $estadoPermiso="Culminado";
@@ -161,10 +161,10 @@ class PdfListadoPermiso extends FPDF{
         $this->ln(20);
         $this->SetX(25);
         $this->Cell(17,10,"",0,0,"C");
-        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
+        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(45,6,utf8_decode($this->generado),'B',0,"C");
         
         $this->Cell(20,10,"",0,0,"C");
-        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(40,6,"",'B',0,"C");
+        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(45,6,"",'B',0,"C");
         
         
         
@@ -225,7 +225,7 @@ class PdfListadoPermiso extends FPDF{
             $this->Cell(20,10,"Desde",1,0,"C");
             $this->Cell(20,10,"Hasta",1,0,"C");
             $this->Cell(30,10,"Remunerado",1,0,"C");
-            $this->Cell(30,10,"Havil",1,0,"C");
+            $this->Cell(30,10,"Habil",1,0,"C");
             $this->Cell(22,10,"Estatus",1,0,"C");
             $this->Cell(30,10,"Tipo de permiso",1,0,"C");
         }
@@ -254,7 +254,7 @@ class PdfListadoPermiso extends FPDF{
                     $estadoPermiso="En Espera";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="A"){
-                    $estadoPermiso="Aprovado";
+                    $estadoPermiso="Aprobado";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="C"){
                     $estadoPermiso="Culminado";
@@ -263,7 +263,7 @@ class PdfListadoPermiso extends FPDF{
                     $estadoPermiso="Denegado";
                 }
                 if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
-                    $estadoPermiso="Interumpido";
+                    $estadoPermiso="Interrumpido";
                 }
                 $this->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
                 $this->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombres"]),1,0,"C");
@@ -285,7 +285,7 @@ class PdfListadoPermiso extends FPDF{
                 $estadoPermiso="En Espera";
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="A"){
-                $estadoPermiso="Aprovado";
+                $estadoPermiso="Aprobado";
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="C"){
                 $estadoPermiso="Culminado";
@@ -294,7 +294,7 @@ class PdfListadoPermiso extends FPDF{
                 $estadoPermiso="Denegado";
             }
             if($this->datosPdf[$contador]["estatu_permiso_trabajador"]==="I"){
-                $estadoPermiso="Interumpido";
+                $estadoPermiso="Interrumpido";
             }
             $this->Cell(21,10,$this->datosPdf[$contador]["id_cedula"],1,0,"C");
             $this->Cell(31,10,utf8_decode($this->datosPdf[$contador]["nombres"]),1,0,"C");
@@ -311,10 +311,10 @@ class PdfListadoPermiso extends FPDF{
         $this->ln(20);
         $this->SetX(25);
         $this->Cell(17,10,"",0,0,"C");
-        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
+        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(45,6,utf8_decode($this->generado),'B',0,"C");
         
         $this->Cell(20,10,"",0,0,"C");
-        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(40,6,"",'B',0,"C");
+        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(45,6,"",'B',0,"C");
         
         
         

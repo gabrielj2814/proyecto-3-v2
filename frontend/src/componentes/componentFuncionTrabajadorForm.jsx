@@ -570,7 +570,7 @@ class ComponentFuncionTrabajador extends React.Component{
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
                             obligatorio="si"
-                            nombreCampo="Codigo:"
+                            nombreCampo="Código:"
                             activo="no"
                             type="text"
                             value={this.state.id_funcion_trabajador}
@@ -661,7 +661,7 @@ class ComponentFuncionTrabajador extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
-                                    value="registrar"
+                                    value="Registrar"
                                     eventoPadre={this.operacion}
                                     />
                                 }
@@ -669,7 +669,7 @@ class ComponentFuncionTrabajador extends React.Component{
                                     <InputButton 
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
-                                    value="actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />   
                                 }
@@ -678,7 +678,7 @@ class ComponentFuncionTrabajador extends React.Component{
                                 <InputButton 
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
-                                value="cancelar"
+                                value="Cancelar"
                                 eventoPadre={this.regresar}
                                 />   
                             </div>

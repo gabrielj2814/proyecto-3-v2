@@ -32,22 +32,17 @@ const ComponentCarusel= () => {
                         <div className="carousel-item active contenedor_imagen">
                             <img className="d-block w-100 img" src={ComunidadCuatro} alt="img"/>
                             <div className="carousel-caption">
-                                <h3>título 1</h3>
-                                <p>Descripción de la imagen.</p>
+                            <h3>Bienvenidos</h3>
                             </div>
                         </div>
                         <div className="carousel-item contenedor_imagen">
                             <img className="d-block w-100 img" src={ComunidadDos} alt="img"/>
                             <div className="carousel-caption">
-                                <h3>título 2</h3>
-                                <p>Descripción de la imagen.</p>
                             </div>
                         </div>
                         <div className="carousel-item contenedor_imagen">
                             <img className="d-block w-100 img" src={ComunidadTres} alt="img"/>
                             <div className="carousel-caption">
-                                <h3>título 3</h3>
-                                <p>Descripción de la imagen.</p>
                             </div>
                         </div>
                     </div>   

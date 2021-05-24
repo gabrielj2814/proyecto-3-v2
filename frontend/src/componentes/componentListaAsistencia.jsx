@@ -420,7 +420,7 @@ class ComponentListaAsistencia extends React.Component{
                                                 <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                                             </svg>
                                         </button>
-                                        Este boton te mostrar una modal perguntandote si estas seguro de pasar la asistencia
+                                        Este boton te mostrara una modal preguntandote si estas seguro de pasar la asistencia
                                    </div>
                                </div>
                             </div>
@@ -445,25 +445,25 @@ class ComponentListaAsistencia extends React.Component{
                               <div className="row justify-content-center mb-3">
                                 <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
                                   <div class="form-groud">
-                                    <label>Tipo de reporte</label>
+                                    <label>Tipo de Reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >seleccione un tipo de reporte</option>
-                                      <option value="1" >generar una lista</option>
-                                      <option value="0" >generar un especifico</option>
+                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="1" >Generar una Lista</option>
+                                      <option value="0" >Generar un Específico</option>
                                     </select>
                                   </div>
                                 </div>
                               </div>
                               <form id="formListaEspecifico" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar mas de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                               <div className="row justify-content-center">
                                     <ComponentFormCampo
                                     clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                     clasesCampo="form-control"
                                     obligatorio="no"
-                                    nombreCampo="Cedula del trabajador"
+                                    nombreCampo="Cédula del trabajador"
                                     activo="si"
                                     type="text"
                                     value={this.state.id_cedula}
@@ -479,7 +479,7 @@ class ComponentListaAsistencia extends React.Component{
                                         <option value="P" >Presente</option>
                                         <option value="II" >Inasistencia injustificada</option>
                                         <option value="IJR" >Inasistencia justificada por reposo</option>
-                                        <option value="IJP" >Inasistencia justificada por permsio</option>
+                                        <option value="IJP" >Inasistencia justificada por permiso</option>
                                       </select>
                                     </div>
                                   </div>
@@ -546,7 +546,7 @@ class ComponentListaAsistencia extends React.Component{
                                 <div className="row justify-content-center">
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="desde" name="desde"/>
                                         </div>
                                     </div>
@@ -563,7 +563,7 @@ class ComponentListaAsistencia extends React.Component{
 
                               <form id="formLista" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar mas de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                                 <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
@@ -573,7 +573,7 @@ class ComponentListaAsistencia extends React.Component{
                                         <option value="P" >Presente</option>
                                         <option value="II" >Inasistencia injustificada</option>
                                         <option value="IJR" >Inasistencia justificada por reposo</option>
-                                        <option value="IJP" >Inasistencia justificada por permsio</option>
+                                        <option value="IJP" >Inasistencia justificada por permiso</option>
                                       </select>
                                     </div>
                                   </div>
@@ -631,7 +631,7 @@ class ComponentListaAsistencia extends React.Component{
                                     </div>
                                     <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div class="form-groud">
-                                        <label>Fecha desde</label>
+                                        <label>Fecha desdé</label>
                                         <input type="date" class="form-control" id="desde" name="desde"/>
                                         </div>
                                     </div>
@@ -671,7 +671,7 @@ class ComponentListaAsistencia extends React.Component{
                                 </button>
                             </div>
                             <div class="modal-body">
-                               <p>Esta seguro de quiere pasar la asistenica</p>
+                               <p>¿Esta seguro de quiere pasar la asistencia?</p>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
@@ -691,12 +691,12 @@ class ComponentListaAsistencia extends React.Component{
                                 </button>
                             </div>
                             <div class="modal-body">
-                               <h3 className="text-center mb-3">Agrege una observación</h3>
+                               <h3 className="text-center mb-3">Agregue una observación</h3>
                                <textarea className="form-control observacion" id="observacion_asistencia" name="observacion_asistencia" value={this.state.observacion_asistencia} onChange={this.cambiarEstado}></textarea>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-primary" onClick={this.enviarObservacion}>guardar</button>
+                                <button type="button" class="btn btn-primary" onClick={this.enviarObservacion}>Guardar</button>
                             </div>
                             </div>
                         </div>
@@ -707,7 +707,7 @@ class ComponentListaAsistencia extends React.Component{
                             <tr>
                             <th scope="col">Cédula</th>
                             <th scope="col">Nombre trabajador</th>
-                            <th scope="col">hora de llegada</th>
+                            <th scope="col">Hora de llegada</th>
                             <th scope="col">Cumplimiento H.</th>
                             <th scope="col">Estado asistencia</th>
                             <th scope="col">Estado trabajador</th>

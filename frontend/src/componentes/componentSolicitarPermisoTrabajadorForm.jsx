@@ -601,13 +601,13 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                         <div>
                             <div className="row justify-content-center">
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
-                                    <span className="">Dias: {this.state.dias_permiso}</span>
+                                    <span className="">Días: {this.state.dias_permiso}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
                                     <span className="">Remunerado: {(this.state.estatu_remunerado==="1")?"Si":"No"}</span>
                                 </div>
                                 <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 ">
-                                    <span className="">Habiles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
+                                    <span className="">Hábiles: {(this.state.estatu_dias_aviles==="1")?"Si":"No"}</span>
                                 </div>
                             </div>
                             <div className="row mt-3">
@@ -620,7 +620,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                                 clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                 obligatorio="si"
                                 mensaje={this.state.msj_fecha_desde_permiso_trabajador}
-                                nombreCampoDate="Desde:"
+                                nombreCampoDate="Desdé:"
                                 clasesCampo="form-control"
                                 value={this.state.fecha_desde_permiso_trabajador}
                                 name="fecha_desde_permiso_trabajador"

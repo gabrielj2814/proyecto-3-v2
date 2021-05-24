@@ -256,10 +256,10 @@ class PdfTrabajador extends FPDF{
 
         $this->ln(30);
         $this->Cell(17,10,"",0,0,"C");
-        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
+        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(45,6,utf8_decode($this->generado),'B',0,"C");
 
         $this->Cell(20,10,"",0,0,"C");
-        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(40,6,"",'B',0,"C");
+        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(45,6,"",'B',0,"C");
         
         
         
@@ -318,10 +318,10 @@ class PdfTrabajador extends FPDF{
 
         $this->ln(20);
         $this->Cell(17,10,"",0,0,"C");
-        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(40,6,utf8_decode($this->generado),'B',0,"C");
+        $this->Cell(45,10,"Generado por:",0,0,"R");$this->Cell(45,6,utf8_decode($this->generado),'B',0,"C");
 
         $this->Cell(20,10,"",0,0,"C");
-        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(40,6,"",'B',0,"C");
+        $this->Cell(45,10,"Solicitado por:",0,0,"R");$this->Cell(45,6,"",'B',0,"C");
         
         
         

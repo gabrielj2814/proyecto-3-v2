@@ -209,8 +209,8 @@ class ComponentAsistencia extends React.Component {
 
                     <div className="row justify-content-center ">
                         <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 asistencia_cedula">
-                            <div>Cedula</div>
-                            <input type="text"  className="form-control" id="cedula" name="cedula" value={this.state.cedula} onChange={this.validarCampoCedula} placeholder="Ingresce su Cédula"/>
+                            <div>Cédula</div>
+                            <input type="text"  className="form-control" id="cedula" name="cedula" value={this.state.cedula} onChange={this.validarCampoCedula} placeholder="Ingrese su Cédula"/>
                         </div>
                     </div>
                 

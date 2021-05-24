@@ -456,11 +456,11 @@ class ComponentTrabajador extends React.Component{
                               <div className="row justify-content-center mb-3">
                                 <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
                                   <div class="form-groud">
-                                    <label>Tipo de reporte</label>
+                                    <label>Tipo de Reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >seleccione un tipo de reporte</option>
-                                      <option value="1" >generar una lista</option>
-                                      <option value="0" >generar un especifico</option>
+                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="1" >Generar una Lista</option>
+                                      <option value="0" >Generar un Específico</option>
                                     </select>
                                   </div>
                                 </div>
@@ -471,7 +471,7 @@ class ComponentTrabajador extends React.Component{
                                   clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                                   clasesCampo="form-control"
                                   obligatorio="no"
-                                  nombreCampo="Cedula del trabajador"
+                                  nombreCampo="Cédula del Trabajador"
                                   activo="si"
                                   type="text"
                                   value={this.state.id_cedula}
@@ -484,21 +484,21 @@ class ComponentTrabajador extends React.Component{
                               </form>
                               <form id="fromListar" class="ocultarFormulario mb-3">
                                 <div className="row justify-content-center mb-3">
-                                    <div className="col-auto">Para seleccionar mas de un elemento mantenr Ctrl + click izquierdo del raton</div>
+                                    <div className="col-auto">Para seleccionar más de un elemento mantener Ctrl + click izquierdo del ratón</div>
                                 </div>
                                 <div className="row justify-content-center">
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Tipo de trabajador</label>
+                                      <label>Tipo de Trabajador</label>
                                       <select class="form-select custom-select" multiple id="id_tipo_trabajador" name="array_id_tipo_trabajador[]" aria-label="Default se0lec0t example" onChange={this.cambiarEstadoTipoTrabajador}>
-                                        <option value="null" >seleccione</option>
+                                        <option value="null" >Seleccione</option>
                                         {this.state.tiposTrabajadores.map((tipoTrabajador,index) => (<option key={"tipo-trabajador"+index} value={tipoTrabajador.id_tipo_trabajador}  >{tipoTrabajador.descripcion_tipo_trabajador}</option>))}
                                       </select>
                                     </div>
                                   </div>
                                   <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <div class="form-groud">
-                                      <label>Funcion del trabajador</label>
+                                      <label>Función del Trabajador</label>
                                       <select class="form-select custom-select" multiple id="id_funcion_trabajador" name="array_id_funcion_trabajador[]" aria-label="Default select example" >
                                         {this.state.funcionesTrabajadores.map((funcionTrabajador,index) => (<option key={"funcion-trabajador"+index} value={funcionTrabajador.id_funcion_trabajador}  >{funcionTrabajador.funcion_descripcion}</option>))}
                                       </select>
@@ -550,7 +550,7 @@ class ComponentTrabajador extends React.Component{
                             </div>
                         </div>
                   </div>
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo Trabajador"/>
+                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Trabajador"/>
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}
                     eventoEscribirCodigo={this.escribir_codigo}

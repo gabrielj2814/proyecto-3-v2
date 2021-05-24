@@ -22,7 +22,7 @@ const componentTableDeDatosSinBarra= (props) =>{
                             idRadioA="es-espera"
                             checkedRadioA={props.tabla}
                             valueRadioA="E"
-                            nombreLabelRadioB="Aprovado"
+                            nombreLabelRadioB="Aprobado"
                             idRadioB="aprovado"
                             valueRadioB="A"
                             eventoPadre={props.ventoConsultarPermiso}
