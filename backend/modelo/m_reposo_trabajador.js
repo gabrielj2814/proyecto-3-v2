@@ -93,8 +93,9 @@ class ReposoTrabajadorModelo extends DriverPostgre {
         return await this.query(SQL)
     }
 
-    registrarModelo(){
+    registrarModelo(numeroReposo){
         const SQL=`INSERT INTO treposotrabajador(
+            numero_reposo,
             id_reposo_trabajador,
             id_cedula,
             id_reposo,
@@ -111,6 +112,7 @@ class ReposoTrabajadorModelo extends DriverPostgre {
             fecha_hasta_entrega_reposo_trabajador,
             estatu_entrega_reposo
             ) VALUES(
+                ${numeroReposo},
                 '${this.id_reposo_trabajador}',
                 '${this.id_cedula}',
                 '${this.id_reposo}',
@@ -185,12 +187,17 @@ class ReposoTrabajadorModelo extends DriverPostgre {
     }
     
     async consultarRepososPorTrabajador(id_cedula){
-        const SQL=`SELECT fecha_desde_reposo_trabajador FROM treposotrabajador WHERE id_cedula='${id_cedula}' GROUP BY fecha_desde_reposo_trabajador;`
+        const SQL=`SELECT numero_reposo FROM treposotrabajador WHERE id_cedula='${id_cedula}' GROUP BY numero_reposo;`
         return await this.query(SQL)
     }
     
-    async consultarRepososPorTrabajadorYFecha(id_cedula,fecha){
-        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${id_cedula}' AND (fecha_desde_reposo_trabajador BETWEEN '${fecha}' AND '${fecha}');`
+    async consultarRepososPorTrabajadorYNumeroReposo(id_cedula,numero){
+        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${id_cedula}' AND numero_reposo=${numero};`
+        return await this.query(SQL)
+    }
+
+    async consultarTodosLosRepososTrabajador(){
+        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${this.id_cedula}'`
         return await this.query(SQL)
     }
 }

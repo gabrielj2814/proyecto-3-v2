@@ -128,13 +128,13 @@ PermisoTrabajadorControlador.consultarPermisoTrabajadorXCedulaEstatuControlador=
     const id_cedula=req.params.id
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     let permiso_result=await PERMISOTRABAJADOR.consultarPermisosTrabajadorPorNumeroPermiso(id_cedula)
-    console.log(permiso_result)
+    // console.log(permiso_result)
     if(permiso_result.rowCount>0){
         const ultimoPermiso=permiso_result.rows[(permiso_result.rows.length-1)]
         // console.log(ultimoPermiso)
         let numeroPermiso=ultimoPermiso.numero_permiso
         let permiso_result2=await PERMISOTRABAJADOR.consultarPermisosPorNumeroPermisoYCedula(id_cedula,numeroPermiso)
-        console.log(permiso_result2)
+        // console.log(permiso_result2)
         if(permiso_result2.rows[0].estatu_permiso_trabajador==="E"){
             respuesta_api.mensaje="su permiso todavia esta en espera"
             respuesta_api.estado_peticion="404"

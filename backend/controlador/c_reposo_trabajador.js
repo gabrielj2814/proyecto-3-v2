@@ -36,7 +36,9 @@ ReposoTrabajadorControlador.registrarControlador=async (req,res,next) => {
                         if(!ReposoTrabajadorControlador.verificarExistencia(reposo_trabajador_result_2)){
                             const permiso_trabajador_result=await PermisoTrabajadorControlador.consultarPermisoActivos(reposo_trabajador.id_cedula)
                             if(!ReposoTrabajadorControlador.verificarExistencia(permiso_trabajador_result)){
-                                reposo_trabajador_modelo.registrarModelo()
+                                let reposoResult=await reposo_trabajador_modelo.consultarTodosLosRepososTrabajador()
+                                let numeroReposo=reposoResult.rowCount+1
+                                reposo_trabajador_modelo.registrarModelo(numeroReposo)
                                 respuesta_api.mensaje="registro completado"
                                 respuesta_api.estado_peticion="200"
                                 req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","treposotrabajador",reposo_trabajador.id_reposo_trabajador)
@@ -472,9 +474,10 @@ ReposoTrabajadorControlador.consultarUltimoReposo= async (req,res) => {
     const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
     let reposos_trabajador_result=await reposo_trabajador_modelo.consultarRepososPorTrabajador(id_cedula)
     if(reposos_trabajador_result.rowCount>0){
-        let fecha=Moment(reposos_trabajador_result.rows[0].fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("YYYY-MM-DD")
-        let fecha2=Moment(reposos_trabajador_result.rows[0].fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")
-        let reposos_trabajador_result2=await reposo_trabajador_modelo.consultarRepososPorTrabajadorYFecha(id_cedula,fecha)
+        let posicion=reposos_trabajador_result.rows.length-1
+        let numero=reposos_trabajador_result.rows[posicion].numero_reposo
+        let reposos_trabajador_result2=await reposo_trabajador_modelo.consultarRepososPorTrabajadorYNumeroReposo(id_cedula,numero)
+        let fecha2=Moment(reposos_trabajador_result2.rows[0].fecha_hasta_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")
         let mensaje=null
         let colorAlert=null
         console.log(reposos_trabajador_result2)
