@@ -30,6 +30,9 @@ class ComponentPerfilTrabajador extends React.Component{
         this.mostarModalMisPermisos=this.mostarModalMisPermisos.bind(this)
         this.solicitarPermiso=this.solicitarPermiso.bind(this)
         this.cerrarModalPermiso=this.cerrarModalPermiso.bind(this)
+        this.mostarModalMisReposo=this.mostarModalMisReposo.bind(this)
+        this.cerrarModalMisReposo=this.cerrarModalMisReposo.bind(this)
+        this.solicitarReposo=this.solicitarReposo.bind(this)
         this.state={
             paso:0,
             modulo:"",// modulo menu
@@ -120,6 +123,16 @@ class ComponentPerfilTrabajador extends React.Component{
                 D:"Denegado",
                 C:"culminado",
             },
+            estadoReposo:{
+                "1":"Activo",
+                "0":"Inactivo",
+                "2":"Interumpido",
+            },
+            estadoEntregaReposo:{
+                "P":"En espera",
+                "E":"Entregado",
+                "N":"No entregado",
+            },
 
             mensaje:{
                 texto:"",
@@ -130,8 +143,24 @@ class ComponentPerfilTrabajador extends React.Component{
 
     async UNSAFE_componentWillMount(){
         await this.consultarDatosDeLaSesion()
+        await this.consultarTodosLosReposos()
         await this.consultarTodosLosPermisos()
         
+    }
+
+    async consultarTodosLosReposos(){
+        let json={
+            id_cedula:this.state.id_cedula
+        }
+        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/consultar-todos-reposos`,json)
+        .then(respuesta => {
+            let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("todos los reposos =>>> ",jsonResponse)
+            this.setState({listaReposos:jsonResponse.datos})
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     async consultarTodosLosPermisos(){
@@ -141,7 +170,7 @@ class ComponentPerfilTrabajador extends React.Component{
         await axios.post("http://localhost:8080/transaccion/permiso-trabajador/consultar-todos-permisos",json)
         .then(respuesta => {
             let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(jsonResponse)
+            console.log("todos los permiso =>>> ",jsonResponse)
             this.setState({listaPermisos:jsonResponse.datos})
         })
         .catch(error => {
@@ -484,16 +513,29 @@ class ComponentPerfilTrabajador extends React.Component{
     mostarModalMisPermisos(){
         $("#modalHistorialPermiso").modal("show")
     }
-
+    
     cerrarModalPermiso(){
         $("#modalHistorialPermiso").modal("hide")
     }
-
+    
     solicitarPermiso(){
         this.cerrarModalPermiso()
         this.props.history.push("/dashboard/transaccion/permiso-trabajador/solicitar")
     }
+    
+    mostarModalMisReposo(){
+        $("#modalHistorialReposo").modal("show")
+    }
+    
+    cerrarModalMisReposo(){
+        $("#modalHistorialReposo").modal("hide")
+    }
 
+    solicitarReposo(){
+        this.cerrarModalMisReposo()
+        this.props.history.push("/dashboard/transaccion/reposo-trabajador/solicitar")
+    }
+    
     render(){
         const vista=(
             <div className="row justify-content-center">
@@ -511,6 +553,63 @@ class ComponentPerfilTrabajador extends React.Component{
                         </div>
                     }
                 </div>
+
+                <div class="modal fade" id="modalHistorialReposo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-xl" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Mis Reposos</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                    <button class="btn btn-outline-primary mb-3" onClick={this.solicitarReposo}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                                            <path d="M8 0a1 1 0 0 1 1 1v6h6a1 1 0 1 1 0 2H9v6a1 1 0 1 1-2 0V9H1a1 1 0 0 1 0-2h6V1a1 1 0 0 1 1-1z"/>
+                                        </svg>
+                                    </button>
+                                    
+                                    <table id="tablaReposo" className="tabla table table-dark table-striped table-bordered table-hover table-responsive-xl ">
+                                        <thead> 
+                                            <tr> 
+                                                <th>N°</th> 
+                                                <th>Reposo</th> 
+                                                <th>Desde</th> 
+                                                <th>Hasta</th>
+                                                <th>Ultimo dia de Entrega</th>
+                                                <th>Estado</th>
+                                                <th>Estado de entrega</th>
+                                            </tr> 
+                                        </thead>
+                                        <tbody>
+
+                                            {this.state.listaReposos.map((reposo,index) => {
+                                                return(
+                                                    <tr key={"reposo-"+index}> 
+                                                        <th>{index+1}</th> 
+                                                        <th>{reposo.nombre_reposo}</th> 
+                                                        <th>{Moment(reposo.fecha_desde_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")}</th> 
+                                                        <th>{Moment(reposo.fecha_hasta_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")}</th>
+                                                        <th>{Moment(reposo.fecha_hasta_entrega_reposo_trabajador,"YYYY-MM-DD").format("DD-MM-YYYY")}</th>
+                                                        <th>{this.state.estadoReposo[`${reposo.estatu_reposo_trabajador}`]}</th>
+                                                        <th>{this.state.estadoEntregaReposo[reposo.estatu_entrega_reposo]}</th>
+                                                    </tr>
+                                                )
+                                            })}
+                                                
+                                        </tbody>
+
+
+                                    </table>
+                                    
+                                    </div>
+                                    <div class="modal-footer ">
+                                        <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                    </div>
+                                    </div>
+                                </div>
+                        </div>
 
                 <div class="modal fade" id="modalHistorialPermiso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-xl" role="document">
@@ -821,7 +920,7 @@ class ComponentPerfilTrabajador extends React.Component{
                                 <button class="btn btn-info">Ver el historial de mis permisos</button>
                             </div>
                             <div className="col-auto">
-                                <button class="btn btn-info">Ver el historial de mis reposos</button>
+                                <button class="btn btn-info" onClick={this.mostarModalMisReposo}>Ver el historial de mis reposos</button>
                             </div>
                     </div>
 

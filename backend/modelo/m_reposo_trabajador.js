@@ -192,12 +192,12 @@ class ReposoTrabajadorModelo extends DriverPostgre {
     }
     
     async consultarRepososPorTrabajadorYNumeroReposo(id_cedula,numero){
-        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${id_cedula}' AND numero_reposo=${numero};`
+        const SQL=`SELECT * FROM treposotrabajador,ttrabajador,treposo WHERE treposotrabajador.id_cedula='${id_cedula}' AND treposotrabajador.numero_reposo=${numero} AND treposotrabajador.id_cedula=ttrabajador.id_cedula AND treposotrabajador.id_reposo=treposo.id_reposo;`
         return await this.query(SQL)
     }
 
     async consultarTodosLosRepososTrabajador(){
-        const SQL=`SELECT * FROM treposotrabajador WHERE id_cedula='${this.id_cedula}'`
+        const SQL=`SELECT * FROM treposotrabajador,ttrabajador,treposo WHERE treposotrabajador.id_cedula='${this.id_cedula}' AND treposotrabajador.id_cedula=ttrabajador.id_cedula AND treposotrabajador.id_reposo=treposo.id_reposo`
         return await this.query(SQL)
     }
 }

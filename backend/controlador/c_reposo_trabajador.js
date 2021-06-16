@@ -563,6 +563,34 @@ ReposoTrabajadorControlador.consultarUltimoReposo= async (req,res) => {
     }
 }
 
+ReposoTrabajadorControlador.consultarTodosLosReposos= async (req,res) => {
+    let {id_cedula} =req.body
+    let respuesta_api={datos:[],estado:false}
+    const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
+    let resultReposo=await reposo_trabajador_modelo.consultarRepososPorTrabajador(id_cedula)
+    if(resultReposo.rowCount>0){
+        // console.log("-------------------------",resultReposo)
+        let permisos=[]
+        for(let permiso of resultReposo.rows){
+            let permisoResult2=await reposo_trabajador_modelo.consultarRepososPorTrabajadorYNumeroReposo(id_cedula,permiso.numero_reposo)
+            permisos.push(permisoResult2.rows[0])
+        }
+        console.log(permisos)
+        // consultarTodosLosRepososTrabajador
+        respuesta_api.datos=permisos.reverse()
+        respuesta_api.estado=true
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+    else{
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+    }
+
+}
+
 
 
 module.exports = ReposoTrabajadorControlador
