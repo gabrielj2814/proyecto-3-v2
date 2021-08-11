@@ -1,5 +1,7 @@
 import Axios from 'axios';
 import React from 'react';
+// IP servidor
+import servidor from '../ipServer.js'
 // js
 import axios from "axios"
 import moment from "moment"
@@ -23,7 +25,7 @@ class CintilloComponent extends React.Component{
     }
 
     consultarCintilloActual(){
-        axios.get("http://localhost:8080/configuracion/cintillo/consultar-activo")
+        axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/consultar-activo`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado){
@@ -32,7 +34,7 @@ class CintilloComponent extends React.Component{
                     estadoCintillo:true,
                     cintilloActual:json.datos[0]
                 })
-                document.getElementById("cintillo").src=`http://localhost:8080/cintillo/cintillo-${json.datos[0].fecha_subida_foto}_${json.datos[0].hora_subida_foto}.${json.datos[0].extension_foto_cintillo}`
+                document.getElementById("cintillo").src=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/cintillo/cintillo-${json.datos[0].fecha_subida_foto}_${json.datos[0].hora_subida_foto}.${json.datos[0].extension_foto_cintillo}`
             }
             else{
                 // alert("no")
