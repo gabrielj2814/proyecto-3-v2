@@ -3,6 +3,8 @@ import {withRouter} from 'react-router-dom'
 //JS
 import axios from 'axios'
 import Moment from "moment"
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import '../css/dashboard.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -48,7 +50,7 @@ class ComponentDashboard extends React.Component{
                 let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
                 var respuesta_servior=""
                 const token=localStorage.getItem("usuario")
-                await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+                await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
                 .then(respuesta=>{
                     respuesta_servior=respuesta.data
                     if(respuesta_servior.usuario){
@@ -179,7 +181,7 @@ class ComponentDashboard extends React.Component{
 
 
         caducarReposos(){
-            axios.get("http://localhost:8080/transaccion/reposo-trabajador/verifircar-vencimiento")
+            axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/verifircar-vencimiento`)
             .then(repuesta => {
                 console.log(repuesta.data)
             })
@@ -189,7 +191,7 @@ class ComponentDashboard extends React.Component{
         }
 
         caducarPermisos(){
-            axios.get("http://localhost:8080/transaccion/permiso-trabajador/verifircar-vencimiento")
+            axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/verifircar-vencimiento`)
             .then(repuesta => {
                 console.log(repuesta.data)
             })
