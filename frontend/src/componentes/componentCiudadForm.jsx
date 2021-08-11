@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentCiudadForm.css'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
 //sub componentes
@@ -87,7 +89,7 @@ class ComponentCiudadForm extends React.Component{
     async generarIdCiudad(){
         var respuesta_servidor="",
         mensaje={texto:"",estado:""}
-        await axios.get("http://localhost:8080/configuracion/ciudad/generar-id")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/generar-id`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             //console.log(respuesta_servidor)
@@ -106,7 +108,7 @@ class ComponentCiudadForm extends React.Component{
             const {operacion}=this.props.match.params
             if(operacion==="registrar"){
                 const {id}=await this.generarIdCiudad();
-                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
                 nombre_propiedad_lista="estados",
                 propiedad_id="id_estado",
                 propiedad_descripcion="nombre_estado",
@@ -122,7 +124,7 @@ class ComponentCiudadForm extends React.Component{
             else{
                 const {id}=this.props.match.params
                 const ciudad=await this.consultarCiudad(id)
-                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
                 nombre_propiedad_lista="estados",
                 propiedad_id="id_estado",
                 propiedad_descripcion="nombre_estado",
@@ -147,7 +149,7 @@ class ComponentCiudadForm extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -160,7 +162,7 @@ class ComponentCiudadForm extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -199,7 +201,7 @@ class ComponentCiudadForm extends React.Component{
         respuesta_servidor=""
         var ciudad={}
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -388,7 +390,7 @@ class ComponentCiudadForm extends React.Component{
     registrar(mensaje_formulario,mensaje,respuesta_servidor){
         if(this.validarFormulario()){
             this.enviarDatos((objeto)=>{
-                axios.post("http://localhost:8080/configuracion/ciudad/registrar",objeto)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/registrar`,objeto)
                 .then(respuesta=>{
                     respuesta_servidor=respuesta.data
                     mensaje.texto=respuesta_servidor.mensaje
@@ -413,7 +415,7 @@ class ComponentCiudadForm extends React.Component{
     actualizar(mensaje_formulario,mensaje,respuesta_servidor){
         if(this.validarFormulario()){
             this.enviarDatos((objeto)=>{
-                axios.put(`http://localhost:8080/configuracion/ciudad/actualizar/${this.state.id_ciudad}`,objeto)
+                axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/actualizar/${this.state.id_ciudad}`,objeto)
                 .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 mensaje.texto=respuesta_servidor.mensaje
@@ -451,7 +453,7 @@ class ComponentCiudadForm extends React.Component{
 
     async agregar(){
         const {id}=await this.generarIdCiudad();
-        const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+        const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
         nombre_propiedad_lista="estados",
         propiedad_id="id_estado",
         propiedad_descripcion="nombre_estado",
