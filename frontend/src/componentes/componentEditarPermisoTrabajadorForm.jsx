@@ -4,6 +4,8 @@ import {withRouter} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentEditarPermisoTrabajadorForm.css'
+// IP servidor
+import servidor from '../ipServer.js'
 //JS
 import axios from 'axios'
 import Moment from 'moment'
@@ -72,7 +74,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
         if(acessoModulo){
             const id=this.props.match.params.id
             const token=localStorage.getItem('usuario')
-            const ruta_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar/${id}/${token}`
+            const ruta_permiso=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar/${id}/${token}`
             const permiso_trabajador=await this.consultarAlServidor(ruta_permiso)
             this.setState({
                 id_cedula:permiso_trabajador.permiso_trabajador.id_cedula,
@@ -107,7 +109,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -120,7 +122,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -280,7 +282,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
         if(this.state.estadoCalcular===true){
             var respuesta_servidor=""
             var mensaje=this.state.mensaje
-            await axios.patch(`http://localhost:8080/transaccion/permiso-trabajador/actualizar-dias-aviles/${this.state.id_permiso_trabajador}`,objeto)
+            await axios.patch(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/actualizar-dias-aviles/${this.state.id_permiso_trabajador}`,objeto)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
