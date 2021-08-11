@@ -1,7 +1,8 @@
 import React from "react"
 
 import {withRouter} from "react-router-dom"
-
+// IP servidor
+import servidor from '../ipServer.js'
 //JS
 import axios from 'axios'
 //css
@@ -83,21 +84,21 @@ class ComponentCamFormulario extends React.Component {
         if(acessoModulo){
             const {operacion}=this.props.match.params
             if(operacion==="registrar"){
-                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
                 nombre_propiedad_lista="estados",
                 propiedad_id="id_estado",
                 propiedad_descripcion="nombre_estado",
                 propiedad_estado="estatu_estado"
                 const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
                 console.log("lista de estados ->>>",estados)
-                const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
+                const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
                 nombre_propiedad_lista_2="ciudades",
                 propiedad_id_2="id_ciudad",
                 propiedad_descripcion_2="nombre_ciudad",
                 propiedad_estado_2="estatu_ciudad"
                 const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
                 console.log("lista de de ciudades por estado ->>>",ciudades)
-                const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+                const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-todos`,
                 nombre_propiedad_lista_3="tipo_cams",
                 propiedad_id_3="id_tipo_cam",
                 propiedad_descripcion_3="nombre_tipo_cam",
@@ -118,21 +119,21 @@ class ComponentCamFormulario extends React.Component {
                 let datos = await this.consultarIdConsultar(id)
                 console.log(datos)
                 let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
-                const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
                 nombre_propiedad_lista="estados",
                 propiedad_id="id_estado",
                 propiedad_descripcion="nombre_estado",
                 propiedad_estado="estatu_estado"
                 const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
                 console.log("lista de estados ->>>",estados)
-                const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
+                const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
                 nombre_propiedad_lista_2="ciudades",
                 propiedad_id_2="id_ciudad",
                 propiedad_descripcion_2="nombre_ciudad",
                 propiedad_estado_2="estatu_ciudad"
                 const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
                 console.log("lista de de ciudades por estado ->>>",ciudades)
-                const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+                const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-todos`,
                 nombre_propiedad_lista_3="tipo_cams",
                 propiedad_id_3="id_tipo_cam",
                 propiedad_descripcion_3="nombre_tipo_cam",
@@ -168,7 +169,7 @@ class ComponentCamFormulario extends React.Component {
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -181,7 +182,7 @@ class ComponentCamFormulario extends React.Component {
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -220,7 +221,7 @@ class ComponentCamFormulario extends React.Component {
         respuesta_servidor=""
         var ciudad={}
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -247,7 +248,7 @@ class ComponentCamFormulario extends React.Component {
         respuesta_servidor=""
         let datos=[]
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/cam/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cam/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -392,7 +393,7 @@ class ComponentCamFormulario extends React.Component {
             console.log("datos del formulario preparados ->>>> ",datos)
             if(operacion==="registrar"){
 
-                axios.post(`http://localhost:8080/configuracion/cam/registrar`,datos)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cam/registrar`,datos)
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
                     console.log(datosServidor)
@@ -415,7 +416,7 @@ class ComponentCamFormulario extends React.Component {
             else if(operacion==="actualizar"){
                 // alert("actualizando")
                 const {id}=this.props.match.params 
-                axios.put(`http://localhost:8080/configuracion/cam/actualizar/${id}`,datos)
+                axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cam/actualizar/${id}`,datos)
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
                     console.log(datosServidor)
