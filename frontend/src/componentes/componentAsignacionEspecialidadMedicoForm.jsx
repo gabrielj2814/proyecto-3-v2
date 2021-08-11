@@ -4,6 +4,8 @@ import {withRouter} from "react-router-dom"
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import "../css/componentAsignacionEspecialidadMedicoForm.css"
+// IP servidor
+import servidor from '../ipServer.js'
 //JS
 import axios from 'axios'
 //componentes
@@ -87,7 +89,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
     }
 
     async generarId(){
-        await axios.get("http://localhost:8080/configuracion/asignacion-medico-especialidad/generar-id")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-medico-especialidad/generar-id`)
         .then(respuesta => {
             console.log(respuesta)
             this.setState({
@@ -154,7 +156,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -167,7 +169,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -205,7 +207,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
         var respuesta_servidor=null
         var mensaje={texto:"",estado:""}
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/asignacion-medico-especialidad/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-medico-especialidad/consultar/${id}/${token}`)
         .then(respuesta=>{
             if(respuesta.data.estado_peticion==="200"){
                 respuesta_servidor=respuesta.data.medico_especialidad
@@ -229,7 +231,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
 
     async consultarTodasEspecialidad(){
         var respuesta_servidor=[]
-        await axios.get("http://localhost:8080/configuracion/especialidad/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/especialidad/consultar-todos`)
         .then(respuesta=>{
           respuesta_servidor=respuesta.data.especialidades
           console.log(respuesta.data)
@@ -243,7 +245,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
 
     async consultarTodosLosMedicos(){
         var respuesta_servidor=[]
-        await axios.get("http://localhost:8080/configuracion/medico/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/medico/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.medicos
             // console.log(respuesta.data)
@@ -316,7 +318,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             console.log("datos del formulario preparados ->>>> ",datos)
             if(operacion==="registrar"){
                 // alert("registrando datos")
-                axios.post("http://localhost:8080/configuracion/asignacion-medico-especialidad/registrar",datos)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-medico-especialidad/registrar`,datos)
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
                     console.log(datosServidor)
@@ -343,7 +345,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             }
             else if(operacion==="actualizar"){
                 // alert("actualizando datos")
-                axios.put(`http://localhost:8080/configuracion/asignacion-medico-especialidad/actualizar/${id}`,datos)
+                axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-medico-especialidad/actualizar/${id}`,datos)
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
                     console.log(datosServidor)
