@@ -1,7 +1,8 @@
 import React from "react"
 
 import {withRouter} from "react-router-dom"
-
+// IP servidor
+import servidor from '../ipServer.js'
 //JS
 import axios from 'axios'
 import Moment from "moment"
@@ -88,7 +89,7 @@ class ComponentCintillo extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -101,7 +102,7 @@ class ComponentCintillo extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -136,7 +137,7 @@ class ComponentCintillo extends React.Component{
     }
 
     consultarCintilloActual(){
-        axios.get("http://localhost:8080/configuracion/cintillo/consultar-activo")
+        axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/consultar-activo`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado){
@@ -156,7 +157,7 @@ class ComponentCintillo extends React.Component{
     }
 
     refrescarGaleria(){
-        axios.get("http://localhost:8080/configuracion/cintillo/consultar-todos")
+        axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/consultar-todos`)
         .then(repuesta => {
             let json=repuesta.data
             let hashArchivo={}
@@ -248,7 +249,7 @@ class ComponentCintillo extends React.Component{
         let infoArchivo=this.state.hashArchivo[boton.getAttribute("data-id-foto")]
         this.setState(infoArchivo)
         let $visorImagen=document.getElementById("imagen-visor")
-        $visorImagen.src=`http://localhost:8080/cintillo/cintillo-${infoArchivo.fecha_subida_foto}_${infoArchivo.hora_subida_foto}.${infoArchivo.extension_foto_cintillo}`
+        $visorImagen.src=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/cintillo/cintillo-${infoArchivo.fecha_subida_foto}_${infoArchivo.hora_subida_foto}.${infoArchivo.extension_foto_cintillo}`
     }
 
     cerrarModalFormularioEditar(){
@@ -356,14 +357,14 @@ class ComponentCintillo extends React.Component{
                 },
                 token:"",
             }
-            axios.post("http://localhost:8080/configuracion/cintillo/subir-cintillo",datos)
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/subir-cintillo`,datos)
             .then(repuesta => {
                 let  json=JSON.parse(JSON.stringify(repuesta.data))
                 if(json.estado){
                     let datosArchivo=new FormData()
                     let archivo=document.getElementById("archivo")
                     datosArchivo.append("archivo",archivo.files[0])
-                    axios.post(`http://localhost:8080/configuracion/cintillo/enviar-foto/${json.fecha}/${json.hora}`,datosArchivo,{
+                    axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/enviar-foto/${json.fecha}/${json.hora}`,datosArchivo,{
                         headers:{'Content-Type': 'multipart/form-data'}
                     })
                     .then(repuesta2 => {
@@ -453,7 +454,7 @@ class ComponentCintillo extends React.Component{
         botonEliminarCintillo.style.display="block"
         let botonCancelar=document.getElementById("botonCancelar")
         botonCancelar.classList.toggle("boton-cancelar-eliminar-cintillo-ocultar")
-        axios.delete(`http://localhost:8080/configuracion/cintillo/eliminar-cintillo/${this.state.id_foto_cintillo}`)
+        axios.delete(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/eliminar-cintillo/${this.state.id_foto_cintillo}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado){
@@ -476,7 +477,7 @@ class ComponentCintillo extends React.Component{
                         }
                         console.log(datosCintilloActualizar)
                         if($cintilloPorDefecto!==null){
-                            axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datosCintilloActualizar)
+                            axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/actualizar-cintillo`,datosCintilloActualizar)
                             .then(respuesta => {
                                 this.consultarCintilloActual()
                                 this.refrescarGaleria()
@@ -598,7 +599,7 @@ class ComponentCintillo extends React.Component{
             if(document.getElementById("archivo_editar").value){
                 datos.cintillo["actualizarFoto"]=true
             }
-            axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datos)
+            axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/actualizar-cintillo`,datos)
             .then(respuesta => {
                 let json=JSON.parse(JSON.stringify(respuesta.data))
                 if(json.estado){
@@ -606,7 +607,7 @@ class ComponentCintillo extends React.Component{
                         let datosArchivo=new FormData()
                         let archivo=document.getElementById("archivo_editar")
                         datosArchivo.append("archivo",archivo.files[0])
-                        axios.post(`http://localhost:8080/configuracion/cintillo/enviar-foto/${json.fecha}/${json.hora}`,datosArchivo,{
+                        axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/enviar-foto/${json.fecha}/${json.hora}`,datosArchivo,{
                             headers:{'Content-Type': 'multipart/form-data'}
                         })
                         .then(repuesta2 => {
@@ -656,7 +657,7 @@ class ComponentCintillo extends React.Component{
                                 }
                                 console.log(datosCintilloActualizar)
                                 if($cintilloPorDefecto!==null){
-                                    axios.put("http://localhost:8080/configuracion/cintillo/actualizar-cintillo",datosCintilloActualizar)
+                                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cintillo/actualizar-cintillo`,datosCintilloActualizar)
                                     .then(respuesta => {
                                         this.consultarCintilloActual()
                                         this.refrescarGaleria()
@@ -880,7 +881,7 @@ class ComponentCintillo extends React.Component{
                         {this.state.archvios.map((archivo,index) => {
                             return (
                                 <div id={archivo.id_foto_cintillo} className={`contenedor-imagen ${(archivo.estatu_foto_cintillo==="1")?"foto-principal":""}`} key={index}>
-                                <img className="imagen-cintillo" src={`http://localhost:8080/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
+                                <img className="imagen-cintillo" src={`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/cintillo/cintillo-${archivo.fecha_subida_foto}_${archivo.hora_subida_foto}.${archivo.extension_foto_cintillo}`} alt="cintillo-img"/>
                                 <div className="hover-imagen">
                                     <div className="row justify-content-center">
                                         <div className=" col-6 col-ms-6 col-md-6 col-lg-6 col-xl-6">
