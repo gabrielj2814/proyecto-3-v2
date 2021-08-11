@@ -632,10 +632,10 @@ class ComponentAccesoForm extends React.Component {
     }
 
     async operacion(a){
-        const operacion=a.target,
-        mensaje =this.state.mensaje
+        const mensaje =this.state.mensaje
         var respuesta_servidor=""
-        if(operacion.value==="registrar"){
+        const operacion=this.props.match.params.operacion
+        if(operacion==="registrar"){
             const respuesta_validaciones=this.validar()
             if(respuesta_validaciones){
                 const objeto={
@@ -665,7 +665,7 @@ class ComponentAccesoForm extends React.Component {
                 alert("Error al validar el formulario")
             }
         }
-        else if(operacion.value==="actualizar"){
+        else if(operacion==="actualizar"){
             const respuesta_validaciones=this.validar()
             if(respuesta_validaciones){
                 // alert("validaciones OK")
