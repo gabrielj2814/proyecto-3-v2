@@ -5,6 +5,8 @@ import {withRouter} from "react-router-dom"
 import axios from 'axios'
 import $ from 'jquery'
 import Moment from 'moment'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -154,7 +156,7 @@ class ComponentPerfilTrabajador extends React.Component{
         let json={
             id_cedula:this.state.id_cedula
         }
-        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/consultar-todos-reposos`,json)
+        await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar-todos-reposos`,json)
         .then(respuesta => {
             let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
             console.log("todos los reposos =>>> ",jsonResponse)
@@ -169,7 +171,7 @@ class ComponentPerfilTrabajador extends React.Component{
         let json={
             id_cedula:this.state.id_cedula
         }
-        await axios.post("http://localhost:8080/transaccion/permiso-trabajador/consultar-todos-permisos",json)
+        await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-todos-permisos`,json)
         .then(respuesta => {
             let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
             console.log("todos los permiso =>>> ",jsonResponse)
@@ -183,7 +185,7 @@ class ComponentPerfilTrabajador extends React.Component{
     async consultarDatosDeLaSesion(){
         var respuesta_servior=""
         const token=localStorage.getItem("usuario")
-        await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
         .then(async respuesta=>{
             respuesta_servior=respuesta.data
             if(respuesta_servior.usuario){
@@ -195,7 +197,7 @@ class ComponentPerfilTrabajador extends React.Component{
     async consultarTrabajador(id){
         var respuesta_servidor=""
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar-trabajador/${id}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-trabajador/${id}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
@@ -392,7 +394,7 @@ class ComponentPerfilTrabajador extends React.Component{
         if(this.validarFormulario()){
         var respuesta_servidor=""
         var mensaje=this.state.mensaje
-        axios.get(`http://localhost:8080/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.nueva_clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
+        axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.nueva_clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
