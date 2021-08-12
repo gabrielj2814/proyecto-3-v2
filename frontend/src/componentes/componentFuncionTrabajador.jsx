@@ -1,6 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -99,7 +101,7 @@ class ComponentFuncionTrabajador extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -112,7 +114,7 @@ class ComponentFuncionTrabajador extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -149,7 +151,7 @@ class ComponentFuncionTrabajador extends React.Component{
     async consultarTodosLosHorarios(){
         let datos=[]
         let horariosHash={}
-        await axios.get("http://localhost:8080/configuracion/horario/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/horario/consultar-todos`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log("lista de horarios =>>>>> ",json)
@@ -175,7 +177,7 @@ class ComponentFuncionTrabajador extends React.Component{
 
     async consultarTodosFuncionTrabajador(){
         var respuesta_servidor=[]
-        await axios.get("http://localhost:8080/configuracion/funcion-trabajador/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.funciones
             console.log(respuesta.data)
@@ -232,7 +234,7 @@ class ComponentFuncionTrabajador extends React.Component{
         var respuesta_servidor="",
         valor=this.state.datoDeBusqueda
         if(valor!==""){
-            await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar-patron/${valor}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-patron/${valor}`)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
@@ -252,7 +254,7 @@ class ComponentFuncionTrabajador extends React.Component{
         var input=a.target,
         valor=input.value
         if(valor!==""){
-            await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar-patron/${valor}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-patron/${valor}`)
             .then(respuesta=>{
                     let respuesta_servidor=JSON.parse(JSON.stringify(respuesta.data))
                     this.setState({registros:respuesta_servidor.funciones,numeros_registros:respuesta_servidor.funciones.length})

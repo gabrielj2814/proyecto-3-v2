@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentFuncionTrabajadorForm.css'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
 //sub componentes
@@ -96,7 +98,7 @@ class ComponentFuncionTrabajador extends React.Component{
     async generarIdFuncionTrabajador(){
         var respuesta_servidor="",
         mensaje={texto:"",estado:""}
-        await axios.get("http://localhost:8080/configuracion/funcion-trabajador/generar-id")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/generar-id`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             //console.log(respuesta_servidor)
@@ -116,7 +118,7 @@ class ComponentFuncionTrabajador extends React.Component{
         
             if(operacion==="registrar"){
                 const {id}=await this.generarIdFuncionTrabajador();
-                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
                 nombre_propiedad_lista="tipos_trabajador",
                 propiedad_id="id_tipo_trabajador",
                 propiedad_descripcion="descripcion_tipo_trabajador",
@@ -136,7 +138,7 @@ class ComponentFuncionTrabajador extends React.Component{
             else{
                 const {id}=this.props.match.params
                 const funcion=await this.consultarFuncionTrabajador(id)
-                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
                 nombre_propiedad_lista="tipos_trabajador",
                 propiedad_id="id_tipo_trabajador",
                 propiedad_descripcion="descripcion_tipo_trabajador",
@@ -166,7 +168,7 @@ class ComponentFuncionTrabajador extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -179,7 +181,7 @@ class ComponentFuncionTrabajador extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -216,7 +218,7 @@ class ComponentFuncionTrabajador extends React.Component{
     async consultarTodosLosHorarios(){
         let datos=[]
         let horariosHash={}
-        await axios.get("http://localhost:8080/configuracion/horario/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/horario/consultar-todos`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log("lista de horarios =>>>>> ",json)
@@ -245,7 +247,7 @@ class ComponentFuncionTrabajador extends React.Component{
         respuesta_servidor=""
         var funcion={}
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/funcion-trabajador/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -429,7 +431,7 @@ class ComponentFuncionTrabajador extends React.Component{
     registrar(mensaje_formulario,mensaje,respuesta_servidor){
         if(this.validarFormulario()){
             this.enviarDatos((objeto)=>{
-                axios.post("http://localhost:8080/configuracion/funcion-trabajador/registrar",objeto)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/registrar`,objeto)
                 .then(respuesta=>{
                     respuesta_servidor=respuesta.data
                     mensaje.texto=respuesta_servidor.mensaje
@@ -454,7 +456,7 @@ class ComponentFuncionTrabajador extends React.Component{
     actualizar(mensaje_formulario,mensaje,respuesta_servidor){
         if(this.validarFormulario()){
             this.enviarDatos((objeto)=>{
-                axios.put(`http://localhost:8080/configuracion/funcion-trabajador/actualizar/${this.state.id_funcion_trabajador}`,objeto)
+                axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/actualizar/${this.state.id_funcion_trabajador}`,objeto)
                 .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 mensaje.texto=respuesta_servidor.mensaje
@@ -493,7 +495,7 @@ class ComponentFuncionTrabajador extends React.Component{
 
     async agregar(){
         const {id}=await this.generarIdFuncionTrabajador();
-        const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+        const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
         nombre_propiedad_lista="tipos_trabajador",
         propiedad_id="id_tipo_trabajador",
         propiedad_descripcion="descripcion_tipo_trabajador",
