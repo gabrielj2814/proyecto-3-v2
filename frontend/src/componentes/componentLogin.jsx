@@ -2,6 +2,8 @@ import React from 'react';
 import {withRouter} from 'react-router-dom'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 // css
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-grid.css';
@@ -78,7 +80,7 @@ class ComponentLogin extends React.Component{
         if(this.validarLoginForm()){
             var respuesta_servidor=""
             var mensaje=this.state.mensaje
-            axios.get(`http://localhost:8080/login/iniciar-session/${this.state.id_cedula}/${this.state.clave_trabajador}`)
+            axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/iniciar-session/${this.state.id_cedula}/${this.state.clave_trabajador}`)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 if(respuesta_servidor.estado_peticion==="200"){
