@@ -98,7 +98,7 @@ class ComponentMedicoForm extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -146,7 +146,7 @@ class ComponentMedicoForm extends React.Component{
     }
 
     async generarIdMedico(){
-        await axios.get("http://localhost:8080/configuracion/medico/generar-id")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/medico/generar-id`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             this.setState({
@@ -162,7 +162,7 @@ class ComponentMedicoForm extends React.Component{
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/medico/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/medico/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -363,7 +363,7 @@ class ComponentMedicoForm extends React.Component{
                 this.enviarDatos((objeto)=>{
                     let mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.post("http://localhost:8080/configuracion/medico/registrar",objeto)
+                    axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/medico/registrar`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
@@ -388,7 +388,7 @@ class ComponentMedicoForm extends React.Component{
                 this.enviarDatos((objeto)=>{
                     let mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.put(`http://localhost:8080/configuracion/medico/actualizar/${this.state.id_medico}`,objeto)
+                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/medico/actualizar/${this.state.id_medico}`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
