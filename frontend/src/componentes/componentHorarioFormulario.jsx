@@ -1,6 +1,8 @@
 import React from "react"
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -141,7 +143,7 @@ class ComponentHorarioFormulario extends React.Component {
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -154,7 +156,7 @@ class ComponentHorarioFormulario extends React.Component {
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -191,7 +193,7 @@ class ComponentHorarioFormulario extends React.Component {
     async consultarHorario(id){
         let datos=[]
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/horario/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/horario/consultar/${id}/${token}`)
         .then(repuesta => {
             const json=JSON.parse(JSON.stringify(repuesta.data))
             if(json.estado_peticion==="200"){
@@ -293,7 +295,7 @@ class ComponentHorarioFormulario extends React.Component {
                     token
                 }
                 // console.log(datos)
-                axios.post("http://localhost:8080/configuracion/horario/agregar-horario",datos)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/horario/agregar-horario`,datos)
                 .then(repuesta => {
                     const json=JSON.parse(JSON.stringify(repuesta.data))
                     // console.log(json)
@@ -333,7 +335,7 @@ class ComponentHorarioFormulario extends React.Component {
                     token
                 }
                 console.log(datos)
-                axios.put(`http://localhost:8080/configuracion/horario/actualizar/${this.state.id_horario}`,datos)
+                axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/horario/actualizar/${this.state.id_horario}`,datos)
                 .then(repuesta => {
                     const json=JSON.parse(JSON.stringify(repuesta.data))
                     // console.log(json)
