@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentMedicoForm.css'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
 //sub componentes
