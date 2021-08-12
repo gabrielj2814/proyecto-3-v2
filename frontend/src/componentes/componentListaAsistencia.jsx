@@ -4,6 +4,8 @@ import {withRouter} from 'react-router-dom'
 //JS
 import axios from 'axios'
 import $ from 'jquery'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -99,7 +101,7 @@ class ComponentListaAsistencia extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
@@ -113,7 +115,7 @@ class ComponentListaAsistencia extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -148,7 +150,7 @@ class ComponentListaAsistencia extends React.Component{
     }
 
     async consultarTipoTrabajador(){
-        await axios.get("http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}configuracion/tipo-trabajador/consultar-tipos-trabajador`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log(json)
@@ -160,7 +162,7 @@ class ComponentListaAsistencia extends React.Component{
     }
 
     async consultarAsistencia(){
-        await axios.get(`http://localhost:8080/transaccion/asistencia/consultar-asistencia-hoy`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia/consultar-asistencia-hoy`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             console.log(json)
@@ -179,8 +181,8 @@ class ComponentListaAsistencia extends React.Component{
     }
     
     async pasarAsistencia(){
-        await axios.get(`http://localhost:8080/transaccion/asistencia/verificar-inasistencias-justificada`)
-        await axios.get(`http://localhost:8080/transaccion/asistencia/verificar-inasistencias-injustificada`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia/verificar-inasistencias-justificada`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia/verificar-inasistencias-injustificada`)
         window.location.href = window.location.href;
     }
 
@@ -210,7 +212,7 @@ class ComponentListaAsistencia extends React.Component{
             }
         }
         console.log("datos =>>>> ",datos)
-        await axios.put(`http://localhost:8080/transaccion/asistencia/agregar-observacion`,datos)
+        await axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia/agregar-observacion`,datos)
         .then(async respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log("repuesta servidor =>>> ",json)
@@ -315,7 +317,7 @@ class ComponentListaAsistencia extends React.Component{
   
         if(datos!==null){
           $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_asistencia.php',
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_asistencia.php`,
             type:"post",
             data:datos,
             success: function(respuesta) {
@@ -323,7 +325,7 @@ class ComponentListaAsistencia extends React.Component{
                 let json=JSON.parse(respuesta)
                 if(json.nombrePdf!=="false"){
                     $filaVerPdf.classList.remove("ocultarFormulario") 
-                    document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                    document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
