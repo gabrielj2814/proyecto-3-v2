@@ -8,6 +8,8 @@ import '../css/componentSolicitarPermisoForm.css'
 //JS
 import axios from 'axios'
 import Moment from 'moment'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
 //sub componentes
@@ -75,7 +77,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         if(localStorage.getItem("usuario")){
             var respuesta_servidor=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 if(respuesta_servidor.usuario){
@@ -145,9 +147,9 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             // const id_cedula=await this.consultarSesion()
             await this.consultarFechaServidor()
             await this.consultarTodosLosTrabajadores()
-            const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
+            const ruta_generar_id=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/generar-id`
             const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
-            const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
+            const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/permiso/consultar-permisos`
             const lista_permisos=await this.consultarAlServidor(ruta_permisos)
             const propiedades={
                 id:"id_permiso",
@@ -186,7 +188,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -199,7 +201,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -234,7 +236,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
     
     async consultarFechaServidor(){
-        await axios.get("http://localhost:8080/transaccion/permiso-trabajador/fecha-servidor")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/fecha-servidor`)
         .then(respuesta => {
             let fechaServidor=respuesta.data.fechaServidor
             // alert(fechaServidor)
@@ -255,7 +257,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async consultarTodosLosTrabajadores(){
-        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos =>>> ",json)
@@ -312,7 +314,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     async buscarPermiso(a){
         let input=a.target;
         const token=localStorage.getItem('usuario')
-        const ruta_permiso=`http://localhost:8080/configuracion/permiso/consultar/${input.value}/${token}`
+        const ruta_permiso=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/permiso/consultar/${input.value}/${token}`
         const permiso=await this.consultarAlServidor(ruta_permiso)
         console.log(permiso)
         this.setState(permiso.permiso)
@@ -427,7 +429,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
                 token
             }
             console.log("datos =>>> ",objeto)
-            await axios.post("http://localhost:8080/transaccion/permiso-trabajador/registrar",objeto)
+            await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/registrar`,objeto)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 mensaje.texto=respuesta_servidor.mensaje
@@ -448,9 +450,9 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async nuevoPermiso(){
-        const ruta_generar_id="http://localhost:8080/transaccion/permiso-trabajador/generar-id"
+        const ruta_generar_id=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/generar-id`
         const id_fomrulario=await this.consultarAlServidor(ruta_generar_id)
-        const ruta_permisos="http://localhost:8080/configuracion/permiso/consultar-permisos"
+        const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/permiso/consultar-permisos`
         const lista_permisos=await this.consultarAlServidor(ruta_permisos)
         const propiedades={
             id:"id_permiso",
@@ -495,7 +497,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
             this.setState({
                 estadoBusquedaTrabajador:true
             })
-            const ruta_ultimo_permiso=`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${input.value}`
+            const ruta_ultimo_permiso=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-ultimo/${input.value}`
             const ultimo_permiso=await this.consultarAlServidor(ruta_ultimo_permiso)
             console.log("datos ultimo permiso =>>> ",ultimo_permiso)
             if(ultimo_permiso.permiso_trabajador.length>0){
@@ -520,7 +522,7 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
     }
 
     async verificarReposoTrabajador(cedula){
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/verifircar-reposo-trabajador/${cedula}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/verifircar-reposo-trabajador/${cedula}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             if(json.estado===true){
