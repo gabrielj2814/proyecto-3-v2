@@ -1,7 +1,8 @@
 import React from "react"
 import {withRouter} from "react-router-dom"
 import $ from "jquery"
-
+// IP servidor
+import servidor from '../ipServer.js'
 //JS
 import axios from 'axios'
 import Moment from 'moment'
@@ -175,7 +176,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         let json={
             id_cedula:this.state.id_cedula
         }
-        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/consultar-ultimo`,json)
+        await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar-ultimo`,json)
         .then(async respuesta => {
             let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
             console.log(jsonResponse)
@@ -234,7 +235,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -250,7 +251,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -263,7 +264,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -299,7 +300,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarRepososTrabajador(id){
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             let respuesta_servidor=JSON.parse(JSON.stringify(respuesta.data))
 
@@ -361,7 +362,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
     }
 
     async consultarReposoActivoTrabajador(id_cedula){
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar-reposo-activos/${id_cedula}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar-reposo-activos/${id_cedula}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado===true){
@@ -382,7 +383,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         let mensaje={texto:"",estado:""}
         let datos=null
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.estado_peticion==="200"){
@@ -406,7 +407,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async generarId(){
         let id=null
-        await axios.get("http://localhost:8080/transaccion/reposo-trabajador/generar-id")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/generar-id`)
         .then(respuesta => {
             id=respuesta.data.id
         })
@@ -418,7 +419,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarTodosTrabajadores(){
         let respuesta_servidor=null
-        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.trabajadores
             let trabajadoresActivos=respuesta_servidor.filter(trabajador => trabajador.estatu_trabajador==="1")
@@ -438,7 +439,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarTodosReposo(){
         let respuesta_servidor=null
-        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/reposo/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.reposos
             let listaDeRepososActivos= respuesta_servidor.filter(reposo => reposo.estatu_reposo==="1")
@@ -463,7 +464,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarTodosLosCam(){
         let datos=null
-        await axios.get("http://localhost:8080/configuracion/cam/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cam/consultar-todos`)
         .then(async respuesta => {
             datos=respuesta.data.cams
             let listaDeCamActivos=datos.filter( cam => cam.estatu_cam==="1")
@@ -499,7 +500,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         respuesta_servidor=""
         var ciudad={}
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/ciudad/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             ciudad=respuesta_servidor.ciudad
@@ -516,7 +517,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         respuesta_servidor=""
         let estado=null
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/estado/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             estado=respuesta_servidor.estado
@@ -533,7 +534,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
         respuesta_servidor=""
         let tipoCam=null
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             tipoCam=respuesta_servidor.tipo_cam
@@ -547,7 +548,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarTodasEspecialidad(){
         var respuesta_servidor=null
-        await axios.get("http://localhost:8080/configuracion/especialidad/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/especialidad/consultar-todos`)
         .then(async respuesta=>{
             respuesta_servidor=respuesta.data.especialidades
             // console.log(respuesta.data)
@@ -623,7 +624,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
     async consultarSignacionesPorEspecialidad(id){
         let datos=null
-        await axios.get(`http://localhost:8080/configuracion/asignacion-medico-especialidad/consultar-asignacion-por-especialidad/${id}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-medico-especialidad/consultar-asignacion-por-especialidad/${id}`)
         .then(repuesta => {
             datos=repuesta.data.medico_especialidad
         })
@@ -941,7 +942,7 @@ class ComponetReposoTrabajadorFormDirecto extends React.Component{
 
             if(this.state.estadoCalcula===true){
                 // alert("si")
-                axios.post("http://localhost:8080/transaccion/reposo-trabajador/registrar",datos)
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/registrar`,datos)
                     .then(respuesta => {
                         let json=JSON.parse(JSON.stringify(respuesta.data))
                         console.log("repuesta =>>> ",json)

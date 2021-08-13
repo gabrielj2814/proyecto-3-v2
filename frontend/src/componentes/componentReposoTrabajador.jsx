@@ -5,6 +5,8 @@ import {withRouter} from "react-router-dom"
 import axios from 'axios'
 import Moment from 'moment'
 import $ from 'jquery'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -157,7 +159,7 @@ class ComponentReposoTrabajador extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
@@ -171,7 +173,7 @@ class ComponentReposoTrabajador extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -228,7 +230,7 @@ class ComponentReposoTrabajador extends React.Component{
 
     async consultarRepososTrabajadoresFechaDesdeHasta(fechaDesde,fechaHasta){
         let datos=null
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/consultar-reposo/${fechaDesde}/${fechaHasta}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/consultar-reposo/${fechaDesde}/${fechaHasta}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             datos=json
@@ -262,7 +264,7 @@ class ComponentReposoTrabajador extends React.Component{
 
     async consultarTodosTrabajadores(){
         let respuesta_servidor=null
-        await axios.get("http://localhost:8080/configuracion/trabajador/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.trabajadores
             // console.log(respuesta.data)
@@ -276,7 +278,7 @@ class ComponentReposoTrabajador extends React.Component{
 
     async consultarTodosReposo(){
         let respuesta_servidor=null
-        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/reposo/consultar-todos`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data.reposos
         })
@@ -301,7 +303,7 @@ class ComponentReposoTrabajador extends React.Component{
     async reposoEntregado(a){
         let boton=a.target
         // alert("Reposo entregado "+boton.id)
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"E"}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"E"}`)
         .then(async repuesta => {
             let json=repuesta.data
             if(json.mensaje!==""){
@@ -324,7 +326,7 @@ class ComponentReposoTrabajador extends React.Component{
     async reposoNoEntregado(a){
         let boton=a.target
         // alert("Reposo no entregado "+boton.id)
-        await axios.get(`http://localhost:8080/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"N"}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/actualizar-entrega-reposo/${boton.id}/${"N"}`)
         .then(async repuesta => {
             let json=repuesta.data
             if(json.mensaje!==""){
@@ -374,7 +376,7 @@ class ComponentReposoTrabajador extends React.Component{
     }
 
     async consultarTodosReposo2(){
-        await axios.get("http://localhost:8080/configuracion/reposo/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/reposo/consultar-todos`)
         .then(respuesta=>{
           let json=JSON.parse(JSON.stringify(respuesta.data.reposos))
             let listaReposos=json.filter(reposo => {
@@ -441,7 +443,7 @@ class ComponentReposoTrabajador extends React.Component{
         if(datos!==null){
         //   alert("generar pdf")
           $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_reposo_trabajador.php',
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_reposo_trabajador.php`,
             type:"post",
             data:datos,
             success: function(respuesta) {
@@ -450,7 +452,7 @@ class ComponentReposoTrabajador extends React.Component{
               let json=JSON.parse(respuesta)
               if(json.nombrePdf!=="false"){
                   $filaVerPdf.classList.remove("ocultarFormulario") 
-                  document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                  document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
               }
               else{
                   $filaVerPdf.classList.add("ocultarFormulario") 
@@ -490,7 +492,7 @@ class ComponentReposoTrabajador extends React.Component{
         //     registros:[],
         //       numeros_registros:0
         // })
-        await axios.post(`http://localhost:8080/transaccion/reposo-trabajador/interumpir`,json)
+        await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/reposo-trabajador/interumpir`,json)
         .then(async respuesta => {
             let jsonResponse=JSON.parse(JSON.stringify(respuesta.data))
             if(jsonResponse.estado===true){
