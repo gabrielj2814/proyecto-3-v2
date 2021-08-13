@@ -7,6 +7,8 @@ import '../css/componentTrabajadorConsulta.css'
 //JS
 import axios from 'axios'
 import Moment from 'moment'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
 //sub componentes
@@ -104,7 +106,7 @@ class ComponentTrabajadorConsulta extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -117,7 +119,7 @@ class ComponentTrabajadorConsulta extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -155,7 +157,7 @@ class ComponentTrabajadorConsulta extends React.Component{
         var mensaje={texto:"",estado:""},
         respuesta_servidor=""
         const token=localStorage.getItem('usuario')
-        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar/${id}/${token}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
