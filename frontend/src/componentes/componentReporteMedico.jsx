@@ -6,8 +6,6 @@ import {withRouter} from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentReporteMedico.css'
-//JS
-import axios from 'axios'
 //componentes
 import ComponentDashboard from './componentDashboard'
 

@@ -2,6 +2,8 @@ import React from 'react';
 import {withRouter} from 'react-router-dom'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 // css
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-grid.css';
@@ -79,7 +81,7 @@ class ComponentRecuperarCuenta extends React.Component{
       async consultarTrabajador(id){
         var respuesta_servidor=""
         var mensaje=this.state.mensaje
-        await axios.get(`http://localhost:8080/configuracion/trabajador/consultar-trabajador/${id}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-trabajador/${id}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_peticion==="200"){
@@ -295,7 +297,7 @@ validarNumero(a){
     async validarClave(){
         if(this.validarFormulario()){var respuesta_servidor=""
         var mensaje=this.state.mensaje
-        axios.get(`http://localhost:8080/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
+        axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/cambiar-clave/${this.state.id_cedula}/${this.state.clave_trabajador}/${this.state.respuesta_usuario_1}/${this.state.respuesta_usuario_2}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)

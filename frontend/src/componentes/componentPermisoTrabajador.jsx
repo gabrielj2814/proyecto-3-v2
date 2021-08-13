@@ -2,6 +2,8 @@ import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import $ from 'jquery'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -77,7 +79,7 @@ class ComponentPermisoTrabajador extends React.Component{
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/permiso-trabajador")
         if(acessoModulo){
           await this.consultarTodosPermiso()
-          const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${"E"}`
+          const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-estatu/${"E"}`
           const permisos=await this.consultarAlServidor(ruta_permisos)
           const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
           permisos_verificado.tabla="E"
@@ -95,7 +97,7 @@ class ComponentPermisoTrabajador extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
@@ -109,7 +111,7 @@ class ComponentPermisoTrabajador extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -221,7 +223,7 @@ class ComponentPermisoTrabajador extends React.Component{
         if(input.value==="C"){
             // /consultar-culminados
             // alert("hola")
-            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-culminados`
+            const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-culminados`
             const permisos=await this.consultarAlServidor(ruta_permisos)
             const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
             permisos_verificado.tabla=input.value
@@ -233,7 +235,7 @@ class ComponentPermisoTrabajador extends React.Component{
         else if(input.value==="A"){
             // /consultar-culminados
             // alert("hola")
-            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-aprovados`
+            const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-aprovados`
             const permisos=await this.consultarAlServidor(ruta_permisos)
             const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
             permisos_verificado.tabla=input.value
@@ -243,7 +245,7 @@ class ComponentPermisoTrabajador extends React.Component{
             this.setState(permisos_verificado)
         }
         else{
-            const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${input.value}`
+            const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-estatu/${input.value}`
             const permisos=await this.consultarAlServidor(ruta_permisos)
             const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
             permisos_verificado.tabla=input.value
@@ -266,9 +268,9 @@ class ComponentPermisoTrabajador extends React.Component{
         }//UPDATE tpermisotrabajador SET estatu_permiso_trabajador='D' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         //UPDATE tpermisotrabajador SET estatu_permiso_trabajador='C' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         var mensaje=this.state.mensaje
-        const ruta_actualizar_permiso=`http://localhost:8080/transaccion/permiso-trabajador/actualizar-estatu/${input.id}`
+        const ruta_actualizar_permiso=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/actualizar-estatu/${input.id}`
         const actualizar_permiso=await this.enviarDatosAlServidor(ruta_actualizar_permiso,objeto)
-        const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${this.state.tabla}`
+        const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-estatu/${this.state.tabla}`
         const permisos=await this.consultarAlServidor(ruta_permisos)
         mensaje.texto=actualizar_permiso.mensaje
         mensaje.estado=actualizar_permiso.estado_peticion
@@ -290,9 +292,9 @@ class ComponentPermisoTrabajador extends React.Component{
             token
         }//UPDATE tpermisotrabajador SET estatu_permiso_trabajador='E' WHERE id_permiso_trabajador='pert-1-22-04-2020'
         var mensaje=this.state.mensaje
-        const ruta_actualizar_permiso=`http://localhost:8080/transaccion/permiso-trabajador/actualizar-estatu/${input.id}`
+        const ruta_actualizar_permiso=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/actualizar-estatu/${input.id}`
         const actualizar_permiso=await this.enviarDatosAlServidor(ruta_actualizar_permiso,objeto)
-        const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-estatu/${this.state.tabla}`
+        const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-estatu/${this.state.tabla}`
         const permisos=await this.consultarAlServidor(ruta_permisos)
         mensaje.texto=actualizar_permiso.mensaje
         mensaje.estado=actualizar_permiso.estado_peticion
@@ -319,7 +321,7 @@ class ComponentPermisoTrabajador extends React.Component{
     }
 
     async consultarTodosPermiso(){
-        await axios.get("http://localhost:8080/configuracion/permiso/consultar-permisos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/permiso/consultar-permisos`)
         .then(respuesta=>{
           let json=JSON.parse(JSON.stringify(respuesta.data.permisos))
           let datosSelect=json.filter(permiso => {
@@ -395,7 +397,7 @@ class ComponentPermisoTrabajador extends React.Component{
               let json=JSON.parse(respuesta)
               if(json.nombrePdf!=="false"){
                   $filaVerPdf.classList.remove("ocultarFormulario") 
-                  document.getElementById("linkPdf").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                  document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
               }
               else{
                   $filaVerPdf.classList.add("ocultarFormulario") 
@@ -432,12 +434,12 @@ class ComponentPermisoTrabajador extends React.Component{
         id:this.state.id_permiso_trabajador_interumpir,
         token
       }
-      await axios.post(`http://localhost:8080/transaccion/permiso-trabajador/interumpir`,json)
+      await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/interumpir`,json)
       .then(async repuesta => {
         let json=JSON.parse(JSON.stringify(repuesta.data))
         console.log(json)
         if(json.estado_peticion==="200"){
-          const ruta_permisos=`http://localhost:8080/transaccion/permiso-trabajador/consultar-aprovados`
+          const ruta_permisos=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/permiso-trabajador/consultar-aprovados`
           const permisos=await this.consultarAlServidor(ruta_permisos)
           const permisos_verificado=this.verficarLista(permisos.permisos_trabajador)
           permisos_verificado.tabla="A"
