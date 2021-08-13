@@ -1,6 +1,8 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -68,7 +70,7 @@ constructor(){
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
@@ -81,7 +83,7 @@ constructor(){
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -150,7 +152,7 @@ constructor(){
 
    async consultarTodosTipoCam(){
         var respuesta_servidor=[]
-        await axios.get("http://localhost:8080/configuracion/tipo-cam/consultar-todos")
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-todos`)
         .then(respuesta=>{
           respuesta_servidor=respuesta.data.tipo_cams
           console.log(respuesta.data)
@@ -199,7 +201,7 @@ constructor(){
         var respuesta_servidor="",
         valor=this.state.datoDeBusqueda
         if(valor!==""){
-          await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar-patron/${valor}`)
+          await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-patron/${valor}`)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
@@ -220,7 +222,7 @@ constructor(){
         valor=input.value,
         respuesta_servidor=""
         if(valor!==""){
-            await axios.get(`http://localhost:8080/configuracion/tipo-cam/consultar-patron/${valor}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-patron/${valor}`)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
