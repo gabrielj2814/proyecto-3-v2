@@ -6,6 +6,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentTrabajadorRegistro.css'
 //JS
 import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 //sub componentes
 import InputButton from '../subComponentes/input_button'
@@ -301,7 +303,7 @@ class ComponentTrabajadorRegistro extends React.Component{
                     clave_trabajador:this.state.clave_trabajador
                 } 
             }
-            axios.patch(`http://localhost:8080/configuracion/trabajador/activar-cuenta/${this.state.id_cedula}`,objeto)
+            axios.patch(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/activar-cuenta/${this.state.id_cedula}`,objeto)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 if(respuesta_servidor.estado_peticion==="200"){
