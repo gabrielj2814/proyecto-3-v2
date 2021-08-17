@@ -306,3 +306,12 @@ CREATE TABLE tcintillo(
     estatu_foto_cintillo character(1) NOT NULL,
     constraint PK_id_foto_cintillo primary key(id_foto_cintillo)
 );
+
+-- tablas de intranet (año 4)
+
+CREATE TABLE tgrado(
+    id_grado serial,
+    numero_grado character(1) NOT NULL,
+    estatus_grado character(1) NOT NULL,
+    constraint PK_id_grado primary key(id_grado)
+);
