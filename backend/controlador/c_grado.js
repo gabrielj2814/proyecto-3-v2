@@ -74,16 +74,24 @@ controladorGrado.actualizar= async (req,res) => {
     let modeloGrado=new ModeloGrado()
     modeloGrado.setDatos(grado)
     modeloGrado.setIdGrado(id)
-    let resultGrado=await modeloGrado.actualizar()
+    let resultGrado=await modeloGrado.consultar()
     if(resultGrado.rowCount>0){
-        respuesta_api.mensaje="actualización completada"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
+        let resultGrado2=await modeloGrado.actualizar()
+        if(resultGrado2.rowCount>0){
+            respuesta_api.mensaje="actualización completada"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+        }
+        else{
+            respuesta_api.mensaje="error al actualizar"
+            respuesta_api.estado_respuesta=false
+            respuesta_api.color_alerta="danger"
+        }
     }
     else{
-        respuesta_api.mensaje="error al actualizar"
+        respuesta_api.mensaje="error al actualizar (este registro no se encuentra en la base de datos)"
         respuesta_api.estado_respuesta=false
-        respuesta_api.color_alerta="danger"
+        respuesta_api.color_alerta="warning"
     }
     res.writeHead(200,{"Content-Type":"application/json"})
     res.write(JSON.stringify(respuesta_api))
