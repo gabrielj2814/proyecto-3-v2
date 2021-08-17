@@ -6,10 +6,10 @@ controladorGrado=require("../../../controlador/c_grado")
 
 router.use(bodyparser.json())
 
-// router.get()// consulta especifica
 router.post("/registrar",controladorGrado.registrar_grador)//registrar
 router.get("/consultar-todos",controladorGrado.consultarTodos)// consultar todos
-// router.put()// actualizar
+router.get("/consultar/:id",controladorGrado.consultar)// consulta especifica
+router.put("/actualizar/:id",controladorGrado.actualizar)// actualizar
 
 
 

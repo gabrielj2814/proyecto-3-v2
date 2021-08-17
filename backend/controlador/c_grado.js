@@ -43,6 +43,53 @@ controladorGrado.consultarTodos=async (req,res) => {
     res.end()
 }
 
+controladorGrado.consultar=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    const ModeloGrado=require("../modelo/m_grado")
+    let {id}=req.params
+    let modeloGrado=new ModeloGrado()
+    modeloGrado.setIdGrado(id)
+    let resultGrado=await modeloGrado.consultar()
+    if(resultGrado.rowCount>0){
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.datos=resultGrado.rows
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="no se a encontrado el registro en la base de datos"
+        respuesta_api.estado_respuesta=false
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
+controladorGrado.actualizar= async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const ModeloGrado=require("../modelo/m_grado")
+    let {grado}=req.body
+    let {id}=req.params
+    let modeloGrado=new ModeloGrado()
+    modeloGrado.setDatos(grado)
+    modeloGrado.setIdGrado(id)
+    let resultGrado=await modeloGrado.actualizar()
+    if(resultGrado.rowCount>0){
+        respuesta_api.mensaje="actualización completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al actualizar"
+        respuesta_api.estado_respuesta=false
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 
 module.exports=controladorGrado
