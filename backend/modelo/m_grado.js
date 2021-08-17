@@ -17,7 +17,12 @@ class ModeloGrado extends DriverPostgre{
     }
 
     async registrar(){
-        const SQL=`INSERT `
+        const SQL=`INSERT INTO tgrado(numero_grado,estatus_grado) VALUES('${this.numero_grado}','${this.estatus_grado}')`
+        return await this.query(SQL)
+    }
+
+    async consultarTodos(){
+        const SQL=`SELECT * FROM tgrado;`
         return await this.query(SQL)
     }
 
@@ -26,4 +31,4 @@ class ModeloGrado extends DriverPostgre{
 
 }
 
-ModuloModelo.exports = ModeloGrado
+module.exports= ModeloGrado
