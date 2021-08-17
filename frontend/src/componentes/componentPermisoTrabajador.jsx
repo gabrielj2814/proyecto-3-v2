@@ -388,7 +388,7 @@ class ComponentPermisoTrabajador extends React.Component{
         if(datos!==null){
           // alert("generar pdf")
           $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_permiso_trabajador.php',
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_permiso_trabajador.php`,
             type:"post",
             data:datos,
             success: function(respuesta) {
