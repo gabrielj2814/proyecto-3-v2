@@ -26,6 +26,8 @@ rutas_modulo_horario=require("./rutas/configuracion/horario"),
 rutas_modulo_asistencia=require("./rutas/transaccion/asistencia"),
 rutas_modulo_bitacora=require("./rutas/transaccion/bitacora"),
 rutas_modulo_cintillo=require("./rutas/configuracion/cintillo")
+// --------------------------------
+const rutas_modulo_grado=require("./rutas/configuracion/grado")
 //SET
 app.set("puerto",8080)
 // USE
@@ -55,6 +57,8 @@ app
 .use("/transaccion/reposo-trabajador",rutas_modulo_reposo_trabajador)
 .use("/transaccion/asistencia",rutas_modulo_asistencia)
 .use("/transaccion/bitacora",rutas_modulo_bitacora)
+// 
+app.use("/configuracion/grado",rutas_modulo_grado)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
