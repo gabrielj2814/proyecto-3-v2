@@ -81,6 +81,101 @@ class ComponenrGradoFormulario extends React.Component{
         }
     }
 
+    async componentWillMount(){
+        // let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/horario")
+        // if(acessoModulo){
+            
+        // }
+        // else{
+
+        // }
+        const {operacion} = this.props.match.params
+        if(operacion==="registrar"){
+            alert("formulario de registro")
+
+        }
+        else if(operacion==="actualizar"){
+            // alert("formulario de actualizar")
+            if(this.props.match.params.id){
+                const {id} = this.props.match.params
+                let datos =await this.consultarGrado(id)
+            }
+        }
+    }
+
+    async consultarGrado(id){
+        axiosCustom.get(`configuracion/grado/consultar/${id}`)
+        .then(respuesta => {
+            let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(respuestaServidor)
+            if(respuestaServidor.estado_respuesta===true){
+                this.setState(respuestaServidor.datos[0])
+
+            }
+            else{
+                alert("este registro no exite")
+            }
+
+        })
+        .catch(error => {
+            console.error(`error de la peticion axios =>>> ${error}`)
+        })
+    }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axiosCustom.get(`login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }  
+            })
+        }
+        return estado
+      }
+  
+      async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+        let estado=false
+        await axiosCustom.get(`configuracion/acceso/consultar/${idPerfil}`)
+        .then(repuesta => {
+            let json=JSON.parse(JSON.stringify(repuesta.data))
+            // console.log("datos modulos =>>>",json)
+            let modulosSistema={}
+            let modulosActivos=json.modulos.filter( modulo => {
+                if(modulo.estatu_modulo==="1"){
+                    return modulo
+                }
+            })
+            // console.log("datos modulos =>>>",modulosActivos);
+            for(let medulo of modulosActivos){
+                if(modulosSistema[medulo.modulo_principal]){
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+                else{
+                    modulosSistema[medulo.modulo_principal]={}
+                    modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                }
+            }
+            console.log(modulosSistema)
+            if(modulosSistema[modulo][subModulo]){
+              estado=true
+            }
+            // this.setState({modulosSistema})
+            
+            
+        })
+        .catch(error =>  {
+            console.log(error)
+        })
+        return estado
+    }
+
+
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
@@ -132,6 +227,7 @@ class ComponenrGradoFormulario extends React.Component{
         }
     }
 
+   
 
 
 
