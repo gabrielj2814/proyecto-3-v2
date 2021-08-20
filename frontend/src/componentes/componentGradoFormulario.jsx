@@ -15,6 +15,10 @@ import InputButton from '../subComponentes/input_button'
 import ComponentFormCampo from '../subComponentes/componentFormCampo';
 import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
 
+const axiosCustom=axios.create({
+    baseURL:`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/`
+})
+
 class ComponenrGradoFormulario extends React.Component{
 
 
@@ -94,15 +98,34 @@ class ComponenrGradoFormulario extends React.Component{
     }
 
 
-    operacion(){
+    async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         const token=localStorage.getItem('usuario')
         if(operacion==="registrar"){
-            alert("registrando")
             let datosFormulario=new FormData(document.getElementById("formularioGrado"))
             let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            console.log(datosFormatiados)
+            let datosGrado={
+                grado:datosFormatiados,
+                token
+            }
+            // console.log(datosGrado)
+            await axiosCustom.post("configuracion/grado/registrar",datosGrado)
+            .then(respuesta => {
+                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                console.log(respuestaServidor)
+                alerta.color=respuestaServidor.color_alerta
+                alerta.mensaje=respuestaServidor.mensaje
+                if(respuestaServidor.estado_respuesta===false){
+                    alerta.estado=true
+                }
+                this.setState({alerta})
+            })
+            .catch(error => {
+                console.error(`error de la peticion axios =>>> ${error}`)
+            })
+
         }
         else if(operacion==="actualizar"){
             alert("actualizando")
