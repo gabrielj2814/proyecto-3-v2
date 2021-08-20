@@ -1,0 +1,228 @@
+import React from 'react';
+import {withRouter} from 'react-router-dom'
+import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
+//css
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/css/bootstrap-grid.css'
+import '../css/componentGradoFormulario.css'
+//componentes
+import ComponentDashboard from './componentDashboard'
+// subComponent
+import AlertBootstrap from "../subComponentes/alertBootstrap"
+import InputButton from '../subComponentes/input_button'
+import ComponentFormCampo from '../subComponentes/componentFormCampo';
+import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
+
+class ComponenrGradoFormulario extends React.Component{
+
+
+    constructor(){
+        super()
+        this.mostrarModulo=this.mostrarModulo.bind(this)
+        this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.operacion=this.operacion.bind(this)
+        this.state={
+            //////
+            modulo:"",
+            estado_menu:false,
+            // formulario
+            id_grado:"",
+            numero_grado:"",
+            estatus_grado:"1",
+            // 
+            msj_numero_grado:{
+                mensaje:"",
+                color_texto:""
+            },
+            //
+            alerta:{
+                color:null,
+                mensaje:null,
+                estado:false
+            }
+        }
+    }
+
+    // logica menu
+    mostrarModulo(a){
+        var span=a.target;
+        if(this.state.modulo===""){
+            const estado="true-"+span.id;
+            this.setState({modulo:estado,estado_menu:true});
+        }
+        else{
+            var modulo=this.state.modulo.split("-");
+            if(modulo[1]===span.id){
+                if(this.state.estado_menu){
+                    const estado="false-"+span.id
+                    this.setState({modulo:estado,estado_menu:false})
+                }
+                else{
+                    const estado="true-"+span.id
+                    this.setState({modulo:estado,estado_menu:true})
+                }
+            }
+            else{
+                if(this.state.estado_menu){
+                    const estado="true-"+span.id
+                    this.setState({modulo:estado})
+                }
+                else{
+                    const estado="true-"+span.id
+                    this.setState({modulo:estado,estado_menu:true})
+                }
+            }
+        }
+    }
+
+    cambiarEstado(a){
+        var input=a.target;
+        this.setState({[input.name]:input.value})
+    }
+
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
+    }
+
+
+    operacion(){
+        const {operacion}=this.props.match.params
+        // alert("operacion")
+        const token=localStorage.getItem('usuario')
+        if(operacion==="registrar"){
+            alert("registrando")
+            let datosFormulario=new FormData(document.getElementById("formularioGrado"))
+            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+            console.log(datosFormatiados)
+        }
+        else if(operacion==="actualizar"){
+            alert("actualizando")
+        }
+    }
+
+
+
+
+
+    render(){
+        const jsx=(
+            <div className="row justify-content-center">
+                {this.state.alerta.estado===true &&
+                    (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
+                        
+                    </div>)
+                }
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_grado">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo">
+                            <span className="titulo-form-reposo">Formulario de Grado</span>
+                        </div>
+                    </div>
+                    <form id="formularioGrado" >
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Código Grado:"
+                            activo="no"
+                            type="text"
+                            value={this.state.id_grado}
+                            name="id_grado"
+                            id="id_grado"
+                            placeholder="Código Grado"
+                            eventoPadre={this.cambiarEstado}
+                            />
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Numero Grado:"
+                            activo="si"
+                            type="text"
+                            value={this.state.numero_grado}
+                            name="numero_grado"
+                            id="numero_grado"
+                            placeholder="Numero Grado"
+                            eventoPadre={this.cambiarEstado}
+                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormRadioState
+                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="Estatus:"
+                            name="estatus_grado"
+                            nombreLabelRadioA="Activo"
+                            idRadioA="activoA"
+                            checkedRadioA={this.state.estatus_grado}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Inactivo"
+                            idRadioB="activoB"
+                            valueRadioB="0"
+                            eventoPadre={this.cambiarEstado}
+                            checkedRadioB={this.state.estatus_grado}
+                            />
+                        </div>
+
+
+                    </form>
+                    <div className="row justify-content-center">
+                            <div className="col-auto">
+                                {this.props.match.params.operacion==="registrar" &&
+                                    <InputButton 
+                                    clasesBoton="btn btn-primary"
+                                    id="boton-registrar"
+                                    value="Registrar"
+                                    eventoPadre={this.operacion}
+                                    />
+                                }
+                                {this.props.match.params.operacion==="actualizar" &&
+                                    <InputButton 
+                                    clasesBoton="btn btn-warning"
+                                    id="boton-actualizar"
+                                    value="Actualizar"
+                                    eventoPadre={this.operacion}
+                                    />   
+                                }
+                            </div>
+                            <div className="col-auto">
+                                <InputButton 
+                                clasesBoton="btn btn-danger"
+                                id="boton-cancelar"
+                                value="Cancelar"
+                                eventoPadre={this.regresar}
+                                />   
+                            </div>
+                        </div>
+                </div>
+            </div>
+        )
+        return(
+            <div className="component_grado_formulario">
+                    
+                <ComponentDashboard
+                componente={jsx}
+                modulo={this.state.modulo}
+                eventoPadreMenu={this.mostrarModulo}
+                estado_menu={this.state.estado_menu}
+                />
+            
+            
+            </div>
+        )
+    }
+
+}
+
+export default withRouter(ComponenrGradoFormulario)
