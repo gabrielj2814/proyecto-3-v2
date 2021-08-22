@@ -82,6 +82,8 @@ import ComponentReposoTrabajadorFormDirecto from "./componentes/componentReposoT
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
 import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
 import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
+// ESTUDIANTE
+import componenteEstudiante from './componentes/componenteEstudiante'
 //cintillo
 import ComponentCintillo from "./componentes/componentCintillo"
 // error
@@ -158,16 +160,16 @@ function App() {
 
         <Route exact path="/dashboard/configuracion/cintillo-home" component={ComponentCintillo}/>
         
-        
         <Route exact path="/dashboard/configuracion/cam/consultar/:id" component={ComponentCamConsultar}/>
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
         
+        <Route exact path="/dashboard/configuracion/gestionar-estudiante" component={componenteEstudiante}/>
+
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorConsulta}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/:operacion/:id?" component={ComponentReposoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador:mensaje?" component={ComponentReposoTrabajador}/>
-
 
         <Route exact path="/dashboard/transaccion/permiso-trabajador/solicitar" component={ComponentSolicitarPermisoForm}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador/trabajador/solicitar" component={ComponentSolicitarPermisoTrabajadorForm}/>
