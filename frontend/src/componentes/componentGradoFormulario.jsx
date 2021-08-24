@@ -90,13 +90,9 @@ class ComponenrGradoFormulario extends React.Component{
 
         // }
         const {operacion} = this.props.match.params
-        if(operacion==="registrar"){
-            alert("formulario de registro")
-
-        }
-        else if(operacion==="actualizar"){
-            // alert("formulario de actualizar")
-            if(this.props.match.params.id){
+        if(operacion==="actualizar"){
+             // alert("formulario de actualizar")
+             if(this.props.match.params.id){
                 const {id} = this.props.match.params
                 let datos =await this.consultarGrado(id)
             }
@@ -223,7 +219,30 @@ class ComponenrGradoFormulario extends React.Component{
 
         }
         else if(operacion==="actualizar"){
-            alert("actualizando")
+            // alert("actualizando")
+            let {id} = this.props.match.params
+            let datosFormulario=new FormData(document.getElementById("formularioGrado"))
+            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+            let datosGrado={
+                grado:datosFormatiados,
+                token
+            }
+            // console.log(datosGrado)
+            await axiosCustom.put(`configuracion/grado/actualizar/${id}`,datosGrado)
+            .then(respuesta => {
+                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                console.log(respuestaServidor)
+                alerta.color=respuestaServidor.color_alerta
+                alerta.mensaje=respuestaServidor.mensaje
+                if(respuestaServidor.estado_respuesta===false){
+                    alerta.estado=true
+                }
+                this.setState({alerta})
+            })
+            .catch(error => {
+                console.error(`error de la peticion axios =>>> ${error}`)
+            })
         }
     }
 
