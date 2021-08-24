@@ -90,6 +90,7 @@ import ComponentError404 from "./componentes/componentError404"
 import ComponentBitacora from "./componentes/componentBitacora"
 // -------------------------------
 // grado
+import ComponentGrado from './componentes/componentGrado'
 import ComponentGradoFormulario from './componentes/componentGradoFormulario'
 
 
@@ -173,6 +174,7 @@ function App() {
 
 
         <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
+        <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>
 
 
 
