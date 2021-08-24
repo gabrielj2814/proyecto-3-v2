@@ -26,6 +26,7 @@ class ComponenrGradoFormulario extends React.Component{
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.regresar=this.regresar.bind(this)
         this.operacion=this.operacion.bind(this)
         this.state={
             //////
@@ -246,7 +247,9 @@ class ComponenrGradoFormulario extends React.Component{
         }
     }
 
-   
+    regresar(){
+        this.props.history.push(`/dashboard/configuracion/grado`)
+    }
 
 
 

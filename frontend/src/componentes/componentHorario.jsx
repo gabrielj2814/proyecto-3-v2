@@ -238,7 +238,7 @@ class ComponentHorario extends React.Component{
                         
                     </div>)
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Horario"/>
+                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Horario"/>
                 
 
                 <div className="row component-tabla-de-datos">

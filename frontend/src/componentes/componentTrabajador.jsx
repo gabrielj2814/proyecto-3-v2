@@ -552,7 +552,7 @@ class ComponentTrabajador extends React.Component{
                             </div>
                         </div>
                   </div>
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Trabajador"/>
+                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Trabajador"/>
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}
                     eventoEscribirCodigo={this.escribir_codigo}

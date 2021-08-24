@@ -357,7 +357,7 @@ class ComponentListaAsistencia extends React.Component{
                         
                     </div>)
                 }
-                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cam">
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_lista_asistencia">
                     <div className="row justify-content-center mb-3">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-cam">
                             <span className="titulo-form-cam">Lista de Asistencia</span>
