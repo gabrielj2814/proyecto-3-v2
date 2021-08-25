@@ -30,7 +30,7 @@ controladorEstudiante.consultar_todos = async(req, res) => {
 
   if (resultEstudiante.rowCount > 0) {
     respuesta_api.mensaje = "consulta completada"
-    respuesta_api.datos = resultGrado.rows
+    respuesta_api.datos = resultEstudiante.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
   }
@@ -54,7 +54,7 @@ controladorEstudiante.consultar = async (req, res) => {
 
   if (resultEstudiante.rowCount > 0) {
     respuesta_api.mensaje = "consulta completada"
-    respuesta_api.datos = resultGrado.rows
+    respuesta_api.datos = resultEstudiante.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
   }
@@ -81,7 +81,7 @@ controladorEstudiante.actualizar = async(req, res) => {
   let resultEstudiante = await modeloEstudiante.actualizar()
 
   if (resultEstudiante.rowCount > 0) {
-    let resultEstudiante2 = await modeloGrado.actualizar()
+    let resultEstudiante2 = await modeloEstudiante.actualizar()
     if (resultEstudiante2.rowCount > 0) {
       respuesta_api.mensaje = "actualización completada"
       respuesta_api.estado_respuesta = true
@@ -102,3 +102,5 @@ controladorEstudiante.actualizar = async(req, res) => {
   res.write(JSON.stringify(respuesta_api))
   res.end()
 }
+
+module.exports = controladorEstudiante;

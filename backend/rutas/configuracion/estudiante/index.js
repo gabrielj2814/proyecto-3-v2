@@ -1,15 +1,15 @@
 const express=require("express"),
 router=express.Router(),
 bodyparser=require("body-parser"),
-controladorGrado=require("../../../controlador/c_estudiante")
+controladorEstudiante=require("../../../controlador/c_estudiante")
 
 
 router.use(bodyparser.json())
 
-router.post("/registrar", controladorGrado.registrar_estudiante)//registrar
-router.get("/consultar-todos", controladorGrado.consultar_todos)// consultar todos
-router.get("/consultar/:id", controladorGrado.consultar)// consulta especifica
-router.put("/actualizar/:id", controladorGrado.actualizar)// actualizar
+router.post("/registrar", controladorEstudiante.registrar_estudiante)//registrar
+router.get("/consultar-todos", controladorEstudiante.consultar_todos)// consultar todos
+router.get("/consultar/:id", controladorEstudiante.consultar)// consulta especifica
+router.put("/actualizar/:id", controladorEstudiante.actualizar)// actualizar
 
 
 

@@ -1,7 +1,7 @@
 const express = require("express"),
   router = express.Router(),
   bodyparser = require("body-parser"),
-  controladorGrado = require("../../../controlador/c_representante")
+  controladorRepresentante = require("../../../controlador/c_representante")
 
 
 router.use(bodyparser.json())

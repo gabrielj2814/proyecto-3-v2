@@ -42,11 +42,11 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   async registrar() {
-    const SQL = `INSERT INTO testudiante(cedula_escolar, cedula_estudiante, nombres_estudiante, apellidos_estudiante, fecha_nacimiento_estudiante
+    const SQL = `INSERT INTO testudiante(cedula_escolar, cedula_estudiante, nombres_estudiante, apellidos_estudiante, fecha_nacimiento_estudiante,
       direccion_nacimiento_estudiante, id_ciudad, sexo_estudiante, procedencia_estudiante, escolaridad_estudiante, vive_con_estudiante,
       estatus_estudiante) VALUES ('${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}', 
       '${this.fecha_nacimiento_estudiante}', '${this.direccion_nacimiento_estudiante}', '${this.id_ciudad}', '${this.sexo_estudiante}', 
-      ${this.procedencia_estudiante}', '${this.escolaridad_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')`
+      '${this.procedencia_estudiante}', '${this.escolaridad_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')`
 
       return await this.query(SQL);
     }
@@ -64,11 +64,11 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   async actualizar(){
-    const SQL = `UPDATE testudiante SET cedula_escolar=${this.cedula_escolar}, cedula_estudiante=${this.cedula_estudiante}, 
-    nombres_estudiante=${this.nombres_estudiante}, apellidos_estudiante=${this.apellidos_estudiante}, fecha_nacimiento_estudiante= ${this.fecha_nacimiento_estudiante},
-    direccion_nacimiento_estudiante= ${this.direccion_nacimiento_estudiante}, id_ciudad=${this.id_ciudad}, sexo_estudiante=${this.sexo_estudiante},
-    procedencia_estudiante=${this.procedencia_estudiante}, escolaridad_estudiante=${this.escolaridad_estudiante}, vive_con_estudiante= ${this.vive_con_estudiante}, 
-    estatus_estudiante=${this.estatus_estudiante}`
+    const SQL = `UPDATE testudiante SET cedula_escolar='${this.cedula_escolar}', cedula_estudiante='${this.cedula_estudiante}', 
+    nombres_estudiante='${this.nombres_estudiante}', apellidos_estudiante='${this.apellidos_estudiante}', fecha_nacimiento_estudiante= '${this.fecha_nacimiento_estudiante}',
+    direccion_nacimiento_estudiante= '${this.direccion_nacimiento_estudiante}', id_ciudad='${this.id_ciudad}', sexo_estudiante='${this.sexo_estudiante}',
+    procedencia_estudiante='${this.procedencia_estudiante}', escolaridad_estudiante='${this.escolaridad_estudiante}', vive_con_estudiante= '${this.vive_con_estudiante}', 
+    estatus_estudiante='${this.estatus_estudiante}'`
 
     return await this.query(SQL);
   }

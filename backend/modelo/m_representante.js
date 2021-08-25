@@ -60,7 +60,7 @@ class ModeloRepresentante extends DriverPostgre {
   }
 
   async registrar () {
-    const SQL = `INSERT INTO trepresente(id_cedula_representante, nombres_representante,apellidos_representante, fecha_nacimiento_representante,
+    const SQL = `INSERT INTO trepresentante(id_cedula_representante, nombres_representante,apellidos_representante, fecha_nacimiento_representante,
       nivel_instruccion_representante, ocupacion_representante, direccion_representante, id_ciudad, telefono_movil_representante, 
       telefono_local_representante, numero_hijos_representante, constitucion_familiar_representante, ingresos_representante, tipo_vivienda_representante, 
       numero_estudiante_inicial_representante, numero_estudiante_grado_1_representante, numero_estudiante_grado_2_representante, numero_estudiante_grado_3_representante,
@@ -84,22 +84,22 @@ class ModeloRepresentante extends DriverPostgre {
   }
 
   async consultar () {
-    const SQL = `SELECT * FROM trepresentante WHERE id_cedula_representante=${this.id_cedula_representante}`
+    const SQL = `SELECT * FROM trepresentante WHERE id_cedula_representante='${this.id_cedula_representante}'`
 
     return await this.query(SQL);
   }
 
   async actualizar() {
-    const SQL = `UPDATE trepresentante SET id_cedula_representante=${this.id_cedula_representante}, nombres_representante=${this.nombres_representante}, 
-    apellidos_representante=${this.apellidos_representante}, fecha_nacimiento_representante=${this.fecha_nacimiento_representante}, 
-    nivel_instruccion_representante=${this.nivel_instruccion_representante}, ocupacion_representante=${this.ocupacion_representante}, 
-    direccion_representante=${this.direccion_representante}, id_ciudad=${this.id_ciudad},telefono_movil_representante=${this.telefono_movil_representante},
-    telefono_local_representante=${this.telefono_local_representante},numero_hijos_representante= ${this.numero_hijos_representante},
-    constitucion_familiar_representante=${this.constitucion_familiar_representante}, ingresos_representante=${this.ingresos_representante},
-    tipo_vivienda_representante=${this.tipo_vivienda_representante}, numero_estudiante_inicial_representante=${this.numero_estudiante_inicial_representante},
-    numero_estudiante_grado_1_representante=${this.numero_estudiante_grado_1_representante}, numero_estudiante_grado_2_representante=${this.numero_estudiante_grado_2_representante},
-    numero_estudiante_grado_3_representante=${this.numero_estudiante_grado_3_representante}, numero_estudiante_grado_4_representante=${this.numero_estudiante_grado_4_representante},
-    numero_estudiante_grado_5_representante=${this.numero_estudiante_grado_5_representante}, numero_estudiante_grado_6_representante=${this.numero_estudiante_grado_6_representante},
+    const SQL = `UPDATE trepresentante SET id_cedula_representante='${this.id_cedula_representante}', nombres_representante='${this.nombres_representante}', 
+    apellidos_representante='${this.apellidos_representante}', fecha_nacimiento_representante='${this.fecha_nacimiento_representante}', 
+    nivel_instruccion_representante='${this.nivel_instruccion_representante}', ocupacion_representante='${this.ocupacion_representante}', 
+    direccion_representante='${this.direccion_representante}', id_ciudad='${this.id_ciudad}',telefono_movil_representante='${this.telefono_movil_representante}',
+    telefono_local_representante='${this.telefono_local_representante}',numero_hijos_representante= '${this.numero_hijos_representante}',
+    constitucion_familiar_representante='${this.constitucion_familiar_representante}', ingresos_representante='${this.ingresos_representante}',
+    tipo_vivienda_representante='${this.tipo_vivienda_representante}', numero_estudiante_inicial_representante='${this.numero_estudiante_inicial_representante}',
+    numero_estudiante_grado_1_representante='${this.numero_estudiante_grado_1_representante}', numero_estudiante_grado_2_representante='${this.numero_estudiante_grado_2_representante}',
+    numero_estudiante_grado_3_representante='${this.numero_estudiante_grado_3_representante}', numero_estudiante_grado_4_representante='${this.numero_estudiante_grado_4_representante}',
+    numero_estudiante_grado_5_representante='${this.numero_estudiante_grado_5_representante}', numero_estudiante_grado_6_representante='${this.numero_estudiante_grado_6_representante}',
     estatus_representante=${this.estatus_representante}`
 
     return await this.query(SQL);
