@@ -317,7 +317,7 @@ class ComponentTipoTrab extends React.Component{
                         </div>
                       </div>
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Tipo Trabajador"/>
+                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Modulo de Tipo Trabajador"/>
                 
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}
