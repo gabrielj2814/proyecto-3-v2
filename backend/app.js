@@ -28,8 +28,6 @@ rutas_modulo_bitacora=require("./rutas/transaccion/bitacora"),
 rutas_modulo_cintillo=require("./rutas/configuracion/cintillo")
 // --------------------------------
 const rutas_modulo_grado=require("./rutas/configuracion/grado")
-const rutas_modulo_estudiante = require("./rutas/configuracion/estudiante")
-const rutas_modulo_representante = require("./rutas/configuracion/representante")
 //SET
 app.set("puerto",8080)
 // USE
@@ -61,8 +59,6 @@ app
 .use("/transaccion/bitacora",rutas_modulo_bitacora)
 // 
 app.use("/configuracion/grado",rutas_modulo_grado)
-app.use("/configuracion/estudiante", rutas_modulo_estudiante)
-app.use("/configuracion/representante", rutas_modulo_representante)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
