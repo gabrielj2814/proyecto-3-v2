@@ -306,3 +306,149 @@ CREATE TABLE tcintillo(
     estatu_foto_cintillo character(1) NOT NULL,
     constraint PK_id_foto_cintillo primary key(id_foto_cintillo)
 );
+
+-- tablas de intranet (año 4)
+
+CREATE TABLE tgrado(
+    id_grado SERIAL,
+    numero_grado character(1) NOT NULL,
+    estatus_grado character(1) NOT NULL,
+    constraint PK_id_grado primary key(id_grado)
+);
+
+
+CREATE TABLE taula(
+    id_aula SERIAL,
+    id_grado INTEGER NOT NULL,
+    nombre_aula character varying(150) NOT NULL,
+    constraint PK_id_aula primary key(id_aula),
+    constraint FK_id_grado foreign key(id_grado) references tgrado(id_grado) on update cascade on delete cascade
+);
+
+CREATE TABLE tano_escolar(
+    id_ano_escolar SERIAL,
+    ano_desde character varying(4) NOT NULL,
+    ano_hasta character varying(4) NOT NULL,
+    fecha_inicio_ano_escolar DATE NOT NULL,
+    fecha_cierre_ano_escolar DATE NOT NULL,
+    estatus_ano_escolar character(1) NOT NULL,
+    constraint PK_id_ano_escolar primary key(id_ano_escolar)
+);
+
+CREATE TABLE tasignacion_aula_profesor(
+    id_asignacion_aula_profesor SERIAL,
+    id_cedula character varying(8) NOT NULL,
+    id_aula INTEGER NOT NULL,
+    id_ano_escolar INTEGER NOT NULL,
+    estatus_asignacion_aula_profesor character(1) NOT NULL,
+    constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
+    constraint FK_id_cedula_tasignacion_aula_profesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
+    constraint FK_id_aula_tasignacion_aula_profesor foreign key(id_aula) references taula(id_aula) on update cascade on delete cascade,
+    constraint FK_id_ano_escolar_tasignacion_aula_profesor foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+);
+
+
+
+CREATE TABLE tlista_vacuna(
+    id_vacuna SERIAL,
+    nombre_vacuna character varying(150) NOT NULL,
+    estaus_vacuna character(1) NOT NULL,
+    constraint PK_id_vacuna primary key(id_vacuna)
+);
+
+CREATE TABLE tlista_enfermedad(
+    id_enfermedad SERIAL,
+    nombre_enfermedad character varying(150) NOT NULL,
+    estaus_enfermedad character(1) NOT NULL,
+    constraint PK_id_enfermedad primary key(id_enfermedad)
+);
+
+CREATE TABLE testudiante(
+    id_estudiante SERIAL,
+    cedula_escolar character varying(11) UNIQUE,
+    cedula_estudiante character varying(8) UNIQUE,
+    nombres_estudiante character varying(150) NOT NULL,
+    apellidos_estudiante character varying(150) NOT NULL,
+    fecha_nacimiento_estudiante DATE NOT NULL,
+    direccion_nacimiento_estudiante character varying(2000) NOT NULL,
+    id_ciudad character varying(6) NOT NULL,
+    sexo_estudiante character(1) NOT NULL,
+    procedencia_estudiante character varying(2000) NOT NULL,
+    escolaridad_estudiante character varying(150) NOT NULL,
+    vive_con_estudiante character varying(2000) NOT NULL,
+    estatus_estudiante character(1) NOT NULL,
+    constraint PK_id_estudiante primary key(id_estudiante),
+    constraint FK_id_ciudad_testudiante foreign key(id_ciudad) references tciudad(id_ciudad) on update cascade on delete cascade
+);
+
+CREATE TABLE vacuna_estudiante(
+    id_vacuna_estudiante SERIAL,
+    id_estudiante INTEGER NOT NULL,
+    id_vacuna INTEGER NOT NULL,
+    constraint PK_id_vacuna_estudiante primary key(id_vacuna_estudiante),
+    constraint FK_id_estudiante_testudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
+    constraint FK_id_vacuna_tlista_vacunas foreign key(id_vacuna) references tlista_vacuna(id_vacuna) on update cascade on delete cascade
+);
+
+CREATE TABLE enfermedad_estudiante(
+    id_enfermedad_estudiante SERIAL,
+    id_estudiante INTEGER NOT NULL,
+    id_enfermedad INTEGER NOT NULL,
+    constraint PK_id_enfermedad_estudiante primary key(id_enfermedad_estudiante),
+    constraint FK_id_estudiante_testudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
+    constraint FK_id_enfermedad_tlista_enfermedad foreign key(id_enfermedad) references tlista_enfermedad(id_enfermedad) on update cascade on delete cascade
+);
+
+CREATE TABLE trepresentante(
+    id_cedula_representante character varying(8) NOT NULL,
+    nombres_representante character varying(150) NOT NULL,
+    apellidos_representante character varying(150) NOT NULL,
+    fecha_nacimiento_representante DATE NOT NULL,
+    nivel_instruccion_representante character varying(150) NOT NULL,
+    ocupacion_representante character varying(2000) NULL,
+    direccion_representante character varying(3000) NOT NULL,
+    id_ciudad character varying(6) NOT NULL,
+    telefono_movil_representante character varying(11) NULL,
+    telefono_local_representante character varying(11) NULL,
+    numero_hijos_representante character varying(2) NOT NULL,
+    constitucion_familiar_representante character varying(150) NOT NULL,-- ver que es esto
+    ingresos_representante character varying(10) NULL,
+    tipo_vivienda_representante character(1) NOT NULL,-- el tipo de vivienda
+    numero_estudiante_inicial_representante character varying(2) NULL,
+    numero_estudiante_grado_1_representante character varying(2) NULL,
+    numero_estudiante_grado_2_representante character varying(2) NULL,
+    numero_estudiante_grado_3_representante character varying(2) NULL,
+    numero_estudiante_grado_4_representante character varying(2) NULL,
+    numero_estudiante_grado_5_representante character varying(2) NULL,
+    numero_estudiante_grado_6_representante character varying(2) NULL,
+    estatus_representante character(1) NOT NULL,
+    constraint PK_id_cedula_representante primary key(id_cedula_representante),
+    constraint FK_id_ciudad_trepresentante foreign key(id_ciudad) references tciudad(id_ciudad) on update cascade on delete cascade
+);
+
+CREATE TABLE tasignacion_representante_estudiante(
+    id_asignacion_representante_estudiante SERIAL,
+    id_estudiante INTEGER NOT NULL,
+    id_cedula_representante character varying(8) NOT NULL,
+    tipo_representante character(1) NOT NULL,
+    parentesco character varying(150) NOT NULL,
+    numero_representante INTEGER NOT NULL,
+    estatus_asignacion_representante_estudiante character(1) NOT NULL,
+    constraint PK_id_asignacion_representante_estudiante primary key(id_asignacion_representante_estudiante),
+    constraint FK_id_cedula_representante_tasignacion_representante_estudiante foreign key(id_cedula_representante) references trepresentante(id_cedula_representante) on update cascade on delete cascade,
+    constraint FK_id_estudiante_tasignacion_representante_estudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade
+);
+
+CREATE TABLE tgrado_escolar(
+    id_grado_escolar SERIAL,
+    id_estudiante INTEGER UNIQUE NOT NULL,
+    cedula_estudiante character(8) UNIQUE NOT NULL,
+    id_asignacion_representante_estudiante INTEGER NOT NULL,
+    id_asignacion_aula_profesor INTEGER NOT NULL,
+    estatus_grado_escolar character(1) NOT NULL,
+    fecha_inscripcion_grado_escolar DATE NOT NULL,
+    constraint PK_id_grado_escolar primary key(id_grado_escolar),
+    constraint FK_id_estudiante_tgrado_escolar foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
+    constraint FK_id_asignacion_representante_estudiante_tgrado_escolar foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
+    constraint FK_id_asignacion_aula_profesor_tgrado_escolar foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
+); 
