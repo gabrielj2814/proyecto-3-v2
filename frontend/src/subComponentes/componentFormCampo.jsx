@@ -5,12 +5,15 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentFormCampo.css'
 
 const ComponentFormCampo = (props) => {
+  if(props != ''){
+    console.log(props)
+  }
 
     return(
         <div className={props.clasesColumna+" columna"}>
             <div className="form-groud">
                 <label>
-                {props.obligatorio && props.obligatorio==="si" && 
+                {props.obligatorio && props.obligatorio==="si" &&
                     (
                         <span className="obligatorio-campo">(*)</span>
                     )
@@ -26,7 +29,7 @@ const ComponentFormCampo = (props) => {
                         <input className={props.clasesCampo} type={props.type} value={props.value} name={props.name} id={props.id} placeholder={props.placeholder} />
                     )
                 }
-                {(props.mensaje && props.mensaje!=="") && 
+                {(props.mensaje && props.mensaje!=="") &&
                     (
                         <span className={`color-texto-${props.mensaje.color_texto}`}>{props.mensaje.mensaje}</span>
                     )
