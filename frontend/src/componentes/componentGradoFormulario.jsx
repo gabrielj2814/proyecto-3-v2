@@ -28,6 +28,7 @@ class ComponenrGradoFormulario extends React.Component{
         this.cambiarEstado=this.cambiarEstado.bind(this)
         this.regresar=this.regresar.bind(this)
         this.operacion=this.operacion.bind(this)
+        this.validarNumero=this.validarNumero.bind(this)
         this.state={
             //////
             modulo:"",
@@ -178,6 +179,22 @@ class ComponenrGradoFormulario extends React.Component{
         this.setState({[input.name]:input.value})
     }
 
+    validarNumero(a){
+        const input=a.target,
+        exprecion=/\d$/
+        if(input.value!==""){
+            if(exprecion.test(input.value)){
+                // console.log("OK")
+                if(input.value.length===1){
+                    this.cambiarEstado(a)
+                }
+            }
+        }
+        else{
+            this.cambiarEstado(a)
+        }
+    }
+
     extrarDatosDelFormData(formData){
         let json={}
         let iterador = formData.entries()
@@ -294,7 +311,7 @@ class ComponenrGradoFormulario extends React.Component{
                             name="numero_grado"
                             id="numero_grado"
                             placeholder="Numero Grado"
-                            eventoPadre={this.cambiarEstado}
+                            eventoPadre={this.validarNumero}
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
