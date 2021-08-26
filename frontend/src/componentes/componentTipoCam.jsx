@@ -320,7 +320,7 @@ constructor(){
                         </div>
                       </div>
                 }
-                <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Tipo CAM"/>
+                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Tipo CAM"/>
                 
                 <ComponentTablaDatos 
                     eventoBuscar={this.buscar}

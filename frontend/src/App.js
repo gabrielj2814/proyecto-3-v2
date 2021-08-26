@@ -88,6 +88,10 @@ import ComponentCintillo from "./componentes/componentCintillo"
 import ComponentError404 from "./componentes/componentError404"
 // seguridad
 import ComponentBitacora from "./componentes/componentBitacora"
+// -------------------------------
+// grado
+import ComponentGrado from './componentes/componentGrado'
+import ComponentGradoFormulario from './componentes/componentGradoFormulario'
 
 
 
@@ -162,6 +166,23 @@ function App() {
         <Route exact path="/dashboard/configuracion/cam/consultar/:id" component={ComponentCamConsultar}/>
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
+
+
+
+
+
+
+
+        <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
+        <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>
+
+
+
+
+
+        
+
+
         
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorConsulta}/>
