@@ -229,6 +229,9 @@ class ComponenrGradoFormulario extends React.Component{
                 if(respuestaServidor.estado_respuesta===false){
                     alerta.estado=true
                 }
+                else{
+                    alerta.estado=respuestaServidor.estado_respuesta
+                }
                 this.setState({alerta})
             })
             .catch(error => {
@@ -255,6 +258,9 @@ class ComponenrGradoFormulario extends React.Component{
                 alerta.mensaje=respuestaServidor.mensaje
                 if(respuestaServidor.estado_respuesta===false){
                     alerta.estado=true
+                }
+                else{
+                    alerta.estado=respuestaServidor.estado_respuesta
                 }
                 this.setState({alerta})
             })
