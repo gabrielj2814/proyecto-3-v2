@@ -36,7 +36,7 @@ class ComponentEstudianteForm extends React.Component{
         this.validarNumero=this.validarNumero.bind(this);
         // this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
         this.fechaNacimiento=this.fechaNacimiento.bind(this);
-        // this.buscarEstudiante=this.buscarEstudiante.bind(this);
+        this.buscarEstudiante=this.buscarEstudiante.bind(this);
         this.validarSelect=this.validarSelect.bind(this);
         this.validarDireccion=this.validarDireccion.bind(this)
         this.validarFormularioRegistrar=this.validarFormularioRegistrar.bind(this);
@@ -445,7 +445,7 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     longitudCampo(input){
-        if(input.name==="id_cedula"){
+        if(input.name==="id_cedula" || input.name === "id_cedula_escolar"){
             if(input.value.length<=8){
                 this.cambiarEstadoDos(input)
             }
@@ -458,11 +458,13 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     cambiarEstadoDos(input){
-        this.setState({[input.name]:input.value})
+      console.log(input)
+      this.setState({[input.name]:input.value})
     }
 
     cambiarEstado(a){
         var input=a.target;
+        console.log(`Target = ${input.value}, name = ${input.name}`)
         this.setState({[input.name]:input.value})
     }
 
@@ -681,33 +683,36 @@ class ComponentEstudianteForm extends React.Component{
     validarDireccion(name){
         var estado = false
         const valor = this.state[name]
-        var msj = this.state["msj_"+name]
-        let msj_direccion = {}, msj_procedencia = {}, msj_vive_con = {}, msj_direccion_nacimiento = {}
+        var msj_direccion = this.state["msj_"+name],
+        msj_procedencia = this.state["msj_"+name],
+        msj_vive_con = this.state["msj_"+name],
+        msj_direccion_nacimiento  = this.state["msj_"+name]
+
         if(valor !== ""){
             if(this.state.StringExprecion.test(valor)){
                 estado = true
                 console.log(`campo ${name} OK`)
-                msj_direccion={mensaje:"",color_texto:"rojo"}
-                msj_procedencia={mensaje:"",color_texto:"rojo"}
-                msj_vive_con={mensaje:"",color_texto:"rojo"}
-                msj_direccion_nacimiento={mensaje:"",color_texto:"rojo"}
+                msj_direccion[0]={mensaje:"",color_texto:"rojo"}
+                msj_procedencia[0]={mensaje:"",color_texto:"rojo"}
+                msj_vive_con[0]={mensaje:"",color_texto:"rojo"}
+                msj_direccion_nacimiento[0]={mensaje:"",color_texto:"rojo"}
                 // this.setState(msj_direccion)
             }
             else{
                 estado = false
-                msj_direccion={mensaje:"la direccion no puede tener solo espacios en blanco",color_texto:"rojo"}
-                msj_procedencia={mensaje:"la procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
-                msj_vive_con={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
-                msj_direccion_nacimiento={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
+                msj_direccion[0]={mensaje:"la direccion no puede tener solo espacios en blanco",color_texto:"rojo"}
+                msj_procedencia[0]={mensaje:"la procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
+                msj_vive_con[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
+                msj_direccion_nacimiento[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
                 // this.setState(msj_direccion)
             }
         }
         else{
             estado = false
-            msj_direccion={mensaje:"la direccion no puede estar vacia",color_texto:"rojo"}
-            msj_procedencia={mensaje:"la procedencia no puede estar vacia",color_texto:"rojo"}
-            msj_vive_con={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
-            msj_direccion_nacimiento={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
+            msj_direccion[0]={mensaje:"la direccion no puede estar vacia",color_texto:"rojo"}
+            msj_procedencia[0]={mensaje:"la procedencia no puede estar vacia",color_texto:"rojo"}
+            msj_vive_con[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
+            msj_direccion_nacimiento[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
             // this.setState({msj_direccion:msj_direccion})
         }
 
@@ -746,29 +751,6 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({["msj_"+nombre_campo]:mensaje_select})
         }
         return respuesta;
-    }
-
-    validarEmail() {
-        let estado=false
-        const correo=this.state.correo
-        var msj_correo=this.state.msj_correo
-        const exprecion=/^(?:[^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*|"[^\n"]+")@(?:[^<>()[\].,;:\s@"]+\.)+[^<>()[\]\.,;:\s@"]{2,63}$/
-        if(correo!==""){
-            if (exprecion.test(correo)){
-                estado=true
-                msj_correo[0]={mensaje:"",color_texto:""}
-                this.setState({msj_correo: msj_correo})
-            }
-            else {
-                msj_correo[0]={mensaje:"La dirección de email es incorrecta",color_texto:"rojo"}
-                this.setState({msj_correo: msj_correo})
-            }
-        }
-        else{
-            msj_correo[0]={mensaje:"no puede estar vacio",color_texto:"rojo"}
-            this.setState({msj_correo: msj_correo})
-        }
-        return estado
     }
 
     validarSelect(name){
@@ -878,7 +860,7 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
-            this.validarEmail()
+
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
@@ -935,24 +917,24 @@ class ComponentEstudianteForm extends React.Component{
         this.props.history.push("/dashboard/configuracion/estudiante");
     }
 
-    // buscarEstudiante(a){
-    //     let input = a.target
-    //     this.validarNumero(a)
-    //     // console.log(input.value)
-    //     let hashEstudiante=JSON.parse(JSON.stringify(this.state.hashEstudiante))
-    //     if(hashEstudiante[input.value]){
-    //         this.setState({
-    //             estadoBusquedaEstudiante:true
-    //         })
-    //         alert("este trabajador ya esta resgistrado")
-    //     }
-    //     else{
-    //         // console.log("NO OK")
-    //         this.setState({
-    //             estadoBusquedaEstudiante:false
-    //         })
-    //     }
-    // }
+    buscarEstudiante(a){
+        let input = a.target
+        this.validarNumero(a)
+        // console.log(input.value)
+        let hashEstudiante=JSON.parse(JSON.stringify(this.state.hashEstudiante))
+        if(hashEstudiante[input.value]){
+            this.setState({
+                estadoBusquedaEstudiante:true
+            })
+            alert("este estudiante ya esta resgistrado")
+        }
+        else{
+            // console.log("NO OK")
+            this.setState({
+                estadoBusquedaEstudiante:false
+            })
+        }
+    }
 
     render(){
         var jsx_estudiante_form1=(
@@ -991,13 +973,13 @@ class ComponentEstudianteForm extends React.Component{
                     <form id="form_trabajador">
                         <div className="row justify-content-center">
                             <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                              clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula[0]}
-                              nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.id_cedula}
+                              clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_escolar[0]}
+                              nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.id_cedula_escolar}
                               name="id_cedula_escolar" id="id_cedula_escolcar" placeholder="Cédula escolar" eventoPadre={this.buscarEstudiante}
                             />
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                              clasesCampo="form-control" obligatorio="no" mensaje={this.state.msj_id_cedula_escolar[0]}
-                              nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula_escolar}
+                              clasesCampo="form-control" obligatorio="no" mensaje={this.state.msj_id_cedula[0]}
+                              nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula}
                               name="id_cedula" id="id_cedula" placeholder="Cédula" eventoPadre={this.buscarEstudiante}
                             />
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1012,7 +994,7 @@ class ComponentEstudianteForm extends React.Component{
                               nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
                               name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
                             />
-                            <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            <ComponentFormDate clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                               obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
                               clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
                               id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}
@@ -1031,7 +1013,7 @@ class ComponentEstudianteForm extends React.Component{
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
                             obligatorio="si" mensaje={this.state.msj_direccion_nacimiento[0]} nombreCampoTextArea="Dirección de nacimiento:"
-                            clasesTextArear="form-control" name="direccion_nacimiento" id="direccion_nacimiento" value={this.state.direccion}
+                            clasesTextArear="form-control" name="direccion_nacimiento" id="direccion_nacimiento" value={this.state.direccion_nacimiento}
                             eventoPadre={this.cambiarEstado}
                           />
                           <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
@@ -1043,12 +1025,12 @@ class ComponentEstudianteForm extends React.Component{
                         <div className="row justify-content-center mx-auto">
                             <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
                               obligatorio="si" mensaje={this.state.msj_vive_con[0]} nombreCampoTextArea="Vive con?:"
-                              clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.direccion}
+                              clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.vive_con}
                               eventoPadre={this.cambiarEstado}
                             />
                             <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
                                 obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="procedencia del estudiante:"
-                                clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.direccion}
+                                clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
                                 eventoPadre={this.cambiarEstado}
                               />
                         </div>
