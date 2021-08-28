@@ -85,6 +85,7 @@ import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrab
 // ESTUDIANTE
 import componenteEstudiante from './componentes/componentEstudiante'
 import ComponentEstudianteForm from './componentes/componentEstudianteForm'
+import ComponentEstudianteConsulta from './componentes/componentEstudianteConsulta'
 //cintillo
 import ComponentCintillo from "./componentes/componentCintillo"
 // error
@@ -169,8 +170,9 @@ function App() {
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
 
-        <Route exact path="/dashboard/configuracion/estudiante" component={componenteEstudiante}/>
-        <Route exact path="/dashboard/configuracion/estudiante/:operacion" component={ComponentEstudianteForm}/>
+      <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
+        <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
+        <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
 
         <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
         <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>

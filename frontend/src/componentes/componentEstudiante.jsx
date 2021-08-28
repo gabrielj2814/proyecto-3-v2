@@ -29,7 +29,13 @@ import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 class ComponenteEstudiante extends React.Component{
     constructor(){
         super();
+        this.actualizarElementoTabla = this.actualizarElementoTabla.bind(this)
+        this.consultarElementoTabla = this.consultarElementoTabla.bind(this)
+        this.verficarLista = this.verficarLista.bind(this)
+        this.consultarTodosLosEstudiantes = this.consultarTodosLosEstudiantes.bind(this)
         this.redirigirFormulario = this.redirigirFormulario.bind(this)
+        this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
+        this.consultarPerfilTrabajador = this.consultarPerfilTrabajador.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -47,28 +53,114 @@ class ComponenteEstudiante extends React.Component{
           }
         }
     }
-    // async UNSAFE_componentWillMount(){
-    //   // let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/trabajador")
-    //   let acessoModulo = true;
-    //   if(acessoModulo){
-    //       await this.consultarTodosTiposTrabajador()
-    //       var json_server_response=await this.consultarTodosTrabajadores();
-    //       var servidor=this.verficarLista(json_server_response);
-    //       if(this.props.match.params.mensaje){
-    //         const msj=JSON.parse(this.props.match.params.mensaje)
-    //         //alert("OK "+msj.texto)
-    //         var mensaje=this.state.mensaje
-    //         mensaje.texto=msj.texto
-    //         mensaje.estado=msj.estado
-    //         servidor.mensaje=mensaje
-    //       }
-    //       this.setState(servidor)
-    //    }
-    //    else{
-    //     alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-    //     this.props.history.goBack()
-    //    }
-    //   }
+
+    actualizarElementoTabla(a){
+        var input=a.target;
+        this.props.history.push("/dashboard/configuracion/estudiante/actualizar/"+input.id);
+    }
+
+    consultarElementoTabla(a){
+        let input=a.target;
+        this.props.history.push("/dashboard/configuracion/estudiante/consultar/"+input.id);
+    }
+
+    async consultarTodosLosEstudiantes(){
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos`)
+        .then(repuesta => repuesta.data.datos )
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+    verficarLista(json_server_response){
+        if(json_server_response.length===0){
+            json_server_response.push({
+              id_permiso:"0",
+              nombre_permiso:"vacio",
+              vacio:"vacio"
+            })
+            return {registros:json_server_response,numeros_registros:0}
+          }
+          else{
+            return {
+              registros:json_server_response,
+              numeros_registros:json_server_response.length
+            }
+          }
+      }
+
+    async UNSAFE_componentWillMount(){
+      let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
+      if(acessoModulo){
+          var json_server_response=await this.consultarTodosLosEstudiantes();
+          var servidor=this.verficarLista(json_server_response);
+          if(this.props.match.params.mensaje){
+            const msj=JSON.parse(this.props.match.params.mensaje)
+            //alert("OK "+msj.texto)
+            var mensaje=this.state.mensaje
+            mensaje.texto=msj.texto
+            mensaje.estado=msj.estado
+            servidor.mensaje=mensaje
+          }
+          this.setState(servidor)
+       }
+       else{
+        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        this.props.history.goBack()
+       }
+      }
+
+      async validarAccesoDelModulo(modulo,subModulo){
+          // /dashboard/configuracion/acceso
+          let estado = false
+            if(localStorage.getItem("usuario")){
+              var respuesta_servior=""
+              const token=localStorage.getItem("usuario")
+              await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
+              .then(async respuesta=>{
+                  respuesta_servior=respuesta.data
+                  if(respuesta_servior.usuario){
+                    estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                  }
+              })
+          }
+          return estado
+        }
+
+        async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+          let estado=false
+          await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
+          .then(repuesta => {
+              let json=JSON.parse(JSON.stringify(repuesta.data))
+              // console.log("datos modulos =>>>",json)
+              let modulosSistema={}
+              let modulosActivos=json.modulos.filter( modulo => {
+                  if(modulo.estatu_modulo==="1"){
+                      return modulo
+                  }
+              })
+              // console.log("datos modulos =>>>",modulosActivos);
+              for(let medulo of modulosActivos){
+                  if(modulosSistema[medulo.modulo_principal]){
+                      modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                  }
+                  else{
+                      modulosSistema[medulo.modulo_principal]={}
+                      modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+                  }
+              }
+              console.log(modulosSistema)
+              if(modulosSistema[modulo][subModulo]){
+                estado=true
+              }
+              // this.setState({modulosSistema})
+          })
+          .catch(error =>  {
+              console.log(error)
+          })
+          return estado
+      }
+
     redirigirFormulario(a){
       const input = a.target;
       if(input.value==="Registrar"){
@@ -93,10 +185,9 @@ class ComponenteEstudiante extends React.Component{
       const jsx_tabla_encabezado = (
             <thead>
                 <tr>
-                    <th>Cedula</th>
+                    <th>Cedula Escolar</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                    <th>Fecha de Nacimiento</th>
                     <th>Sexo</th>
                 </tr>
             </thead>
@@ -106,15 +197,17 @@ class ComponenteEstudiante extends React.Component{
           <tbody>
                 {this.state.registros.map((estudiante)=>{
                     return(
-                        <tr key={estudiante.id_cedula}>
-                          <td>{estudiante.id_cedula}</td>
-                          <td>{estudiante.nombres+" "+estudiante.apellidos}</td>
+                        <tr key={estudiante.cedula_escolar}>
+                          <td>{estudiante.cedula_escolar}</td>
+                          <td>{estudiante.nombres_estudiante}</td>
+                          <td>{estudiante.apellidos_estudiante}</td>
+                          <td>{ (estudiante.sexo_estudiante == '1') ? "Masculino" : "Femenino" }</td>
                          {!estudiante.vacio &&
                             <td>
                                 <ButtonIcon
                                 clasesBoton="btn btn-warning btn-block"
-                                value={estudiante.id_cedula}
-                                id={estudiante.id_cedula}
+                                value={estudiante.id_estudiante}
+                                id={estudiante.id_estudiante}
                                 eventoPadre={this.actualizarElementoTabla}
                                 icon="icon-pencil"
                                 />
@@ -125,8 +218,8 @@ class ComponenteEstudiante extends React.Component{
                         <td>
                             <ButtonIcon
                             clasesBoton="btn btn-secondary btn-block"
-                            value={estudiante.id_cedula}
-                            id={estudiante.id_cedula}
+                            value={estudiante.id_estudiante}
+                            id={estudiante.id_estudiante}
                             eventoPadre={this.consultarElementoTabla}
                             icon="icon-search"
                             />
@@ -165,13 +258,13 @@ class ComponenteEstudiante extends React.Component{
                       </div>
                     </div>
                   </div>
-                  <div className="col-3 col-ms-3 col-md-3 columna-boton">
-                    <div className="row justify-content-center align-items-center contenedor-boton">
-                      <div className="col-auto">
-                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
-                      </div>
-                    </div>
-                  </div>
+                  // <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                  //   <div className="row justify-content-center align-items-center contenedor-boton">
+                  //     <div className="col-auto">
+                  //       <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                  //     </div>
+                  //   </div>
+                  // </div>
               </div>
           </div>
       )

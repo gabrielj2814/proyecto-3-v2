@@ -21,6 +21,7 @@ import ComponentFormSelect from '../subComponentes/componentFormSelect';
 import ComponentFormDate from '../subComponentes/componentFormDate'
 import ComponentFormTextArea from '../subComponentes/componentFormTextArea'
 import { Alert } from 'bootstrap';
+import AlertBootstrap from "../subComponentes/alertBootstrap"
 
 class ComponentEstudianteForm extends React.Component{
 
@@ -31,7 +32,7 @@ class ComponentEstudianteForm extends React.Component{
         this.regresar=this.regresar.bind(this);
         this.operacion=this.operacion.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
-        // this.agregar=this.agregar.bind(this);
+        this.agregar=this.agregar.bind(this);
         this.validarTexto=this.validarTexto.bind(this);
         this.validarNumero=this.validarNumero.bind(this);
         // this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
@@ -41,25 +42,29 @@ class ComponentEstudianteForm extends React.Component{
         this.validarDireccion=this.validarDireccion.bind(this)
         this.validarFormularioRegistrar=this.validarFormularioRegistrar.bind(this);
         this.validarCampo=this.validarCampo.bind(this)
+        this.enviarDatos=this.enviarDatos.bind(this)
+        this.consultarEstudiante=this.consultarEstudiante.bind(this)
+        this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
+        this.consultarCiudad = this.consultarCiudad.bind(this)
         this.state={
             // ------------------
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
+            id:"",
             id_cedula_escolar:"",
             id_cedula:"",
             nombres:"",
             apellidos:"",
             fecha_nacimiento:"",
             direccion_nacimiento:"",
-            direccion:"",
+            escolaridad:"",
             vive_con:"",
             procedencia:"",
             id_estado:"",
             id_ciudad:"",
             sexo_estudiante:"1",
             estatu_estudiante:"1",
-            fecha_inactividad:"",
             //MSJ
             msj_id_cedula_escolar:[{mensaje:"",color_texto:""}],
             msj_id_cedula:[{mensaje:"",color_texto:""}],
@@ -67,7 +72,7 @@ class ComponentEstudianteForm extends React.Component{
             msj_apellidos:[{mensaje:"",color_texto:""}],
             msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
             msj_direccion_nacimiento:[{mensaje:"",color_texto:""}],
-            msj_direccion:[{mensaje:"",color_texto:""}],
+            msj_escolaridad:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
@@ -125,11 +130,10 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        // let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
-        let acessoModulo = true;
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
         if(acessoModulo){
             await this.consultarFechaServidor()
-            // await this.consultarTodosLosTrabajadores()
+            await this.consultarTodosLosEstudiantes()
             const operacion=this.props.match.params.operacion
 
             if(operacion==="registrar"){
@@ -155,22 +159,43 @@ class ComponentEstudianteForm extends React.Component{
               })
         }
         else if(operacion==="actualizar"){
-            // this.setState({fecha_inactividad:Moment().format("YYYY-MM-DD")})
-                const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
-                nombre_propiedad_lista_1="perfiles",
-                propiedad_id_1="id_perfil",
-                propiedad_descripcion_1="nombre_perfil",
-                propiedad_estado_1="estatu_perfil"
-                const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-                nombre_propiedad_lista="tipos_trabajador",
-                propiedad_id="id_tipo_trabajador",
-                propiedad_descripcion="descripcion_tipo_trabajador",
-                propiedad_estado="estatu_tipo_trabajador"
-                const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+            const {id}=this.props.match.params
+            let datos = await this.consultarEstudiante(id)
 
-                const id=this.props.match.params.id
-                await this.consultarTrabajador(tipo_trabajador,lista_perfiles,id)
+            let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
+            const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
+            nombre_propiedad_lista="estados",
+            propiedad_id="id_estado",
+            propiedad_descripcion="nombre_estado",
+            propiedad_estado="estatu_estado"
+            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+
+            const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${datosCiudad.id_estado}`,
+            nombre_propiedad_lista_2="ciudades",
+            propiedad_id_2="id_ciudad",
+            propiedad_descripcion_2="nombre_ciudad",
+            propiedad_estado_2="estatu_ciudad"
+            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+
+            this.setState({
+              id_cedula_escolar:datos.cedula_escolar,
+              id_cedula:(datos.cedula_estudiante != "" && datos.cedula_estudiante != undefined) ? datos.cedula_estudiante : "No tiene",
+              nombres:datos.nombres_estudiante,
+              apellidos:datos.apellidos_estudiante,
+              fecha_nacimiento:Moment(datos.fecha_nacimiento_estudiante).format("YYYY-MM-DD"),
+              direccion_nacimiento:datos.direccion_nacimiento_estudiante,
+              escolaridad:datos.escolaridad_estudiante,
+              vive_con:datos.vive_con_estudiante,
+              procedencia:datos.procedencia_estudiante,
+              id_ciudad:datos.id_ciudad,
+              sexo_estudiante:datos.sexo_estudiante,
+              estatu_estudiante:datos.estatus_estudiante,
+              estados: estados,
+              ciudades: ciudades
+            })
+
+            document.getElementById("id_estado").value=datosCiudad.id_estado
+            document.getElementById("id_ciudad").value=datos.id_ciudad
             }
         }
         else{
@@ -223,8 +248,6 @@ class ComponentEstudianteForm extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-
-
         })
         .catch(error =>  {
             console.log(error)
@@ -232,16 +255,43 @@ class ComponentEstudianteForm extends React.Component{
         return estado
     }
 
-    async consultarTodosLosTrabajadores(){
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
+    async consultarCiudad(id){
+        var mensaje={texto:"",estado:""},
+        respuesta_servidor=""
+        var ciudad={}
+        const token=localStorage.getItem('usuario')
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar/${id}/${token}`)
+        .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            if(respuesta_servidor.estado_peticion==="200"){
+                ciudad=respuesta_servidor.ciudad
+            }
+            else if(respuesta_servidor.estado_peticion==="404"){
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_peticion
+                this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+            }
+
+        })
+        .catch(error=>{
+            console.log(error)
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.estado="500"
+            this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
+        })
+        return ciudad
+    }
+
+    async consultarTodosLosEstudiantes(){
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos =>>> ",json)
             let hash={}
-            for(let trabajador of json.trabajadores){
-                hash[trabajador.id_cedula]=trabajador
+            for(let estudiante of json.datos){
+                hash[estudiante.cedula_escolar]=estudiante
             }
-            console.log("hash trabajador =>>> ",hash)
+            console.log("hash estudiante =>>> ",hash)
             this.setState({hashEstudiante:hash})
         })
         .catch(error => {
@@ -261,104 +311,30 @@ class ComponentEstudianteForm extends React.Component{
         })
     }
 
-    async consultarTrabajador(tipo_trabajador,lista_perfiles,id){
-        var mensaje={texto:"",estado:""},
-        respuesta_servidor=""
-        var id_cedula="",
-        nombres="",
-        apellidos="",
-        sexo_trabajador="",
-        telefono_movil="",
-        telefono_local="",
-        correo="",
-        direccion="",
-        grado_instruccion="",
-        titulo_grado_instruccion="",
-        designacion="",
-        fecha_nacimiento="",
-        fecha_ingreso="",
-        estatu_trabajador="",
-        id_perfil="",
-        id_tipo_trabajador="",
-        id_funcion_trabajador="",
-        fecha_inactividad=""
-        const token=localStorage.getItem('usuario')
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar/${id}/${token}`)
-        .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            console.log(respuesta_servidor)
-            if(respuesta_servidor.estado_peticion==="200"){
-                id_cedula=respuesta_servidor.trabajador.id_cedula
-                nombres=respuesta_servidor.trabajador.nombres
-                apellidos=respuesta_servidor.trabajador.apellidos
-                sexo_trabajador=respuesta_servidor.trabajador.sexo_trabajador
-                telefono_movil=(respuesta_servidor.trabajador.telefono_movil==="N-O")?"":respuesta_servidor.trabajador.telefono_movil
-                telefono_local=(respuesta_servidor.trabajador.telefono_local==="N-O")?"":respuesta_servidor.trabajador.telefono_local
-                correo=(respuesta_servidor.trabajador.correo==="N-O")?"":respuesta_servidor.trabajador.correo
-                direccion=respuesta_servidor.trabajador.direccion
-                grado_instruccion=respuesta_servidor.trabajador.grado_instruccion
-                titulo_grado_instruccion=respuesta_servidor.trabajador.titulo_grado_instruccion
-                designacion=respuesta_servidor.trabajador.designacion
-                fecha_nacimiento=Moment(respuesta_servidor.trabajador.fecha_nacimiento).format("YYYY-MM-DD")
-                fecha_ingreso=Moment(respuesta_servidor.trabajador.fecha_ingreso).format("YYYY-MM-DD")
-                estatu_trabajador=respuesta_servidor.trabajador.estatu_trabajador
-                id_perfil=respuesta_servidor.trabajador.id_perfil
-                id_tipo_trabajador=respuesta_servidor.trabajador.id_tipo_trabajador
-                id_funcion_trabajador=respuesta_servidor.trabajador.id_funcion_trabajador
-                fecha_inactividad=null
-                if(respuesta_servidor.trabajador.fecha_inactividad===null){
-                    fecha_inactividad=Moment(this.state.fechaServidor,"YYYY-MM-DD").format("YYYY-MM-DD")
-                }
-                else{
-                    fecha_inactividad=respuesta_servidor.trabajador.fecha_inactividad
-                }
-
-            }
-            else if(respuesta_servidor.estado_peticion==="404"){
-                mensaje.texto=respuesta_servidor.mensaje
-                mensaje.estado=respuesta_servidor.estado_peticion
-                this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
-            }
-
-        })
-        .catch(error=>{
-            console.log(error)
-            mensaje.texto="No se puedo conectar con el servidor"
-            mensaje.estado="500"
-            this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
-        })
-        const objeto_estado=await this.buscarFuncionTrabajador(id_tipo_trabajador)
-        this.setState({
-            id_cedula:id_cedula,
-            nombres:nombres,
-            apellidos:apellidos,
-            telefono_movil:telefono_movil,
-            telefono_local:telefono_local,
-            correo:correo,
-            grado_instruccion:grado_instruccion,
-            titulo_grado_instruccion:titulo_grado_instruccion,
-            fecha_nacimiento:fecha_nacimiento,
-            fecha_ingreso:fecha_ingreso,
-            direccion:direccion,
-            estatu_trabajador:estatu_trabajador,
-            sexo_trabajador:sexo_trabajador,
-            designacion:designacion,
-            id_perfil:id_perfil,
-            id_tipo_trabajador:id_tipo_trabajador,
-            id_funcion_trabajador:id_funcion_trabajador,
-            perfiles:lista_perfiles,
-            tipos_trabajador:tipo_trabajador,
-            funcion_trabajador:objeto_estado.funcion_trabajador,
-            fecha_inactividad:fecha_inactividad,
-            mensaje:objeto_estado.mensaje
-        })
-        let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-        let edadTrabajador=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
-        this.setState({edadTrabajador})
-        document.getElementById("grado_instruccion").value=grado_instruccion
-        document.getElementById("id_perfil").value=id_perfil
-        document.getElementById("id_tipo_trabajador").value=id_tipo_trabajador
-        document.getElementById("id_funcion_trabajador").value=id_funcion_trabajador
+    async consultarEstudiante(id){
+      let mensaje =""
+      const token=localStorage.getItem('usuario')
+      let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
+      // /${token}
+      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}`)
+      .then(respuesta=>{
+          let respuesta_servidor=respuesta.data
+          if(respuesta_servidor.estado_respuesta=== true){
+            return respuesta_servidor.datos[0]
+          }
+          else if(respuesta_servidor.estado_respuesta===false){
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_peticion
+              this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+          }
+      })
+      .catch(error=>{
+          console.log(error)
+          mensaje.texto="No se puedo conectar con el servidor"
+          mensaje.estado="500"
+          this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+      })
+        // let edadTrabajador=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
     }
 
     async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
@@ -458,13 +434,11 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     cambiarEstadoDos(input){
-      console.log(input)
       this.setState({[input.name]:input.value})
     }
 
     cambiarEstado(a){
         var input=a.target;
-        console.log(`Target = ${input.value}, name = ${input.name}`)
         this.setState({[input.name]:input.value})
     }
 
@@ -477,53 +451,7 @@ class ComponentEstudianteForm extends React.Component{
         this.setState({edadTrabajador})
     }
 
-    async consultarFuncionesTrabajador(a){
-        var input=a.target;
-        const objeto_estado=await this.buscarFuncionTrabajador(input.value)
-        this.setState(objeto_estado)
-    }
-
-    async buscarFuncionTrabajador(id){
-        var respuesta_servidor=""
-        var objeto_estado=""
-        var mensaje=this.state.mensaje
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-id-tipo-trabajador/${id}`)
-            .then(respuesta=>{
-                respuesta_servidor=respuesta.data
-                if(respuesta_servidor.estado_peticion==="200"){
-                    var lista_vacia=[]
-                    const propiedades={
-                        id:"id_funcion_trabajador",
-                        descripcion:"funcion_descripcion",
-                        estado:"estatu_funcion_trabajador"
-                    }
-                    const lista_funciones_trabajador=this.formatoOptionSelect(respuesta_servidor.funciones,lista_vacia,propiedades)
-
-                    mensaje.estado=respuesta_servidor.estado_peticion
-
-                    objeto_estado={id_tipo_trabajador:id,funcion_trabajador:lista_funciones_trabajador,mensaje:mensaje}
-
-                }
-                else if(respuesta_servidor.estado_peticion==="500"){
-                    mensaje.texto=respuesta_servidor.mensaje
-                    mensaje.estado=respuesta_servidor.estado_peticion
-                    this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
-                }
-                else if(respuesta_servidor.estado_peticion==="404"){
-                    mensaje.texto=respuesta_servidor.mensaje
-                    mensaje.estado=respuesta_servidor.estado_peticion
-                    this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
-                }
-
-            })
-            .catch(error=>{
-                console.log(error)
-            })
-        return objeto_estado
-    }
-
     validarCampo(nombre_campo){
-        console.log(`Nombre del campo ${nombre_campo}`)
         var estado=false
         const valor=this.state[nombre_campo]
         var msj_nombres=this.state["msj_"+nombre_campo]
@@ -552,75 +480,41 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     async agregar(){
-        const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
-        nombre_propiedad_lista_1="perfiles",
-        propiedad_id_1="id_perfil",
-        propiedad_descripcion_1="nombre_perfil",
-        propiedad_estado_1="estatu_perfil"
-        const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-        const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
-        nombre_propiedad_lista="tipos_trabajador",
-        propiedad_id="id_tipo_trabajador",
-        propiedad_descripcion="descripcion_tipo_trabajador",
-        propiedad_estado="estatu_tipo_trabajador"
-        const tipo_trabajador=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-        // alert("agregando nuevo formulario")
-        let listaFuncionTrabajador={
-            funcion_trabajador:[]
-        }
-        if(tipo_trabajador.length!==0){
-            listaFuncionTrabajador=await this.buscarFuncionTrabajador(tipo_trabajador[0].id)
-        }
-        console.log(listaFuncionTrabajador);
-        var mensaje=this.state.mensaje
-        mensaje.estado=""
-        var mensaje_campo=[{mensaje:"",color_texto:""}]
-        this.setState({
-            id_cedula:"",
-            nombres:"",
-            apellidos:"",
-            telefono_movil:"",
-            telefono_local:"",
-            correo:"",
-            grado_instruccion:"",
-            titulo_grado_instruccion:"",
-            fecha_nacimiento:"",
-            fecha_ingreso:"",
-            direccion:"",
-            perfiles:lista_perfiles,
-            tipos_trabajador:tipo_trabajador,
-            mensaje:mensaje,
-            id_perfil:(lista_perfiles.length===0)?null:lista_perfiles[0].id,
-            id_tipo_trabajador:(tipo_trabajador.length===0)?null:tipo_trabajador[0].id,
-            id_funcion_trabajador:(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id,
-            funcion_trabajador:listaFuncionTrabajador.funcion_trabajador,
-            //
-            msj_id_cedula:mensaje_campo,
-            msj_nombres:mensaje_campo,
-            msj_apellidos:mensaje_campo,
-            msj_fecha_nacimiento:mensaje_campo,
-            msj_fecha_ingreso:mensaje_campo,
-            msj_direccion:mensaje_campo,
-            msj_grado_instruccion:mensaje_campo,
-            msj_id_perfil:mensaje_campo,
-            msj_id_tipo_trabajador:mensaje_campo,
-            msj_id_funcion_trabajador:mensaje_campo,
-            msj_telefono_movil:mensaje_campo,
-            msj_telefono_local:mensaje_campo,
-            msj_correo:mensaje_campo,
-            msj_titulo_grado_instruccion:mensaje_campo,
-            edadTrabajador:null
-        })
-        this.props.history.push("/dashboard/configuracion/trabajador/registrar")
-        document.getElementById("id_funcion_trabajador").value=(listaFuncionTrabajador.funcion_trabajador.length===0)?null:listaFuncionTrabajador.funcion_trabajador[0].id;
-        document.getElementById("grado_instruccion").value="ingeniero"
-        document.getElementById("id_perfil").value=(lista_perfiles.length===0)?null:lista_perfiles[0].id
-        document.getElementById("id_tipo_trabajador").value=(tipo_trabajador.length===0)?null:tipo_trabajador[0].id
+      var mensaje=this.state.mensaje
+      mensaje.estado=""
+      var mensaje_campo=[{mensaje:"",color_texto:""}]
+      this.setState({
+        id_cedula_escolar:"",
+        id_cedula:"",
+        nombres:"",
+        apellidos:"",
+        fecha_nacimiento:"",
+        direccion_nacimiento:"",
+        escolaridad:"",
+        vive_con:"",
+        procedencia:"",
+        id_estado:"",
+        id_ciudad:"",
+        sexo_estudiante:"1",
+        estatu_estudiante:"1",
+        //MSJ
+        msj_id_cedula_escolar:mensaje_campo,
+        msj_id_cedula:mensaje_campo,
+        msj_nombres:mensaje_campo,
+        msj_apellidos:mensaje_campo,
+        msj_fecha_nacimiento:mensaje_campo,
+        msj_direccion_nacimiento:mensaje_campo,
+        msj_escolaridad:mensaje_campo,
+        msj_vive_con:mensaje_campo,
+        msj_procedencia:mensaje_campo,
+        msj_sexo_estudiante:mensaje_campo,
+        msj_estatu_estudiante:mensaje_campo,
+        msj_id_estado:mensaje_campo,
+        msj_id_ciudad:mensaje_campo,
+        edadEstudiante:null,
+      })
+      this.props.history.push("/dashboard/configuracion/estudiante/registrar")
     }
-
-    // componentDidUpdate(){
-    //     alert("hola")
-    // }
 
     validarCampoNumero(nombre_campo){
         var estado=false
@@ -651,25 +545,27 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFechaNacimineto(){
         var estado=false
-        var fecha_trabajador_nacimiento=Moment(new Date(this.state.fecha_nacimiento))
-        fecha_trabajador_nacimiento.add(1,"d")
+        var fecha_estudiante_nacimiento=Moment(new Date(this.state.fecha_nacimiento))
+        fecha_estudiante_nacimiento.add(1,"d")
         var fecha_minima=Moment();
-        fecha_minima.subtract(18,"y")
+        var fecha_maxima=Moment();
+        fecha_minima.subtract(4,"y")
+        fecha_maxima.subtract(11,"y")
         var msj_fecha_nacimiento=this.state.msj_fecha_nacimiento
         if(this.state.fecha_nacimiento!==""){
-            if(!fecha_trabajador_nacimiento.isAfter(fecha_minima)){
-                if(fecha_trabajador_nacimiento.isBefore(fecha_minima)){
+            if(!fecha_estudiante_nacimiento.isAfter(fecha_minima)){
+                if(fecha_estudiante_nacimiento.isAfter(fecha_maxima)){
                     estado=true
                     msj_fecha_nacimiento[0]={mensaje:"",color_texto:"rojo"}
                     this.setState(msj_fecha_nacimiento)
                 }
                 else{
-                    msj_fecha_nacimiento[0]={mensaje:"enserio acabas de poner esa fecha",color_texto:"rojo"}
+                    msj_fecha_nacimiento[0]={mensaje:"El estudiante solo puede tener hasta 11 anos",color_texto:"rojo"}
                     this.setState(msj_fecha_nacimiento)
                 }
             }
             else{
-                msj_fecha_nacimiento[0]={mensaje:"es menor de edad",color_texto:"rojo"}
+                msj_fecha_nacimiento[0]={mensaje:"es demadiaso joven",color_texto:"rojo"}
                 this.setState(msj_fecha_nacimiento)
             }
         }
@@ -683,8 +579,7 @@ class ComponentEstudianteForm extends React.Component{
     validarDireccion(name){
         var estado = false
         const valor = this.state[name]
-        var msj_direccion = this.state["msj_"+name],
-        msj_procedencia = this.state["msj_"+name],
+        var msj_procedencia = this.state["msj_"+name],
         msj_vive_con = this.state["msj_"+name],
         msj_direccion_nacimiento  = this.state["msj_"+name]
 
@@ -692,124 +587,107 @@ class ComponentEstudianteForm extends React.Component{
             if(this.state.StringExprecion.test(valor)){
                 estado = true
                 console.log(`campo ${name} OK`)
-                msj_direccion[0]={mensaje:"",color_texto:"rojo"}
                 msj_procedencia[0]={mensaje:"",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"",color_texto:"rojo"}
-                // this.setState(msj_direccion)
+                // this.setState(msj_escolaridad)
             }
             else{
                 estado = false
-                msj_direccion[0]={mensaje:"la direccion no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_procedencia[0]={mensaje:"la procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
-                // this.setState(msj_direccion)
+                // this.setState(msj_escolaridad)
             }
         }
         else{
             estado = false
-            msj_direccion[0]={mensaje:"la direccion no puede estar vacia",color_texto:"rojo"}
             msj_procedencia[0]={mensaje:"la procedencia no puede estar vacia",color_texto:"rojo"}
             msj_vive_con[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
             msj_direccion_nacimiento[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
-            // this.setState({msj_direccion:msj_direccion})
+            // this.setState({msj_escolaridad:msj_direccion})
         }
 
-        if(name == 'direccion') this.setState(msj_direccion)
-        else if(name == 'procedencia') this.setState(msj_procedencia)
+        if(name == 'procedencia') this.setState(msj_procedencia)
         else if(name == 'direccion_nacimiento') this.setState(msj_direccion_nacimiento)
         else this.setState(msj_vive_con)
 
         return estado
     }
 
-    verificarSelect(nombre_campo,modulo,modulos){
-        var respuesta=false,
-        contador=0
-        var mensaje_select=this.state["msj_"+nombre_campo]
-        if(modulo!==""){
-          while(contador < modulos.length){
-              var {id} = modulos[contador];
-              if(modulo===id){
-                  respuesta=true;
-              }
-              contador+=1
-          }
-            if(respuesta){
-                console.log("NL-> 236: OK COMBO");
-                mensaje_select[0]={mensaje:"",color_texto:"rojo"}
-                this.setState({["msj_"+nombre_campo]:mensaje_select})
-            }
-            else{
-                mensaje_select[0]={mensaje:"Error no puedes modificar los valores del Combo",color_texto:"rojo"}
-                this.setState({["msj_"+nombre_campo]:mensaje_select})
-            }
-        }
-        else{
-            mensaje_select[0]={mensaje:"Por favor seleciona un elemento del combo",color_texto:"rojo"}
-            this.setState({["msj_"+nombre_campo]:mensaje_select})
-        }
-        return respuesta;
+    validarSelect(name){
+      let estado = false
+      const valor = this.state[name]
+      let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name];
+      if(valor != ""){
+        estado = true
+        msj_id_ciudad[0] = {mensaje: "", color_texto:"rojo"}
+        msj_id_estado[0] = {mensaje: "", color_texto:"rojo"}
+      }else{
+        msj_id_ciudad[0] = {mensaje: "Debe de seleccionar una ciudad", color_texto:"rojo"}
+        msj_id_estado[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
+      }
+      if(name == "id_ciudad") this.setState(msj_id_ciudad)
+      else if(name == "id_estado") this.setState(msj_id_estado)
+      return estado
     }
 
-    validarSelect(name){
+    validarRadio(name){
+      let estado = false
       const valor = this.state[name]
-      console.log(`Valor ${valor}`)
-      return false;
+      let msj_sexo_estudiante = this.state["msj_"+name],
+      msj_estatu_estudiante = this.state["msj_"+name]
+      if(valor != ""){
+        estado = true
+        msj_sexo_estudiante[0] = {mensaje: "", color_texto:"rojo"}
+        msj_estatu_estudiante[0] = {mensaje: "", color_texto:"rojo"}
+      }else{
+        msj_sexo_estudiante[0] = {mensaje: "Debe de seleccionar sexo", color_texto:"rojo"}
+        msj_estatu_estudiante[0] = {mensaje: "Debe de seleccionar el estado del estudiante", color_texto:"rojo"}
+      }
+      if(name == "sexo_estudiante") this.setState(msj_sexo_estudiante)
+      else if(name == "estatu_estudiante") this.setState(msj_estatu_estudiante)
+      return estado
     }
 
     validarFormularioRegistrar(){
 
         const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
         validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
-        validar_direccion=this.validarDireccion("direccion"),validar_procedencia=this.validarDireccion("procedencia"),
+        validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
         validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
-        validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad')
+        validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
+        validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
         if(
           validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
-          validar_direccion && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad
+          validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
+          validar_sexo_estudiante && validar_estatu_estudiante
         ){
           return {estado: true, fecha:validar_fecha_nacimiento.fecha}
         }else{
           return {estado: false}
         }
-
-        // if(validar_email && validar_titulo_grado_instruccion && validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_fecha_ingreso.estado && validar_direccion){
-        //     estado=true
-        //     return {estado:estado,fecha:validar_fecha_ingreso.fecha}
-        // }
-        // else{
-        //     return {estado:estado}
-        // }
     }
 
     validarFormularioActuazliar(){
-        var estado=false
-        const validar_nombres=this.validarCampo("nombres"),
-        validar_apellidos=this.validarCampo("apellidos"),
-        validar_cedula=this.validarCampoNumero("id_cedula"),
-        validar_titulo_grado_instruccion=this.validarCampo("titulo_grado_instruccion"),
-        validar_fecha_nacimiento=this.validarFechaNacimineto(),
-        validar_email=this.validarEmail(),
-        validar_direccion=this.validarDireccion()
-        console.log(validar_email)
-        if(validar_email && validar_titulo_grado_instruccion && validar_nombres && validar_apellidos && validar_cedula && validar_fecha_nacimiento && validar_direccion){
-            estado=true
-            return {estado:estado,fecha:this.state.fecha_ingreso}
-        }
-        else{
-            return {estado:estado}
-        }
-    }
+      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
+      validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+      validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
+      validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
+      validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
+      validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
-    // componentDidMount(){
-    //     // alert(document.getElementById("grado_instruccion").value)
-    //     this.setState({
-    //         grado_instruccion:document.getElementById("grado_instruccion").value
-    //     })
-    // }
+      if(
+        validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
+        validar_sexo_estudiante && validar_estatu_estudiante
+      ){
+        return {estado: true, fecha:validar_fecha_nacimiento.fecha}
+      }else{
+        return {estado: false}
+      }
+    }
 
     operacion(){
         $(".columna-modulo").animate({
@@ -825,7 +703,7 @@ class ComponentEstudianteForm extends React.Component{
             msj_apellidos:[{mensaje:"",color_texto:""}],
             msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
             msj_direccion_nacimiento:[{mensaje:"",color_texto:""}],
-            msj_direccion:[{mensaje:"",color_texto:""}],
+            msj_escolaridad:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
@@ -840,17 +718,17 @@ class ComponentEstudianteForm extends React.Component{
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/registrar`,objeto)
+                    axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/registrar`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
-                        mensaje.estado=respuesta_servidor.estado_peticion
+                        mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
-                        mensaje.estado="500"
+                        mensaje.estado=false
                         console.log(error)
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
@@ -865,18 +743,17 @@ class ComponentEstudianteForm extends React.Component{
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/actualizar/${this.state.id_cedula}`,objeto)
+                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.state.id_cedula}`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
-                        mensaje.estado=respuesta_servidor.estado_peticion
+                        mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
-                        mensaje.estado="500"
-                        console.log(error)
+                        mensaje.estado=false
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                     })
@@ -885,33 +762,28 @@ class ComponentEstudianteForm extends React.Component{
         }
     }
 
-    // enviarDatos(estado_validar_formulario,petion){
-    //     const token=localStorage.getItem('usuario')
-    //     // this.state.fecha_inactividad
-    //     const objeto={
-    //         trabajador:{
-    //             id_cedula:this.state.id_cedula,
-    //             nombres:this.state.nombres,
-    //             apellidos:this.state.apellidos,
-    //             sexo_trabajador:this.state.sexo_trabajador,
-    //             telefono_movil:(this.state.telefono_movil==="")?"N-O":this.state.telefono_movil,
-    //             telefono_local:(this.state.telefono_local==="")?"N-O":this.state.telefono_local,
-    //             correo:(this.state.correo==="")?"N-O":this.state.correo,
-    //             direccion:this.state.direccion,
-    //             grado_instruccion:this.state.grado_instruccion,
-    //             titulo_grado_instruccion:this.state.titulo_grado_instruccion,
-    //             designacion:this.state.designacion,
-    //             fecha_nacimiento:this.state.fecha_nacimiento,
-    //             fecha_ingreso:estado_validar_formulario.fecha,
-    //             estatu_trabajador:this.state.estatu_trabajador,
-    //             id_perfil:this.state.id_perfil,
-    //             id_funcion_trabajador:this.state.id_funcion_trabajador,
-    //             fecha_inactividad:Moment(this.state.fecha_inactividad,"YYYY-MM-DD")
-    //         },
-    //         token:token
-    //     }
-    //     petion(objeto)
-    // }
+    enviarDatos(estado_validar_formulario,petion){
+        const token=localStorage.getItem('usuario')
+        const objeto={
+            estudiante:{
+              id_estudiante: null,
+              cedula_escolar: this.state.id_cedula_escolar,
+              cedula_estudiante: this.state.id_cedula,
+              nombres_estudiante: this.state.nombres,
+              apellidos_estudiante: this.state.apellidos,
+              fecha_nacimiento_estudiante: this.state.fecha_nacimiento,
+              direccion_nacimiento_estudiante: this.state.direccion_nacimiento,
+              id_ciudad: this.state.id_ciudad,
+              sexo_estudiante: this.state.sexo_estudiante,
+              procedencia_estudiante: this.state.procedencia,
+              escolaridad_estudiante: this.state.escolaridad,
+              vive_con_estudiante: this.state.vive_con,
+              estatus_estudiante: this.state.estatu_estudiante,
+            },
+            token:token
+        }
+        petion(objeto)
+    }
 
     regresar(){
         this.props.history.push("/dashboard/configuracion/estudiante");
@@ -939,13 +811,13 @@ class ComponentEstudianteForm extends React.Component{
     render(){
         var jsx_estudiante_form1=(
             <div className="row justify-content-center">
+
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="200" || this.state.mensaje.estado==="404" || this.state.mensaje.estado==="500") &&
+                    {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false) &&
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
+                                <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
                                     <p>Mensaje: {this.state.mensaje.texto}</p>
-                                    <p>Estado: {this.state.mensaje.estado}</p>
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>
@@ -1011,30 +883,34 @@ class ComponentEstudianteForm extends React.Component{
                             }
                         </div>
                         <div className="row justify-content-center mx-auto">
-                          <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
+                          <ComponentFormCampo clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
+                            clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_escolaridad[0]}
+                            nombreCampo="Escolaridad:" activo="si" type="text" value={this.state.escolaridad}
+                            name="escolaridad" id="escolaridad" placeholder="Escolaridad" eventoPadre={this.validarTexto}
+                          />
+                        </div>
+                        <div className="row justify-content-center mx-auto">
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             obligatorio="si" mensaje={this.state.msj_direccion_nacimiento[0]} nombreCampoTextArea="Dirección de nacimiento:"
                             clasesTextArear="form-control" name="direccion_nacimiento" id="direccion_nacimiento" value={this.state.direccion_nacimiento}
                             eventoPadre={this.cambiarEstado}
                           />
-                          <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
-                            obligatorio="si" mensaje={this.state.msj_direccion[0]} nombreCampoTextArea="Dirección:"
-                            clasesTextArear="form-control" name="direccion" id="direccion" value={this.state.direccion}
+                        </div>
+                        <div className="row justify-content-center mx-auto">
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="si" mensaje={this.state.msj_vive_con[0]} nombreCampoTextArea="Vive con?:"
+                            clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.vive_con}
                             eventoPadre={this.cambiarEstado}
                           />
                         </div>
                         <div className="row justify-content-center mx-auto">
-                            <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
-                              obligatorio="si" mensaje={this.state.msj_vive_con[0]} nombreCampoTextArea="Vive con?:"
-                              clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.vive_con}
-                              eventoPadre={this.cambiarEstado}
-                            />
-                            <ComponentFormTextArea clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
-                                obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="procedencia del estudiante:"
-                                clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
-                                eventoPadre={this.cambiarEstado}
-                              />
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="procedencia del estudiante:"
+                            clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
+                            eventoPadre={this.cambiarEstado}
+                          />
                         </div>
-                        <div className="row justify-content-center mx-auto">
+                        <div className="row justify-content-center mx-auto my-2">
                           <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                           obligatorio="si"
@@ -1060,37 +936,32 @@ class ComponentEstudianteForm extends React.Component{
                           option={this.state.ciudades}
                           />
                         </div>
-                        <div className="row justify-content-center mt-3">
+                        <div className="row justify-content-center mt-1">
                             <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
                               extra="custom-control-inline" nombreCampoRadio="Sexo:" name="sexo_estudiante"
                               nombreLabelRadioA="Masculino" idRadioA="masculino" checkedRadioA={this.state.sexo_estudiante}
                               valueRadioA="1" nombreLabelRadioB="Femenino" idRadioB="femenino"
                               valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
                             />
-                            <ComponentFormRadioState
-                              clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
-                              extra="custom-control-inline"
-                              nombreCampoRadio="Estatus:"
-                              name="estatu_estudiante"
-                              nombreLabelRadioA="Activó"
-                              idRadioA="activoestudianterA"
-                              checkedRadioA={this.state.estatu_estudianter}
-                              valueRadioA="1"
-                              nombreLabelRadioB="Inactivo"
-                              idRadioB="activoestudianterB"
-                              valueRadioB="0"
-                              eventoPadre={this.cambiarEstado}
-                              checkedRadioB={this.state.estatu_estudianter}
-                            />
                         </div>
-                        {(this.state.estatu_estudiante==="0" && this.props.match.params.operacion==="actualizar")&&
-                            <div className="row justify-content-center">
-                                <div className="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9">
-                                    Fecha de inactividad:{Moment(this.state.fecha_inactividad,"YYYY-MM-DD").format("DD-MM-YYYY")}
-                                </div>
-                            </div>
+                        <div className="row justify-content-center mt-1">
+                          <ComponentFormRadioState
+                            clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="Estatus:"
+                            name="estatu_estudiante"
+                            nombreLabelRadioA="Activó"
+                            idRadioA="activoestudianterA"
+                            checkedRadioA={this.state.estatu_estudiante}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Inactivo"
+                            idRadioB="activoestudianterB"
+                            valueRadioB="0"
+                            eventoPadre={this.cambiarEstado}
+                            checkedRadioB={this.state.estatu_estudiante}
+                          />
+                        </div>
 
-                        }
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
