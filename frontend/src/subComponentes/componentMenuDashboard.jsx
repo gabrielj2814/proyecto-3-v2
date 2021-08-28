@@ -1,7 +1,7 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
 //JS
-import $, { ready } from'jquery';
+import $, { ready } from 'jquery';
 import popper from 'popper.js';
 import axios from 'axios';
 import 'bootstrap/dist/js/bootstrap.bundle';
@@ -18,7 +18,7 @@ import LinkButtom from '../subComponentes/link_button'
 ------ transaccion
 <span className="item-sub-menu">Asistencia</span>
 <span className="item-sub-menu">Gestionar Permiso</span> <- ADMIN O SECRETARIA
-<span className="item-sub-menu">Solicitar Permiso</span> 
+<span className="item-sub-menu">Solicitar Permiso</span>
 <span className="item-sub-menu">Gestionar Reposo</span>
 ------ Reportes
 <span className="item-sub-menu">Trabajador</span>
@@ -47,14 +47,14 @@ class MenuDashboard extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                     await this.consultarPerfilTrabajador(respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
-        
+
     }
 
     async consultarPerfilTrabajador(idPerfil){
-        
+
         await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
@@ -77,8 +77,8 @@ class MenuDashboard extends React.Component{
             }
             console.log(modulosSistema)
             this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -88,11 +88,11 @@ class MenuDashboard extends React.Component{
     irASolicitudPermiso(){
         this.props.history.push("/dashboard/transaccion/permiso-trabajador/solicitar")
     }
-    
+
     irASolicitudReposo(){
         this.props.history.push("/dashboard/transaccion/reposo-trabajador/solicitar")
     }
-    
+
     irHaBitacora(){
         this.props.history.push("/dashboard/seguridad/bitacora")
     }
@@ -144,15 +144,15 @@ class MenuDashboard extends React.Component{
 
                         </div>
                     }
-                    
+
                 </div>
             </div>
             {this.props.estado_menu&&
                 <div className="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2 columna-sub-menu">
-                    
+
                     {modulo[1]==="transaccion"&&
                         <div id="trasaccion">
-                            
+
                             {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia" texto="Asistencia"/>
                             }
@@ -165,14 +165,13 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/transaccion"]["/reposo-trabajador"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/reposo-trabajador" texto="Gestionar Reposo"/>
                             }
+
                         </div>
                     }
                     {modulo[1]==="configuracion"&&
                         <div id="configuracion">
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/grado" texto="Grado"/>
-
-
-                            
+                          <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estudiante" texto="Estudiante"/>
+                          <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/grado" texto="Grado"/>
                             {this.state.modulosSistema["/dashboard/configuracion"]["/acceso"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/acceso" texto="Acceso"/>
                             }
@@ -189,7 +188,7 @@ class MenuDashboard extends React.Component{
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
                             }
 
-                            
+
                             {this.state.modulosSistema["/dashboard/configuracion"]["/especialidad"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
                             }
@@ -199,7 +198,7 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/configuracion"]["/medico"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Médico"/>
                             }
-                            
+
                             {this.state.modulosSistema["/dashboard/configuracion"]["/estado"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
                             }
@@ -212,7 +211,7 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/configuracion"]["/cam"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Médica"/>
                             }
-                            
+
                             {this.state.modulosSistema["/dashboard/configuracion"]["/horario"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
                             }
@@ -233,7 +232,7 @@ class MenuDashboard extends React.Component{
                     }
                 </div>
             }
-        </>  
+        </>
         )
     }
 
@@ -292,16 +291,16 @@ class MenuDashboard extends React.Component{
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
 
-                            
+
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignación Médico Especialidad"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Médico"/>
-                            
+
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de Centro de Asistencia Médica"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Médica"/>
-                            
+
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
 //                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cintillo-home" texto="Cintillo"/>
@@ -314,9 +313,9 @@ class MenuDashboard extends React.Component{
 //                     }
 //                 </div>
 //             }
-//         </>  
+//         </>
 //     )
-        
+
 
 // }
 

@@ -33,7 +33,7 @@ class ComponentCamFormulario extends React.Component {
         this.state={
             modulo:"",// modulo menu
             estado_menu:false,
-            //---------- 
+            //----------
             // formulario
             id_cam:"",
             nombre_cam:"",
@@ -67,7 +67,7 @@ class ComponentCamFormulario extends React.Component {
                 mensaje:"",
                 color_texto:""
             },
-            // 
+            //
             tipo_cams:[],
             estados:[],
             ciudades:[],
@@ -149,7 +149,7 @@ class ComponentCamFormulario extends React.Component {
                 document.getElementById("id_estado").value=datosCiudad.id_estado
                 document.getElementById("id_ciudad").value=datos.id_ciudad
                 document.getElementById("id_tipo_cam").value=datos.id_tipo_cam
-                
+
             }
         }
         else{
@@ -159,7 +159,7 @@ class ComponentCamFormulario extends React.Component {
 
 
 
-        
+
 
     }
 
@@ -174,12 +174,12 @@ class ComponentCamFormulario extends React.Component {
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -207,8 +207,8 @@ class ComponentCamFormulario extends React.Component {
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -291,7 +291,7 @@ class ComponentCamFormulario extends React.Component {
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_peticion
                 // this.props.history.push(`/dashboard/configuracion/ciudad${JSON.stringify(mensaje)}`)
-            } 
+            }
         })
         .catch(error=>{
             console.log(error)
@@ -375,7 +375,7 @@ class ComponentCamFormulario extends React.Component {
             json[next.value[0]]=next.value[1]
             next=iterador.next()
         }
-        return json   
+        return json
     }
 
     operacion(){
@@ -415,7 +415,7 @@ class ComponentCamFormulario extends React.Component {
             }
             else if(operacion==="actualizar"){
                 // alert("actualizando")
-                const {id}=this.props.match.params 
+                const {id}=this.props.match.params
                 axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/cam/actualizar/${id}`,datos)
                 .then(respuesta => {
                     let datosServidor=JSON.parse(JSON.stringify(respuesta.data))
@@ -444,7 +444,7 @@ class ComponentCamFormulario extends React.Component {
         }
     }
 
-    
+
 
     validarFormulario(){
         let estadoFormulario=false
@@ -452,8 +452,8 @@ class ComponentCamFormulario extends React.Component {
         const estadoTelelfono=this.validarTelefono();
         const estatuEstado=this.validarSelectNull("estado");
         const estatuCiudad=this.validarSelectNull("ciudad");
-        const estatuTipoCam=this.validarSelectNull("tipo_cam"); 
-        const estatuDireccion=this.validarDireccion(); 
+        const estatuTipoCam=this.validarSelectNull("tipo_cam");
+        const estatuDireccion=this.validarDireccion();
         if(estadoNombreCam && estadoTelelfono && estatuEstado && estatuCiudad && estatuTipoCam && estatuDireccion){
             estadoFormulario=true;
         }
@@ -471,7 +471,7 @@ class ComponentCamFormulario extends React.Component {
             if(!exprecion1.test($inputTelefono.value)){
 
                 if(!exprecion2.test($inputTelefono.value)){
-                    
+
                     if($inputTelefono.value.length===11){
                         estado = true;
                         msj_telefono_cam.mensaje="";
@@ -483,7 +483,7 @@ class ComponentCamFormulario extends React.Component {
                         msj_telefono_cam.color_texto="rojo";
                         this.setState({msj_telefono_cam});
                     }
-                    
+
                 }
                 else{
                     msj_telefono_cam.mensaje="este campo no permite letras";
@@ -632,7 +632,7 @@ class ComponentCamFormulario extends React.Component {
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_cam">
@@ -643,7 +643,7 @@ class ComponentCamFormulario extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-auto">
-                            <ButtonIcon 
+                            <ButtonIcon
                             clasesBoton="btn btn-outline-success"
                             icon="icon-plus"
                             id="icon-plus"
@@ -745,7 +745,7 @@ class ComponentCamFormulario extends React.Component {
                             defaultValue={this.state.id_ciudad}
                             option={this.state.ciudades}
                             />
-                        
+
                         </div>
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
@@ -767,7 +767,7 @@ class ComponentCamFormulario extends React.Component {
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
@@ -775,29 +775,25 @@ class ComponentCamFormulario extends React.Component {
                                     />
                                 }
                                 {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
                                     value="Actualizar"
                                     eventoPadre={this.operacion}
-                                    />   
+                                    />
                                 }
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
-                    
                     </form>
-                
-                
                 </div>
-            
             </div>
         )
 
