@@ -3,9 +3,9 @@ class DriverPostgreSQL {
     constructor(){
         const {Pool} =require("pg"),
         config={
-            user:"postgres",
+            user:"gabriel",
             host:"localhost",
-            password:"123456",
+            password:"stark",
             database:"proyecto_3"
         }
         this.database=new Pool(config);

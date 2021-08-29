@@ -84,22 +84,40 @@ class ComponenrGradoFormulario extends React.Component{
     }
 
     async componentWillMount(){
-        // let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/horario")
-        // if(acessoModulo){
-            
-        // }
-        // else{
-
-        // }
-        const {operacion} = this.props.match.params
-        if(operacion==="actualizar"){
-             // alert("formulario de actualizar")
-             if(this.props.match.params.id){
-                const {id} = this.props.match.params
-                let datos =await this.consultarGrado(id)
+        let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/grado")
+        if(acessoModulo){
+            const {operacion} = this.props.match.params
+            if(operacion==="actualizar"){
+                 // alert("formulario de actualizar")
+                 if(this.props.match.params.id){
+                    const {id} = this.props.match.params
+                    let datos =await this.consultarGrado(id)
+                }
             }
-        }
+         }
+         else{
+          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          this.props.history.goBack()
+         }
+        
     }
+
+    async validarAccesoDelModulo(modulo,subModulo){
+        // /dashboard/configuracion/acceso
+        let estado = false
+          if(localStorage.getItem("usuario")){
+            var respuesta_servior=""
+            const token=localStorage.getItem("usuario")
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
+            .then(async respuesta=>{
+                respuesta_servior=respuesta.data
+                if(respuesta_servior.usuario){
+                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
+                }
+            })
+        }
+        return estado
+      }
 
     async consultarGrado(id){
         axiosCustom.get(`configuracion/grado/consultar/${id}`)

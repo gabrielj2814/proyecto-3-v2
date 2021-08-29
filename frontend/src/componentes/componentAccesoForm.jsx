@@ -75,6 +75,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"asignacion especialidad medico",id:"/asignacion-especialidad-medico"}, 
                     {descripcion:"horario",id:"/horario"}, 
                     {descripcion:"cintillo home",id:"/cintillo-home"}, 
+                    {descripcion:"grado",id:"/grado"}, 
+                    {descripcion:"estudiante",id:"/estudiante"}
                 ],
                 // reporte:[
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
