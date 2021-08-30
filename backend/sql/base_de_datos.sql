@@ -325,6 +325,7 @@ CREATE TABLE taula(
     id_aula SERIAL,
     id_grado INTEGER NOT NULL,
     nombre_aula character varying(150) NOT NULL,
+    estatus_aula character(1) NOT NULL,
     constraint PK_id_aula primary key(id_aula),
     constraint FK_id_grado foreign key(id_grado) references tgrado(id_grado) on update cascade on delete cascade
 );
