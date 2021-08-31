@@ -45,5 +45,27 @@ ControladorAula.consultarTodos=async (req,res) => {
     res.end()
 }
 
+ControladorAula.consultar=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let {id} = req.params
+    let Aula=new ModeloAula()
+    Aula.setIdAula(id)
+    let resultAula=await Aula.consultar()
+    if(resultAula.rowCount>0){
+        respuesta_api.datos=resultAula.rows
+        respuesta_api.mensaje="Consulta completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar no hay aulas"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 module.exports=ControladorAula

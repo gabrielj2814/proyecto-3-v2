@@ -45,8 +45,9 @@ class ModeloAula extends DriverPostgresql{
         return await this.query(SQL)
     }
 
-    async consultarEspecifico(){
+    async consultar(){
         const SQL=`SELECT * FROM tgrado,taula WHERE taula.id_aula=${this.id_aula} AND tgrado.id_grado=taula.id_grado`
+        return await this.query(SQL)
     }
 
     async actualizar(){
