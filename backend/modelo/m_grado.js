@@ -21,7 +21,7 @@ class ModeloGrado extends DriverPostgre{
     }
 
     async registrar(){
-        const SQL=`INSERT INTO tgrado(numero_grado,estatus_grado) VALUES('${this.numero_grado}','${this.estatus_grado}')`
+        const SQL=`INSERT INTO tgrado(numero_grado,estatus_grado) VALUES('${this.numero_grado}','${this.estatus_grado}') RETURNING id_grado`
         return await this.query(SQL)
     }
 

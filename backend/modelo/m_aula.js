@@ -36,7 +36,7 @@ class ModeloAula extends DriverPostgresql{
                 ${this.id_grado},
                 '${this.nombre_aula}',
                 '${this.estatus_aula}'
-            ) RETURNIGN id_aula`
+            ) RETURNING id_aula`
         return await this.query(SQL)
     }
 
