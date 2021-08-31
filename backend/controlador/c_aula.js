@@ -67,5 +67,27 @@ ControladorAula.consultar=async (req,res) => {
     res.end()
 }
 
+ControladorAula.actualizar=async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    let {aula} = req.body
+    let Aula=new ModeloAula()
+    Aula.setDatos(aula)
+    let resultAula=await Aula.actualizar()
+    if(resultAula.rowCount>0){
+        respuesta_api.mensaje="Actualización completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al actualizar (este registro no se encuantran en la base de datos)"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    } 
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+
+}
+
 
 module.exports=ControladorAula
