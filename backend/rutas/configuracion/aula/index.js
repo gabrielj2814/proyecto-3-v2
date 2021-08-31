@@ -7,6 +7,7 @@ ControladorAula=require("../../../controlador/c_aula")
 router.use(bodyparser.json())
 
 router.post("/registrar",ControladorAula.registrar)
+router.get("/consultar-todos",ControladorAula.consultarTodos)
 
 
 module.exports= router
