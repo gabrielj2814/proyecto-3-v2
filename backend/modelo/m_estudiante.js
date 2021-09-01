@@ -57,8 +57,29 @@ class ModeloEstudiante extends DriverPostgre {
     return await this.query(SQL);
   }
 
+  async consultarEstudiantesActivos () {
+    const SQL = `SELECT * FROM testudiante WHERE estatus_estudiante='1' `
+
+    return this.query(SQL);
+  }
+  
+  async consultarEstudiantesInactivos() {
+    const SQL = `SELECT * FROM testudiante WHERE estatus_estudiante='0' `
+
+    return this.query(SQL);
+  }
+
+
   async consultar(){
-    const SQL = `SELECT * FROM testudiante WHERE id_estudiante=${this.id_estudiante}`
+    const SQL = `SELECT * FROM testudiante JOIN tciudad ON tciudad.id_ciudad = testudiante.id_ciudad WHERE 
+    testudiante.id_estudiante=${this.id_estudiante}`
+
+    return await this.query(SQL);
+  }
+
+  async consultarpatron(patron) {
+    const SQL = `SELECT * FROM testudiante WHERE cedula_escolar LIKE '%${patron}%' OR cedula_estudiante LIKE '%${patron}%' OR 
+    nombres_estudiante LIKE '%${patron}%' OR apellidos_estudiante LIKE '%${patron}%'`
 
     return await this.query(SQL);
   }
@@ -68,7 +89,7 @@ class ModeloEstudiante extends DriverPostgre {
     nombres_estudiante='${this.nombres_estudiante}', apellidos_estudiante='${this.apellidos_estudiante}', fecha_nacimiento_estudiante= '${this.fecha_nacimiento_estudiante}',
     direccion_nacimiento_estudiante= '${this.direccion_nacimiento_estudiante}', id_ciudad='${this.id_ciudad}', sexo_estudiante='${this.sexo_estudiante}',
     procedencia_estudiante='${this.procedencia_estudiante}', escolaridad_estudiante='${this.escolaridad_estudiante}', vive_con_estudiante= '${this.vive_con_estudiante}', 
-    estatus_estudiante='${this.estatus_estudiante}'`
+    estatus_estudiante='${this.estatus_estudiante}' WHERE id_estudiante='${this.id_estudiante}'`
 
     return await this.query(SQL);
   }

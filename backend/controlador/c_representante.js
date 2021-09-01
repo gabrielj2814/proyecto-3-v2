@@ -69,6 +69,75 @@ controladorRepresentante.consultar = async (req, res) => {
 
 }
 
+controladorRepresentante.consultarRepresentantesActivos = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloRepresentante = require("../modelo/m_representante");
+  let modeloRepresentante = new ModeloRepresentante()
+  let resultRepresentante = await modeloRepresentante.consultarRepresentantesActivos()
+
+  if (resultRepresentante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultRepresentante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+
+}
+
+controladorRepresentante.consultarRepresentantesInactivos = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloRepresentante = require("../modelo/m_representante");
+  let modeloRepresentante = new ModeloRepresentante()
+  let resultRepresentante = await modeloRepresentante.consultarRepresentantesInactivos()
+
+  if (resultRepresentante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultRepresentante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+
+}
+
+controladorRepresentante.consultarpatron = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloRepresentante = require("../modelo/m_representante");
+  const patron = req.params.patron
+  let modeloRepresentante = new ModeloRepresentante()
+  let resultRepresentante = await modeloRepresentante.consultarpatron(patron)
+
+  if (resultRepresentante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultRepresentante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorRepresentante.actualizar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloRepresentante = require("../modelo/m_representante");
@@ -78,20 +147,18 @@ controladorRepresentante.actualizar = async (req, res) => {
   modeloRepresentante.setDatos(representante)
   modeloRepresentante.setIdRepresentante(id)
 
-  let resultRepresentante = await modeloRepresentante.actualizar()
+  let resultRepresentante = ""
+
+  if (representante.nueva_cedula) {
+    resultRepresentante = await modeloRepresentante.actualizar_2();
+  }else {
+    resultRepresentante = await modeloRepresentante.actualizar();
+  }
 
   if (resultRepresentante.rowCount > 0) {
-    let resultRepresentante2 = await modeloRepresentante.actualizar()
-    if (resultRepresentante2.rowCount > 0) {
-      respuesta_api.mensaje = "actualización completada"
-      respuesta_api.estado_respuesta = true
-      respuesta_api.color_alerta = "success"
-    }
-    else {
-      respuesta_api.mensaje = "error al actualizar"
-      respuesta_api.estado_respuesta = false
-      respuesta_api.color_alerta = "danger"
-    }
+    respuesta_api.mensaje = "actualización completada"
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
   }
   else {
     respuesta_api.mensaje = "error al actualizar (este registro no se encuentra en la base de datos)"

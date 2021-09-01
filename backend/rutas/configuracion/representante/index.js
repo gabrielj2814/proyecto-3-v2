@@ -9,6 +9,9 @@ router.use(bodyparser.json())
 router.post("/registrar", controladorRepresentante.registrar_representante)//registrar
 router.get("/consultar-todos", controladorRepresentante.consultar_todos)// consultar todos
 router.get("/consultar/:id", controladorRepresentante.consultar)// consulta especifica
+router.get("/consultar-patron/:patron", controladorRepresentante.consultarpatron) //consultar por patron
+router.get("/representantes-activos", controladorRepresentante.consultarRepresentantesActivos) //consultar todos los representantes activos
+router.get("/representantes-inactivos", controladorRepresentante.consultarRepresentantesInactivos) //consultar todos los representantes activos
 router.put("/actualizar/:id", controladorRepresentante.actualizar)// actualizar
 
 
