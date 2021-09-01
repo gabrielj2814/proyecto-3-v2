@@ -69,6 +69,75 @@ controladorEstudiante.consultar = async (req, res) => {
 
 }
 
+controladorEstudiante.consultarpatron = async(req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloEstudiante = require("../modelo/m_estudiante");
+  const patron = req.params.patron
+  let modeloEstudiante = new ModeloEstudiante()
+  let resultEstudiante = await modeloEstudiante.consultarpatron(patron)
+
+  if (resultEstudiante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultEstudiante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
+controladorEstudiante.consultarEstudiantesActivos = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloEstudiante = require("../modelo/m_estudiante");
+  let modeloEstudiante = new ModeloEstudiante()
+  let resultEstudiante = await modeloEstudiante.consultarEstudiantesActivos()
+
+  if (resultEstudiante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultEstudiante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+
+}
+
+controladorEstudiante.consultarEstudiantesInactivos = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloEstudiante = require("../modelo/m_estudiante");
+  let modeloEstudiante = new ModeloEstudiante()
+  let resultEstudiante = await modeloEstudiante.consultarEstudiantesInactivos()
+
+  if (resultEstudiante.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultEstudiante.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+
+}
+
 controladorEstudiante.actualizar = async(req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloEstudiante = require("../modelo/m_estudiante");
