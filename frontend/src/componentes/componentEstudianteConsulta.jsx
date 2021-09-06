@@ -157,6 +157,7 @@ class ComponentEstudianteConsulta extends React.Component{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_respuesta===true){
               let results = respuesta_servidor.datos[0]
+              
               this.setState({
                 id_cedula_escolar:results.cedula_escolar,
                 id_cedula:(results.cedula_estudiante != "" && results.cedula_estudiante != undefined) ? results.cedula_estudiante : "No tiene",
@@ -167,7 +168,7 @@ class ComponentEstudianteConsulta extends React.Component{
                 escolaridad:results.escolaridad_estudiante,
                 vive_con:results.vive_con_estudiante,
                 procedencia:results.procedencia_estudiante,
-                id_ciudad:results.id_ciudad,
+                id_ciudad:results.nombre_ciudad,
                 sexo_estudiante:(results.sexo_estudiante == "1") ? "Masculino" : "Femenino",
                 estatu_estudiante:(results.estatus_estudiante == "1") ? "Activo" : "Innactivo",
               })

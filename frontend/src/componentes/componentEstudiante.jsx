@@ -247,15 +247,26 @@ class ComponenteEstudiante extends React.Component{
                           <td>{estudiante.apellidos_estudiante}</td>
                           <td>{ (estudiante.sexo_estudiante == '1') ? "Masculino" : "Femenino" }</td>
                          {!estudiante.vacio &&
-                            <td>
-                                <ButtonIcon
+                           <td>
+                             <ButtonIcon
                                 clasesBoton="btn btn-warning btn-block"
                                 value={estudiante.id_estudiante}
                                 id={estudiante.id_estudiante}
                                 eventoPadre={this.actualizarElementoTabla}
                                 icon="icon-pencil"
-                                />
+                              />
                             </td>
+                         }
+                         {!estudiante.vacio &&
+                           <td>
+                             <ButtonIcon
+                               clasesBoton="btn btn-secondary btn-block"
+                               value={estudiante.id_estudiante}
+                               id={estudiante.id_estudiante}
+                               eventoPadre={this.consultarElementoTabla}
+                               icon="icon-search"
+                              />
+                           </td>
                          }
                     </tr>
                     )
