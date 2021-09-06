@@ -652,7 +652,7 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFormularioRegistrar(){
 
-        const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
+        const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
         validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
         validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
@@ -660,7 +660,7 @@ class ComponentEstudianteForm extends React.Component{
         validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
         if(
-          validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+          validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
           validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
           validar_sexo_estudiante && validar_estatu_estudiante
         ){
@@ -671,7 +671,7 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     validarFormularioActuazliar(){
-      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
+      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
       validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
       validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
       validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
@@ -679,7 +679,7 @@ class ComponentEstudianteForm extends React.Component{
       validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
       if(
-        validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
         validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
         validar_sexo_estudiante && validar_estatu_estudiante
       ){
@@ -738,12 +738,12 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
-
+            const {id}=this.props.match.params
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.state.id_cedula}`,objeto)
+                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
