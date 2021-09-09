@@ -151,7 +151,6 @@ class ComponenteEstudiante extends React.Component{
           var input=a.target,
           valor=input.value,
           respuesta_servidor=""
-          console.log(servidor)
           if(valor!==""){
             await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-patron/${valor}`)
             .then(respuesta=>{

@@ -5,4 +5,4 @@
 /backend/upload/reporte/*.pdf
 /frontend/node_modules
 
-/backend/modelo/driver_postgresql.js
+backend/modelo/driver_postgresql.js

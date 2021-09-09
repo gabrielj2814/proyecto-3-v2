@@ -33,9 +33,8 @@ class ComponentEstudianteForm extends React.Component{
         this.operacion=this.operacion.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.agregar=this.agregar.bind(this);
-        this.validarTexto=this.validarTexto.bind(this);
         this.validarNumero=this.validarNumero.bind(this);
-        // this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
+        this.validarTexto=this.validarTexto.bind(this);
         this.fechaNacimiento=this.fechaNacimiento.bind(this);
         this.buscarEstudiante=this.buscarEstudiante.bind(this);
         this.validarSelect=this.validarSelect.bind(this);
@@ -325,16 +324,16 @@ class ComponentEstudianteForm extends React.Component{
           else if(respuesta_servidor.estado_respuesta===false){
               mensaje.texto=respuesta_servidor.mensaje
               mensaje.estado=respuesta_servidor.estado_peticion
-              this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+              this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
           }
       })
       .catch(error=>{
           console.log(error)
           mensaje.texto="No se puedo conectar con el servidor"
           mensaje.estado="500"
-          this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+          this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
       })
-        // let edadTrabajador=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
+        // let edadEstudiante=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
     }
 
     async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
@@ -356,7 +355,7 @@ class ComponentEstudianteForm extends React.Component{
             else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_peticion
-                this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+                this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
             }
         })
         .catch(error=>{
@@ -447,8 +446,8 @@ class ComponentEstudianteForm extends React.Component{
         this.cambiarEstado(a)
         // console.log(input.value)
         let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-        let edadTrabajador=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
-        this.setState({edadTrabajador})
+        let edadEstudiante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+        this.setState({edadEstudiante})
     }
 
     validarCampo(nombre_campo){
@@ -560,7 +559,7 @@ class ComponentEstudianteForm extends React.Component{
                     this.setState(msj_fecha_nacimiento)
                 }
                 else{
-                    msj_fecha_nacimiento[0]={mensaje:"El estudiante solo puede tener hasta 11 anos",color_texto:"rojo"}
+                    msj_fecha_nacimiento[0]={mensaje:"El estudiante solo puede tener hasta 11 años",color_texto:"rojo"}
                     this.setState(msj_fecha_nacimiento)
                 }
             }

@@ -157,7 +157,7 @@ class ComponentEstudianteConsulta extends React.Component{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_respuesta===true){
               let results = respuesta_servidor.datos[0]
-              
+
               this.setState({
                 id_cedula_escolar:results.cedula_escolar,
                 id_cedula:(results.cedula_estudiante != "" && results.cedula_estudiante != undefined) ? results.cedula_estudiante : "No tiene",
@@ -201,7 +201,7 @@ class ComponentEstudianteConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_trabajador_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-trabajador-consulta">
-                            <span className="titulo-trabajador-consulta">Trabajador Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
+                            <span className="titulo-trabajador-consulta">Estudiante Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
                         </div>
                     </div>
                     <div className="row">
