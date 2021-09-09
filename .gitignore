@@ -4,5 +4,5 @@
 /backend/upload/cintillo/*.jpeg
 /backend/upload/reporte/*.pdf
 /frontend/node_modules
-/frontend/src/ipServer.js
+
 /backend/modelo/driver_postgresql.js
