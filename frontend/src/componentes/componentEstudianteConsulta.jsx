@@ -262,7 +262,7 @@ class ComponentEstudianteConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatus Trabajador: </span>
+                            <span className="propiedad">Estatus del estudiante: </span>
                             <span className="valor">{this.state.estatu_estudiante}</span>
                         </div>
                     </div>

@@ -1,27 +1,3 @@
-// id_cedula_representante char(8),
-// nombre_representante varchar(150),
-// apellidos_representante varchar(150),
-// fecha_nacimiento_representante date,
-// nivel_instruccion_representante varchar(150),
-// ocupacion_representante varchar(2000),
-// direccion_representante varchar(3000),
-// id_ciudad varchar(6),
-// telefono_movil_representante varchar(11)
-// telefono_local_representante varchar(11)
-// numero_hijos_representante varchar(2),
-// constitucion_familiar_representante varchar(150),
-// ingresos_representante varchar(10),
-// tipo_vivienda_representante char(1),
-//
-// numero_estudiante_inicial_representante varchar(2),
-// numero_estudiante_grado_1_representante varchar(2),
-// numero_estudiante_grado_2_representante varchar(2),
-// numero_estudiante_grado_3_representante varchar(2),
-// numero_estudiante_grado_4_representante varchar(2),
-// numero_estudiante_grado_5_representante varchar(2),
-// numero_estudiante_grado_6_representante varchar(2),
-//
-// estatus_representante char(1)
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import $ from "jquery"
@@ -88,15 +64,20 @@ class ComponentRepresentanteForm extends React.Component{
         constitucion_familiar_representante: "",
         ingresos_representante: "",
         tipo_vivienda_representante: "",
-        sexo_representante:"1",
         estatus_representante:"1",
+        numero_estudiante_inicial_representante: "0",
+        numero_estudiante_grado_1_representante: "0",
+        numero_estudiante_grado_2_representante: "0",
+        numero_estudiante_grado_3_representante: "0",
+        numero_estudiante_grado_4_representante: "0",
+        numero_estudiante_grado_5_representante: "0",
+        numero_estudiante_grado_6_representante: "0",
         //MSJ
         msj_id_cedula:[{mensaje:"",color_texto:""}],
         msj_nombres:[{mensaje:"",color_texto:""}],
         msj_apellidos:[{mensaje:"",color_texto:""}],
         msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
-        msj_sexo_representate:[{mensaje:"",color_texto:""}],
-        msj_estatu_representate:[{mensaje:"",color_texto:""}],
+        msj_estatus_representante:[{mensaje:"",color_texto:""}],
         msj_id_estado:[{ mensaje:"", color_texto:""}],
         msj_id_ciudad:[{ mensaje:"", color_texto:""}],
         msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
@@ -108,12 +89,34 @@ class ComponentRepresentanteForm extends React.Component{
         msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
         msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
         msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_2_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_3_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_4_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_5_representante:[{ mensaje:"", color_texto:""}],
+        msj_numero_estudiante_grado_6_representante:[{ mensaje:"", color_texto:""}],
         //// combo box
         estados:[],
         ciudades:[],
         fecha_minimo:"",
         hashEstudiante:{},
         estadoBusquedaRepresentante:false,
+        grados_instruccion:[
+            {id:"ingeniero",descripcion:"ingeniero"},
+            {id:"licenciado",descripcion:"licenciado"},
+            {id:"tsu",descripcion:"tsu"},
+            {id:"bachiller",descripcion:"bachiller"},
+            {id:"educacion basica",descripcion:"educación basica"}
+        ],
+        tipo_viviendas:[
+          {id:"",descripcion:"Selecciona una opcion"},
+          {id:"1",descripcion:"Rancho"},
+          {id:"2",descripcion:"Casa"},
+          {id:"3",descripcion:"Quinta"},
+          {id:"4",descripcion:"Apartamento"},
+          {id:"5",descripcion:"Alquilada"}
+        ],
         ///
         mensaje:{
             texto:"",
@@ -176,7 +179,7 @@ class ComponentRepresentanteForm extends React.Component{
 
             this.setState({
               id_cedula: datos.id_cedula_representante,
-              nombres: datos.nombre_representante,
+              nombres: datos.nombres_representante,
               apellidos: datos.apellidos_representante,
               fecha_nacimiento: Moment(datos.fecha_nacimiento_representante).format("YYYY-MM-DD"),
               nivel_instruccion: datos.nivel_instruccion_representante,
@@ -186,21 +189,32 @@ class ComponentRepresentanteForm extends React.Component{
               telefono_movil_representante: datos.telefono_movil_representante,
               telefono_local_representante: datos.telefono_local_representante,
               numero_hijos_representante: datos.numero_hijos_representante,
+              numero_estudiante_inicial_representante: datos.numero_estudiante_inicial_representante,
+              numero_estudiante_grado_1_representante: datos.numero_estudiante_grado_1_representante,
+              numero_estudiante_grado_2_representante: datos.numero_estudiante_grado_2_representante,
+              numero_estudiante_grado_3_representante: datos.numero_estudiante_grado_3_representante,
+              numero_estudiante_grado_4_representante: datos.numero_estudiante_grado_4_representante,
+              numero_estudiante_grado_5_representante: datos.numero_estudiante_grado_5_representante,
+              numero_estudiante_grado_6_representante: datos.numero_estudiante_grado_6_representante,
               constitucion_familiar_representante: datos.constitucion_familiar_representante,
               ingresos_representante: datos.ingresos_representante,
               tipo_vivienda_representante: datos.tipo_vivienda_representante,
-              sexo_representante: datos.sexo_representante,
               estatus_representante: datos.estatus_representante,
               estados: estados,
-              ciudades: ciudades
+              ciudades: ciudades,
+              id_estado:datos.id_estado,
             })
+
+            document.getElementById("tipo_vivienda_representante").value=this.state.tipo_vivienda_representante
             document.getElementById("id_estado").value=datosCiudad.id_estado
             document.getElementById("id_ciudad").value=datos.id_ciudad
           }else{
             alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
           }
+    }
   }
+
 
   // logica menu
   mostrarModulo(a){
@@ -356,14 +370,14 @@ class ComponentRepresentanteForm extends React.Component{
         else if(respuesta_servidor.estado_respuesta===false){
             mensaje.texto=respuesta_servidor.mensaje
             mensaje.estado=respuesta_servidor.estado_peticion
-            this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+            this.props.history.push(`/dashboard/configuracion/representante${JSON.stringify(mensaje)}`)
         }
     })
     .catch(error=>{
         console.log(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
-        this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+        this.props.history.push(`/dashboard/configuracion/representante${JSON.stringify(mensaje)}`)
     })
       // let edadTrabajador=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
   }
@@ -387,7 +401,7 @@ class ComponentRepresentanteForm extends React.Component{
         else if(respuesta_servidor.estado_peticion==="404"){
             mensaje.texto=respuesta_servidor.mensaje
             mensaje.estado=respuesta_servidor.estado_peticion
-            this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+            this.props.history.push(`/dashboard/configuracion/representante${JSON.stringify(mensaje)}`)
         }
     })
     .catch(error=>{
@@ -459,10 +473,18 @@ class ComponentRepresentanteForm extends React.Component{
             this.cambiarEstadoDos(input)
         }
     }
-    else if(input.name==="telefono_movil" || input.name==="telefono_local"){
+    else if(input.name==="telefono_movil_representante" || input.name==="telefono_local_representante"){
         if(input.value.length<=11){
             this.cambiarEstadoDos(input)
         }
+    }else if(input.name === "ingresos_representante"){
+      if(input.value.length<=10){
+        this.cambiarEstadoDos(input)
+      }
+    }else{
+      if(input.value.length<10){
+        this.cambiarEstadoDos(input)
+      }
     }
   }
 
@@ -483,12 +505,14 @@ class ComponentRepresentanteForm extends React.Component{
     let edadRepresentante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
     this.setState({edadRepresentante})
   }
-  // TODO: Adaptar esta funcion
+
   validarCampo(nombre_campo){
     var estado=false
     const valor=this.state[nombre_campo]
-    var msj_nombres=this.state["msj_"+nombre_campo]
-    var msj_apellidos=this.state["msj_"+nombre_campo]
+    let msj_nombres=this.state["msj_"+nombre_campo]
+    let msj_apellidos=this.state["msj_"+nombre_campo]
+    let msj_ocupacion = this.state["msj_"+nombre_campo]
+    let msj_constitucion_familiar_representante = this.state["msj_"+nombre_campo]
 
     if(valor!==""){
       if(this.state.StringExprecion.test(valor)){
@@ -496,16 +520,24 @@ class ComponentRepresentanteForm extends React.Component{
         console.log("campo nombre "+nombre_campo+" OK")
         msj_nombres[0] = {mensaje: "",color_texto:"rojo"}
         msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
+        msj_ocupacion[0] = {mensaje: "",color_texto:"rojo"}
+        msj_constitucion_familiar_representante[0] = {mensaje: "",color_texto:"rojo"}
       }else{
         msj_nombres[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
         msj_apellidos[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+        msj_ocupacion[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+        msj_constitucion_familiar_representante[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
       }
     }else{
       msj_nombres[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
       msj_apellidos[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
+      msj_ocupacion[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
+      msj_constitucion_familiar_representante[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
     }
 
-    if(nombre_campo == "nombres") this.setState(msj_nombres)
+    if(nombre_campo === "nombres") this.setState(msj_nombres)
+    else if(nombre_campo === "constitucion_familiar_representante") this.setState(msj_constitucion_familiar_representante)
+    else if(nombre_campo === "ocupacion") this.setState(msj_ocupacion)
     else this.setState(msj_apellidos)
     return estado
   }
@@ -530,14 +562,19 @@ class ComponentRepresentanteForm extends React.Component{
       constitucion_familiar_representante: "",
       ingresos_representante: "",
       tipo_vivienda_representante: "",
-      sexo_representante:"1",
       estatus_representante:"1",
+      numero_estudiante_inicial_representante: "",
+      numero_estudiante_grado_1_representante: "",
+      numero_estudiante_grado_2_representante: "",
+      numero_estudiante_grado_3_representante: "",
+      numero_estudiante_grado_4_representante: "",
+      numero_estudiante_grado_5_representante: "",
+      numero_estudiante_grado_6_representante: "",
       //MSJ
       msj_id_cedula:mensaje_campo,
       msj_nombres:mensaje_campo,
       msj_apellidos:mensaje_campo,
       msj_fecha_nacimiento:mensaje_campo,
-      msj_sexo_representate:mensaje_campo,
       msj_estatu_representate:mensaje_campo,
       msj_id_estado:mensaje_campo,
       msj_id_ciudad:mensaje_campo,
@@ -550,6 +587,13 @@ class ComponentRepresentanteForm extends React.Component{
       msj_constitucion_familiar_representante:mensaje_campo,
       msj_ingresos_representante:mensaje_campo,
       msj_tipo_vivienda_representante:mensaje_campo,
+      numero_estudiante_inicial_representante:mensaje_campo,
+      numero_estudiante_grado_1_representante:mensaje_campo,
+      numero_estudiante_grado_2_representante:mensaje_campo,
+      numero_estudiante_grado_3_representante:mensaje_campo,
+      numero_estudiante_grado_4_representante:mensaje_campo,
+      numero_estudiante_grado_5_representante:mensaje_campo,
+      numero_estudiante_grado_6_representante:mensaje_campo,
       edadRepresentante:null,
     })
     this.props.history.push("/dashboard/configuracion/representante/registrar")
@@ -564,10 +608,32 @@ class ComponentRepresentanteForm extends React.Component{
       if(campo!==""){
           if(!exprecion_2.test(campo)){
               if(exprecion.test(campo)){
-                  estado=true
-                  console.log("campo nombre "+nombre_campo+" OK")
-                  mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
-                  this.setState({["msj_"+nombre_campo]:mensaje_campo})
+
+                if(nombre_campo == "numero_hijos_representante"){
+                  let numero_hijos = parseInt(this.state.numero_hijos_representante)
+                  const sumatoria = (a, b) => a + b;
+                  let numeros = [
+                    parseInt(this.state.numero_estudiante_inicial_representante),
+                    parseInt(this.state.numero_estudiante_grado_1_representante),
+                    parseInt(this.state.numero_estudiante_grado_2_representante),
+                    parseInt(this.state.numero_estudiante_grado_3_representante),
+                    parseInt(this.state.numero_estudiante_grado_4_representante),
+                    parseInt(this.state.numero_estudiante_grado_5_representante),
+                    parseInt(this.state.numero_estudiante_grado_6_representante),
+                  ]
+                  let total_estudiante_representante = numeros.reduce(sumatoria)
+
+                  if(numero_hijos < total_estudiante_representante){
+                    estado = false
+                    mensaje_campo[0]={mensaje:"El numero de hijos no puede ser mayor a la cantidad de estudiantes registrados para este representante",color_texto:"rojo"}
+                    this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
+                    return false;
+                  }
+                }
+                estado=true
+                console.log("campo nombre "+nombre_campo+" OK")
+                mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
               }
           }
           else{
@@ -614,7 +680,7 @@ class ComponentRepresentanteForm extends React.Component{
       }
       return estado
   }
-  // TODO: Adaptar esta funcion
+
   validarDireccion(name){
       var estado = false
       const valor = this.state[name]
@@ -623,7 +689,6 @@ class ComponentRepresentanteForm extends React.Component{
       if(valor !== ""){
           if(this.state.StringExprecion.test(valor)){
               estado = true
-              console.log(`campo ${name} OK`)
               msj_direccion[0]={mensaje:"",color_texto:"rojo"}
           }
           else{
@@ -636,81 +701,93 @@ class ComponentRepresentanteForm extends React.Component{
           msj_direccion[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
       }
 
-      if(name == 'direccion') this.setState(msj_direccion)
-      // else if(name == 'direccion_nacimiento') this.setState(msj_direccion_nacimiento)
-      // else this.setState(msj_vive_con)
-
+      if(name === 'direccion') this.setState(msj_direccion)
       return estado
   }
 
   validarSelect(name){
     let estado = false
     const valor = this.state[name]
-    let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name];
+    let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name], msj_nivel_instruccion = this.state["msj_"+name],
+    msj_tipo_vivienda_representante = this.state["msj_"+name];
+
     if(valor != ""){
       estado = true
       msj_id_ciudad[0] = {mensaje: "", color_texto:"rojo"}
       msj_id_estado[0] = {mensaje: "", color_texto:"rojo"}
+      msj_nivel_instruccion[0] = {mensaje: "", color_texto:"rojo"}
+      msj_tipo_vivienda_representante[0] = {mensaje:"", color_texto:"rojo"}
     }else{
       msj_id_ciudad[0] = {mensaje: "Debe de seleccionar una ciudad", color_texto:"rojo"}
       msj_id_estado[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
+      msj_nivel_instruccion[0] = {mensaje: "Debe de seleccionar un grado de intrucccion", color_texto:"rojo"}
+      msj_tipo_vivienda_representante[0] = {mensaje:"Debe de seleccionar una opcion", color_texto:"rojo"}
     }
-    if(name == "id_ciudad") this.setState(msj_id_ciudad)
-    else if(name == "id_estado") this.setState(msj_id_estado)
+    if(name === "id_ciudad") this.setState(msj_id_ciudad)
+    else if(name === "id_estado") this.setState(msj_id_estado)
+    else if(name === "nivel_instruccion") this.setState(msj_nivel_instruccion)
+    else if(name === "tipo_vivienda_representante") this.setState(msj_tipo_vivienda_representante)
     return estado
   }
 
   validarRadio(name){
     let estado = false
     const valor = this.state[name]
-    let msj_sexo_repre = this.state["msj_"+name],
-    msj_estatu_representate = this.state["msj_"+name]
-    if(valor != ""){
+    let msj_estatus_representante = this.state["msj_"+name]
+    if(valor !== ""){
       estado = true
-      msj_sexo_repre[0] = {mensaje: "", color_texto:"rojo"}
-      msj_estatu_representate[0] = {mensaje: "", color_texto:"rojo"}
+      msj_estatus_representante[0] = {mensaje: "", color_texto:"rojo"}
     }else{
-      msj_sexo_repre[0] = {mensaje: "Debe de seleccionar sexo", color_texto:"rojo"}
-      msj_estatu_representate[0] = {mensaje: "Debe de seleccionar el estado del representante", color_texto:"rojo"}
+      msj_estatus_representante[0] = {mensaje: "Debe de seleccionar el estado del representante", color_texto:"rojo"}
     }
-    if(name == "sexo_representante") this.setState(msj_sexo_representante)
-    else if(name == "estato_representante") this.setState(msj_estato_representante)
+    if(name === "estatus_representante") this.setState(msj_estatus_representante)
     return estado
   }
-  // TODO: Adaptar luego
-  validarFormularioRegistrar(){
-      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
-      validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
-      validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
-      validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
-      validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
-      validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
-      if(
-        validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
-        validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
-        validar_sexo_estudiante && validar_estatu_estudiante
-      ){
-        return {estado: true, fecha:validar_fecha_nacimiento.fecha}
-      }else{
-        return {estado: false}
-      }
-  }
-  // Adaptar luego
-  validarFormularioActuazliar(){
-    const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
-    validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
-    validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
-    validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
-    validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
-    validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
+  validarFormularioRegistrar(){
+    const validarCedula = this.validarCampoNumero('id_cedula'), validarNombre = this.validarCampo('nombres'), validarApellido = this.validarCampo('apellidos'),
+    validarTelefonoMovil = this.validarCampoNumero('telefono_movil_representante'), validarTelefonoLocal = this.validarCampoNumero('telefono_local_representante'),
+    validarFechaNacimineto = this.validarFechaNacimineto(), validarOcupacion = this.validarCampo('ocupacion'), validarIngresos = this.validarCampoNumero('ingresos_representante'),
+    validarGradoIntruccion = this.validarSelect('nivel_instruccion'), validarNumeroHijos = this.validarCampoNumero('numero_hijos_representante'),
+    validarNumEstInicial = this.validarCampoNumero('numero_estudiante_inicial_representante'), ValidarNumEstGrado1 = this.validarCampoNumero('numero_estudiante_grado_1_representante'),
+    ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
+    ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
+    ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
+    validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
+    ValidarCiudad = this.validarSelect('id_ciudad'), ValidarStatus = this.validarRadio('estatus_representante')
 
     if(
-      validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
-      validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
-      validar_sexo_estudiante && validar_estatu_estudiante
+      validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
+      validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
+      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarStatus
     ){
-      return {estado: true, fecha:validar_fecha_nacimiento.fecha}
+      return { estado: true, fecha: validarFechaNacimineto.fecha }
+    }else{
+      return {estado: false}
+    }
+  }
+
+  validarFormularioActuazliar(){
+
+    const validarCedula = this.validarCampoNumero('id_cedula'), validarNombre = this.validarCampo('nombres'), validarApellido = this.validarCampo('apellidos'),
+    validarTelefonoMovil = this.validarCampoNumero('telefono_movil_representante'), validarTelefonoLocal = this.validarCampoNumero('telefono_local_representante'),
+    validarFechaNacimineto = this.validarFechaNacimineto(), validarOcupacion = this.validarCampo('ocupacion'), validarIngresos = this.validarCampoNumero('ingresos_representante'),
+    validarGradoIntruccion = this.validarSelect('nivel_instruccion'), validarNumeroHijos = this.validarCampoNumero('numero_hijos_representante'),
+    validarNumEstInicial = this.validarCampoNumero('numero_estudiante_inicial_representante'), ValidarNumEstGrado1 = this.validarCampoNumero('numero_estudiante_grado_1_representante'),
+    ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
+    ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
+    ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
+    validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
+    ValidarCiudad = this.validarSelect('id_ciudad'), ValidarStatus = this.validarRadio('estatus_representante')
+
+    console.log(ValidarEstado, ValidarCiudad)
+
+    if(
+      validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
+      validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
+      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarStatus
+    ){
+      return { estado: true, fecha: validarFechaNacimineto.fecha }
     }else{
       return {estado: false}
     }
@@ -728,8 +805,7 @@ class ComponentRepresentanteForm extends React.Component{
           msj_nombres:[{mensaje:"",color_texto:""}],
           msj_apellidos:[{mensaje:"",color_texto:""}],
           msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
-          msj_sexo_representate:[{mensaje:"",color_texto:""}],
-          msj_estatu_representate:[{mensaje:"",color_texto:""}],
+          msj_estatus_representante:[{mensaje:"",color_texto:""}],
           msj_id_estado:[{ mensaje:"", color_texto:""}],
           msj_id_ciudad:[{ mensaje:"", color_texto:""}],
           msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
@@ -741,6 +817,13 @@ class ComponentRepresentanteForm extends React.Component{
           msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
           msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
           msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_2_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_3_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_4_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_5_representante:[{ mensaje:"", color_texto:""}],
+          msj_numero_estudiante_grado_6_representante:[{ mensaje:"", color_texto:""}],
       }
       if(operacion==="registrar"){
 
@@ -770,6 +853,7 @@ class ComponentRepresentanteForm extends React.Component{
       else if(operacion==="actualizar"){
           const estado_validar_formulario=this.validarFormularioActuazliar()
           const {id}=this.props.match.params
+
           if(estado_validar_formulario.estado){
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
                   const mensaje =this.state.mensaje
@@ -792,24 +876,34 @@ class ComponentRepresentanteForm extends React.Component{
           }
       }
   }
-  // TODO: Adaptar luego
+
   enviarDatos(estado_validar_formulario,petion){
       const token=localStorage.getItem('usuario')
       const objeto={
-          estudiante:{
-            id_estudiante: null,
-            cedula_escolar: this.state.id_cedula_escolar,
-            cedula_estudiante: this.state.id_cedula,
-            nombres_estudiante: this.state.nombres,
-            apellidos_estudiante: this.state.apellidos,
-            fecha_nacimiento_estudiante: this.state.fecha_nacimiento,
-            direccion_nacimiento_estudiante: this.state.direccion_nacimiento,
+          representante:{
+            id_cedula_representante: this.state.id_cedula,
+            nueva_cedula: "",
+            nombres_representante: this.state.nombres,
+            apellidos_representante: this.state.apellidos,
+            fecha_nacimiento_representante: this.state.fecha_nacimiento,
+            nivel_instruccion_representante: this.state.nivel_instruccion,
+            ocupacion_representante: this.state.ocupacion,
+            direccion_representante: this.state.direccion,
             id_ciudad: this.state.id_ciudad,
-            sexo_estudiante: this.state.sexo_estudiante,
-            procedencia_estudiante: this.state.procedencia,
-            escolaridad_estudiante: this.state.escolaridad,
-            vive_con_estudiante: this.state.vive_con,
-            estatus_estudiante: this.state.estatu_estudiante,
+            telefono_movil_representante: this.state.telefono_movil_representante,
+            telefono_local_representante: this.state.telefono_local_representante,
+            numero_hijos_representante: this.state.numero_hijos_representante,
+            constitucion_familiar_representante: this.state.constitucion_familiar_representante,
+            ingresos_representante: this.state.ingresos_representante,
+            tipo_vivienda_representante: this.state.tipo_vivienda_representante,
+            numero_estudiante_inicial_representante: this.state.numero_estudiante_inicial_representante,
+            numero_estudiante_grado_1_representante: this.state.numero_estudiante_grado_1_representante,
+            numero_estudiante_grado_2_representante: this.state.numero_estudiante_grado_2_representante,
+            numero_estudiante_grado_3_representante: this.state.numero_estudiante_grado_3_representante,
+            numero_estudiante_grado_4_representante: this.state.numero_estudiante_grado_4_representante,
+            numero_estudiante_grado_5_representante: this.state.numero_estudiante_grado_5_representante,
+            numero_estudiante_grado_6_representante: this.state.numero_estudiante_grado_6_representante,
+            estatus_representante: this.state.estatus_representante,
           },
           token:token
       }
@@ -839,4 +933,271 @@ class ComponentRepresentanteForm extends React.Component{
       }
   }
 
+  render(){
+    var jsx_representante_form1=(
+        <div className="row justify-content-center">
+
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false) &&
+                    <div className="row">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
+                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <button className="close" data-dismiss="alert">
+                                    <span>X</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                        <span className="titulo-form-trabajador">Formulario representante</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-auto">
+                        <ButtonIcon
+                        clasesBoton="btn btn-outline-success"
+                        icon="icon-plus"
+                        id="icon-plus"
+                        eventoPadre={this.agregar}
+                        />
+                    </div>
+                </div>
+                <form id="form_trabajador">
+                    <div className="row justify-content-center">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula[0]}
+                          nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula}
+                          name="id_cedula" id="id_cedula" placeholder="Cédula" eventoPadre={this.buscarRepresentante}
+                        />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_nombres[0]}
+                          nombreCampo="Nombres:" activo="si" type="text" value={this.state.nombres}
+                          name="nombres" id="nombres" placeholder="Nombre" eventoPadre={this.validarTexto}
+                        />
+                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_apellidos[0]}
+                        nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
+                        name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
+                      />
+                    </div>
+                    <div className="row justify-content-center">
+                        <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_representante[0]}
+                          nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_representante}
+                          name="telefono_movil_representante" id="telefono_movil" placeholder="Telefono movil" eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
+                          nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_representante}
+                          name="telefono_local_representante" id="telefono_movil" placeholder="Telefono local" eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
+                          clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
+                          id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}
+                        />
+                      {this.state.edadRepresentante!==null &&
+                            (
+                            <div className="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                    <div className="form-ground">
+                                        <label className="mb-3">Edad:</label>
+                                        <div >{this.state.edadRepresentante} Años</div>
+                                    </div>
+                            </div>
+                            )
+                        }
+                    </div>
+                    <div className="row justify-content-center mx-auto my-2">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion[0]}
+                        nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion}
+                        name="ocupacion" id="ocupacion" placeholder="Ocupacion" eventoPadre={this.validarTexto}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_representante[0]}
+                        nombreCampo="Ingresos:" activo="si" type="text" value={this.state.ingresos_representante}
+                        name="ingresos_representante" id="ingresos_representante" placeholder="Ingresos del representante" eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormSelect
+                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                        obligatorio="si"
+                        mensaje={this.state.msj_nivel_instruccion[0]}
+                        nombreCampoSelect="Nivel Instrucción:"
+                        clasesSelect="custom-select"
+                        name="nivel_instruccion"
+                        id="nivel_instruccion"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.nivel_instruccion}
+                        option={this.state.grados_instruccion}
+                      />
+                    </div>
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_hijos_representante[0]}
+                        nombreCampo="Numero de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
+                        name="numero_hijos_representante" id="numer_hijos_representante" placeholder="Numero de hijos" eventoPadre={this.validarNumero}
+                      />
+
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_inicial_representante[0]}
+                        nombreCampo="Numero estudiantes en inicial:" activo="si" type="text" value={this.state.numero_estudiante_inicial_representante}
+                        name="numero_estudiante_inicial_representante" id="numer_estudiante_inicial" placeholder="Numero estudiantes en inicial" eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_1_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (1) :" activo="si" type="text" value={this.state.numero_estudiante_grado_1_representante}
+                        name="numero_estudiante_grado_1_representante" id="numero_estudiante_grado_1_representante" placeholder="Numero estudiantes en grado (1) " eventoPadre={this.validarNumero}
+                      />
+                    </div>
+
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_2_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (2) :" activo="si" type="text" value={this.state.numero_estudiante_grado_2_representante}
+                        name="numero_estudiante_grado_2_representante" id="numero_estudiante_grado_2_representante" placeholder="Numero estudiantes en grado (2) " eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_3_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (3) :" activo="si" type="text" value={this.state.numero_estudiante_grado_3_representante}
+                        name="numero_estudiante_grado_3_representante" id="numero_estudiante_grado_3_representante" placeholder="Numero estudiantes en grado (3) " eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_4_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (4) :" activo="si" type="text" value={this.state.numero_estudiante_grado_4_representante}
+                        name="numero_estudiante_grado_4_representante" id="numero_estudiante_grado_4_representante" placeholder="Numero estudiantes en grado (4) " eventoPadre={this.validarNumero}
+                      />
+                    </div>
+
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_5_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (5) :" activo="si" type="text" value={this.state.numero_estudiante_grado_5_representante}
+                        name="numero_estudiante_grado_5_representante" id="numero_estudiante_grado_5_representante" placeholder="Numero estudiantes en grado (5) " eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_6_representante[0]}
+                        nombreCampo="Numero estudiantes en grado (6) :" activo="si" type="text" value={this.state.numero_estudiante_grado_6_representante}
+                        name="numero_estudiante_grado_6_representante" id="numero_estudiante_grado_6_representante" placeholder="Numero estudiantes en grado (6) " eventoPadre={this.validarNumero}
+                      />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
+                        nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
+                        name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
+                      />
+                    </div>
+                    <div className="row justify-content-center mx-auto">
+                      <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                        obligatorio="si" mensaje={this.state.msj_direccion[0]} nombreCampoTextArea="Dirección:"
+                        clasesTextArear="form-control" name="direccion" id="direccion" value={this.state.direccion}
+                        eventoPadre={this.cambiarEstado}
+                      />
+                    </div>
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormSelect
+                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                        obligatorio="si"
+                        mensaje={this.state.msj_tipo_vivienda_representante[0]}
+                        nombreCampoSelect="Tipo de vivienda:"
+                        clasesSelect="custom-select"
+                        name="tipo_vivienda_representante"
+                        id="tipo_vivienda_representante"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.tipo_vivienda_representante}
+                        option={this.state.tipo_viviendas}
+                      />
+                      <ComponentFormSelect
+                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                        obligatorio="si"
+                        mensaje={this.state.msj_id_estado}
+                        nombreCampoSelect="Estado:"
+                        clasesSelect="custom-select"
+                        name="id_estado"
+                        id="id_estado"
+                        eventoPadre={this.consultarCiudadesXEstado}
+                        defaultValue={this.state.id_estado}
+                        option={this.state.estados}
+                      />
+                      <ComponentFormSelect
+                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                        obligatorio="si"
+                        mensaje={this.state.msj_id_ciudad}
+                        nombreCampoSelect="Ciudad:"
+                        clasesSelect="custom-select"
+                        name="id_ciudad"
+                        id="id_ciudad"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.id_ciudad}
+                        option={this.state.ciudades}
+                      />
+                    </div>
+
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormRadioState
+                        clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                        extra="custom-control-inline"
+                        nombreCampoRadio="Estatus:"
+                        name="estatu_representante"
+                        nombreLabelRadioA="Activó"
+                        idRadioA="activoestudianterA"
+                        checkedRadioA={this.state.estatus_representante}
+                        valueRadioA="1"
+                        nombreLabelRadioB="Inactivo"
+                        idRadioB="activoestudianterB"
+                        valueRadioB="0"
+                        eventoPadre={this.cambiarEstado}
+                        checkedRadioB={this.state.estatus_representante}
+                      />
+                    </div>
+
+                    <div className="row justify-content-center">
+                        <div className="col-auto">
+                            {this.props.match.params.operacion==="registrar" &&
+                                <InputButton
+                                clasesBoton="btn btn-primary"
+                                id="boton-registrar"
+                                value="Registrar"
+                                eventoPadre={this.operacion}
+                                />
+                            }
+                            {this.props.match.params.operacion==="actualizar" &&
+                                <InputButton
+                                clasesBoton="btn btn-warning"
+                                id="boton-actualizar"
+                                value="Actualizar"
+                                eventoPadre={this.operacion}
+                                />
+                            }
+                        </div>
+                        <div className="col-auto">
+                            <InputButton
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    )
+
+    return(
+        <div className="component_trabajador_form">
+          <ComponentDashboard
+          componente={jsx_representante_form1}
+          modulo={this.state.modulo}
+          eventoPadreMenu={this.mostrarModulo}
+          estado_menu={this.state.estado_menu}
+          />
+        </div>
+    )
+  }
 }
+
+export default withRouter(ComponentRepresentanteForm)

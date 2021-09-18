@@ -244,7 +244,7 @@ class ComponenteEstudiante extends React.Component{
                           <td>{estudiante.cedula_escolar}</td>
                           <td>{estudiante.nombres_estudiante}</td>
                           <td>{estudiante.apellidos_estudiante}</td>
-                          <td>{ (estudiante.sexo_estudiante == '1') ? "Masculino" : "Femenino" }</td>
+                          <td>{ (estudiante.sexo_estudiante === '1') ? "Masculino" : "Femenino" }</td>
                          {!estudiante.vacio &&
                            <td>
                              <ButtonIcon

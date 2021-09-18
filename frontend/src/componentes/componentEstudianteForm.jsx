@@ -865,7 +865,7 @@ class ComponentEstudianteForm extends React.Component{
                               nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
                               name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
                             />
-                            <ComponentFormDate clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                          <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
                               clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
                               id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}

@@ -1,25 +1,3 @@
-// id_cedula_representante char(8),
-// nombre_representante varchar(150),
-// apellidos_representante varchar(150),
-// fecha_nacimiento_representante date,
-// nivel_instruccion_representante varchar(150),
-// ocupacion_representante varchar(2000),
-// direccion_representante varchar(3000),
-// id_ciudad varchar(6),
-// telefono_movil_representante varchar(11)
-// telefono_local_representante varchar(11)
-// numero_hijos_representante varchar(2),
-// constitucion_familiar_representante varchar(150),
-// ingresos_representante varchar(10),
-// tipo_vivienda_representante char(1),
-//
-// numero_estudiante_inicial_representante varchar(2),
-// numero_estudiante_grado_1_representante varchar(2),
-// numero_estudiante_grado_2_representante varchar(2),
-// numero_estudiante_grado_3_representante varchar(2),
-// numero_estudiante_grado_4_representante varchar(2),
-// numero_estudiante_grado_5_representante varchar(2),
-// numero_estudiante_grado_6_representante varchar(2),
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 //css
@@ -39,32 +17,47 @@ import InputButton from '../subComponentes/input_button'
 class ComponentRepresentanteConsulta extends React.Component{
   constructor(){
     super();
+    this.mostrarModulo=this.mostrarModulo.bind(this);
+    this.regresar=this.regresar.bind(this);
+    this.actualizar=this.actualizar.bind(this)
     this.state={
         modulo:"",// modulo menu
         estado_menu:false,
         //formulario
-        id_cedula: "",
-        nombres: "",
-        apellidos: "",
-        fecha_nacimiento: "",
-        nivel_instruccion: "",
-        ocupacion: "",
-        direccion: "",
-        id_estado:"",
-        id_ciudad:"",
+        id_cedula_representante : "",
+        nombre_representante: "",
+        apellidos_representante: "",
+        estatus_representante:"1",
+        fecha_nacimiento_representante: "",
+        nivel_instruccion_representante: "",
+        ocupacion_representante: "",
+        direccion_representante: "",
+        nombre_ciudad: "",
         telefono_movil_representante: "",
         telefono_local_representante: "",
         numero_hijos_representante: "",
         constitucion_familiar_representante: "",
         ingresos_representante: "",
-        tipo_vivienda_representante: "",
-        sexo_representante:"1",
-        estatus_representante:"1",
+        tipo_vivienda_representante : "",
+        numero_estudiante_inicial_representante: "",
+        numero_estudiante_grado_1_representante: "",
+        numero_estudiante_grado_2_representante: "",
+        numero_estudiante_grado_3_representante: "",
+        numero_estudiante_grado_4_representante: "",
+        numero_estudiante_grado_5_representante: "",
+        numero_estudiante_grado_6_representante: "",
         ////parametros de modulos relacionados
         descripcion_tipo_trabajador:"",
         nombre_perfil:"",
         funcion_descripcion:"",
         estatu_cuenta:"",
+        tipo_viviendas:[
+          {id:"1",descripcion:"Rancho"},
+          {id:"2",descripcion:"Casa"},
+          {id:"3",descripcion:"Quinta"},
+          {id:"4",descripcion:"Apartamento"},
+          {id:"5",descripcion:"Alquilada"}
+        ],
         mensaje:{
             texto:"",
             estado:""
@@ -76,7 +69,7 @@ class ComponentRepresentanteConsulta extends React.Component{
       let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/representante")
       if(acessoModulo){
           const id=this.props.match.params.id
-          await this.consultarEstudiante(id)
+          await this.consultarRepresentante(id)
       }
       else{
           alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
@@ -86,7 +79,6 @@ class ComponentRepresentanteConsulta extends React.Component{
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
-      // /dashboard/configuracion/acceso
       let estado = false
         if(localStorage.getItem("usuario")){
           var respuesta_servior=""
@@ -137,7 +129,7 @@ class ComponentRepresentanteConsulta extends React.Component{
   }
 
   async consultarRepresentante(id){
-    let mensaje =""
+    let mensaje = {}
     const token=localStorage.getItem('usuario')
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
     // /${token}
@@ -145,7 +137,33 @@ class ComponentRepresentanteConsulta extends React.Component{
     .then(respuesta=>{
         let respuesta_servidor=respuesta.data
         if(respuesta_servidor.estado_respuesta=== true){
-          return respuesta_servidor.datos[0]
+          console.log(respuesta_servidor.datos)
+          let results = respuesta_servidor.datos[0]
+
+          this.setState({
+            id_cedula_representante : results.id_cedula_representante,
+            nombre_representante: results.nombres_representante,
+            apellidos_representante: results.apellidos_representante,
+            estatus_representante:(results.estatus_representante === "1") ? "Activo" : "Innactivo",
+            fecha_nacimiento_representante: Moment(results.fecha_nacimiento_representante).format("DD/MM/YYYY"),
+            nivel_instruccion_representante: results.nivel_instruccion_representante,
+            ocupacion_representante: results.ocupacion_representante,
+            direccion_representante: results.direccion_representante,
+            nombre_ciudad: results.nombre_ciudad,
+            telefono_movil_representante: results.telefono_movil_representante,
+            telefono_local_representante: results.telefono_local_representante,
+            numero_hijos_representante: results.numero_hijos_representante,
+            constitucion_familiar_representante: results.constitucion_familiar_representante,
+            ingresos_representante: results.ingresos_representante,
+            tipo_vivienda_representante : this.state.tipo_viviendas.filter( e => e.id === results.tipo_vivienda_representante)[0].descripcion,
+            numero_estudiante_inicial_representante: results.numero_estudiante_inicial_representante,
+            numero_estudiante_grado_1_representante: results.numero_estudiante_grado_1_representante,
+            numero_estudiante_grado_2_representante: results.numero_estudiante_grado_2_representante,
+            numero_estudiante_grado_3_representante: results.numero_estudiante_grado_3_representante,
+            numero_estudiante_grado_4_representante: results.numero_estudiante_grado_4_representante,
+            numero_estudiante_grado_5_representante: results.numero_estudiante_grado_5_representante,
+            numero_estudiante_grado_6_representante: results.numero_estudiante_grado_6_representante,
+          })
         }
         else if(respuesta_servidor.estado_respuesta===false){
             mensaje.texto=respuesta_servidor.mensaje
@@ -204,86 +222,145 @@ class ComponentRepresentanteConsulta extends React.Component{
   }
 
   render(){
+
     var jsx_representante_consulta=(
         <div className="row justify-content-center">
            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_trabajador_consulta">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-trabajador-consulta">
-                        <span className="titulo-trabajador-consulta">Representante Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
+                        <span className="titulo-trabajador-consulta">Representante Consultado: {this.state.nombre_representante+" "+this.state.apellidos_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Cédula escolar: </span>
-                        <span className="valor">{this.state.id_cedula_escolar}</span>
+                        <span className="propiedad">Cédula: </span>
+                        <span className="valor">{this.state.id_cedula_representante}</span>
                     </div>
                 </div>
-                { this.state.id_cedula != "" &&
-                  <div className="row">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                          <span className="propiedad">Cédula del estudiante: </span>
-                          <span className="valor">{this.state.id_cedula}</span>
-                      </div>
-                  </div>
-                }
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Nombre: </span>
-                        <span className="valor">{this.state.nombres}</span>
+                        <span className="valor">{this.state.nombre_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Apellido: </span>
-                        <span className="valor">{this.state.apellidos}</span>
+                        <span className="valor">{this.state.apellidos_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Fecha de Nacimiento: </span>
-                        <span className="valor">{this.state.fecha_nacimiento}</span>
+                        <span className="valor">{this.state.fecha_nacimiento_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Direccion de nacimiento: </span>
-                        <span className="valor">{this.state.direccion_nacimiento}</span>
+                        <span className="propiedad">Direccion: </span>
+                        <span className="valor">{this.state.direccion_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Escolaridad: </span>
-                        <span className="valor">{this.state.escolaridad}</span>
+                        <span className="propiedad">Telefono movil: </span>
+                        <span className="valor">{this.state.telefono_movil_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">El estudiante vive con: </span>
-                        <span className="valor">{this.state.vive_con}</span>
+                        <span className="propiedad">Telefono local: </span>
+                        <span className="valor">{this.state.telefono_local_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Procedencia del estudiante: </span>
-                        <span className="valor">{this.state.procedencia}</span>
+                        <span className="propiedad">Estatus representante: </span>
+                        <span className="valor">{this.state.estatus_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Estatus Trabajador: </span>
-                        <span className="valor">{this.state.estatu_estudiante}</span>
+                        <span className="propiedad">Ocupacion: </span>
+                        <span className="valor">{this.state.ocupacion_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                        <span className="propiedad">Sexo del estudiante: </span>
-                        <span className="valor">{this.state.sexo_estudiante}</span>
+                        <span className="propiedad">Grado de instruccion: </span>
+                        <span className="valor">{this.state.nivel_instruccion_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Ingresos del representante: </span>
+                        <span className="valor">{this.state.ingresos_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Tipo de vivienda: </span>
+                        <span className="valor">{this.state.tipo_vivienda_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Ciudad: </span>
-                        <span className="valor">{ this.state.id_ciudad}</span>
+                        <span className="valor">{ this.state.nombre_ciudad}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Constitucion familiar: </span>
+                        <span className="valor">{ this.state.constitucion_familiar_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de hijos del representante: </span>
+                        <span className="valor">{ this.state.numero_hijos_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en inicial: </span>
+                        <span className="valor">{ this.state.numero_estudiante_inicial_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en primer grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_1_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en segundo grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_2_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en tercer grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_3_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en cuarto grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_4_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en quinto grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_5_representante}</span>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                        <span className="propiedad">Numero de estudiantes en sexto grado: </span>
+                        <span className="valor">{ this.state.numero_estudiante_grado_6_representante}</span>
                     </div>
                 </div>
                 <div className="row justify-content-center">
@@ -320,3 +397,4 @@ class ComponentRepresentanteConsulta extends React.Component{
     )
   }
 }
+export default withRouter(ComponentRepresentanteConsulta)

@@ -122,7 +122,6 @@ function App() {
         <Route exact path="/dashboard/configuracion/permiso/:operacion/:id?" component={ComponentPermisoForm}/>
         <Route exact path="/dashboard/configuracion/permiso:mensaje?" component={ComponentPermiso}/>
 
-
         <Route exact path="/dashboard/configuracion/reposo/consultar/:id" component={ComponentReposoConsulta}/>
         <Route exact path="/dashboard/configuracion/reposo/:operacion/:id?" component={ComponentReposoForm}/>
         <Route exact path="/dashboard/configuracion/reposo:mensaje?" component={ComponentReposo}/>
@@ -175,11 +174,11 @@ function App() {
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
-
-        <Route exact path="/dashboard/configuracion/representante/consultar/:id" component={ComponentRepresentanteConsulta}/>
-        <Route exact path="/dashboard/configuracion/representante/:mensaje?" component={ComponentRepresentante}/>
-        <Route exact path="/dashboard/configuracion/representante/:operacion/:id?" component={ComponentRepresentanteForm}/>
         
+        <Route exact path="/dashboard/configuracion/representante:mensaje?" component={ComponentRepresentante} />
+        <Route exact path="/dashboard/configuracion/representante/consultar/:id?" component={ComponentRepresentanteConsulta} />
+        <Route exact path="/dashboard/configuracion/representante/:operacion/:id?" component={ComponentRepresentanteForm} />
+
         <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
         <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>
 
@@ -207,3 +206,4 @@ function App() {
 }
 
 export default App;
+
