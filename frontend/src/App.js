@@ -96,6 +96,9 @@ import ComponentBitacora from "./componentes/componentBitacora"
 // grado
 import ComponentGrado from './componentes/componentGrado'
 import ComponentGradoFormulario from './componentes/componentGradoFormulario'
+// Aula
+import ComponentAulaFormulario from './componentes/componentAulaFormulario'
+
 
 
 
@@ -170,12 +173,14 @@ function App() {
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
 
-      <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
+        <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
 
         <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
         <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>
+
+        <Route exact path="/dashboard/configuracion/aula/:operacion/:id?" component={ComponentAulaFormulario}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>
