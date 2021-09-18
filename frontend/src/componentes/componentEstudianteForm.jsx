@@ -33,9 +33,8 @@ class ComponentEstudianteForm extends React.Component{
         this.operacion=this.operacion.bind(this);
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.agregar=this.agregar.bind(this);
-        this.validarTexto=this.validarTexto.bind(this);
         this.validarNumero=this.validarNumero.bind(this);
-        // this.consultarFuncionesTrabajador=this.consultarFuncionesTrabajador.bind(this);
+        this.validarTexto=this.validarTexto.bind(this);
         this.fechaNacimiento=this.fechaNacimiento.bind(this);
         this.buscarEstudiante=this.buscarEstudiante.bind(this);
         this.validarSelect=this.validarSelect.bind(this);
@@ -325,16 +324,16 @@ class ComponentEstudianteForm extends React.Component{
           else if(respuesta_servidor.estado_respuesta===false){
               mensaje.texto=respuesta_servidor.mensaje
               mensaje.estado=respuesta_servidor.estado_peticion
-              this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+              this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
           }
       })
       .catch(error=>{
           console.log(error)
           mensaje.texto="No se puedo conectar con el servidor"
           mensaje.estado="500"
-          this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+          this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
       })
-        // let edadTrabajador=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
+        // let edadEstudiante=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
     }
 
     async consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado){
@@ -356,7 +355,7 @@ class ComponentEstudianteForm extends React.Component{
             else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_peticion
-                this.props.history.push(`/dashboard/configuracion/trabajador${JSON.stringify(mensaje)}`)
+                this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
             }
         })
         .catch(error=>{
@@ -447,8 +446,8 @@ class ComponentEstudianteForm extends React.Component{
         this.cambiarEstado(a)
         // console.log(input.value)
         let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-        let edadTrabajador=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
-        this.setState({edadTrabajador})
+        let edadEstudiante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+        this.setState({edadEstudiante})
     }
 
     validarCampo(nombre_campo){
@@ -560,7 +559,7 @@ class ComponentEstudianteForm extends React.Component{
                     this.setState(msj_fecha_nacimiento)
                 }
                 else{
-                    msj_fecha_nacimiento[0]={mensaje:"El estudiante solo puede tener hasta 11 anos",color_texto:"rojo"}
+                    msj_fecha_nacimiento[0]={mensaje:"El estudiante solo puede tener hasta 11 años",color_texto:"rojo"}
                     this.setState(msj_fecha_nacimiento)
                 }
             }
@@ -652,7 +651,7 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFormularioRegistrar(){
 
-        const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
+        const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
         validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
         validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
@@ -660,7 +659,7 @@ class ComponentEstudianteForm extends React.Component{
         validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
         if(
-          validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+          validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
           validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
           validar_sexo_estudiante && validar_estatu_estudiante
         ){
@@ -671,7 +670,7 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     validarFormularioActuazliar(){
-      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),validar_cedula=this.validarCampoNumero("id_cedula"),
+      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
       validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
       validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
       validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
@@ -679,7 +678,7 @@ class ComponentEstudianteForm extends React.Component{
       validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
       if(
-        validarCedulaEscolar && validar_cedula && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
         validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
         validar_sexo_estudiante && validar_estatu_estudiante
       ){
@@ -738,12 +737,12 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
-
+            const {id}=this.props.match.params
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
-                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.state.id_cedula}`,objeto)
+                    axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         mensaje.texto=respuesta_servidor.mensaje
@@ -866,7 +865,7 @@ class ComponentEstudianteForm extends React.Component{
                               nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
                               name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
                             />
-                            <ComponentFormDate clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                          <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
                               clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
                               id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}
