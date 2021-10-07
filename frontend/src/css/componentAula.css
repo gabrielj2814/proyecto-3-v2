@@ -2,13 +2,13 @@
     --color-fondo-formulario:#fff;
 }
 
-.contenedor_tabla_grado{
+/* .contenedor_tabla_grado{
     background-color: var(--color-fondo-formulario);
     height: 100%;
     border-radius: 15px;
     padding-top: 15px;
-}
+} */
 
-.component_grado{
+.component_aula{
     height: 100%;
 }

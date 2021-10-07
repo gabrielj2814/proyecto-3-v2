@@ -29,6 +29,7 @@ class ComponentAulaFormulario extends React.Component{
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.cambiarEstado=this.cambiarEstado.bind(this)
         this.operacion=this.operacion.bind(this)
+        this.regresar=this.regresar.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -202,6 +203,10 @@ class ComponentAulaFormulario extends React.Component{
                 console.error(`error de la peticion axios =>>> ${error}`)
             })
         }
+    }
+
+    regresar(){
+        this.props.history.push("/dashboard/configuracion/aula")
     }
 
     render(){
