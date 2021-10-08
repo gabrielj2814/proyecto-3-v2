@@ -40,7 +40,7 @@ class ComponentAulaFormulario extends React.Component{
             estatus_aula:"1",
             listaGradosEscolares:[],
             // 
-            msj_numero_grado:{
+            msj_nombre_aula:{
                 mensaje:"",
                 color_texto:""
             },
@@ -142,66 +142,128 @@ class ComponentAulaFormulario extends React.Component{
         })
     }
 
+    validarNombreAula(){
+        let estado=false
+        let msj_nombre_aula=JSON.parse(JSON.stringify(this.state.msj_nombre_aula))
+        const nombreAula=document.getElementById("nombre_aula"),
+        exprecion=/[A-Za-z0-9]/g
+        if(nombreAula.value!==""){
+            if(exprecion.test(nombreAula.value)){
+                estado=true
+                msj_nombre_aula.mensaje=""
+                msj_nombre_aula.color_texto=""
+            }
+            else{
+                // console.log("NO se acepta valores numericos")
+                msj_nombre_aula.mensaje="no puede solo haber espacios en blanco"
+                msj_nombre_aula.color_texto="rojo"
+                estado= false
+            }
+        }
+        else{
+            msj_nombre_aula.color_texto="rojo"
+            msj_nombre_aula.mensaje="este campo no puede estar vacio"
+            estado= false
+        }
+        this.setState({msj_nombre_aula})
+        return estado
+    }
+
+    validarAnoEscolar(){
+        if(this.state.listaGradosEscolares.length>0){
+            // return true
+            let selectAnoEscolar=document.getElementById("id_grado")
+            let anoEscolarEncontrado=this.state.listaGradosEscolares.filter((anoEscolar,index) => anoEscolar.id_grado===parseInt(selectAnoEscolar.value))
+            if(anoEscolarEncontrado.length>0){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        else{
+            alert("no se a podido hacer la operacion por que no hay años escolares registrados")
+            return false
+        }
+    }
+
+    validarFormulario(){
+        let estadoValidacionNombreAula=this.validarNombreAula()
+        let validacionAnoEscolar=this.validarAnoEscolar()
+        if(estadoValidacionNombreAula && validacionAnoEscolar){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
 
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         const token=localStorage.getItem('usuario')
-        if(operacion==="registrar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioAula"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosAula={
-                aula:datosFormatiados,
-                token
+        if(this.validarFormulario()){
+            if(operacion==="registrar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioAula"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosAula={
+                    aula:datosFormatiados,
+                    token
+                }
+                // console.log(datosAula)
+                await axiosCustom.post("configuracion/aula/registrar",datosAula)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
             }
-            // console.log(datosAula)
-            await axiosCustom.post("configuracion/aula/registrar",datosAula)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
+            else if(operacion==="actualizar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioAula"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosAula={
+                    aula:datosFormatiados,
+                    token
                 }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+                // console.log(datosAula)
+                await axiosCustom.put(`configuracion/aula/actualizar/${this.props.match.params.id}`,datosAula)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+            }
+
         }
-        else if(operacion==="actualizar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioAula"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosAula={
-                aula:datosFormatiados,
-                token
-            }
-            // console.log(datosAula)
-            await axiosCustom.put(`configuracion/aula/actualizar/${this.props.match.params.id}`,datosAula)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
-                }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+        else{
+            alert("Error al validar el formulario")
         }
     }
 
@@ -249,6 +311,7 @@ class ComponentAulaFormulario extends React.Component{
                             name="nombre_aula"
                             id="nombre_aula"
                             placeholder="Nombre Aula"
+                            mensaje={this.state.msj_nombre_aula}
                             eventoPadre={this.cambiarEstado}
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
