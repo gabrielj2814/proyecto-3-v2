@@ -77,6 +77,7 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"cintillo home",id:"/cintillo-home"}, 
                     {descripcion:"grado",id:"/grado"}, 
                     {descripcion:"estudiante",id:"/estudiante"},
+                    {descripcion:"representante",id:"/representante"},
                     {descripcion:"aula",id:"/aula"}
                 ],
                 // reporte:[

@@ -29,6 +29,7 @@ import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 class ComponentRepresentante extends React.Component{
   constructor(){
     super();
+    this.mostrarModulo = this.mostrarModulo.bind(this)
     this.actualizarElementoTabla = this.actualizarElementoTabla.bind(this)
     this.consultarElementoTabla = this.consultarElementoTabla.bind(this)
     this.verficarLista = this.verficarLista.bind(this)
@@ -54,62 +55,94 @@ class ComponentRepresentante extends React.Component{
         estado:""
       }
     }
-}
-
-actualizarElementoTabla(a){
-    var input=a.target;
-    this.props.history.push("/dashboard/configuracion/representante/actualizar/"+input.id);
-}
-
-consultarElementoTabla(a){
-    let input=a.target;
-    this.props.history.push("/dashboard/configuracion/representante/consultar/"+input.id);
-}
-
-async consultarTodosLosEstudiantes(){
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/consultar-todos`)
-    .then(repuesta => repuesta.data.datos )
-    .catch(error => {
-        console.log(error)
-    })
-}
-
-verficarLista(json_server_response){
-    if(json_server_response.length===0){
-        json_server_response.push({
-          id_permiso:"0",
-          nombre_permiso:"vacio",
-          vacio:"vacio"
-        })
-        return {registros:json_server_response,numeros_registros:0}
-      }
-      else{
-        return {
-          registros:json_server_response,
-          numeros_registros:json_server_response.length
-        }
-      }
   }
 
-async UNSAFE_componentWillMount(){
-  let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/representante")
-  if(acessoModulo){
-      var json_server_response=await this.consultarTodosLosEstudiantes();
-      var servidor=this.verficarLista(json_server_response);
-      if(this.props.match.params.mensaje){
-        const msj=JSON.parse(this.props.match.params.mensaje)
-        //alert("OK "+msj.texto)
-        var mensaje=this.state.mensaje
-        mensaje.texto=msj.texto
-        mensaje.estado=msj.estado
-        servidor.mensaje=mensaje
-      }
-      this.setState(servidor)
-   }
-   else{
-    alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-    this.props.history.goBack()
-   }
+  // logica menu
+  mostrarModulo(a){
+    var span=a.target;
+    if(this.state.modulo===""){
+        const estado="true-"+span.id;
+        this.setState({modulo:estado,estado_menu:true});
+    }
+    else{
+        var modulo=this.state.modulo.split("-");
+        if(modulo[1]===span.id){
+            if(this.state.estado_menu){
+                const estado="false-"+span.id
+                this.setState({modulo:estado,estado_menu:false})
+            }
+            else{
+                const estado="true-"+span.id
+                this.setState({modulo:estado,estado_menu:true})
+            }
+        }
+        else{
+            if(this.state.estado_menu){
+                const estado="true-"+span.id
+                this.setState({modulo:estado})
+            }
+            else{
+                const estado="true-"+span.id
+                this.setState({modulo:estado,estado_menu:true})
+            }
+        }
+    }
+  }
+
+  actualizarElementoTabla(a){
+      var input=a.target;
+      this.props.history.push("/dashboard/configuracion/representante/actualizar/"+input.id);
+  }
+
+  consultarElementoTabla(a){
+      let input=a.target;
+      this.props.history.push("/dashboard/configuracion/representante/consultar/"+input.id);
+  }
+
+  async consultarTodosLosEstudiantes(){
+      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/consultar-todos`)
+      .then(repuesta => repuesta.data.datos )
+      .catch(error => {
+          console.log(error)
+      })
+  }
+
+  verficarLista(json_server_response){
+      if(json_server_response.length===0){
+          json_server_response.push({
+            id_permiso:"0",
+            nombre_permiso:"vacio",
+            vacio:"vacio"
+          })
+          return {registros:json_server_response,numeros_registros:0}
+        }
+        else{
+          return {
+            registros:json_server_response,
+            numeros_registros:json_server_response.length
+          }
+        }
+    }
+
+  async UNSAFE_componentWillMount(){
+    let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/representante")
+    if(acessoModulo){
+        var json_server_response=await this.consultarTodosLosEstudiantes();
+        var servidor=this.verficarLista(json_server_response);
+        if(this.props.match.params.mensaje){
+          const msj=JSON.parse(this.props.match.params.mensaje)
+          //alert("OK "+msj.texto)
+          var mensaje=this.state.mensaje
+          mensaje.texto=msj.texto
+          mensaje.estado=msj.estado
+          servidor.mensaje=mensaje
+        }
+        this.setState(servidor)
+    }
+    else{
+      alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+      this.props.history.goBack()
+    }
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
@@ -128,6 +161,40 @@ async UNSAFE_componentWillMount(){
       }
       return estado
     }
+
+    async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
+      let estado=false
+      await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
+      .then(repuesta => {
+          let json=JSON.parse(JSON.stringify(repuesta.data))
+          // console.log("datos modulos =>>>",json)
+          let modulosSistema={}
+          let modulosActivos=json.modulos.filter( modulo => {
+              if(modulo.estatu_modulo==="1"){
+                  return modulo
+              }
+          })
+          // console.log("datos modulos =>>>",modulosActivos);
+          for(let medulo of modulosActivos){
+              if(modulosSistema[medulo.modulo_principal]){
+                  modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+              }
+              else{
+                  modulosSistema[medulo.modulo_principal]={}
+                  modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
+              }
+          }
+          console.log(modulosSistema)
+          if(modulosSistema[modulo][subModulo]){
+            estado=true
+          }
+          // this.setState({modulosSistema})
+      })
+      .catch(error =>  {
+          console.log(error)
+      })
+      return estado
+  }
 
     async buscar(a){
       var respuesta_servidor="",
@@ -170,39 +237,7 @@ async UNSAFE_componentWillMount(){
       }
     }
 
-    async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
-      let estado=false
-      await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
-      .then(repuesta => {
-          let json=JSON.parse(JSON.stringify(repuesta.data))
-          // console.log("datos modulos =>>>",json)
-          let modulosSistema={}
-          let modulosActivos=json.modulos.filter( modulo => {
-              if(modulo.estatu_modulo==="1"){
-                  return modulo
-              }
-          })
-          // console.log("datos modulos =>>>",modulosActivos);
-          for(let medulo of modulosActivos){
-              if(modulosSistema[medulo.modulo_principal]){
-                  modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
-              }
-              else{
-                  modulosSistema[medulo.modulo_principal]={}
-                  modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
-              }
-          }
-          console.log(modulosSistema)
-          if(modulosSistema[modulo][subModulo]){
-            estado=true
-          }
-          // this.setState({modulosSistema})
-      })
-      .catch(error =>  {
-          console.log(error)
-      })
-      return estado
-  }
+    
 
   redirigirFormulario(a){
     const input = a.target;
@@ -299,13 +334,13 @@ async UNSAFE_componentWillMount(){
                 </div>
               </div>
             </div>
-            // <div className="col-3 col-ms-3 col-md-3 columna-boton">
-            //   <div className="row justify-content-center align-items-center contenedor-boton">
-            //     <div className="col-auto">
-            //       <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
-            //     </div>
-            //   </div>
-            // </div>
+            <div className="col-3 col-ms-3 col-md-3 columna-boton">
+              <div className="row justify-content-center align-items-center contenedor-boton">
+                <div className="col-auto">
+                  <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     );
