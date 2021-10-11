@@ -29,6 +29,7 @@ import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 class ComponenteEstudiante extends React.Component{
     constructor(){
         super();
+        this.mostrarModulo = this.mostrarModulo.bind(this)
         this.actualizarElementoTabla = this.actualizarElementoTabla.bind(this)
         this.consultarElementoTabla = this.consultarElementoTabla.bind(this)
         this.verficarLista = this.verficarLista.bind(this)
@@ -54,6 +55,38 @@ class ComponenteEstudiante extends React.Component{
         }
     }
 
+    // logica menu
+    mostrarModulo(a){
+      var span=a.target;
+      if(this.state.modulo===""){
+          const estado="true-"+span.id;
+          this.setState({modulo:estado,estado_menu:true});
+      }
+      else{
+          var modulo=this.state.modulo.split("-");
+          if(modulo[1]===span.id){
+              if(this.state.estado_menu){
+                  const estado="false-"+span.id
+                  this.setState({modulo:estado,estado_menu:false})
+              }
+              else{
+                  const estado="true-"+span.id
+                  this.setState({modulo:estado,estado_menu:true})
+              }
+          }
+          else{
+              if(this.state.estado_menu){
+                  const estado="true-"+span.id
+                  this.setState({modulo:estado})
+              }
+              else{
+                  const estado="true-"+span.id
+                  this.setState({modulo:estado,estado_menu:true})
+              }
+          }
+      }
+  }
+
     actualizarElementoTabla(a){
         var input=a.target;
         this.props.history.push("/dashboard/configuracion/estudiante/actualizar/"+input.id);
@@ -71,6 +104,8 @@ class ComponenteEstudiante extends React.Component{
             console.log(error)
         })
     }
+
+
 
     verficarLista(json_server_response){
         if(json_server_response.length===0){
