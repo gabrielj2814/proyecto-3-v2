@@ -157,6 +157,7 @@ class ComponentEstudianteConsulta extends React.Component{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_respuesta===true){
               let results = respuesta_servidor.datos[0]
+
               this.setState({
                 id_cedula_escolar:results.cedula_escolar,
                 id_cedula:(results.cedula_estudiante != "" && results.cedula_estudiante != undefined) ? results.cedula_estudiante : "No tiene",
@@ -167,7 +168,7 @@ class ComponentEstudianteConsulta extends React.Component{
                 escolaridad:results.escolaridad_estudiante,
                 vive_con:results.vive_con_estudiante,
                 procedencia:results.procedencia_estudiante,
-                id_ciudad:results.id_ciudad,
+                id_ciudad:results.nombre_ciudad,
                 sexo_estudiante:(results.sexo_estudiante == "1") ? "Masculino" : "Femenino",
                 estatu_estudiante:(results.estatus_estudiante == "1") ? "Activo" : "Innactivo",
               })
@@ -200,7 +201,7 @@ class ComponentEstudianteConsulta extends React.Component{
                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_trabajador_consulta">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-trabajador-consulta">
-                            <span className="titulo-trabajador-consulta">Trabajador Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
+                            <span className="titulo-trabajador-consulta">Estudiante Consultado: {this.state.nombres+" "+this.state.apellidos}</span>
                         </div>
                     </div>
                     <div className="row">
@@ -261,7 +262,7 @@ class ComponentEstudianteConsulta extends React.Component{
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Estatus Trabajador: </span>
+                            <span className="propiedad">Estatus del estudiante: </span>
                             <span className="valor">{this.state.estatu_estudiante}</span>
                         </div>
                     </div>

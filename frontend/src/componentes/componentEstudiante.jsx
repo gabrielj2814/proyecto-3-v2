@@ -37,6 +37,8 @@ class ComponenteEstudiante extends React.Component{
         this.redirigirFormulario = this.redirigirFormulario.bind(this)
         this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
         this.consultarPerfilTrabajador = this.consultarPerfilTrabajador.bind(this)
+        this.buscar = this.buscar.bind(this)
+        this.escribir_codigo = this.escribir_codigo.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -162,6 +164,47 @@ class ComponenteEstudiante extends React.Component{
           return estado
         }
 
+        async buscar(a){
+          var respuesta_servidor="",
+          valor=this.state.datoDeBusqueda
+          if(valor!==""){
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-patron/${valor}`)
+              .then(respuesta=>{
+                respuesta_servidor=respuesta.data
+                console.log(respuesta_servidor)
+                this.setState({registros:respuesta_servidor.datos})
+              })
+              .catch(error=>{
+                console.log(error)
+                alert("error en el servidor")
+              })
+          }else{
+            alert("Error:la barra de busqueda esta vacia")
+          }
+        }
+        async escribir_codigo(a){
+          var input=a.target,
+          valor=input.value,
+          respuesta_servidor=""
+          if(valor!==""){
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-patron/${valor}`)
+            .then(respuesta=>{
+              respuesta_servidor=respuesta.data
+              console.log(respuesta_servidor)
+              this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.datos,numeros_registros:respuesta_servidor.datos.length})
+            })
+            .catch(error=>{
+              console.log(error)
+              alert("error en el servidor")
+            })
+          }else{
+            // console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
+            var json_server_response=await this.consultarTodosLosEstudiantes();
+            var servidor_res=this.verficarLista(json_server_response);
+            this.setState(servidor_res)
+          }
+        }
+
         async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
           let estado=false
           await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -236,17 +279,28 @@ class ComponenteEstudiante extends React.Component{
                           <td>{estudiante.cedula_escolar}</td>
                           <td>{estudiante.nombres_estudiante}</td>
                           <td>{estudiante.apellidos_estudiante}</td>
-                          <td>{ (estudiante.sexo_estudiante == '1') ? "Masculino" : "Femenino" }</td>
+                          <td>{ (estudiante.sexo_estudiante === '1') ? "Masculino" : "Femenino" }</td>
                          {!estudiante.vacio &&
-                            <td>
-                                <ButtonIcon
+                           <td>
+                             <ButtonIcon
                                 clasesBoton="btn btn-warning btn-block"
                                 value={estudiante.id_estudiante}
                                 id={estudiante.id_estudiante}
                                 eventoPadre={this.actualizarElementoTabla}
                                 icon="icon-pencil"
-                                />
+                              />
                             </td>
+                         }
+                         {!estudiante.vacio &&
+                           <td>
+                             <ButtonIcon
+                               clasesBoton="btn btn-secondary btn-block"
+                               value={estudiante.id_estudiante}
+                               id={estudiante.id_estudiante}
+                               eventoPadre={this.consultarElementoTabla}
+                               icon="icon-search"
+                              />
+                           </td>
                          }
                     </tr>
                     )
