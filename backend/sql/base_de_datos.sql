@@ -362,8 +362,6 @@ CREATE TABLE tasignacion_aula_profesor(
     constraint FK_id_ano_escolar_tasignacion_aula_profesor foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
 
-
-
 CREATE TABLE tlista_vacuna(
     id_vacuna SERIAL,
     nombre_vacuna character varying(150) NOT NULL,
