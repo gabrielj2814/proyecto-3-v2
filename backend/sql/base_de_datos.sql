@@ -38,6 +38,8 @@ INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES(
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/permiso','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/cintillo-home','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/estudiante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/representante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/aula','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/permiso-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/reposo-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/asistencia/lista','1');
@@ -340,19 +342,25 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
+CREATE TABLE tprofesor(
+    id_profesor SERIAL ,
+    id_cedula character varying(8) NOT NULL,
+    estatus_profesor character(1) NOT NULL,
+    constraint PK_id_profesor primary key(id_profesor),
+    constraint FK_id_cedula_tprofesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
+
 CREATE TABLE tasignacion_aula_profesor(
     id_asignacion_aula_profesor SERIAL,
-    id_cedula character varying(8) NOT NULL,
+    id_profesor INTEGER NOT NULL,
     id_aula INTEGER NOT NULL,
     id_ano_escolar INTEGER NOT NULL,
     estatus_asignacion_aula_profesor character(1) NOT NULL,
     constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
-    constraint FK_id_cedula_tasignacion_aula_profesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
+    constraint FK_id_profesor_tasignacion_aula_profesor foreign key(id_profesor) references tprofesor(id_profesor) on update cascade on delete cascade,
     constraint FK_id_aula_tasignacion_aula_profesor foreign key(id_aula) references taula(id_aula) on update cascade on delete cascade,
     constraint FK_id_ano_escolar_tasignacion_aula_profesor foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
-
-
 
 CREATE TABLE tlista_vacuna(
     id_vacuna SERIAL,
