@@ -345,8 +345,8 @@ class ComponentRepresentanteForm extends React.Component{
         let json=JSON.parse(JSON.stringify(repuesta.data))
         // console.log("datos =>>> ",json)
         let hash={}
-        for(let estudiante of json.datos){
-            hash[estudiante.cedula_escolar]=estudiante
+        for(let representante of json.datos){
+            hash[representante.id_cedula_representante]=representante
         }
         console.log("hash representante =>>> ",hash)
         this.setState({hashRepresentante:hash})
