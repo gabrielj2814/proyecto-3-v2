@@ -32,6 +32,7 @@ const rutas_modulo_aula=require("./rutas/configuracion/aula")
 const rutas_modulo_estudiante = require("./rutas/configuracion/estudiante")
 const rutas_modulo_representante = require("./rutas/configuracion/representante")
 const rutas_modulo_asignacion_representante_estudiante = require('./rutas/configuracion/asignacion-representante-estudiante')
+const rutas_modulo_profesor = require('./rutas/configuracion/profesor')
 //SET
 app.set("puerto",8080)
 // USE
@@ -67,6 +68,7 @@ app.use("/configuracion/aula",rutas_modulo_aula)
 app.use("/configuracion/estudiante", rutas_modulo_estudiante)
 app.use("/configuracion/representante", rutas_modulo_representante)
 app.use("/configuracion/asignacion-representante-estudiante", rutas_modulo_asignacion_representante_estudiante)
+app.use("/configuracion/profesor", rutas_modulo_profesor)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
