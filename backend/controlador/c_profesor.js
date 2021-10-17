@@ -24,5 +24,27 @@ controladorProfesor.registrar=async (req,res) => {
     
 }
 
+controladorProfesor.consultar=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    const {id} = req.params
+    let modelo_profesor = new ModeloProfesor()
+    modelo_profesor.setIdProfesor(id)
+    let resultProfesor=await modelo_profesor.consultar()
+    if(resultProfesor.rowCount>0){
+        respuesta_api.datos=resultProfesor.rows
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 module.exports = controladorProfesor
