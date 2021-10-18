@@ -46,5 +46,26 @@ controladorProfesor.consultar=async (req,res) => {
     res.end()
 }
 
+controladorProfesor.actualizar=async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const {profesor} = req.body
+    let modelo_profesor=new ModeloProfesor()
+    modelo_profesor.setDatos(profesor)
+    let resultProfesor=await modelo_profesor.actualizar()
+    if(resultProfesor.rowCount > 0){
+        respuesta_api.mensaje="actualización completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al actualizar (no se a encontrado el registro)"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 module.exports = controladorProfesor

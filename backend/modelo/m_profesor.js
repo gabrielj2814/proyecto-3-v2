@@ -52,7 +52,7 @@ class ModeloProfesor extends DriverPostgres{
     async actualizar(){
         const SQL=`UPDATE tprofesor SET
             id_cedula='${this.id_cedula}',
-            estatus_profesor='${this.id_profesor}'
+            estatus_profesor='${this.estatus_profesor}'
             WHERE 
             id_profesor=${this.id_profesor};
         `
