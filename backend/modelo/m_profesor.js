@@ -40,7 +40,7 @@ class ModeloProfesor extends DriverPostgres{
     }
     
     async consultarPorCedula(){
-        const SQL=`SELECT * FROM tprofesor,ttrabajador WHERE tprofesor.id_profesor=${this.id_cedula} AND  ttrabajador.id_cedula=tprofesor.id_cedula`;
+        const SQL=`SELECT * FROM tprofesor,ttrabajador WHERE tprofesor.id_cedula='${this.id_cedula}' AND  ttrabajador.id_cedula=tprofesor.id_cedula`;
         return await this.query(SQL)
     }
 

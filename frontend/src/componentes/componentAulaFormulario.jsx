@@ -170,7 +170,7 @@ class ComponentAulaFormulario extends React.Component{
                 this.setState({listaGradosEscolares:respuestaServidor.datos})
             }
             else{
-                alert("este registro no exite")
+                alert("No hay grados escolares registrados" )
             }
 
         })
@@ -345,7 +345,7 @@ class ComponentAulaFormulario extends React.Component{
                 }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_aula">
                     <div className="row justify-content-center">
-                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-aula">
                             <span className="titulo-form-reposo">Formulario de Aula</span>
                         </div>
                     </div>
