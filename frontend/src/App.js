@@ -106,7 +106,10 @@ import ComponentAula from './componentes/componentAula'
 //Profesor
 import ComponentProfesorFormulario from './componentes/componentProfesorFormulario'
 import ComponentProfesor from './componentes/componentProfesor'
-
+// Asignacion representante-estudiante
+import ComponenteAsignacionRepresentanteEstudiante from './componentes/componenteAsignacionRepresentanteEstudiante';
+import ComponenteAsignacionRepresentanteEstudianteConsulta from './componentes/componenteAsignacionRepresentanteEstudianteConsulta';
+import ComponenteAsignacionRepresentanteEstudianteForm from './componentes/componenteAsignacionRepresentanteEstudianteForm';
 
 
 import ComponentReporteMedico from './componentes/componentReporteMedico'
@@ -166,6 +169,10 @@ function App() {
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/:operacion/:id?" component={ComponentAsignacionEspecialidadMedicoForm}/>
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico:mensaje?" component={ComponentAsignacionEspecialidadMedico}/>
 
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/consultar/:id" component={ComponenteAsignacionRepresentanteEstudianteConsulta}/>
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
+
         <Route exact path="/dashboard/configuracion/tipo-cam/consultar/:id" component={ComponentTipoCamConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
@@ -182,7 +189,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
-        
+
         <Route exact path="/dashboard/configuracion/representante:mensaje?" component={ComponentRepresentante} />
         <Route exact path="/dashboard/configuracion/representante/consultar/:id?" component={ComponentRepresentanteConsulta} />
         <Route exact path="/dashboard/configuracion/representante/:operacion/:id?" component={ComponentRepresentanteForm} />
@@ -220,4 +227,3 @@ function App() {
 }
 
 export default App;
-

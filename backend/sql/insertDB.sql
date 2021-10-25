@@ -1,5 +1,7 @@
 INSERT INTO tperfil(id_perfil,nombre_perfil,estatu_perfil) VALUES('prl-1','web master','1');
 
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/asignacion-representante-estudiante','1');
+
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/trabajador','1');
 
 INSERT INTO ttipotrabajador(id_tipo_trabajador,descripcion_tipo_trabajador,estatu_tipo_trabajador) VALUES('tipot-1','docente a','1');

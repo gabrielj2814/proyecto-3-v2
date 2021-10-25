@@ -808,7 +808,7 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     render(){
-        var jsx_estudiante_form1=(
+        var jsx_estudiante_form = (
             <div className="row justify-content-center">
 
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
@@ -992,34 +992,12 @@ class ComponentEstudianteForm extends React.Component{
                     </form>
                 </div>
             </div>
-        )
-
-        var jsx_estudiante_form = (
-          <div className="row justify-content-center">
-            <div clasName="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
-              <div className="row justify-content-center">
-                <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                  <span className="titulo-form-trabajador">Formulario estudiante</span>
-                </div>
-              </div>
-              <div className="row">
-                  <div className="col-auto">
-                      <ButtonIcon
-                      clasesBoton="btn btn-outline-success"
-                      icon="icon-plus"
-                      id="icon-plus"
-                      eventoPadre={this.agregar}
-                      />
-                  </div>
-              </div>
-            </div>
-          </div>
-        )
+        );
 
         return(
             <div className="component_trabajador_form">
               <ComponentDashboard
-              componente={jsx_estudiante_form1}
+              componente={jsx_estudiante_form}
               modulo={this.state.modulo}
               eventoPadreMenu={this.mostrarModulo}
               estado_menu={this.state.estado_menu}
