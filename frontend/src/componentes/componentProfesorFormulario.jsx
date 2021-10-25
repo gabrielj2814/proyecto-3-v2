@@ -136,65 +136,78 @@ class ComponentProfesorFormulario extends React.Component {
         return json   
     }
 
+    validarComboTrabajador(){
+        let estado=false
+        if(this.state.listaTrabajadores.length>0){
+            estado=true
+        }
+        return estado
+    }
+
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         const token=localStorage.getItem('usuario')
-        if(operacion==="registrar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosProfesor={
-                profesor:datosFormatiados,
-                token
+        if(this.validarComboTrabajador()){
+            if(operacion==="registrar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosProfesor={
+                    profesor:datosFormatiados,
+                    token
+                }
+                // console.log(datosProfesor)
+                await axiosCustom.post("configuracion/profesor/registrar",datosProfesor)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
             }
-            // console.log(datosProfesor)
-            await axiosCustom.post("configuracion/profesor/registrar",datosProfesor)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
+            else if(operacion==="actualizar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosProfesor={
+                    profesor:datosFormatiados,
+                    token
                 }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+                // console.log(datosProfesor)
+                await axiosCustom.put(`configuracion/profesor/actualizar/${this.props.match.params.id}`,datosProfesor)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+            }
         }
-        else if(operacion==="actualizar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosProfesor={
-                profesor:datosFormatiados,
-                token
-            }
-            // console.log(datosProfesor)
-            await axiosCustom.put(`configuracion/profesor/actualizar/${this.props.match.params.id}`,datosProfesor)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
-                }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+        else{
+            alert("error al validar el formulario")
         }
     }
 
