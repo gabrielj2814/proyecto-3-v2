@@ -105,6 +105,7 @@ import ComponentAulaFormulario from './componentes/componentAulaFormulario'
 import ComponentAula from './componentes/componentAula'
 //Profesor
 import ComponentProfesorFormulario from './componentes/componentProfesorFormulario'
+import ComponentProfesor from './componentes/componentProfesor'
 
 
 
@@ -193,6 +194,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/aula:mensaje?" component={ComponentAula}/>
 
         <Route exact path="/dashboard/configuracion/profesor/:operacion/:id?" component={ComponentProfesorFormulario}/>
+        <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>

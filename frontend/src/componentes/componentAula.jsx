@@ -243,7 +243,7 @@ class ComponentAula extends React.Component{
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Aula"/>
 
                 <div className="row">
-                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_grado">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
                         <div className="row">
                             <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 mb-3">
                                 <div class="form-groud">
@@ -260,7 +260,6 @@ class ComponentAula extends React.Component{
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
-                <div className="row"></div>
                 
                 <div className="row">
                 
