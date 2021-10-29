@@ -1,7 +1,7 @@
 const DriverPostgre = require("./driver_postgresql")
 const ModuloModelo = require("./m_modulo")
 
-class ModuloAñoEscolar extends DriverPostgre {
+class ModuloAnoEscolar extends DriverPostgre {
   constructor(){
     super()
 
@@ -28,7 +28,7 @@ class ModuloAñoEscolar extends DriverPostgre {
 
   async registrar(){
     const SQL = `INSERT INTO tano_escolar(ano_desde, ano_hasta, fecha_inicio_ano_escolar, fecha_cierre_ano_escolar, estatus_ano_escolar)
-                  VALUES('${this.ano_desde}', '${this.ano_hasta}', '${this.fecha_inicio_ano_escolar}', '${this.fecha_cierre_ano_escolar}', 
+                  VALUES('${this.ano_desde}', '${this.ano_hasta}', '${this.fecha_inicio_ano_escolar}', '${this.fecha_cierre_ano_escolar}',
                   '${this.estatus_ano_escolar}')
                 `
     return await this.query(SQL)
@@ -53,4 +53,4 @@ class ModuloAñoEscolar extends DriverPostgre {
   }
 }
 
-module.exports = ModuloAñoEscolar;
+module.exports = ModuloAnoEscolar;
