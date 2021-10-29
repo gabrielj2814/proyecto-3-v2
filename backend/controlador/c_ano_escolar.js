@@ -1,8 +1,11 @@
+const moment = require('moment');
+moment.locale('es');
+
 const controladorAnoEscolar = {}
 
 controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
-  const ModeloAnoEscolar = require("../modelo/m_año_escolar");
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
   let { anoescolar } = req.body
   let modeloAnoEscolar = new ModeloAnoEscolar()
   modeloAnoEscolar.setDatos(anoescolar)
@@ -24,7 +27,7 @@ controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
 
 controladorAnoEscolar.consultar_todos = async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
-  const ModeloAnoEscolar = require("../modelo/m_año_escolar");
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
   let modeloAnoEscolar = new ModeloAnoEscolar()
   let resultAnoEscolar = await modeloAnoEscolar.consultarTodos()
 
@@ -44,9 +47,39 @@ controladorAnoEscolar.consultar_todos = async (req, res) => {
   res.end()
 }
 
+controladorAnoEscolar.getDateNow = async (req, res) => {
+  // const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+
+  const hoy = moment();
+
+  const formato = 'YYYY-MM-DD';
+  const fecha = await hoy.format(formato)
+  //console.log({ data: fecha });
+  res.json({ 
+    mensaje: 'consulta completada',
+    datos: fecha,
+    estado_respuesta: true,
+    color_alerta: "success"
+  })
+  // if (fecha.rowCount > 0) {
+  //   respuesta_api.mensaje = "consulta completada"
+  //   respuesta_api.datos = fecha.rows
+  //   respuesta_api.estado_respuesta = true
+  //   respuesta_api.color_alerta = "success"
+  // }
+  // else {
+  //   respuesta_api.mensaje = "no se pudo obtener la fecha actual"
+  //   respuesta_api.estado_respuesta = false
+  //   respuesta_api.color_alerta = "danger"
+  // }
+  // res.writeHead(200, { "Content-Type": "application/json" })
+  // res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorAnoEscolar.consultarpatron = async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
-  const ModeloAnoEscolar = require("../modelo/m_año_escolar");
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
   const patron = req.params.patron
   let modeloAnoEscolar = new ModeloAnoEscolar()
   let resultAnoEscolar = await modeloAnoEscolar.consultarpatron(patron)
@@ -67,9 +100,10 @@ controladorAnoEscolar.consultarpatron = async (req, res) => {
   res.end()
 }
 
+
 controladorAnoEscolar.actualizar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
-  const ModeloAnoEscolar = require("../modelo/m_año_escolar");
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
   let { anoescolar } = req.body
   let { id } = req.params
   let modeloAnoEscolar = new ModeloAnoEscolar()
