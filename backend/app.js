@@ -33,7 +33,7 @@ const rutas_modulo_estudiante = require("./rutas/configuracion/estudiante")
 const rutas_modulo_representante = require("./rutas/configuracion/representante")
 const rutas_modulo_asignacion_representante_estudiante = require('./rutas/configuracion/asignacion-representante-estudiante')
 const rutas_modulo_ano_escolar = require('./rutas/configuracion/ano-escolar')
-const rutas_modulo_profesor = require('./rutas/configuracion/profesor')
+const rutas_modulo_profesor = require('./rutas/configuracion/profesor'))
 //SET
 app.set("puerto",8080)
 // USE
