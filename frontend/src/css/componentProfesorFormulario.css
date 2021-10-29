@@ -1,0 +1,23 @@
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.contenedor_formulario_profesor{
+    background-color: var(--color-fondo-formulario);
+    height: auto;
+    border-radius: 15px;
+    padding-bottom: 30px;
+}
+
+.component_profesor_formulario{
+    height: 100%;
+}
+
+.contenedor-titulo-form-profesor{
+    border-bottom: 1px solid #111;
+    margin-bottom: 15px;
+}
+
+.titulo-form-profesor{
+    font-size: 2.5rem; 
+}

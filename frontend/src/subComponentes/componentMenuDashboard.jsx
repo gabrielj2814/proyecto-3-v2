@@ -188,6 +188,13 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/configuracion"]["/aula"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/aula" texto="Aula"/>
                             }
+                            {this.state.modulosSistema["/dashboard/configuracion"]["/profesor"]&&
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/profesor" texto="Profesor"/>
+                            }
+
+
+
+
                             {this.state.modulosSistema["/dashboard/configuracion"]["/acceso"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/acceso" texto="Acceso"/>
                             }
@@ -203,8 +210,6 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/configuracion"]["/permiso"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
                             }
-
-
                             {this.state.modulosSistema["/dashboard/configuracion"]["/especialidad"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
                             }
