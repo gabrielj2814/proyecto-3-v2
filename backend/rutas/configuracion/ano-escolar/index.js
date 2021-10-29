@@ -1,7 +1,7 @@
 const express = require("express"),
   router = express.Router(),
   bodyparser = require("body-parser"),
-  controladorAnoEscolar = require("../../../controlador/c_año_escolar")
+  controladorAnoEscolar = require("../../../controlador/c_ano_escolar")
 
 
 router.use(bodyparser.json())

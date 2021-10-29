@@ -5,7 +5,7 @@ app =express(),
 logger=require("morgan"),
 cors=require("cors"),
 fs=require("fs");
-// importando rutas de los modulos 
+// importando rutas de los modulos
 const rutas_modulo_login=require("./rutas/login"),
 rutas_modulo_acceso=require("./rutas/configuracion/acceso"),
 rutas_modulo_permiso=require("./rutas/configuracion/permiso"),
@@ -32,7 +32,7 @@ const rutas_modulo_aula=require("./rutas/configuracion/aula")
 const rutas_modulo_estudiante = require("./rutas/configuracion/estudiante")
 const rutas_modulo_representante = require("./rutas/configuracion/representante")
 const rutas_modulo_asignacion_representante_estudiante = require('./rutas/configuracion/asignacion-representante-estudiante')
-const rutas_modulo_año_escolar = require('./rutas/configuracion/año-escolar')
+const rutas_modulo_ano_escolar = require('./rutas/configuracion/ano-escolar')
 //SET
 app.set("puerto",8080)
 // USE
@@ -62,13 +62,13 @@ app
 .use("/transaccion/reposo-trabajador",rutas_modulo_reposo_trabajador)
 .use("/transaccion/asistencia",rutas_modulo_asistencia)
 .use("/transaccion/bitacora",rutas_modulo_bitacora)
-// 
+//
 app.use("/configuracion/grado",rutas_modulo_grado)
 app.use("/configuracion/aula",rutas_modulo_aula)
 app.use("/configuracion/estudiante", rutas_modulo_estudiante)
 app.use("/configuracion/representante", rutas_modulo_representante)
 app.use("/configuracion/asignacion-representante-estudiante", rutas_modulo_asignacion_representante_estudiante)
-app.use("/configuracion/ano-escolar", rutas_modulo_año_escolar)
+app.use("/configuracion/ano-escolar", rutas_modulo_ano_escolar)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
