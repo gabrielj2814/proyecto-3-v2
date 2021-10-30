@@ -34,11 +34,24 @@ class ModuloAñoEscolar extends DriverPostgre {
     return await this.query(SQL)
   }
 
+  async consultar() {
+    const SQL = `SELECT * FROM tano_escolar WHERE id_ano_escolar=${this.id_ano_escolar}`
+
+    return await this.query(SQL);
+  }
+  
+  async consultarAnoEscolarActivo() {
+    const SQL = `SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';`
+
+    return await this.query(SQL);
+  }
+
   async consultarTodos() {
     const SQL = 'SELECT * FROM tano_escolar'
 
     return await this.query(SQL);
   }
+  
 
   async consultarpatron(patron){
     const SQL = `SELECT * FROM tano_escolar WHERE ano_desde LIKE '%${patron}%' OR ano_hasta LIKE '%${patron}%' `
