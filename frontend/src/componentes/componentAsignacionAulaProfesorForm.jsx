@@ -27,7 +27,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     constructor(){
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
-        // this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.cambiarEstado=this.cambiarEstado.bind(this)
         // this.operacion=this.operacion.bind(this)
         // this.regresar=this.regresar.bind(this)
         this.state={
@@ -215,9 +215,66 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         </div>
                     </div>
                     <form id="formularioAsigAulaProf" >
-
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Código Asignación:"
+                            activo="no"
+                            type="text"
+                            value={this.state.id_asignacion_aula_profesor}
+                            name="id_asignacion_aula_profesor"
+                            id="id_asignacion_aula_profesor"
+                            placeholder="Código Asignacion"
+                            eventoPadre={this.cambiarEstado}
+                            />
+                            <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6'></div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                                <span className="sub-titulo-form-reposo-trabajador">Trabajador</span>
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                                <span className="sub-titulo-form-reposo-trabajador">Aula</span>
+                            </div>
+                        </div>
+                        <div className="row mt-3">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                                <span className="sub-titulo-form-reposo-trabajador">Otros</span>
+                            </div>
+                        </div>
 
                     </form>
+                    <div className="row justify-content-center">
+                        <div className="col-auto">
+                            {this.props.match.params.operacion==="registrar" &&
+                                <InputButton 
+                                clasesBoton="btn btn-primary"
+                                id="boton-registrar"
+                                value="Registrar"
+                                eventoPadre={this.operacion}
+                                />
+                            }
+                            {this.props.match.params.operacion==="actualizar" &&
+                                <InputButton 
+                                clasesBoton="btn btn-warning"
+                                id="boton-actualizar"
+                                value="Actualizar"
+                                eventoPadre={this.operacion}
+                                />   
+                            }
+                        </div>
+                        <div className="col-auto">
+                            <InputButton 
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
+                            />   
+                        </div>
+                    </div>
                 </div>
             </div>
         )

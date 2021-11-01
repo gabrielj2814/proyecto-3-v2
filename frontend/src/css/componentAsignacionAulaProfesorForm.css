@@ -9,13 +9,13 @@
     padding-bottom: 30px;
 }
 
-.component_asig_aula_prof_formulario{
-    height: 100%;
-}
-
 .contenedor-titulo-form-asig-aula-prof{
     border-bottom: 1px solid #111;
     margin-bottom: 15px;
+}
+
+.component_asig_aula_prof_formulario{
+    height: 100%;
 }
 
 .titulo-form-asig_aula_prof{
