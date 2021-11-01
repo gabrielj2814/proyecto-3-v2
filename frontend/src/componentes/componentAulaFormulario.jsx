@@ -378,7 +378,7 @@ class ComponentAulaFormulario extends React.Component{
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div class="form-groud">
-                                    <label>Año de la Sección</label>
+                                    <label>Grado de la Sección</label>
                                     <select id="id_grado" name="id_grado" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
                                         {this.state.listaGradosEscolares.map((grado,index)=> {
                                             return(
