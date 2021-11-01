@@ -36,13 +36,15 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             modulo:"",
             estado_menu:false,
             // formulario
+            id_cedula:"",
+            id_grado:"",
+            //
             id_asignacion_aula_profesor:"",
             id_profesor:"",
-            id_grado:"",
             id_aula:"",
             id_ano_escolar:"",
             estatus_asignacion_aula_profesor:"1",
-            // 
+            // -----------------------------
             listaGrados:[],
             listaAulas:[],
             hashListaProfesores:{},
@@ -99,19 +101,61 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     async componentWillMount(){
         const {operacion}=this.props.match.params
         if(operacion==="registrar"){
-            await this.consultarAnoEscolarActico()
+            await this.consultarAnoEscolarActivo()
             await this.consultarProfesores()
             await this.consultarGrados()
             await this.consultarAulasPorGrado()
         }
-        // else if(operacion==="actualizar"){
-        //     await this.consultarGrados()
-        //     await this.consultarAulasPorGrado()
-        // }
+        else if(operacion==="actualizar"){
+            const {id}=this.props.match.params
+            await this.consultarProfesores()
+            await this.consultarGrados()
+            await this.consultarAulasPorGrado()
+            await this.consultarAsignacionAulaProfesor(id)
+            if(this.state.id_asignacion_aula_profesor!=""){
+                let cedulaProfesor={
+                    target:{
+                        value:this.state.id_cedula,
+                    }
+                }
+                let selectIdGrado={
+                    target:{
+                        value:this.state.id_grado,
+                    }
+                }
+                this.buscarProfesor(cedulaProfesor)
+                document.getElementById("id_grado").value=this.state.id_grado
+                await this.consultarAulasPorGrado2(selectIdGrado)
+                document.getElementById("id_aula").value=this.state.id_aula
+            }
+
+        }
 
     }
 
-    async consultarAnoEscolarActico(){
+    async consultarAsignacionAulaProfesor(id){
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}`)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(json)
+            if(json.datos.length>0){
+                this.setState({
+                    id_cedula:json.datos[0].id_cedula,
+                    id_asignacion_aula_profesor:json.datos[0].id_asignacion_aula_profesor,
+                    id_profesor:json.datos[0].id_profesor,
+                    id_grado:json.datos[0].id_grado,
+                    id_aula:json.datos[0].id_aula,
+                    id_ano_escolar:json.datos[0].id_ano_escolar,
+                    estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor
+                })
+            }
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
+    async consultarAnoEscolarActivo(){
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-activo`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
@@ -160,7 +204,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     
     async consultarAulasPorGrado(){
         if(this.state.listaGrados.length>0){
-            await axiosCustom.get(`configuracion/aula//consultar-aula-por-grado/${this.state.listaGrados[0].id_grado}`)
+            await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${this.state.listaGrados[0].id_grado}`)
             .then(respuesta =>{
                 let json=JSON.parse(JSON.stringify(respuesta.data))
                 this.setState({listaAulas:json.datos})
@@ -177,7 +221,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     
     async consultarAulasPorGrado2(a){
         let inputSelectGrados=a.target
-        await axiosCustom.get(`configuracion/aula//consultar-aula-por-grado/${inputSelectGrados.value}`)
+        await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${inputSelectGrados.value}`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
             this.setState({listaAulas:json.datos})
@@ -275,26 +319,25 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 asignacionAulaProfesor:datosFormatiados,
                 token
             }
-            alert("actualizando")
             // console.log(datosAula)
-            // await axiosCustom.put(`configuracion/aula/actualizar/${this.props.match.params.id}`,datosAula)
-            // .then(respuesta => {
-            //     let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            //     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-            //     // console.log(respuestaServidor)
-            //     alerta.color=respuestaServidor.color_alerta
-            //     alerta.mensaje=respuestaServidor.mensaje
-            //     if(respuestaServidor.estado_respuesta===false){
-            //         alerta.estado=true
-            //     }
-            //     else{
-            //         alerta.estado=respuestaServidor.estado_respuesta
-            //     }
-            //     this.setState({alerta})
-            // })
-            // .catch(error => {
-            //     console.error(`error de la peticion axios =>>> ${error}`)
-            // })
+            await axiosCustom.put(`transaccion/asignacion-aula-profesor/actualizar/${this.props.match.params.id}`,datosAsignacion)
+            .then(respuesta => {
+                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                // console.log(respuestaServidor)
+                alerta.color=respuestaServidor.color_alerta
+                alerta.mensaje=respuestaServidor.mensaje
+                if(respuestaServidor.estado_respuesta===false){
+                    alerta.estado=true
+                }
+                else{
+                    alerta.estado=respuestaServidor.estado_respuesta
+                }
+                this.setState({alerta})
+            })
+            .catch(error => {
+                console.error(`error de la peticion axios =>>> ${error}`)
+            })
         }
     }
 

@@ -103,7 +103,7 @@ ControladorAsignacionAulaProfesor.actualizar=async (req,res) => {
     if(resultAsignacionAulaProfesor.rowCount>0){
         respuesta_api.mensaje="actualización completada"
         respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="succes"
+        respuesta_api.color_alerta="success"
     }
     else{
         respuesta_api.mensaje="error al actualizar ( no se entrol el registro )"
