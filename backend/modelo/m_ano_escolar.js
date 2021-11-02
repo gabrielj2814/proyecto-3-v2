@@ -1,7 +1,7 @@
 const DriverPostgre = require("./driver_postgresql")
 const ModuloModelo = require("./m_modulo")
 
-class ModuloAñoEscolar extends DriverPostgre {
+class ModuloAnoEscolar extends DriverPostgre {
   constructor(){
     super()
 
@@ -66,4 +66,4 @@ class ModuloAñoEscolar extends DriverPostgre {
   }
 }
 
-module.exports = ModuloAñoEscolar;
+module.exports = ModuloAnoEscolar;
