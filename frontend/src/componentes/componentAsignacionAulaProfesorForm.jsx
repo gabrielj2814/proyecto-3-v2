@@ -31,6 +31,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.buscarProfesor=this.buscarProfesor.bind(this)
         this.consultarAulasPorGrado2=this.consultarAulasPorGrado2.bind(this)
         this.operacion=this.operacion.bind(this)
+        this.verificarDisponibilidadAula=this.verificarDisponibilidadAula.bind(this)
         // this.regresar=this.regresar.bind(this)
         this.state={
             modulo:"",
@@ -51,11 +52,21 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             hashListaAnoEscolares:{},
             hashAnoEscolaresActivo:{},
             // 
-            estado_aula_seleccionada:null,
+            disponibilidadProfesor:null,
+            disponibilidadAula:null,
             // 
             msj_id_cedula:{
                 mensaje:"",
                 color_texto:""
+            },
+            // estas propiedades son para al momento de actualizar el registro destingir si estan igual o si se ha aplicado algun cambio,
+            // para poder asi poder aplicar las validaciones
+            respaldoDatos:{
+                id_asignacion_aula_profesor:null,
+                id_profesor:null,
+                id_aula:null,
+                id_ano_escolar:null,
+                estatus_asignacion_aula_profesor:null
             },
             //
             alerta:{
@@ -105,6 +116,12 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             await this.consultarProfesores()
             await this.consultarGrados()
             await this.consultarAulasPorGrado()
+            let selectAula={
+                target:{
+                    value:document.getElementById("id_aula").value
+                }
+            }
+            await this.verificarDisponibilidadAula(selectAula)
         }
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
@@ -148,6 +165,16 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     id_ano_escolar:json.datos[0].id_ano_escolar,
                     estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor
                 })
+                let respaldoDatos=JSON.parse(JSON.stringify({
+                    id_cedula:json.datos[0].id_cedula,
+                    id_asignacion_aula_profesor:json.datos[0].id_asignacion_aula_profesor,
+                    id_profesor:json.datos[0].id_profesor,
+                    id_grado:json.datos[0].id_grado,
+                    id_aula:json.datos[0].id_aula,
+                    id_ano_escolar:json.datos[0].id_ano_escolar,
+                    estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor
+                }))
+                this.setState({respaldoDatos})
             }
         })
         .catch(error => {
@@ -204,7 +231,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     
     async consultarAulasPorGrado(){
         if(this.state.listaGrados.length>0){
-            await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${this.state.listaGrados[0].id_grado}`)
+            let id_grado=document.getElementById("id_grado").value
+            await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${id_grado}`)
             .then(respuesta =>{
                 let json=JSON.parse(JSON.stringify(respuesta.data))
                 this.setState({listaAulas:json.datos})
@@ -241,7 +269,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.props.history.push("/dashboard/configuracion/aula")
     }
 
-    buscarProfesor(a){
+    async buscarProfesor(a){
+        this.cambiarEstado(a)
         let input=a.target
         let $seccionNombreProfesor=document.getElementById("nombreProfesor")
         let msj_id_cedula=JSON.parse(JSON.stringify(this.state.msj_id_cedula))
@@ -252,6 +281,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 this.setState({id_profesor:profesor.id_profesor})
                 msj_id_cedula.mensaje=""
                 msj_id_cedula.color_texto="rojo"
+                await this.verficarDisponibilidadProfesor(profesor.id_profesor)
                 
             }
             else{
@@ -266,6 +296,28 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             this.setState({id_profesor:""})
             $seccionNombreProfesor.textContent=``
         }
+        
+        
+    }
+
+    async verficarDisponibilidadProfesor(idProfesor){
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.id_ano_escolar}/${idProfesor}`)
+        .then(respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // disponibilidadProfesor
+            // console.log(json)
+            if(json.datos.disponibilidadProfesor===true){
+                this.setState({disponibilidadProfesor:true})
+            }
+            else{
+                
+                this.setState({disponibilidadProfesor:false})
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
     }
 
     extrarDatosDelFormData(formData){
@@ -279,66 +331,161 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         return json   
     }
 
+    validarCampoCedulaProfesor(){
+        let estado=false
+        let cedulaProfesor=document.getElementById("id_cedula")
+        let exprecion=/[0-9]/
+        let msj_id_cedula=JSON.parse(JSON.stringify(this.state.msj_id_cedula))
+        if(cedulaProfesor.value!=""){
+            if(cedulaProfesor.value.length===8){
+                if(this.state.hashListaProfesores[cedulaProfesor.value]){
+                    estado=true
+                    msj_id_cedula.mensaje=``
+                    msj_id_cedula.color_texto="verde"
+                }
+                else{
+                    msj_id_cedula.mensaje=`el profesor no ha sido encontrado, por favor verifique que la cedula este bien escrita`
+                    msj_id_cedula.color_texto="rojo"
+                }
+            }
+            else{
+                msj_id_cedula.mensaje=`este campo no cumple con los caracteres minimos para realizar la busqueda del profesor ${cedulaProfesor.value.length}/8`
+                msj_id_cedula.color_texto="rojo"
+            }
+        }
+        else{
+            msj_id_cedula.mensaje="este campo no puede estar vacio"
+            msj_id_cedula.color_texto="rojo"
+        }
+        this.setState({msj_id_cedula})
+        return estado
+
+    }
+
+    async verificarDisponibilidadAula(a){
+        this.cambiarEstado(a)
+        let input =a.target
+        let inputSelectGrados=a.target
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
+        .then(respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            if(json.datos.disponibilidadAula===true){
+                this.setState({disponibilidadAula:true})
+            }
+            else{
+                
+                this.setState({disponibilidadAula:false})
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+
+    }
+
+    // validarDisponibilidadAula(){
+
+    // }
+
+    validarFormulario(){
+        let estado=false
+        let estadoValidacionCedulaProfesor=this.validarCampoCedulaProfesor()
+        if(estadoValidacionCedulaProfesor){
+            estado=true
+        }
+        return estado
+    }
+
+    verificarCambios(){
+        let idProfesor=parseInt(document.getElementById("id_profesor").value )
+        let idAula=parseInt(document.getElementById("id_aula").value)
+        let estadoValidacionAula=false
+        let estadoValidacionProfesor=false
+        if(this.state.respaldoDatos.id_aula!==idAula){
+            alert("no")
+            estadoValidacionAula=true
+        }
+        if(this.state.respaldoDatos.id_profesor!==idProfesor){
+            alert("no")
+            estadoValidacionProfesor=true
+        }
+        if(estadoValidacionAula===false && estadoValidacionProfesor===false){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         const token=localStorage.getItem('usuario')
-        if(operacion==="registrar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioAsigAulaProf"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosAsignacion={
-                asignacionAulaProfesor:datosFormatiados,
-                token
-            }
-            // console.log(datosAula)
-            await axiosCustom.post("transaccion/asignacion-aula-profesor/registrar",datosAsignacion)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
+
+            if(operacion==="registrar"){
+                if(this.state.disponibilidadAula===true && this.state.disponibilidadProfesor===true && this.validarCampoCedulaProfesor()===true){
+                    // alert("Registrar")
+                    let datosFormulario=new FormData(document.getElementById("formularioAsigAulaProf"))
+                    let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                    let datosAsignacion={
+                        asignacionAulaProfesor:datosFormatiados,
+                        token
+                    }
+                    // console.log(datosAula)
+                    await axiosCustom.post("transaccion/asignacion-aula-profesor/registrar",datosAsignacion)
+                    .then(respuesta => {
+                        let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                        let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                        // console.log(respuestaServidor)
+                        alerta.color=respuestaServidor.color_alerta
+                        alerta.mensaje=respuestaServidor.mensaje
+                        if(respuestaServidor.estado_respuesta===false){
+                            alerta.estado=true
+                        }
+                        else{
+                            alerta.estado=respuestaServidor.estado_respuesta
+                        }
+                        this.setState({alerta})
+                    })
+                    .catch(error => {
+                        console.error(`error de la peticion axios =>>> ${error}`)
+                    })
                 }
                 else{
-                    alerta.estado=respuestaServidor.estado_respuesta
+                    alert("error al validar el formulario")
                 }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
-        }
-        else if(operacion==="actualizar"){
-            // alert("Registrar")
-            let datosFormulario=new FormData(document.getElementById("formularioAsigAulaProf"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosAsignacion={
-                asignacionAulaProfesor:datosFormatiados,
-                token
             }
-            // console.log(datosAula)
-            await axiosCustom.put(`transaccion/asignacion-aula-profesor/actualizar/${this.props.match.params.id}`,datosAsignacion)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                // console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
-                }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
-        }
+            else if(operacion==="actualizar"){
+                // alert("Registrar")
+                this.verificarCambios()
+                // let datosFormulario=new FormData(document.getElementById("formularioAsigAulaProf"))
+                // let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                // let datosAsignacion={
+                //     asignacionAulaProfesor:datosFormatiados,
+                //     token
+                // }
+                // // console.log(datosAula)
+                // await axiosCustom.put(`transaccion/asignacion-aula-profesor/actualizar/${this.props.match.params.id}`,datosAsignacion)
+                // .then(respuesta => {
+                //     let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                //     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                //     // console.log(respuestaServidor)
+                //     alerta.color=respuestaServidor.color_alerta
+                //     alerta.mensaje=respuestaServidor.mensaje
+                //     if(respuestaServidor.estado_respuesta===false){
+                //         alerta.estado=true
+                //     }
+                //     else{
+                //         alerta.estado=respuestaServidor.estado_respuesta
+                //     }
+                //     this.setState({alerta})
+                // })
+                // .catch(error => {
+                //     console.error(`error de la peticion axios =>>> ${error}`)
+                // })
+            }
     }
 
     render(){
@@ -398,7 +545,15 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             </div>
                             <input type="hidden" id="id_profesor" name="id_profesor" value={this.state.id_profesor}/>
                             <input type="hidden" id="id_ano_escolar" name="id_ano_escolar" value={this.state.id_ano_escolar}/>
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <label>Disponibilidad del Profesor:</label>
+                                {this.state.disponibilidadProfesor===true &&
+                                        <div>Disponible </div>
+                                }
+                                {this.state.disponibilidadProfesor===false &&
+                                        <div>No Disponible</div>
+                                }
+                            </div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
@@ -423,7 +578,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div class="form-groud">
                                     <label>Sección</label>
-                                    <select id="id_aula" name="id_aula" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
+                                    <select id="id_aula" name="id_aula" class="form-select custom-select" aria-label="Default select example" onChange={this.verificarDisponibilidadAula}>
                                         {this.state.listaAulas.map((aula,index)=> {
                                             return(
                                                 <option key={index} value={aula.id_aula} >{aula.nombre_aula}</option>
@@ -434,7 +589,16 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                     </select>
                                 </div>
                             </div>
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                            
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <label>Disponibilidad del Aula:</label>
+                                {this.state.disponibilidadAula===true &&
+                                        <div>Aula Disponible</div>
+                                }
+                                {this.state.disponibilidadAula===false &&
+                                        <div>Aula no Disponible</div>
+                                }
+                            </div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
