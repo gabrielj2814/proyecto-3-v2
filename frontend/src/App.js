@@ -112,6 +112,7 @@ import ComponenteAsignacionRepresentanteEstudianteConsulta from './componentes/c
 import ComponenteAsignacionRepresentanteEstudianteForm from './componentes/componenteAsignacionRepresentanteEstudianteForm';
 // Asignacion aula profesor
 import ComponentAsignacionAulaProfesorForm from './componentes/componentAsignacionAulaProfesorForm';
+import ComponentAsignacionAulaProfesor from './componentes/componentAsignacionAulaProfesor';
 
 
 
@@ -207,6 +208,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
+        <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>
