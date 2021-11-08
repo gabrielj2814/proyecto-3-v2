@@ -60,19 +60,25 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
     }
     
     async consultarTodos(){
-        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
+        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,tgrado,taula,tano_escolar,ttrabajador WHERE
         tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+        tgrado.id_grado=taula.id_grado AND
         taula.id_aula=tasignacion_aula_profesor.id_aula AND
-        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
+        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND 
+        tprofesor.id_cedula=ttrabajador.id_cedula
+        ;`
         return await this.query(SQL)
     }
     
     async consultarTodosPorAnoEscolar(){
-        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
+        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,tgrado,taula,tano_escolar,ttrabajador WHERE
         tasignacion_aula_profesor.id_ano_escolar=${this.id_ano_escolar} AND
         tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+        tgrado.id_grado=taula.id_grado AND
         taula.id_aula=tasignacion_aula_profesor.id_aula AND
-        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
+        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
+        tprofesor.id_cedula=ttrabajador.id_cedula
+        ;`
         return await this.query(SQL)
     }
     

@@ -32,7 +32,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.consultarAulasPorGrado2=this.consultarAulasPorGrado2.bind(this)
         this.operacion=this.operacion.bind(this)
         this.verificarDisponibilidadAula=this.verificarDisponibilidadAula.bind(this)
-        // this.regresar=this.regresar.bind(this)
+        this.regresar=this.regresar.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -280,7 +280,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     }
 
     regresar(){
-        this.props.history.push("/dashboard/configuracion/aula")
+        this.props.history.push("/dashboard/transaccion/asignacion-aula-profesor")
     }
 
     async buscarProfesor(a){
