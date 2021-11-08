@@ -46,6 +46,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             id_ano_escolar:"",
             estatus_asignacion_aula_profesor:"1",
             // -----------------------------
+            ano_desde:"",
+            ano_hasta:"",
+            // -----------------------------
             listaGrados:[],
             listaAulas:[],
             hashListaProfesores:{},
@@ -168,7 +171,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     id_grado:json.datos[0].id_grado,
                     id_aula:json.datos[0].id_aula,
                     id_ano_escolar:json.datos[0].id_ano_escolar,
-                    estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor
+                    estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor,
+                    ano_desde:json.datos[0].ano_desde,
+                    ano_hasta:json.datos[0].ano_hasta
                 })
                 let respaldoDatos=JSON.parse(JSON.stringify({
                     id_cedula:json.datos[0].id_cedula,
@@ -195,6 +200,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             if(json.datos.length===1){
                 this.setState({hashAnoEscolaresActivo:json.datos[0]})
                 this.setState({id_ano_escolar:this.state.hashAnoEscolaresActivo.id_ano_escolar})
+                this.setState({ano_desde:this.state.hashAnoEscolaresActivo.ano_desde})
+                this.setState({ano_hasta:this.state.hashAnoEscolaresActivo.ano_hasta})
             }
 
         })
@@ -568,7 +575,11 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             placeholder="Código Asignacion"
                             eventoPadre={this.cambiarEstado}
                             />
-                            <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6'></div>
+                            <div className='col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3'></div>
+                            <div className='col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3'>
+                                <label>Año Escolar:</label>
+                                <div>{this.state.ano_desde} - {this.state.ano_hasta}</div>
+                            </div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
