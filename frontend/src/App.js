@@ -90,6 +90,9 @@ import ComponentEstudianteConsulta from './componentes/componentEstudianteConsul
 import ComponentRepresentanteConsulta from './componentes/ComponentRepresentanteConsulta'
 import ComponentRepresentante from './componentes/ComponentRepresentante'
 import ComponentRepresentanteForm from './componentes/ComponentRepresentanteForm'
+// ANO ESCOLAR
+import ComponentAnoEscolar from './componentes/componentAnoEscolar.jsx';
+import ComponentAnoEscolarForm from './componentes/componentAnoEscolarForm.jsx';
 //cintillo
 import ComponentCintillo from "./componentes/componentCintillo"
 // error
@@ -193,6 +196,9 @@ function App() {
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
+
+        <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
+        <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
 
         <Route exact path="/dashboard/configuracion/representante:mensaje?" component={ComponentRepresentante} />
         <Route exact path="/dashboard/configuracion/representante/consultar/:id?" component={ComponentRepresentanteConsulta} />

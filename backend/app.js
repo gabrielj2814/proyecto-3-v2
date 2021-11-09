@@ -5,7 +5,7 @@ app =express(),
 logger=require("morgan"),
 cors=require("cors"),
 fs=require("fs");
-// importando rutas de los modulos 
+// importando rutas de los modulos
 const rutas_modulo_login=require("./rutas/login"),
 rutas_modulo_acceso=require("./rutas/configuracion/acceso"),
 rutas_modulo_permiso=require("./rutas/configuracion/permiso"),
@@ -64,7 +64,7 @@ app
 .use("/transaccion/reposo-trabajador",rutas_modulo_reposo_trabajador)
 .use("/transaccion/asistencia",rutas_modulo_asistencia)
 .use("/transaccion/bitacora",rutas_modulo_bitacora)
-// 
+//
 app.use("/configuracion/grado",rutas_modulo_grado)
 app.use("/configuracion/aula",rutas_modulo_aula)
 app.use("/configuracion/estudiante", rutas_modulo_estudiante)

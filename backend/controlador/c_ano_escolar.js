@@ -13,7 +13,7 @@ controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
     respuesta_api.color_alerta = "success"
   }
   else {
-    respuesta_api.mensaje = "error al registrar el ano escolar"
+    respuesta_api.mensaje = "error al registrar el año escolar"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
   }
@@ -43,6 +43,7 @@ controladorAnoEscolar.consultar_todos = async (req, res) => {
   res.write(JSON.stringify(respuesta_api))
   res.end()
 }
+
 
 controladorAnoEscolar.consultar= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }

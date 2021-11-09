@@ -10,7 +10,7 @@ const ComponentFormDate = (props) => {
         <div className={props.clasesColumna+" columna"}>
             <div className="form-groud">
                 <label>
-                {props.obligatorio && props.obligatorio==="si" && 
+                {props.obligatorio && props.obligatorio==="si" &&
                     (
                         <span className="obligatorio-campo">(*)</span>
                     )
@@ -18,7 +18,7 @@ const ComponentFormDate = (props) => {
                 {props.nombreCampoDate}</label>
                 {props.minio &&
                     (
-                        <input className={props.clasesCampo} type="date" value={props.value} name={props.name} id={props.id} onChange={props.eventoPadre} min={props.minio}  required />
+                        <input className={props.clasesCampo} type="date" value={props.value} name={props.name} id={props.id} onChange={props.eventoPadre} min={props.minio} max={ (props.maxim) ? props.maxim : null }  required />
                     )
                 }
                 {!props.minio &&
@@ -26,7 +26,7 @@ const ComponentFormDate = (props) => {
                         <input className={props.clasesCampo} type="date" value={props.value} name={props.name} id={props.id} onChange={props.eventoPadre}  required />
                     )
                 }
-                {(props.mensaje && props.mensaje!=="") && 
+                {(props.mensaje && props.mensaje!=="") &&
                     (
                         <span className={`color-texto-${props.mensaje.color_texto}`}>{props.mensaje.mensaje}</span>
                     )
