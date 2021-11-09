@@ -75,6 +75,7 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
   // }
   // res.writeHead(200, { "Content-Type": "application/json" })
   // res.write(JSON.stringify(respuesta_api))
+}
 
 controladorAnoEscolar.consultar= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
@@ -179,4 +180,4 @@ controladorAnoEscolar.actualizar = async (req, res) => {
   res.end()
 }
 
-module.exports = controladorAnoEscolar;
+module.exports = controladorAnoEscolar
