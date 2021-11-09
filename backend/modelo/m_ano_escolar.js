@@ -28,10 +28,23 @@ class ModuloAnoEscolar extends DriverPostgre {
 
   async registrar(){
     const SQL = `INSERT INTO tano_escolar(ano_desde, ano_hasta, fecha_inicio_ano_escolar, fecha_cierre_ano_escolar, estatus_ano_escolar)
-                  VALUES('${this.ano_desde}', '${this.ano_hasta}', '${this.fecha_inicio_ano_escolar}', '${this.fecha_cierre_ano_escolar}',
+                  VALUES('${this.ano_desde}', '${this.ano_hasta}', '${this.fecha_inicio_ano_escolar}', '${this.fecha_cierre_ano_escolar}', 
                   '${this.estatus_ano_escolar}')
                 `
     return await this.query(SQL)
+  }
+
+
+  async consultar() {
+    const SQL = `SELECT * FROM tano_escolar WHERE id_ano_escolar=${this.id_ano_escolar}`
+
+    return await this.query(SQL);
+  }
+  
+  async consultarAnoEscolarActivo() {
+    const SQL = `SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';`
+
+    return await this.query(SQL);
   }
 
   async consultarTodos() {
@@ -39,6 +52,7 @@ class ModuloAnoEscolar extends DriverPostgre {
 
     return await this.query(SQL);
   }
+
 
   async consultarpatron(patron){
     const SQL = `SELECT * FROM tano_escolar WHERE ano_desde LIKE '%${patron}%' OR ano_hasta LIKE '%${patron}%' `
