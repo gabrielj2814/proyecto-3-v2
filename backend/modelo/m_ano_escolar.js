@@ -34,7 +34,6 @@ class ModuloAnoEscolar extends DriverPostgre {
     return await this.query(SQL)
   }
 
-
   async consultar() {
     const SQL = `SELECT * FROM tano_escolar WHERE id_ano_escolar=${this.id_ano_escolar}`
 
@@ -52,7 +51,6 @@ class ModuloAnoEscolar extends DriverPostgre {
 
     return await this.query(SQL);
   }
-
 
   async consultarpatron(patron){
     const SQL = `SELECT * FROM tano_escolar WHERE ano_desde LIKE '%${patron}%' OR ano_hasta LIKE '%${patron}%' `

@@ -1,3 +1,7 @@
+
+const moment = require('moment');
+moment.locale('es');
+
 const controladorAnoEscolar = {}
 
 controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
@@ -44,6 +48,33 @@ controladorAnoEscolar.consultar_todos = async (req, res) => {
   res.end()
 }
 
+controladorAnoEscolar.getDateNow = async (req, res) => {
+  // const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+
+  const hoy = moment();
+
+  const formato = 'YYYY-MM-DD';
+  const fecha = await hoy.format(formato)
+  //console.log({ data: fecha });
+  res.json({ 
+    mensaje: 'consulta completada',
+    datos: fecha,
+    estado_respuesta: true,
+    color_alerta: "success"
+  })
+  // if (fecha.rowCount > 0) {
+  //   respuesta_api.mensaje = "consulta completada"
+  //   respuesta_api.datos = fecha.rows
+  //   respuesta_api.estado_respuesta = true
+  //   respuesta_api.color_alerta = "success"
+  // }
+  // else {
+  //   respuesta_api.mensaje = "no se pudo obtener la fecha actual"
+  //   respuesta_api.estado_respuesta = false
+  //   respuesta_api.color_alerta = "danger"
+  // }
+  // res.writeHead(200, { "Content-Type": "application/json" })
+  // res.write(JSON.stringify(respuesta_api))
 
 controladorAnoEscolar.consultar= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
