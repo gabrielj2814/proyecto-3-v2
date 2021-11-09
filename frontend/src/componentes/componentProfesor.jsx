@@ -1,15 +1,16 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import axios from 'axios'
-// IP servidor
-import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
-import "../css/componentGrado.css"
+import '../css/componentProfesor.css'
+//JS
+import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
-// subComponent
+//sub componentes
 import AlertBootstrap from "../subComponentes/alertBootstrap"
 import InputButton from '../subComponentes/input_button'
 import TituloModulo from '../subComponentes/tituloModulo'
@@ -20,20 +21,20 @@ const axiosCustom=axios.create({
     baseURL:`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/`
 })
 
-class ComponentGrado extends React.Component{
+class ComponentProfesor extends React.Component {
 
 
     constructor(){
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.redirigirFormulario=this.redirigirFormulario.bind(this)
-        this.actualizarElementoTabla=this.actualizarElementoTabla.bind(this)
+        this.irAlFormularioDeActualizacion=this.irAlFormularioDeActualizacion.bind(this)
         this.state={
-            //////
             modulo:"",
             estado_menu:false,
+            
             registros:[],
-            // --------
+            //
             alerta:{
                 color:null,
                 mensaje:null,
@@ -52,38 +53,37 @@ class ComponentGrado extends React.Component{
         else{
             var modulo=this.state.modulo.split("-");
             if(modulo[1]===span.id){
-                if(this.state.estado_menu){
-                    const estado="false-"+span.id
-                    this.setState({modulo:estado,estado_menu:false})
-                }
-                else{
-                    const estado="true-"+span.id
-                    this.setState({modulo:estado,estado_menu:true})
-                }
+        if(this.state.estado_menu){
+            const estado="false-"+span.id
+            this.setState({modulo:estado,estado_menu:false})
+        }
+        else{
+            const estado="true-"+span.id
+            this.setState({modulo:estado,estado_menu:true})
+        }
             }
             else{
-                if(this.state.estado_menu){
-                    const estado="true-"+span.id
-                    this.setState({modulo:estado})
-                }
-                else{
-                    const estado="true-"+span.id
-                    this.setState({modulo:estado,estado_menu:true})
-                }
+        if(this.state.estado_menu){
+            const estado="true-"+span.id
+            this.setState({modulo:estado})
+        }
+        else{
+            const estado="true-"+span.id
+            this.setState({modulo:estado,estado_menu:true})
+        }
             }
         }
     }
 
     async componentWillMount(){
-        let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/grado")
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/profesor")
         if(acessoModulo){
-            await this.consultarTodosLosGrados()
-         }
-         else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-          this.props.history.goBack()
-         }
-        
+            await this.consultarTodosProfesorTrabajador()
+        }
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -97,7 +97,7 @@ class ComponentGrado extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }
+                }  
             })
         }
         return estado
@@ -130,6 +130,8 @@ class ComponentGrado extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
+            
+            
         })
         .catch(error =>  {
             console.log(error)
@@ -137,63 +139,64 @@ class ComponentGrado extends React.Component{
         return estado
     }
 
-    async consultarTodosLosGrados(){
-        await axiosCustom.get("configuracion/grado/consultar-todos")
+    async consultarTodosProfesorTrabajador(id){
+        // const token=localStorage.getItem('usuario')
+        await axiosCustom.get(`configuracion/profesor/consultar-todos`)
         .then(respuesta => {
-            let repuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(repuestaServidor)
-            this.setState({registros:repuestaServidor.datos})
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(">>>",json)
+            this.setState({registros:json.datos})
         })
         .catch(error => {
-            console.error("error =>>> ",error)
+            console.error("error al conectar con el servidor")
         })
     }
 
     redirigirFormulario(a){
-        this.props.history.push("/dashboard/configuracion/grado/registrar")
+        this.props.history.push("/dashboard/configuracion/profesor/registrar")
     }
     
-    actualizarElementoTabla(a){
-        const input = a.target;
-        this.props.history.push(`/dashboard/configuracion/grado/actualizar/${input.id}`)
+    irAlFormularioDeActualizacion(a){
+        let input=a.target
+        this.props.history.push(`/dashboard/configuracion/profesor/actualizar/${input.id}`)
     }
 
+
+
     render(){
+
         const jsx_tabla_encabezado=(
             <thead> 
                 <tr> 
-                  <th>Código</th> 
-                  <th>Grado</th>
-                  <th>Estatus</th>
-                  </tr> 
+                    <th>Código</th> 
+                    <th>Nombre del profesor</th>
+                    <th>Estatus</th>
+                </tr> 
             </thead>
         )
 
         const jsx_tabla_body=(
             <tbody>
-                {this.state.registros.map((grado,index)=>{
+                {this.state.registros.map((profesor,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{grado.id_grado}</td>
-                            <td>{grado.numero_grado}</td>
-                            <td>{(grado.estatus_grado==="1")?"Activo":"Inactivo"}</td>
-                            {!grado.vacio &&
-                                <td>
-                                    <ButtonIcon 
-                                    clasesBoton="btn btn-warning btn-block" 
-                                    value={grado.id_grado} 
-                                    id={grado.id_grado}
-                                    eventoPadre={this.actualizarElementoTabla} 
-                                    icon="icon-pencil"
-                                    />
-                                </td>
-                            }
+                            <td>{profesor.id_profesor}</td>
+                            <td>{profesor.nombres} {profesor.apellidos}</td>
+                            <td>{(profesor.estatus_profesor==="1")?"Activo":"Inactivo"}</td>
+                            <td>
+                                <ButtonIcon 
+                                clasesBoton="btn btn-warning btn-block" 
+                                value={profesor.id_profesor} 
+                                id={profesor.id_profesor}
+                                eventoPadre={this.irAlFormularioDeActualizacion} 
+                                icon="icon-pencil"
+                                />
+                            </td>
                     </tr>
                     )
                 })}
             </tbody>
         )
-
         const jsx=(
             <div>
                 {this.state.alerta.estado===true &&
@@ -203,13 +206,14 @@ class ComponentGrado extends React.Component{
                         
                     </div>)
                 }
-                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center " tituloModulo="Módulo de Grado"/>
-                
+                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Profesor"/>
+
                 <div className="row">
-                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_grado">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
+                
                 <div className="row">
                 
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
@@ -222,8 +226,8 @@ class ComponentGrado extends React.Component{
                 </div>
             </div>
         )
-        return(
-            <div className="component_grado">
+        return (
+            <div className="component_profesor">
                     
                 <ComponentDashboard
                 componente={jsx}
@@ -231,12 +235,12 @@ class ComponentGrado extends React.Component{
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-        
-        
+            
+            
             </div>
         )
     }
 
 }
 
-export default withRouter(ComponentGrado)
+export default withRouter(ComponentProfesor)

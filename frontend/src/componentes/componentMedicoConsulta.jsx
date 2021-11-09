@@ -84,12 +84,12 @@ class ComponentMedicoConsulta extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -117,8 +117,8 @@ class ComponentMedicoConsulta extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -145,7 +145,7 @@ class ComponentMedicoConsulta extends React.Component{
                     apellido_medico:apellido_medico,
                     estatu_medico:estatu_medico
                 })
-                
+
            }
            else if(respuesta_servidor.estado_peticion==="404"){
                 mensaje.texto=respuesta_servidor.mensaje
@@ -200,7 +200,7 @@ class ComponentMedicoConsulta extends React.Component{
                     </div>
                     <div className="row justify-content-center">
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
                                 value="Actualizar"
@@ -208,12 +208,12 @@ class ComponentMedicoConsulta extends React.Component{
                                 />
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
                 </div>

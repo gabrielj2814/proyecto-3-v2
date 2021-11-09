@@ -91,12 +91,12 @@ class ComponentEstadoForm extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -124,8 +124,8 @@ class ComponentEstadoForm extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -256,7 +256,7 @@ class ComponentEstadoForm extends React.Component{
                 msj_nombre_estado.mensaje="este campo solo permite letras"
                 msj_nombre_estado.color_texto="rojo"
                 this.setState(msj_nombre_estado)
-            } 
+            }
         }
         else{
             msj_nombre_estado.mensaje="este campo no puede estar vacio"
@@ -373,7 +373,7 @@ class ComponentEstadoForm extends React.Component{
                 </div>
                 <div className="row">
                     <div className="col-auto">
-                        <ButtonIcon 
+                        <ButtonIcon
                         clasesBoton="btn btn-outline-success"
                         icon="icon-plus"
                         id="icon-plus"
@@ -431,8 +431,8 @@ class ComponentEstadoForm extends React.Component{
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
-                                    
-                                    <InputButton 
+
+                                    <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
@@ -440,29 +440,29 @@ class ComponentEstadoForm extends React.Component{
                                     />
                                 }
                                 {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
                                     value="Actualizar"
                                     eventoPadre={this.operacion}
-                                    />   
+                                    />
                                 }
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
                 </form>
             </div>
         </div>
     )
-	
-	
+
+
 		return(
 			<div className="component_estado_formulario">
 				<ComponentDashboard

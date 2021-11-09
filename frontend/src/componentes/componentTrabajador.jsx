@@ -3,7 +3,7 @@ import {withRouter} from 'react-router-dom'
 import axios from 'axios'
 import $ from 'jquery'
 // IP servidor
-import servidor from '../ipServer.js'
+import servidorJson from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -82,7 +82,7 @@ class ComponentTrabajador extends React.Component{
           if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
@@ -96,7 +96,7 @@ class ComponentTrabajador extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -132,7 +132,7 @@ class ComponentTrabajador extends React.Component{
 
       async consultarTodosTrabajadores(){
         var respuesta_servidor=[]
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
+        await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/trabajador/consultar-todos`)
         .then(respuesta=>{
           respuesta_servidor=respuesta.data.trabajadores
           console.log(respuesta.data)
@@ -165,7 +165,7 @@ class ComponentTrabajador extends React.Component{
         var respuesta_servidor="",
         valor=this.state.datoDeBusqueda
         if(valor!==""){
-          await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-patron/${valor}`)
+          await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/trabajador/consultar-patron/${valor}`)
             .then(respuesta=>{
               respuesta_servidor=respuesta.data
               console.log(respuesta_servidor)
@@ -225,7 +225,7 @@ class ComponentTrabajador extends React.Component{
         valor=input.value,
         respuesta_servidor=""
         if(valor!==""){
-          await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/trabajador/consultar-patron/${valor}`)
+          await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/trabajador/consultar-patron/${valor}`)
           .then(respuesta=>{
             respuesta_servidor=respuesta.data
             console.log(respuesta_servidor)
@@ -274,7 +274,7 @@ class ComponentTrabajador extends React.Component{
     */
 
     async consultarTodosTiposTrabajador(){
-      await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`)
+      await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`)
       .then(async respuesta => {
         let json=JSON.parse(JSON.stringify(respuesta.data))
         // console.log("datos => ",json)
@@ -288,7 +288,7 @@ class ComponentTrabajador extends React.Component{
       })
     }
     async buscarFuncionTrabajador(id){
-      await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-id-tipo-trabajador/${id}`)
+      await axios.get(`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/configuracion/funcion-trabajador/consultar-id-tipo-trabajador/${id}`)
       .then(respuesta=>{
           let json=JSON.parse(JSON.stringify(respuesta.data))
           console.log("datos funcion trabajador => ",json)
@@ -355,7 +355,7 @@ class ComponentTrabajador extends React.Component{
       if(datos!==null){
         // alert("generar pdf")
         $.ajax({
-          url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_trabajador.php`,
+          url: `http://${servidorJson.ipServidor}:${servidorJson.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_trabajador.php`,
           type:"post",
           data:datos,
           success: function(respuesta) {
@@ -364,7 +364,7 @@ class ComponentTrabajador extends React.Component{
               let json=JSON.parse(respuesta)
               if(json.nombrePdf!=="false"){
                   $filaVerPdf.classList.remove("ocultarFormulario") 
-                  document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+                  document.getElementById("linkPdf").href=`http://${servidorJson.ipServidor}:${servidorJson.servidorNode.puerto}/reporte/${json.nombrePdf}`
               }
               else{
                   $filaVerPdf.classList.add("ocultarFormulario") 

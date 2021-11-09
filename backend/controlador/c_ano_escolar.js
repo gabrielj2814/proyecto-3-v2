@@ -1,3 +1,4 @@
+
 const moment = require('moment');
 moment.locale('es');
 
@@ -74,6 +75,50 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
   // }
   // res.writeHead(200, { "Content-Type": "application/json" })
   // res.write(JSON.stringify(respuesta_api))
+
+controladorAnoEscolar.consultar= async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
+  let {id} = req.params
+  let modeloAnoEscolar = new ModeloAnoEscolar()
+  modeloAnoEscolar.setIdAnoEscolar(id)
+  let resultAnoEscolar = await modeloAnoEscolar.consultar()
+
+  if (resultAnoEscolar.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultAnoEscolar.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
+controladorAnoEscolar.consultarAnoEscolarActivo= async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
+  let modeloAnoEscolar = new ModeloAnoEscolar()
+  let resultAnoEscolar = await modeloAnoEscolar.consultarAnoEscolarActivo()
+
+  if (resultAnoEscolar.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultAnoEscolar.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
   res.end()
 }
 
@@ -99,7 +144,6 @@ controladorAnoEscolar.consultarpatron = async (req, res) => {
   res.write(JSON.stringify(respuesta_api))
   res.end()
 }
-
 
 controladorAnoEscolar.actualizar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }

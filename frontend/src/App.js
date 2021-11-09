@@ -77,11 +77,22 @@ import componentHorarioFormulario from './componentes/componentHorarioFormulario
 // ASISTENCIA
 import ComponentAsistencia from './componentes/componentAsistencia';
 import ComponentListaAsistencia from './componentes/componentListaAsistencia';
-// REPOSO TRABAJADOR 
+// REPOSO TRABAJADOR
 import ComponentReposoTrabajadorFormDirecto from "./componentes/componentReposoTrabajadorFormDirecto"
 import ComponentReposoTrabajadorForm from "./componentes/componentReposoTrabajadorForm"
 import ComponentReposoTrabajador from "./componentes/componentReposoTrabajador"
 import ComponentReposoTrabajadorConsulta from "./componentes/componentReposoTrabajadorConsulta"
+// ESTUDIANTE
+import componenteEstudiante from './componentes/componentEstudiante'
+import ComponentEstudianteForm from './componentes/componentEstudianteForm'
+import ComponentEstudianteConsulta from './componentes/componentEstudianteConsulta'
+// REPRESENTANTE
+import ComponentRepresentanteConsulta from './componentes/ComponentRepresentanteConsulta'
+import ComponentRepresentante from './componentes/ComponentRepresentante'
+import ComponentRepresentanteForm from './componentes/ComponentRepresentanteForm'
+// ANO ESCOLAR
+import ComponentAnoEscolar from './componentes/componentAnoEscolar.jsx';
+import ComponentAnoEscolarForm from './componentes/componentAnoEscolarForm.jsx';
 //cintillo
 import ComponentCintillo from "./componentes/componentCintillo"
 // error
@@ -92,6 +103,19 @@ import ComponentBitacora from "./componentes/componentBitacora"
 // grado
 import ComponentGrado from './componentes/componentGrado'
 import ComponentGradoFormulario from './componentes/componentGradoFormulario'
+// Aula
+import ComponentAulaFormulario from './componentes/componentAulaFormulario'
+import ComponentAula from './componentes/componentAula'
+//Profesor
+import ComponentProfesorFormulario from './componentes/componentProfesorFormulario'
+import ComponentProfesor from './componentes/componentProfesor'
+// Asignacion representante-estudiante
+import ComponenteAsignacionRepresentanteEstudiante from './componentes/componenteAsignacionRepresentanteEstudiante';
+import ComponenteAsignacionRepresentanteEstudianteConsulta from './componentes/componenteAsignacionRepresentanteEstudianteConsulta';
+import ComponenteAsignacionRepresentanteEstudianteForm from './componentes/componenteAsignacionRepresentanteEstudianteForm';
+// Asignacion aula profesor
+import ComponentAsignacionAulaProfesorForm from './componentes/componentAsignacionAulaProfesorForm';
+import ComponentAsignacionAulaProfesor from './componentes/componentAsignacionAulaProfesor';
 
 
 
@@ -115,7 +139,6 @@ function App() {
         <Route exact path="/dashboard/configuracion/permiso/consultar/:id" component={ComponentPermisoConsulta}/>
         <Route exact path="/dashboard/configuracion/permiso/:operacion/:id?" component={ComponentPermisoForm}/>
         <Route exact path="/dashboard/configuracion/permiso:mensaje?" component={ComponentPermiso}/>
-
 
         <Route exact path="/dashboard/configuracion/reposo/consultar/:id" component={ComponentReposoConsulta}/>
         <Route exact path="/dashboard/configuracion/reposo/:operacion/:id?" component={ComponentReposoForm}/>
@@ -148,47 +171,55 @@ function App() {
         <Route exact path="/dashboard/configuracion/especialidad/consultar/:id" component={ComponentEspecialidadConsulta}/>
         <Route exact path="/dashboard/configuracion/especialidad/:operacion/:id?" component={ComponentEspecialidadForm}/>
         <Route exact path="/dashboard/configuracion/especialidad:mensaje?" component={ComponentEspecialidad}/>
-        
+
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/consultar/:id" component={ComponentAsignacionEspecialidadMedicoConsulta}/>
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/:operacion/:id?" component={ComponentAsignacionEspecialidadMedicoForm}/>
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico:mensaje?" component={ComponentAsignacionEspecialidadMedico}/>
 
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/consultar/:id" component={ComponenteAsignacionRepresentanteEstudianteConsulta}/>
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
+
         <Route exact path="/dashboard/configuracion/tipo-cam/consultar/:id" component={ComponentTipoCamConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
-        
+
         <Route exact path="/dashboard/configuracion/horario/:operacion/:id?" component={componentHorarioFormulario}/>
         <Route exact path="/dashboard/configuracion/horario:mensaje?" component={componentHorario}/>
 
         <Route exact path="/dashboard/configuracion/cintillo-home" component={ComponentCintillo}/>
-        
-        
+
         <Route exact path="/dashboard/configuracion/cam/consultar/:id" component={ComponentCamConsultar}/>
         <Route exact path="/dashboard/configuracion/cam/:operacion/:id?" component={ComponentCamFormulario}/>
         <Route exact path="/dashboard/configuracion/cam:mensaje?" component={ComponentCam}/>
 
+        <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
+        <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
+        <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
 
+        <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
+        <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
 
-
-
-
+        <Route exact path="/dashboard/configuracion/representante:mensaje?" component={ComponentRepresentante} />
+        <Route exact path="/dashboard/configuracion/representante/consultar/:id?" component={ComponentRepresentanteConsulta} />
+        <Route exact path="/dashboard/configuracion/representante/:operacion/:id?" component={ComponentRepresentanteForm} />
 
         <Route exact path="/dashboard/configuracion/grado/:operacion/:id?" component={ComponentGradoFormulario}/>
         <Route exact path="/dashboard/configuracion/grado:mensaje?" component={ComponentGrado}/>
 
+        <Route exact path="/dashboard/configuracion/aula/:operacion/:id?" component={ComponentAulaFormulario}/>
+        <Route exact path="/dashboard/configuracion/aula:mensaje?" component={ComponentAula}/>
 
+        <Route exact path="/dashboard/configuracion/profesor/:operacion/:id?" component={ComponentProfesorFormulario}/>
+        <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
 
+        <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
+        <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
 
-
-        
-
-
-        
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
-        <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorConsulta}/>
+        <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/:operacion/:id?" component={ComponentReposoTrabajadorForm}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador:mensaje?" component={ComponentReposoTrabajador}/>
-
 
         <Route exact path="/dashboard/transaccion/permiso-trabajador/solicitar" component={ComponentSolicitarPermisoForm}/>
         <Route exact path="/dashboard/transaccion/permiso-trabajador/trabajador/solicitar" component={ComponentSolicitarPermisoTrabajadorForm}/>

@@ -3,5 +3,6 @@
 /backend/upload/cintillo/*.png
 /backend/upload/cintillo/*.jpeg
 /backend/upload/reporte/*.pdf
-/fronted/node_modules
+/frontend/node_modules
 
+backend/modelo/driver_postgresql.js

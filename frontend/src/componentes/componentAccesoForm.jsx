@@ -75,6 +75,11 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"asignacion especialidad medico",id:"/asignacion-especialidad-medico"}, 
                     {descripcion:"horario",id:"/horario"}, 
                     {descripcion:"cintillo home",id:"/cintillo-home"}, 
+                    {descripcion:"grado",id:"/grado"}, 
+                    {descripcion:"estudiante",id:"/estudiante"},
+                    {descripcion:"representante",id:"/representante"},
+                    {descripcion:"aula",id:"/aula"},
+                    {descripcion:"profesor",id:"/profesor"}
                 ],
                 // reporte:[
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
@@ -83,7 +88,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"reposo trabajador",id:"/reposo-trabajador"},
                     {descripcion:"permiso trabajador",id:"/permiso-trabajador"},
                     {descripcion:"asistencia",id:"/asistencia"},
-                    {descripcion:"lista asistencia",id:"/asistencia/lista"}
+                    {descripcion:"lista asistencia",id:"/asistencia/lista"},
+                    {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},

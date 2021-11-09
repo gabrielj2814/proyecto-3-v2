@@ -1,44 +1,45 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
-import axios from 'axios'
-// IP servidor
-import servidor from '../ipServer.js'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
-import '../css/componentGradoFormulario.css'
+import '../css/componentProfesorFormulario.css'
+//JS
+import axios from 'axios'
+// IP servidor
+import servidor from '../ipServer.js'
 //componentes
 import ComponentDashboard from './componentDashboard'
-// subComponent
+//sub componentes
 import AlertBootstrap from "../subComponentes/alertBootstrap"
 import InputButton from '../subComponentes/input_button'
 import ComponentFormCampo from '../subComponentes/componentFormCampo';
-import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
+import ComponentFormSelect from '../subComponentes/componentFormSelect';
+import ComponentFormRadioState from '../subComponentes/componentFormRadioState';
+
 
 const axiosCustom=axios.create({
     baseURL:`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/`
 })
 
-class ComponenrGradoFormulario extends React.Component{
-
+class ComponentProfesorFormulario extends React.Component {
 
     constructor(){
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
         this.cambiarEstado=this.cambiarEstado.bind(this)
-        this.regresar=this.regresar.bind(this)
         this.operacion=this.operacion.bind(this)
-        this.validarNumero=this.validarNumero.bind(this)
+        this.regresar=this.regresar.bind(this)
         this.state={
-            //////
             modulo:"",
             estado_menu:false,
             // formulario
-            id_grado:"",
-            numero_grado:"",
-            estatus_grado:"1",
+            id_profesor:"",
+            id_cedula:"",
+            estatus_profesor:"1",
+            listaTrabajadores:[],
             // 
-            msj_numero_grado:{
+            msj_nombre_profesor:{
                 mensaje:"",
                 color_texto:""
             },
@@ -51,7 +52,7 @@ class ComponenrGradoFormulario extends React.Component{
         }
     }
 
-    // logica menu
+        // logica menu
     mostrarModulo(a){
         var span=a.target;
         if(this.state.modulo===""){
@@ -84,22 +85,20 @@ class ComponenrGradoFormulario extends React.Component{
     }
 
     async componentWillMount(){
-        let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/grado")
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/profesor")
         if(acessoModulo){
-            const {operacion} = this.props.match.params
+            const {operacion}=this.props.match.params
+            await this.consultarTrabajadores()
             if(operacion==="actualizar"){
-                 // alert("formulario de actualizar")
-                 if(this.props.match.params.id){
-                    const {id} = this.props.match.params
-                    let datos =await this.consultarGrado(id)
-                }
+                await this.consultarProfesorTrabajador(this.props.match.params.id)
             }
-         }
-         else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-          this.props.history.goBack()
-         }
-        
+
+        }
+        else{
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            this.props.history.goBack()
+        }
+
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -113,51 +112,15 @@ class ComponenrGradoFormulario extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }
-            })
-        }
-        return estado
-      }
-
-    async consultarGrado(id){
-        axiosCustom.get(`configuracion/grado/consultar/${id}`)
-        .then(respuesta => {
-            let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(respuestaServidor)
-            if(respuestaServidor.estado_respuesta===true){
-                this.setState(respuestaServidor.datos[0])
-
-            }
-            else{
-                alert("este registro no exite")
-            }
-
-        })
-        .catch(error => {
-            console.error(`error de la peticion axios =>>> ${error}`)
-        })
-    }
-
-    async validarAccesoDelModulo(modulo,subModulo){
-        // /dashboard/configuracion/acceso
-        let estado = false
-          if(localStorage.getItem("usuario")){
-            var respuesta_servior=""
-            const token=localStorage.getItem("usuario")
-            await axiosCustom.get(`login/verificar-sesion${token}`)
-            .then(async respuesta=>{
-                respuesta_servior=respuesta.data
-                if(respuesta_servior.usuario){
-                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
                 }  
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axiosCustom.get(`configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)
@@ -191,26 +154,36 @@ class ComponenrGradoFormulario extends React.Component{
         return estado
     }
 
+    async consultarProfesorTrabajador(id){
+        // const token=localStorage.getItem('usuario')
+        await axiosCustom.get(`configuracion/profesor/consultar/${id}`)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            if(json.datos.length>0){
+                document.getElementById("id_cedula").value=json.datos[0].id_cedula
+                this.setState(json.datos[0])
+            }
+        })
+        .catch(error => {
+            console.error("error al conectar con el servidor")
+        })
+    }
+
+    async consultarTrabajadores(){
+        await axiosCustom.get(`configuracion/trabajador/consultar-todos`)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            this.setState({listaTrabajadores:json.trabajadores})
+        })
+        .catch(error => {
+            console.error("error al conectar con el servidor")
+        })
+    }
 
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
-    }
-
-    validarNumero(a){
-        const input=a.target,
-        exprecion=/\d$/
-        if(input.value!==""){
-            if(exprecion.test(input.value)){
-                // console.log("OK")
-                if(input.value.length===1){
-                    this.cambiarEstado(a)
-                }
-            }
-        }
-        else{
-            this.cambiarEstado(a)
-        }
     }
 
     extrarDatosDelFormData(formData){
@@ -224,76 +197,84 @@ class ComponenrGradoFormulario extends React.Component{
         return json   
     }
 
+    validarComboTrabajador(){
+        let estado=false
+        if(this.state.listaTrabajadores.length>0){
+            estado=true
+        }
+        return estado
+    }
 
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         const token=localStorage.getItem('usuario')
-        if(operacion==="registrar"){
-            let datosFormulario=new FormData(document.getElementById("formularioGrado"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosGrado={
-                grado:datosFormatiados,
-                token
+        if(this.validarComboTrabajador()){
+            if(operacion==="registrar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosProfesor={
+                    profesor:datosFormatiados,
+                    token
+                }
+                // console.log(datosProfesor)
+                await axiosCustom.post("configuracion/profesor/registrar",datosProfesor)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
             }
-            // console.log(datosGrado)
-            await axiosCustom.post("configuracion/grado/registrar",datosGrado)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
+            else if(operacion==="actualizar"){
+                // alert("Registrar")
+                let datosFormulario=new FormData(document.getElementById("formularioProfesor"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosProfesor={
+                    profesor:datosFormatiados,
+                    token
                 }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
-
+                // console.log(datosProfesor)
+                await axiosCustom.put(`configuracion/profesor/actualizar/${this.props.match.params.id}`,datosProfesor)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+            }
         }
-        else if(operacion==="actualizar"){
-            // alert("actualizando")
-            let {id} = this.props.match.params
-            let datosFormulario=new FormData(document.getElementById("formularioGrado"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosGrado={
-                grado:datosFormatiados,
-                token
-            }
-            // console.log(datosGrado)
-            await axiosCustom.put(`configuracion/grado/actualizar/${id}`,datosGrado)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
-                }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+        else{
+            alert("error al validar el formulario")
         }
     }
 
     regresar(){
-        this.props.history.push(`/dashboard/configuracion/grado`)
+        this.props.history.push(`/dashboard/configuracion/profesor`)
     }
-
-
-
 
     render(){
         const jsx=(
@@ -305,38 +286,39 @@ class ComponenrGradoFormulario extends React.Component{
                         
                     </div>)
                 }
-                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_grado">
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_profesor">
                     <div className="row justify-content-center">
-                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-reposo">
-                            <span className="titulo-form-reposo">Formulario de Grado</span>
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-profesor">
+                            <span className="titulo-form-reposo">Formulario Profesor</span>
                         </div>
                     </div>
-                    <form id="formularioGrado" >
+                    <form id="formularioProfesor" >
                         <div className="row justify-content-center">
-                            <ComponentFormCampo
+                        <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Código Grado:"
+                            nombreCampo="Código Profesor:"
                             activo="no"
                             type="text"
-                            value={this.state.id_grado}
-                            name="id_grado"
-                            id="id_grado"
-                            placeholder="Código Grado"
+                            value={this.state.id_profesor}
+                            name="id_profesor"
+                            id="id_profesor"
+                            placeholder="Código Profesor"
                             eventoPadre={this.cambiarEstado}
                             />
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            nombreCampo="Numero Grado:"
-                            activo="si"
-                            type="text"
-                            value={this.state.numero_grado}
-                            name="numero_grado"
-                            id="numero_grado"
-                            placeholder="Numero Grado"
-                            eventoPadre={this.validarNumero}
-                            />
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-groud">
+                                    <label>trabajador</label>
+                                    <select id="id_cedula" name="id_cedula" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
+                                        {this.state.listaTrabajadores.map((trabajador,index)=> {
+                                            return(
+                                                <option key={index} value={trabajador.id_cedula} >{trabajador.nombres} {trabajador.apellidos}</option>
+                                            )
+                                            })
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
                         <div className="row justify-content-center">
@@ -344,22 +326,19 @@ class ComponenrGradoFormulario extends React.Component{
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus:"
-                            name="estatus_grado"
+                            name="estatus_profesor"
                             nombreLabelRadioA="Activo"
                             idRadioA="activoA"
-                            checkedRadioA={this.state.estatus_grado}
+                            checkedRadioA={this.state.estatus_profesor}
                             valueRadioA="1"
                             nombreLabelRadioB="Inactivo"
                             idRadioB="activoB"
                             valueRadioB="0"
                             eventoPadre={this.cambiarEstado}
-                            checkedRadioB={this.state.estatus_grado}
+                            checkedRadioB={this.state.estatus_profesor}
                             />
                         </div>
-
-
-                    </form>
-                    <div className="row justify-content-center">
+                        <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
                                     <InputButton 
@@ -387,11 +366,12 @@ class ComponenrGradoFormulario extends React.Component{
                                 />   
                             </div>
                         </div>
+                    </form>
                 </div>
             </div>
         )
         return(
-            <div className="component_grado_formulario">
+            <div className="component_aula_formulario">
                     
                 <ComponentDashboard
                 componente={jsx}
@@ -407,4 +387,4 @@ class ComponenrGradoFormulario extends React.Component{
 
 }
 
-export default withRouter(ComponenrGradoFormulario)
+export default withRouter(ComponentProfesorFormulario)

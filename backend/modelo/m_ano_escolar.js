@@ -1,8 +1,7 @@
 const DriverPostgre = require("./driver_postgresql")
 const ModuloModelo = require("./m_modulo")
 
-
-class ModuloAñoEscolar extends DriverPostgre {
+class ModuloAnoEscolar extends DriverPostgre {
   constructor(){
     super()
 
@@ -35,6 +34,18 @@ class ModuloAñoEscolar extends DriverPostgre {
     return await this.query(SQL)
   }
 
+  async consultar() {
+    const SQL = `SELECT * FROM tano_escolar WHERE id_ano_escolar=${this.id_ano_escolar}`
+
+    return await this.query(SQL);
+  }
+  
+  async consultarAnoEscolarActivo() {
+    const SQL = `SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';`
+
+    return await this.query(SQL);
+  }
+
   async consultarTodos() {
     const SQL = 'SELECT * FROM tano_escolar'
 
@@ -52,7 +63,6 @@ class ModuloAñoEscolar extends DriverPostgre {
                `
     return await this.query(SQL)
   }
-
 }
 
-module.exports = ModuloAñoEscolar;
+module.exports = ModuloAnoEscolar;

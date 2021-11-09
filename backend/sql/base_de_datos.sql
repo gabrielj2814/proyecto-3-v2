@@ -20,6 +20,9 @@ CREATE TABLE tmodulo(
 );
 
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/acceso','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/representante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/estudiante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/grado','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/tipo-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/funcion-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/horario','1');
@@ -34,6 +37,9 @@ INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES(
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/reposo','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/permiso','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/cintillo-home','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/estudiante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/representante','1');
+INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/configuracion','/aula','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/permiso-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/reposo-trabajador','1');
 INSERT INTO tmodulo(id_perfil,modulo_principal,sub_modulo,estatu_modulo) VALUES('prl-1','/dashboard/transaccion','/asistencia/lista','1');
@@ -129,13 +135,13 @@ CREATE TABLE tpermisotrabajador(
     id_permiso character varying(8) NOT NULL,
     fecha_desde_permiso_trabajador DATE NULL,
     fecha_hasta_permiso_trabajador DATE NULL,
-    estatu_permiso_trabajador character(1) NOT NULL,-- E significa en espera, A significa aprovado, C significa culminado, D significa denegado, I significa interumpido 
+    estatu_permiso_trabajador character(1) NOT NULL,-- E significa en espera, A significa aprovado, C significa culminado, D significa denegado, I significa interumpido
     permiso_trabajador_dias_aviles character varying(3) NOT NULL,
     permiso_trabajador_tipo character varying(2) NOT NULL, -- PN, PR / PN permiso normal / PR permiso de retiro para salir temprano
     numero_permiso INTEGER NOT NULL,
     constraint PK_id_permiso_trabajador primary key(id_permiso_trabajador),
     constraint FK_id_cedula_tpermisotrabajador foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
-    constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade 
+    constraint FK_id_permiso_tpermisotrabajador foreign key(id_permiso) references tpermiso(id_permiso) on update cascade on delete cascade
 );
 
 -- estado del id_permis
@@ -144,9 +150,9 @@ CREATE TABLE tpermisotrabajador(
 -- C -> culminado
 -- D -> denegado
 -- ALTER TABLE tpermisotrabajador ADD COLUMN numero_permiso INTEGER NULL;
--- DELETE FROM tasistencia; 
--- DELETE FROM tpermisotrabajador; 
--- DELETE FROM treposotrabajador; 
+-- DELETE FROM tasistencia;
+-- DELETE FROM tpermisotrabajador;
+-- DELETE FROM treposotrabajador;
 
 
 -- INSERT INTO tpermisotrabajador(id_permiso_trabajador,id_cedula,id_permiso,fecha_desde_permiso_trabajador,fecha_hasta_permiso_trabajador,estatu_permiso_trabajador,permiso_trabajador_dias_aviles) VALUES('pert-2020-06-18-1','27636392','per-1','2020-06-18','2020-06-20','A','1');
@@ -228,7 +234,7 @@ CREATE TABLE tasignacionmedicoespecialidad(
 
 INSERT INTO tasignacionmedicoespecialidad(id_asignacion_medico_especialidad,id_medico,id_especialidad,estatu_asignacion) VALUES('ams-2020-06-15-1','med-2021-03-17-1',1,'1');
 
-CREATE TABLE treposo( 
+CREATE TABLE treposo(
     id_reposo character varying(8) NOT NULL,
     nombre_reposo character varying(150) NOT NULL,
     estatu_reposo character(1) NOT NULL,
@@ -260,7 +266,7 @@ CREATE TABLE treposotrabajador(
     constraint FK_id_cam_treposotrabajador foreign key(id_cam) references tcam(id_cam) on update cascade on delete cascade,
     constraint FK_id_asignacion_medico_especialidad_treposotrabajador foreign key(id_asignacion_medico_especialidad) references tasignacionmedicoespecialidad(id_asignacion_medico_especialidad) on update cascade on delete cascade
 );
---  estado de entrega del reposo 
+--  estado de entrega del reposo
 -- estado P en espera
 -- estado E entrego
 -- estado N no entrego
@@ -321,6 +327,7 @@ CREATE TABLE taula(
     id_aula SERIAL,
     id_grado INTEGER NOT NULL,
     nombre_aula character varying(150) NOT NULL,
+    estatus_aula character(1) NOT NULL,
     constraint PK_id_aula primary key(id_aula),
     constraint FK_id_grado foreign key(id_grado) references tgrado(id_grado) on update cascade on delete cascade
 );
@@ -335,19 +342,25 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
+CREATE TABLE tprofesor(
+    id_profesor SERIAL ,
+    id_cedula character varying(8) NOT NULL,
+    estatus_profesor character(1) NOT NULL,
+    constraint PK_id_profesor primary key(id_profesor),
+    constraint FK_id_cedula_tprofesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
+
 CREATE TABLE tasignacion_aula_profesor(
     id_asignacion_aula_profesor SERIAL,
-    id_cedula character varying(8) NOT NULL,
+    id_profesor INTEGER NOT NULL,
     id_aula INTEGER NOT NULL,
     id_ano_escolar INTEGER NOT NULL,
     estatus_asignacion_aula_profesor character(1) NOT NULL,
     constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
-    constraint FK_id_cedula_tasignacion_aula_profesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade,
+    constraint FK_id_profesor_tasignacion_aula_profesor foreign key(id_profesor) references tprofesor(id_profesor) on update cascade on delete cascade,
     constraint FK_id_aula_tasignacion_aula_profesor foreign key(id_aula) references taula(id_aula) on update cascade on delete cascade,
     constraint FK_id_ano_escolar_tasignacion_aula_profesor foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
-
-
 
 CREATE TABLE tlista_vacuna(
     id_vacuna SERIAL,
@@ -451,4 +464,4 @@ CREATE TABLE tgrado_escolar(
     constraint FK_id_estudiante_tgrado_escolar foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_representante_estudiante_tgrado_escolar foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_aula_profesor_tgrado_escolar foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
-); 
+);
