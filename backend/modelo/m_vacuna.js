@@ -42,12 +42,12 @@ class ModeloVacuna extends DriverPostgreSQL{
     }
 
     async actualizar(){
-        const SQL=`UPDATE SET nombre_vacuna='${this.nombre_vacuna}',estaus_vacuna='${this.estaus_vacuna}' WHERE  id_vacuna=${this.id_vacuna};`
+        const SQL=`UPDATE tlista_vacuna SET nombre_vacuna='${this.nombre_vacuna}',estaus_vacuna='${this.estaus_vacuna}' WHERE id_vacuna=${this.id_vacuna};`
         return await this.query(SQL)
     }
 
     async consultarVacunaPorPatron(patron){
-        const SQL=`SELECT * FROM tlista_vacuna WHERE nombre_vacuna LIKE S'%{this.nombre_vacuna}%';`
+        const SQL=`SELECT * FROM tlista_vacuna WHERE nombre_vacuna LIKE '%${patron}%';`
         return await this.query(SQL)
     }
 

@@ -8,6 +8,8 @@ router.use(bodyParse.json())
 router.post("/registrar",ControladorVacuna.registrar)
 router.get("/consultar/:id",ControladorVacuna.consultar)
 router.get("/consultar-todos",ControladorVacuna.consultarTodos)
+router.get("/consultar-por-patron/:patron",ControladorVacuna.consultarPorPatron)
+router.put("/actualizar/:id",ControladorVacuna.actualizar)
 
 
 module.exports = router
