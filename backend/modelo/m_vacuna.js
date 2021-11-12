@@ -35,6 +35,11 @@ class ModeloVacuna extends DriverPostgreSQL{
         const SQL=`SELECT * FROM tlista_vacuna WHERE id_vacuna=${this.id_vacuna};`
         return await this.query(SQL)
     }
+    
+    async consultarTodos(){
+        const SQL=`SELECT * FROM tlista_vacuna;`
+        return await this.query(SQL)
+    }
 
     async actualizar(){
         const SQL=`UPDATE SET nombre_vacuna='${this.nombre_vacuna}',estaus_vacuna='${this.estaus_vacuna}' WHERE  id_vacuna=${this.id_vacuna};`
