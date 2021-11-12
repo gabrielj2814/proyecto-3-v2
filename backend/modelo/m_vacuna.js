@@ -27,7 +27,7 @@ class ModeloVacuna extends DriverPostgreSQL{
         ) VALUES(
             '${this.nombre_vacuna}',
             '${this.estaus_vacuna}'
-        ); RETURNING id_vacuna`
+        ) RETURNING id_vacuna;`
         return await this.query(SQL)
     }
 
