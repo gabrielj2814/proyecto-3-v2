@@ -32,6 +32,14 @@ class ComponentVacunaForm extends React.Component {
             modulo:"",
             estado_menu:false,
             // formulario
+            id_vacuna:"",
+            nombre_vacuna:"",
+            estaus_vacuna:"",
+            // -----
+            msj_nombre_vacuna:{
+                mensaje:"",
+                color_texto:""
+            },
             alerta:{
                 color:null,
                 mensaje:null,
@@ -72,10 +80,110 @@ class ComponentVacunaForm extends React.Component {
         }
     }
 
+    cambiarEstado(a){
+        var input=a.target;
+        this.setState({[input.name]:input.value})
+    }
+
     render(){
         const jsx=(
-            <div>
-                <h1>hola</h1>
+            <div className="row justify-content-center">
+                {this.state.alerta.estado===true &&
+                    (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
+                        
+                    </div>)
+                }
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_vacuna">
+                    <div className="row justify-content-center">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-vacuna">
+                            <span className="titulo-form-vacuna">Formulario de Vacuna</span>
+                        </div>
+                    </div>
+                    <form id="formularioVacuna" >
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Código vacuna:"
+                            activo="no"
+                            type="text"
+                            value={this.state.id_vacuna}
+                            name="id_vacuna"
+                            id="id_vacuna"
+                            placeholder="Código Vacuna"
+                            eventoPadre={this.cambiarEstado}
+                            />
+                            <ComponentFormCampo
+                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control"
+                            nombreCampo="Nombre:"
+                            activo="si"
+                            type="text"
+                            value={this.state.nombre_vacuna}
+                            name="nombre_vacuna"
+                            id="nombre_vacuna"
+                            placeholder="Nombre Vacuna"
+                            mensaje={this.state.msj_nombre_vacuna}
+                            eventoPadre={this.cambiarEstado}
+                            />
+                            <div className='col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3'></div>
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormRadioState
+                            clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="Estatus:"
+                            name="estaus_vacuna"
+                            nombreLabelRadioA="Activo"
+                            idRadioA="activoA"
+                            checkedRadioA={this.state.estaus_vacuna}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Inactivo"
+                            idRadioB="activoB"
+                            valueRadioB="0"
+                            eventoPadre={this.cambiarEstado}
+                            checkedRadioB={this.state.estaus_vacuna}
+                            />
+                        </div>
+
+                    </form>
+                    <div className="row justify-content-center">
+                        <div className="col-auto">
+                            {this.props.match.params.operacion==="registrar" &&
+                                <InputButton 
+                                clasesBoton="btn btn-primary"
+                                id="boton-registrar"
+                                value="Registrar"
+                                eventoPadre={this.operacion}
+                                />
+                            }
+                            {this.props.match.params.operacion==="actualizar" &&
+                                <InputButton 
+                                clasesBoton="btn btn-warning"
+                                id="boton-actualizar"
+                                value="Actualizar"
+                                eventoPadre={this.operacion}
+                                />   
+                            }
+                        </div>
+                        <div className="col-auto">
+                            <InputButton 
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
+                            />   
+                        </div>
+                    </div>
+
+
+
+
+
+
+                </div>
             </div>
         )
 
