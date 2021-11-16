@@ -26,7 +26,8 @@ class ComponentVacunaForm extends React.Component {
     constructor(){
         super();
         this.mostrarModulo=this.mostrarModulo.bind(this)
-        // this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.operacion=this.operacion.bind(this)
+        this.cambiarEstado=this.cambiarEstado.bind(this)
         // this.regresar=this.regresar.bind(this)
         this.state={
             modulo:"",
@@ -34,7 +35,7 @@ class ComponentVacunaForm extends React.Component {
             // formulario
             id_vacuna:"",
             nombre_vacuna:"",
-            estaus_vacuna:"",
+            estaus_vacuna:"1",
             // -----
             msj_nombre_vacuna:{
                 mensaje:"",
@@ -83,6 +84,111 @@ class ComponentVacunaForm extends React.Component {
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
+    }
+
+    extrarDatosDelFormData(formData){
+        let json={}
+        let iterador = formData.entries()
+        let next= iterador.next();
+        while(!next.done){
+            json[next.value[0]]=next.value[1]
+            next=iterador.next()
+        }
+        return json   
+    }
+
+    validarCampoNombreVacuna(){
+        let estado=false
+        let $inputNombreVacuna=document.getElementById("nombre_vacuna")
+        let msj_nombre_vacuna=JSON.parse(JSON.stringify(this.state.msj_nombre_vacuna))
+        let exprecion=/[a-zA-Z]/g
+        if($inputNombreVacuna.value!==""){
+            if(exprecion.test($inputNombreVacuna.value)){
+                estado=true
+                msj_nombre_vacuna.mensaje=``
+                msj_nombre_vacuna.color_texto="verde"
+            }
+            else{
+                msj_nombre_vacuna.mensaje=`este campo no puede tener solo espacios en blanco`
+                msj_nombre_vacuna.color_texto="rojo"
+            }
+        }
+        else{
+            msj_nombre_vacuna.mensaje=`este campo no puede estar vacio`
+            msj_nombre_vacuna.color_texto="rojo"
+        }
+        this.setState({msj_nombre_vacuna})
+        return estado
+    }
+
+    async operacion(){
+        const {operacion}=this.props.match.params
+        // alert("operacion")
+        const token=localStorage.getItem('usuario')
+
+        if(this.validarCampoNombreVacuna()){
+            if(operacion==="registrar"){
+                let datosFormulario=new FormData(document.getElementById("formularioVacuna"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosVacuna={
+                    vacuna:datosFormatiados,
+                    token
+                }
+                // console.log(datosVacuna)
+                await axiosCustom.post("configuracion/vacuna/registrar",datosVacuna)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+            }
+            else if(operacion==="actualizar"){
+                let datosFormulario=new FormData(document.getElementById("formularioVacuna"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosVacuna={
+                    vacuna:datosFormatiados,
+                    token
+                }
+                // console.log(datosVacuna)
+                await axiosCustom.put(`configuracion/vacuna/actualizar/${this.props.match.params.id}`,datosVacuna)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    // console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+
+            }
+        }
+        else{
+            alert("error al validar el formulario")
+        }
+
+            
+
     }
 
     render(){
