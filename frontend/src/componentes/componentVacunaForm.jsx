@@ -80,6 +80,30 @@ class ComponentVacunaForm extends React.Component {
             }
         }
     }
+    async componentWillMount(){
+        let {operacion} = this.props.match.params
+        if(operacion==="actualizar"){
+            let {id} = this.props.match.params
+            await this.consultarVacuna(id)
+        }
+    }
+
+    async consultarVacuna(id){
+        await axiosCustom.get(`configuracion/vacuna/consultar/${id}`)
+        .then(respuesta => {
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>",json)
+            if(json.datos.length>0){
+                this.setState(json.datos[0])
+            }
+            else{
+                alert("el registro que intento consultar no se encuentra en la base de datos")
+            }
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
 
     cambiarEstado(a){
         var input=a.target;

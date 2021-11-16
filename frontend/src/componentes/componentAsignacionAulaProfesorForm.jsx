@@ -247,6 +247,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 }))
                 this.setState({respaldoDatos})
             }
+            else{
+                alert("el registro que intento consultar no se encuentra en la base de datos")
+            }
         })
         .catch(error => {
             console.error(error)

@@ -196,8 +196,13 @@ class ComponentAulaFormulario extends React.Component{
         .then(respuesta => {
             console.log(respuesta.data)
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            this.setState(respuestaServidor.datos[0])
-            document.getElementById("id_grado").value=respuestaServidor.datos[0].id_grado
+            if(respuestaServidor.datos.length>0){
+                this.setState(respuestaServidor.datos[0])
+                document.getElementById("id_grado").value=respuestaServidor.datos[0].id_grado
+            }
+            else{
+                alert("el registro que intento consultar no se encuentra en la base de datos")
+            }
         })
         .catch(error => {
             console.error(`error de la peticion axios =>>> ${error}`)

@@ -164,6 +164,9 @@ class ComponentProfesorFormulario extends React.Component {
                 document.getElementById("id_cedula").value=json.datos[0].id_cedula
                 this.setState(json.datos[0])
             }
+            else{
+                alert("el registro que intento consultar no se encuentra en la base de datos")
+            }
         })
         .catch(error => {
             console.error("error al conectar con el servidor")
