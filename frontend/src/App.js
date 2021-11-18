@@ -118,6 +118,7 @@ import ComponentAsignacionAulaProfesorForm from './componentes/componentAsignaci
 import ComponentAsignacionAulaProfesor from './componentes/componentAsignacionAulaProfesor';
 // vacuna
 import ComponentVacunaForm from './componentes/componentVacunaForm';
+import ComponentVacuna from './componentes/componentVacuna';
 
 
 
@@ -213,6 +214,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/aula:mensaje?" component={ComponentAula}/>
 
         <Route exact path="/dashboard/configuracion/vacuna/:operacion/:id?" component={ComponentVacunaForm}/>
+        <Route exact path="/dashboard/configuracion/vacuna:mensaje?" component={ComponentVacuna}/>
 
 
 

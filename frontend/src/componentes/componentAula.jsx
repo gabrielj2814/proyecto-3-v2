@@ -44,7 +44,7 @@ class ComponentAula extends React.Component{
         }
     }
 
-     // logica menu
+    // logica menu
     mostrarModulo(a){
         var span=a.target;
         if(this.state.modulo===""){
