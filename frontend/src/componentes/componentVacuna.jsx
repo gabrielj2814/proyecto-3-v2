@@ -26,6 +26,8 @@ class ComponentVacuna extends React.Component{
     constructor(){
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
+        this.cambiarEstado=this.cambiarEstado.bind(this)
+        this.buscarVacunas=this.buscarVacunas.bind(this)
         // this.redirigirFormulario=this.redirigirFormulario.bind(this)
         // this.irAlFormularioDeActualizacion=this.irAlFormularioDeActualizacion.bind(this)
         this.state={
@@ -40,6 +42,10 @@ class ComponentVacuna extends React.Component{
                 estado:false
             }
         }
+    }
+
+    async componentWillMount(){
+        await this.consultarTodo()
     }
 
         // logica menu
@@ -74,11 +80,109 @@ class ComponentVacuna extends React.Component{
             }
         }
 
+    async consultarTodo(){
+        await axiosCustom.get(`configuracion/vacuna/consultar-todos`)
+            .then(respuesta => {
+                let repuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                console.log(repuestaServidor)
+                this.setState({registros:repuestaServidor.datos})
+            })
+            .catch(error => {
+                console.error("error =>>> ",error)
+            })
+    }
+
+    cambiarEstado(a){
+        let input=a.target
+        this.setState({[input.name]:input.vaule})
+    }
+
+    async buscarVacunas(a){
+        
+        let $inputNombreVacuna=document.getElementById("nombreVacuna")
+        if($inputNombreVacuna.value!==""){
+            await axiosCustom.get(`configuracion/vacuna/consultar-por-patron/${$inputNombreVacuna.value}`)
+            .then(respuesta => {
+                let repuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                console.log(repuestaServidor)
+                this.setState({registros:repuestaServidor.datos})
+            })
+            .catch(error => {
+                console.error("error =>>> ",error)
+            })
+        }
+        else{
+            await this.consultarTodo()
+        }
+        
+
+    }
+
+    irAlFormularioDeActualizacion(){
+        alert("hola")
+    }
+
 
     render(){
+        const jsx_tabla_encabezado=(
+            <thead> 
+                <tr> 
+                    <th>Código</th> 
+                    <th>Nombre de la Vacuna</th>
+                    <th>Estodo</th>
+                </tr> 
+            </thead>
+        )
+
+        const jsx_tabla_body=(
+            <tbody>
+                {this.state.registros.map((vacuna,index)=>{
+                    return(
+                        <tr key={index}>
+                            <td>{vacuna.id_vacuna}</td>
+                            <td>{vacuna.nombre_vacuna}</td>
+                            <td>{(vacuna.estaus_vacuna==="1")?"Activo":"Inactivo"}</td>
+                            {!vacuna.vacio &&
+                                <td>
+                                    <ButtonIcon 
+                                    clasesBoton="btn btn-warning btn-block" 
+                                    value={vacuna.id_vacuna} 
+                                    id={vacuna.id_vacuna}
+                                    eventoPadre={this.irAlFormularioDeActualizacion} 
+                                    icon="icon-pencil"
+                                    />
+                                </td>
+                            }
+                    </tr>
+                    )
+                })}
+            </tbody>
+        )
+
         const jsx=(
             <div>
-                <h1>hola</h1>
+                {this.state.alerta.estado===true &&
+                    (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+
+                        <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
+                        
+                    </div>)
+                }
+                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Vacuna"/>
+                
+                <div className="row">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
+                        <div className="row">
+                            <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3 mb-3">
+                                <div class="form-groud">
+                                        <label>Nombre:</label>
+                                        <input className="form-control" id="nombreVacuna" name="nombreVacuna" placeholder="Nombre de la vacuna" onChange={this.buscarVacunas}/>
+                                </div>
+                            </div>
+                        </div>
+                        <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
+                    </div>
+                </div>
             </div>
         )
         return (
