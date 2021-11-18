@@ -168,6 +168,9 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-aula-profesor"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-aula-profesor" texto="Asignacion Aula Profesor"/>
                             }
+                            {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-representante-estudiante"]&&
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-representante-estudiante" texto="Asignacion Estudiante Representante"/>
+                            }
 
                         </div>
                     }
@@ -178,9 +181,6 @@ class MenuDashboard extends React.Component{
                             }
                             {this.state.modulosSistema["/dashboard/configuracion"]["/representante"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/representante" texto="Representante"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/asignacion-representante-estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-representante-estudiante" texto="Asignacion Representante-estudiante"/>
                             }
                             {this.state.modulosSistema["/dashboard/configuracion"]["/ano-escolar"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ano-escolar" texto="Ano escolar"/>

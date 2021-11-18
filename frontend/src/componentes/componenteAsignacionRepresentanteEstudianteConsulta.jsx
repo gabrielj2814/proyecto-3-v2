@@ -87,7 +87,7 @@ class ComponentAsignacionRepresentanteEstudianteConsulta extends React.Component
   }
 
   async UNSAFE_componentWillMount(){
-      let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/asignacion-representante-estudiante")
+      let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-representante-estudiante")
       if(acessoModulo){
           const id=this.props.match.params.id
           await this.consultarRegistros(id)
@@ -188,8 +188,8 @@ class ComponentAsignacionRepresentanteEstudianteConsulta extends React.Component
     })
   }
 
-  actualizar(){ this.props.history.push("/dashboard/configuracion/asignacion-representante-estudiante/actualizar/"+this.props.match.params.id); }
-  regresar(){ this.props.history.push("/dashboard/configuracion/asignacion-representante-estudiante"); }
+  actualizar(){ this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante/actualizar/"+this.props.match.params.id); }
+  regresar(){ this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante"); }
 
   render(){
       var jsx_asignacion_consulta=(

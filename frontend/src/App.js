@@ -179,10 +179,6 @@ function App() {
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico/:operacion/:id?" component={ComponentAsignacionEspecialidadMedicoForm}/>
         <Route exact path="/dashboard/configuracion/asignacion-especialidad-medico:mensaje?" component={ComponentAsignacionEspecialidadMedico}/>
 
-        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/consultar/:id" component={ComponenteAsignacionRepresentanteEstudianteConsulta}/>
-        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
-        <Route exact path="/dashboard/configuracion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
-
         <Route exact path="/dashboard/configuracion/tipo-cam/consultar/:id" component={ComponentTipoCamConsulta}/>
         <Route exact path="/dashboard/configuracion/tipo-cam/:operacion/:id?" component={ComponentTipoCamForm}/>
         <Route exact path="/dashboard/configuracion/tipo-cam:mensaje?" component={ComponentTipoCam}/>
@@ -237,6 +233,11 @@ function App() {
 
         <Route exact path="/dashboard/transaccion/asistencia" component={ComponentAsistencia}/>
         <Route exact path="/dashboard/transaccion/asistencia/lista" component={ComponentListaAsistencia}/>
+
+        <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante/consultar/:id" component={ComponenteAsignacionRepresentanteEstudianteConsulta}/>
+        <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
+        <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
+
 
         <Route exact path="/dashboard/seguridad/bitacora" component={ComponentBitacora}/>
 

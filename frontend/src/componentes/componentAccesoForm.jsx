@@ -90,7 +90,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"permiso trabajador",id:"/permiso-trabajador"},
                     {descripcion:"asistencia",id:"/asistencia"},
                     {descripcion:"lista asistencia",id:"/asistencia/lista"},
-                    {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"}
+                    {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"},
+                    {descripcion:"asignacion estudiante representante",id:"/asignacion-representante-estudiante"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},
