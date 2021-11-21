@@ -62,20 +62,7 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
     estado_respuesta: true,
     color_alerta: "success"
   })
-  // if (fecha.rowCount > 0) {
-  //   respuesta_api.mensaje = "consulta completada"
-  //   respuesta_api.datos = fecha.rows
-  //   respuesta_api.estado_respuesta = true
-  //   respuesta_api.color_alerta = "success"
-  // }
-  // else {
-  //   respuesta_api.mensaje = "no se pudo obtener la fecha actual"
-  //   respuesta_api.estado_respuesta = false
-  //   respuesta_api.color_alerta = "danger"
-  // }
-  // res.writeHead(200, { "Content-Type": "application/json" })
-  // res.write(JSON.stringify(respuesta_api))
-
+}
 controladorAnoEscolar.consultar= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
@@ -179,4 +166,4 @@ controladorAnoEscolar.actualizar = async (req, res) => {
   res.end()
 }
 
-module.exports = controladorAnoEscolar;
+module.exports = controladorAnoEscolar
