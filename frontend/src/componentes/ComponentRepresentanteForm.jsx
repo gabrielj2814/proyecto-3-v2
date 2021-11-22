@@ -622,16 +622,15 @@ class ComponentRepresentanteForm extends React.Component{
                     parseInt(this.state.numero_estudiante_grado_6_representante),
                   ]
                   let total_estudiante_representante = numeros.reduce(sumatoria)
-
-                  if(numero_hijos < total_estudiante_representante){
+                  
+                  if(numero_hijos != total_estudiante_representante){
                     estado = false
-                    mensaje_campo[0]={mensaje:"El numero de hijos no puede ser mayor a la cantidad de estudiantes registrados para este representante",color_texto:"rojo"}
+                    mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
                     this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
                     return false;
                   }
                 }
                 estado=true
-                console.log("campo nombre "+nombre_campo+" OK")
                 mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
               }
@@ -986,12 +985,12 @@ class ComponentRepresentanteForm extends React.Component{
                       />
                     </div>
                     <div className="row justify-content-center">
-                        <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_representante[0]}
                           nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_representante}
                           name="telefono_movil_representante" id="telefono_movil" placeholder="Telefono movil" eventoPadre={this.validarNumero}
                         />
-                      <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
                           nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_representante}
                           name="telefono_local_representante" id="telefono_movil" placeholder="Telefono local" eventoPadre={this.validarNumero}
