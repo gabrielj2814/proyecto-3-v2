@@ -35,7 +35,7 @@ const rutas_modulo_asignacion_representante_estudiante = require('./rutas/config
 const rutas_modulo_profesor = require('./rutas/configuracion/profesor')
 const rutas_modulo_ano_escolar = require('./rutas/configuracion/ano-escolar')
 const rutas_modulo_asignacion_aula_profesor = require('./rutas/transaccion/asignacion-aula-profesor')
-const rutas_modula_lista_vacuna = require('./rutas/configuracion/vacuna')
+const rutas_modula_lista_enfermedad = require('./rutas/configuracion/enfermedad')
 //SET
 app.set("puerto",8080)
 // USE
@@ -74,7 +74,7 @@ app.use("/configuracion/asignacion-representante-estudiante", rutas_modulo_asign
 app.use("/configuracion/profesor", rutas_modulo_profesor)
 app.use("/configuracion/ano-escolar", rutas_modulo_ano_escolar)
 app.use("/transaccion/asignacion-aula-profesor", rutas_modulo_asignacion_aula_profesor)
-app.use("/configuracion/vacuna", rutas_modula_lista_vacuna)
+app.use("/configuracion/enfermedad", rutas_modula_lista_enfermedad)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
