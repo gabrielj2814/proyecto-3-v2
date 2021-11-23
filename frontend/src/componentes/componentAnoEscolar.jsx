@@ -30,7 +30,6 @@ class ComponentAnoEscolar extends React.Component{
     super();
     this.mostrarModulo = this.mostrarModulo.bind(this)
     this.actualizarElementoTabla = this.actualizarElementoTabla.bind(this)
-    this.consultarElementoTabla = this.consultarElementoTabla.bind(this)
     this.verficarLista = this.verficarLista.bind(this)
     this.redirigirFormulario = this.redirigirFormulario.bind(this)
     this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
@@ -89,11 +88,7 @@ class ComponentAnoEscolar extends React.Component{
   actualizarElementoTabla(a){
       var input=a.target;
       this.props.history.push("/dashboard/configuracion/ano-escolar/actualizar/"+input.id);
-  }
 
-  consultarElementoTabla(a){
-      let input=a.target;
-      this.props.history.push("/dashboard/configuracion/ano-escolar/consultar/"+input.id);
   }
 
   async consultarTodosLosEstudiantes(){
@@ -177,6 +172,7 @@ class ComponentAnoEscolar extends React.Component{
           alert("Error:la barra de busqueda esta vacia")
         }
       }
+
       async escribir_codigo(a){
         var input=a.target,
         valor=input.value,
@@ -286,10 +282,10 @@ class ComponentAnoEscolar extends React.Component{
                       <tr key={anoEscolar.id_ano_escolar}>
                         <td>{anoEscolar.ano_desde}</td>
                         <td>{anoEscolar.ano_hasta}</td>
-                        <td>{anoEscolar.fecha_inicio_ano_escolar}</td>
-                        <td>{anoEscolar.fecha_cierre_ano_escolar}</td>
+                        <td>{Moment(anoEscolar.fecha_inicio_ano_escolar).format("DD/MM/YYYY")}</td>
+                        <td>{Moment(anoEscolar.fecha_cierre_ano_escolar).format("DD/MM/YYYY")}</td>
                         <td>{ (anoEscolar.estatus_ano_escolar === '1') ? "Activo" : "Innactivo" }</td>
-                       {!anoEscolar.vacio &&
+                       {!anoEscolar.vacio && anoEscolar.estatus_ano_escolar === '1' &&
                          <td>
                            <ButtonIcon
                               clasesBoton="btn btn-warning btn-block"
@@ -299,17 +295,6 @@ class ComponentAnoEscolar extends React.Component{
                               icon="icon-pencil"
                             />
                           </td>
-                       }
-                       {!anoEscolar.vacio &&
-                         <td>
-                           <ButtonIcon
-                             clasesBoton="btn btn-secondary btn-block"
-                             value={anoEscolar.id_ano_escolar}
-                             id={anoEscolar.id_ano_escolar}
-                             eventoPadre={this.consultarElementoTabla}
-                             icon="icon-search"
-                            />
-                         </td>
                        }
                   </tr>
                   )
