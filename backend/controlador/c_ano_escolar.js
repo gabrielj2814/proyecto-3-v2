@@ -63,6 +63,8 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
     color_alerta: "success"
   })
 }
+
+
 controladorAnoEscolar.consultar= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");

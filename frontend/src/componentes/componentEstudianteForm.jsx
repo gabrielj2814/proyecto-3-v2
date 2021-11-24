@@ -421,7 +421,7 @@ class ComponentEstudianteForm extends React.Component{
 
     longitudCampo(input){
         if(input.name==="id_cedula" || input.name === "id_cedula_escolar"){
-            if(input.value.length<=8){
+            if(input.value.length<=11){
                 this.cambiarEstadoDos(input)
             }
         }
@@ -651,15 +651,14 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFormularioRegistrar(){
 
-        const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
-        validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+        const validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
         validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
         validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
         validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
         if(
-          validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+          validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
           validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
           validar_sexo_estudiante && validar_estatu_estudiante
         ){
@@ -670,15 +669,14 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     validarFormularioActuazliar(){
-      const validarCedulaEscolar = this.validarCampoNumero('id_cedula_escolar'),
-      validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+      const validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
       validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
       validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
       validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
       validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
       if(
-        validarCedulaEscolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
         validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
         validar_sexo_estudiante && validar_estatu_estudiante
       ){
@@ -844,7 +842,7 @@ class ComponentEstudianteForm extends React.Component{
                     <form id="form_trabajador">
                         <div className="row justify-content-center">
                             <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                              clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_escolar[0]}
+                              clasesCampo="form-control" obligatorio="no" mensaje={this.state.msj_id_cedula_escolar[0]}
                               nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.id_cedula_escolar}
                               name="id_cedula_escolar" id="id_cedula_escolcar" placeholder="Cédula escolar" eventoPadre={this.buscarEstudiante}
                             />
@@ -880,9 +878,7 @@ class ComponentEstudianteForm extends React.Component{
                                 </div>
                                 )
                             }
-                        </div>
-                        <div className="row justify-content-center mx-auto">
-                          <ComponentFormCampo clasesColumna="col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9"
+                            <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_escolaridad[0]}
                             nombreCampo="Escolaridad:" activo="si" type="text" value={this.state.escolaridad}
                             name="escolaridad" id="escolaridad" placeholder="Escolaridad" eventoPadre={this.validarTexto}

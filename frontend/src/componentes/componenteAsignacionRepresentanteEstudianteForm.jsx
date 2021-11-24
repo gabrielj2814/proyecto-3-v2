@@ -88,7 +88,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/asignacion-representante-estudiante")
+    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-representante-estudiante")
     if(acessoModulo){
       await this.consultarFechaServidor()
       await this.GetTodosRepresentantesEstudiantes()
@@ -350,7 +350,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       msj_numero_representante:[{mensaje:"",color_texto:""}],
       msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
     })
-    this.props.history.push("/dashboard/configuracion/asignacion-representante-estudiante/registrar")
+    this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante/registrar")
   }
 
   validarCampoNumero(nombre_campo){
@@ -508,7 +508,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       petion(objeto)
   }
 
-  regresar(){ this.props.history.push("/dashboard/configuracion/asignacion-representante-estudiante"); }
+  regresar(){ this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante"); }
 
   BuscarEstudiante(a){
 

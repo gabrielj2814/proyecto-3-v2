@@ -35,8 +35,13 @@ class ComponentAnoEscolarForm extends React.Component{
     this.fechaNacimiento=this.fechaNacimiento.bind(this);
     this.validarFecha = this.validarFecha.bind(this);
     this.validarFormularioRegistrar=this.validarFormularioRegistrar.bind(this);
-    this.enviarDatos=this.enviarDatos.bind(this)
-    this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
+    this.enviarDatos=this.enviarDatos.bind(this);
+    this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this);
+    this.ConsultarFechaActual = this.ConsultarFechaActual.bind(this);
+    this.ConsultarAnoActivo = this.ConsultarAnoActivo.bind(this);
+    this.ConsultarRegistro = this.ConsultarRegistro.bind(this);
+    this.validainicioFinal = this.validainicioFinal.bind(this);
+    this.confirmar = this.confirmar.bind(this);
     this.state = {
       // ------------------
       modulo:"",// modulo menu
@@ -47,7 +52,7 @@ class ComponentAnoEscolarForm extends React.Component{
       ano_hasta: "",
       fecha_inicio_ano_escolar: "",
       fecha_cierre_ano_escolar: "",
-      estatus_ano_escolar: "",
+      estatus_ano_escolar: "1",
       //MSJ
       msj_id_ano_escolar: [{mensaje:"",color_texto:""}],
       msj_ano_desde: [{mensaje:"",color_texto:""}],
@@ -56,10 +61,8 @@ class ComponentAnoEscolarForm extends React.Component{
       msj_fecha_cierre_ano_escolar: [{mensaje:"",color_texto:""}],
       msj_estatus_ano_escolar: [{mensaje:"",color_texto:""}],
       //// combo box
-      estados:[],
-      ciudades:[],
-      fecha_minimo:"",
-      fecha_maxima: Moment().add(1,'y'),
+      fecha_actual: "",
+      confirmar_operacion: false,
       ///
       mensaje:{
           texto:"",
@@ -110,22 +113,58 @@ class ComponentAnoEscolarForm extends React.Component{
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/ano-escolar")
     const operacion=this.props.match.params.operacion
     if(acessoModulo){
-      console.log("Hola")    ;
 
-      if(operacion === "registro"){
+      if(operacion === "registrar"){
+        let AnoActivo = await this.ConsultarAnoActivo();
+        var mensaje={texto:"Ya existe un año escolar activo",estado: "404"}
+        if(AnoActivo.estado_respuesta) this.props.history.push(`/dashboard/configuracion/ano-escolar${JSON.stringify(mensaje)}`)
+        // SI EXISTE UN ANO ESCOLAR ACTIVO, RETORNAR A LA VISTA ANTERIOR
+        let fecha_actual_servidor = await this.ConsultarFechaActual();
         this.setState({
-          ano_desde: Moment().format("YYYY"),
-          ano_desde: Moment().add(1,'y').format("YYYY"),
-          fecha_inicio_ano_escolar: Moment().format("YYYY-MM-DD"),
-          fecha_cierre_ano_escolar: Moment().add(1,'y').format("YYYY-MM-DD")
+          ano_desde: Moment(fecha_actual_servidor.datos).format("YYYY"),
+          ano_hasta: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY"),
+          fecha_inicio_ano_escolar: Moment(fecha_actual_servidor.datos).format("YYYY-MM-DD"),
+          fecha_cierre_ano_escolar: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
+          fecha_actual: fecha_actual_servidor.datos,
         });
       }
-      // else if(operacion==="actualizar"){
+      else if(operacion==="actualizar"){
+        let responseServidor = await this.ConsultarRegistro(this.props.match.params.id)
+        let array = responseServidor.datos[0];
+        let fecha_actual_servidor = await this.ConsultarFechaActual();
+
+        this.setState({
+          ano_desde: array.ano_desde,
+          ano_hasta: array.ano_hasta,
+          fecha_inicio_ano_escolar: Moment(array.fecha_inicio_ano_escolar).format("YYYY-MM-DD"),
+          fecha_cierre_ano_escolar: Moment(array.fecha_cierre_ano_escolar).format("YYYY-MM-DD"),
+          fecha_actual: fecha_actual_servidor.datos,
+        });
+
+        document.getElementById("ano_desde").readonly = true;
+        document.getElementById("ano_hasta").readonly = true;
+        document.getElementById("fecha_inicio_ano_escolar").readonly = true;
+        document.getElementById("activo").disabled = true;
+        document.getElementById("innactivo").disabled = true;
+      }
       //   console.log("Adio");
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+  }
+  async ConsultarAnoActivo(){
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/consultar-ano-escolar-activo`)
+    .then(async response => response.data)
+  }
+  async ConsultarFechaActual(){
+      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/fecha-actual`)
+      .then(async response => response.data)
+  }
+
+  async ConsultarRegistro(id){
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/consultar/${id}`)
+    .then(async response => response.data)
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
@@ -210,7 +249,7 @@ class ComponentAnoEscolarForm extends React.Component{
           else if(respuesta_servidor.estado_peticion==="404"){
               mensaje.texto=respuesta_servidor.mensaje
               mensaje.estado=respuesta_servidor.estado_peticion
-              this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
+              this.props.history.push(`/dashboard/configuracion/ano-escolar{JSON.stringify(mensaje)}`)
           }
       })
       .catch(error=>{
@@ -280,16 +319,16 @@ class ComponentAnoEscolarForm extends React.Component{
   }
 
   validarCampoNumero(nombre_campo){
-      var estado=false
-      const campo=this.state[nombre_campo],
-      exprecion=/\d$/,
-      exprecion_2=/\s/
-      var mensaje_campo=this.state["msj_"+nombre_campo]
+      var estado = false
+      const campo = this.state[nombre_campo],
+      exprecion = /\d$/,
+      exprecion_2 = /\s/
+      var mensaje_campo = this.state["msj_"+nombre_campo]
       if(campo!==""){
           if(!exprecion_2.test(campo)){
               if(exprecion.test(campo)){
                   estado=true
-                  console.log("campo nombre "+nombre_campo+" OK")
+
                   mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
                   this.setState({["msj_"+nombre_campo]:mensaje_campo})
               }
@@ -306,26 +345,79 @@ class ComponentAnoEscolarForm extends React.Component{
       return estado
   }
 
+  validainicioFinal(){
+    let estado = true;
+    const inicio_ano = parseInt(this.state.ano_desde);
+    const final_ano = parseInt(this.state.ano_hasta);
+    let msj_ano_desde = this.state.msj_ano_desde;
+    let msj_ano_hasta = this.state.msj_ano_hasta;
+    let fecha_minima = parseInt(Moment(this.state.fecha_actual).format("YYYY"));
+    let fecha_maxima = parseInt(Moment(this.state.fecha_actual).add(1,'y').format("YYYY"));
+
+    if(inicio_ano < fecha_minima){
+      msj_ano_desde[0] = {mensaje:"El año de inicio no puede ser menor al año en curso", color_texto:"rojo"};
+      this.setState(msj_ano_desde);
+      estado = false;
+    }
+
+    if(inicio_ano > final_ano){
+      msj_ano_desde[0] = {mensaje:"El año de inicio no puede ser mayor al año escolar de cierre", color_texto:"rojo"};
+      this.setState(msj_ano_desde);
+      estado = false;
+    }
+
+    if(final_ano < inicio_ano){
+      msj_ano_hasta[0] = {mensaje:"El año de cierre no puede ser menor al año escolar de inicio", color_texto:"rojo"};
+      this.setState(msj_ano_hasta);
+      estado = false;
+    }
+
+    if(final_ano > fecha_maxima){
+      msj_ano_hasta[0] = {mensaje:"El año de cierre no puede ser mayor a un año, del año en curso", color_texto:"rojo"};
+      this.setState(msj_ano_hasta);
+      estado = false;
+    }
+
+    return estado;
+  }
+
   validarFecha(){
-    const fecha_inicio = Moment(new Date(this.state.fecha_inicio_ano_escolar));
-    const fecha_cierre = Moment(new Date(this.state.fecha_cierre_ano_escolar));
-    var estado=false
+    const fecha_inicio = Moment(this.state.fecha_inicio_ano_escolar);
+    const fecha_cierre = Moment(this.state.fecha_cierre_ano_escolar);
+    let fecha_minima = Moment(this.state.fecha_actual);
+    let fecha_maxima = Moment(Moment(this.state.fecha_actual).add(1,'y').format("YYYY-MM-DD"));
+    let estado = true
+    let operacion = this.props.match.params.operacion;
 
-    var fecha_minima=Moment();
-    var fecha_maxima=Moment();
-    fecha_maxima.add(1,'y');
-
-    if(fecha_inicio.isAfter(fecha_minima)){
-      console.log("Hay problemas con esta fecha minima");
+    if(operacion === "actualizar"){
+      fecha_maxima.add(4,'M');
+      this.setState({ano_hasta: Moment(fecha_cierre).format("YYYY")});
     }
 
-    if(fecha_cierre.isAfter(fecha_minima)){
-      console.log("La fecha de cierre es invalida");
+    if(operacion === "registrar"){
+      if(fecha_inicio.isBefore(fecha_minima)){
+        let msj_fecha_inicio_ano_escolar = this.state.msj_fecha_inicio_ano_escolar
+        msj_fecha_inicio_ano_escolar[0] = {mensaje: "La fecha de inicio es menor a la fecha minima", color_texto:"rojo"}
+        this.setState(msj_fecha_inicio_ano_escolar)
+        estado = false;
+      }
     }
 
-    if(!fecha_cierre.isAfter(fecha_cierre)){
-      console.log("La fecha maxima fue superada");
+    if(fecha_cierre.isAfter(fecha_maxima)){
+      console.log(fecha_cierre, fecha_maxima)
+      let msj_fecha_cierre_ano_escolar = this.state.msj_fecha_cierre_ano_escolar
+      msj_fecha_cierre_ano_escolar[0] = {mensaje: "La fecha de cierre es mayor a la fecha maxima", color_texto:"rojo"}
+      this.setState(msj_fecha_cierre_ano_escolar)
+      estado = false;
     }
+
+    if(fecha_inicio.isSame(fecha_cierre)){
+      let msj_fecha_inicio_ano_escolar = this.state.msj_fecha_inicio_ano_escolar
+      msj_fecha_inicio_ano_escolar[0] = {mensaje: "Las fechas de inicio y cierre no pueden ser exactamente la misma fecha", color_texto:"rojo"}
+      this.setState(msj_fecha_inicio_ano_escolar)
+      estado = false;
+    }
+
     return estado
   }
 
@@ -345,13 +437,25 @@ class ComponentAnoEscolarForm extends React.Component{
 
   validarFormularioRegistrar(){
     const validaInicio = this.validarCampoNumero('ano_desde'), validaHasta = this.validarCampoNumero('ano_hasta'),
-    ValidaFechas = this.validarFecha()
-    console.log("Validando Formulario")
-    return {estado: false}
+    ValidaFechas = this.validarFecha(), validarInicioFinal = this.validainicioFinal();
+
+    if(validaInicio && validaHasta && ValidaFechas && validarInicioFinal){
+      if(!this.state.confirmar_operacion) $("#modalConfirmar").modal("show")
+      return {estado: true};
+    }else{
+      return {estado: false};
+    }
   }
 
+  confirmar(){
+    $("#modalConfirmar").modal("hide")
+    this.setState({confirmar_operacion: true});
+    this.operacion();
+  };
+
   validarFormularioActuazliar(){
-    console.log("Validando Formulario")
+    const ValidaFechas = this.validarFecha()
+    if(ValidaFechas) return {estado: true}; else return {estado: false};
   }
 
   operacion(){
@@ -371,8 +475,8 @@ class ComponentAnoEscolarForm extends React.Component{
       }
       if(operacion==="registrar"){
 
-          const estado_validar_formulario=this.validarFormularioRegistrar()
-          if(estado_validar_formulario.estado){
+          let estado_validar_formulario = this.validarFormularioRegistrar()
+          if(this.state.confirmar_operacion){
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
                   const mensaje =this.state.mensaje
                   var respuesta_servidor=""
@@ -423,22 +527,15 @@ class ComponentAnoEscolarForm extends React.Component{
   enviarDatos(estado_validar_formulario,petion){
       const token=localStorage.getItem('usuario')
       const objeto={
-          // estudiante:{
-          //   id_estudiante: null,
-          //   cedula_escolar: this.state.id_cedula_escolar,
-          //   cedula_estudiante: this.state.id_cedula,
-          //   nombres_estudiante: this.state.nombres,
-          //   apellidos_estudiante: this.state.apellidos,
-          //   fecha_nacimiento_estudiante: this.state.fecha_nacimiento,
-          //   direccion_nacimiento_estudiante: this.state.direccion_nacimiento,
-          //   id_ciudad: this.state.id_ciudad,
-          //   sexo_estudiante: this.state.sexo_estudiante,
-          //   procedencia_estudiante: this.state.procedencia,
-          //   escolaridad_estudiante: this.state.escolaridad,
-          //   vive_con_estudiante: this.state.vive_con,
-          //   estatus_estudiante: this.state.estatu_estudiante,
-          // },
-          token:token
+        anoescolar:{
+          id_ano_escolar: this.state.id_ano_escolar,
+          ano_desde: this.state.ano_desde,
+          ano_hasta: this.state.ano_hasta,
+          fecha_inicio_ano_escolar: this.state.fecha_inicio_ano_escolar,
+          fecha_cierre_ano_escolar: this.state.fecha_cierre_ano_escolar,
+          estatus_ano_escolar: this.state.estatus_ano_escolar,
+        },
+        token:token
       }
       petion(objeto)
   }
@@ -449,8 +546,35 @@ class ComponentAnoEscolarForm extends React.Component{
 
     render(){
         var jsx_anoEscolar_form = (
+          <>
+          <div class="modal fade" id="modalConfirmar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Estas segur@?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div className="row d-flex justify-content-center text-justify mx-2">
+                    <h5>
+                      <span className="text-danger font-bold">!!</span>
+                      Todos los datos ingresado excepto la fecha de cierre, seran datos que no se podran modificar luego
+                      <b> debes de estar seguro de los datos ingresados</b>. de ser asi, por favor confirma la operacion,
+                        de no ser asi, por favor cancela la operacion y asegurate de que todo este bien
+                        <span className="text-danger font-bold">!!</span>
+                    </h5>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-success" onClick={ () => this.confirmar() } >Acepto</button>
+                  <button type="button" class="btn btn-warning" data-dismiss="modal">Cancelar</button>
+                </div>
+              </div>
+            </div>
+          </div>
             <div className="row justify-content-center">
-
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                     {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false) &&
                         <div className="row">
@@ -509,7 +633,7 @@ class ComponentAnoEscolarForm extends React.Component{
                         <div className="row justify-content-center mt-1">
                             <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
                               extra="custom-control-inline" nombreCampoRadio="Estatus del año escolar:" name="estatus_ano_escolar"
-                              nombreLabelRadioA="Activo" idRadioA="actvo" checkedRadioA={this.state.estatus_ano_escolar}
+                              nombreLabelRadioA="Activo" idRadioA="activo" checkedRadioA={this.state.estatus_ano_escolar}
                               valueRadioA="1" nombreLabelRadioB="Innactivo" idRadioB="innactivo"
                               valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.estatus_ano_escolar}
                             />
@@ -545,6 +669,7 @@ class ComponentAnoEscolarForm extends React.Component{
                     </form>
                 </div>
             </div>
+          </>
         );
 
         return(
