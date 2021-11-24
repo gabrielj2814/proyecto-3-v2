@@ -48,4 +48,4 @@ class ModeloGrado extends DriverPostgre{
 
 }
 
-module.exports= ModeloGrado
+module.exports= ModeloGrado;
