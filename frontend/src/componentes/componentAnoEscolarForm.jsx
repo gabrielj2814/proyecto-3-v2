@@ -127,6 +127,9 @@ class ComponentAnoEscolarForm extends React.Component{
           fecha_cierre_ano_escolar: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
           fecha_actual: fecha_actual_servidor.datos,
         });
+
+        document.getElementById("ano_desde").readonly = true;
+        document.getElementById("ano_hasta").readonly = true;
       }
       else if(operacion==="actualizar"){
         let responseServidor = await this.ConsultarRegistro(this.props.match.params.id)
@@ -147,7 +150,6 @@ class ComponentAnoEscolarForm extends React.Component{
         document.getElementById("activo").disabled = true;
         document.getElementById("innactivo").disabled = true;
       }
-      //   console.log("Adio");
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
@@ -287,6 +289,8 @@ class ComponentAnoEscolarForm extends React.Component{
   cambiarEstado(a){
       var input=a.target;
       this.setState({[input.name]:input.value})
+      if(input.name == "fecha_inicio_ano_escolar") this.setState({ano_desde: Momment(input.value).format("YYYY")})
+      else this.setState({ano_hasta: Momment(input.value).format("YYYY")})
   }
 
   fechaNacimiento(a){
