@@ -613,12 +613,12 @@ class ComponentAnoEscolarForm extends React.Component{
                         <div className="row justify-content-center">
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ano_desde[0]}
-                              nombreCampo="Inicio ano:" activo="si" type="text" value={this.state.ano_desde}
+                              nombreCampo="Inicio año:" activo="si" type="text" value={this.state.ano_desde}
                               name="ano_desde" id="ano_desde" placeholder="Desde" eventoPadre={this.validarNumero}
                             />
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ano_hasta[0]}
-                              nombreCampo="Final ano:" activo="si" type="text" value={this.state.ano_hasta}
+                              nombreCampo="Final año:" activo="si" type="text" value={this.state.ano_hasta}
                               name="ano_hasta" id="ano_hasta" placeholder="Hasta" eventoPadre={this.validarNumero}
                             />
                         </div>
