@@ -231,7 +231,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
+            
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
@@ -268,22 +268,24 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
     const jsx_tabla_encabezado = (
           <thead>
               <tr>
-                  <th>ID</th>
                   <th>Cedula del representante</th>
-                  <th>Id estudiante</th>
+                  <th>Nombre del representante</th>
+                  <th>Codigo del estudiante</th>
+                  <th>Nombre del estudiante</th>
                   <th>Tipo de representante</th>
               </tr>
           </thead>
       );
-      
+                  
       const jsx_tabla_body=(
         <tbody>
               {this.state.registros.map( asignacion => {
                 return(
                   <tr key={asignacion.id_asignacion_representante_estudiante}>
-                        <td>{asignacion.id_asignacion_representante_estudiante}</td>
                         <td>{asignacion.id_cedula_representante}</td>
-                        <td>{asignacion.id_estudiante}</td>
+                        <td>{asignacion.nombres_representante+" "+asignacion.apellidos_representante}</td>
+                        <td>{asignacion.cedula_estudiante != "No tiene" ? asignacion.cedula_estudiante : asignacion.cedula_escolar}</td>
+                        <td>{asignacion.nombres_estudiante+" "+asignacion.apellidos_estudiante}</td>
                         <td>{this.state.tipos_representantes.filter( e => e.id === asignacion.tipo_representante)[0].descripcion}</td>
                        {!asignacion.vacio &&
                          <td>

@@ -36,14 +36,16 @@ class ModeloAsigRepresentanteEstudiante extends DriverPostgre {
   }
 
   async consultarTodos(){
-    const SQL = 'SELECT * FROM tasignacion_representante_estudiante'
+    const SQL = `SELECT * FROM tasignacion_representante_estudiante 
+    JOIN testudiante ON testudiante.id_estudiante = tasignacion_representante_estudiante.id_estudiante
+    JOIN trepresentante ON trepresentante.id_cedula_representante = tasignacion_representante_estudiante.id_cedula_representante`;
 
     return await this.query(SQL)
   }
 
   async consultar() {
     const SQL = `SELECT * FROM tasignacion_representante_estudiante 
-                  JOIN testudiante ON testudiante.id_estudiante = tasignacion_representante_estudiante.id_estudiante
+                  JOIN testudiante ON testudiante.id_estudiante = tasignacion_representante_estudiante.id_estudiante 
                   JOIN trepresentante ON trepresentante.id_cedula_representante = tasignacion_representante_estudiante.id_cedula_representante  WHERE
                   tasignacion_representante_estudiante.id_asignacion_representante_estudiante=${this.id_asignacion_representante_estudiante}
                 `
