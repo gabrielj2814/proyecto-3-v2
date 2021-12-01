@@ -75,6 +75,7 @@ class MenuDashboard extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
+            // console.log(json.modulos)
             console.log(modulosSistema)
             this.setState({modulosSistema})
 
@@ -197,8 +198,9 @@ class MenuDashboard extends React.Component{
                             {this.state.modulosSistema["/dashboard/configuracion"]["/vacuna"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/vacuna" texto="Vacuna"/>
                             }
-
-
+                            {this.state.modulosSistema["/dashboard/configuracion"]["/enfermedad"]&&
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/enfermedad" texto="Enfermedades"/>
+                            }
 
 
                             {this.state.modulosSistema["/dashboard/configuracion"]["/acceso"]&&

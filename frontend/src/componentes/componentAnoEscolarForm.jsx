@@ -289,8 +289,8 @@ class ComponentAnoEscolarForm extends React.Component{
   cambiarEstado(a){
       var input=a.target;
       this.setState({[input.name]:input.value})
-      if(input.name == "fecha_inicio_ano_escolar") this.setState({ano_desde: Momment(input.value).format("YYYY")})
-      else this.setState({ano_hasta: Momment(input.value).format("YYYY")})
+      if(input.name == "fecha_inicio_ano_escolar") this.setState({ano_desde: Moment(input.value).format("YYYY")})
+      else this.setState({ano_hasta: Moment(input.value).format("YYYY")})
   }
 
   fechaNacimiento(a){

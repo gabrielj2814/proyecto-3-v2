@@ -57,6 +57,11 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
         parentesco: "",
         numero_representante: 0,
         estatus_asignacion_representante_estudiante:"1",
+        // Datos extras para el formulario
+        nombre_representante: "",
+        nombre_estudiante: "",
+        apellido_estudiante: "",
+        apellido_representante: "",
         //MSJ
         msj_id:[{mensaje:"",color_texto:""}],
         msj_id_estudiante:[{mensaje:"",color_texto:""}],
@@ -514,12 +519,13 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
-
+    
     if(hashEstudiante[a.target.value]){
       this.setState({
-        estadoBusquedaEstudiante: true
+        estadoBusquedaEstudiante: true,
+        nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
+        apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
       });
-      alert("Estudiante encontrado!");
       return;
     }
     this.setState({
@@ -533,9 +539,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
     if(hashRepresentante[a.target.value]){
       this.setState({
-        estadoBusquedaRepresentante: true
+        estadoBusquedaRepresentante: true,
+        nombre_representante: hashRepresentante[a.target.value].nombres_representante,
+        apellido_representante: hashRepresentante[a.target.value].apellidos_representante
       });
-      alert("Representante encontrado!");
       return;
     }
     this.setState({
@@ -549,7 +556,8 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       let json = JSON.parse(JSON.stringify(res.data));
       let hash = {};
       for(let estudiante of json.datos){
-        hash[estudiante.id_estudiante] = estudiante;
+        if(estudiante.cedula_estudiante != "No tiene") hash[estudiante.cedula_estudiante] = estudiante;
+        else hash[estudiante.cedula_escolar] = estudiante;
       }
 
       this.setState({hashEstudiante:hash})
@@ -604,37 +612,60 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                     </div>
                 </div>
                 <form id="form_trabajador">
-                  <div className="row justify-content-center">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_estudiante[0]}
-                        nombreCampo="Id estudiante:" activo="si" type="text" value={this.state.id_estudiante}
-                        name="id_estudiante" id="id_estudiante" placeholder="Cédula del estudiante" eventoPadre={this.BuscarEstudiante}
-                      />
-                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                  <div className="row justify-content-center align-items-center">
+                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_representante[0]}
                         nombreCampo="Cédula del representante:" activo="si" type="text" value={this.state.id_cedula_representante}
                         name="id_cedula_representante" id="id_cedula_representante" placeholder="Cédula del representante" eventoPadre={this.buscarRepresentante}
                       />
-                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                          <label>Nombre del representante: {this.state.nombre_representante}</label>
+                          <label>Apellido del representante: {this.state.apellido_representante}</label>
+                      </div>
+                  </div>
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Representante</span>
+                      </div>
+                  </div>
+                  <div className="row justify-content-center align-items-center">
+                    <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_estudiante[0]}
+                        nombreCampo="Cedula del estudiante:" activo="si" type="text" value={this.state.id_estudiante}
+                        name="id_estudiante" id="id_estudiante" placeholder="Cédula del estudiante" eventoPadre={this.BuscarEstudiante}
+                      />
+                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                        <label>Nombre del estudiante: {this.state.nombre_estudiante}</label>
+                        <label>Apellido del estudiante: {this.state.apellido_estudiante}</label>
+                      </div>
+                  </div>
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                      </div>
+                  </div>
+                  <div className="row justify-content-center">
+                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_representante[0]}
                         nombreCampo="Numero del representante:" activo="si" type="number" value={this.state.numero_representante}
                         name="numero_representante" id="numero_representante" placeholder="numero del representante" eventoPadre={this.validarNumero}
                       />
+                      <div className="col-1 col-ms-1 col-md-1 col-lg-1 col-xl-1"></div>
+                      <ComponentFormSelect
+                        clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
+                        obligatorio="si"
+                        mensaje={this.state.msj_tipo_representante[0]}
+                        nombreCampoSelect="Tipo de representante:"
+                        clasesSelect="custom-select"
+                        name="tipo_representante"
+                        id="tipo_representante"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.tipo_representante}
+                        option={this.state.tipos_representantes}
+                      />
                   </div>
                   <div className="row justify-content-center">
-                    <ComponentFormSelect
-                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                      obligatorio="si"
-                      mensaje={this.state.msj_tipo_representante[0]}
-                      nombreCampoSelect="Tipo de representante:"
-                      clasesSelect="custom-select"
-                      name="tipo_representante"
-                      id="tipo_representante"
-                      eventoPadre={this.cambiarEstado}
-                      defaultValue={this.state.tipo_representante}
-                      option={this.state.tipos_representantes}
-                    />
-                    <ComponentFormTextArea clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                    <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                       obligatorio="si" mensaje={this.state.msj_parentesco[0]} nombreCampoTextArea="Parentesco:"
                       clasesTextArear="form-control" name="parentesco" id="parentesco" value={this.state.parentesco}
                       eventoPadre={this.cambiarEstado}
@@ -642,7 +673,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   </div>
                   <div className="row justify-content-center mt-1">
                     <ComponentFormRadioState
-                      clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus de la asignacion:"
                       name="estatus_asignacion_representante_estudiante"
@@ -656,6 +687,11 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                       eventoPadre={this.cambiarEstado}
                       checkedRadioB={this.state.estatus_asignacion_representante_estudiante}
                     />
+                  </div>
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Datos extras</span>
+                      </div>
                   </div>
                     <div className="row justify-content-center">
                         <div className="col-auto">
