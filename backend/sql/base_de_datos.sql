@@ -339,6 +339,7 @@ CREATE TABLE tano_escolar(
     fecha_inicio_ano_escolar DATE NOT NULL,
     fecha_cierre_ano_escolar DATE NOT NULL,
     estatus_ano_escolar character(1) NOT NULL,
+    seguimiento_ano_escolar character(1) NOT NULL, -- 0 cerrado , 1 actual , 2 siguiente
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
