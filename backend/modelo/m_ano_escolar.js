@@ -41,6 +41,12 @@ class ModuloAnoEscolar extends DriverPostgre {
 
     return await this.query(SQL);
   }
+
+  async consultarSeguimiento() {
+    const SQL = `SELECT * FROM tano_escolar WHERE seguimiento_ano_escolar='2';`
+
+    return await this.query(SQL);
+  }
   
   async consultarAnoEscolarActivo() {
     const SQL = `SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';`
