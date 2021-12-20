@@ -89,6 +89,28 @@ controladorAnoEscolar.consultar= async (req, res) => {
   res.end()
 }
 
+controladorAnoEscolar.consultarAnoSeguimiento = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
+  let modeloAnoEscolar = new ModeloAnoEscolar()
+  let resultAnoEscolar = await modeloAnoEscolar.consultarSeguimiento()
+
+  if (resultAnoEscolar.rowCount > 0) {
+    respuesta_api.mensaje = "Ya existe un año escolar en planificación "
+    respuesta_api.datos = resultAnoEscolar.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorAnoEscolar.consultarAnoEscolarActivo= async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
