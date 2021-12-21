@@ -142,14 +142,14 @@ class ComponentEstudianteForm extends React.Component{
               propiedad_descripcion="nombre_estado",
               propiedad_estado="estatu_estado"
               const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-              console.log("lista de estados ->>>",estados)
+              
               const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
               nombre_propiedad_lista_2="ciudades",
               propiedad_id_2="id_ciudad",
               propiedad_descripcion_2="nombre_ciudad",
               propiedad_estado_2="estatu_ciudad"
               const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-              console.log("lista de de ciudades por estado ->>>",ciudades)
+              
               this.setState({
                   estados,
                   ciudades,
@@ -382,7 +382,6 @@ class ComponentEstudianteForm extends React.Component{
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-        console.log("lista de de ciudades por estado ->>>",ciudades)
         this.setState({
             id_estado:input.value,
             ciudades,
@@ -407,12 +406,7 @@ class ComponentEstudianteForm extends React.Component{
         const input=a.target,
         exprecion=/[A-Za-z\s]$/
         if(input.value!==""){
-            if(exprecion.test(input.value)){
-                this.cambiarEstadoDos(input)
-            }
-            else{
-                console.log("NO se acepta valores numericos")
-            }
+            if(exprecion.test(input.value)) this.cambiarEstadoDos(input)
         }
         else{
             this.cambiarEstadoDos(input)
