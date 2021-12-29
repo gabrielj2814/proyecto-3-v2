@@ -436,7 +436,7 @@ PermisoTrabajadorControlador.verificarVencimiento=async (req,res) => {
     const PERMISOTRABAJADOR=new PermisoTrabajadorModelo()
     let datosConsultaPermisos=await PERMISOTRABAJADOR.consultarTodosPermisoAprovados()
     let permisos=datosConsultaPermisos.rows
-    console.log("permisos =>>> ",permisos)
+    // console.log("permisos =>>> ",permisos)
     for(let permiso of permisos){
         
         let fechaPermiso=Moment(permiso.fecha_hasta_permiso_trabajador)

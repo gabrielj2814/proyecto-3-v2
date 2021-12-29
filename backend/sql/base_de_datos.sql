@@ -343,6 +343,8 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
+-- ALTER TABLE tano_escolar ADD COLUMN seguimiento_ano_escolar character(1) NULL;
+)
 CREATE TABLE tprofesor(
     id_profesor SERIAL ,
     id_cedula character varying(8) NOT NULL,

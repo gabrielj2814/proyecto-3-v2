@@ -68,8 +68,27 @@ class ModuloAnoEscolar extends DriverPostgre {
   async actualizar(){
     const SQL = `UPDATE tano_escolar SET ano_desde ='${this.ano_desde}', ano_hasta=  '${this.ano_hasta}', fecha_inicio_ano_escolar='${this.fecha_inicio_ano_escolar}',
                   fecha_cierre_ano_escolar='${this.fecha_cierre_ano_escolar}', estatus_ano_escolar= '${this.estatus_ano_escolar}',
-                  seguimiento_ano_escolar= '${this.seguimiento_ano_escolar}'
+                  seguimiento_ano_escolar= '${this.seguimiento_ano_escolar}' WHERE id_ano_escolar=${this.id_ano_escolar};
                `
+    return await this.query(SQL)
+  }
+
+  async cierreDeAnoEscolar(){
+    const SQL = `UPDATE tano_escolar SET 
+      estatus_ano_escolar= '0',
+      seguimiento_ano_escolar= '0'
+      WHERE 
+      id_ano_escolar=${this.id_ano_escolar};
+    `
+    return await this.query(SQL)
+  }
+  async aperturaDeAnoEscolar(){
+    const SQL = `UPDATE tano_escolar SET 
+      estatus_ano_escolar= '1',
+      seguimiento_ano_escolar= '1'
+      WHERE 
+      id_ano_escolar=${this.id_ano_escolar};
+    `
     return await this.query(SQL)
   }
 }
