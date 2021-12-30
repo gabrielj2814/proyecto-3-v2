@@ -54,6 +54,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             hashListaProfesores:{},
             hashListaAnoEscolares:{},
             hashAnoEscolaresActivo:{},
+            hashAnoEscolaresSiguiente:{},
             // 
             disponibilidadProfesor:null,
             disponibilidadAula:null,
@@ -125,6 +126,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 await this.consultarAulasPorGrado()
                 let selectAula={
                     target:{
+                        id:"id_aula",
+                        name:"id_aula",
                         value:document.getElementById("id_aula").value
                     }
                 }
@@ -273,6 +276,31 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             console.error(error)
         })
     }
+    
+    async consultarAnoEscolarSiguiente(){
+        await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
+        .then(respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(json)
+            let hashAnoEscolaresSiguiente=json.datos
+            if(json.estado_respuesta===true){
+                this.setState({hashAnoEscolaresSiguiente})
+                
+
+            }
+            else{
+                this.setState({disponibilidadProfesor:false})
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
+    async verficarDisponibilidadProfesorSiguienteAnoEscolar(){
+
+    }
 
     async consultarProfesores(){
         await axiosCustom.get(`configuracion/profesor/consultar-todos`)
@@ -395,16 +423,16 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
     async verficarDisponibilidadProfesor(idProfesor){
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.id_ano_escolar}/${idProfesor}`)
-        .then(respuesta =>{
+        .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // disponibilidadProfesor
             // console.log(json)
             if(json.datos.disponibilidadProfesor===true){
                 this.setState({disponibilidadProfesor:true})
             }
             else{
-                
-                this.setState({disponibilidadProfesor:false})
+                // this.setState({disponibilidadProfesor:false})
+                // AQUI
+                await this.consultarAnoEscolarSiguiente()
             }
 
         })
@@ -461,7 +489,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
+            console.log(json)
             if(json.datos.disponibilidadAula===true){
                 this.setState({disponibilidadAula:true})
             }

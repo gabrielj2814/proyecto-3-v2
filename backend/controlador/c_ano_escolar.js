@@ -229,4 +229,28 @@ controladorAnoEscolar.verificarAnoEscolar= async (req,res) => {
 
 }
 
+controladorAnoEscolar.consultarAnoEscolarSiguiente= async (req,res) => {
+  const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
+  const respuesta_api = { mensaje: "",datos:[],estado_respuesta: false, color_alerta: "" }
+  let AnoEscolar=new ModeloAnoEscolar()
+  let resultAnoEscolar=await AnoEscolar.consultarSeguimiento()
+  // console.log("=>>>>>>>>>>>>>>>>>>>>",resultAnoEscolar.rows)
+  if(resultAnoEscolar.rowCount===1){
+    respuesta_api.datos=resultAnoEscolar.rows[0]
+    respuesta_api.mensaje="si hay un año escolar planificado"
+    respuesta_api.estado_respuesta=true
+    respuesta_api.color_alerta="success"
+  }
+  else{
+    respuesta_api.mensaje="no hay un año escolar planificado"
+    respuesta_api.estado_respuesta=false
+    respuesta_api.color_alerta="success"
+  }
+
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+
+}
+
 module.exports = controladorAnoEscolar
