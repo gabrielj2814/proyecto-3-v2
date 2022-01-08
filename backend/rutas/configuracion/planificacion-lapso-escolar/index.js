@@ -9,6 +9,7 @@ bodyParse=require("body-parser")
 router.use(bodyParse.json())
 
 router.post("/crear-planificacion",ControladorPlanificacionLapsoEscolar.crearPlanificacion)
+router.post("/crear-lapso",ControladorPlanificacionLapsoEscolar.crearLapsoAcademico)
 
 
 
