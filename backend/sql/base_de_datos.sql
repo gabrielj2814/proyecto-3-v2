@@ -481,7 +481,7 @@ CREATE TABLE tlapso_academico(
     id_lapso_academico SERIAL,
     id_planificacion_lapso_escolar INTEGER NOT NULL,
     nombre_lapso_academico character varying(150) NOT NULL,
-    estatu_lapso_academico character(1) NOT NULL,
+    estatu_lapso_academico character(1) NOT NULL, --1 -> se pueden seguir haciendo cambios pero no se puede utilizar para evaluar hacer evaluaciones ,2 -> listo (no se pueden hacer mas cambios y esta listo para usarse)
     fecha_de_creacion_lapso_academico DATE NOT NULL,
     constraint PK_id_lapso_academico primary key(id_lapso_academico),
     constraint FK_id_planificacion_lapso_escolar foreign key(id_planificacion_lapso_escolar) references tplanificacion_lapso_escolar(id_planificacion_lapso_escolar) on update cascade on delete cascade
