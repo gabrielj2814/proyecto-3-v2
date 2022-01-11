@@ -41,9 +41,14 @@ class ModeloPlanificacionLapsoEscolar extends PostgreDriver{
     async consultarIdPlanificaionAsignacionAula(){
         const SQL=`
         SELECT * FROM
-        tplanificacion_lapso_escolar
+        tplanificacion_lapso_escolar,
+        tasignacion_aula_profesor,
+        tano_escolar
         WHERE
-        id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor}
+        tplanificacion_lapso_escolar.id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor} AND
+        tasignacion_aula_profesor.id_asignacion_aula_profesor=tplanificacion_lapso_escolar.id_asignacion_aula_profesor AND
+        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar
+        
         `;
         return await this.query(SQL);
     }

@@ -52,13 +52,13 @@ controladorPlanificacionLapsoEscolar.consultarPlanificacion=async (req,res) => {
             planificacionLapsoEscolar.setIdAsignacionAulaProfesor(asignacionesAulaProfesor.id_asignacion_aula_profesor)
             let resultIdPlanificaionAsignacionAula=await planificacionLapsoEscolar.consultarIdPlanificaionAsignacionAula()
             if(resultIdPlanificaionAsignacionAula.rowCount>0){
-                respuesta_api.mensaje="planificaciones consultadas con exito)"
+                respuesta_api.mensaje="planificaciones consultadas con exito"
                 respuesta_api.datos.push(resultIdPlanificaionAsignacionAula.rows[0])
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="danger"
             }
             else{
-                respuesta_api.mensaje="no hay planificaciones creadas)"
+                respuesta_api.mensaje="no hay planificaciones creadas"
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="danger"
             }
@@ -66,7 +66,7 @@ controladorPlanificacionLapsoEscolar.consultarPlanificacion=async (req,res) => {
         }
     }
     else{ 
-        respuesta_api.mensaje="error al consultar hoy tiene aualas asignadas)"
+        respuesta_api.mensaje="error al consultar hoy tiene aualas asignadas"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
     }

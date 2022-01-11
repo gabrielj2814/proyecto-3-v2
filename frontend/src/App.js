@@ -124,6 +124,9 @@ import componentEnfermedades from './componentes/componentEnfermedades';
 import componentEnfermedadesForm from './componentes/componentEnfermedadesForm';
 // Reporte medico
 import ComponentReporteMedico from './componentes/componentReporteMedico'
+// PlanificacionLapsoAcademico
+import ComponentPlanificacionLapsoEscolar from './componentes/componentPlanificacionLapsoEscolar'
+
 
 function App() {
   return (
@@ -221,6 +224,8 @@ function App() {
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
+
+        <Route exact path="/dashboard/transaccion/planificacion" component={ComponentPlanificacionLapsoEscolar}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>
