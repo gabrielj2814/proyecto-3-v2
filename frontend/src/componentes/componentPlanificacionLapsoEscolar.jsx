@@ -27,6 +27,7 @@ class ComponentPlanificacionLapsoEscolar extends React.Component{
     constructor(){
         super();
         this.mostrarModulo=this.mostrarModulo.bind(this);
+        this.irHaVistaDeLapsoDePlanificacion=this.irHaVistaDeLapsoDePlanificacion.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
@@ -167,6 +168,13 @@ class ComponentPlanificacionLapsoEscolar extends React.Component{
         })
     }
 
+    irHaVistaDeLapsoDePlanificacion(a){
+        let boton=a.target
+        let idPlanificaion=boton.getAttribute("data-id-planificacion")
+        // alert(idPlanificaion)
+        this.props.history.push(`/dashboard/transaccion/planificacion/${idPlanificaion}/lapso`)
+    }
+
     render(){
         const jsx=(
             <div>
@@ -182,8 +190,8 @@ class ComponentPlanificacionLapsoEscolar extends React.Component{
 
                         {this.state.planificaciones.map((planificaion,index) => {
                             return(
-                                <div key={index} className='boton-planificacion' id={planificaion.id_planificacion_lapso_escolar}>
-                                    <div className='texto-boton-planificacion'>Plan: {planificaion.ano_desde}-{planificaion.ano_hasta}</div>
+                                <div key={index} className='boton-planificacion' data-id-planificacion={planificaion.id_planificacion_lapso_escolar} onClick={this.irHaVistaDeLapsoDePlanificacion}>
+                                    <div className='texto-boton-planificacion' data-id-planificacion={planificaion.id_planificacion_lapso_escolar} >Plan: {planificaion.ano_desde}-{planificaion.ano_hasta}</div>
                                 </div>
                             )
                         })
