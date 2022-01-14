@@ -1,0 +1,28 @@
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.contenedor_lapso{
+    /* background-color: var(--color-fondo-formulario); */
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+
+.component_lapso{
+    height: 100%;
+}
+
+.contenedorlapso{
+    border-bottom: 1px solid #111;
+    margin-bottom: 15px;
+}
+
+.titulo-modulo-lapso{
+    text-align: center;
+    color:#FFF;
+    margin-bottom: 60px;
+}
