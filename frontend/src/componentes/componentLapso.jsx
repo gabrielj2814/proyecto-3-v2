@@ -27,11 +27,17 @@ class ComponentLapso extends React.Component{
         super();
         this.mostrarModulo=this.mostrarModulo.bind(this);
         this.regresarHaLapsosPlanificacion=this.regresarHaLapsosPlanificacion.bind(this);
+        this.cambiarEstado=this.cambiarEstado.bind(this);
+        this.guardarObjetivo=this.guardarObjetivo.bind(this);
+        this.eliminarObjetivo=this.eliminarObjetivo.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
             // ------
             id_lapso:null,
+            id_lapso_academico:"",
+            descripcion_objetivo_academico:"",
+            estatu_objetivo_lapso_academico:"",
             listaObjetivos:[],
 
             //
@@ -102,6 +108,88 @@ class ComponentLapso extends React.Component{
         this.props.history.push(`/dashboard/transaccion/planificacion/${id_planificacion}/lapso`)
     }
 
+    
+    cambiarEstado(a){
+        var input=a.target;
+        this.setState({[input.name]:input.value})
+    }
+
+    async guardarObjetivo(){
+        let exprecion=/[A-Za-z]/g
+        let exprecion2=/[0-9]/g
+        let descripcionObjetivo=document.getElementById("descripcion_objetivo_academico")
+        if(descripcionObjetivo.value!==""){
+            if(exprecion.test(descripcionObjetivo.value) || exprecion2.test(descripcionObjetivo.value)){
+                let datos={
+                    objetivo:{
+                        id_objetivo_lapso_academico:"",
+                        id_lapso_academico:this.props.match.params.id_lapso,
+                        descripcion_objetivo_academico:descripcionObjetivo.value,
+                        estatu_objetivo_lapso_academico:1
+                    }
+                }
+                await axiosCustom.post(
+                    `transaccion/planificacion-lapso-escolar/crear-objetivo`,
+                    datos
+                )
+                .then(async respuesta=>{
+                    let json=JSON.parse(JSON.stringify(respuesta.data))
+                    // console.log(json)
+                    await this.consultarObjetivos()
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    if(json.color_alerta=="success"){
+                        alerta.color="success"
+                        alerta.mensaje=json.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+                    else{
+                        alerta.color="danger"
+                        alerta.mensaje=json.mensaje
+                        alerta.estado=true
+                        this.setState({alerta})
+                    }
+
+                })
+                .catch(error => {
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    alerta.color="danger"
+                    alerta.mensaje="error al conectarse con el servidor"
+                    alerta.estado=true
+                    this.setState({alerta})
+                })
+            }
+            else{
+                alert("no tiene caracteres validos")
+            }
+        }
+        else{
+            alert("no puede estar vacion")
+        }
+
+    }
+
+    async eliminarObjetivo(a){
+        let boton=a.target
+        let idObjetivo=boton.getAttribute("data-id-objetivo")
+        await axiosCustom.delete(
+            `transaccion/planificacion-lapso-escolar/eliminar-objetivo/${idObjetivo}`
+        )
+        .then(async respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log(json)
+            await this.consultarObjetivos()
+        })
+        .catch(error => {
+            let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+            alerta.color="danger"
+            alerta.mensaje="error al conectarse con el servidor"
+            alerta.estado=true
+            this.setState({alerta})
+        })
+    }
+    
+
     render(){
         const jsx=(
             <div>
@@ -123,10 +211,10 @@ class ComponentLapso extends React.Component{
                         <div class="form-group row justify-content-center">
                             <label className="col-auto col-form-label">Descripción del objetivo:</label>
                             <div className="col-3">
-                                <input type="text" className="form-control" placeholder='Descripción del objetivo' id="descripcion_objetivo_academico" name="descripcion_objetivo_academico"/>
+                                <input type="text" className="form-control" onChange={this.cambiarEstado} placeholder='Descripción del objetivo' id="descripcion_objetivo_academico" name="descripcion_objetivo_academico"/>
                             </div>
                             <div className='col-auto'>
-                                <button className='btn btn-primary' >Guardar</button>
+                                <input type="button" className='btn btn-primary' value="guardar" onClick={this.guardarObjetivo}/>
                             </div>
                         </div>
                         <input type="hidden" id="estatu_objetivo_lapso_academico" name="estatu_objetivo_lapso_academico" value="1"/>
@@ -136,13 +224,13 @@ class ComponentLapso extends React.Component{
                         <div class="form-group row justify-content-center">
                             <label className="col-auto col-form-label">Estado de la planificaión:</label>
                             <div className='col-3'>
-                                <select className='form-control'>
+                                <select className='form-control' onChange={this.cambiarEstado}>
                                     <option value="1">En desarrollo</option>
                                     <option value="2">Listo para usarse</option>
                                 </select>
                             </div>
                             <div className='col-auto'>
-                                <button className='btn btn-primary' >Guardar</button>
+                                <input type="button" className='btn btn-primary' value="guardar"/>
                             </div>
                         </div>
                         <input type="hidden" id="estatu_objetivo_lapso_academico" name="estatu_objetivo_lapso_academico" value="1"/>
@@ -165,7 +253,7 @@ class ComponentLapso extends React.Component{
                                             <th scope="row">{index+1}</th>
                                             <td>{objetivo.descripcion_objetivo_academico}</td>
                                             <td>
-                                                <button className='btn btn-danger'data-id-objetivo={objetivo.id_objetivo_lapso_academico} >Eliminar</button>
+                                                <button className='btn btn-danger' data-id-objetivo={objetivo.id_objetivo_lapso_academico} onClick={this.eliminarObjetivo}>Eliminar</button>
                                             </td>
                                         </tr>
                                     )
