@@ -118,7 +118,7 @@ class ComponentLapso extends React.Component{
                     </svg>
                 </button>
                 <h2 className='titulo-modulo-lapso'>lapso {this.props.match.params.id_lapso}</h2>
-                <div className='contenedor-lapso pt-5 pb-5'>
+                <div className='contenido-lapso pt-5 pb-5'>
                     <form id="formularioLapso" className='mb-5'>
                         <div class="form-group row justify-content-center">
                             <label className="col-auto col-form-label">Descripción del objetivo:</label>
