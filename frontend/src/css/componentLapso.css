@@ -26,3 +26,16 @@
     color:#FFF;
     margin-bottom: 60px;
 }
+
+.titulo-modulo-lapso-negro{
+    text-align: center;
+    color:#111;
+}
+
+.contenedor-lapso{
+    width: 100%;
+    min-height: 300px;
+    height: auto;
+    background-color: #FFF;
+    border-radius: 10px;
+}

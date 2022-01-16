@@ -64,8 +64,8 @@ class ModeloObjetivoLapsoAcademico extends PostgreDriver{
         return await this.query(SQL);
     }
 
-    async consultarTodos(){
-        const SQL=`SELECT * FROM tobjetivo_lapso_academico`;
+    async consultarTodosLosObjetivosPorLapso(){
+        const SQL=`SELECT * FROM tobjetivo_lapso_academico WHERE id_lapso_academico=${this.id_lapso_academico}`;
         return await this.query(SQL);
     }
 

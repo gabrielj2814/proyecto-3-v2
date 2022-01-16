@@ -14,7 +14,7 @@ router.post("/crear-lapso",ControladorPlanificacionLapsoEscolar.crearLapsoAcadem
 router.get("/consultar-lapso/:id_planificaion",ControladorPlanificacionLapsoEscolar.consultarLapsoPorPlanificacion)
 router.post("/crear-objetivo",ControladorPlanificacionLapsoEscolar.crearObjetivo)
 router.put("/actualizar-objetivo",ControladorPlanificacionLapsoEscolar.actualizar)
-router.get("/consultar-todos-objetivo",ControladorPlanificacionLapsoEscolar.consultarTodos)
+router.get("/consultar-todos-objetivo/:id_lapso",ControladorPlanificacionLapsoEscolar.consultarTodos)
 router.delete("/eliminar-objetivo/:id",ControladorPlanificacionLapsoEscolar.eliminar)
 
 

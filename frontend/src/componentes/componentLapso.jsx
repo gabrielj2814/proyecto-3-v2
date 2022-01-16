@@ -31,7 +31,9 @@ class ComponentLapso extends React.Component{
             modulo:"",
             estado_menu:false,
             // ------
-            listaDeLapsos:[],
+            id_lapso:null,
+            listaObjetivos:[],
+
             //
             alerta:{
                 color:null,
@@ -73,10 +75,27 @@ class ComponentLapso extends React.Component{
         }
     }
 
-    // async componentWillMount(){
-    //     const {id_planificacion} =this.props.match.params
-    //     await this.consultarLapsoPlanificacion(id_planificacion)
-    // }
+    async componentWillMount(){
+        this.setState({id_lapso:this.props.match.params.id_lapso})
+        await this.consultarObjetivos()
+    }
+
+    async consultarObjetivos(){
+        await axiosCustom.get(
+            `transaccion/planificacion-lapso-escolar/consultar-todos-objetivo/${this.props.match.params.id_lapso}`
+        )
+        .then(respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            this.setState({listaObjetivos:json.datos})
+        })
+        .catch(error => {
+            let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+            alerta.color="danger"
+            alerta.mensaje="error al conectarse con el servidor"
+            alerta.estado=true
+            this.setState({alerta})
+        })
+    }
 
     regresarHaLapsosPlanificacion(){
         const {id_planificacion} =this.props.match.params
@@ -98,7 +117,71 @@ class ComponentLapso extends React.Component{
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                     </svg>
                 </button>
-                <h2 className='titulo-modulo-lapso-planificaion'>lapso {this.props.match.params.id_lapso}</h2>
+                <h2 className='titulo-modulo-lapso'>lapso {this.props.match.params.id_lapso}</h2>
+                <div className='contenedor-lapso pt-5 pb-5'>
+                    <form id="formularioLapso" className='mb-5'>
+                        <div class="form-group row justify-content-center">
+                            <label className="col-auto col-form-label">Descripción del objetivo:</label>
+                            <div className="col-3">
+                                <input type="text" className="form-control" placeholder='Descripción del objetivo' id="descripcion_objetivo_academico" name="descripcion_objetivo_academico"/>
+                            </div>
+                            <div className='col-auto'>
+                                <button className='btn btn-primary' >Guardar</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="estatu_objetivo_lapso_academico" name="estatu_objetivo_lapso_academico" value="1"/>
+                        <input type="hidden" id="id_planificacion" name="id_planificacion" value={this.props.match.params.id_planificacion}/>
+                    </form>
+                    <form id="formularioPlanificaionLapso" className='mb-5'>
+                        <div class="form-group row justify-content-center">
+                            <label className="col-auto col-form-label">Estado de la planificaión:</label>
+                            <div className='col-3'>
+                                <select className='form-control'>
+                                    <option value="1">En desarrollo</option>
+                                    <option value="2">Listo para usarse</option>
+                                </select>
+                            </div>
+                            <div className='col-auto'>
+                                <button className='btn btn-primary' >Guardar</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="estatu_objetivo_lapso_academico" name="estatu_objetivo_lapso_academico" value="1"/>
+                        <input type="hidden" id="id_planificacion" name="id_planificacion" value={this.props.match.params.id_planificacion}/>
+                    </form>
+                    <h2 className='titulo-modulo-lapso-negro mb-3'>Lista de objetivos</h2>
+                    <div className='row justify-content-center'>
+                        <div className='col-9 col-sm-9 col-md-9 col-lg-9 col-xl-9'>
+                            <table className="table table-hover table-dark ">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre del objetivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {this.state.listaObjetivos.map((objetivo, index) => {
+                                    return (
+                                        <tr key={index}>
+                                            <th scope="row">{index+1}</th>
+                                            <td>{objetivo.descripcion_objetivo_academico}</td>
+                                            <td>
+                                                <button className='btn btn-danger'data-id-objetivo={objetivo.id_objetivo_lapso_academico} >Eliminar</button>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                                {this.state.listaObjetivos.length===0 && 
+                                    (
+                                        <tr >
+                                            <td colspan="3"><center>Sin Objetivos Registrados</center></td>
+                                        </tr>
+                                    )
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         )
         return (

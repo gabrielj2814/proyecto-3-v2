@@ -199,8 +199,10 @@ controladorPlanificacionLapsoEscolar.actualizar=async (req,res) => {
 controladorPlanificacionLapsoEscolar.consultarTodos=async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const ModeloObjetivoLapsoAcademico=require("../modelo/m_objetivo_lapso_academico")
+    let {id_lapso} = req.params
     let Objetivo=new ModeloObjetivoLapsoAcademico()
-    let result=await Objetivo.consultarTodos()
+    Objetivo.setIdLapsoAcademico(id_lapso)
+    let result=await Objetivo.consultarTodosLosObjetivosPorLapso()
     if(result.rowCount>0){
         respuesta_api.mensaje="Objetivos consultados exitosamente"
         respuesta_api.datos=result.rows
