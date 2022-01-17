@@ -111,7 +111,7 @@ controladorPlanificacionLapsoEscolar.crearLapsoAcademico= async (req,res) => {
                 else{
                     respuesta_api.mensaje="ya hay lapsos asignado a planificaciones"
                     respuesta_api.estado_respuesta=true
-                    respuesta_api.color_alerta="succes"
+                    respuesta_api.color_alerta="success"
                 }
                 
             }
@@ -138,10 +138,58 @@ controladorPlanificacionLapsoEscolar.consultarLapsoPorPlanificacion= async (req,
         respuesta_api.datos=result.rows
         respuesta_api.mensaje="lapsos consultados con exito"
         respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="succes"
+        respuesta_api.color_alerta="success"
     }
     else{
         respuesta_api.mensaje="error al consultar los lapso academicos (no hay lapso academicos creados)"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+
+    }
+
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
+controladorPlanificacionLapsoEscolar.consultarLapso= async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    const ModeloLapsoAcademico=require("../modelo/m_lapso_academico")
+    let {id_lapso} = req.params
+    let lapso=new ModeloLapsoAcademico()
+    lapso.setIdLapsoAcademico(id_lapso)
+    let result= await lapso.consultarLapso()
+    if(result.rowCount>0){
+        respuesta_api.datos=result.rows
+        respuesta_api.mensaje="lapso consultado exitosamente"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar el lapso"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+
+    }
+
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
+controladorPlanificacionLapsoEscolar.actualizarEstadoLapso= async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const ModeloLapsoAcademico=require("../modelo/m_lapso_academico")
+    let {lapso} = req.body
+    let modeloLapso=new ModeloLapsoAcademico()
+    let result= await modeloLapso.actualizarEstadoLapso(lapso.id_lapso_academico,lapso.estatu_lapso_academico)
+    if(result.rowCount>0){
+        respuesta_api.mensaje="Estatus de lapso cambiado exitosamente"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="Error al actualizar el estado del lapso"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
 

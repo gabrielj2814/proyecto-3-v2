@@ -12,8 +12,10 @@ router.post("/crear-planificacion",ControladorPlanificacionLapsoEscolar.crearPla
 router.get("/consultar-planificacion/:cedula",ControladorPlanificacionLapsoEscolar.consultarPlanificacion)
 router.post("/crear-lapso",ControladorPlanificacionLapsoEscolar.crearLapsoAcademico)
 router.get("/consultar-lapso/:id_planificaion",ControladorPlanificacionLapsoEscolar.consultarLapsoPorPlanificacion)
+router.get("/consultar-lapso/lapso/:id_lapso",ControladorPlanificacionLapsoEscolar.consultarLapso)
 router.post("/crear-objetivo",ControladorPlanificacionLapsoEscolar.crearObjetivo)
 router.put("/actualizar-objetivo",ControladorPlanificacionLapsoEscolar.actualizar)
+router.put("/actualizar-estado-lapso",ControladorPlanificacionLapsoEscolar.actualizarEstadoLapso)
 router.get("/consultar-todos-objetivo/:id_lapso",ControladorPlanificacionLapsoEscolar.consultarTodos)
 router.delete("/eliminar-objetivo/:id",ControladorPlanificacionLapsoEscolar.eliminar)
 

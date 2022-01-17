@@ -30,6 +30,7 @@ class ComponentLapso extends React.Component{
         this.cambiarEstado=this.cambiarEstado.bind(this);
         this.guardarObjetivo=this.guardarObjetivo.bind(this);
         this.eliminarObjetivo=this.eliminarObjetivo.bind(this);
+        this.guardarEstadoPlanificaion=this.guardarEstadoPlanificaion.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
@@ -84,6 +85,28 @@ class ComponentLapso extends React.Component{
     async componentWillMount(){
         this.setState({id_lapso:this.props.match.params.id_lapso})
         await this.consultarObjetivos()
+        await this.consultarLapso()
+    }
+
+    async consultarLapso(){
+        await axiosCustom.get(
+            `transaccion/planificacion-lapso-escolar/consultar-lapso/lapso/${this.props.match.params.id_lapso}`
+        )
+        .then(respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("datos lapos =>>>>",json)
+            if(json.datos.length>0){
+                let estadoLapso=document.getElementById("estadoLapso")
+                estadoLapso.value=json.datos[0].estatu_lapso_academico
+            }
+        })
+        .catch(error => {
+            let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+            alerta.color="danger"
+            alerta.mensaje="error al conectarse con el servidor"
+            alerta.estado=true
+            this.setState({alerta})
+        })
     }
 
     async consultarObjetivos(){
@@ -107,17 +130,57 @@ class ComponentLapso extends React.Component{
         const {id_planificacion} =this.props.match.params
         this.props.history.push(`/dashboard/transaccion/planificacion/${id_planificacion}/lapso`)
     }
-
     
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
     }
 
+    async guardarEstadoPlanificaion(){
+        let contenedorAlertasLapsoObjetivo=document.getElementById("contenedorAlertasLapsoObjetivo")
+        let estadoLapso=document.getElementById("estadoLapso")
+        let datos={
+            lapso:{
+                id_lapso_academico:this.state.id_lapso,
+                estatu_lapso_academico:estadoLapso.value
+            }
+        }
+        await axiosCustom.put(
+            `transaccion/planificacion-lapso-escolar/actualizar-estado-lapso`,
+            datos
+        )
+        .then(async respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            await this.consultarObjetivos()
+            
+            if(json.color_alerta=="success"){
+                let alertaHtml=`
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">${json.mensaje}<button class="close" data-dismiss="alert"><span>X</span></button></div>
+                `
+                contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+            }
+            else{
+                let alertaHtml=`
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">${json.mensaje}<button class="close" data-dismiss="alert"><span>X</span></button></div>
+                `
+                contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+            }
+
+        })
+        .catch(error => {
+            let alertaHtml=`
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">error al conectarse con el servidor"<button class="close" data-dismiss="alert"><span>X</span></button></div>
+            `
+            contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+        })
+
+    }
+
     async guardarObjetivo(){
+        let contenedorAlertasLapsoObjetivo=document.getElementById("contenedorAlertasLapsoObjetivo")
+        let descripcionObjetivo=document.getElementById("descripcion_objetivo_academico")
         let exprecion=/[A-Za-z]/g
         let exprecion2=/[0-9]/g
-        let descripcionObjetivo=document.getElementById("descripcion_objetivo_academico")
         if(descripcionObjetivo.value!==""){
             if(exprecion.test(descripcionObjetivo.value) || exprecion2.test(descripcionObjetivo.value)){
                 let datos={
@@ -131,32 +194,32 @@ class ComponentLapso extends React.Component{
                 await axiosCustom.post(
                     `transaccion/planificacion-lapso-escolar/crear-objetivo`,
                     datos
-                )
-                .then(async respuesta=>{
-                    let json=JSON.parse(JSON.stringify(respuesta.data))
-                    // console.log(json)
-                    await this.consultarObjetivos()
-                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                    if(json.color_alerta=="success"){
-                        alerta.color="success"
-                        alerta.mensaje=json.mensaje
-                        alerta.estado=true
-                        this.setState({alerta})
-                    }
-                    else{
-                        alerta.color="danger"
-                        alerta.mensaje=json.mensaje
-                        alerta.estado=true
-                        this.setState({alerta})
-                    }
+                    )
+                    .then(async respuesta=>{
+                        let json=JSON.parse(JSON.stringify(respuesta.data))
+                        // console.log(json)
+                        await this.consultarObjetivos()
+
+                        let descripcionObjetivo=document.getElementById("descripcion_objetivo_academico")
+                        if(json.color_alerta=="success"){
+                            let alertaHtml=`
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">${json.mensaje}<button class="close" data-dismiss="alert"><span>X</span></button></div>
+                            `
+                            contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+                        }
+                        else{
+                            let alertaHtml=`
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">${json.mensaje}<button class="close" data-dismiss="alert"><span>X</span></button></div>
+                            `
+                            contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+                        }
 
                 })
                 .catch(error => {
-                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                    alerta.color="danger"
-                    alerta.mensaje="error al conectarse con el servidor"
-                    alerta.estado=true
-                    this.setState({alerta})
+                    let alertaHtml=`
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">error al conectarse con el servidor"<button class="close" data-dismiss="alert"><span>X</span></button></div>
+                    `
+                    contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
                 })
             }
             else{
@@ -177,7 +240,12 @@ class ComponentLapso extends React.Component{
         )
         .then(async respuesta=>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(json)
+            // console.log(json)
+            let contenedorAlertasLapsoObjetivo=document.getElementById("contenedorAlertasLapsoObjetivo")
+            let alertaHtml=`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">Objetivo Eliminado exitosamente<button class="close" data-dismiss="alert"><span>X</span></button></div>
+            `
+            contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
             await this.consultarObjetivos()
         })
         .catch(error => {
@@ -200,6 +268,9 @@ class ComponentLapso extends React.Component{
                         
                     </div>)
                 }
+                <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12" id="contenedorAlertasLapsoObjetivo">
+
+                </div>
                 <button className='btn btn-primary' onClick={this.regresarHaLapsosPlanificacion}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
@@ -224,17 +295,15 @@ class ComponentLapso extends React.Component{
                         <div class="form-group row justify-content-center">
                             <label className="col-auto col-form-label">Estado de la planificaión:</label>
                             <div className='col-3'>
-                                <select className='form-control' onChange={this.cambiarEstado}>
+                                <select id="estadoLapso" className='form-control' onChange={this.cambiarEstado}>
                                     <option value="1">En desarrollo</option>
                                     <option value="2">Listo para usarse</option>
                                 </select>
                             </div>
                             <div className='col-auto'>
-                                <input type="button" className='btn btn-primary' value="guardar"/>
+                                <input type="button" className='btn btn-primary' value="guardar" onClick={this.guardarEstadoPlanificaion}/>
                             </div>
                         </div>
-                        <input type="hidden" id="estatu_objetivo_lapso_academico" name="estatu_objetivo_lapso_academico" value="1"/>
-                        <input type="hidden" id="id_planificacion" name="id_planificacion" value={this.props.match.params.id_planificacion}/>
                     </form>
                     <h2 className='titulo-modulo-lapso-negro mb-3'>Lista de objetivos</h2>
                     <div className='row justify-content-center'>

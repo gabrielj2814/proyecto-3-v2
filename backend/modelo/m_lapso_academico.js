@@ -46,12 +46,30 @@ class ModeloLapsoAcademico extends PostgreDriver{
         return await this.query(SQL)
     }
 
-    async consultarlapsoPorPlanificacion($id){
+    async consultarlapsoPorPlanificacion(id){
         const SQL=`
         SELECT * FROM
         tlapso_academico
         WHERE 
-        id_planificacion_lapso_escolar=${$id}`
+        id_planificacion_lapso_escolar=${id}`
+        return await this.query(SQL);
+    }
+    
+    async consultarLapso(){
+        const SQL=`
+        SELECT * FROM
+        tlapso_academico
+        WHERE 
+        id_lapso_academico=${this.id_lapso_academico}`
+        return await this.query(SQL);
+    }
+
+    async actualizarEstadoLapso(id,estado){
+        const SQL=`
+        UPDATE tlapso_academico SET
+        estatu_lapso_academico='${estado}'
+        WHERE 
+        id_lapso_academico=${id}`
         return await this.query(SQL);
     }
 
