@@ -94,7 +94,7 @@ class ComponentLapso extends React.Component{
         )
         .then(respuesta=>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("datos lapos =>>>>",json)
+            // console.log("datos lapos =>>>>",json)
             if(json.datos.length>0){
                 let estadoLapso=document.getElementById("estadoLapso")
                 estadoLapso.value=json.datos[0].estatu_lapso_academico
