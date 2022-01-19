@@ -112,6 +112,7 @@ class ComponentLapso extends React.Component{
         }
         return estado
       }
+      
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
