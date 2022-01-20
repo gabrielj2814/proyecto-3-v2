@@ -123,16 +123,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         return await this.query(SQL)
     }
 
-    // async consultarProfesorYAula(){
-    //     const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
-    //     tasignacion_aula_profesor.id_profesor=${this.id_profesor} AND
-    //     tasignacion_aula_profesor.id_aula=${this.id_aula} AND
-    //     tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
-    //     taula.id_aula=tasignacion_aula_profesor.id_aula AND
-    //     tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
-    //     return await this.query(SQL)
-    // }
-
     async actualizar(){
         const SQL=`UPDATE tasignacion_aula_profesor SET
         id_profesor=${this.id_profesor},

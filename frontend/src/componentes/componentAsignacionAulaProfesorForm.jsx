@@ -1,5 +1,6 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
+import $ from 'jquery'
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -33,6 +34,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.operacion=this.operacion.bind(this)
         this.verificarDisponibilidadAula=this.verificarDisponibilidadAula.bind(this)
         this.regresar=this.regresar.bind(this)
+        this.cerrarModal=this.cerrarModal.bind(this)
+        this.verficarDisponibilidadProfesorAnoEscolarSiguiente=this.verficarDisponibilidadProfesorAnoEscolarSiguiente.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -54,6 +57,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             hashListaProfesores:{},
             hashListaAnoEscolares:{},
             hashAnoEscolaresActivo:{},
+            hashAnoEscolaresSiguiente:{},
             // 
             disponibilidadProfesor:null,
             disponibilidadAula:null,
@@ -125,6 +129,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 await this.consultarAulasPorGrado()
                 let selectAula={
                     target:{
+                        id:"id_aula",
+                        name:"id_aula",
                         value:document.getElementById("id_aula").value
                     }
                 }
@@ -205,7 +211,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
+            // console.log(modulosSistema)
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
@@ -223,7 +229,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(json)
+            // console.log(json)
             if(json.datos.length>0){
                 this.setState({
                     id_cedula:json.datos[0].id_cedula,
@@ -272,6 +278,30 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         .catch(error => {
             console.error(error)
         })
+    }
+    
+    async consultarAnoEscolarSiguiente(){
+        await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
+        .then(respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            let hashAnoEscolaresSiguiente=json.datos
+            if(json.estado_respuesta===true){
+                this.setState({hashAnoEscolaresSiguiente})
+            }
+            else{
+                this.setState({disponibilidadProfesor:false})
+                // poner mensaje de que no hay año siguiente disponible 
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+
+    async verficarDisponibilidadProfesorSiguienteAnoEscolar(){
+
     }
 
     async consultarProfesores(){
@@ -395,15 +425,60 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
     async verficarDisponibilidadProfesor(idProfesor){
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.id_ano_escolar}/${idProfesor}`)
-        .then(respuesta =>{
+        .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // disponibilidadProfesor
-            // console.log(json)
             if(json.datos.disponibilidadProfesor===true){
+                // await this.consultarAnoEscolarActivo()
                 this.setState({disponibilidadProfesor:true})
             }
             else{
-                
+                await this.consultarAnoEscolarSiguiente()
+                if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
+
+                    if(this.props.match.params.operacion==="actualizar"){
+                        if(this.state.respaldoDatos.id_profesor!==this.state.id_profesor){
+                            $("#modalAginacionProferosSiguiente").modal("show")
+                            document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
+                        }
+                    }
+                    else{
+                        $("#modalAginacionProferosSiguiente").modal("show")
+                        document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
+                    }
+                    // await this.verficarDisponibilidadProfesorAnoEscolarSiguiente(idProfesor)
+                }
+                else{
+                    document.getElementById("parrafoMensaje").textContent="no hay año siguiente disponible"
+                    $("#modalMensaje").modal("show")
+                    this.setState({disponibilidadProfesor:false})
+                }
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    }
+    
+    async verficarDisponibilidadProfesorAnoEscolarSiguiente(a){
+        let idProfesor=a.target.getAttribute("data-id-profesor")
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.hashAnoEscolaresSiguiente.id_ano_escolar}/${idProfesor}`)
+        .then(async respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            if(json.datos.disponibilidadProfesor===true){
+                this.setState({
+                    id_ano_escolar:this.state.hashAnoEscolaresSiguiente.id_ano_escolar,
+                    ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde,
+                    ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta
+                })
+                $("#modalAginacionProferosSiguiente").modal("hide")
+                this.setState({disponibilidadProfesor:true})
+            }
+            else{
+                document.getElementById("parrafoMensaje").textContent="El profesor ya tiene asignaciones tanto para el año actual como para el siguiente"
+                $("#modalMensaje").modal("show")
+                await this.consultarAnoEscolarActivo()
                 this.setState({disponibilidadProfesor:false})
             }
 
@@ -411,6 +486,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         .catch(error => {
             console.error(error)
         })
+    }
+
+    mostrarModalAsignacionProfesorAnoSiguiente(a){
+
     }
 
     extrarDatosDelFormData(formData){
@@ -459,7 +538,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.cambiarEstado(a)
         let input =a.target
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
-        .then(respuesta =>{
+        .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log(json)
             if(json.datos.disponibilidadAula===true){
@@ -467,7 +546,19 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             }
             else{
                 
-                this.setState({disponibilidadAula:false})
+                // this.setState({disponibilidadAula:false})
+                await this.consultarAnoEscolarSiguiente()
+                if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
+                    // $("#modalAginacionProferosSiguiente").modal("show")
+                    // document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
+                    await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);
+
+                }
+                else{
+                    document.getElementById("parrafoMensaje").textContent="no hay año siguiente disponible"
+                    $("#modalMensaje").modal("show")
+                    this.setState({disponibilidadAula:false})
+                }
             }
         })
         .catch(error => {
@@ -485,9 +576,25 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
     }
 
-    // validarDisponibilidadAula(){
+    async consultarDisponivilidadAulaSiguienteAnoEscolar(idAula){
 
-    // }
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.hashAnoEscolaresSiguiente.id_ano_escolar}/${idAula}`)
+        .then(async respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("->>>>>>>>>>>>>>>>>>>",json)
+            if(json.datos.disponibilidadAula===true){
+                this.setState({disponibilidadAula:true})
+
+            }
+            else{
+                this.setState({disponibilidadAula:false})
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
+    } 
 
     validarFormulario(){
         let estado=false
@@ -609,6 +716,11 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             }
     }
 
+    cerrarModal(a){
+        let idModal=a.target.getAttribute("data-id-modal")
+        $(`#${idModal}`).modal("hide")
+    }
+
     render(){
         const jsx=(
             <div className="row justify-content-center">
@@ -619,6 +731,51 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         
                     </div>)
                 }
+
+                    <div class="modal fade" id="modalAginacionProferosSiguiente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <p>El profesor consultado ya tiene una planificacion para el año escolar {this.state.hashAnoEscolaresActivo.ano_desde} - {this.state.hashAnoEscolaresActivo.ano_hasta}, pero esta disponble para el siguiente año escolar {this.state.hashAnoEscolaresSiguiente.ano_desde} - {this.state.hashAnoEscolaresSiguiente.ano_hasta} desea asignarlo para el siguiente año escolar</p>
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="asginarProfesor" class="btn btn-success " data-id-profesor="" onClick={this.verficarDisponibilidadProfesorAnoEscolarSiguiente}>Asiganar</button>
+                                <button type="button" id="cancelarAsignacion" class="btn btn-danger " data-id-modal="modalAginacionProferosSiguiente" onClick={this.cerrarModal}>Cancelar</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="modalMensaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <p id="parrafoMensaje"></p>
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="cancelarAsignacion" class="btn btn-danger " data-id-modal="modalMensaje" onClick={this.cerrarModal}>Cerrar</button>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_asig_aula_prof">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-asig-aula-prof">
