@@ -414,7 +414,7 @@ ReposoTrabajadorControlador.verificarVencimiento= async (req,res) => {
     const reposo_trabajador_modelo=new ReposoTrabajadorModelo()
     let datosConsultaReposos=await reposo_trabajador_modelo.consultarRepososActivos()
     let reposos=datosConsultaReposos.rows
-    console.log("reposos =>>> ",reposos)
+    // console.log("reposos =>>> ",reposos)
     for(let reposo of reposos){
         
         // reposo.fecha_hasta_reposo_trabajador=Moment(reposo.fecha_hasta_reposo_trabajador,"YYYY-MM-DD")

@@ -44,6 +44,7 @@ class ComponentDashboard extends React.Component{
         async UNSAFE_componentWillMount(){
             this.caducarReposos()
             this.caducarPermisos()
+            this.chequearAnoEscolar()
 
             var mensaje={texto:"",estado:""}
             if(localStorage.getItem("usuario")){
@@ -177,6 +178,16 @@ class ComponentDashboard extends React.Component{
             localStorage.removeItem("fechaSesion")
             clearInterval(this.state.referenciaRelog)
             clearInterval(this.state.referenciaTemporzadorSesion)
+        }
+
+        chequearAnoEscolar(){
+            axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/chequear-ano-escolar`)
+            .then(repuesta => {
+                console.log(repuesta.data)
+            })
+            .catch(error=> {
+                console.log(error)
+            })
         }
 
 
