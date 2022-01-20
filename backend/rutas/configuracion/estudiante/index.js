@@ -14,6 +14,13 @@ router.get("/estudiantes-activos", controladorEstudiante.consultarEstudiantesAct
 router.get("/estudiantes-inactivos", controladorEstudiante.consultarEstudiantesInactivos) //consultar todos los estudiantes inactivos
 router.put("/actualizar/:id", controladorEstudiante.actualizar)// actualizar
 
+router.post("/registrar-vacuna-estudiante", controladorEstudiante.registrar_vacuna_estudiante)//route de registar vacuna estudiantil
+router.delete("/eliminar-vacuna-estudiante/:id", controladorEstudiante.eliminar_vacuna_estudiante)//route de eliminar vacuna estudiantil
+
+router.post("/registrar-enfermedad-estudiante", controladorEstudiante.registrar_enfermedad_estudiante)//route de registar vacuna estudiantil
+router.delete("/eliminar-enfermedad-estudiante/:id", controladorEstudiante.eliminar_enfermedad_estudiante)//route de eliminar vacuna estudiantil
+
+
 
 
 module.exports = router 

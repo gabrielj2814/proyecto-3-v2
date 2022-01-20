@@ -46,7 +46,9 @@ class ModeloEstudiante extends DriverPostgre {
       direccion_nacimiento_estudiante, id_ciudad, sexo_estudiante, procedencia_estudiante, escolaridad_estudiante, vive_con_estudiante,
       estatus_estudiante) VALUES ('${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}', 
       '${this.fecha_nacimiento_estudiante}', '${this.direccion_nacimiento_estudiante}', '${this.id_ciudad}', '${this.sexo_estudiante}', 
-      '${this.procedencia_estudiante}', '${this.escolaridad_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')`
+      '${this.procedencia_estudiante}', '${this.escolaridad_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')
+      RETURNING id_estudiante
+      `
 
       return await this.query(SQL);
     }
@@ -56,6 +58,7 @@ class ModeloEstudiante extends DriverPostgre {
 
     return await this.query(SQL);
   }
+
 
   async consultarEstudiantesActivos () {
     const SQL = `SELECT * FROM testudiante WHERE estatus_estudiante='1' `
