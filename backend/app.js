@@ -39,6 +39,7 @@ const rutas_modula_lista_enfermedad = require('./rutas/configuracion/enfermedad'
 const rutas_modulo_vacuna = require('./rutas/configuracion/vacuna')
 const rutas_modulo_vacuna_estudiante = require("./rutas/configuracion/vacuna_estudiante")
 const rutas_modulo_enfermedad_estudiante = require("./rutas/configuracion/enfermedad_estudiante")
+const rutas_modulo_planificacion_lapso_escolar = require('./rutas/configuracion/planificacion-lapso-escolar')
 //SET
 app.set("puerto",8080)
 // USE
@@ -77,10 +78,11 @@ app.use("/configuracion/asignacion-representante-estudiante", rutas_modulo_asign
 app.use("/configuracion/profesor", rutas_modulo_profesor)
 app.use("/configuracion/ano-escolar", rutas_modulo_ano_escolar)
 app.use("/configuracion/vacuna", rutas_modulo_vacuna)
-app.use("/transaccion/asignacion-aula-profesor", rutas_modulo_asignacion_aula_profesor)
 app.use("/configuracion/enfermedad", rutas_modula_lista_enfermedad)
 app.use("/configuracion/enfermedad_estudiante", rutas_modulo_enfermedad_estudiante)
 app.use("/configuracion/vacuna_estudiante", rutas_modulo_vacuna_estudiante)
+app.use("/transaccion/asignacion-aula-profesor", rutas_modulo_asignacion_aula_profesor)
+app.use("/transaccion/planificacion-lapso-escolar", rutas_modulo_planificacion_lapso_escolar)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
