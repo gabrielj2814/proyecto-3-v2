@@ -9,7 +9,7 @@ controladorProfesor.registrar=async (req,res) => {
     const resultProfesor=await modelo_profesor.consultarPorCedula()
     if(resultProfesor.rowCount===0){
         const resultProfesor2=await modelo_profesor.registrar()
-        respuesta_api.mensaje="Registro complatado"
+        respuesta_api.mensaje="Registro completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
     }

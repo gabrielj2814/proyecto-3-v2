@@ -45,12 +45,17 @@ class ComponentEstudianteForm extends React.Component{
         this.consultarEstudiante=this.consultarEstudiante.bind(this)
         this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
         this.consultarCiudad = this.consultarCiudad.bind(this)
+        this.ConsultarEnfermedades = this.ConsultarEnfermedades.bind(this);
+        this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
+        this.capturaCheck = this.capturaCheck.bind(this);
+        this.registroEnfermedadANDVacunaEstudiante = this.registroEnfermedadANDVacunaEstudiante.bind(this);
+        this.ConsultarVacunasANDEnfermedadesDelEstudiante = this.ConsultarVacunasANDEnfermedadesDelEstudiante.bind(this);
         this.state={
             // ------------------
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
-            id:"",
+            id_estudiante:"",
             id_cedula_escolar:"",
             id_cedula:"",
             nombres:"",
@@ -62,6 +67,8 @@ class ComponentEstudianteForm extends React.Component{
             procedencia:"",
             id_estado:"",
             id_ciudad:"",
+            id_enfermedad: [],
+            id_vacuna: [],
             sexo_estudiante:"1",
             estatu_estudiante:"1",
             //MSJ
@@ -81,6 +88,8 @@ class ComponentEstudianteForm extends React.Component{
             //// combo box
             estados:[],
             ciudades:[],
+            enfermedades:[],
+            vacunas:[],
             fecha_minimo:"",
             hashEstudiante:{},
             estadoBusquedaEstudiante:false,
@@ -133,6 +142,7 @@ class ComponentEstudianteForm extends React.Component{
         if(acessoModulo){
             await this.consultarFechaServidor()
             await this.consultarTodosLosEstudiantes()
+            await this.ConsultarEnfermedades();
             const operacion=this.props.match.params.operacion
 
             if(operacion==="registrar"){
@@ -160,7 +170,8 @@ class ComponentEstudianteForm extends React.Component{
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
             let datos = await this.consultarEstudiante(id)
-
+            await this.ConsultarVacunasANDEnfermedadesDelEstudiante(datos.id_estudiante);
+            
             let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
             const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
             nombre_propiedad_lista="estados",
@@ -177,6 +188,7 @@ class ComponentEstudianteForm extends React.Component{
             const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
             this.setState({
+                id_estudiante: datos.id_estudiante,
               id_cedula_escolar:datos.cedula_escolar,
               id_cedula:(datos.cedula_estudiante != "" && datos.cedula_estudiante != undefined) ? datos.cedula_estudiante : "No tiene",
               nombres:datos.nombres_estudiante,
@@ -288,7 +300,13 @@ class ComponentEstudianteForm extends React.Component{
             // console.log("datos =>>> ",json)
             let hash={}
             for(let estudiante of json.datos){
-                hash[estudiante.cedula_escolar]=estudiante
+                if(estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "" || 
+                estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "No tiene" ||
+                estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "null" ||
+                estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == null){
+                    hash[estudiante.cedula_escolar]=estudiante
+                }else hash[estudiante.cedula_estudiante]=estudiante;
+                
             }
             console.log("hash estudiante =>>> ",hash)
             this.setState({hashEstudiante:hash})
@@ -296,6 +314,78 @@ class ComponentEstudianteForm extends React.Component{
         .catch(error => {
             console.log(error)
         })
+    }
+
+    async ConsultarVacunasANDEnfermedadesDelEstudiante(id_estudiante){
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/consultar/${id_estudiante}`)
+        .then( ({data}) => {
+
+            if(data.datos != undefined){
+                let array = data.datos.map( item => item.id_enfermedad);
+                this.setState({id_enfermedad: array})
+            }
+            
+        }).catch(error => {
+            console.error(error);
+        })
+
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/consultar/${id_estudiante}`)
+        .then( ({data}) => {
+            
+            if(data.datos != undefined){
+                let array = data.datos.map( item => item.id_vacuna);
+                this.setState({id_vacuna: array})
+            }
+        }).catch(error => {
+            console.error(error);
+        })
+    }
+
+    async ConsultarEnfermedades(){
+        
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar-todos`)
+        .then(respuesta => {
+            let lista_enfermedades = respuesta.data.datos;
+            let enfermedades = this.state.enfermedades;
+
+            enfermedades = lista_enfermedades.map( datos => {
+                if(datos.estaus_enfermedad == "1") return { id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad}
+            })     
+
+            this.setState({enfermedades});
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+    }
+
+    async ConsultarVacunas(){
+        
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna/consultar-todos`)
+        .then(respuesta => {
+            let lista_vacunas = respuesta.data.datos;
+            let vacunas = this.state.vacunas;
+
+            vacunas = lista_vacunas.map( datos => {
+                if(datos.estaus_vacuna == "1") return { id: datos.id_vacuna, descripcion: datos.nombre_vacuna}
+            })     
+
+            this.setState({vacunas});
+        })
+        .catch(error => {
+            console.log("error al conectar con el servidor")
+        })
+    }
+
+    capturaCheck(names){
+        let checks = document.querySelectorAll(`.${names}-check`);
+        let values = [];
+        checks.forEach( item =>{
+            console.log(item.checked);
+            if(item.checked == true) values.push(item.value);
+        });
+        if(names == 'enfermedad') this.setState({id_enfermedad: values});
+        if(names == 'vacuna') this.setState({id_vacuna: values});
     }
 
     async consultarFechaServidor(){
@@ -414,8 +504,12 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     longitudCampo(input){
-        if(input.name==="id_cedula" || input.name === "id_cedula_escolar"){
+        if(input.name === "id_cedula_escolar"){
             if(input.value.length<=11){
+                this.cambiarEstadoDos(input)
+            }
+        }else if(input.name==="id_cedula"){
+            if(input.value.length<=8){
                 this.cambiarEstadoDos(input)
             }
         }
@@ -680,6 +774,49 @@ class ComponentEstudianteForm extends React.Component{
       }
     }
 
+    registroEnfermedadANDVacunaEstudiante(){
+        if(this.state.id_estudiante != ""){
+            const token = localStorage.getItem('usuario')
+            if(this.state.id_enfermedad.length > 0){
+                let objeto = {
+                    enfermedades:{
+                        id_estudiante: this.state.id_estudiante,
+                        id_enfermedad: this.state.id_enfermedad
+                    },
+                    token: token
+                };
+                
+
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objeto)
+                .then( ({data}) => {
+                    console.log(data);
+                    if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
+                    else{
+                        console.log(data.mensaje);
+                    }
+                })
+            }
+
+            if(this.state.id_vacuna.length > 0){
+                let objeto = {
+                    vacunas: {
+                        id_estudiante: this.state.id_estudiante,
+                        id_vacuna: this.state.id_vacuna
+                    },
+                    token: token
+                };
+                
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/registrar`,objeto)
+                .then( ({data}) => {
+                    if(!data.estado_respuesta) console.log("VACUNA NO REGISTRADA")
+                    else{
+                        console.log(data.mensaje)
+                    }
+                })
+            }            
+        }
+    }
+
     operacion(){
         $(".columna-modulo").animate({
             scrollTop: 0
@@ -712,10 +849,14 @@ class ComponentEstudianteForm extends React.Component{
                     axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/registrar`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
+                        let id_estu = respuesta_servidor.datos[0].id_estudiante;
+                                                                        
                         mensaje.texto=respuesta_servidor.mensaje
                         mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
+                        this.setState({id_estudiante: id_estu})
+                        this.registroEnfermedadANDVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
@@ -737,10 +878,12 @@ class ComponentEstudianteForm extends React.Component{
                     axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
+
                         mensaje.texto=respuesta_servidor.mensaje
                         mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
+                        this.registroEnfermedadANDVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
@@ -757,9 +900,9 @@ class ComponentEstudianteForm extends React.Component{
         const token=localStorage.getItem('usuario')
         const objeto={
             estudiante:{
-              id_estudiante: null,
-              cedula_escolar: this.state.id_cedula_escolar,
-              cedula_estudiante: this.state.id_cedula,
+              id_estudiante: this.state.id_estudiante,
+              cedula_escolar: (this.state.id_cedula_escolar != '') ? this.state.id_cedula_escolar : 'No tiene',
+              cedula_estudiante: (this.state.id_cedula != '') ? this.state.id_cedula : 'No tiene',
               nombres_estudiante: this.state.nombres,
               apellidos_estudiante: this.state.apellidos,
               fecha_nacimiento_estudiante: this.state.fecha_nacimiento,
@@ -799,7 +942,22 @@ class ComponentEstudianteForm extends React.Component{
         }
     }
 
+    CodeSearch(id, name){
+        let status_checked = "";
+        let lista = this.state['id_'+name];
+        if(lista.length > 0){
+            lista.forEach( item => {
+                if(id == item){
+                    status_checked = "checked";
+                }
+            })
+        }
+        return status_checked;
+    }
+
     render(){
+        let contador_enfermedad = -1, contador_vacuna = -1;
+        
         var jsx_estudiante_form = (
             <div className="row justify-content-center">
 
@@ -950,7 +1108,48 @@ class ComponentEstudianteForm extends React.Component{
                             checkedRadioB={this.state.estatu_estudiante}
                           />
                         </div>
+                        <div className="row justify-content-center">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                                <span className="titulo-form-trabajador">Enfermedades</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center mt-1 mb-2">
+                            {this.state.enfermedades.map( (item,index) => {
+                                return (
+                                    <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
+                                        <input type="checkbox" class="form-check-input enfermedad-check" name="enfermedad[]" 
+                                            onChange={() => this.capturaCheck('enfermedad')} checked={this.CodeSearch(item.id,"enfermedad")} id="enfermedad" value={item.id} />
+                                        <label class="form-check-label">{item.descripcion}</label>
+                                    </div>
+                                );
+                            })}
+                            {this.state.enfermedades.length == 0 &&
+                                <h3>Sin enfermedades registradas</h3>
+                            }
+                        </div>
 
+                        <div className="row justify-content-center">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                                <span className="titulo-form-trabajador">Vacunas</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center mt-1 mb-2">
+                            {this.state.vacunas.map( (item,index) => {
+                                contador_vacuna += 1;
+                                return (
+                                    <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
+                                        <input type="checkbox" class="form-check-input vacuna-check" checked={this.CodeSearch(item.id,"vacuna")} 
+                                        name="vacuna[]" onChange={() => this.capturaCheck('vacuna')} id="vacuna" value={item.id} />
+                                        <label class="form-check-label">{item.descripcion}</label>
+                                    </div>
+                                );
+                            })}
+
+                            {this.state.vacunas.length == 0 &&
+                                <h3>Sin vacunas registradas</h3>
+                            }
+                        </div>
+                        
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
