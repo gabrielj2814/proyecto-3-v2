@@ -347,11 +347,12 @@ class ComponentEstudianteForm extends React.Component{
         .then(respuesta => {
             let lista_enfermedades = respuesta.data.datos;
             let enfermedades = this.state.enfermedades;
-
+            enfermedades = lista_enfermedades.filter( datos => datos.estaus_enfermedad === "1")
             enfermedades = lista_enfermedades.map( datos => {
-                if(datos.estaus_enfermedad == "1") return { id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad}
-            })     
-
+                return {
+                    id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad
+                }
+            } )  
             this.setState({enfermedades});
         })
         .catch(error => {
@@ -365,11 +366,10 @@ class ComponentEstudianteForm extends React.Component{
         .then(respuesta => {
             let lista_vacunas = respuesta.data.datos;
             let vacunas = this.state.vacunas;
-
-            vacunas = lista_vacunas.map( datos => {
-                if(datos.estaus_vacuna == "1") return { id: datos.id_vacuna, descripcion: datos.nombre_vacuna}
-            })     
-
+            vacunas = lista_vacunas.filter( datos => datos.estaus_vacuna === "1")     
+            vacunas = vacunas.map( datos => {
+                return { id: datos.id_vacuna, descripcion: datos.nombre_vacuna}
+            } )  
             this.setState({vacunas});
         })
         .catch(error => {
