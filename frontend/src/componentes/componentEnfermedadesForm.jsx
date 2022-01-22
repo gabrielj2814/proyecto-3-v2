@@ -36,6 +36,7 @@ class ComponentEnfermedadesForm extends React.Component{
     this.ConsultarRegistro = this.ConsultarRegistro.bind(this);
     this.validarcampo = this.validarcampo.bind(this);
     this.validarTexto = this.validarTexto.bind(this);
+    this.cambiarEstado = this.cambiarEstado.bind(this);
     this.state = {
       // ------------------
       modulo:"",// modulo menu
@@ -214,6 +215,11 @@ class ComponentEnfermedadesForm extends React.Component{
   cambiarEstadoDos(input){
     this.setState({[input.name]:input.value})
   }
+
+  cambiarEstado(a){
+    var input=a.target;
+    this.setState({[input.name]:input.value})
+}
 
   async agregar(){
     var mensaje=this.state.mensaje
