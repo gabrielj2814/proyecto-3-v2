@@ -777,43 +777,39 @@ class ComponentEstudianteForm extends React.Component{
     registroEnfermedadANDVacunaEstudiante(){
         if(this.state.id_estudiante != ""){
             const token = localStorage.getItem('usuario')
-            if(this.state.id_enfermedad.length > 0){
-                let objeto = {
-                    enfermedades:{
-                        id_estudiante: this.state.id_estudiante,
-                        id_enfermedad: this.state.id_enfermedad
-                    },
-                    token: token
-                };
-                
+            let objeto = {
+                enfermedades:{
+                    id_estudiante: this.state.id_estudiante,
+                    id_enfermedad: this.state.id_enfermedad
+                },
+                token: token
+            };
+            
 
-                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objeto)
-                .then( ({data}) => {
-                    console.log(data);
-                    if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
-                    else{
-                        console.log(data.mensaje);
-                    }
-                })
-            }
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objeto)
+            .then( ({data}) => {
+                console.log(data);
+                if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
+                else{
+                    console.log(data.mensaje);
+                }
+            })
 
-            if(this.state.id_vacuna.length > 0){
-                let objeto = {
-                    vacunas: {
-                        id_estudiante: this.state.id_estudiante,
-                        id_vacuna: this.state.id_vacuna
-                    },
-                    token: token
-                };
-                
-                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/registrar`,objeto)
-                .then( ({data}) => {
-                    if(!data.estado_respuesta) console.log("VACUNA NO REGISTRADA")
-                    else{
-                        console.log(data.mensaje)
-                    }
-                })
-            }            
+            let objeto = {
+                vacunas: {
+                    id_estudiante: this.state.id_estudiante,
+                    id_vacuna: this.state.id_vacuna
+                },
+                token: token
+            };
+            
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/registrar`,objeto)
+            .then( ({data}) => {
+                if(!data.estado_respuesta) console.log("VACUNA NO REGISTRADA")
+                else{
+                    console.log(data.mensaje)
+                }
+            })            
         }
     }
 
