@@ -9,15 +9,17 @@ controladorEnfermedadEstudiante.registrar = async (req, res) => {
   
   modelo_enfermedad_estudiante.setIdEstudiante(id_estudiante);
   await modelo_enfermedad_estudiante.eliminar();
-  
-  await id_enfermedad.forEach( async (enfermedad) => {
-    modelo_enfermedad_estudiante.setDatos({
-      id_enfermedad: enfermedad,
-      id_estudiante: id_estudiante
-    });
 
-    await modelo_enfermedad_estudiante.registrar();
-  })
+  if(id_enfermedad != [] || id_enfermedad[0] != undefined){
+    await id_enfermedad.forEach( async (enfermedad) => {
+      modelo_enfermedad_estudiante.setDatos({
+        id_enfermedad: enfermedad,
+        id_estudiante: id_estudiante
+      });
+
+      await modelo_enfermedad_estudiante.registrar();
+    })
+  }
   respuesta_api.mensaje = "Registro completado"
   respuesta_api.estado_respuesta = true
   respuesta_api.color_alerta = "success"

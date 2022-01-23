@@ -8,15 +8,18 @@ controladorVacunaEstudiante.registrar = async (req, res) => {
   let modelo_vacuna_estudiante = new ModelVacunadEstudiante()
   modelo_vacuna_estudiante.setIdEstudiante(id_estudiante);
   await modelo_vacuna_estudiante.eliminar();
-  
-  await id_vacuna.forEach( async (vacuna) => {
-    modelo_vacuna_estudiante.setDatos({
-      id_vacuna: vacuna,
-      id_estudiante: id_estudiante
-    });
 
-    await modelo_vacuna_estudiante.registrar();
-  })
+  if(id_vacuna != [] || id_vacuna[0] != undefined){
+    await id_vacuna.forEach( async (vacuna) => {
+      modelo_vacuna_estudiante.setDatos({
+        id_vacuna: vacuna,
+        id_estudiante: id_estudiante
+      });
+  
+      await modelo_vacuna_estudiante.registrar();
+    })
+  }  
+
   respuesta_api.mensaje = "Registro completado"
   respuesta_api.estado_respuesta = true
   respuesta_api.color_alerta = "success"
