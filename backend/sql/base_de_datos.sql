@@ -381,7 +381,8 @@ CREATE TABLE tlista_enfermedad(
 
 CREATE TABLE testudiante(
     id_estudiante SERIAL,
-    cedula_escolar character varying(11) UNIQUE,
+    codigo_cedula_escolar character varying(8) NOT NULL,
+    cedula_escolar character varying(11) NOT NULL,
     cedula_estudiante character varying(8) UNIQUE,
     nombres_estudiante character varying(150) NOT NULL,
     apellidos_estudiante character varying(150) NOT NULL,
