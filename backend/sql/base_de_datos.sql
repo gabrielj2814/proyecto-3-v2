@@ -350,7 +350,7 @@ CREATE TABLE tfecha_incripcion(
     fecha_incripcion_desde DATE NOT NULL,
     fecha_incripcion_hasta DATE NOT NULL,
     fecha_tope_inscripcion DATE NOT NULL,
-    estado_reapertura_inscripcion character(1) NOT NULL, -- 0 -> no se a usado, 1 -> si se ha usado por enden no se puede usar otra vez
+    estado_reapertura_inscripcion character(1) NOT NULL, -- 0 -> no se a usado, 1 -> en uso, 2-> ya se uso por enden ya no se puede usar otra vez
     constraint PK_id_fecha_incripcion primary key(id_fecha_incripcion),
     constraint FK_id_ano_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
