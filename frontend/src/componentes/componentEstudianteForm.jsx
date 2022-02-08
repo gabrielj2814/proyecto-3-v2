@@ -56,6 +56,7 @@ class ComponentEstudianteForm extends React.Component{
             estado_menu:false,
             //formulario
             id_estudiante:"",
+            codigo_cedula_escolar: "",
             id_cedula_escolar:"",
             id_cedula:"",
             nombres:"",
@@ -72,6 +73,7 @@ class ComponentEstudianteForm extends React.Component{
             sexo_estudiante:"1",
             estatu_estudiante:"1",
             //MSJ
+            msj_codigo_cedula_escolar:[{mensaje:"",color_texto:""}],
             msj_id_cedula_escolar:[{mensaje:"",color_texto:""}],
             msj_id_cedula:[{mensaje:"",color_texto:""}],
             msj_nombres:[{mensaje:"",color_texto:""}],
@@ -189,6 +191,7 @@ class ComponentEstudianteForm extends React.Component{
 
             this.setState({
                 id_estudiante: datos.id_estudiante,
+                codigo_cedula_escolar: datos.codigo_cedula_escolar,
               id_cedula_escolar:datos.cedula_escolar,
               id_cedula:(datos.cedula_estudiante != "" && datos.cedula_estudiante != undefined) ? datos.cedula_estudiante : "No tiene",
               nombres:datos.nombres_estudiante,
@@ -207,6 +210,7 @@ class ComponentEstudianteForm extends React.Component{
 
             document.getElementById("id_estado").value=datosCiudad.id_estado
             document.getElementById("id_ciudad").value=datos.id_ciudad
+            document.getElementById("codigo_cedula_escolar").readOnly = true;
             }
         }
         else{
@@ -381,7 +385,6 @@ class ComponentEstudianteForm extends React.Component{
         let checks = document.querySelectorAll(`.${names}-check`);
         let values = [];
         checks.forEach( item =>{
-            console.log(item.checked);
             if(item.checked == true) values.push(item.value);
         });
         if(names == 'enfermedad') this.setState({id_enfermedad: values});
@@ -482,10 +485,7 @@ class ComponentEstudianteForm extends React.Component{
         const input=a.target,
         exprecion=/\d$/
         if(input.value!==""){
-            if(exprecion.test(input.value)){
-                // console.log("OK")
-                this.longitudCampo(input)
-            }
+            if(exprecion.test(input.value)) this.longitudCampo(input)
         }
         else{
             this.cambiarEstadoDos(input)
@@ -508,7 +508,7 @@ class ComponentEstudianteForm extends React.Component{
             if(input.value.length<=11){
                 this.cambiarEstadoDos(input)
             }
-        }else if(input.name==="id_cedula"){
+        }else if(input.name==="id_cedula" || input.name === "codigo_cedula_escolar"){
             if(input.value.length<=8){
                 this.cambiarEstadoDos(input)
             }
@@ -739,14 +739,14 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFormularioRegistrar(){
 
-        const validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+        const validar_codigo_cedula_escolar = this.validarCampoNumero("codigo_cedula_escolar"),validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
         validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
         validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
         validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
         validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
         if(
-          validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+          validar_codigo_cedula_escolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
           validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
           validar_sexo_estudiante && validar_estatu_estudiante
         ){
@@ -788,7 +788,6 @@ class ComponentEstudianteForm extends React.Component{
 
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objetoEnfermedad)
             .then( ({data}) => {
-                console.log(data);
                 if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
                 else{
                     console.log(data.mensaje);
@@ -897,6 +896,7 @@ class ComponentEstudianteForm extends React.Component{
         const objeto={
             estudiante:{
               id_estudiante: this.state.id_estudiante,
+              codigo_cedula_escolar: this.state.codigo_cedula_escolar,
               cedula_escolar: (this.state.id_cedula_escolar != '') ? this.state.id_cedula_escolar : 'No tiene',
               cedula_estudiante: (this.state.id_cedula != '') ? this.state.id_cedula : 'No tiene',
               nombres_estudiante: this.state.nombres,
@@ -951,9 +951,7 @@ class ComponentEstudianteForm extends React.Component{
         return status_checked;
     }
 
-    render(){
-        let contador_enfermedad = -1, contador_vacuna = -1;
-        
+    render(){        
         var jsx_estudiante_form = (
             <div className="row justify-content-center">
 
@@ -990,6 +988,11 @@ class ComponentEstudianteForm extends React.Component{
                     <form id="form_trabajador">
                         <div className="row justify-content-center">
                             <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                              clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_codigo_cedula_escolar[0]}
+                              nombreCampo="Codigo de la Cédula escolar:" activo="si" type="text" value={this.state.codigo_cedula_escolar}
+                              name="codigo_cedula_escolar" id="codigo_cedula_escolar" placeholder="Codigo de la Cédula escolar" eventoPadre={this.validarNumero}
+                            />
+                            <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="no" mensaje={this.state.msj_id_cedula_escolar[0]}
                               nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.id_cedula_escolar}
                               name="id_cedula_escolar" id="id_cedula_escolcar" placeholder="Cédula escolar" eventoPadre={this.buscarEstudiante}
@@ -999,19 +1002,21 @@ class ComponentEstudianteForm extends React.Component{
                               nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula}
                               name="id_cedula" id="id_cedula" placeholder="Cédula" eventoPadre={this.buscarEstudiante}
                             />
-                          <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_nombres[0]}
                               nombreCampo="Nombres:" activo="si" type="text" value={this.state.nombres}
                               name="nombres" id="nombres" placeholder="Nombre" eventoPadre={this.validarTexto}
                             />
-                        </div>
-                        <div className="row justify-content-center">
-                            <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_apellidos[0]}
                               nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
                               name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
                             />
-                          <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        </div>
+                        <div className="row justify-content-center">
+                            <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
                               clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
                               id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}
@@ -1131,7 +1136,6 @@ class ComponentEstudianteForm extends React.Component{
                         </div>
                         <div className="row justify-content-center mt-1 mb-2">
                             {this.state.vacunas.map( (item,index) => {
-                                contador_vacuna += 1;
                                 return (
                                     <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
                                         <input type="checkbox" class="form-check-input vacuna-check" checked={this.CodeSearch(item.id,"vacuna")} 
