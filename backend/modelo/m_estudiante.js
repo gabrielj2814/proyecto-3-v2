@@ -6,6 +6,7 @@ class ModeloEstudiante extends DriverPostgre {
   constructor() {
     super()
     this.id_estudiante = ""
+    this.codigo_cedula_escolar = ""
     this.cedula_escolar = ""
     this.cedula_estudiante = ""
     this.nombres_estudiante = ""
@@ -18,7 +19,6 @@ class ModeloEstudiante extends DriverPostgre {
     this.escolaridad_estudiante = ""
     this.vive_con_estudiante = ""
     this.estatus_estudiante = ""
-
   }
 
   setDatos(estudiante) {
@@ -35,6 +35,7 @@ class ModeloEstudiante extends DriverPostgre {
     this.escolaridad_estudiante = estudiante.escolaridad_estudiante
     this.vive_con_estudiante = estudiante.vive_con_estudiante
     this.estatus_estudiante = estudiante.estatus_estudiante
+    this.codigo_cedula_escolar = estudiante.codigo_cedula_escolar
   }
 
   setIdEstudiante(id) {
@@ -42,9 +43,9 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   async registrar() {
-    let SQL = `INSERT INTO testudiante(cedula_escolar, cedula_estudiante, nombres_estudiante, apellidos_estudiante, fecha_nacimiento_estudiante,
+    let SQL = `INSERT INTO testudiante(codigo_cedula_escolar,cedula_escolar, cedula_estudiante, nombres_estudiante, apellidos_estudiante, fecha_nacimiento_estudiante,
       direccion_nacimiento_estudiante, id_ciudad, sexo_estudiante, procedencia_estudiante, escolaridad_estudiante, vive_con_estudiante,
-      estatus_estudiante) VALUES ('${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}', 
+      estatus_estudiante) VALUES ('${this.codigo_cedula_escolar}','${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}', 
       '${this.fecha_nacimiento_estudiante}', '${this.direccion_nacimiento_estudiante}', '${this.id_ciudad}', '${this.sexo_estudiante}', 
       '${this.procedencia_estudiante}', '${this.escolaridad_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')
       RETURNING id_estudiante`.replace("'null'","null");
