@@ -42,7 +42,7 @@ class ModeloFechaInscripcion extends DriverPostgre{
             '${this.fecha_incripcion_desde}',
             '${this.fecha_incripcion_hasta}',
             '${this.fecha_tope_inscripcion}',
-            '${this.estado_reapertura_inscripcion}',
+            '0',
         ) RETURNING id_fecha_incripcion;`;
         return await this.query(SQL)
     }
@@ -58,7 +58,7 @@ class ModeloFechaInscripcion extends DriverPostgre{
         return await this.query(SQL)
     }
     
-    async consultarTodas(){
+    async consultarTodo(){
         const SQL=`SELECT * FROM 
         tfecha_incripcion,
         tano_escolar 
@@ -85,7 +85,7 @@ class ModeloFechaInscripcion extends DriverPostgre{
         const SQL=`UPDATE tfecha_incripcion SET
         estado_reapertura_inscripcion=1,
         WHERE 
-        id_fecha_incripcion=${this.id_fecha_incripcion}
+        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion=0
         `;
         return this.query(SQL)
     }
@@ -94,7 +94,7 @@ class ModeloFechaInscripcion extends DriverPostgre{
         const SQL=`UPDATE tfecha_incripcion SET
         estado_reapertura_inscripcion=2,
         WHERE 
-        id_fecha_incripcion=${this.id_fecha_incripcion}
+        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion=1
         `;
         return this.query(SQL)
     }
