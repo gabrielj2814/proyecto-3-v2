@@ -113,12 +113,12 @@ ControladorFechaInscripcion.cerrarInscripcion=async (req,res) => {
     modeloFechaInscripcion.setIdFechaInscripcion(id)
     let resultFecha=await modeloFechaInscripcion.cerrarInscripcion()
     if(resultFecha.rowCount>0){
-        respuesta_api.mensaje="se ha re-aperturado la inscripción"
+        respuesta_api.mensaje="se ha cerrado la inscripción"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
     }
     else{
-        respuesta_api.mensaje="error al re-aperturado la inscripción"
+        respuesta_api.mensaje="error al cerrar inscripción"
         respuesta_api.estado_respuesta=false
         respuesta_api.color_alerta="danger"
     }

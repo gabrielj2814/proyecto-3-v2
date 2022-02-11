@@ -35,14 +35,14 @@ class ModeloFechaInscripcion extends DriverPostgre{
             fecha_incripcion_desde,
             fecha_incripcion_hasta,
             fecha_tope_inscripcion,
-            estado_reapertura_inscripcion,
+            estado_reapertura_inscripcion
         )
         VALUES(
             ${this.id_ano_escolar},
             '${this.fecha_incripcion_desde}',
             '${this.fecha_incripcion_hasta}',
             '${this.fecha_tope_inscripcion}',
-            '0',
+            '0'
         ) RETURNING id_fecha_incripcion;`;
         return await this.query(SQL)
     }
@@ -74,7 +74,7 @@ class ModeloFechaInscripcion extends DriverPostgre{
         fecha_incripcion_desde='${this.fecha_incripcion_desde}',
         fecha_incripcion_hasta='${this.fecha_incripcion_hasta}',
         fecha_tope_inscripcion='${this.fecha_tope_inscripcion}',
-        estado_reapertura_inscripcion='${this.estado_reapertura_inscripcion}',
+        estado_reapertura_inscripcion='${this.estado_reapertura_inscripcion}'
         WHERE 
         id_fecha_incripcion=${this.id_fecha_incripcion}
         `;
@@ -83,18 +83,18 @@ class ModeloFechaInscripcion extends DriverPostgre{
     
     async reAbrirInscripcion(){
         const SQL=`UPDATE tfecha_incripcion SET
-        estado_reapertura_inscripcion=1,
+        estado_reapertura_inscripcion='1'
         WHERE 
-        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion=0
+        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion='0'
         `;
         return this.query(SQL)
     }
     
     async cerrarInscripcion(){
         const SQL=`UPDATE tfecha_incripcion SET
-        estado_reapertura_inscripcion=2,
+        estado_reapertura_inscripcion='2'
         WHERE 
-        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion=1
+        id_fecha_incripcion=${this.id_fecha_incripcion} AND estado_reapertura_inscripcion='1'
         `;
         return this.query(SQL)
     }
