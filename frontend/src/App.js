@@ -128,6 +128,8 @@ import ComponentReporteMedico from './componentes/componentReporteMedico'
 import ComponentPlanificacionLapsoEscolar from './componentes/componentPlanificacionLapsoEscolar'
 import ComponentLapsoPlanificaion from './componentes/componentLapsoPlanificaion'
 import ComponentLapso from './componentes/componentLapso'
+// fecha inscripcion
+import ComponentFechaInscripcionFormulario from './componentes/componentFechaInscripcionFormulario'
 
 
 function App() {
@@ -223,6 +225,8 @@ function App() {
 
         <Route exact path="/dashboard/configuracion/profesor/:operacion/:id?" component={ComponentProfesorFormulario}/>
         <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
+
+        <Route exact path="/dashboard/configuracion/fecha-inscripcion/:operacion/:id?" component={ComponentFechaInscripcionFormulario}/>
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
