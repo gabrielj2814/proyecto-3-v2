@@ -343,6 +343,18 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
+-- ALTER TABLE tano_escolar ADD COLUMN seguimiento_ano_escolar character(1) NULL;
+CREATE TABLE tfecha_incripcion(
+    id_fecha_incripcion SERIAL,
+    id_ano_escolar INTEGER NOT NULL,
+    fecha_incripcion_desde DATE NOT NULL,
+    fecha_incripcion_hasta DATE NOT NULL,
+    fecha_tope_inscripcion DATE NOT NULL,
+    estado_reapertura_inscripcion character(1) NOT NULL, -- 0 -> no se a usado, 1 -> en uso, 2-> ya se uso por enden ya no se puede usar otra vez
+    constraint PK_id_fecha_incripcion primary key(id_fecha_incripcion),
+    constraint FK_id_ano_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+);
+
 CREATE TABLE tprofesor(
     id_profesor SERIAL ,
     id_cedula character varying(8) NOT NULL,
@@ -379,7 +391,8 @@ CREATE TABLE tlista_enfermedad(
 
 CREATE TABLE testudiante(
     id_estudiante SERIAL,
-    cedula_escolar character varying(11) UNIQUE,
+    codigo_cedula_escolar character varying(8) NOT NULL,
+    cedula_escolar character varying(11) NOT NULL,
     cedula_estudiante character varying(8) UNIQUE,
     nombres_estudiante character varying(150) NOT NULL,
     apellidos_estudiante character varying(150) NOT NULL,
@@ -465,4 +478,31 @@ CREATE TABLE tgrado_escolar(
     constraint FK_id_estudiante_tgrado_escolar foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_representante_estudiante_tgrado_escolar foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_aula_profesor_tgrado_escolar foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
+);
+
+CREATE TABLE tplanificacion_lapso_escolar(
+    id_planificacion_lapso_escolar SERIAL,
+    id_asignacion_aula_profesor INTEGER NOT NULL,
+    fecha_de_creacion_planificacion_lapso_escolar DATE NOT NULL,
+    constraint PK_id_planificacion_lapso_escolar primary key(id_planificacion_lapso_escolar),
+    constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
+);
+
+CREATE TABLE tlapso_academico(
+    id_lapso_academico SERIAL,
+    id_planificacion_lapso_escolar INTEGER NOT NULL,
+    nombre_lapso_academico character varying(150) NOT NULL,
+    estatu_lapso_academico character(1) NOT NULL, --1 -> se pueden seguir haciendo cambios pero no se puede utilizar para evaluar hacer evaluaciones ,2 -> listo (no se pueden hacer mas cambios y esta listo para usarse)
+    fecha_de_creacion_lapso_academico DATE NOT NULL,
+    constraint PK_id_lapso_academico primary key(id_lapso_academico),
+    constraint FK_id_planificacion_lapso_escolar foreign key(id_planificacion_lapso_escolar) references tplanificacion_lapso_escolar(id_planificacion_lapso_escolar) on update cascade on delete cascade
+);
+
+CREATE TABLE tobjetivo_lapso_academico(
+    id_objetivo_lapso_academico SERIAL,
+    id_lapso_academico INTEGER NOT NULL,
+    descripcion_objetivo_academico character varying(350) NOT NULL,
+    estatu_objetivo_lapso_academico character(1) NOT NULL,
+    constraint PK_id_objetivo_lapso_academico primary key(id_objetivo_lapso_academico),
+    constraint FK_id_lapso_academico foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
 );

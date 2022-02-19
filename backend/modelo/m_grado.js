@@ -1,5 +1,4 @@
 const DriverPostgre=require("./driver_postgresql")
-const ModuloModelo = require("./m_modulo")
 
 class ModeloGrado extends DriverPostgre{
 

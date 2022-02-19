@@ -123,7 +123,6 @@ class ComponentAnoEscolar extends React.Component{
         var servidor=this.verficarLista(json_server_response);
         if(this.props.match.params.mensaje){
           const msj=JSON.parse(this.props.match.params.mensaje)
-          //alert("OK "+msj.texto)
           var mensaje=this.state.mensaje
           mensaje.texto=msj.texto
           mensaje.estado=msj.estado
@@ -208,7 +207,6 @@ class ComponentAnoEscolar extends React.Component{
                     return modulo
                 }
             })
-            // console.log("datos modulos =>>>",modulosActivos);
             for(let medulo of modulosActivos){
                 if(modulosSistema[medulo.modulo_principal]){
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
@@ -218,7 +216,6 @@ class ComponentAnoEscolar extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
@@ -260,6 +257,7 @@ class ComponentAnoEscolar extends React.Component{
                 <th>Fecha de incio</th>
                 <th>Fecha de cierre</th>
                 <th>Estatus</th>
+                <th>Seguimiento</th>
               </tr>
           </thead>
       );
@@ -285,6 +283,7 @@ class ComponentAnoEscolar extends React.Component{
                         <td>{Moment(anoEscolar.fecha_inicio_ano_escolar).format("DD/MM/YYYY")}</td>
                         <td>{Moment(anoEscolar.fecha_cierre_ano_escolar).format("DD/MM/YYYY")}</td>
                         <td>{ (anoEscolar.estatus_ano_escolar === '1') ? "Activo" : "Innactivo" }</td>
+                        <td>{ (anoEscolar.seguimiento_ano_escolar === '1') ? "Corriendo" : (anoEscolar.seguimiento_ano_escolar === '2') ? "Planificado" : "Cerrado"}</td>
                        {!anoEscolar.vacio && anoEscolar.estatus_ano_escolar === '1' &&
                          <td>
                            <ButtonIcon

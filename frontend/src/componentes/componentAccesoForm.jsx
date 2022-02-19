@@ -81,6 +81,7 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"aula",id:"/aula"},
                     {descripcion:"profesor",id:"/profesor"},
                     {descripcion:"vacuna",id:"/vacuna"},
+                    {descripcion:"enfermedad",id:"/enfermedad"},
                     {descripcion:"año escolar",id:"/ano-escolar"}
                 ],
                 // reporte:[
@@ -92,7 +93,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"asistencia",id:"/asistencia"},
                     {descripcion:"lista asistencia",id:"/asistencia/lista"},
                     {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"},
-                    {descripcion:"asignacion estudiante representante",id:"/asignacion-representante-estudiante"}
+                    {descripcion:"asignacion estudiante representante",id:"/asignacion-representante-estudiante"},
+                    {descripcion:"planificación",id:"/planificaion"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},

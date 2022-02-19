@@ -9,6 +9,7 @@ controladorEstudiante.registrar_estudiante = async (req, res) => {
   let resultEstudiante = await modeloEstudiante.registrar()
   if (resultEstudiante.rowCount > 0) {
     respuesta_api.mensaje = "registro completado"
+    respuesta_api.datos = resultEstudiante.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
   }
