@@ -130,6 +130,7 @@ import ComponentLapsoPlanificaion from './componentes/componentLapsoPlanificaion
 import ComponentLapso from './componentes/componentLapso'
 // fecha inscripcion
 import ComponentFechaInscripcionFormulario from './componentes/componentFechaInscripcionFormulario'
+import ComponentFechaInscripcion from './componentes/componentFechaInscripcion'
 
 
 function App() {
@@ -227,6 +228,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
 
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:operacion/:id?" component={ComponentFechaInscripcionFormulario}/>
+        <Route exact path="/dashboard/configuracion/fecha-inscripcion/:mensaje?" component={ComponentFechaInscripcion}/>
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
