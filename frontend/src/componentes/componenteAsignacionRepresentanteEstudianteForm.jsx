@@ -52,6 +52,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
         //formulario
         id_asignacion_representante_estudiante: null,
         id_estudiante: "",
+        cedula_escolar: "",
         id_cedula_representante: "",
         tipo_representante: "",
         parentesco: "",
@@ -64,7 +65,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
         apellido_representante: "",
         //MSJ
         msj_id:[{mensaje:"",color_texto:""}],
-        msj_id_estudiante:[{mensaje:"",color_texto:""}],
+        msj_cedula_escolar:[{mensaje:"",color_texto:""}],
         msj_id_cedula_representante:[{mensaje:"",color_texto:""}],
         msj_tipo_representante:[{mensaje:"",color_texto:""}],
         msj_parentesco:[{mensaje:"",color_texto:""}],
@@ -101,16 +102,20 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
       if(operacion === "actualizar"){
         const {id} = this.props.match.params;
-        // TODO: Consultar
         const datos = await this.consultarRegistros(id);
 
         this.setState({
           id_estudiante: datos.id_estudiante,
+          cedula_escolar: datos.cedula_escolar+datos.codigo_cedula_escolar,
           id_cedula_representante: datos.id_cedula_representante,
           tipo_representante: datos.tipo_representante,
           parentesco: datos.parentesco,
           numero_representante: datos.numero_representante,
           estatus_asignacion_representante_estudiante: datos.estatus_asignacion_representante_estudiante,
+          nombre_representante: datos.nombres_representante,
+          nombre_estudiante: datos.nombres_estudiante,
+          apellido_estudiante: datos.apellidos_estudiante,
+          apellido_representante: datos.apellidos_representante,
         })
 
         document.getElementById('tipo_representante').value = datos.tipo_representante
@@ -267,7 +272,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
   validarNumero(a){
     const input = a.target,
-    exprecion=/\d$/
+    exprecion= new RegExp("^[0-9-]+$")
     if(input.value!==""){
       if(exprecion.test(input.value)) this.longitudCampo(input)
 
@@ -284,12 +289,15 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   longitudCampo(input){
-
+    console.log(input.name)
     if(input.name==="id_estudiante" || input.name === "id_cedula_representante"){
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }
     else if(input.name==="numero_representante"){
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
+    }
+    else if(input.name==="cedula_escolar"){
+      if(input.value.length <= 12) this.cambiarEstadoDos(input)
     }
   }
 
@@ -341,6 +349,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       //formulario
       id:"",
       id_estudiante: "",
+      cedula_escolar: "",
       id_cedula_representante: "",
       tipo_representante: "",
       parentesco: "",
@@ -348,7 +357,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       estatus_asignacion_representante_estudiante:"1",
       //MSJ
       msj_id:[{mensaje:"",color_texto:""}],
-      msj_id_estudiante:[{mensaje:"",color_texto:""}],
+      msj_cedula_escolar:[{mensaje:"",color_texto:""}],
       msj_id_cedula_representante:[{mensaje:"",color_texto:""}],
       msj_tipo_representante:[{mensaje:"",color_texto:""}],
       msj_parentesco:[{mensaje:"",color_texto:""}],
@@ -408,23 +417,23 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   validarFormularioRegistrar(){
-      const validar_id_estudiante = this.validarCampoNumero('id_estudiante'),
+      const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
       validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
       validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
       validar_parentesco = this.validarCampo('parentesco');
 
-      if( validar_id_estudiante && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
+      if( validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
         return {estado: true}
       }else return {estado: false}
   }
 
   validarFormularioActuazliar(){
-    const validar_id_estudiante = this.validarCampoNumero('id_estudiante'),
+    const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
     validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
     validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
     validar_parentesco = this.validarCampo('parentesco');
 
-    if( validar_id_estudiante && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
+    if( validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
       return {estado: true}
     }else return {estado: false}
   }
@@ -438,7 +447,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       const mensaje_formulario={
           mensaje:"",
           msj_id:[{mensaje:"",color_texto:""}],
-          msj_id_estudiante:[{mensaje:"",color_texto:""}],
+          msj_cedula_escolar:[{mensaje:"",color_texto:""}],
           msj_id_cedula_representante:[{mensaje:"",color_texto:""}],
           msj_tipo_representante:[{mensaje:"",color_texto:""}],
           msj_parentesco:[{mensaje:"",color_texto:""}],
@@ -520,9 +529,13 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
     
+    console.log(hashEstudiante)
+
     if(hashEstudiante[a.target.value]){
+      console.log(hashEstudiante[a.target.value])
       this.setState({
         estadoBusquedaEstudiante: true,
+        id_estudiante: hashEstudiante[a.target.value].id_estudiante,
         nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
         apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
       });
@@ -556,8 +569,8 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       let json = JSON.parse(JSON.stringify(res.data));
       let hash = {};
       for(let estudiante of json.datos){
-        if(estudiante.cedula_estudiante != "No tiene") hash[estudiante.cedula_estudiante] = estudiante;
-        else hash[estudiante.cedula_escolar] = estudiante;
+        if(estudiante.cedula_estudiante != null) hash[estudiante.cedula_estudiante] = estudiante;
+        if(estudiante.cedula_escolar != null) hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
       }
 
       this.setState({hashEstudiante:hash})
@@ -630,9 +643,9 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_estudiante[0]}
-                        nombreCampo="Cedula del estudiante:" activo="si" type="text" value={this.state.id_estudiante}
-                        name="id_estudiante" id="id_estudiante" placeholder="Cédula del estudiante" eventoPadre={this.BuscarEstudiante}
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                        nombreCampo="Cedula del estudiante:" activo="si" type="text" value={this.state.cedula_escolar}
+                        name="cedula_escolar" id="cedula_escolar" placeholder="Cédula escolar del estudiante" eventoPadre={this.BuscarEstudiante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
                         <label>Nombre del estudiante: {this.state.nombre_estudiante}</label>

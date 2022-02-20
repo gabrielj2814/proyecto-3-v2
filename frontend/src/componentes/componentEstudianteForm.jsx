@@ -145,6 +145,7 @@ class ComponentEstudianteForm extends React.Component{
             await this.consultarFechaServidor()
             await this.consultarTodosLosEstudiantes()
             await this.ConsultarEnfermedades();
+            await this.ConsultarVacunas();
             const operacion=this.props.match.params.operacion
 
             if(operacion==="registrar"){
