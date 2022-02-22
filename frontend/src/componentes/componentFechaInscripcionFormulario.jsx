@@ -160,69 +160,199 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         var input=a.target;
         this.setState({[input.name]:input.value})
     }
+    
+    validarFechaInicioInscripcio(){
+            let msj_fecha_incripcion_desde=JSON.parse(JSON.stringify(this.state.msj_fecha_incripcion_hasta))
+            let estado=false;
+            let fechaIncripcionDesde=document.getElementById("fecha_incripcion_desde")
+            let fechaIncripcionHasta=document.getElementById("fecha_incripcion_hasta")
+            let anoEscolarSelect=document.getElementById("id_ano_escolar")
+            let opcionSeleccionado="";
+            for(let opcion of anoEscolarSelect.childNodes){
+                if(anoEscolarSelect.value===opcion.value){
+                    opcionSeleccionado=opcion
+                    break;
+                }
+            }
+            // alert(opcionSeleccionado.textContent)
+            let inicioAno=opcionSeleccionado.textContent.split("-")[0]
+            let finAno=opcionSeleccionado.textContent.split("-")[1]
+            if(moment(fechaIncripcionDesde.value,"YYYY-MM-DD").isAfter(inicioAno+"-01-01")){
+                if(moment(fechaIncripcionDesde.value,"YYYY-MM-DD").isBefore(finAno+"-12-31")){
+                    if(moment(fechaIncripcionDesde.value,"YYYY-MM-DD").isBefore(fechaIncripcionHasta.value)){
+                        msj_fecha_incripcion_desde.color_texto="rojo"
+                        msj_fecha_incripcion_desde.mensaje=""
+                        this.setState({msj_fecha_incripcion_desde})
+                        estado=true;
+                    }
+                    else{
+                        msj_fecha_incripcion_desde.color_texto="rojo"
+                        msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción tiene que ser anterior a la fecha de fin de inscripción"
+                        this.setState({msj_fecha_incripcion_desde})
+                    }
+                }
+                else{
+                    msj_fecha_incripcion_desde.color_texto="rojo"
+                    msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción no puede salir del rango del año escolar"
+                    this.setState({msj_fecha_incripcion_desde})
+                }
+            }
+            else{
+                msj_fecha_incripcion_desde.color_texto="rojo"
+                msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción no puede salir del rango del año escolar"
+                this.setState({msj_fecha_incripcion_desde})
+            }
+            return estado
+        }
+
+        validarFechaFinInscripcio(){
+            let msj_fecha_incripcion_hasta=JSON.parse(JSON.stringify(this.state.msj_fecha_incripcion_hasta))
+            let estado=false;
+            let fechaIncripcionDesde=document.getElementById("fecha_incripcion_desde")
+            let fechaIncripcionHasta=document.getElementById("fecha_incripcion_hasta")
+            let anoEscolarSelect=document.getElementById("id_ano_escolar")
+            let opcionSeleccionado="";
+            for(let opcion of anoEscolarSelect.childNodes){
+                if(anoEscolarSelect.value===opcion.value){
+                    opcionSeleccionado=opcion
+                    break;
+                }
+            }
+            // alert(opcionSeleccionado.textContent)
+            let inicioAno=opcionSeleccionado.textContent.split("-")[0]
+            let finAno=opcionSeleccionado.textContent.split("-")[1]
+            if(moment(fechaIncripcionHasta.value,"YYYY-MM-DD").isAfter(moment(inicioAno+"-01-01","YYYY-MM-DD").format("YYYY-MM-DD"))){
+                if(moment(fechaIncripcionHasta.value,"YYYY-MM-DD").isBefore(finAno+"-12-31")){
+                    if(moment(fechaIncripcionHasta.value,"YYYY-MM-DD").isAfter(fechaIncripcionDesde.value)){
+                        msj_fecha_incripcion_hasta.color_texto="rojo"
+                        msj_fecha_incripcion_hasta.mensaje=""
+                        this.setState({msj_fecha_incripcion_hasta})
+                        estado=true;
+                    }
+                    else{
+                        msj_fecha_incripcion_hasta.color_texto="rojo"
+                        msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción tiene que ser posterior a la fecha inicio de inscripción"
+                        this.setState({msj_fecha_incripcion_hasta})
+                    }
+                }
+                else{
+                    msj_fecha_incripcion_hasta.color_texto="rojo"
+                    msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción no puede salir del rango del año escolar"
+                    this.setState({msj_fecha_incripcion_hasta})
+                }
+            }
+            else{
+                msj_fecha_incripcion_hasta.color_texto="rojo"
+                msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción no puede salir del rango del año escolar"
+                this.setState({msj_fecha_incripcion_hasta})
+            }
+            return estado;
+        }
+
+        validarFechaTopeInscripcio(){
+            let msj_fecha_tope_inscripcion=JSON.parse(JSON.stringify(this.state.msj_fecha_tope_inscripcion))
+            let estado=false;
+            let fechaTopeInscripcion=document.getElementById("fecha_tope_inscripcion")
+            let fechaIncripcionHasta=document.getElementById("fecha_incripcion_hasta")
+            let anoEscolarSelect=document.getElementById("id_ano_escolar")
+            let opcionSeleccionado="";
+            for(let opcion of anoEscolarSelect.childNodes){
+                if(anoEscolarSelect.value===opcion.value){
+                    opcionSeleccionado=opcion
+                    break;
+                }
+            }
+            // alert(opcionSeleccionado.textContent)
+            let inicioAno=opcionSeleccionado.textContent.split("-")[0]
+            let finAno=opcionSeleccionado.textContent.split("-")[1]
+            if(moment(fechaTopeInscripcion.value,"YYYY-MM-DD").isBefore(finAno+"-12-31")){
+                if(moment(fechaTopeInscripcion.value,"YYYY-MM-DD").isAfter(fechaIncripcionHasta.value)){
+                    msj_fecha_tope_inscripcion.color_texto="rojo"
+                    msj_fecha_tope_inscripcion.mensaje=""
+                    this.setState({msj_fecha_tope_inscripcion})
+                    estado=true;
+                }
+                else{
+                    msj_fecha_tope_inscripcion.color_texto="rojo"
+                    msj_fecha_tope_inscripcion.mensaje="la fecha tope tiene que ser posterior que la fecha de fin de inscripción"
+                    this.setState({msj_fecha_tope_inscripcion})
+                }
+            }
+            else{
+                msj_fecha_tope_inscripcion.color_texto="rojo"
+                msj_fecha_tope_inscripcion.mensaje="la fecha tope no puede salir del rango del año ecolar"
+                this.setState({msj_fecha_tope_inscripcion})
+            }
+            return estado
+        }
 
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
         // validaciones
-        // if(){}else{}
+        // this.validarFechaInicioInscripcio();
         const token=localStorage.getItem('usuario')
-        if(operacion==="registrar"){
-            let datosFormulario=new FormData(document.getElementById("formularioFechaInscripcion"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosFechaInscripcion={
-                fecha_inscripcion:datosFormatiados,
-                token
+        if(this.validarFechaInicioInscripcio() && this.validarFechaFinInscripcio() && this.validarFechaTopeInscripcio()){
+            if(operacion==="registrar"){
+                let datosFormulario=new FormData(document.getElementById("formularioFechaInscripcion"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosFechaInscripcion={
+                    fecha_inscripcion:datosFormatiados,
+                    token
+                }
+                console.log(datosFechaInscripcion)
+                await axiosCustom.post("configuracion/fecha-inscripcion/registrar",datosFechaInscripcion)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+    
             }
-            console.log(datosFechaInscripcion)
-            await axiosCustom.post("configuracion/fecha-inscripcion/registrar",datosFechaInscripcion)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
+            else if(operacion==="actualizar"){
+                // alert("actualizando")
+                let {id} = this.props.match.params
+                let datosFormulario=new FormData(document.getElementById("formularioFechaInscripcion"))
+                let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                let datosFechaInscripcion={
+                    fecha_inscripcion:datosFormatiados,
+                    token
                 }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
-
+                // console.log(datosFechaInscripcion)
+                await axiosCustom.put(`configuracion/fecha-inscripcion/actualizar/${id}`,datosFechaInscripcion)
+                .then(respuesta => {
+                    let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+                    let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+                    console.log(respuestaServidor)
+                    alerta.color=respuestaServidor.color_alerta
+                    alerta.mensaje=respuestaServidor.mensaje
+                    if(respuestaServidor.estado_respuesta===false){
+                        alerta.estado=true
+                    }
+                    else{
+                        alerta.estado=respuestaServidor.estado_respuesta
+                    }
+                    this.setState({alerta})
+                })
+                .catch(error => {
+                    console.error(`error de la peticion axios =>>> ${error}`)
+                })
+            }
         }
-        else if(operacion==="actualizar"){
-            // alert("actualizando")
-            let {id} = this.props.match.params
-            let datosFormulario=new FormData(document.getElementById("formularioFechaInscripcion"))
-            let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
-            let datosFechaInscripcion={
-                fecha_inscripcion:datosFormatiados,
-                token
-            }
-            // console.log(datosFechaInscripcion)
-            await axiosCustom.put(`configuracion/fecha-inscripcion/actualizar/${id}`,datosFechaInscripcion)
-            .then(respuesta => {
-                let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-                let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
-                alerta.color=respuestaServidor.color_alerta
-                alerta.mensaje=respuestaServidor.mensaje
-                if(respuestaServidor.estado_respuesta===false){
-                    alerta.estado=true
-                }
-                else{
-                    alerta.estado=respuestaServidor.estado_respuesta
-                }
-                this.setState({alerta})
-            })
-            .catch(error => {
-                console.error(`error de la peticion axios =>>> ${error}`)
-            })
+        else{
+            alert("error al validar el formulario")
         }
     }
 
@@ -312,11 +442,11 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div class="form-groud">
-                                    <label><span className="obligatorio-campo">(*)</span>Estatus</label>
+                                    <label><span className="obligatorio-campo">(*)</span>Año Escolares</label>
                                     <select class="form-select custom-select" onChange={this.cambiarEstado} id="id_ano_escolar" name="id_ano_escolar" aria-label="Default select example" >
                                         <option value="null">Selccione un año escolar</option>
-                                        {this.state.listaAnosEscolares.map((ano,index) => {
-                                            return <option key={index} value={ano.id_ano_escolar}>{ano.ano_desde} - {ano.ano_hasta}</option>
+						{this.state.listaAnosEscolares.map((ano,index) => {
+								return <option key={index} value={ano.id_ano_escolar}>{ano.ano_desde}-{ano.ano_hasta}</option>
                                         })}
                                     </select>
                                 </div>
