@@ -47,7 +47,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             id_profesor:"",
             id_aula:"",
             id_ano_escolar:"",
+            numero_total_de_estudiantes:"",
             estatus_asignacion_aula_profesor:"1",
+            listaDenNumeroEstudiante:[],
             // -----------------------------
             ano_desde:"",
             ano_hasta:"",
@@ -122,6 +124,13 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         const {operacion}=this.props.match.params
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-aula-profesor")
         if(acessoModulo){
+            let cantidadDeEstudiante=35
+            let listaDenNumeroEstudiante=[]
+
+            for(let contador=0;contador<cantidadDeEstudiante;contador++){
+                listaDenNumeroEstudiante.push(contador+1)
+            }
+            this.setState({listaDenNumeroEstudiante})
             if(operacion==="registrar"){
                 await this.consultarAnoEscolarActivo()
                 await this.consultarProfesores()
@@ -240,8 +249,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     id_ano_escolar:json.datos[0].id_ano_escolar,
                     estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor,
                     ano_desde:json.datos[0].ano_desde,
-                    ano_hasta:json.datos[0].ano_hasta
+                    ano_hasta:json.datos[0].ano_hasta,
+                    numero_total_de_estudiantes:json.datos[0].numero_total_de_estudiantes
                 })
+                document.getElementById("numero_total_de_estudiantes").value=json.datos[0].numero_total_de_estudiantes
                 let respaldoDatos=JSON.parse(JSON.stringify({
                     id_cedula:json.datos[0].id_cedula,
                     id_asignacion_aula_profesor:json.datos[0].id_asignacion_aula_profesor,
@@ -891,6 +902,23 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             {this.state.cambioAula===false &&
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                             }
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-groud">
+                                    <label>Numero total de estudiantes</label>
+                                    <select id="numero_total_de_estudiantes" name="numero_total_de_estudiantes" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
+                                        {this.state.listaDenNumeroEstudiante.map((numeroEstudiante,index)=> {
+                                            return(
+                                                <option key={index} value={numeroEstudiante} >{numeroEstudiante}</option>
+                                            )
+                                            })
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
