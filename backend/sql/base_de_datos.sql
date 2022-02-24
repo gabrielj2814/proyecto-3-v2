@@ -322,7 +322,6 @@ CREATE TABLE tgrado(
     constraint PK_id_grado primary key(id_grado)
 );
 
-
 CREATE TABLE taula(
     id_aula SERIAL,
     id_grado INTEGER NOT NULL,
@@ -343,7 +342,6 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
--- ALTER TABLE tano_escolar ADD COLUMN seguimiento_ano_escolar character(1) NULL;
 CREATE TABLE tfecha_incripcion(
     id_fecha_incripcion SERIAL,
     id_ano_escolar INTEGER NOT NULL,
@@ -362,12 +360,13 @@ CREATE TABLE tprofesor(
     constraint PK_id_profesor primary key(id_profesor),
     constraint FK_id_cedula_tprofesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
 );
-
+-- ALTER TABLE tasignacion_aula_profesor ADD COLUMN numero_total_de_estudiantes INTEGER NULL;
 CREATE TABLE tasignacion_aula_profesor(
     id_asignacion_aula_profesor SERIAL,
     id_profesor INTEGER NOT NULL,
     id_aula INTEGER NOT NULL,
     id_ano_escolar INTEGER NOT NULL,
+    numero_total_de_estudiantes INTEGER NOT NULL,
     estatus_asignacion_aula_profesor character(1) NOT NULL,
     constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
     constraint FK_id_profesor_tasignacion_aula_profesor foreign key(id_profesor) references tprofesor(id_profesor) on update cascade on delete cascade,

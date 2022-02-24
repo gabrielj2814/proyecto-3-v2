@@ -137,24 +137,7 @@ class ComponenrGradoFormulario extends React.Component{
             console.error(`error de la peticion axios =>>> ${error}`)
         })
     }
-
-    async validarAccesoDelModulo(modulo,subModulo){
-        // /dashboard/configuracion/acceso
-        let estado = false
-          if(localStorage.getItem("usuario")){
-            var respuesta_servior=""
-            const token=localStorage.getItem("usuario")
-            await axiosCustom.get(`login/verificar-sesion${token}`)
-            .then(async respuesta=>{
-                respuesta_servior=respuesta.data
-                if(respuesta_servior.usuario){
-                  estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
-            })
-        }
-        return estado
-      }
-  
+    
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axiosCustom.get(`configuracion/acceso/consultar/${idPerfil}`)

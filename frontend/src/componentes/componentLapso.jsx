@@ -37,6 +37,7 @@ class ComponentLapso extends React.Component{
             // ------
             id_lapso:null,
             id_lapso_academico:"",
+            nombre_lapso:"",
             descripcion_objetivo_academico:"",
             estatu_objetivo_lapso_academico:"",
             listaObjetivos:[],
@@ -158,6 +159,8 @@ class ComponentLapso extends React.Component{
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log("datos lapos =>>>>",json)
             if(json.datos.length>0){
+                let nombreLapso=document.getElementById("nombreLapso")
+                nombreLapso.textContent=json.datos[0].nombre_lapso_academico;
                 let estadoLapso=document.getElementById("estadoLapso")
                 estadoLapso.value=json.datos[0].estatu_lapso_academico
             }
@@ -338,7 +341,7 @@ class ComponentLapso extends React.Component{
                         <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
                     </svg>
                 </button>
-                <h2 className='titulo-modulo-lapso'>lapso {this.props.match.params.id_lapso}</h2>
+                <h2 className='titulo-modulo-lapso'>lapso <span id="nombreLapso"></span></h2>
                 <div className='contenido-lapso pt-5 pb-5'>
                     <form id="formularioLapso" className='mb-5'>
                         <div class="form-group row justify-content-center">

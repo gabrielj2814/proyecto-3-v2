@@ -67,6 +67,17 @@ class ModeloFechaInscripcion extends DriverPostgre{
         `;
         return await this.query(SQL)
     }
+    
+    async consultarTodo2(){
+        const SQL=`SELECT * FROM 
+        tfecha_incripcion,
+        tano_escolar 
+        WHERE 
+        tano_escolar.id_ano_escolar=tfecha_incripcion.id_ano_escolar AND
+        (tano_escolar.seguimiento_ano_escolar='1' OR tano_escolar.seguimiento_ano_escolar='2');
+        `;
+        return await this.query(SQL)
+    }
 
     async actualizar(){
         const SQL=`UPDATE tfecha_incripcion SET
