@@ -131,7 +131,7 @@ import ComponentLapso from './componentes/componentLapso'
 // fecha inscripcion
 import ComponentFechaInscripcionFormulario from './componentes/componentFechaInscripcionFormulario'
 import ComponentFechaInscripcion from './componentes/componentFechaInscripcion'
-
+import ComponentMultiStepForm from './componentes/ComponentMultiStepForm'
 
 function App() {
   return (
@@ -203,7 +203,8 @@ function App() {
 
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
-        <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/actualizar/:id?" component={ComponentEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/registrar" component={ComponentMultiStepForm}/>
 
         <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
         <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
