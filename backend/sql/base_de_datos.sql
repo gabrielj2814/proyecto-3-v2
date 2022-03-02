@@ -342,6 +342,17 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
+CREATE TABLE tfecha_lapso_academico(
+    id_fecha_lapso_academico SERIAL,
+    id_ano_escolar INTEGER NOT NULL,
+    numero_lapos character(1) NOT NULL,
+    fecha_lapso_inicio DATE NOT NULL,
+    fecha_lapso_cierre DATE NOT NULL,
+    estado_fecha_lapso character(1) NOT NULL,
+    constraint PK_id_fecha_lapso_academico primary key(id_fecha_lapso_academico),
+    constraint FK_id_ano_escolar_tfecha_lapso_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+);
+
 CREATE TABLE tfecha_incripcion(
     id_fecha_incripcion SERIAL,
     id_ano_escolar INTEGER NOT NULL,
