@@ -40,7 +40,7 @@ class ModuloFechaLapsoAcademico extends DriverPostgre {
             '${this.fecha_lapso_inicio}',
             '${this.fecha_lapso_cierre}',
             '${this.estado_fecha_lapso}'
-        );`
+        ) RETURNING id_fecha_lapso_academico;`
         return await this.query(SQL)
     }
 
