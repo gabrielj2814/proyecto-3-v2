@@ -30,7 +30,7 @@ ControladorFechaLapsoAcademico.consultar= async (req,res) => {
     modeloFechaLapsoAcademico.setIdFechaLapsoAcademico(id)
     let result =await modeloFechaLapsoAcademico.consultar()
     if(result.rowCount>0){
-        respuesta_api.mensaje=result.rows
+        respuesta_api.datos=result.rows
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
@@ -52,7 +52,7 @@ ControladorFechaLapsoAcademico.consultarPorAnoEscolor= async (req,res) => {
     modeloFechaLapsoAcademico.setIdAnoEscolar(id)
     let result =await modeloFechaLapsoAcademico.consultarPorFechaLapsosPorAnoEscolar()
     if(result.rowCount>0){
-        respuesta_api.mensaje=result.rows
+        respuesta_api.datos=result.rows
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
@@ -72,7 +72,7 @@ ControladorFechaLapsoAcademico.consultarTodos= async (req,res) => {
     let modeloFechaLapsoAcademico= new ModeloFechaLapsoAcademico()
     let result =await modeloFechaLapsoAcademico.consultarTodo()
     if(result.rowCount>0){
-        respuesta_api.mensaje=result.rows
+        respuesta_api.datos=result.rows
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"

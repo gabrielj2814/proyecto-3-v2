@@ -45,17 +45,32 @@ class ModuloFechaLapsoAcademico extends DriverPostgre {
     }
 
     async consultar(){
-        const SQL=`SELECT * FROM tfecha_lapso_academico WHERE id_fecha_lapso_academico=${this.id_fecha_lapso_academico}`
+        const SQL=`SELECT * FROM 
+        tfecha_lapso_academico,
+        tano_escolar
+        WHERE 
+        tfecha_lapso_academico.id_fecha_lapso_academico=${this.id_fecha_lapso_academico} AND
+        tano_escolar.id_ano_escolar=tfecha_lapso_academico.id_ano_escolar`
         return await this.query(SQL)
     }
 
     async consultarPorFechaLapsosPorAnoEscolar(){
-        const SQL=`SELECT * FROM tfecha_lapso_academico WHERE id_ano_escolar=${this.id_ano_escolar}`
+        const SQL=`SELECT * FROM 
+        tfecha_lapso_academico,
+        tano_escolar 
+        WHERE 
+        tfecha_lapso_academico.id_ano_escolar=${this.id_ano_escolar} AND
+        tano_escolar.id_ano_escolar=tfecha_lapso_academico.id_ano_escolar;`
         return await this.query(SQL)
     }
 
     async consultarTodo(){
-        const SQL=`SELECT * FROM tfecha_lapso_academico`
+        const SQL=`SELECT * FROM 
+        tfecha_lapso_academico,
+        tano_escolar
+        WHERE 
+        tano_escolar.id_ano_escolar=tfecha_lapso_academico.id_ano_escolar;
+        `
         return await this.query(SQL)
     }
 
