@@ -350,7 +350,7 @@ CREATE TABLE tfecha_lapso_academico(
     fecha_lapso_cierre DATE NOT NULL,
     estado_fecha_lapso character(1) NOT NULL,
     constraint PK_id_fecha_lapso_academico primary key(id_fecha_lapso_academico),
-    constraint FK_id_ano_escolar_tfecha_lapso_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+    constraint FK_id_ano_escolar_tfecha_lapso_academico foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
 
 CREATE TABLE tfecha_incripcion(
