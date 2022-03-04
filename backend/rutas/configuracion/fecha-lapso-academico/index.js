@@ -6,11 +6,11 @@ ControladorFechaLapsoAcademico=require("../../../controlador/c_fecha_lapso_acade
 
 router.use(bodyparser.json())
 
-// router.post("/registrar",)
-// router.get("/consultar/:id",)
-// router.get("/consultar-todo",)
-// router.get("/consultar-por-ano-escolar/:id",)
-// router.put("/actualizar/:id",)
+router.post("/registrar",ControladorFechaLapsoAcademico.registrar)
+router.get("/consultar/:id",ControladorFechaLapsoAcademico.consultar)
+router.get("/consultar-todo",ControladorFechaLapsoAcademico.consultarTodos)
+router.get("/consultar-por-ano-escolar/:id",ControladorFechaLapsoAcademico.consultarPorAnoEscolor)
+router.put("/actualizar/:id",ControladorFechaLapsoAcademico.actulizar)
 // router.get("/consultar-fecha-servidor",)
 
 module.exports = router 
