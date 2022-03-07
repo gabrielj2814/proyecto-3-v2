@@ -195,7 +195,7 @@ class ComponentVacuna extends React.Component{
                 <tr> 
                     <th>Código</th> 
                     <th>Nombre de la Vacuna</th>
-                    <th>Estodo</th>
+                    <th>Estado</th>
                 </tr> 
             </thead>
         )
