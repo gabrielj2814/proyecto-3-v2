@@ -236,7 +236,7 @@ function App() {
 
         <Route exact path="/dashboard/transaccion/planificacion" component={ComponentPlanificacionLapsoEscolar}/>
         <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/lapso" component={ComponentLapsoPlanificaion}/>
-        <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/lapso/:id_lapso" component={ComponentLapso}/>
+        <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/año-escolar/:id_ano/lapso/:id_lapso" component={ComponentLapso}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>

@@ -49,9 +49,13 @@ class ModeloLapsoAcademico extends PostgreDriver{
     async consultarlapsoPorPlanificacion(id){
         const SQL=`
         SELECT * FROM
+        tasignacion_aula_profesor,
+        tplanificacion_lapso_escolar,
         tlapso_academico
         WHERE 
-        id_planificacion_lapso_escolar=${id}`
+        tlapso_academico.id_planificacion_lapso_escolar=${id} AND
+        tplanificacion_lapso_escolar.id_planificacion_lapso_escolar=tlapso_academico.id_planificacion_lapso_escolar AND
+        tasignacion_aula_profesor.id_asignacion_aula_profesor=tplanificacion_lapso_escolar.id_asignacion_aula_profesor`
         return await this.query(SQL);
     }
     
