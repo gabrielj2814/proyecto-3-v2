@@ -290,6 +290,28 @@ controladorPlanificacionLapsoEscolar.eliminar=async (req,res) => {
     res.end()
 }
 
+controladorPlanificacionLapsoEscolar.asignarFechaLapso= async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const ModeloLapsoAcademico=require("../modelo/m_lapso_academico")
+    let {idFecha,idLapso} = req.params
+    let ModeloLapso=new ModeloLapsoAcademico()
+    ModeloLapso.setIdLapsoAcademico(idLapso)
+    let resultLapso=await ModeloLapso.asignarFechaLapso(idFecha)
+    if(resultLapso.rowCount>0){
+        respuesta_api.mensaje="Fechas asginada al lapso academico"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="Error al asignar las fechas"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 
 module.exports= controladorPlanificacionLapsoEscolar
