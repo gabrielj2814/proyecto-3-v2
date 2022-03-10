@@ -10,31 +10,26 @@ import axios from 'axios'
 import Moment from 'moment'
 // IP servidor
 import servidor from '../ipServer.js'
-//componentes
-import ComponentDashboard from './componentDashboard'
 //sub componentes
-import InputButton from '../subComponentes/input_button'
-import ButtonIcon from '../subComponentes/buttonIcon'
-import ComponentFormCampo from '../subComponentes/componentFormCampo';
-import ComponentFormRadioState from '../subComponentes/componentFormRadioState';
-import ComponentFormSelect from '../subComponentes/componentFormSelect';
-import ComponentFormDate from '../subComponentes/componentFormDate'
-import ComponentFormTextArea from '../subComponentes/componentFormTextArea'
+import InputButton from './input_button'
+import ButtonIcon from './buttonIcon'
+import ComponentFormCampo from './componentFormCampo';
+import ComponentFormRadioState from './componentFormRadioState';
+import ComponentFormSelect from './componentFormSelect';
+import ComponentFormDate from './componentFormDate'
+import ComponentFormTextArea from './componentFormTextArea'
 import { Alert } from 'bootstrap';
-import AlertBootstrap from "../subComponentes/alertBootstrap"
+import AlertBootstrap from "./alertBootstrap"
 
-class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
-  constructor(){
-    super();
+class ComponentMultiStepFormAsignacion extends React.Component{
+  constructor(props){
+    super(props);
     this.GetTodosRepresentantesEstudiantes = this.GetTodosRepresentantesEstudiantes.bind(this);
-    this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
     this.buscarRepresentante = this.buscarRepresentante.bind(this)
     this.BuscarEstudiante = this.BuscarEstudiante.bind(this);
-    this.mostrarModulo = this.mostrarModulo.bind(this);
     this.regresar=this.regresar.bind(this);
     this.operacion=this.operacion.bind(this);
     this.cambiarEstado=this.cambiarEstado.bind(this);
-    this.agregar=this.agregar.bind(this);
     this.validarNumero=this.validarNumero.bind(this);
     this.validarTexto=this.validarTexto.bind(this);
     this.validarSelect=this.validarSelect.bind(this);
@@ -42,17 +37,16 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
     this.validarFormularioRegistrar=this.validarFormularioRegistrar.bind(this);
     this.validarCampo=this.validarCampo.bind(this)
     this.enviarDatos=this.enviarDatos.bind(this)
-
-    // this.consultarRepresentante=this.consultarRepresentante.bind(this)
-
+    this.RemCedulas = this.RemCedulas.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
         estado_menu:false,
         //formulario
         id_asignacion_representante_estudiante: null,
-        id_estudiante: "",
+        id_estudiante: this.props.idEstudiante,
         cedula_escolar: "",
+        cedulas_representante: this.props.cedulasRepresentante,
         id_cedula_representante: "",
         tipo_representante: "",
         parentesco: "",
@@ -78,6 +72,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           {id: "P", descripcion: "Papa"},
           {id: "O", descripcion: "Otro representante"}
         ],
+        tipos_representantes_usados:[],
         hashRepresentante:{},
         hashEstudiante:{},
         estadoBusquedaEstudiante: false,
@@ -94,116 +89,9 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-representante-estudiante")
-    if(acessoModulo){
-      await this.consultarFechaServidor()
-      await this.GetTodosRepresentantesEstudiantes()
-      const operacion=this.props.match.params.operacion
-
-      if(operacion === "actualizar"){
-        const {id} = this.props.match.params;
-        const datos = await this.consultarRegistros(id);
-
-        this.setState({
-          id_estudiante: datos.id_estudiante,
-          cedula_escolar: datos.cedula_escolar+datos.codigo_cedula_escolar,
-          id_cedula_representante: datos.id_cedula_representante,
-          tipo_representante: datos.tipo_representante,
-          parentesco: datos.parentesco,
-          numero_representante: datos.numero_representante,
-          estatus_asignacion_representante_estudiante: datos.estatus_asignacion_representante_estudiante,
-          nombre_representante: datos.nombres_representante,
-          nombre_estudiante: datos.nombres_estudiante,
-          apellido_estudiante: datos.apellidos_estudiante,
-          apellido_representante: datos.apellidos_representante,
-        })
-
-        document.getElementById('tipo_representante').value = datos.tipo_representante
-      }
-    }
-  }
-
-  async validarAccesoDelModulo(modulo,subModulo){
-    let estado = false
-    if(localStorage.getItem("usuario")){
-
-      const token=localStorage.getItem("usuario")
-      await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
-      .then(async respuesta=>{
-          let respuesta_servior = respuesta.data
-          if(respuesta_servior.usuario){
-            estado = await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-          }
-      })
-    }
-    return estado
-  }
-
-  async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
-    let estado=false
-    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
-    .then(repuesta => {
-        let json=JSON.parse(JSON.stringify(repuesta.data))
-        // console.log("datos modulos =>>>",json)
-        let modulosSistema={}
-        let modulosActivos=json.modulos.filter( modulo => {
-            if(modulo.estatu_modulo==="1"){
-                return modulo
-            }
-        })
-        // console.log("datos modulos =>>>",modulosActivos);
-        for(let medulo of modulosActivos){
-            if(modulosSistema[medulo.modulo_principal]){
-                modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
-            }
-            else{
-                modulosSistema[medulo.modulo_principal]={}
-                modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
-            }
-        }
-        console.log(modulosSistema)
-        if(modulosSistema[modulo][subModulo]){
-          estado=true
-        }
-        // this.setState({modulosSistema})
-    })
-    .catch(error =>  {
-        console.log(error)
-    })
-    return estado
-  }
-
-  // logica menu
-  mostrarModulo(a){
-      // esta funcion tiene la logica del menu no tocar si no quieres que el menu no te responda como es devido
-      var span=a.target;
-      if(this.state.modulo===""){
-          const estado="true-"+span.id;
-          this.setState({modulo:estado,estado_menu:true});
-      }
-      else{
-          var modulo=this.state.modulo.split("-");
-          if(modulo[1]===span.id){
-              if(this.state.estado_menu){
-                  const estado="false-"+span.id
-                  this.setState({modulo:estado,estado_menu:false})
-              }
-              else{
-                  const estado="true-"+span.id
-                  this.setState({modulo:estado,estado_menu:true})
-              }
-          }
-          else{
-              if(this.state.estado_menu){
-                  const estado="true-"+span.id
-                  this.setState({modulo:estado})
-              }
-              else{
-                  const estado="true-"+span.id
-                  this.setState({modulo:estado,estado_menu:true})
-              }
-          }
-      }
+    await this.consultarFechaServidor()
+    await this.GetTodosRepresentantesEstudiantes()
+    await this.BuscarEstudiante()
   }
 
   async consultarFechaServidor(){
@@ -213,9 +101,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           // alert(fechaServidor)
           this.setState({fechaServidor})
       })
-      .catch(error => {
-          console.log("error al conectar con el servidor")
-      })
+      .catch(error => console.log("error al conectar con el servidor") )
   }
 
   async consultarRegistros(id){
@@ -304,8 +190,25 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   cambiarEstadoDos(input){ this.setState({[input.name]:input.value}) }
 
   cambiarEstado(a){
-      var input=a.target;
-      this.setState({[input.name]:input.value})
+    if(a.target.id == "tipo_representante"){
+      if(this.state.tipos_representantes_usados.length > 0 && a.target.value != ""){
+        let validacion = true;
+
+        this.state.tipos_representantes_usados.map( item => {
+          if(item.id == a.target.value) validacion = false;
+        });
+
+        if(!validacion){
+          let mensaje_campo = this.state["msj_tipo_representante"];
+          mensaje_campo[0] = {mensaje: "Ya esta registrado este tipo de representante, elije otro", color_texto:"rojo"}
+          this.setState({["msj_tipo_representante"]:mensaje_campo})
+          return false;
+        }
+
+      }
+    }
+    var input=a.target;
+    this.setState({[input.name]:input.value})
   }
 
   validarCampo(nombre_campo){
@@ -339,32 +242,6 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       else if(nombre_campo === "parentesco") this.setState(msj_parentesco)
       else this.setState(msj_apellidos)
       return estado
-  }
-
-  async agregar(){
-    var mensaje=this.state.mensaje
-    mensaje.estado=""
-    var mensaje_campo=[{mensaje:"",color_texto:""}]
-    this.setState({
-      //formulario
-      id:"",
-      id_estudiante: "",
-      cedula_escolar: "",
-      id_cedula_representante: "",
-      tipo_representante: "",
-      parentesco: "",
-      numero_representante: "",
-      estatus_asignacion_representante_estudiante:"1",
-      //MSJ
-      msj_id:[{mensaje:"",color_texto:""}],
-      msj_cedula_escolar:[{mensaje:"",color_texto:""}],
-      msj_id_cedula_representante:[{mensaje:"",color_texto:""}],
-      msj_tipo_representante:[{mensaje:"",color_texto:""}],
-      msj_parentesco:[{mensaje:"",color_texto:""}],
-      msj_numero_representante:[{mensaje:"",color_texto:""}],
-      msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
-    })
-    this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante/registrar")
   }
 
   validarCampoNumero(nombre_campo){
@@ -427,23 +304,8 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       }else return {estado: false}
   }
 
-  validarFormularioActuazliar(){
-    const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
-    validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
-    validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-    validar_parentesco = this.validarCampo('parentesco');
-
-    if( validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
-      return {estado: true}
-    }else return {estado: false}
-  }
-
   operacion(){
-      $(".columna-modulo").animate({
-          scrollTop: 0
-          }, 1000)
-      const operacion=this.props.match.params.operacion
-
+      $(".columna-modulo").animate({scrollTop: 0}, 1000)
       const mensaje_formulario={
           mensaje:"",
           msj_id:[{mensaje:"",color_texto:""}],
@@ -454,55 +316,45 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           msj_numero_representante:[{mensaje:"",color_texto:""}],
           msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
       }
-      if(operacion==="registrar"){
+      const estado_validar_formulario=this.validarFormularioRegistrar()
 
-          const estado_validar_formulario=this.validarFormularioRegistrar()
-          if(estado_validar_formulario.estado){
-              this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                  const mensaje =this.state.mensaje
-                  var respuesta_servidor=""
-                  axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto)
-                  .then(respuesta=>{
-                      respuesta_servidor=respuesta.data
-                      mensaje.texto=respuesta_servidor.mensaje
-                      mensaje.estado=respuesta_servidor.estado_respuesta
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-                  .catch(error=>{
-                      mensaje.texto="No se puedo conectar con el servidor"
-                      mensaje.estado=false
-                      console.log(error)
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-              })
-          }
+      if(estado_validar_formulario.estado){
+          this.enviarDatos(estado_validar_formulario,(objeto)=>{
+          const mensaje =this.state.mensaje
+          var respuesta_servidor=""
+          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto)
+            .then(respuesta=>{
+              respuesta_servidor=respuesta.data
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_respuesta
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+              this.RemCedulas(this.state.id_cedula_representante)
+              this.GestionarTiposRepresentante()
+
+            })
+            .catch(error=>{
+              mensaje.texto="No se puedo conectar con el servidor"
+              mensaje.estado=false
+              console.log(error)
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            })
+          })
       }
-      else if(operacion==="actualizar"){
-          const estado_validar_formulario=this.validarFormularioActuazliar()
-          const {id}=this.props.match.params
-          if(estado_validar_formulario.estado){
-              this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                  const mensaje =this.state.mensaje
-                  var respuesta_servidor=""
-                  axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/actualizar/${id}`,objeto)
-                  .then(respuesta=>{
-                      respuesta_servidor=respuesta.data
-                      mensaje.texto=respuesta_servidor.mensaje
-                      mensaje.estado=respuesta_servidor.estado_respuesta
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-                  .catch(error=>{
-                      mensaje.texto="No se puedo conectar con el servidor"
-                      mensaje.estado=false
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-              })
-          }
-      }
+  }
+
+  GestionarTiposRepresentante(){
+    let tipos_usados = this.state.tipos_representantes_usados;
+    let value = this.state.tipo_representante
+
+    if(tipos_usados.length > 0){
+      let nuevo = true;
+      tipos_usados.map( item =>{ if(item.id == value) nuevo = false; })
+      if(nuevo) tipos_usados.push({id: value})
+
+    }else tipos_usados = [{id: value}];
+    this.setState({tipos_representantes_usados: tipos_usados})
   }
 
   enviarDatos(estado_validar_formulario,petion){
@@ -524,20 +376,17 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
   regresar(){ this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante"); }
 
-  BuscarEstudiante(a){
+  BuscarEstudiante(){
 
-    this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
-    
-    console.log(hashEstudiante)
 
-    if(hashEstudiante[a.target.value]){
-      console.log(hashEstudiante[a.target.value])
+    if(hashEstudiante[this.state.id_estudiante]){
       this.setState({
         estadoBusquedaEstudiante: true,
-        id_estudiante: hashEstudiante[a.target.value].id_estudiante,
-        nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
-        apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
+        id_estudiante: hashEstudiante[this.state.id_estudiante].id_estudiante,
+        cedula_escolar: hashEstudiante[this.state.id_estudiante].cedula_escolar,
+        nombre_estudiante: hashEstudiante[this.state.id_estudiante].nombres_estudiante,
+        apellido_estudiante: hashEstudiante[this.state.id_estudiante].apellidos_estudiante,
       });
       return;
     }
@@ -547,20 +396,29 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   buscarRepresentante(a){
-    this.validarNumero(a);
-    let hashRepresentante = JSON.parse(JSON.stringify(this.state.hashRepresentante));
+    a.persist();
+    setTimeout(() => {
+      this.validarNumero(a);
+      let hashRepresentante = JSON.parse(JSON.stringify(this.state.hashRepresentante));
 
-    if(hashRepresentante[a.target.value]){
+      if(hashRepresentante[a.target.value]){
+        this.setState({
+          estadoBusquedaRepresentante: true,
+          nombre_representante: hashRepresentante[a.target.value].nombres_representante,
+          apellido_representante: hashRepresentante[a.target.value].apellidos_representante
+        });
+        return;
+      }
       this.setState({
-        estadoBusquedaRepresentante: true,
-        nombre_representante: hashRepresentante[a.target.value].nombres_representante,
-        apellido_representante: hashRepresentante[a.target.value].apellidos_representante
+        estadoBusquedaRepresentante: false
       });
-      return;
-    }
-    this.setState({
-      estadoBusquedaRepresentante: false
-    });
+    }, 100);
+  }
+
+  RemCedulas(value){
+    let cedulas_representante = this.state.cedulas_representante;
+    let new_array = cedulas_representante.filter( item => item.id != value);
+    this.setState({cedulas_representante: new_array});
   }
 
   async GetTodosRepresentantesEstudiantes(){
@@ -569,8 +427,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       let json = JSON.parse(JSON.stringify(res.data));
       let hash = {};
       for(let estudiante of json.datos){
-        if(estudiante.cedula_estudiante != null) hash[estudiante.cedula_estudiante] = estudiante;
-        if(estudiante.cedula_escolar != null) hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
+        hash[estudiante.id_estudiante] = estudiante;
       }
 
       this.setState({hashEstudiante:hash})
@@ -591,7 +448,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   render(){
-    var jsx_representante_estudiante=(
+    return (
         <div className="row justify-content-center">
 
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
@@ -614,7 +471,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                         <span className="titulo-form-trabajador">Formulario de asignacion representante-estudiante</span>
                     </div>
                 </div>
-                <div className="row">
+                {/* <div className="row">
                     <div className="col-auto">
                         <ButtonIcon
                         clasesBoton="btn btn-outline-success"
@@ -623,13 +480,20 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                         eventoPadre={this.agregar}
                         />
                     </div>
-                </div>
+                </div> */}
                 <form id="form_trabajador">
                   <div className="row justify-content-center align-items-center">
-                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_representante[0]}
-                        nombreCampo="Cédula del representante:" activo="si" type="text" value={this.state.id_cedula_representante}
-                        name="id_cedula_representante" id="id_cedula_representante" placeholder="Cédula del representante" eventoPadre={this.buscarRepresentante}
+                      <ComponentFormSelect
+                        clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
+                        obligatorio="si"
+                        mensaje={this.state.msj_id_cedula_representante[0]}
+                        nombreCampoSelect="Cédula del representante:"
+                        clasesSelect="custom-select"
+                        name="id_cedula_representante"
+                        id="id_cedula_representante"
+                        eventoPadre={this.buscarRepresentante}
+                        defaultValue={this.state.id_cedula_representante}
+                        option={this.state.cedulas_representante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
                           <label>Nombre del representante: {this.state.nombre_representante}</label>
@@ -708,7 +572,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   </div>
                     <div className="row justify-content-center">
                         <div className="col-auto">
-                            {this.props.match.params.operacion==="registrar" &&
+                            {this.props.operacion==="registrar" &&
                                 <InputButton
                                 clasesBoton="btn btn-primary"
                                 id="boton-registrar"
@@ -716,40 +580,30 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                                 eventoPadre={this.operacion}
                                 />
                             }
-                            {this.props.match.params.operacion==="actualizar" &&
-                                <InputButton
-                                clasesBoton="btn btn-warning"
-                                id="boton-actualizar"
-                                value="Actualizar"
-                                eventoPadre={this.operacion}
-                                />
-                            }
                         </div>
                         <div className="col-auto">
                             <InputButton
-                            clasesBoton="btn btn-danger"
-                            id="boton-cancelar"
-                            value="Cancelar"
-                            eventoPadre={this.regresar}
+                              clasesBoton="btn btn-success"
+                              id="boton-anadir"
+                              value="Nuevo representante"
+                              eventoPadre={this.props.reverse}
                             />
+                        </div>
+                        <div className="col-auto">
+                            {this.props.obligatorio == false && <InputButton
+                              clasesBoton="btn btn-secondary"
+                              id="boton-cancelar"
+                              value="Omitir"
+                              eventoPadre={this.props.next}
+                            />
+                            }
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     )
-
-    return(
-        <div className="component_trabajador_form">
-          <ComponentDashboard
-          componente={jsx_representante_estudiante}
-          modulo={this.state.modulo}
-          eventoPadreMenu={this.mostrarModulo}
-          estado_menu={this.state.estado_menu}
-          />
-        </div>
-    )
   }
 }
 
-export default withRouter(ComponentAsignacionRepresentanteEstudianteForm)
+export default ComponentMultiStepFormAsignacion

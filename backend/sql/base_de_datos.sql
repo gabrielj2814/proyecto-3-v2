@@ -322,7 +322,6 @@ CREATE TABLE tgrado(
     constraint PK_id_grado primary key(id_grado)
 );
 
-
 CREATE TABLE taula(
     id_aula SERIAL,
     id_grado INTEGER NOT NULL,
@@ -343,7 +342,17 @@ CREATE TABLE tano_escolar(
     constraint PK_id_ano_escolar primary key(id_ano_escolar)
 );
 
--- ALTER TABLE tano_escolar ADD COLUMN seguimiento_ano_escolar character(1) NULL;
+CREATE TABLE tfecha_lapso_academico(
+    id_fecha_lapso_academico SERIAL,
+    id_ano_escolar INTEGER NOT NULL,
+    numero_lapos character(1) NOT NULL,
+    fecha_lapso_inicio DATE NOT NULL,
+    fecha_lapso_cierre DATE NOT NULL,
+    estado_fecha_lapso character(1) NOT NULL,
+    constraint PK_id_fecha_lapso_academico primary key(id_fecha_lapso_academico),
+    constraint FK_id_ano_escolar_tfecha_lapso_academico foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+);
+
 CREATE TABLE tfecha_incripcion(
     id_fecha_incripcion SERIAL,
     id_ano_escolar INTEGER NOT NULL,
@@ -362,12 +371,13 @@ CREATE TABLE tprofesor(
     constraint PK_id_profesor primary key(id_profesor),
     constraint FK_id_cedula_tprofesor foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
 );
-
+-- ALTER TABLE tasignacion_aula_profesor ADD COLUMN numero_total_de_estudiantes INTEGER NULL;
 CREATE TABLE tasignacion_aula_profesor(
     id_asignacion_aula_profesor SERIAL,
     id_profesor INTEGER NOT NULL,
     id_aula INTEGER NOT NULL,
     id_ano_escolar INTEGER NOT NULL,
+    numero_total_de_estudiantes INTEGER NOT NULL,
     estatus_asignacion_aula_profesor character(1) NOT NULL,
     constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
     constraint FK_id_profesor_tasignacion_aula_profesor foreign key(id_profesor) references tprofesor(id_profesor) on update cascade on delete cascade,
@@ -488,13 +498,17 @@ CREATE TABLE tplanificacion_lapso_escolar(
     constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
 );
 
+ALTER TABLE tlapso_academico ADD COLUMN id_fecha_lapso_academico INTEGER NULL;
+
 CREATE TABLE tlapso_academico(
     id_lapso_academico SERIAL,
     id_planificacion_lapso_escolar INTEGER NOT NULL,
     nombre_lapso_academico character varying(150) NOT NULL,
+    id_fecha_lapso_academico INTEGER NULL,
     estatu_lapso_academico character(1) NOT NULL, --1 -> se pueden seguir haciendo cambios pero no se puede utilizar para evaluar hacer evaluaciones ,2 -> listo (no se pueden hacer mas cambios y esta listo para usarse)
     fecha_de_creacion_lapso_academico DATE NOT NULL,
     constraint PK_id_lapso_academico primary key(id_lapso_academico),
+    constraint FK_id_fecha_lapso_academico foreign key(id_fecha_lapso_academico) references tfecha_lapso_academico(id_fecha_lapso_academico) on update cascade on delete cascade,
     constraint FK_id_planificacion_lapso_escolar foreign key(id_planificacion_lapso_escolar) references tplanificacion_lapso_escolar(id_planificacion_lapso_escolar) on update cascade on delete cascade
 );
 

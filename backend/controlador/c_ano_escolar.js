@@ -236,7 +236,7 @@ controladorAnoEscolar.consultarAnoEscolarSiguiente= async (req,res) => {
   let resultAnoEscolar=await AnoEscolar.consultarSeguimiento()
   // console.log("=>>>>>>>>>>>>>>>>>>>>",resultAnoEscolar.rows)
   if(resultAnoEscolar.rowCount===1){
-    respuesta_api.datos=resultAnoEscolar.rows[0]
+    respuesta_api.datos=resultAnoEscolar.rows
     respuesta_api.mensaje="si hay un año escolar planificado"
     respuesta_api.estado_respuesta=true
     respuesta_api.color_alerta="success"

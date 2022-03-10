@@ -167,7 +167,8 @@ class ComponentLapsoPlanificaion extends React.Component{
         let input=a.target
         const {id_planificacion} =this.props.match.params
         const id_lapso=input.getAttribute("data-id-lapso")
-        this.props.history.push(`/dashboard/transaccion/planificacion/${id_planificacion}/lapso/${id_lapso}`)
+        const id_ano_escolar=input.getAttribute("data-id-ano-escolar")
+        this.props.history.push(`/dashboard/transaccion/planificacion/${id_planificacion}/año-escolar/${id_ano_escolar}/lapso/${id_lapso}`)
     }
 
     render(){
@@ -188,10 +189,10 @@ class ComponentLapsoPlanificaion extends React.Component{
                 <h2 className='titulo-modulo-lapso-planificaion'>lapsos Academico</h2>
                 {this.state.listaDeLapsos.map((lapso,index) => {
                     return (
-                        <div className="contenedor-lapso" key={index} data-id-lapso={lapso.id_lapso_academico} onClick={this.irHaLapso}>
-                            <div className='lapso' data-id-lapso={lapso.id_lapso_academico}>
-                                <div class="nombre-lapso" data-id-lapso={lapso.id_lapso_academico}>Lapso {lapso.nombre_lapso_academico}</div>
-                                <div class="estado-lapso" data-id-lapso={lapso.id_lapso_academico}> {(lapso.estatu_lapso_academico==="1")?
+                        <div className="contenedor-lapso" key={index} data-id-lapso={lapso.id_lapso_academico} data-id-ano-escolar={lapso.id_ano_escolar} onClick={this.irHaLapso}>
+                            <div className='lapso' data-id-lapso={lapso.id_lapso_academico} data-id-ano-escolar={lapso.id_ano_escolar}>
+                                <div class="nombre-lapso" data-id-lapso={lapso.id_lapso_academico} data-id-ano-escolar={lapso.id_ano_escolar}>Lapso {lapso.nombre_lapso_academico}</div>
+                                <div class="estado-lapso" data-id-lapso={lapso.id_lapso_academico} data-id-ano-escolar={lapso.id_ano_escolar}> {(lapso.estatu_lapso_academico==="1")?
                                 <button className='btn btn-warning'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-fill" viewBox="0 0 16 16">
                                         <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>

@@ -41,6 +41,7 @@ const rutas_modulo_vacuna_estudiante = require("./rutas/configuracion/vacuna_est
 const rutas_modulo_enfermedad_estudiante = require("./rutas/configuracion/enfermedad_estudiante")
 const rutas_modulo_planificacion_lapso_escolar = require('./rutas/configuracion/planificacion-lapso-escolar')
 const rutas_modulo_fecha_inscripcion = require('./rutas/configuracion/fecha_inscripcion')
+const rutas_modulo_fecha_lapso_academico = require('./rutas/configuracion/fecha-lapso-academico')
 //SET
 app.set("puerto",8080)
 // USE
@@ -85,6 +86,7 @@ app.use("/configuracion/vacuna_estudiante", rutas_modulo_vacuna_estudiante)
 app.use("/transaccion/asignacion-aula-profesor", rutas_modulo_asignacion_aula_profesor)
 app.use("/transaccion/planificacion-lapso-escolar", rutas_modulo_planificacion_lapso_escolar)
 app.use("/configuracion/fecha-inscripcion", rutas_modulo_fecha_inscripcion)
+app.use("/configuracion/fecha-lapso-academico", rutas_modulo_fecha_lapso_academico)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())

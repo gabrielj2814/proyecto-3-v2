@@ -130,7 +130,8 @@ import ComponentLapsoPlanificaion from './componentes/componentLapsoPlanificaion
 import ComponentLapso from './componentes/componentLapso'
 // fecha inscripcion
 import ComponentFechaInscripcionFormulario from './componentes/componentFechaInscripcionFormulario'
-
+import ComponentFechaInscripcion from './componentes/componentFechaInscripcion'
+import ComponentMultiStepForm from './componentes/ComponentMultiStepForm'
 
 function App() {
   return (
@@ -202,7 +203,8 @@ function App() {
 
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
-        <Route exact path="/dashboard/configuracion/estudiante/:operacion/:id?" component={ComponentEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/actualizar/:id?" component={ComponentEstudianteForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/registrar" component={ComponentMultiStepForm}/>
 
         <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
         <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
@@ -227,13 +229,14 @@ function App() {
         <Route exact path="/dashboard/configuracion/profesor:mensaje?" component={ComponentProfesor}/>
 
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:operacion/:id?" component={ComponentFechaInscripcionFormulario}/>
+        <Route exact path="/dashboard/configuracion/fecha-inscripcion/:mensaje?" component={ComponentFechaInscripcion}/>
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
 
         <Route exact path="/dashboard/transaccion/planificacion" component={ComponentPlanificacionLapsoEscolar}/>
         <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/lapso" component={ComponentLapsoPlanificaion}/>
-        <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/lapso/:id_lapso" component={ComponentLapso}/>
+        <Route exact path="/dashboard/transaccion/planificacion/:id_planificacion/año-escolar/:id_ano/lapso/:id_lapso" component={ComponentLapso}/>
 
         <Route exact path="/dashboard/transaccion/reposo-trabajador/solicitar" component={ComponentReposoTrabajadorFormDirecto}/>
         <Route exact path="/dashboard/transaccion/reposo-trabajador/consultar/:id" component={ComponentReposoTrabajadorForm}/>

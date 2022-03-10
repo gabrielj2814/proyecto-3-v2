@@ -1,0 +1,14 @@
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.contenedor_tabla_fecha_inscripcion{
+    background-color: var(--color-fondo-formulario);
+    height: 100%;
+    border-radius: 15px;
+    padding-top: 15px;
+}
+
+.component_fecha_inscripcion{
+    height: 100%;
+}

@@ -270,7 +270,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
               <tr>
                   <th>Cedula del representante</th>
                   <th>Nombre del representante</th>
-                  <th>Codigo del estudiante</th>
+                  <th>Cedula escolar</th>
                   <th>Nombre del estudiante</th>
                   <th>Tipo de representante</th>
               </tr>
@@ -284,15 +284,15 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
                   <tr key={asignacion.id_asignacion_representante_estudiante}>
                         <td>{asignacion.id_cedula_representante}</td>
                         <td>{asignacion.nombres_representante+" "+asignacion.apellidos_representante}</td>
-                        <td>{asignacion.cedula_estudiante != "No tiene" ? asignacion.cedula_estudiante : asignacion.cedula_escolar}</td>
+                        <td>{asignacion.codigo_cedula_escolar+"-"+asignacion.cedula_escolar}</td>
                         <td>{asignacion.nombres_estudiante+" "+asignacion.apellidos_estudiante}</td>
                         <td>{this.state.tipos_representantes.filter( e => e.id === asignacion.tipo_representante)[0].descripcion}</td>
                        {!asignacion.vacio &&
                          <td>
                            <ButtonIcon
                               clasesBoton="btn btn-warning btn-block"
-                              value={asignacion.id_estudiante}
-                              id={asignacion.id_estudiante}
+                              value={asignacion.id_asignacion_representante_estudiante}
+                              id={asignacion.id_asignacion_representante_estudiante}
                               eventoPadre={this.actualizarElementoTabla}
                               icon="icon-pencil"
                             />
