@@ -520,3 +520,57 @@ CREATE TABLE tobjetivo_lapso_academico(
     constraint PK_id_objetivo_lapso_academico primary key(id_objetivo_lapso_academico),
     constraint FK_id_lapso_academico foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
 );
+
+CREATE TABLE tinscripcion(
+    id_inscripcion SERIAL,
+    id_estudiante INTEGER NOT NULL,
+    id_asignacion_representante_estudiante INTEGER NOT NULL,
+    id_asignacion_aula_profesor INTEGER NOT NULL,
+    fecha_inscripcion DATE NOT NULL,
+    estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS I,E,P,R 
+    constraint PK_id_inscripcion primary key(id_inscripcion),
+    constraint FK_id_estudiante_tinscripcion foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
+    constraint FK_id_asignacion_representante_estudiante_tinscripcion foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
+    constraint FK_id_asignacion_aula_profesor_tinscripcion foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
+);
+
+CREATE TABLE tasistencia_estudiante(
+    id_asistencia_estudiante SERIAL,
+    id_inscripcion INTEGER NOT NULL,
+    fecha_asistencia_estudiante DATE NOT NULL,
+    observacion_asistencia_estudiante character varying(250) NOT NULL,
+    constraint PK_id_asistencia_estudiante primary key(id_asistencia_estudiante),
+    constraint FK_id_inscripcion_tasistencia_estudianten foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
+);
+
+CREATE TABLE tboleta(
+    id_boleta SERIAL ,
+    id_inscripcion INTEGER NOT NULL,
+    observacion_boleta character varying(250) NOT NULL,
+    fecha_boleta DATE NOT NULL,
+    constraint PK_id_boleta primary key(id_boleta),
+    constraint FK_id_inscripcion_tboleta foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
+);
+
+CREATE TABLE tnota(
+    id_nota SERIAL,
+    id_boleta INTEGER NOT NULL,
+    id_objetivo_lapso_academico INTEGER NOT NULL,
+    nota character varying(1) NOT NULL,
+    observacion_nota character varying(250) NOT NULL,
+    fecha_nota DATE NOT NULL,
+    constraint PK_id_nota primary key(id_nota),
+    constraint FK_id_objetivo_lapso_academico_tnota foreign key(id_objetivo_lapso_academico) references tobjetivo_lapso_academico(id_objetivo_lapso_academico) on update cascade on delete cascade
+);
+
+CREATE TABLE tpromocion(
+    id_promocion SERIAL,
+    id_inscripcion INTEGER NOT NULL,
+    grado_a_promocionar character varying(1) NOT NULL,
+    fecha_promocion DATE NOT NULL,
+    observacion_promocion character varying(300) NOT NULL,
+    constraint PK_id_promocion primary key(id_promocion),
+    constraint FK_id_inscripcion_tpromocion foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
+);
+
+-- CREATE TABLE tretiro();
