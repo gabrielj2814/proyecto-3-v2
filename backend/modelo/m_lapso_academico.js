@@ -77,6 +77,15 @@ class ModeloLapsoAcademico extends PostgreDriver{
         return await this.query(SQL);
     }
 
+    async asignarFechaLapso(idFecha){
+        const SQL=`
+        UPDATE tlapso_academico SET
+        id_fecha_lapso_academico=${idFecha}
+        WHERE 
+        id_lapso_academico=${this.id_lapso_academico} RETURNING id_lapso_academico;`
+        return await this.query(SQL);
+    }
+
 
 }
 

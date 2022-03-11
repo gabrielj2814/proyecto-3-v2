@@ -32,18 +32,18 @@ class ComponentLapso extends React.Component{
         this.guardarObjetivo=this.guardarObjetivo.bind(this);
         this.eliminarObjetivo=this.eliminarObjetivo.bind(this);
         this.guardarEstadoPlanificaion=this.guardarEstadoPlanificaion.bind(this);
+        this.guardarTipoDeLapso=this.guardarTipoDeLapso.bind(this);
         this.state={
             modulo:"",
             estado_menu:false,
             // ------
             id_lapso:null,
             id_lapso_academico:"",
-            id_fecha_lapso:"",
             nombre_lapso:"",
             descripcion_objetivo_academico:"",
             estatu_objetivo_lapso_academico:"",
             listaObjetivos:[],
-            id_fecha_lapso:null,
+            id_planificacion_lapso_escolar:"",
             lista_fecha_lapso_escolar:[],
 
             //
@@ -182,15 +182,20 @@ class ComponentLapso extends React.Component{
         )
         .then(respuesta=>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log("datos lapos =>>>>",json)
+            console.log("datos lapos =>>>>",json)
             if(json.datos.length>0){
                 let nombreLapso=document.getElementById("nombreLapso")
                 nombreLapso.textContent=json.datos[0].nombre_lapso_academico;
                 let estadoLapso=document.getElementById("estadoLapso")
                 estadoLapso.value=json.datos[0].estatu_lapso_academico
+                if(json.datos[0].id_fecha_lapso_academico!==null){
+                    let id_fecha_lapso_academico=document.getElementById("id_fecha_lapso_academico")
+                    id_fecha_lapso_academico.value=json.datos[0].id_fecha_lapso_academico
+                }
             }
         })
         .catch(error => {
+            console.log("qie paso")
             let alerta=JSON.parse(JSON.stringify(this.state.alerta))
             alerta.color="danger"
             alerta.mensaje="error al conectarse con el servidor"
@@ -346,6 +351,29 @@ class ComponentLapso extends React.Component{
             this.setState({alerta})
         })
     }
+
+    async guardarTipoDeLapso(){
+        let idFechaLapso=document.getElementById("id_fecha_lapso_academico").value
+        await axiosCustom.put(
+            `transaccion/planificacion-lapso-escolar/asignar-fecha-lapso/${idFechaLapso}/${this.props.match.params.id_lapso}`
+        )
+        .then(async respuesta=>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            // console.log(json)
+            let contenedorAlertasLapsoObjetivo=document.getElementById("contenedorAlertasLapsoObjetivo")
+            let alertaHtml=`
+                <div class="alert alert-success alert-dismissible fade show" role="alert">Se le asignado fecha con existo<button class="close" data-dismiss="alert"><span>X</span></button></div>
+            `
+            contenedorAlertasLapsoObjetivo.innerHTML+=alertaHtml
+        })
+        .catch(error => {
+            let alerta=JSON.parse(JSON.stringify(this.state.alerta))
+            alerta.color="danger"
+            alerta.mensaje="error al conectarse con el servidor"
+            alerta.estado=true
+            this.setState({alerta})
+        })
+    }
     
 
     render(){
@@ -397,7 +425,7 @@ class ComponentLapso extends React.Component{
                         <div class="form-group row justify-content-center ">
                             <label className="col-3 col-form-label text-right">Fecha de lapso:</label>
                             <div className='col-3'>
-                                <select id="id_fecha_lapso" className='form-control' >
+                                <select id="id_fecha_lapso_academico" className='form-control' >
                                     {this.state.lista_fecha_lapso_escolar.map((fechaLapso,index) => {
                                         return (
                                             <option key={index} value={fechaLapso.id_fecha_lapso_academico} >lapso {fechaLapso.numero_lapos} - ({moment(fechaLapso.fecha_lapso_inicio,"YYYY-MM-DD").format("DD-MM-YYYY")} - {moment(fechaLapso.fecha_lapso_cierre,"YYYY-MM-DD").format("DD-MM-YYYY")})</option>
@@ -406,7 +434,7 @@ class ComponentLapso extends React.Component{
                                 </select>
                             </div>
                             <div className='col-3'>
-                                <input type="button" className='btn btn-primary' value="guardar" />
+                                <input type="button" className='btn btn-primary' value="guardar" onClick={this.guardarTipoDeLapso}/>
                             </div>
                         </div>
                     </form>

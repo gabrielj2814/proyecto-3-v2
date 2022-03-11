@@ -18,6 +18,7 @@ router.put("/actualizar-objetivo",ControladorPlanificacionLapsoEscolar.actualiza
 router.put("/actualizar-estado-lapso",ControladorPlanificacionLapsoEscolar.actualizarEstadoLapso)
 router.get("/consultar-todos-objetivo/:id_lapso",ControladorPlanificacionLapsoEscolar.consultarTodos)
 router.delete("/eliminar-objetivo/:id",ControladorPlanificacionLapsoEscolar.eliminar)
+router.put("/asignar-fecha-lapso/:idFecha/:idLapso",ControladorPlanificacionLapsoEscolar.asignarFechaLapso)
 
 
 
