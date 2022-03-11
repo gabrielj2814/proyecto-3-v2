@@ -538,6 +538,7 @@ CREATE TABLE tasistencia_estudiante(
     id_asistencia_estudiante SERIAL,
     id_inscripcion INTEGER NOT NULL,
     fecha_asistencia_estudiante DATE NOT NULL,
+    estatus_asistencia_estudiante character(1) NOT NULL, -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo
     observacion_asistencia_estudiante character varying(250) NOT NULL,
     constraint PK_id_asistencia_estudiante primary key(id_asistencia_estudiante),
     constraint FK_id_inscripcion_tasistencia_estudianten foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
