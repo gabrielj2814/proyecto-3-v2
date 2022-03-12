@@ -4,7 +4,8 @@ const express=require("express"),
 app =express(),
 logger=require("morgan"),
 cors=require("cors"),
-fs=require("fs");
+fs=require("fs"),
+bodyParser=require("body-parser");
 // importando rutas de los modulos
 const rutas_modulo_login=require("./rutas/login"),
 rutas_modulo_acceso=require("./rutas/configuracion/acceso"),
@@ -42,6 +43,7 @@ const rutas_modulo_enfermedad_estudiante = require("./rutas/configuracion/enferm
 const rutas_modulo_planificacion_lapso_escolar = require('./rutas/configuracion/planificacion-lapso-escolar')
 const rutas_modulo_fecha_inscripcion = require('./rutas/configuracion/fecha_inscripcion')
 const rutas_modulo_fecha_lapso_academico = require('./rutas/configuracion/fecha-lapso-academico')
+const rutas_modulo_inscripcion = require('./rutas/configuracion/inscripcion')
 //SET
 app.set("puerto",8080)
 // USE
@@ -50,6 +52,9 @@ app.use(express.static(__dirname+"/upload"))
 app
 .use(logger('dev'))
 .use(cors())
+
+app.use(bodyParser.json()) // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true }))
 // rutas de los modulos
 .use("/login",rutas_modulo_login)
 .use("/configuracion/acceso",rutas_modulo_acceso)
@@ -87,6 +92,7 @@ app.use("/transaccion/asignacion-aula-profesor", rutas_modulo_asignacion_aula_pr
 app.use("/transaccion/planificacion-lapso-escolar", rutas_modulo_planificacion_lapso_escolar)
 app.use("/configuracion/fecha-inscripcion", rutas_modulo_fecha_inscripcion)
 app.use("/configuracion/fecha-lapso-academico", rutas_modulo_fecha_lapso_academico)
+app.use("/configuracion/inscripcion", rutas_modulo_inscripcion)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())

@@ -22,6 +22,7 @@ class ModuloAnoEscolar extends DriverPostgre {
     this.fecha_cierre_ano_escolar = anoescolar.fecha_cierre_ano_escolar
     this.estatus_ano_escolar = anoescolar.estatus_ano_escolar
     this.seguimiento_ano_escolar = anoescolar.seguimiento_ano_escolar
+
   }
 
   setIdAnoEscolar(id){
