@@ -345,7 +345,7 @@ CREATE TABLE tano_escolar(
 CREATE TABLE tfecha_lapso_academico(
     id_fecha_lapso_academico SERIAL,
     id_ano_escolar INTEGER NOT NULL,
-    numero_lapos character(1) NOT NULL,
+    numero_lapos character(1) NOT NULL, -- <- correjir esto
     fecha_lapso_inicio DATE NOT NULL,
     fecha_lapso_cierre DATE NOT NULL,
     estado_fecha_lapso character(1) NOT NULL,
@@ -476,20 +476,6 @@ CREATE TABLE tasignacion_representante_estudiante(
     constraint FK_id_estudiante_tasignacion_representante_estudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade
 );
 
-CREATE TABLE tgrado_escolar(
-    id_grado_escolar SERIAL,
-    id_estudiante INTEGER UNIQUE NOT NULL,
-    cedula_estudiante character(8) UNIQUE NOT NULL,
-    id_asignacion_representante_estudiante INTEGER NOT NULL,
-    id_asignacion_aula_profesor INTEGER NOT NULL,
-    estatus_grado_escolar character(1) NOT NULL,
-    fecha_inscripcion_grado_escolar DATE NOT NULL,
-    constraint PK_id_grado_escolar primary key(id_grado_escolar),
-    constraint FK_id_estudiante_tgrado_escolar foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
-    constraint FK_id_asignacion_representante_estudiante_tgrado_escolar foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
-    constraint FK_id_asignacion_aula_profesor_tgrado_escolar foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
-);
-
 CREATE TABLE tplanificacion_lapso_escolar(
     id_planificacion_lapso_escolar SERIAL,
     id_asignacion_aula_profesor INTEGER NOT NULL,
@@ -498,7 +484,7 @@ CREATE TABLE tplanificacion_lapso_escolar(
     constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
 );
 
-ALTER TABLE tlapso_academico ADD COLUMN id_fecha_lapso_academico INTEGER NULL;
+-- ALTER TABLE tlapso_academico ADD COLUMN id_fecha_lapso_academico INTEGER NULL;
 
 CREATE TABLE tlapso_academico(
     id_lapso_academico SERIAL,
