@@ -33,10 +33,12 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarTodas(){
-    const SQL = "SELECT * FROM tinscripcion "
+    const SQL = `SELECT * FROM tinscripcion 
+                  JOIN testudiante ON testudiante.id_estudiante = tinscripcion.id_estudiante
+                  JOIN tasignacion_aula_profesor ON tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor
+                `
+
     // JOIN tasignacion_representante_estudiante ON tasignacion_representante_estudiante.id_asignacion_representante_estudiante = tinscripcion.id_asignacion_representante_estudiante
-    // JOIN testudiante ON testudiante.id_estudiante = tinscripcion.id_estudiante
-    // JOIN tasignacion_aula_profesor ON tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor
 
     return await this.query(SQL)
   }

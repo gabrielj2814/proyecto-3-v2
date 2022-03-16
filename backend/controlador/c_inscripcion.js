@@ -25,7 +25,9 @@ controladorInscripcion.registrar_inscripcion = async ( req, res) => {
 controladorInscripcion.consultarTodas= async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const ModeloInscripcion=require('../modelo/m_inscripcion')
+    // const patron = req.body.patron
     let modeloInscripcion=new ModeloInscripcion()
+    // modeloInscripcion.setIdProfesor(patron)
     let resultInscripcion = await modeloInscripcion.consultarTodas()
     if(resultInscripcion.rowCount>0){
         respuesta_api.mensaje="consulta completada"
