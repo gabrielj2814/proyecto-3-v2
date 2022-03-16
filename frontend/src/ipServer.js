@@ -1,5 +1,5 @@
 export default {
-    ipServidor:"192.168.1.107",
+    ipServidor:"192.168.1.108",
     servidorNode:{
         puerto:"8080"
     },

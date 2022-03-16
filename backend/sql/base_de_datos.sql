@@ -513,7 +513,7 @@ CREATE TABLE tinscripcion(
     id_asignacion_representante_estudiante INTEGER NOT NULL,
     id_asignacion_aula_profesor INTEGER NOT NULL,
     fecha_inscripcion DATE NOT NULL,
-    estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS I,E,P,R 
+    estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS I -> inscripto ,E -> en espera ,P -> pre inscripto,R -> retirado 
     constraint PK_id_inscripcion primary key(id_inscripcion),
     constraint FK_id_estudiante_tinscripcion foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_representante_estudiante_tinscripcion foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
@@ -524,7 +524,7 @@ CREATE TABLE tasistencia_estudiante(
     id_asistencia_estudiante SERIAL,
     id_inscripcion INTEGER NOT NULL,
     fecha_asistencia_estudiante DATE NOT NULL,
-    estatus_asistencia_estudiante character(1) NOT NULL, -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo
+    estatus_asistencia_estudiante character(1) NOT NULL, -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo, 3 -> otros sumar observacion
     observacion_asistencia_estudiante character varying(250) NOT NULL,
     constraint PK_id_asistencia_estudiante primary key(id_asistencia_estudiante),
     constraint FK_id_inscripcion_tasistencia_estudianten foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade

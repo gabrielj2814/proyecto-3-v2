@@ -1,7 +1,7 @@
 const DriverPostgre=require("./driver_postgresql")
 const Moment=require("moment")
 
-class AsistenciaModelo extends DriverPostgre {
+class ModeloAsistenciaEstudiante extends DriverPostgre {
 
     constructor(){
         super()
@@ -28,19 +28,46 @@ class AsistenciaModelo extends DriverPostgre {
         this.observacion_asistencia_estudiante=datos.observacion_asistencia_estudiante
     }
 
-    actualizarEstadoAsistencia(){
-
+    async actualizarEstadoAsistencia(estado){
+        const SQL=`UPDATE tasistencia_estudiante SET 
+        estatus_asistencia_estudiante='${estado}'
+        WHERE 
+        id_asistencia_estudiante=${this.id_asistencia_estudiante}
+        `
+        return await this.query(SQL)
     }
 
-    actualizarObservacion(){
-
+    async actualizarObservacion(observacion){
+        const SQL=`UPDATE tasistencia_estudiante SET 
+        observacion_asistencia_estudiante='${observacion}'
+        WHERE 
+        id_asistencia_estudiante=${this.id_asistencia_estudiante}
+        `
+        return await this.query(SQL)
     }
 
     crearAsistenciaDeHoy(){
 
     }
 
-
-
+    registrarAsistencia(){
+        // test insert INSERT INTO tasistencia_estudiante(id_inscripcion,fecha_asistencia_estudiante,estatus_asistencia_estudiante,observacion_asistencia_estudiante)VALUES(1,'2022/03/15','1','la puta que te pario') RETURNING id_asistencia_estudiante;
+            
+        const SQL=`INSERT INTO tasistencia_estudiante(
+            id_inscripcion,
+            fecha_asistencia_estudiante,
+            estatus_asistencia_estudiante,
+            observacion_asistencia_estudiante
+            )
+            VALUES(
+                ${this.id_inscripcion},
+                '${this.fecha_asistencia_estudiante}',
+                '${this.estatus_asistencia_estudiante}',
+                '${this.observacion_asistencia_estudiante}'
+            ) RETURNING id_asistencia_estudiante;
+            `
+    }
 
 } 
+
+module.exports = ModeloAsistenciaEstudiante
