@@ -8,7 +8,7 @@ router.use(bodyParser.json())
 
 router.put("/actualizar-estado",ControladorAsistenciaEstudiante.actualizarEstadoAsistencia)
 router.put("/actualizar-observacion",ControladorAsistenciaEstudiante.actualizarObservacionAsistencia)
-router.post("/crear-asistencia",ControladorAsistenciaEstudiante.actualizarObservacionAsistencia)
+router.post("/crear-asistencia/:cedula",ControladorAsistenciaEstudiante.crearAsistenciaDeHoy)
 
 
 module.exports = router

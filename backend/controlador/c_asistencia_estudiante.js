@@ -3,7 +3,16 @@ const ControladorAsistenciaEstudiante={}
 
 
 ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const controladorInscripcion=require("./c_inscripcion")
+    let {cedula} = req.params
+    let datos=await controladorInscripcion.obtenerEstudianteProfesor(cedula)
 
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify({
+        datoss:datos
+    }))
+    res.end()
 }
 
 

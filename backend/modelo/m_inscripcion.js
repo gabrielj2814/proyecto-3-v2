@@ -34,44 +34,26 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL)
   }
 
-  /////////////////las funciones que me pediste crear//////////////////////
   
-  async anoescolar(){
-    const SQL = " SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1' "
-
+  async consultarAnoEscolar(){
+    const SQL = "SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';"
     return await this.query(SQL)
   }
 
-  async profTrabajador(){
-    const SQL = " SELECT * FROM tprofesor,ttrabajador WHERE tprofesor.id_cedula=ttrabajador.id_cedula AND ttrabajador.id_cedula=tprofesor.id_cedula "
+  async consultarProfesorTrabajador(cedula){
+    const SQL = `SELECT * FROM tprofesor,ttrabajador WHERE tprofesor.id_cedula='${cedula}' AND ttrabajador.id_cedula=tprofesor.id_cedula;`
     return await this.query(SQL)
   }
 
-  async asig(){
-    const SQL = "SELECT * FROM tasignacion_aula_profesor WHERE id_profesor=tasignacion_aula_profesor.id_profesor AND id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar "
+  async consultarAsigancionActulaProfesor(idProfesor,idAnoEscolar){
+    const SQL = `SELECT * FROM tasignacion_aula_profesor WHERE id_profesor=${idProfesor} AND id_ano_escolar=${idAnoEscolar}`
     return await this.query(SQL)
   }
 
-  async estudiante(){
-    const SQL = "SELECT * FROM tinscripcion,testudiante WHERE tinscripcion.id_asignacion_aula_profesor=tasignacion_aula_profesor.id_asignacion_aula_profesor AND testudiante.id_estudiante=tinscripcion.id_estudiante"
+  async consultarEstudiantesPorAsignacion(idAsignacion){
+    const SQL = `SELECT * FROM tinscripcion,testudiante WHERE tinscripcion.id_asignacion_aula_profesor=${idAsignacion} AND testudiante.id_estudiante=tinscripcion.id_estudiante;`
     return await this.query(SQL)
   }
-
-  ///////////////////////////Y terminan ahi //////////////////////////////
-
-
-
-  // async consultarTodas(){
-    
-  //   const SQL = `SELECT * FROM tinscripcion,tano_escolar,tprofesor,ttrabajador,tasignacion_aula_profesor WHERE 
-  //               tano_escolar.estatus_ano_escolar='1' AND
-  //               tprofesor.id_profesor='2' AND ttrabajador.id_cedula=tprofesor.id_cedula AND
-  //               tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND
-  //               tasignacion_aula_profesor.id_asignacion_aula_profesor= 3
-                
-  //               `
-  //               return await this.query(SQL)
-  // }
   
   
 

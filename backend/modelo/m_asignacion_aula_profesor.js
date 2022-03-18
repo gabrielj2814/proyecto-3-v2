@@ -42,6 +42,7 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
             id_profesor,
             id_aula,
             id_ano_escolar,
+            numero_total_de_estudiantes,
             estatus_asignacion_aula_profesor
         ) VALUES(
             ${this.id_profesor},
