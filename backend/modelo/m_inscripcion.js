@@ -10,7 +10,6 @@ class ModeloInscripcion extends DriverPostgres {
     this.fecha_inscripcion = "";
     this.estatus_inscripcion = "";
 
-    this.id_profesor = "";
   }
 
   setDatos(inscripcion){
@@ -20,8 +19,6 @@ class ModeloInscripcion extends DriverPostgres {
     this.id_asignacion_aula_profesor = inscripcion.id_asignacion_aula_profesor;
     this.fecha_inscripcion = inscripcion.fecha_inscripcion;
     this.estatus_inscripcion = inscripcion.estatus_inscripcion;
-
-    this.id_profesor = inscripcion.id_profesor
 
   }
 
