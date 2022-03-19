@@ -23,7 +23,7 @@ import LinkButtom from '../subComponentes/link_button'
 ------ Reportes
 <span className="item-sub-menu">Trabajador</span>
 */
-
+import servidor from '../ipServer.js'
 
 class MenuDashboard extends React.Component{
 
@@ -42,7 +42,7 @@ class MenuDashboard extends React.Component{
         if(localStorage.getItem("usuario")){
             var respuesta_servior=""
             const token=localStorage.getItem("usuario")
-            await axios.get(`http://localhost:8080/login/verificar-sesion${token}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){

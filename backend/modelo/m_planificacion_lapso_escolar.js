@@ -65,6 +65,7 @@ class ModeloPlanificacionLapsoEscolar extends PostgreDriver{
         tprofesor.id_cedula=ttrabajador.id_cedula AND 
         tprofesor.estatus_profesor='1' AND 
         tasignacion_aula_profesor.id_profesor=tprofesor.id_profesor AND 
+        tasignacion_aula_profesor.estatus_asignacion_aula_profesor='1' AND 
         tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
         (tano_escolar.seguimiento_ano_escolar='1' OR
         tano_escolar.seguimiento_ano_escolar='2');

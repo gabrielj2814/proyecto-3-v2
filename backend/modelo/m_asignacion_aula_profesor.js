@@ -55,9 +55,10 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
     }
 
     async consultar(){
-        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
+        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,tgrado,taula,tano_escolar WHERE
         tasignacion_aula_profesor.id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor} AND
         tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+        tgrado.id_grado=taula.id_grado AND
         taula.id_aula=tasignacion_aula_profesor.id_aula AND
         tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
         return await this.query(SQL)
@@ -137,6 +138,20 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         WHERE
         id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor}
         `
+        return await this.query(SQL)
+    }
+
+    async consultarAsignacionActual(cedula){
+        const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,ttrabajador,tgrado,taula,tano_escolar WHERE
+        tprofesor.id_cedula='${cedula}' AND
+        ttrabajador.id_cedula=tprofesor.id_cedula AND
+        tasignacion_aula_profesor.id_profesor=tprofesor.id_profesor AND
+        taula.id_aula=tasignacion_aula_profesor.id_aula AND
+        tgrado.id_grado=taula.id_grado AND
+        tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
+        tano_escolar.estatus_ano_escolar='1' AND 
+        tasignacion_aula_profesor.estatus_asignacion_aula_profesor='1'
+        ;`
         return await this.query(SQL)
     }
 
