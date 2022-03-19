@@ -60,10 +60,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             hashListaAnoEscolares:{},
             hashAnoEscolaresActivo:{},
             hashAnoEscolaresSiguiente:{},
-            // 
+            //
             disponibilidadProfesor:null,
             disponibilidadAula:null,
-            // 
+            //
             msj_id_cedula:{
                 mensaje:"",
                 color_texto:""
@@ -87,7 +87,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             }
         }
     }
-    
+
     // logica menu
     mostrarModulo(a){
         var span=a.target;
@@ -170,14 +170,14 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     this.setState({cambioAula:false})
                     // document.getElementById("contenedorDisponibilidadProfesor").style.display="none"
                 }
-    
+
             }
         }
         else{
             alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
-        
+
 
     }
 
@@ -192,7 +192,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -225,8 +225,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -290,7 +290,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             console.error(error)
         })
     }
-    
+
     async consultarAnoEscolarSiguiente(){
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
         .then(respuesta =>{
@@ -302,7 +302,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             }
             else{
                 this.setState({disponibilidadProfesor:false})
-                // poner mensaje de que no hay año siguiente disponible 
+                // poner mensaje de que no hay año siguiente disponible
             }
 
         })
@@ -345,7 +345,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             console.error(error)
         })
     }
-    
+
     async consultarAulasPorGrado(){
         if(this.state.listaGrados.length>0){
             let id_grado=document.getElementById("id_grado").value
@@ -363,7 +363,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             })
         }
     }
-    
+
     async consultarAulasPorGrado2(a){
         let inputSelectGrados=a.target
         await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${inputSelectGrados.value}`)
@@ -376,7 +376,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 }
                 else{
                     this.setState({cambioAula:false})
-    
+
                 }
             }
 
@@ -430,8 +430,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             this.setState({id_profesor:""})
             $seccionNombreProfesor.textContent=``
         }
-        
-        
+
+
     }
 
     async verficarDisponibilidadProfesor(idProfesor){
@@ -470,7 +470,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             console.error(error)
         })
     }
-    
+
     async verficarDisponibilidadProfesorAnoEscolarSiguiente(a){
         let idProfesor=a.target.getAttribute("data-id-profesor")
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.hashAnoEscolaresSiguiente.id_ano_escolar}/${idProfesor}`)
@@ -511,7 +511,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             json[next.value[0]]=next.value[1]
             next=iterador.next()
         }
-        return json   
+        return json
     }
 
     validarCampoCedulaProfesor(){
@@ -556,7 +556,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 this.setState({disponibilidadAula:true})
             }
             else{
-                
+
                 // this.setState({disponibilidadAula:false})
                 await this.consultarAnoEscolarSiguiente()
                 if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
@@ -588,7 +588,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     }
 
     async consultarDisponivilidadAulaSiguienteAnoEscolar(idAula){
-
+      console.log("Estoy aqui")
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.hashAnoEscolaresSiguiente.id_ano_escolar}/${idAula}`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
@@ -605,7 +605,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         .catch(error => {
             console.error(error)
         })
-    } 
+    }
 
     validarFormulario(){
         let estado=false
@@ -723,7 +723,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     alert("error al validar el formulario")
                 }
 
-               
+
             }
     }
 
@@ -739,7 +739,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
 
@@ -887,7 +887,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                     </select>
                                 </div>
                             </div>
-                            
+
                             {this.state.cambioAula===true &&
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <label>Disponibilidad del Aula:</label>
@@ -947,7 +947,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     <div className="row justify-content-center">
                         <div className="col-auto">
                             {this.props.match.params.operacion==="registrar" &&
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-primary"
                                 id="boton-registrar"
                                 value="Registrar"
@@ -955,21 +955,21 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 />
                             }
                             {this.props.match.params.operacion==="actualizar" &&
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
                                 value="Actualizar"
                                 eventoPadre={this.operacion}
-                                />   
+                                />
                             }
                         </div>
                         <div className="col-auto">
-                            <InputButton 
+                            <InputButton
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
                             value="Cancelar"
                             eventoPadre={this.regresar}
-                            />   
+                            />
                         </div>
                     </div>
                 </div>
