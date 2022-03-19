@@ -1,13 +1,13 @@
 const controladorInscripcion = {}
 
 controladorInscripcion.registrar_inscripcion = async ( req, res) => {
-    const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
+    const respuesta_api = { mensaje: "", datos:[],estado_respuesta: false, color_alerta: "" };
     const ModeloInscripcion = require("../modelo/m_inscripcion");
     const ControladorAsignacionAulaProfesor=require("./c_asignacion_aula_profesor")
     let modeloInscripcion = new ModeloInscripcion()
     let { inscripcion } = req.body
     modeloInscripcion.setDatos(inscripcion)
-    let consultarInscripcionActiva=await modeloInscripcion.consultarTodasLasInscripcionesEstudianteEnI()
+    let consultarInscripcionActiva=await modeloInscripcion.consultarValidandoInscripcionEstudiante()
     if(consultarInscripcionActiva.rowCount===0){
         let datosDeAsignacionAula=await ControladorAsignacionAulaProfesor.consultarDatosAsignacion(inscripcion.id_asignacion_aula_profesor)
         let listaDeInscriptos=await modeloInscripcion.consultarInscripcionesPorAsignacion()
@@ -43,6 +43,7 @@ controladorInscripcion.registrar_inscripcion = async ( req, res) => {
     else{
         respuesta_api.mensaje="error el estudiante ya esta inscripto"
         respuesta_api.estado_respuesta=false
+        respuesta_api.datos=consultarInscripcionActiva.rows[0]
         respuesta_api.color_alerta="danger"
     }
     res.writeHead(200,{"Content-Type":"application/json"})
