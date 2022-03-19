@@ -163,5 +163,30 @@ ControladorAsignacionAulaProfesor.actualizar=async (req,res) => {
     res.end()
 }
 
+ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    let {id_ano_escolar,id_aula} = req.params
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    modeloAsignacionAulaProfesor.setdatoIdAula(id_aula)
+    modeloAsignacionAulaProfesor.setdatoIdAnoEscolar(id_ano_escolar)
+    let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarAulaPorAnoEscolar()
+    if(resultAsignacionAulaProfesor.rowCount>0){
+        respuesta_api.mensaje="consultar completada"
+        respuesta_api.datos=resultAsignacionAulaProfesor.rows
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="succes"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar ( no se entrol el registro )"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+
+
+}
+
 
 module.exports= ControladorAsignacionAulaProfesor

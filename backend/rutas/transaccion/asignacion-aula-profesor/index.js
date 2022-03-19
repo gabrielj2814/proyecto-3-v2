@@ -13,6 +13,7 @@ router.get("/consultar-por-ano-escolar/:id",ControladorAsignacionAulaProfesor.co
 router.get("/consultar-disponibilidad-aula/:id_ano_escolar/:id_aula",ControladorAsignacionAulaProfesor.consultarDisponibilidadAula)
 router.get("/consultar-disponibilidad-profesor/:id_ano_escolar/:id_profesor",ControladorAsignacionAulaProfesor.consultarDisponibilidadProfesor)
 router.put("/actualizar/:id",ControladorAsignacionAulaProfesor.actualizar)
+router.get("/consultar-aula-por-ano-actual/:id_ano_escolar/:id_aula",ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno)
 
 
 module.exports = router
