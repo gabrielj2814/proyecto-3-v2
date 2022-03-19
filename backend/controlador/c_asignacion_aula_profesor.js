@@ -188,6 +188,29 @@ ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) 
 
 }
 
+ControladorAsignacionAulaProfesor.consularAsigancionActualProfesor= async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    let {cedula} = req.params
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    let resultAsignacionActualProfesor= await modeloAsignacionAulaProfesor.consultarAsignacionActual(cedula)
+    if(resultAsignacionActualProfesor.rowCount>0){
+        respuesta_api.mensaje="consultar completada"
+        respuesta_api.datos=resultAsignacionActualProfesor.rows[0]
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="succes"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar ( no se entrol el registro )"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+
+
+}
+
 // ==================
 // ==================
 // ==================

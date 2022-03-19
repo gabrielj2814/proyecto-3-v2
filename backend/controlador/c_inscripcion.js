@@ -132,7 +132,7 @@ controladorInscripcion.actualizar= async (req,res) => {
 controladorInscripcion.obtenerEstudianteProfesor=async (cedulaProfesor) => {
     const ModeloInscripcion=require('../modelo/m_inscripcion')
     let modeloInscripcion= new ModeloInscripcion()
-    const resultAnoActual=await modeloInscripcion.consultarAnoEscolar()
+    const resultAnoActual=await modeloInscripcion.consultarAnoEscolarActivo()
     const resultProfesor=await modeloInscripcion.consultarProfesorTrabajador(cedulaProfesor)
     // console.log("profesor =>>> ",resultProfesor.rows)
     // console.log("ano =>>> ",resultAnoActual.rows)

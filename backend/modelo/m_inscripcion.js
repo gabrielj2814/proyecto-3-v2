@@ -54,8 +54,8 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   
-  async consultarAnoEscolar(){
-    const SQL = "SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1';"
+  async consultarAnoEscolarActivo(){
+    const SQL = "SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1'"
     return await this.query(SQL)
   }
 
@@ -65,7 +65,7 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarAsigancionActulaProfesor(idProfesor,idAnoEscolar){
-    const SQL = `SELECT * FROM tasignacion_aula_profesor WHERE id_profesor=${idProfesor} AND id_ano_escolar=${idAnoEscolar}`
+    const SQL = `SELECT * FROM tasignacion_aula_profesor WHERE id_profesor=${idProfesor} AND id_ano_escolar=${idAnoEscolar} AND estatus_asignacion_aula_profesor='1'`
     return await this.query(SQL)
   }
 
