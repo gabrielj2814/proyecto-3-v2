@@ -1,25 +1,53 @@
 const controladorInscripcion = {}
 
 controladorInscripcion.registrar_inscripcion = async ( req, res) => {
-  const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
-  const ModeloInscripcion = require("../modelo/m_inscripcion");
-  let { inscripcion } = req.body
-  let modeloInscripcion = new ModeloInscripcion()
-  modeloInscripcion.setDatos(inscripcion)
-  let resultInscripcion= await modeloInscripcion.registrar()
-  if(resultInscripcion.rowCount>0){
-      respuesta_api.mensaje="registro completado"
-      respuesta_api.estado_respuesta=true
-      respuesta_api.color_alerta="success"
-  }
-  else{
-      respuesta_api.mensaje="error al realizar la inscripción"
-      respuesta_api.estado_respuesta=false
-      respuesta_api.color_alerta="danger"
-  }
-  res.writeHead(200,{"Content-Type":"application/json"})
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
+    const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
+    const ModeloInscripcion = require("../modelo/m_inscripcion");
+    const ControladorAsignacionAulaProfesor=require("./c_asignacion_aula_profesor")
+    let modeloInscripcion = new ModeloInscripcion()
+    let { inscripcion } = req.body
+    modeloInscripcion.setDatos(inscripcion)
+    let consultarInscripcionActiva=await modeloInscripcion.consultarTodasLasInscripcionesEstudianteEnI()
+    if(consultarInscripcionActiva.rowCount===0){
+        let datosDeAsignacionAula=await ControladorAsignacionAulaProfesor.consultarDatosAsignacion(inscripcion.id_asignacion_aula_profesor)
+        let listaDeInscriptos=await modeloInscripcion.consultarInscripcionesPorAsignacion()
+        let totalDeCuposDisponibles=datosDeAsignacionAula.numero_total_de_estudiantes-listaDeInscriptos.rowCount
+        console.log("total de cupos =>>>> ",totalDeCuposDisponibles)
+        if(listaDeInscriptos.rowCount<=datosDeAsignacionAula.numero_total_de_estudiantes){
+            let resultInscripcion= await modeloInscripcion.registrar()
+            if(resultInscripcion.rowCount>0){
+                respuesta_api.mensaje="registro completado"
+                respuesta_api.estado_respuesta=true
+                respuesta_api.color_alerta="success"
+            }
+            else{
+                respuesta_api.mensaje="error al realizar la inscripción"
+                respuesta_api.estado_respuesta=false
+                respuesta_api.color_alerta="danger"
+            }
+            // let inscripcionesEstudiate=await modeloInscripcion.consultarInscripcionesEstudiante()
+            // if(inscripcionesEstudiate.rowCount===0){
+            //     console.log("el estudiante no esta inscrpto en esta aula")
+            // }
+            // else{
+            //     console.log("el estudiante intento inscripbir otra vez en la misma aula ")
+            // }
+
+        }
+        else{
+            respuesta_api.mensaje="error no cupos disponibles"
+            respuesta_api.estado_respuesta=false
+            respuesta_api.color_alerta="danger"
+        }
+    }
+    else{
+        respuesta_api.mensaje="error el estudiante ya esta inscripto"
+        respuesta_api.estado_respuesta=false
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
 }
 
 controladorInscripcion.consultarTodas= async (req,res) => {

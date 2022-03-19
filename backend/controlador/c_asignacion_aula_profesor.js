@@ -172,7 +172,7 @@ ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) 
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarAulaPorAnoEscolar()
     if(resultAsignacionAulaProfesor.rowCount>0){
         respuesta_api.mensaje="consultar completada"
-        respuesta_api.datos=resultAsignacionAulaProfesor.rows
+        respuesta_api.datos=resultAsignacionAulaProfesor.rows[0]
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="succes"
     }
@@ -186,6 +186,23 @@ ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) 
     res.end()
 
 
+}
+
+// ==================
+// ==================
+// ==================
+
+ControladorAsignacionAulaProfesor.consultarDatosAsignacion= async (id) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    modeloAsignacionAulaProfesor.setdatoIdAsignacionAulaProfesor(id)
+    let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultar()
+    if(resultAsignacionAulaProfesor.rowCount>0){
+        return resultAsignacionAulaProfesor.rows[0]
+    }
+    else{
+        return []
+    }
 }
 
 
