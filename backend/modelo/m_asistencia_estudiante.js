@@ -46,11 +46,7 @@ class ModeloAsistenciaEstudiante extends DriverPostgre {
         return await this.query(SQL)
     }
 
-    crearAsistenciaDeHoy(){
-
-    }
-
-    registrarAsistencia(){
+    async registrarAsistencia(){
         // test insert INSERT INTO tasistencia_estudiante(id_inscripcion,fecha_asistencia_estudiante,estatus_asistencia_estudiante,observacion_asistencia_estudiante)VALUES(1,'2022/03/15','1','la puta que te pario') RETURNING id_asistencia_estudiante;
             
         const SQL=`INSERT INTO tasistencia_estudiante(
@@ -66,6 +62,21 @@ class ModeloAsistenciaEstudiante extends DriverPostgre {
                 '${this.observacion_asistencia_estudiante}'
             ) RETURNING id_asistencia_estudiante;
             `
+        return await this.query(SQL)
+    }
+
+    async consultarAsistenciaDeHoy(){
+        let fecha=Moment().format("YYYY-MM-DD")
+        const SQL=`SELECT * FROM 
+        testudiante,
+        tinscripcion,
+        tasistencia_estudiante 
+        WHERE
+        tasistencia_estudiante.fecha_asistencia_estudiante='${fecha}' AND
+        tinscripcion.id_inscripcion=tasistencia_estudiante.id_inscripcion AND
+        testudiante.id_estudiante=tinscripcion.id_estudiante
+        `;
+        return await this.query(SQL)
     }
 
 } 
