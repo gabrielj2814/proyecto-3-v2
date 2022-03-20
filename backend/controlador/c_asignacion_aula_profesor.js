@@ -169,7 +169,7 @@ ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) 
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setdatoIdAula(id_aula)
     modeloAsignacionAulaProfesor.setdatoIdAnoEscolar(id_ano_escolar)
-    let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarAulaPorAnoEscolar()
+    let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarProfesorPorAnoYAula()
     if(resultAsignacionAulaProfesor.rowCount>0){
         respuesta_api.mensaje="consultar completada"
         respuesta_api.datos=resultAsignacionAulaProfesor.rows[0]
@@ -189,18 +189,24 @@ ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) 
 }
 
 ControladorAsignacionAulaProfesor.consularAsigancionActualProfesor= async (req,res) => {
-    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    const ModeloInscripcion = require("../modelo/m_inscripcion");
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let {cedula} = req.params
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    let modeloInscripcion = new ModeloInscripcion()
     let resultAsignacionActualProfesor= await modeloAsignacionAulaProfesor.consultarAsignacionActual(cedula)
     if(resultAsignacionActualProfesor.rowCount>0){
+        let asignacionAulaProf=resultAsignacionActualProfesor.rows[0]
+        modeloInscripcion.setIdAsignacionAulaProfesor(asignacionAulaProf.id_asignacion_aula_profesor)
+        let listaDeInscriptos=await modeloInscripcion.consultarInscripcionesPorAsignacion()
         respuesta_api.mensaje="consultar completada"
         respuesta_api.datos=resultAsignacionActualProfesor.rows[0]
+        respuesta_api.cuposRestantes=resultAsignacionActualProfesor.rows[0].numero_total_de_estudiantes-listaDeInscriptos.rowCount
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="succes"
     }
     else{
-        respuesta_api.mensaje="error al consultar ( no se entrol el registro )"
+        respuesta_api.mensaje="error al consultar ( no se entro el registro )"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
     }
