@@ -106,9 +106,7 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
         return await this.query(SQL)
     }
-<<<<<<< HEAD
-=======
-    
+
     async consultarProfesorPorAnoYAula(){
         const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
         tasignacion_aula_profesor.id_ano_escolar=${this.id_ano_escolar} AND
@@ -118,7 +116,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar;`
         return await this.query(SQL)
     }
->>>>>>> db5b34fe79ad15e18bea36c79b0de2f8391f005c
 
     async consultarDisponibilidadProfesor(){
         const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
@@ -162,7 +159,7 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         taula.id_aula=tasignacion_aula_profesor.id_aula AND
         tgrado.id_grado=taula.id_grado AND
         tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
-        tano_escolar.estatus_ano_escolar='1' AND 
+        tano_escolar.estatus_ano_escolar='1' AND
         tasignacion_aula_profesor.estatus_asignacion_aula_profesor='1'
         ;`
         return await this.query(SQL)
