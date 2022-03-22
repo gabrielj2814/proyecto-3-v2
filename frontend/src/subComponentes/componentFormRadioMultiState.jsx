@@ -7,11 +7,12 @@ import '../css/componentFormRadioState.css'
 import ComponentFormRadio from './componentFormRadio'
 
 const ComponentFormRadioMultiState = (props) => {
-
+  let estates = Array.isArray(props.estates[0]) ? props.estates[0] : props.estates
+  
     return(
         <div className={props.clasesColumna+" columna"}>
           <label className="nombre-campo-label-state">{props.nombreCampoRadio}</label>
-          { props.estates.map( (item,index) => {
+          { estates.map( (item,index) => {
             let id = props.idRadio[index], nombre, valor = item;
             if(!props.nombreUnico) nombre = props.nombreLabelRadio[index]
             else{
