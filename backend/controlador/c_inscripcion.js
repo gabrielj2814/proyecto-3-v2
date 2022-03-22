@@ -129,11 +129,13 @@ controladorInscripcion.actualizar= async (req,res) => {
     res.end()
 }
 
-controladorInscripcion.obtenerEstudianteProfesor=async (cedulaProfesor) => {
+controladorInscripcion.obtenerEstudianteProfesor=async (req,res) => {
     const ModeloInscripcion=require('../modelo/m_inscripcion')
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:"",datos:[]}
+    let {cedula} = req.params;
     let modeloInscripcion= new ModeloInscripcion()
     const resultAnoActual=await modeloInscripcion.consultarAnoEscolarActivo()
-    const resultProfesor=await modeloInscripcion.consultarProfesorTrabajador(cedulaProfesor)
+    const resultProfesor=await modeloInscripcion.consultarProfesorTrabajador(cedula)
     // console.log("profesor =>>> ",resultProfesor.rows)
     // console.log("ano =>>> ",resultAnoActual.rows)
     if(resultProfesor.rowCount>0 && resultAnoActual.rowCount>0){
@@ -146,39 +148,38 @@ controladorInscripcion.obtenerEstudianteProfesor=async (cedulaProfesor) => {
             const resultEstudiantesInscriptos= await modeloInscripcion.consultarEstudiantesPorAsignacion(datosAsignacion.id_asignacion_aula_profesor)
             // console.log("inscriptos =>>> ",resultEstudiantesInscriptos.rows)
             if(resultEstudiantesInscriptos.rowCount>0){
-                return {
+                respuesta_api.datos = {
                     datosProfesor,
                     datosAnoActual,
                     datosAsignacion,
                     listaDeEstudiantes:resultEstudiantesInscriptos.rows,
-                    estado:true
-
                 }
+                respuesta_api.estado_respuesta = true;
+                respuesta_api.color_alerta="success"
+                respuesta_api.mensaje="consulta completada"
+
             }
             else{
-                return {
-                    estado:false,
-                    mensaje:"error el profesor no tiene estudiantes inscriptos"
-                }
+                respuesta_api.estado_respuesta = false;
+                respuesta_api.mensaje = "error el profesor no tiene estudiantes inscriptos";
+                respuesta_api.color_alerta="danger"
             }
 
         }
         else{
-            return {
-                estado:false,
-                mensaje:"error este profesor no tiene asiganciones activas"
-            }
+          respuesta_api.estado_respuesta = false;
+          respuesta_api.color_alerta="danger"
+          respuesta_api.mensaje = "error este profesor no tiene asiganciones activas";
         }
     }
     else{
-        return {
-            estado:false,
-            mensaje:"error este profesor no esta registra o no hay un año activo corriendo"
-        }
+      respuesta_api.estado_respuesta = false;
+      respuesta_api.color_alerta="danger"
+      respuesta_api.mensaje = "error este profesor no esta registra o no hay un año activo corriendo";
     }
-
-
-
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
 }
 
 

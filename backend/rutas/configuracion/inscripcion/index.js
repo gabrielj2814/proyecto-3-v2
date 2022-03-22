@@ -7,6 +7,6 @@ router.post("/registrar", controladorInscripcion.registrar_inscripcion)//registr
 router.get("/consultar-todas", controladorInscripcion.consultarTodas)//consultar todas las inscripciones
 router.get("/consultar/:id", controladorInscripcion.consultar) //consultar una inscripcion
 router.put("/actualizar/:id", controladorInscripcion.actualizar) //actualizar una inscripción
-
+router.get("/consultar-estudiante-por-profesor/:cedula", controladorInscripcion.obtenerEstudianteProfesor)
 
 module.exports = router

@@ -3,6 +3,7 @@ import {withRouter} from "react-router-dom"
 
 //JS
 import axios from 'axios'
+import Moment from 'moment'
 // IP servidor
 import servidor from '../ipServer.js'
 //css
@@ -18,6 +19,9 @@ import ButtonIcon from '../subComponentes/buttonIcon'
 import TituloModulo from '../subComponentes/tituloModulo'
 
 import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
+const axiosCustom=axios.create({
+    baseURL:`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/`
+})
 
 class ComponentInscripcion extends React.Component{
     constructor(){
@@ -36,6 +40,7 @@ class ComponentInscripcion extends React.Component{
           modulo:"",
           estado_menu:false,
           //////
+          cedula_profesor: null,
           nombre_usuario:null,
           datoDeBusqueda:"",
           registros:[],
@@ -93,11 +98,11 @@ class ComponentInscripcion extends React.Component{
     }
 
     async ConsultarRegistros(){
-        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-todas`)
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-estudiante-por-profesor/${this.state.cedula_profesor}`)
         .then(repuesta =>{
             console.log(repuesta.data.datos)
 
-            return repuesta.data.datos;
+            return repuesta.data.datos.listaDeEstudiantes;
         })
         .catch(error => console.log(error))
     }
@@ -119,21 +124,40 @@ class ComponentInscripcion extends React.Component{
           }
       }
 
+      async obtenerDatosDeLasesion(){
+          const token=localStorage.getItem("usuario")
+          await axiosCustom.get(`login/verificar-sesion${token}`)
+          .then(respuesta=>{
+              let respuesta_servior=respuesta.data
+              if(respuesta_servior.usuario){
+                  this.setState({
+                      cedula_profesor:respuesta_servior.usuario.id_cedula
+                  })
+              }
+          })
+          .catch(error => {
+              let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
+              mensaje.estado="danger"
+              mensaje.texto="error al conectarse con el servidor"
+              this.setState({mensaje})
+          })
+      }
+
     async UNSAFE_componentWillMount(){
       let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
       if(acessoModulo){
-        await this.ConsultarRegistros()
-          // var json_server_response=await this.ConsultarRegistros();
-          // var servidor=this.verficarLista(json_server_response);
-          if(this.props.match.params.mensaje){
-            const msj=JSON.parse(this.props.match.params.mensaje)
-            //alert("OK "+msj.texto)
-            var mensaje=this.state.mensaje
-            mensaje.texto=msj.texto
-            mensaje.estado=msj.estado
-            servidor.mensaje=mensaje
-          }
-          // this.setState(servidor)
+        await this.obtenerDatosDeLasesion();
+        var json_server_response=await this.ConsultarRegistros();
+        var servidor=this.verficarLista(json_server_response);
+        if(this.props.match.params.mensaje){
+          const msj=JSON.parse(this.props.match.params.mensaje)
+          //alert("OK "+msj.texto)
+          var mensaje=this.state.mensaje
+          mensaje.texto=msj.texto
+          mensaje.estado=msj.estado
+          servidor.mensaje=mensaje
+        }
+        this.setState(servidor)
        }
        else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
@@ -256,7 +280,8 @@ class ComponentInscripcion extends React.Component{
             <thead>
                 <tr>
                     <th>Codigo</th>
-                    <th>Nombre</th>
+                    <th>fecha de inscripcion</th>
+                    <th>Cedula escolar</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -265,11 +290,17 @@ class ComponentInscripcion extends React.Component{
         const jsx_tabla_body=(
           <tbody>
                 {this.state.registros.map((inscripcion, index)=>{
+                  let estado = (inscripcion.estatus_inscripcion == "I") ? "Inscrito" : "";
+                  estado = (inscripcion.estatus_inscripcion == "E") ? "Espera" : estado;
+                  estado = (inscripcion.estatus_inscripcion == "P") ? "Pre-Inscrito" : estado;
+                  estado = (inscripcion.estatus_inscripcion == "R") ? "Retiro" : estado;
+                  estado = (inscripcion.estatus_inscripcion == "T") ? "Terminado" : estado;
                     return(
                         <tr key={index}>
                           <td>{inscripcion.id_inscripcion}</td>
-                          <td>{inscripcion.id_estudiante}</td>
-                          <td>{inscripcion.fecha_inscripcion}</td>
+                          <td>{Moment(inscripcion.fecha_inscripcion).format("D/M/YYYY")}</td>
+                          <td>{inscripcion.codigo_cedula_escolar}-{inscripcion.cedula_escolar}</td>
+                          <td>{estado}</td>
                          {!inscripcion.vacio &&
                            <td>
                              <ButtonIcon

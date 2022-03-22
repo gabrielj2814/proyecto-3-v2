@@ -111,13 +111,13 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarTodas(){
-    
-      const SQL = `SELECT * FROM tinscripcion,tano_escolar,tprofesor,ttrabajador,tasignacion_aula_profesor WHERE 
+
+      const SQL = `SELECT * FROM tinscripcion,tano_escolar,tprofesor,ttrabajador,tasignacion_aula_profesor WHERE
                 tano_escolar.estatus_ano_escolar='1' AND
                 tprofesor.id_profesor='2' AND ttrabajador.id_cedula=tprofesor.id_cedula AND
                 tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND
                 tasignacion_aula_profesor.id_asignacion_aula_profesor= 3
-                
+
                 `
                 return await this.query(SQL)
   }
