@@ -39,7 +39,6 @@ class ComponentInscripcionForm extends React.Component{
     super();
     this.GetRepresentant_Estudiant = this.GetRepresentant_Estudiant.bind(this);
     this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
-    this.buscarRepresentante = this.buscarRepresentante.bind(this)
     this.BuscarEstudiante = this.BuscarEstudiante.bind(this);
     this.mostrarModulo = this.mostrarModulo.bind(this);
     this.regresar=this.regresar.bind(this);
@@ -54,7 +53,6 @@ class ComponentInscripcionForm extends React.Component{
     this.validarCampo=this.validarCampo.bind(this)
     this.enviarDatos=this.enviarDatos.bind(this)
     this.Consultar_ano_escolar = this.Consultar_ano_escolar.bind(this)
-    this.disponibilidad_aula = this.disponibilidad_aula.bind(this)
     this.obtenerDatosDeLasesion = this.obtenerDatosDeLasesion.bind(this)
     this.Consultar_asignacion_aula = this.Consultar_asignacion_aula.bind(this)
     // this.consultarRepresentante=this.consultarRepresentante.bind(this)
@@ -80,6 +78,7 @@ class ComponentInscripcionForm extends React.Component{
         nombre_ano_escolar: "",
         nombre_aula: "",
         numero_grado: "",
+        cupos_disponibles: "",
         //MSJ
         msj_cedula_escolar:[{mensaje:"",color_texto:""}],
         msj_id_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
@@ -131,17 +130,25 @@ class ComponentInscripcionForm extends React.Component{
         let mensaje = {};
 
         if(respuesta_servior.datos.estatus_aula != "1"){
-          mensaje.estado="danger"
-          mensaje.text="El aula no esta habilitada"
+          mensaje.estado=false
+          mensaje.texto="El aula no esta habilitada"
           this.setState({mensaje})
           return ;
         }
 
         if(respuesta_servior.datos.estatus_grado != "1"){
-          mensaje.estado="danger"
-          mensaje.text="El grado no esta habilitado"
+          mensaje.estado=false
+          mensaje.texto="El grado no esta habilitado"
           this.setState({mensaje})
           return ;
+        }
+
+        if(respuesta_servior.cuposRestantes <= 0){
+          mensaje.estado=false
+          mensaje.texto="Ya no hay cupos disponibles para seguir inscribiendo"
+          this.setState({mensaje})
+
+          document.getElementById("cedula_escolar").disabled = true;
         }
 
         this.setState({
@@ -149,28 +156,17 @@ class ComponentInscripcionForm extends React.Component{
           id_asignacion_aula_profesor: respuesta_servior.datos.id_asignacion_aula_profesor,
           numero_grado: respuesta_servior.datos.numero_grado,
           nombre_aula: respuesta_servior.datos.nombre_aula,
-          nombre_ano_escolar: `${respuesta_servior.datos.ano_desde}-${respuesta_servior.datos.ano_hasta}`
+          nombre_ano_escolar: `${respuesta_servior.datos.ano_desde}-${respuesta_servior.datos.ano_hasta}`,
+          cupos_disponibles: respuesta_servior.cuposRestantes
         });
       }
     })
     .catch(error => {
         let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
-        mensaje.estado="danger"
+        mensaje.estado=false
         mensaje.text="error al conectarse con el servidor"
         this.setState({mensaje})
     })
-  }
-
-  async disponibilidad_aula(input){
-
-    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.target.value}/`)
-    .then( res => {
-      console.log(res.data)
-    })
-    .catch( error => {
-      console.log(error)
-    })
-
   }
 
   async Consultar_ano_escolar(){
@@ -385,7 +381,7 @@ class ComponentInscripcionForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 12) this.cambiarEstadoDos(input)
+      if(input.value.length <= 13) this.cambiarEstadoDos(input)
     }
   }
 
@@ -555,6 +551,7 @@ class ComponentInscripcionForm extends React.Component{
                       mensaje.texto=respuesta_servidor.mensaje
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
+                      this.Consultar_asignacion_aula();
                       this.setState(mensaje_formulario)
                   })
                   .catch(error=>{
@@ -618,12 +615,25 @@ class ComponentInscripcionForm extends React.Component{
 
     if(hashEstudiante[a.target.value]){
       let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
+      let representantes = [];
+
+      for(let id in hashAsignacionRepresentante){
+        if(hashAsignacionRepresentante[id].id_estudiante == hashEstudiante[a.target.value].id_estudiante){
+          representantes.push(hashAsignacionRepresentante[id])
+        }
+      }
+
+      if(representantes.length == 0){
+        alert("El estudiante no tiene representantes asignados");
+        return ;
+      }
+
       this.setState({
         estadoBusquedaEstudiante: true,
         id_estudiante: hashEstudiante[a.target.value].id_estudiante,
         nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
         apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
-        lista_representantes: [hashAsignacionRepresentante[hashEstudiante[a.target.value].id_estudiante]]
+        lista_representantes: [representantes]
       });
 
       return;
@@ -632,32 +642,15 @@ class ComponentInscripcionForm extends React.Component{
 
   }
 
-  buscarRepresentante(a){
-    this.validarNumero(a);
-    let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
-
-    if(hashAsignacionRepresentante[a.target.value]){
-      this.setState({
-        estadoBusquedaRepresentante: true,
-        nombre_representante: hashAsignacionRepresentante[a.target.value].nombres_representante,
-        apellido_representante: hashAsignacionRepresentante[a.target.value].apellidos_representante
-      });
-      return;
-    }
-    this.setState({
-      estadoBusquedaRepresentante: false
-    });
-  }
-
   async GetRepresentant_Estudiant(){
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
     .then( res => {
       let json = JSON.parse(JSON.stringify(res.data));
       let hash = {};
-      for(let asignacion of json.datos){
-        hash[asignacion.id_estudiante] = asignacion;
-      }
 
+      for(let asignacion of json.datos){
+        hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
+      }
       this.setState({hashAsignacionRepresentante:hash})
 
     })
@@ -765,6 +758,12 @@ class ComponentInscripcionForm extends React.Component{
                       nombreCampo="Nombre del aula:" activo="no" type="text" value={this.state.nombre_aula}
                       name="nombre_aula" id="nombre_aula" placeholder="nombre del aula"
                     />
+                    <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
+                      clasesCampo="form-control" obligatorio="si"
+                      nombreCampo="Cupos restantes:" activo="no" type="text" value={this.state.cupos_disponibles}
+                      name="cupos__disponibles" id="cupos__disponibles" placeholder="Cupos restantes"
+                    />
+
 
                   <ComponentFormRadioMultiState
                     clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"

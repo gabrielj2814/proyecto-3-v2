@@ -297,7 +297,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 12) this.cambiarEstadoDos(input)
+      if(input.value.length <= 13) this.cambiarEstadoDos(input)
     }
   }
 
@@ -528,7 +528,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
 
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
-    
+
     console.log(hashEstudiante)
 
     if(hashEstudiante[a.target.value]){

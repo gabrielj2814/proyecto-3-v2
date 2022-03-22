@@ -94,12 +94,15 @@ class ComponentInscripcion extends React.Component{
 
     async ConsultarRegistros(){
         return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-todas`)
-        .then(repuesta => repuesta.data.datos )
+        .then(repuesta =>{
+            console.log(repuesta.data.datos)
+
+            return repuesta.data.datos;
+        })
         .catch(error => console.log(error))
     }
 
     verficarLista(json_server_response){
-      console.log(json_server_response)
         if(json_server_response.length===0){
             json_server_response.push({
               id_permiso:"0",
@@ -117,10 +120,11 @@ class ComponentInscripcion extends React.Component{
       }
 
     async UNSAFE_componentWillMount(){
-      let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/enfermedad")
+      let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
       if(acessoModulo){
-          var json_server_response=await this.ConsultarRegistros();
-          var servidor=this.verficarLista(json_server_response);
+        await this.ConsultarRegistros()
+          // var json_server_response=await this.ConsultarRegistros();
+          // var servidor=this.verficarLista(json_server_response);
           if(this.props.match.params.mensaje){
             const msj=JSON.parse(this.props.match.params.mensaje)
             //alert("OK "+msj.texto)
@@ -129,7 +133,7 @@ class ComponentInscripcion extends React.Component{
             mensaje.estado=msj.estado
             servidor.mensaje=mensaje
           }
-          this.setState(servidor)
+          // this.setState(servidor)
        }
        else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
