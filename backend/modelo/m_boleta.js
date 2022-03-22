@@ -55,6 +55,11 @@ class ModeloBoleta extends DriverPostgre{
         return await this.query(SQL)
     }
     
+    async consultaInscripcionYLapso(){
+        const SQL=`SELECT * FROM tboleta WHERE id_inscripcion=${this.id_inscripcion} AND id_lapso_academico=${this.id_inscripcion};`
+        return await this.query(SQL)
+    }
+
     async consultar(){
         const SQL=`SELECT * FROM tboleta WHERE id_boleta=${this.id_boleta};`
         return await this.query(SQL)
