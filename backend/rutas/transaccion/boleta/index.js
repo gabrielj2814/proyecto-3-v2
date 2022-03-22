@@ -5,10 +5,11 @@ controladorBoleta=require("../../../controlador/c_boleta")
 
 router.use(bodyparser.json())
 
-router.post("")
-router.post("")
-router.get("")
-router.get("")
+router.post("",controladorBoleta.registrar)
+router.post("",controladorBoleta.registrarMasivo)
+router.get("",controladorBoleta.consultarTodasLasBoletasDelInscripto)
+router.get("",controladorBoleta.consultarTodasLasBoleta)
+router.get("",controladorBoleta.actualizarObservacion)
 
 
 

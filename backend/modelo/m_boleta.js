@@ -15,10 +15,19 @@ class ModeloBoleta extends DriverPostgre{
     setIdBoleta(id){
         this.id_boleta=id
     }
+
+    setIdInscripcion(id){
+        this.id_inscripcion=id
+    }
+
+    setIdLapso(id){
+        this.id_lapso_academico=id
+    }
     
     setDatos(datos){
         this.id_boleta=datos.id_boleta
         this.id_inscripcion=datos.id_inscripcion
+        this.id_lapso_academico=datos.id_lapso_academico
         this.observacion_boleta=datos.observacion_boleta
         this.fecha_boleta=datos.fecha_boleta
     }
@@ -34,7 +43,7 @@ class ModeloBoleta extends DriverPostgre{
         VALUES(
             ${this.id_inscripcion},
             ${this.id_lapso_academico},
-            '${this.observacion_boleta}',
+            'sin observacion',
             '${fecha}'
         ) RETURNING id_boleta;`
         return await this.query(SQL)
@@ -48,6 +57,11 @@ class ModeloBoleta extends DriverPostgre{
     
     async consultar(){
         const SQL=`SELECT * FROM tboleta WHERE id_boleta=${this.id_boleta};`
+        return await this.query(SQL)
+    }
+    
+    async actualizarObservacion(observacion){
+        const SQL=`UPDATE tboleta SET observacion_boleta='${observacion}' WHERE id_boleta=${this.id_boleta};`
         return await this.query(SQL)
     }
 

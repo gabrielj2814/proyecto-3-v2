@@ -18,4 +18,8 @@ ControladorBoleta.consultarTodasLasBoleta= async (req,res) => {
 
 }
 
+ControladorBoleta.actualizarObservacion= async (req,res) => {
+
+}
+
 module.exports = ControladorBoleta
