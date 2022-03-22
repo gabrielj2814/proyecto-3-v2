@@ -534,9 +534,11 @@ CREATE TABLE tboleta(
     id_boleta SERIAL ,
     id_inscripcion INTEGER NOT NULL,
     observacion_boleta character varying(250) NOT NULL,
+    id_lapso_academico INTEGER NOT NULL,
     fecha_boleta DATE NOT NULL,
     constraint PK_id_boleta primary key(id_boleta),
-    constraint FK_id_inscripcion_tboleta foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
+    constraint FK_id_inscripcion_tboleta foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade,
+    constraint FK_id_lapso_academico_tboleta foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
 );
 
 CREATE TABLE tnota(
