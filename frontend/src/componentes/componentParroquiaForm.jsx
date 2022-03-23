@@ -185,7 +185,7 @@ class ComponentParroquiaForm extends React.Component{
 
   async consultarCiudadesXEstado(a){
       let input=a.target
-      const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
+      const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${input.value}`,
       nombre_propiedad_lista_2="ciudades",
       propiedad_id_2="id_ciudad",
       propiedad_descripcion_2="nombre_ciudad",

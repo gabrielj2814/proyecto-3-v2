@@ -105,20 +105,6 @@ class ComponentSolicitarPermisoTrabajadorForm extends React.Component{
         return id_cedula
     }
 
-    /*
-    async buscarUltimoPermiso(cedula){
-        var respuesta_servidor=""
-        await axios.get(`http://localhost:8080/transaccion/permiso-trabajador/consultar-ultimo/${cedula}`)
-        .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-        })
-        .catch(error=>{
-            console.log(error)
-        })
-        return respuesta_servidor
-    }
-    */
-
     async consultarAlServidor(ruta){
         var respuesta_servidor=""
         await axios.get(ruta)

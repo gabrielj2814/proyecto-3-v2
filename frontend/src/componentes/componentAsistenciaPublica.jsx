@@ -1,5 +1,6 @@
 import React from 'react'
 import {withRouter} from 'react-router-dom'
+import servidor from '../ipServer.js'
 
 import axios from  'axios'
 
@@ -39,7 +40,7 @@ class ComponentAsistenciaPublica extends React.Component{
             }
         }
         console.log(json);
-        await axios.post("http://localhost:8080/transaccion/asistencia/presente-2",json)
+        await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia/presente-2`,json)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data.respuesta_api))
             console.log("datos asistencia =>>>>",json)

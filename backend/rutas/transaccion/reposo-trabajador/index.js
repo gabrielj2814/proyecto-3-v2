@@ -5,7 +5,6 @@ ReposoTrabajadorControlador=require("../../../controlador/c_reposo_trabajador"),
 VitacoraControlador=require("../../../controlador/c_vitacora")
 
 router.use(bodyparser.json())
-// localhost:8080/transaccion/reposo-trabajador/consultar/repot-2020-05-25-25
 router.get("/generar-id",ReposoTrabajadorControlador.generarId)
 router.get("/consultar-reposo-activos/:id_cedula",ReposoTrabajadorControlador.consultarReposoActivoTrabajdor)
 router.post("/registrar",ReposoTrabajadorControlador.registrarControlador,VitacoraControlador.capturaDatos)
@@ -51,7 +50,6 @@ module.exports= router
 // RepososTrabajadorControlador=require("../../../controlador/c_reposo_trabajador")
 
 // router.use(bodyparser.json())
-// // localhost:8080/transaccion/reposo-trabajador/consultar/repot-2020-05-25-25
 // router.get("/generar-id",RepososTrabajadorControlador.generarId)
 // router.post("/registrar",RepososTrabajadorControlador.registrarControlador)
 // router.get("/consultar/:id",ReposoTrabajadorControlador.consultarControlador)
