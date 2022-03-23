@@ -314,7 +314,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log(json)
-            
+
             if(json.estado_respuesta===true){
                 let hashAnoEscolaresSiguiente=json.datos[0]
                 this.setState({hashAnoEscolaresSiguiente})
@@ -770,16 +770,16 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte PDF</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                              <p>El profesor consultado ya tiene una planificacion para el año escolar {this.state.hashAnoEscolaresActivo.ano_desde} - {this.state.hashAnoEscolaresActivo.ano_hasta}, pero esta disponble para el siguiente año escolar {this.state.hashAnoEscolaresSiguiente.ano_desde} - {this.state.hashAnoEscolaresSiguiente.ano_hasta} desea asignarlo para el siguiente año escolar</p>
+                              <p>El profesor consultado ya tiene una planificación para el año escolar {this.state.hashAnoEscolaresActivo.ano_desde} - {this.state.hashAnoEscolaresActivo.ano_hasta}, pero esta disponble para el siguiente año escolar {this.state.hashAnoEscolaresSiguiente.ano_desde} - {this.state.hashAnoEscolaresSiguiente.ano_hasta} desea asignarlo para el siguiente año escolar</p>
                             </div>
                             <div class="modal-footer ">
-                                <button type="button" id="asginarProfesor" class="btn btn-success " data-id-profesor="" onClick={this.verficarDisponibilidadProfesorAnoEscolarSiguiente}>Asiganar</button>
+                                <button type="button" id="asginarProfesor" class="btn btn-success " data-id-profesor="" onClick={this.verficarDisponibilidadProfesorAnoEscolarSiguiente}>Asignar</button>
                                 <button type="button" id="cancelarAsignacion" class="btn btn-danger " data-id-modal="modalAginacionProferosSiguiente" onClick={this.cerrarModal}>Cancelar</button>
                             </div>
                             </div>

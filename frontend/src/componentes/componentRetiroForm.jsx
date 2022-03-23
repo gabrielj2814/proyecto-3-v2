@@ -599,9 +599,9 @@ class ComponentRetiroForm extends React.Component{
           var respuesta_servidor=""
           axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/registrar`,objeto)
           .then(respuesta=>{
-            respuesta_servidor=respuesta.data
+            respuesta_servidor=respuesta.data            
             mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado
+            mensaje.estado=respuesta_servidor.estado_respuesta
             mensaje.color_alerta=respuesta_servidor.color_alerta
             mensaje_formulario.mensaje=mensaje
             this.setState(mensaje_formulario)

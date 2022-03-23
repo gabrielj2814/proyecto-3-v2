@@ -324,7 +324,7 @@ class ComponentParroquiaForm extends React.Component{
       msj_fecha_cierre_ano_escolar: mensaje_campo,
       msj_estatus_ano_escolar: mensaje_campo,
     })
-    this.props.history.push("/dashboard/configuracion/enfermedad/registrar")
+    this.props.history.push("/dashboard/configuracion/parroquia/registrar")
   }
 
   validarTexto(a){
@@ -426,7 +426,7 @@ class ComponentParroquiaForm extends React.Component{
 
           let estado_validar_formulario = this.validarFormularioRegistrar()
           if(estado_validar_formulario.estado){
-            
+
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
                   const mensaje =this.state.mensaje
                   var respuesta_servidor=""

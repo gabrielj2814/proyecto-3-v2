@@ -150,9 +150,6 @@ class ComponentAnoEscolarForm extends React.Component{
             seguimiento_ano_escolar: "1",
           });
         }
-
-        document.getElementById("ano_desde").readonly = true;
-        document.getElementById("ano_hasta").readonly = true;
       }
       else if(operacion==="actualizar"){
         let responseServidor = await this.ConsultarRegistro(this.props.match.params.id)
@@ -182,6 +179,11 @@ class ComponentAnoEscolarForm extends React.Component{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+
+    setTimeout( () => {
+      document.getElementById("ano_desde").readonly = true;
+      document.getElementById("ano_hasta").readonly = true;
+    },100)
   }
   async ConsultarAnoActivo(){
     return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/consultar-ano-escolar-activo`)
@@ -587,8 +589,8 @@ class ComponentAnoEscolarForm extends React.Component{
                     <h5>
                       <span className="text-danger font-bold">!!</span>
                       Todos los datos ingresado excepto la fecha de cierre, seran datos que no se podran modificar luego
-                      <b> debes de estar seguro de los datos ingresados</b>. de ser asi, por favor confirma la operacion,
-                        de no ser asi, por favor cancela la operacion y asegurate de que todo este bien
+                      <b> debes de estar seguro de los datos ingresados</b>. de ser asi, por favor confirma la operación,
+                        de no ser asi, por favor cancela la operación y asegurate de que todo este bien
                         <span className="text-danger font-bold">!!</span>
                     </h5>
                   </div>
