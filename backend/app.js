@@ -46,6 +46,7 @@ const rutas_modulo_fecha_lapso_academico = require('./rutas/configuracion/fecha-
 const rutas_modulo_inscripcion = require('./rutas/configuracion/inscripcion')
 const rutas_modulo_asistencia_estudiante = require('./rutas/transaccion/asistencia_estudiante')
 const rutas_modulo_boleta = require('./rutas/transaccion/boleta')
+const rutas_modulo_nota = require('./rutas/transaccion/nota')
 //SET
 app.set("puerto",8080)
 // USE
@@ -97,6 +98,7 @@ app.use("/configuracion/fecha-lapso-academico", rutas_modulo_fecha_lapso_academi
 app.use("/configuracion/inscripcion", rutas_modulo_inscripcion)
 app.use("/transaccion/asistencia-estudiante", rutas_modulo_asistencia_estudiante)
 app.use("/transaccion/boleta", rutas_modulo_boleta)
+app.use("/transaccion/nota", rutas_modulo_nota)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())

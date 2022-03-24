@@ -64,7 +64,7 @@ ControladorBoleta.consultarTodasLasBoletasDelInscripto= async (req,res) => {
     const {id} = req.params
     let modeloBoleta = new ModeloBoleta()
     modeloBoleta.setIdInscripcion(id)
-    let resultBoleta=await modeloBoleta.consultaBoletarPorInscripcion()
+    let resultBoleta=await modeloBoleta.consultarBoletasPorInscripcion()
     if(resultBoleta.rowCount>0){
         respuesta_api.mensaje="boeltas del estudiante consultadas"
         respuesta_api.estado_respuesta=true
@@ -80,6 +80,21 @@ ControladorBoleta.consultarTodasLasBoletasDelInscripto= async (req,res) => {
     res.write(JSON.stringify(respuesta_api))
     res.end()
 }
+
+ControladorBoleta.consultarBoletaDelInscripto= async (idBoleta,idInscripcion) => {
+    let modeloBoleta = new ModeloBoleta()
+    modeloBoleta.setIdInscripcion(idInscripcion)
+    modeloBoleta.setIdBoleta(idBoleta)
+    let resultBoleta=await modeloBoleta.consultarBoletaPorInscripcion()
+    if(resultBoleta.rowCount>0){
+        return resultBoleta.rows
+    }
+    else{
+        return []
+    }
+}
+
+
 
 // ControladorBoleta.consultarTodasLasBoleta= async (req,res) => {
 //     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
