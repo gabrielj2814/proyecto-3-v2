@@ -87,7 +87,7 @@ ControladorBoleta.consultarBoletaDelInscripto= async (idBoleta,idInscripcion) =>
     modeloBoleta.setIdBoleta(idBoleta)
     let resultBoleta=await modeloBoleta.consultarBoletaPorInscripcion()
     if(resultBoleta.rowCount>0){
-        return resultBoleta.rows
+        return resultBoleta
     }
     else{
         return []

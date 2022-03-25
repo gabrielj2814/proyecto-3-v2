@@ -65,7 +65,15 @@ class ModeloBoleta extends DriverPostgre{
     }
     
     async consultarBoletaPorInscripcion(){
-        const SQL=`SELECT * FROM tboleta,tlapso_academico WHERE tboleta.id_inscripcion=${this.id_inscripcion} AND tboleta.id_boleta=${this.id_boleta}; AND tlapso_academico.id_lapso_academico=tboleta.id_lapso_academico AND tobjetivo_lapso_academico.id_lapso_academico=tlapso_academico.id_lapso_academico`
+        // tboleta.id_inscripcion=${this.id_inscripcion} AND 
+        const SQL=`SELECT * FROM 
+        tboleta,
+        tlapso_academico,
+        tobjetivo_lapso_academico 
+        WHERE 
+        tboleta.id_boleta=${this.id_boleta} AND 
+        tlapso_academico.id_lapso_academico=tboleta.id_lapso_academico AND 
+        tobjetivo_lapso_academico.id_lapso_academico=tlapso_academico.id_lapso_academico`
         return await this.query(SQL)
     }
 
@@ -82,4 +90,5 @@ class ModeloBoleta extends DriverPostgre{
 
 }
 
+// SELECT * FROM tboleta,tlapso_academico,tlapso_academico WHERE tboleta.id_boleta=${this.id_boleta} AND tlapso_academico.id_lapso_academico=tboleta.id_lapso_academico AND tobjetivo_lapso_academico.id_lapso_academico=tlapso_academico.id_lapso_academico
 module.exports = ModeloBoleta

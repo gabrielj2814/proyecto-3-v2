@@ -1,5 +1,4 @@
 const DriverPostgre=require("./driver_postgresql")
-const Moment=require("moment")
 
 class ModeloNota extends DriverPostgre{
 
@@ -13,7 +12,7 @@ class ModeloNota extends DriverPostgre{
         this.fecha_nota=""
     }
 
-    setINota(id){
+    setIdNota(id){
         this.id_nota=id
     }
     
@@ -35,7 +34,6 @@ class ModeloNota extends DriverPostgre{
     }
 
     async crearNotaIndicador(){
-        let fecha=Moment().format("YYYY-MM-DD")
         const SQL=`INSERT INTO tnota(
             id_boleta,
             id_objetivo_lapso_academico,
@@ -48,13 +46,13 @@ class ModeloNota extends DriverPostgre{
             ${this.id_objetivo_lapso_academico},
             '-',
             '${this.observacion_nota}',
-            '${fecha}'
+            '${this.fecha_nota}'
         )`
         return await this.query(SQL)
     }
 
     async actualizarNota(nota){
-        const SQL=`UPDATE tnota SET nota=${nota} WHERE id_nota=${ths.id_nota}`
+        const SQL=`UPDATE tnota SET nota='${nota}' WHERE id_nota=${this.id_nota}`
         return await this.query(SQL)
     }
 
@@ -64,3 +62,5 @@ class ModeloNota extends DriverPostgre{
     }
 
 }
+
+module.exports= ModeloNota

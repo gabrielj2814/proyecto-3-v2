@@ -7,7 +7,7 @@ router.use(bodyparser.json())
 
 router.post("/crear/:id_boleta",controladorNota.crear)
 router.put("/actualizar-nota",controladorNota.actualizarNota)
-router.put("/consultar-notas/:id_boleta",controladorNota.consultarNotaBoleta)
+router.get("/consultar-notas/:id",controladorNota.consultarNotaBoleta)
 
 
 module.exports = router 
