@@ -132,6 +132,10 @@ import ComponentLapso from './componentes/componentLapso'
 import ComponentFechaInscripcionFormulario from './componentes/componentFechaInscripcionFormulario'
 import ComponentFechaInscripcion from './componentes/componentFechaInscripcion'
 import ComponentMultiStepForm from './componentes/ComponentMultiStepForm'
+// Incripcion
+import ComponentInscripcionForm from './componentes/ComponentInscripcionForm'
+import ComponentInscripcion from './componentes/ComponentInscripcion'
+
 
 function App() {
   return (
@@ -231,6 +235,9 @@ function App() {
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:operacion/:id?" component={ComponentFechaInscripcionFormulario}/>
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:mensaje?" component={ComponentFechaInscripcion}/>
 
+        <Route exact path="/dashboard/configuracion/inscripcion/:operacion/:id?" component={ComponentInscripcionForm}/>
+        <Route exact path="/dashboard/configuracion/inscripcion/:mensaje?" component={ComponentInscripcion}/>
+        
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
 
@@ -254,6 +261,8 @@ function App() {
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante/consultar/:id" component={ComponenteAsignacionRepresentanteEstudianteConsulta}/>
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
+
+
 
 
         <Route exact path="/dashboard/seguridad/bitacora" component={ComponentBitacora}/>

@@ -25,7 +25,7 @@ class ModeloInscripcion extends DriverPostgres {
   setIdInscripcion(id){
     this.id_inscripcion = id
   }
-  
+
   setIdAsignacionAulaProfesor(id){
     this.id_asignacion_aula_profesor = id
   }
@@ -53,7 +53,7 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL)
   }
 
-  
+
   async consultarAnoEscolarActivo(){
     const SQL = "SELECT * FROM tano_escolar WHERE estatus_ano_escolar='1'"
     return await this.query(SQL)
@@ -73,8 +73,8 @@ class ModeloInscripcion extends DriverPostgres {
     const SQL = `SELECT * FROM tinscripcion,testudiante WHERE tinscripcion.id_asignacion_aula_profesor=${idAsignacion} AND testudiante.id_estudiante=tinscripcion.id_estudiante;`
     return await this.query(SQL)
   }
-  
-  
+
+
 
   async consultar(){
     const SQL = `SELECT * FROM tinscripcion
@@ -111,13 +111,13 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarTodas(){
-    
-      const SQL = `SELECT * FROM tinscripcion,tano_escolar,tprofesor,ttrabajador,tasignacion_aula_profesor WHERE 
+
+      const SQL = `SELECT * FROM tinscripcion,tano_escolar,tprofesor,ttrabajador,tasignacion_aula_profesor WHERE
                 tano_escolar.estatus_ano_escolar='1' AND
                 tprofesor.id_profesor='2' AND ttrabajador.id_cedula=tprofesor.id_cedula AND
                 tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND
                 tasignacion_aula_profesor.id_asignacion_aula_profesor= 3
-                
+
                 `
                 return await this.query(SQL)
   }
