@@ -92,6 +92,7 @@ class ComponentEstudianteForm extends React.Component{
             ciudades:[],
             enfermedades:[],
             vacunas:[],
+            operacion: "",
             fecha_minimo:"",
             hashEstudiante:{},
             estadoBusquedaEstudiante:false,
@@ -141,12 +142,14 @@ class ComponentEstudianteForm extends React.Component{
 
     async UNSAFE_componentWillMount(){
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
+        console.log("Esto es estudiante");
         if(acessoModulo){
             await this.consultarFechaServidor()
             await this.consultarTodosLosEstudiantes()
             await this.ConsultarEnfermedades();
             await this.ConsultarVacunas();
-            const operacion=this.props.match.params.operacion
+            let operacion=this.props.match
+            operacion = operacion.url.split("/")[4];
 
             if(operacion==="registrar"){
               const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
@@ -155,26 +158,27 @@ class ComponentEstudianteForm extends React.Component{
               propiedad_descripcion="nombre_estado",
               propiedad_estado="estatu_estado"
               const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-              
+
               const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
               nombre_propiedad_lista_2="ciudades",
               propiedad_id_2="id_ciudad",
               propiedad_descripcion_2="nombre_ciudad",
               propiedad_estado_2="estatu_ciudad"
               const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-              
+
               this.setState({
                   estados,
                   ciudades,
                   id_estado:(estados.length===0)?null:estados[0].id,
                   id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+                  operacion: operacion
               })
         }
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
             let datos = await this.consultarEstudiante(id)
             await this.ConsultarVacunasANDEnfermedadesDelEstudiante(datos.id_estudiante);
-            
+
             let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
             const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
             nombre_propiedad_lista="estados",
@@ -206,7 +210,8 @@ class ComponentEstudianteForm extends React.Component{
               sexo_estudiante:datos.sexo_estudiante,
               estatu_estudiante:datos.estatus_estudiante,
               estados: estados,
-              ciudades: ciudades
+              ciudades: ciudades,
+              operacion: operacion
             })
 
             document.getElementById("id_estado").value=datosCiudad.id_estado
@@ -305,13 +310,13 @@ class ComponentEstudianteForm extends React.Component{
             // console.log("datos =>>> ",json)
             let hash={}
             for(let estudiante of json.datos){
-                if(estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "" || 
+                if(estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "" ||
                 estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "No tiene" ||
                 estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == "null" ||
                 estudiante.cedula_escolar != "" && estudiante.cedula_estudiante == null){
                     hash[estudiante.cedula_escolar]=estudiante
                 }else hash[estudiante.cedula_estudiante]=estudiante;
-                
+
             }
             console.log("hash estudiante =>>> ",hash)
             this.setState({hashEstudiante:hash})
@@ -329,14 +334,14 @@ class ComponentEstudianteForm extends React.Component{
                 let array = data.datos.map( item => item.id_enfermedad);
                 this.setState({id_enfermedad: array})
             }
-            
+
         }).catch(error => {
             console.error(error);
         })
 
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/consultar/${id_estudiante}`)
         .then( ({data}) => {
-            
+
             if(data.datos != undefined){
                 let array = data.datos.map( item => item.id_vacuna);
                 this.setState({id_vacuna: array})
@@ -347,7 +352,7 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     async ConsultarEnfermedades(){
-        
+
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar-todos`)
         .then(respuesta => {
             let lista_enfermedades = respuesta.data.datos;
@@ -357,7 +362,7 @@ class ComponentEstudianteForm extends React.Component{
                 return {
                     id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad
                 }
-            } )  
+            } )
             this.setState({enfermedades});
         })
         .catch(error => {
@@ -366,15 +371,15 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     async ConsultarVacunas(){
-        
+
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna/consultar-todos`)
         .then(respuesta => {
             let lista_vacunas = respuesta.data.datos;
             let vacunas = this.state.vacunas;
-            vacunas = lista_vacunas.filter( datos => datos.estaus_vacuna === "1")     
+            vacunas = lista_vacunas.filter( datos => datos.estaus_vacuna === "1")
             vacunas = vacunas.map( datos => {
                 return { id: datos.id_vacuna, descripcion: datos.nombre_vacuna}
-            } )  
+            } )
             this.setState({vacunas});
         })
         .catch(error => {
@@ -412,6 +417,7 @@ class ComponentEstudianteForm extends React.Component{
       return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}`)
       .then(respuesta=>{
           let respuesta_servidor=respuesta.data
+          console.log(respuesta_servidor)
           if(respuesta_servidor.estado_respuesta=== true){
             return respuesta_servidor.datos[0]
           }
@@ -785,7 +791,7 @@ class ComponentEstudianteForm extends React.Component{
                 },
                 token: token
             };
-            
+
 
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objetoEnfermedad)
             .then( ({data}) => {
@@ -802,14 +808,14 @@ class ComponentEstudianteForm extends React.Component{
                 },
                 token: token
             };
-            
+
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/registrar`,objetoVacuna)
             .then( ({data}) => {
                 if(!data.estado_respuesta) console.log("VACUNA NO REGISTRADA")
                 else{
                     console.log(data.mensaje)
                 }
-            })            
+            })
         }
     }
 
@@ -846,7 +852,7 @@ class ComponentEstudianteForm extends React.Component{
                     .then(respuesta=>{
                         respuesta_servidor=respuesta.data
                         let id_estu = respuesta_servidor.datos[0].id_estudiante;
-                                                                        
+
                         mensaje.texto=respuesta_servidor.mensaje
                         mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
@@ -952,7 +958,7 @@ class ComponentEstudianteForm extends React.Component{
         return status_checked;
     }
 
-    render(){        
+    render(){
         var jsx_estudiante_form = (
             <div className="row justify-content-center">
 
@@ -1119,7 +1125,7 @@ class ComponentEstudianteForm extends React.Component{
                             {this.state.enfermedades.map( (item,index) => {
                                 return (
                                     <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
-                                        <input type="checkbox" class="form-check-input enfermedad-check" name="enfermedad[]" 
+                                        <input type="checkbox" class="form-check-input enfermedad-check" name="enfermedad[]"
                                             onChange={() => this.capturaCheck('enfermedad')} checked={this.CodeSearch(item.id,"enfermedad")} id="enfermedad" value={item.id} />
                                         <label class="form-check-label">{item.descripcion}</label>
                                     </div>
@@ -1139,7 +1145,7 @@ class ComponentEstudianteForm extends React.Component{
                             {this.state.vacunas.map( (item,index) => {
                                 return (
                                     <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
-                                        <input type="checkbox" class="form-check-input vacuna-check" checked={this.CodeSearch(item.id,"vacuna")} 
+                                        <input type="checkbox" class="form-check-input vacuna-check" checked={this.CodeSearch(item.id,"vacuna")}
                                         name="vacuna[]" onChange={() => this.capturaCheck('vacuna')} id="vacuna" value={item.id} />
                                         <label class="form-check-label">{item.descripcion}</label>
                                     </div>
@@ -1150,10 +1156,10 @@ class ComponentEstudianteForm extends React.Component{
                                 <h3>Sin vacunas registradas</h3>
                             }
                         </div>
-                        
+
                         <div className="row justify-content-center">
                             <div className="col-auto">
-                                {this.props.match.params.operacion==="registrar" &&
+                                {this.state.operacion==="registrar" &&
                                     <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
@@ -1161,7 +1167,7 @@ class ComponentEstudianteForm extends React.Component{
                                     eventoPadre={this.operacion}
                                     />
                                 }
-                                {this.props.match.params.operacion==="actualizar" &&
+                                {this.state.operacion==="actualizar" &&
                                     <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
