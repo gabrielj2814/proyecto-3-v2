@@ -1,5 +1,5 @@
 const ControladorBoleta={}
-const ModeloBoleta= require("../modelo/m_Boleta")
+const ModeloBoleta= require("../modelo/m_boleta")
 
 ControladorBoleta.registrar= async (req,res) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}

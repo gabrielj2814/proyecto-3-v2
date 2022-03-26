@@ -98,11 +98,11 @@ class ComponentInscripcion extends React.Component{
     }
 
     async ConsultarRegistros(){
+      var respuesta_servidor = [];
         return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-estudiante-por-profesor/${this.state.cedula_profesor}`)
-        .then(repuesta =>{
-            console.log(repuesta.data.datos)
-
-            return repuesta.data.datos.listaDeEstudiantes;
+        .then(respuesta =>{
+          if(respuesta.data.datos.listaDeEstudiantes) return respuesta.data.datos.listaDeEstudiantes;
+          return respuesta.data.datos;
         })
         .catch(error => console.log(error))
     }
@@ -290,6 +290,8 @@ class ComponentInscripcion extends React.Component{
         const jsx_tabla_body=(
           <tbody>
                 {this.state.registros.map((inscripcion, index)=>{
+                  if(inscripcion.vacio) return(<tr></tr>)
+
                   let estado = (inscripcion.estatus_inscripcion == "I") ? "Inscrito" : "";
                   estado = (inscripcion.estatus_inscripcion == "E") ? "Espera" : estado;
                   estado = (inscripcion.estatus_inscripcion == "P") ? "Pre-Inscrito" : estado;
@@ -301,16 +303,17 @@ class ComponentInscripcion extends React.Component{
                           <td>{Moment(inscripcion.fecha_inscripcion).format("D/M/YYYY")}</td>
                           <td>{inscripcion.codigo_cedula_escolar}-{inscripcion.cedula_escolar}</td>
                           <td>{estado}</td>
-                         {!inscripcion.vacio &&
-                           <td>
-                             <ButtonIcon
-                                clasesBoton="btn btn-warning btn-block"
-                                value={inscripcion.id_inscripcion}
-                                id={inscripcion.id_inscripcion}
-                                eventoPadre={this.actualizarElementoTabla}
-                                icon="icon-pencil"
-                              />
-                            </td>
+                         {
+                           // !inscripcion.vacio &&
+                           // <td>
+                           //   <ButtonIcon
+                           //      clasesBoton="btn btn-warning btn-block"
+                           //      value={inscripcion.id_inscripcion}
+                           //      id={inscripcion.id_inscripcion}
+                           //      eventoPadre={this.actualizarElementoTabla}
+                           //      icon="icon-pencil"
+                           //    />
+                           //  </td>
                          }
                          {/* {!enfermedad.vacio &&
                            <td>
