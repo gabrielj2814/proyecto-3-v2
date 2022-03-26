@@ -1,9 +1,3 @@
-// id_inscripcion SERIAL,
-// id_estudiante INTEGER NOT NULL,
-// id_asignacion_representante_estudiante INTEGER NOT NULL,
-// id_asignacion_aula_profesor INTEGER NOT NULL,
-// fecha_inscripcion DATE NOT NULL,
-// estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import $ from "jquery"
