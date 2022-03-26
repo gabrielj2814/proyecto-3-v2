@@ -562,4 +562,12 @@ CREATE TABLE tpromocion(
     constraint FK_id_inscripcion_tpromocion foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
 
--- CREATE TABLE tretiro();
+CREATE TABLE tretiro(
+    id_retiro SERIAL,
+    id_inscripcion INTEGER NOT NULL,
+    motivo_retiro character varying(3000) NOT NULL,
+    fecha_retiro DATE NOT NULL,
+    estado_retiro character(1) NOT NULL,
+    constraint PK_estado_retiro primary key(id_promocion),
+    constraint FK_id_inscripcion_tretiro foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
+);
