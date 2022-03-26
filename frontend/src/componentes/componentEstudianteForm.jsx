@@ -823,7 +823,7 @@ class ComponentEstudianteForm extends React.Component{
         $(".columna-modulo").animate({
             scrollTop: 0
             }, 1000)
-        const operacion=this.props.match.params.operacion
+        const operacion=this.state.operacion
 
         const mensaje_formulario={
             mensaje:"",
