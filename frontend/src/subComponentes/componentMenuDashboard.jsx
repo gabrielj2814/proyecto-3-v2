@@ -180,6 +180,9 @@ class MenuDashboard extends React.Component{
                     }
                     {modulo[1]==="configuracion"&&
                         <div id="configuracion">
+                            {this.state.modulosSistema["/dashboard/configuracion"]["/inscripcion"]&&
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/inscripcion" texto="Inscripción"/>
+                            }
                             {this.state.modulosSistema["/dashboard/configuracion"]["/estudiante"]&&
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estudiante" texto="Estudiante"/>
                             }
