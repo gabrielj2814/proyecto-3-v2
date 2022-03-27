@@ -5,7 +5,9 @@ controladorPromocion=require("../../../controlador/c_promocion")
 
 router.use(bodyparser.json())
 
-// router.post("/crear/:id_boleta",controladorPromocion.crear)
-
+router.post("/crear-promocion",controladorPromocion.registrar)
+router.get("/consultar-promocion/:id",controladorPromocion.consultar)
+router.get("/consultar-promocion-por-inscripcion/:id",controladorPromocion.consultarPorInscripcion)
+router.put("/actualizar",controladorPromocion.actualizar)
 
 module.exports = router 
