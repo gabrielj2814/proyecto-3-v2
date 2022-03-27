@@ -555,9 +555,12 @@ CREATE TABLE tnota(
 CREATE TABLE tpromocion(
     id_promocion SERIAL,
     id_inscripcion INTEGER NOT NULL,
-    grado_a_promocionar character varying(1) NOT NULL,
     fecha_promocion DATE NOT NULL,
-    observacion_promocion character varying(300) NOT NULL,
+    descripcion_logro character varying(3000) NOT NULL,
+    recomendacion_pariente character varying(3000) NOT NULL,
+    nota_promocion character(1) NOT NULL,
+    descripcion_nota_promocion character varying(3000) NOT NULL,
+    dias_promocion character varying(2) NOT NULL,
     constraint PK_id_promocion primary key(id_promocion),
     constraint FK_id_inscripcion_tpromocion foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
