@@ -180,6 +180,15 @@ INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu
 INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-2','araure','est-1','1');
 INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-3','barquisimeto','est-2','1');
 
+CREATE TABLE tparroquia(
+    id_parroquia SERIAL,
+    nombre_parroquia character varying(150) NOT NULL,
+    id_ciudad character varying(6) NOT NULL,
+    estatu_parroquia character(1) NOT NULL,
+    constraint PK_id_parroquia primary key(id_parroquia),
+    constraint FK_id_ciudad_tparroquia foreign key(id_ciudad) references tciudad(id_ciudad) on update cascade on delete cascade
+);
+
 CREATE TABLE ttipocam(
     id_tipo_cam character varying(7) NOT NULL,
     nombre_tipo_cam character varying(150) NOT NULL,
@@ -392,30 +401,32 @@ CREATE TABLE tlista_vacuna(
     constraint PK_id_vacuna primary key(id_vacuna)
 );
 
-CREATE TABLE tlista_enfermedad(
-    id_enfermedad SERIAL,
-    nombre_enfermedad character varying(150) NOT NULL,
-    estaus_enfermedad character(1) NOT NULL,
-    constraint PK_id_enfermedad primary key(id_enfermedad)
-);
+-- CREATE TABLE tlista_enfermedad( -- x no se usa
+--     id_enfermedad SERIAL,
+--     nombre_enfermedad character varying(150) NOT NULL,
+--     estaus_enfermedad character(1) NOT NULL,
+--     constraint PK_id_enfermedad primary key(id_enfermedad)
+-- );
 
 CREATE TABLE testudiante(
     id_estudiante SERIAL,
     codigo_cedula_escolar character varying(8) NOT NULL,
     cedula_escolar character varying(11) NOT NULL,
-    cedula_estudiante character varying(8) UNIQUE,
+    cedula_estudiante character varying(8) NULL,
     nombres_estudiante character varying(150) NOT NULL,
     apellidos_estudiante character varying(150) NOT NULL,
     fecha_nacimiento_estudiante DATE NOT NULL,
     direccion_nacimiento_estudiante character varying(2000) NOT NULL,
-    id_ciudad character varying(6) NOT NULL,
+    id_parroquia_nacimiento INTEGER NOT NULL,
+    id_parroquia_vive INTEGER NOT NULL,
+    enfermedades_estudiante character varying(3000) NOT NULL,
     sexo_estudiante character(1) NOT NULL,
     procedencia_estudiante character varying(2000) NOT NULL,
-    escolaridad_estudiante character varying(150) NOT NULL,
     vive_con_estudiante character varying(2000) NOT NULL,
     estatus_estudiante character(1) NOT NULL,
     constraint PK_id_estudiante primary key(id_estudiante),
-    constraint FK_id_ciudad_testudiante foreign key(id_ciudad) references tciudad(id_ciudad) on update cascade on delete cascade
+    constraint FK_id_parroquia_nacimiento_testudiante foreign key(id_parroquia_nacimiento) references tparroquia(id_parroquia) on update cascade on delete cascade,
+    constraint FK_id_parroquia_vive_testudiante foreign key(id_parroquia_vive) references tparroquia(id_parroquia) on update cascade on delete cascade
 );
 
 CREATE TABLE vacuna_estudiante(
@@ -427,14 +438,14 @@ CREATE TABLE vacuna_estudiante(
     constraint FK_id_vacuna_tlista_vacunas foreign key(id_vacuna) references tlista_vacuna(id_vacuna) on update cascade on delete cascade
 );
 
-CREATE TABLE enfermedad_estudiante(
-    id_enfermedad_estudiante SERIAL,
-    id_estudiante INTEGER NOT NULL,
-    id_enfermedad INTEGER NOT NULL,
-    constraint PK_id_enfermedad_estudiante primary key(id_enfermedad_estudiante),
-    constraint FK_id_estudiante_testudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
-    constraint FK_id_enfermedad_tlista_enfermedad foreign key(id_enfermedad) references tlista_enfermedad(id_enfermedad) on update cascade on delete cascade
-);
+-- CREATE TABLE enfermedad_estudiante( -- x no se usa
+--     id_enfermedad_estudiante SERIAL,
+--     id_estudiante INTEGER NOT NULL,
+--     id_enfermedad INTEGER NOT NULL,
+--     constraint PK_id_enfermedad_estudiante primary key(id_enfermedad_estudiante),
+--     constraint FK_id_estudiante_testudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
+--     constraint FK_id_enfermedad_tlista_enfermedad foreign key(id_enfermedad) references tlista_enfermedad(id_enfermedad) on update cascade on delete cascade
+-- );
 
 CREATE TABLE trepresentante(
     id_cedula_representante character varying(8) NOT NULL,
@@ -476,36 +487,36 @@ CREATE TABLE tasignacion_representante_estudiante(
     constraint FK_id_estudiante_tasignacion_representante_estudiante foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade
 );
 
-CREATE TABLE tplanificacion_lapso_escolar(
-    id_planificacion_lapso_escolar SERIAL,
-    id_asignacion_aula_profesor INTEGER NOT NULL,
-    fecha_de_creacion_planificacion_lapso_escolar DATE NOT NULL,
-    constraint PK_id_planificacion_lapso_escolar primary key(id_planificacion_lapso_escolar),
-    constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
-);
+-- CREATE TABLE tplanificacion_lapso_escolar( -- x no se usa
+--     id_planificacion_lapso_escolar SERIAL,
+--     id_asignacion_aula_profesor INTEGER NOT NULL,
+--     fecha_de_creacion_planificacion_lapso_escolar DATE NOT NULL,
+--     constraint PK_id_planificacion_lapso_escolar primary key(id_planificacion_lapso_escolar),
+--     constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
+-- );
 
--- ALTER TABLE tlapso_academico ADD COLUMN id_fecha_lapso_academico INTEGER NULL;
+-- -- ALTER TABLE tlapso_academico ADD COLUMN id_fecha_lapso_academico INTEGER NULL;
 
-CREATE TABLE tlapso_academico(
-    id_lapso_academico SERIAL,
-    id_planificacion_lapso_escolar INTEGER NOT NULL,
-    nombre_lapso_academico character varying(150) NOT NULL,
-    id_fecha_lapso_academico INTEGER NULL,
-    estatu_lapso_academico character(1) NOT NULL, --1 -> se pueden seguir haciendo cambios pero no se puede utilizar para evaluar hacer evaluaciones ,2 -> listo (no se pueden hacer mas cambios y esta listo para usarse)
-    fecha_de_creacion_lapso_academico DATE NOT NULL,
-    constraint PK_id_lapso_academico primary key(id_lapso_academico),
-    constraint FK_id_fecha_lapso_academico foreign key(id_fecha_lapso_academico) references tfecha_lapso_academico(id_fecha_lapso_academico) on update cascade on delete cascade,
-    constraint FK_id_planificacion_lapso_escolar foreign key(id_planificacion_lapso_escolar) references tplanificacion_lapso_escolar(id_planificacion_lapso_escolar) on update cascade on delete cascade
-);
+-- CREATE TABLE tlapso_academico( -- x no se usa
+--     id_lapso_academico SERIAL,
+--     id_planificacion_lapso_escolar INTEGER NOT NULL,
+--     nombre_lapso_academico character varying(150) NOT NULL,
+--     id_fecha_lapso_academico INTEGER NULL,
+--     estatu_lapso_academico character(1) NOT NULL, --1 -> se pueden seguir haciendo cambios pero no se puede utilizar para evaluar hacer evaluaciones ,2 -> listo (no se pueden hacer mas cambios y esta listo para usarse)
+--     fecha_de_creacion_lapso_academico DATE NOT NULL,
+--     constraint PK_id_lapso_academico primary key(id_lapso_academico),
+--     constraint FK_id_fecha_lapso_academico foreign key(id_fecha_lapso_academico) references tfecha_lapso_academico(id_fecha_lapso_academico) on update cascade on delete cascade,
+--     constraint FK_id_planificacion_lapso_escolar foreign key(id_planificacion_lapso_escolar) references tplanificacion_lapso_escolar(id_planificacion_lapso_escolar) on update cascade on delete cascade
+-- );
 
-CREATE TABLE tobjetivo_lapso_academico(
-    id_objetivo_lapso_academico SERIAL,
-    id_lapso_academico INTEGER NOT NULL,
-    descripcion_objetivo_academico character varying(350) NOT NULL,
-    estatu_objetivo_lapso_academico character(1) NOT NULL,
-    constraint PK_id_objetivo_lapso_academico primary key(id_objetivo_lapso_academico),
-    constraint FK_id_lapso_academico foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
-);
+-- CREATE TABLE tobjetivo_lapso_academico( -- x no se usa
+--     id_objetivo_lapso_academico SERIAL,
+--     id_lapso_academico INTEGER NOT NULL,
+--     descripcion_objetivo_academico character varying(350) NOT NULL,
+--     estatu_objetivo_lapso_academico character(1) NOT NULL,
+--     constraint PK_id_objetivo_lapso_academico primary key(id_objetivo_lapso_academico),
+--     constraint FK_id_lapso_academico foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
+-- );
 
 CREATE TABLE tinscripcion(
     id_inscripcion SERIAL,
@@ -530,27 +541,27 @@ CREATE TABLE tasistencia_estudiante(
     constraint FK_id_inscripcion_tasistencia_estudianten foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
 
-CREATE TABLE tboleta(
-    id_boleta SERIAL ,
-    id_inscripcion INTEGER NOT NULL,
-    observacion_boleta character varying(250) NOT NULL,
-    id_lapso_academico INTEGER NOT NULL,
-    fecha_boleta DATE NOT NULL,
-    constraint PK_id_boleta primary key(id_boleta),
-    constraint FK_id_inscripcion_tboleta foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade,
-    constraint FK_id_lapso_academico_tboleta foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
-);
+-- CREATE TABLE tboleta( -- x no se usa
+--     id_boleta SERIAL ,
+--     id_inscripcion INTEGER NOT NULL,
+--     observacion_boleta character varying(250) NOT NULL,
+--     id_lapso_academico INTEGER NOT NULL,
+--     fecha_boleta DATE NOT NULL,
+--     constraint PK_id_boleta primary key(id_boleta),
+--     constraint FK_id_inscripcion_tboleta foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade,
+--     constraint FK_id_lapso_academico_tboleta foreign key(id_lapso_academico) references tlapso_academico(id_lapso_academico) on update cascade on delete cascade
+-- );
 
-CREATE TABLE tnota(
-    id_nota SERIAL,
-    id_boleta INTEGER NOT NULL,
-    id_objetivo_lapso_academico INTEGER NOT NULL,
-    nota character varying(1) NOT NULL,
-    observacion_nota character varying(250) NOT NULL,
-    fecha_nota DATE NOT NULL,
-    constraint PK_id_nota primary key(id_nota),
-    constraint FK_id_objetivo_lapso_academico_tnota foreign key(id_objetivo_lapso_academico) references tobjetivo_lapso_academico(id_objetivo_lapso_academico) on update cascade on delete cascade
-);
+-- CREATE TABLE tnota( -- x no se usa
+--     id_nota SERIAL,
+--     id_boleta INTEGER NOT NULL,
+--     id_objetivo_lapso_academico INTEGER NOT NULL,
+--     nota character varying(1) NOT NULL,
+--     observacion_nota character varying(250) NOT NULL,
+--     fecha_nota DATE NOT NULL,
+--     constraint PK_id_nota primary key(id_nota),
+--     constraint FK_id_objetivo_lapso_academico_tnota foreign key(id_objetivo_lapso_academico) references tobjetivo_lapso_academico(id_objetivo_lapso_academico) on update cascade on delete cascade
+-- );
 
 CREATE TABLE tpromocion(
     id_promocion SERIAL,
@@ -571,6 +582,15 @@ CREATE TABLE tretiro(
     motivo_retiro character varying(3000) NOT NULL,
     fecha_retiro DATE NOT NULL,
     estado_retiro character(1) NOT NULL,
-    constraint PK_estado_retiro primary key(id_promocion),
+    constraint PK_id_retiro primary key(id_retiro),
     constraint FK_id_inscripcion_tretiro foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
+
+-- DROP TABLE tretiro;
+-- DROP TABLE tpromocion;
+-- DROP TABLE tasistencia_estudiante;
+-- DROP TABLE tinscripcion;
+-- DROP TABLE tasignacion_representante_estudiante;
+-- DROP TABLE trepresentante;
+-- DROP TABLE vacuna_estudiante;
+-- DROP TABLE testudiante;
