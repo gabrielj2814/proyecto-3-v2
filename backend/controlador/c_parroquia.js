@@ -90,6 +90,29 @@ controladorParroquia.consultarpatron = async (req, res) => {
   res.end()
 }
 
+controladorParroquia.consultarParroquiaXCiudadModulo = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloParraquia = require("../modelo/m_parroquia");
+  const ciudad = req.params.ciudad
+  let modeloParroquia = new ModeloParraquia()
+  let resultParroquia = await modeloParroquia.consultarParroquiaXCiudadModulo(ciudad)
+
+  if (resultParroquia.rowCount > 0) {
+    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.datos = resultParroquia.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorParroquia.actualizar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloParraquia = require("../modelo/m_parroquia")

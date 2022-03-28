@@ -46,6 +46,12 @@ class ModuloParroquia extends DriverPostgres {
     return await this.query(SQL);
   }
 
+  async consultarParroquiaXCiudadModulo(ciudad){
+    const SQL = `SELECT * FROM tparroquia WHERE id_ciudad='${ciudad}'`
+    //console.log(SQL)
+    return await this.query(SQL)
+  }
+
   async actualizar(){
     const SQL = ` UPDATE tparroquia SET nombre_parroquia= '${this.nombre_parroquia}', id_ciudad= '${this.id_ciudad}', 
                   estatu_parroquia= '${this.estatu_parroquia}' 
