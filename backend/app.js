@@ -48,6 +48,7 @@ const rutas_modulo_asistencia_estudiante = require('./rutas/transaccion/asistenc
 const rutas_modulo_boleta = require('./rutas/transaccion/boleta')
 const rutas_modulo_nota = require('./rutas/transaccion/nota')
 const rutas_modulo_promocion = require('./rutas/transaccion/promocion')
+const rutas_modulo_retiro = require('./rutas/transaccion/retiro')
 const rutas_modulo_parroquia = require('./rutas/configuracion/parroquia')
 //SET
 app.set("puerto",8080)
@@ -102,6 +103,7 @@ app.use("/transaccion/asistencia-estudiante", rutas_modulo_asistencia_estudiante
 app.use("/transaccion/boleta", rutas_modulo_boleta)
 app.use("/transaccion/nota", rutas_modulo_nota)
 app.use("/transaccion/promocion", rutas_modulo_promocion)
+app.use("/transaccion/retiro", rutas_modulo_retiro)
 app.use("/configuracion/parroquia", rutas_modulo_parroquia)
 
 // app.get("/ver-imagen",(req,res) => {

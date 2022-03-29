@@ -579,9 +579,10 @@ CREATE TABLE tpromocion(
 CREATE TABLE tretiro(
     id_retiro SERIAL,
     id_inscripcion INTEGER NOT NULL,
+    cedula_representante_solicitud character varying(15) NOT NULL,
     motivo_retiro character varying(3000) NOT NULL,
     fecha_retiro DATE NOT NULL,
-    estado_retiro character(1) NOT NULL,
+    estado_retiro character(1) NOT NULL, -- E -> en espera de respuesta, R -> Rechazado, A -> Aprobado
     constraint PK_id_retiro primary key(id_retiro),
     constraint FK_id_inscripcion_tretiro foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
