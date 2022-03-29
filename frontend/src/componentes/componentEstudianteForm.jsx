@@ -49,7 +49,7 @@ class ComponentEstudianteForm extends React.Component{
         this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
         this.capturaCheck = this.capturaCheck.bind(this);
         this.registroEnfermedadANDVacunaEstudiante = this.registroEnfermedadANDVacunaEstudiante.bind(this);
-        this.ConsultarVacunasANDEnfermedadesDelEstudiante = this.ConsultarVacunasANDEnfermedadesDelEstudiante.bind(this);
+        this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
         this.state={
             // ------------------
             modulo:"",// modulo menu
@@ -177,7 +177,7 @@ class ComponentEstudianteForm extends React.Component{
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
             let datos = await this.consultarEstudiante(id)
-            await this.ConsultarVacunasANDEnfermedadesDelEstudiante(datos.id_estudiante);
+            await this.ConsultarVacunas(datos.id_estudiante);
 
             let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
             const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
@@ -326,18 +326,7 @@ class ComponentEstudianteForm extends React.Component{
         })
     }
 
-    async ConsultarVacunasANDEnfermedadesDelEstudiante(id_estudiante){
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/consultar/${id_estudiante}`)
-        .then( ({data}) => {
-
-            if(data.datos != undefined){
-                let array = data.datos.map( item => item.id_enfermedad);
-                this.setState({id_enfermedad: array})
-            }
-
-        }).catch(error => {
-            console.error(error);
-        })
+    async ConsultarVacunas(id_estudiante){
 
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/consultar/${id_estudiante}`)
         .then( ({data}) => {
@@ -348,25 +337,6 @@ class ComponentEstudianteForm extends React.Component{
             }
         }).catch(error => {
             console.error(error);
-        })
-    }
-
-    async ConsultarEnfermedades(){
-
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar-todos`)
-        .then(respuesta => {
-            let lista_enfermedades = respuesta.data.datos;
-            let enfermedades = this.state.enfermedades;
-            enfermedades = lista_enfermedades.filter( datos => datos.estaus_enfermedad === "1")
-            enfermedades = lista_enfermedades.map( datos => {
-                return {
-                    id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad
-                }
-            } )
-            this.setState({enfermedades});
-        })
-        .catch(error => {
-            console.log("error al conectar con el servidor")
         })
     }
 
