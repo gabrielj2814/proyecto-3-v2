@@ -49,6 +49,7 @@ const rutas_modulo_boleta = require('./rutas/transaccion/boleta')
 const rutas_modulo_nota = require('./rutas/transaccion/nota')
 const rutas_modulo_promocion = require('./rutas/transaccion/promocion')
 const rutas_modulo_retiro = require('./rutas/transaccion/retiro')
+const rutas_modulo_parroquia = require('./rutas/configuracion/parroquia')
 //SET
 app.set("puerto",8080)
 // USE
@@ -103,6 +104,7 @@ app.use("/transaccion/boleta", rutas_modulo_boleta)
 app.use("/transaccion/nota", rutas_modulo_nota)
 app.use("/transaccion/promocion", rutas_modulo_promocion)
 app.use("/transaccion/retiro", rutas_modulo_retiro)
+app.use("/configuracion/parroquia", rutas_modulo_parroquia)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
