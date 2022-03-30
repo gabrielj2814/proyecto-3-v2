@@ -11,6 +11,9 @@ class ModeloRetiro extends DriverPostgre{
         this.motivo_retiro=""
         this.fecha_retiro=""
         this.estado_retiro=""
+        this.estadoEspera="E"
+        this.estadoRezado="R"
+        this.estadoAprobado="R"
     }
 
     setIdRetiro(id){
@@ -19,6 +22,10 @@ class ModeloRetiro extends DriverPostgre{
 
     setIdInscripcion(id){
         this.id_inscripcion=id
+    }
+    
+    setEstado(estado){
+        this.estado_retiro=estado
     }
 
     setDatos(datos){
@@ -32,6 +39,7 @@ class ModeloRetiro extends DriverPostgre{
 
 
     async registrar(){
+        let fecha=Moment().format("YYYY-MM-DD")
         const SQL=`INSERT INTO tretiro(
             id_inscripcion,
             cedula_representante_solicitud,
@@ -43,8 +51,8 @@ class ModeloRetiro extends DriverPostgre{
             ${this.id_inscripcion},
             ${this.cedula_representante_solicitud},
             '${this.motivo_retiro}',
-            '${this.fecha_retiro}',
-            'E'
+            '${fecha}',
+            '${this.this.estadoEspera}'
         ) RETURNING id_retiro`
         return await this.query(SQL)
     }
@@ -58,11 +66,13 @@ class ModeloRetiro extends DriverPostgre{
         return await this.query(SQL)
     }
 
-    async consultarPorEstado(){
+    async consultarPorEstado(fechaDesde,fechaHasta){
         const SQL=`SELECT * FROM 
         tretiro
         WHERE
-        tretiro.id_retiro=${this.tretiro}
+        (fecha_retiro BETWEEN '${fechaDesde}' AND '${fechaHasta}') AND
+        estado_retiro='${this.estado_retiro}'
+
         `
         return await this.query(SQL)
     }
