@@ -45,10 +45,9 @@ class ComponentEstudianteForm extends React.Component{
         this.consultarEstudiante=this.consultarEstudiante.bind(this)
         this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
         this.consultarCiudad = this.consultarCiudad.bind(this)
-        this.ConsultarEnfermedades = this.ConsultarEnfermedades.bind(this);
         this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
         this.capturaCheck = this.capturaCheck.bind(this);
-        this.registroEnfermedadANDVacunaEstudiante = this.registroEnfermedadANDVacunaEstudiante.bind(this);
+        this.registroVacunaEstudiante = this.registroVacunaEstudiante.bind(this);
         this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
         this.state={
             // ------------------
@@ -68,6 +67,7 @@ class ComponentEstudianteForm extends React.Component{
             procedencia:"",
             id_estado:"",
             id_ciudad:"",
+            enfermedades: "",
             id_enfermedad: [],
             id_vacuna: [],
             sexo_estudiante:"1",
@@ -81,6 +81,7 @@ class ComponentEstudianteForm extends React.Component{
             msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
             msj_direccion_nacimiento:[{mensaje:"",color_texto:""}],
             msj_escolaridad:[{mensaje:"",color_texto:""}],
+            msj_enfermedades:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
@@ -208,6 +209,7 @@ class ComponentEstudianteForm extends React.Component{
               procedencia:datos.procedencia_estudiante,
               id_ciudad:datos.id_ciudad,
               sexo_estudiante:datos.sexo_estudiante,
+              enfermedades: datos.enfermedades_estudiante,
               estatu_estudiante:datos.estatus_estudiante,
               estados: estados,
               ciudades: ciudades,
@@ -271,7 +273,7 @@ class ComponentEstudianteForm extends React.Component{
             // this.setState({modulosSistema})
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -295,7 +297,7 @@ class ComponentEstudianteForm extends React.Component{
 
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
             mensaje.texto="No se puedo conectar con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
@@ -322,7 +324,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({hashEstudiante:hash})
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 
@@ -353,7 +355,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({vacunas});
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.error("error al conectar con el servidor")
         })
     }
 
@@ -375,7 +377,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({fechaServidor})
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.error("error al conectar con el servidor")
         })
     }
 
@@ -398,7 +400,7 @@ class ComponentEstudianteForm extends React.Component{
           }
       })
       .catch(error=>{
-          console.log(error)
+          console.error(error)
           mensaje.texto="No se puedo conectar con el servidor"
           mensaje.estado="500"
           this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
@@ -429,7 +431,7 @@ class ComponentEstudianteForm extends React.Component{
             }
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
         })
         return lista
     }
@@ -561,6 +563,7 @@ class ComponentEstudianteForm extends React.Component{
         id_ciudad:"",
         sexo_estudiante:"1",
         estatu_estudiante:"1",
+        enfermedades: "",
         //MSJ
         msj_id_cedula_escolar:mensaje_campo,
         msj_id_cedula:mensaje_campo,
@@ -751,25 +754,9 @@ class ComponentEstudianteForm extends React.Component{
       }
     }
 
-    registroEnfermedadANDVacunaEstudiante(){
+    registroVacunaEstudiante(){
         if(this.state.id_estudiante != ""){
             const token = localStorage.getItem('usuario')
-            let objetoEnfermedad = {
-                enfermedades:{
-                    id_estudiante: this.state.id_estudiante,
-                    id_enfermedad: this.state.id_enfermedad
-                },
-                token: token
-            };
-
-
-            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objetoEnfermedad)
-            .then( ({data}) => {
-                if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
-                else{
-                    console.log(data.mensaje);
-                }
-            })
 
             let objetoVacuna = {
                 vacunas: {
@@ -806,6 +793,7 @@ class ComponentEstudianteForm extends React.Component{
             msj_escolaridad:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
+            msj_enfermedades:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
             msj_estatu_estudiante:[{mensaje:"",color_texto:""}],
             msj_id_estado:[{ mensaje:"", color_texto:""}],
@@ -828,12 +816,12 @@ class ComponentEstudianteForm extends React.Component{
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                         this.setState({id_estudiante: id_estu})
-                        this.registroEnfermedadANDVacunaEstudiante()
+                        this.registroVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
                         mensaje.estado=false
-                        console.log(error)
+                        console.error(error)
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                     })
@@ -855,7 +843,7 @@ class ComponentEstudianteForm extends React.Component{
                         mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
-                        this.registroEnfermedadANDVacunaEstudiante()
+                        this.registroVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
@@ -886,6 +874,7 @@ class ComponentEstudianteForm extends React.Component{
               escolaridad_estudiante: this.state.escolaridad,
               vive_con_estudiante: this.state.vive_con,
               estatus_estudiante: this.state.estatu_estudiante,
+              enfermedades_estudiante: this.state.enfermedades,
             },
             token:token
         }
@@ -1092,18 +1081,10 @@ class ComponentEstudianteForm extends React.Component{
                             </div>
                         </div>
                         <div className="row justify-content-center mt-1 mb-2">
-                            {this.state.enfermedades.map( (item,index) => {
-                                return (
-                                    <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
-                                        <input type="checkbox" class="form-check-input enfermedad-check" name="enfermedad[]"
-                                            onChange={() => this.capturaCheck('enfermedad')} checked={this.CodeSearch(item.id,"enfermedad")} id="enfermedad" value={item.id} />
-                                        <label class="form-check-label">{item.descripcion}</label>
-                                    </div>
-                                );
-                            })}
-                            {this.state.enfermedades.length == 0 &&
-                                <h3>Sin enfermedades registradas</h3>
-                            }
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="no" mensaje={this.state.msj_enfermedades[0]} nombreCampoTextArea="Enfermedades del estudiante:"
+                            clasesTextArear="form-control" name="enfermedades" id="enfermedades" value={this.state.enfermedades}
+                            eventoPadre={this.cambiarEstado}/>
                         </div>
 
                         <div className="row justify-content-center">
