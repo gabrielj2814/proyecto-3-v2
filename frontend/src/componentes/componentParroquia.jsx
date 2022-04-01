@@ -1,10 +1,8 @@
+
 import React from 'react'
 import {withRouter} from "react-router-dom"
-
 //JS
 import axios from 'axios'
-import Moment from 'moment'
-import $ from 'jquery'
 // IP servidor
 import servidor from '../ipServer.js'
 //css
@@ -16,24 +14,19 @@ import ComponentDashboard from './componentDashboard'
 //sub componentes
 import InputButton from '../subComponentes/input_button'
 import ButtonIcon from '../subComponentes/buttonIcon'
-import ComponentFormSelect from "../subComponentes/componentFormSelect"
-import AlertBootstrap from "../subComponentes/alertBootstrap"
-import ComponentFormDate from '../subComponentes/componentFormDate'
-// --
+
 import TituloModulo from '../subComponentes/tituloModulo'
-import Tabla from '../subComponentes/componentTabla'
-import ComponentFormCampo from '../subComponentes/componentFormCampo';
 
 import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 
-class ComponenteEstudiante extends React.Component{
+class ComponentParroquia extends React.Component{
     constructor(){
         super();
         this.mostrarModulo = this.mostrarModulo.bind(this)
         this.actualizarElementoTabla = this.actualizarElementoTabla.bind(this)
         this.consultarElementoTabla = this.consultarElementoTabla.bind(this)
         this.verficarLista = this.verficarLista.bind(this)
-        this.consultarTodosLosEstudiantes = this.consultarTodosLosEstudiantes.bind(this)
+        this.ConsultarRegistros = this.ConsultarRegistros.bind(this)
         this.redirigirFormulario = this.redirigirFormulario.bind(this)
         this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
         this.consultarPerfilTrabajador = this.consultarPerfilTrabajador.bind(this)
@@ -91,23 +84,21 @@ class ComponenteEstudiante extends React.Component{
 
     actualizarElementoTabla(a){
         var input=a.target;
-        this.props.history.push("/dashboard/configuracion/estudiante/actualizar/"+input.id);
+        this.props.history.push("/dashboard/configuracion/parroquia/actualizar/"+input.id);
     }
 
     consultarElementoTabla(a){
         let input=a.target;
-        this.props.history.push("/dashboard/configuracion/estudiante/consultar/"+input.id);
+        this.props.history.push("/dashboard/configuracion/parroquia/consultar/"+input.id);
     }
 
-    async consultarTodosLosEstudiantes(){
-        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos`)
+    async ConsultarRegistros(){
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-todos`)
         .then(repuesta => repuesta.data.datos )
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
-
-
 
     verficarLista(json_server_response){
         if(json_server_response.length===0){
@@ -127,9 +118,10 @@ class ComponenteEstudiante extends React.Component{
       }
 
     async UNSAFE_componentWillMount(){
-      let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
+      let acessoModulo =await this.validarAccesoDelModulo("/dashboard/configuracion","/parroquia")
       if(acessoModulo){
-          var json_server_response=await this.consultarTodosLosEstudiantes();
+          var json_server_response=await this.ConsultarRegistros();
+          console.log(json_server_response)
           var servidor=this.verficarLista(json_server_response);
           if(this.props.match.params.mensaje){
             const msj=JSON.parse(this.props.match.params.mensaje)
@@ -168,14 +160,14 @@ class ComponenteEstudiante extends React.Component{
           var respuesta_servidor="",
           valor=this.state.datoDeBusqueda
           if(valor!==""){
-            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-patron/${valor}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-patron/${valor}`)
               .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 console.log(respuesta_servidor)
                 this.setState({registros:respuesta_servidor.datos})
               })
               .catch(error=>{
-                console.log(error)
+                console.error(error)
                 alert("error en el servidor")
               })
           }else{
@@ -187,19 +179,18 @@ class ComponenteEstudiante extends React.Component{
           valor=input.value,
           respuesta_servidor=""
           if(valor!==""){
-            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-patron/${valor}`)
+            await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-patron/${valor}`)
             .then(respuesta=>{
               respuesta_servidor=respuesta.data
-              console.log(respuesta_servidor)
               this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.datos,numeros_registros:respuesta_servidor.datos.length})
             })
             .catch(error=>{
-              console.log(error)
+              console.error(error)
               alert("error en el servidor")
             })
           }else{
             // console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
-            var json_server_response=await this.consultarTodosLosEstudiantes();
+            var json_server_response=await this.ConsultarRegistros();
             var servidor_res=this.verficarLista(json_server_response);
             this.setState(servidor_res)
           }
@@ -234,7 +225,7 @@ class ComponenteEstudiante extends React.Component{
               // this.setState({modulosSistema})
           })
           .catch(error =>  {
-              console.log(error)
+              console.error(error)
           })
           return estado
       }
@@ -242,7 +233,7 @@ class ComponenteEstudiante extends React.Component{
     redirigirFormulario(a){
       const input = a.target;
       if(input.value==="Registrar"){
-        this.props.history.push("/dashboard/configuracion/estudiante/registrar")
+        this.props.history.push("/dashboard/configuracion/parroquia/registrar")
       }
     }
     render(){
@@ -263,52 +254,54 @@ class ComponenteEstudiante extends React.Component{
       const jsx_tabla_encabezado = (
             <thead>
                 <tr>
-                    <th>Cedula Escolar</th>
                     <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Sexo</th>
+                    <th>Ciudad</th>
+                    <th>Estado</th>
+                    <th>Estatus</th>
                 </tr>
             </thead>
         );
 
         const jsx_tabla_body=(
           <tbody>
-                {this.state.registros.map((estudiante)=>{
+                {this.state.registros.map((parroquia, index)=>{
+
+                    if(parroquia.vacio) return '';
                     return(
-                        <tr key={estudiante.cedula_escolar}>
-                          <td>{estudiante.codigo_cedula_escolar}-{estudiante.cedula_escolar}</td>
-                          <td>{estudiante.nombres_estudiante}</td>
-                          <td>{estudiante.apellidos_estudiante}</td>
-                          <td>{ (estudiante.nombres_estudiante != null) ? (estudiante.sexo_estudiante === '1') ? "Masculino" : "Femenino" : "" }</td>
-                         {!estudiante.vacio &&
+                        <tr key={index}>
+                          <td>{parroquia.nombre_parroquia}</td>
+                          <td>{parroquia.nombre_ciudad}</td>
+                          <td>{parroquia.nombre_estado}</td>
+                          <td>{ (parroquia.estatu_parroquia === '1') ? "Activo" : "Innactivo" }</td>
+                         {!parroquia.vacio &&
                            <td>
                              <ButtonIcon
                                 clasesBoton="btn btn-warning btn-block"
-                                value={estudiante.id_estudiante}
-                                id={estudiante.id_estudiante}
+                                value={parroquia.id_parroquia}
+                                id={parroquia.id_parroquia}
                                 eventoPadre={this.actualizarElementoTabla}
                                 icon="icon-pencil"
                               />
                             </td>
                          }
-                         {!estudiante.vacio &&
+                         {/* {!enfermedad.vacio &&
                            <td>
                              <ButtonIcon
                                clasesBoton="btn btn-secondary btn-block"
-                               value={estudiante.id_estudiante}
-                               id={estudiante.id_estudiante}
+                               value={enfermedad.id_enfermedad}
+                               id={enfermedad.id_enfermedad}
                                eventoPadre={this.consultarElementoTabla}
                                icon="icon-search"
                               />
                            </td>
-                         }
+                         } */}
                     </tr>
                     )
                 })}
             </tbody>
         )
 
-      var jsx_estudiante_inicio=(
+      var jsx_enfermedad_inicio=(
           <div>
               {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="500" || this.state.mensaje.estado==="404") &&
               <div className="row">
@@ -323,7 +316,7 @@ class ComponenteEstudiante extends React.Component{
                 </div>
               </div>
               }
-              <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Estudiante"/>
+              <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Parroquia"/>
               <ComponentTablaDatos eventoBuscar={this.buscar} eventoEscribirCodigo={this.escribir_codigo}
                   tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.numeros_registros}
               />
@@ -342,7 +335,7 @@ class ComponenteEstudiante extends React.Component{
       return(
           <div className="component_trabajador_inicio">
               <ComponentDashboard
-              componente={jsx_estudiante_inicio}
+              componente={jsx_enfermedad_inicio}
               modulo={this.state.modulo}
               eventoPadreMenu={this.mostrarModulo}
               estado_menu={this.state.estado_menu}
@@ -352,4 +345,4 @@ class ComponenteEstudiante extends React.Component{
     }
 }
 
-export default withRouter(ComponenteEstudiante)
+export default withRouter(ComponentParroquia)
