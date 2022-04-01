@@ -276,7 +276,7 @@ class ComponenteEstudiante extends React.Component{
                 {this.state.registros.map((estudiante)=>{
                     return(
                         <tr key={estudiante.cedula_escolar}>
-                          <td>{estudiante.cedula_escolar}</td>
+                          <td>{estudiante.codigo_cedula_escolar}-{estudiante.cedula_escolar}</td>
                           <td>{estudiante.nombres_estudiante}</td>
                           <td>{estudiante.apellidos_estudiante}</td>
                           <td>{ (estudiante.nombres_estudiante != null) ? (estudiante.sexo_estudiante === '1') ? "Masculino" : "Femenino" : "" }</td>
