@@ -470,8 +470,9 @@ CREATE TABLE trepresentante(
     numero_estudiante_grado_5_representante character varying(2) NULL,
     numero_estudiante_grado_6_representante character varying(2) NULL,
     estatus_representante character(1) NOT NULL,
+    id_parroquia INTEGER NOT NULL,
     constraint PK_id_cedula_representante primary key(id_cedula_representante),
-    constraint FK_id_ciudad_trepresentante foreign key(id_ciudad) references tciudad(id_ciudad) on update cascade on delete cascade
+    constraint FK_id_parroquia_trepresentante foreign key(id_parroquia) references tparroquia(id_parroquia) on update cascade on delete cascade
 );
 
 CREATE TABLE tasignacion_representante_estudiante(
