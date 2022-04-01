@@ -45,11 +45,11 @@ class ComponentEstudianteForm extends React.Component{
         this.consultarEstudiante=this.consultarEstudiante.bind(this)
         this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
         this.consultarCiudad = this.consultarCiudad.bind(this)
-        this.ConsultarEnfermedades = this.ConsultarEnfermedades.bind(this);
         this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
         this.capturaCheck = this.capturaCheck.bind(this);
-        this.registroEnfermedadANDVacunaEstudiante = this.registroEnfermedadANDVacunaEstudiante.bind(this);
-        this.ConsultarVacunasANDEnfermedadesDelEstudiante = this.ConsultarVacunasANDEnfermedadesDelEstudiante.bind(this);
+        this.registroVacunaEstudiante = this.registroVacunaEstudiante.bind(this);
+        this.ConsultarVacunas = this.ConsultarVacunas.bind(this);
+        this.consultarParroquiasXCiudad = this.consultarParroquiasXCiudad.bind(this)
         this.state={
             // ------------------
             modulo:"",// modulo menu
@@ -63,12 +63,15 @@ class ComponentEstudianteForm extends React.Component{
             apellidos:"",
             fecha_nacimiento:"",
             direccion_nacimiento:"",
-            escolaridad:"",
             vive_con:"",
             procedencia:"",
+            id_estado_nacimiento:"",
+            id_ciudad_nacimiento:"",
+            id_parroquia_nacimiento:"",
             id_estado:"",
             id_ciudad:"",
-            id_enfermedad: [],
+            id_parroquia_vive:"",
+            enfermedades_estudiante:"",
             id_vacuna: [],
             sexo_estudiante:"1",
             estatu_estudiante:"1",
@@ -80,17 +83,21 @@ class ComponentEstudianteForm extends React.Component{
             msj_apellidos:[{mensaje:"",color_texto:""}],
             msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
             msj_direccion_nacimiento:[{mensaje:"",color_texto:""}],
-            msj_escolaridad:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
+            msj_enfermedades:[{mensaje:"",color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
             msj_estatu_estudiante:[{mensaje:"",color_texto:""}],
             msj_id_estado:[{ mensaje:"", color_texto:""}],
+            msj_id_estado_nacimiento:[{ mensaje:"", color_texto:""}],
             msj_id_ciudad:[{ mensaje:"", color_texto:""}],
+            msj_id_ciudad_nacimiento:[{ mensaje:"", color_texto:""}],
+            msj_id_parroquia_vive:[{ mensaje:"", color_texto:""}],
+            msj_id_parroquia_nacimiento:[{ mensaje:"", color_texto:""}],
             //// combo box
             estados:[],
             ciudades:[],
-            enfermedades:[],
+            parroquias:[],
             vacunas:[],
             operacion: "",
             fecha_minimo:"",
@@ -142,11 +149,9 @@ class ComponentEstudianteForm extends React.Component{
 
     async UNSAFE_componentWillMount(){
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
-        console.log("Esto es estudiante");
         if(acessoModulo){
             await this.consultarFechaServidor()
             await this.consultarTodosLosEstudiantes()
-            await this.ConsultarEnfermedades();
             await this.ConsultarVacunas();
             let operacion=this.props.match
             operacion = operacion.url.split("/")[4];
@@ -166,18 +171,30 @@ class ComponentEstudianteForm extends React.Component{
               propiedad_estado_2="estatu_ciudad"
               const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
+              const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+              nombre_propiedad_lista_3="datos",
+              propiedad_id_3="id_parroquia",
+              propiedad_descripcion_3="nombre_parroquia",
+              propiedad_estado_3="estatu_parroquia"
+              const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
               this.setState({
-                  estados,
-                  ciudades,
-                  id_estado:(estados.length===0)?null:estados[0].id,
-                  id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-                  operacion: operacion
+                estados,
+                ciudades,
+                parroquias,
+                id_estado:(estados.length===0)?null:estados[0].id,
+                id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
+                id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+                id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
+                id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
+                id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+                operacion: operacion
               })
         }
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
             let datos = await this.consultarEstudiante(id)
-            await this.ConsultarVacunasANDEnfermedadesDelEstudiante(datos.id_estudiante);
+            await this.ConsultarVacunas(datos.id_estudiante);
 
             let datosCiudad=await this.consultarCiudad(datos.id_ciudad)
             const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
@@ -194,28 +211,48 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_estado_2="estatu_ciudad"
             const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
+            const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+            nombre_propiedad_lista_3="datos",
+            propiedad_id_3="id_parroquia",
+            propiedad_descripcion_3="nombre_parroquia",
+            propiedad_estado_3="estatu_parroquia"
+            const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
+            console.log(parroquias)
+
             this.setState({
-                id_estudiante: datos.id_estudiante,
-                codigo_cedula_escolar: datos.codigo_cedula_escolar,
+              id_estudiante: datos.id_estudiante,
+              codigo_cedula_escolar: datos.codigo_cedula_escolar,
               id_cedula_escolar:datos.cedula_escolar,
               id_cedula:(datos.cedula_estudiante != "" && datos.cedula_estudiante != undefined) ? datos.cedula_estudiante : "No tiene",
               nombres:datos.nombres_estudiante,
               apellidos:datos.apellidos_estudiante,
               fecha_nacimiento:Moment(datos.fecha_nacimiento_estudiante).format("YYYY-MM-DD"),
               direccion_nacimiento:datos.direccion_nacimiento_estudiante,
-              escolaridad:datos.escolaridad_estudiante,
+              enfermedades_estudiante:datos.enfermedades_estudiante,
               vive_con:datos.vive_con_estudiante,
               procedencia:datos.procedencia_estudiante,
-              id_ciudad:datos.id_ciudad,
               sexo_estudiante:datos.sexo_estudiante,
+              enfermedades: datos.enfermedades_estudiante,
               estatu_estudiante:datos.estatus_estudiante,
               estados: estados,
               ciudades: ciudades,
+              parroquias: parroquias,
+              id_parroquia_vive: datos.id_parroquia_vive,
+              id_parroquia_nacimiento: datos.id_parroquia_nacimiento,
+
+              // id_estado:(estados.length===0)?null:estados[0].id,
+              // id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
+              // id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+              // id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
+              // id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
+              // id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+
               operacion: operacion
             })
 
-            document.getElementById("id_estado").value=datosCiudad.id_estado
-            document.getElementById("id_ciudad").value=datos.id_ciudad
+            document.getElementById("id_estado").value = datosCiudad.id_estado
+            document.getElementById("id_ciudad").value = datos.id_ciudad
             document.getElementById("codigo_cedula_escolar").readOnly = true;
             }
         }
@@ -271,7 +308,7 @@ class ComponentEstudianteForm extends React.Component{
             // this.setState({modulosSistema})
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -295,7 +332,7 @@ class ComponentEstudianteForm extends React.Component{
 
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
             mensaje.texto="No se puedo conectar con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
@@ -322,22 +359,11 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({hashEstudiante:hash})
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 
-    async ConsultarVacunasANDEnfermedadesDelEstudiante(id_estudiante){
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/consultar/${id_estudiante}`)
-        .then( ({data}) => {
-
-            if(data.datos != undefined){
-                let array = data.datos.map( item => item.id_enfermedad);
-                this.setState({id_enfermedad: array})
-            }
-
-        }).catch(error => {
-            console.error(error);
-        })
+    async ConsultarVacunas(id_estudiante){
 
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/vacuna_estudiante/consultar/${id_estudiante}`)
         .then( ({data}) => {
@@ -348,25 +374,6 @@ class ComponentEstudianteForm extends React.Component{
             }
         }).catch(error => {
             console.error(error);
-        })
-    }
-
-    async ConsultarEnfermedades(){
-
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar-todos`)
-        .then(respuesta => {
-            let lista_enfermedades = respuesta.data.datos;
-            let enfermedades = this.state.enfermedades;
-            enfermedades = lista_enfermedades.filter( datos => datos.estaus_enfermedad === "1")
-            enfermedades = lista_enfermedades.map( datos => {
-                return {
-                    id: datos.id_enfermedad, descripcion: datos.nombre_enfermedad
-                }
-            } )
-            this.setState({enfermedades});
-        })
-        .catch(error => {
-            console.log("error al conectar con el servidor")
         })
     }
 
@@ -383,7 +390,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({vacunas});
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.error("error al conectar con el servidor")
         })
     }
 
@@ -405,7 +412,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({fechaServidor})
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.error("error al conectar con el servidor")
         })
     }
 
@@ -428,7 +435,7 @@ class ComponentEstudianteForm extends React.Component{
           }
       })
       .catch(error=>{
-          console.log(error)
+          console.error(error)
           mensaje.texto="No se puedo conectar con el servidor"
           mensaje.estado="500"
           this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
@@ -443,7 +450,7 @@ class ComponentEstudianteForm extends React.Component{
         await axios.get(ruta_api)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
-            if(respuesta_servidor.estado_peticion==="200"){
+            if(respuesta_servidor.estado_peticion==="200" || respuesta_servidor.color_alerta == "success"){
                 var lista_vacia=[]
                 const propiedades={
                     id:propiedad_id,
@@ -459,7 +466,7 @@ class ComponentEstudianteForm extends React.Component{
             }
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
         })
         return lista
     }
@@ -488,6 +495,23 @@ class ComponentEstudianteForm extends React.Component{
             id_ciudad:(ciudades.length===0)?null:ciudades[0].id
         })
     }
+    async consultarParroquiasXCiudad(a){
+        let input=a.target
+        const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${input.value}`,
+        nombre_propiedad_lista_3="datos",
+        propiedad_id_3="id_parroquia",
+        propiedad_descripcion_3="nombre_parroquia",
+        propiedad_estado_3="estatu_parroquia"
+        const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
+        this.setState({
+            id_ciudad:input.value,
+            parroquias,
+            id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+            id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
+        })
+    }
+
     validarNumero(a){
         const input=a.target,
         exprecion=/\d$/
@@ -578,33 +602,45 @@ class ComponentEstudianteForm extends React.Component{
       mensaje.estado=""
       var mensaje_campo=[{mensaje:"",color_texto:""}]
       this.setState({
+        id_estudiante:"",
+        codigo_cedula_escolar: "",
         id_cedula_escolar:"",
         id_cedula:"",
         nombres:"",
         apellidos:"",
         fecha_nacimiento:"",
         direccion_nacimiento:"",
-        escolaridad:"",
         vive_con:"",
         procedencia:"",
+        id_estado_nacimiento:"",
+        id_ciudad_nacimiento:"",
+        id_parroquia_nacimiento:"",
         id_estado:"",
         id_ciudad:"",
+        id_parroquia_vive:"",
+        enfermedades_estudiante:"",
+        id_vacuna: [],
         sexo_estudiante:"1",
         estatu_estudiante:"1",
         //MSJ
+        msj_codigo_cedula_escolar:mensaje_campo,
         msj_id_cedula_escolar:mensaje_campo,
         msj_id_cedula:mensaje_campo,
         msj_nombres:mensaje_campo,
         msj_apellidos:mensaje_campo,
         msj_fecha_nacimiento:mensaje_campo,
         msj_direccion_nacimiento:mensaje_campo,
-        msj_escolaridad:mensaje_campo,
         msj_vive_con:mensaje_campo,
         msj_procedencia:mensaje_campo,
         msj_sexo_estudiante:mensaje_campo,
         msj_estatu_estudiante:mensaje_campo,
         msj_id_estado:mensaje_campo,
+        msj_id_estado_nacimiento:mensaje_campo,
         msj_id_ciudad:mensaje_campo,
+        msj_id_ciudad_nacimiento:mensaje_campo,
+        msj_id_parroquia_vive:mensaje_campo,
+        msj_id_parroquia_nacimiento:mensaje_campo,
+        msj_enfermedades:mensaje_campo,
         edadEstudiante:null,
       })
       this.props.history.push("/dashboard/configuracion/estudiante/registrar")
@@ -684,14 +720,12 @@ class ComponentEstudianteForm extends React.Component{
                 msj_procedencia[0]={mensaje:"",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"",color_texto:"rojo"}
-                // this.setState(msj_escolaridad)
             }
             else{
                 estado = false
                 msj_procedencia[0]={mensaje:"la procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
-                // this.setState(msj_escolaridad)
             }
         }
         else{
@@ -699,7 +733,6 @@ class ComponentEstudianteForm extends React.Component{
             msj_procedencia[0]={mensaje:"la procedencia no puede estar vacia",color_texto:"rojo"}
             msj_vive_con[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
             msj_direccion_nacimiento[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
-            // this.setState({msj_escolaridad:msj_direccion})
         }
 
         if(name == 'procedencia') this.setState(msj_procedencia)
@@ -746,17 +779,18 @@ class ComponentEstudianteForm extends React.Component{
 
     validarFormularioRegistrar(){
 
-        const validar_codigo_cedula_escolar = this.validarCampoNumero("codigo_cedula_escolar"),validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
-        validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
-        validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
-        validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
-        validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
+      const validar_codigo_cedula_escolar = this.validarCampoNumero("codigo_cedula_escolar"),validar_cedula_escolar = this.validarCampoNumero("id_cedula_escolar")
+      ,validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+      validar_procedencia=this.validarDireccion("procedencia"),
+      validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
+      validar_estado=this.validarSelect('id_estado'),validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
+      validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
-        if(
-          validar_codigo_cedula_escolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
-          validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
-          validar_sexo_estudiante && validar_estatu_estudiante
-        ){
+      if(
+        validar_codigo_cedula_escolar && validar_cedula_escolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_estado && validar_ciudad &&
+        validar_sexo_estudiante && validar_estatu_estudiante
+      ){
           return {estado: true, fecha:validar_fecha_nacimiento.fecha}
         }else{
           return {estado: false}
@@ -764,15 +798,16 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     validarFormularioActuazliar(){
-      const validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
-      validar_escolaridad=this.validarCampo("escolaridad"),validar_procedencia=this.validarDireccion("procedencia"),
+      const validar_codigo_cedula_escolar = this.validarCampoNumero("codigo_cedula_escolar"),validar_cedula_escolar = this.validarCampoNumero("id_cedula_escolar")
+      ,validar_nombres=this.validarCampo("nombres"),validar_apellidos=this.validarCampo("apellidos"),validar_fecha_nacimiento=this.validarFechaNacimineto(),
+      validar_procedencia=this.validarDireccion("procedencia"),valida_parroquia_nacimiento=this.validarSelect('id_parroquia_nacimiento'),
       validar_vive_con=this.validarDireccion("vive_con"),validar_direccion_nacimiento=this.validarDireccion("direccion_nacimiento"),
-      validar_ciudad=this.validarSelect('id_ciudad'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
+      valida_parroquia_vive=this.validarSelect('id_parroquia_vive'),validar_sexo_estudiante=this.validarRadio('sexo_estudiante'),
       validar_estatu_estudiante=this.validarRadio('estatu_estudiante')
 
       if(
-        validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
-        validar_escolaridad && validar_procedencia && validar_vive_con && validar_direccion_nacimiento && validar_ciudad &&
+        validar_codigo_cedula_escolar && validar_cedula_escolar && validar_nombres && validar_apellidos && validar_fecha_nacimiento &&
+        validar_procedencia && validar_vive_con && validar_direccion_nacimiento && valida_parroquia_vive && valida_parroquia_nacimiento &&
         validar_sexo_estudiante && validar_estatu_estudiante
       ){
         return {estado: true, fecha:validar_fecha_nacimiento.fecha}
@@ -781,25 +816,9 @@ class ComponentEstudianteForm extends React.Component{
       }
     }
 
-    registroEnfermedadANDVacunaEstudiante(){
+    registroVacunaEstudiante(){
         if(this.state.id_estudiante != ""){
             const token = localStorage.getItem('usuario')
-            let objetoEnfermedad = {
-                enfermedades:{
-                    id_estudiante: this.state.id_estudiante,
-                    id_enfermedad: this.state.id_enfermedad
-                },
-                token: token
-            };
-
-
-            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad_estudiante/registrar`,objetoEnfermedad)
-            .then( ({data}) => {
-                if(!data.estado_respuesta) console.log("ENFERMEDAD NO REGISTRADA");
-                else{
-                    console.log(data.mensaje);
-                }
-            })
 
             let objetoVacuna = {
                 vacunas: {
@@ -827,19 +846,24 @@ class ComponentEstudianteForm extends React.Component{
 
         const mensaje_formulario={
             mensaje:"",
+            msj_codigo_cedula_escolar:[{mensaje:"",color_texto:""}],
             msj_id_cedula_escolar:[{mensaje:"",color_texto:""}],
             msj_id_cedula:[{mensaje:"",color_texto:""}],
             msj_nombres:[{mensaje:"",color_texto:""}],
             msj_apellidos:[{mensaje:"",color_texto:""}],
             msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
             msj_direccion_nacimiento:[{mensaje:"",color_texto:""}],
-            msj_escolaridad:[{mensaje:"",color_texto:""}],
             msj_vive_con:[{ mensaje:"", color_texto:""}],
             msj_procedencia:[{ mensaje:"", color_texto:""}],
             msj_sexo_estudiante:[{mensaje:"",color_texto:""}],
             msj_estatu_estudiante:[{mensaje:"",color_texto:""}],
             msj_id_estado:[{ mensaje:"", color_texto:""}],
+            msj_id_estado_nacimiento:[{ mensaje:"", color_texto:""}],
             msj_id_ciudad:[{ mensaje:"", color_texto:""}],
+            msj_id_ciudad_nacimiento:[{ mensaje:"", color_texto:""}],
+            msj_enfermedades:[{ mensaje:"", color_texto:""}],
+            msj_id_parroquia_vive:[{ mensaje:"", color_texto:""}],
+            msj_id_parroquia_nacimiento:[{ mensaje:"", color_texto:""}],
         }
         if(operacion==="registrar"){
 
@@ -858,12 +882,12 @@ class ComponentEstudianteForm extends React.Component{
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                         this.setState({id_estudiante: id_estu})
-                        this.registroEnfermedadANDVacunaEstudiante()
+                        this.registroVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
                         mensaje.estado=false
-                        console.log(error)
+                        console.error(error)
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
                     })
@@ -872,6 +896,7 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
+            console.log(estado_validar_formulario)
             const {id}=this.props.match.params
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
@@ -885,7 +910,7 @@ class ComponentEstudianteForm extends React.Component{
                         mensaje.estado=respuesta_servidor.estado_respuesta
                         mensaje_formulario.mensaje=mensaje
                         this.setState(mensaje_formulario)
-                        this.registroEnfermedadANDVacunaEstudiante()
+                        this.registroVacunaEstudiante()
                     })
                     .catch(error=>{
                         mensaje.texto="No se puedo conectar con el servidor"
@@ -910,12 +935,13 @@ class ComponentEstudianteForm extends React.Component{
               apellidos_estudiante: this.state.apellidos,
               fecha_nacimiento_estudiante: this.state.fecha_nacimiento,
               direccion_nacimiento_estudiante: this.state.direccion_nacimiento,
-              id_ciudad: this.state.id_ciudad,
+              id_parroquia_nacimiento: this.state.id_parroquia_nacimiento,
+              id_parroquia_vive: this.state.id_parroquia_vive,
               sexo_estudiante: this.state.sexo_estudiante,
               procedencia_estudiante: this.state.procedencia,
-              escolaridad_estudiante: this.state.escolaridad,
               vive_con_estudiante: this.state.vive_con,
               estatus_estudiante: this.state.estatu_estudiante,
+              enfermedades_estudiante: this.state.enfermedades_estudiante,
             },
             token:token
         }
@@ -1038,25 +1064,6 @@ class ComponentEstudianteForm extends React.Component{
                                 </div>
                                 )
                             }
-                            <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_escolaridad[0]}
-                            nombreCampo="Escolaridad:" activo="si" type="text" value={this.state.escolaridad}
-                            name="escolaridad" id="escolaridad" placeholder="Escolaridad" eventoPadre={this.validarTexto}
-                          />
-                        </div>
-                        <div className="row justify-content-center mx-auto">
-                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            obligatorio="si" mensaje={this.state.msj_direccion_nacimiento[0]} nombreCampoTextArea="Dirección de nacimiento:"
-                            clasesTextArear="form-control" name="direccion_nacimiento" id="direccion_nacimiento" value={this.state.direccion_nacimiento}
-                            eventoPadre={this.cambiarEstado}
-                          />
-                        </div>
-                        <div className="row justify-content-center mx-auto">
-                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            obligatorio="si" mensaje={this.state.msj_vive_con[0]} nombreCampoTextArea="Vive con?:"
-                            clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.vive_con}
-                            eventoPadre={this.cambiarEstado}
-                          />
                         </div>
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
@@ -1064,6 +1071,11 @@ class ComponentEstudianteForm extends React.Component{
                             clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
                             eventoPadre={this.cambiarEstado}
                           />
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                                <span className="titulo-form-trabajador">Donde vive el estudiante</span>
+                            </div>
                         </div>
                         <div className="row justify-content-center mx-auto my-2">
                           <ComponentFormSelect
@@ -1086,9 +1098,90 @@ class ComponentEstudianteForm extends React.Component{
                           clasesSelect="custom-select"
                           name="id_ciudad"
                           id="id_ciudad"
-                          eventoPadre={this.cambiarEstado}
+                          eventoPadre={this.consultarParroquiasXCiudad}
                           defaultValue={this.state.id_ciudad}
                           option={this.state.ciudades}
+                          />
+                          <ComponentFormSelect
+                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si"
+                          mensaje={this.state.msj_id_parroquia_vive}
+                          nombreCampoSelect="Parroquia donde vive:"
+                          clasesSelect="custom-select"
+                          name="id_parroquia_vive"
+                          id="id_parroquia_vive"
+                          eventoPadre={this.cambiarEstado}
+                          defaultValue={this.state.id_parroquia_vive}
+                          option={this.state.parroquias}
+                          />
+                        </div>
+                        <div className="row justify-content-center mx-auto">
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="si" mensaje={this.state.msj_vive_con[0]} nombreCampoTextArea="Vive con?:"
+                            clasesTextArear="form-control" name="vive_con" id="vive_con" value={this.state.vive_con}
+                            eventoPadre={this.cambiarEstado}
+                          />
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                                <span className="titulo-form-trabajador">Donde nació el estudiante</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center mx-auto my-2">
+                          <ComponentFormSelect
+                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si"
+                          mensaje={this.state.msj_id_estado_nacimiento}
+                          nombreCampoSelect="Estado:"
+                          clasesSelect="custom-select"
+                          name="id_estado_nacimiento"
+                          id="id_estado_nacimiento"
+                          eventoPadre={this.consultarCiudadesXEstado}
+                          defaultValue={this.state.id_estado_nacimiento}
+                          option={this.state.estados}
+                          />
+                          <ComponentFormSelect
+                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si"
+                          mensaje={this.state.msj_id_ciudad_nacimiento}
+                          nombreCampoSelect="Ciudad:"
+                          clasesSelect="custom-select"
+                          name="id_ciudad_nacimiento"
+                          id="id_ciudad_nacimiento"
+                          eventoPadre={this.consultarParroquiasXCiudad}
+                          defaultValue={this.state.id_ciudad_nacimiento}
+                          option={this.state.ciudades}
+                          />
+                          <ComponentFormSelect
+                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si"
+                          mensaje={this.state.msj_id_parroquia_nacimiento}
+                          nombreCampoSelect="Parroquia donde nació:"
+                          clasesSelect="custom-select"
+                          name="id_parroquia_nacimiento"
+                          id="id_parroquia_nacimiento"
+                          eventoPadre={this.cambiarEstado}
+                          defaultValue={this.state.id_parroquia_nacimiento}
+                          option={this.state.parroquias}
+                          />
+                        </div>
+                        <div className="row justify-content-center mx-auto">
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="si" mensaje={this.state.msj_direccion_nacimiento[0]} nombreCampoTextArea="Dirección de nacimiento:"
+                            clasesTextArear="form-control" name="direccion_nacimiento" id="direccion_nacimiento" value={this.state.direccion_nacimiento}
+                            eventoPadre={this.cambiarEstado}
+                          />
+                        </div>
+                        <div className="row justify-content-center">
+                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                                <span className="titulo-form-trabajador">Otros datos</span>
+                            </div>
+                        </div>
+                        <div className="row justify-content-center mx-auto">
+                          <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                            obligatorio="si" mensaje={this.state.msj_enfermedades[0]} nombreCampoTextArea="Enfermedades del estudiante:"
+                            clasesTextArear="form-control" name="enfermedades_estudiante" id="enfermedades_estudiante" value={this.state.enfermedades_estudiante}
+                            eventoPadre={this.cambiarEstado}
                           />
                         </div>
                         <div className="row justify-content-center mt-1">
@@ -1116,26 +1209,6 @@ class ComponentEstudianteForm extends React.Component{
                             checkedRadioB={this.state.estatu_estudiante}
                           />
                         </div>
-                        <div className="row justify-content-center">
-                            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                                <span className="titulo-form-trabajador">Enfermedades</span>
-                            </div>
-                        </div>
-                        <div className="row justify-content-center mt-1 mb-2">
-                            {this.state.enfermedades.map( (item,index) => {
-                                return (
-                                    <div key={index} className='col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3'>
-                                        <input type="checkbox" class="form-check-input enfermedad-check" name="enfermedad[]"
-                                            onChange={() => this.capturaCheck('enfermedad')} checked={this.CodeSearch(item.id,"enfermedad")} id="enfermedad" value={item.id} />
-                                        <label class="form-check-label">{item.descripcion}</label>
-                                    </div>
-                                );
-                            })}
-                            {this.state.enfermedades.length == 0 &&
-                                <h3>Sin enfermedades registradas</h3>
-                            }
-                        </div>
-
                         <div className="row justify-content-center">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
                                 <span className="titulo-form-trabajador">Vacunas</span>

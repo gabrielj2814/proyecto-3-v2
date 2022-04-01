@@ -28,20 +28,20 @@ class ModuloParroquia extends DriverPostgres {
   }
 
   async consultarTodos() {
-    const SQL = 'SELECT * FROM tparroquia'
+    const SQL = 'SELECT * FROM tparroquia JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad JOIN testado ON testado.id_estado = tciudad.id_estado'
 
     return await this.query(SQL);
   }
 
   async consultar() {
-    const SQL = `SELECT * FROM tparroquia JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad WHERE 
+    const SQL = `SELECT * FROM tparroquia JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad WHERE
     tparroquia.id_parroquia=${this.id_parroquia}`
 
     return await this.query(SQL);
   }
 
   async consultarpatron(patron) {
-    const SQL = `SELECT * FROM tparroquia WHERE nombre_parroquia LIKE '%${patron}%'`
+    const SQL = `SELECT * FROM tparroquia JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad JOIN testado ON testado.id_estado = tciudad.id_estado WHERE tparroquia.nombre_parroquia LIKE '%${patron}%'`
 
     return await this.query(SQL);
   }
@@ -53,9 +53,9 @@ class ModuloParroquia extends DriverPostgres {
   }
 
   async actualizar(){
-    const SQL = ` UPDATE tparroquia SET nombre_parroquia= '${this.nombre_parroquia}', id_ciudad= '${this.id_ciudad}', 
-                  estatu_parroquia= '${this.estatu_parroquia}' 
-    
+    const SQL = ` UPDATE tparroquia SET nombre_parroquia= '${this.nombre_parroquia}', id_ciudad= '${this.id_ciudad}',
+                  estatu_parroquia= '${this.estatu_parroquia}'
+
     `
     return await this.query(SQL);
   }
