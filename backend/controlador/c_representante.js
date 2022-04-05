@@ -22,6 +22,28 @@ controladorRepresentante.registrar_representante = async(req, res) => {
   res.end()
 }
 
+controladorRepresentante.registrar_padres = async(req, res) => {
+  const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
+  const ModeloRepresentante = require("../modelo/m_representante");
+  let { representante } = req.body
+  let modeloRepresentante = new ModeloRepresentante()
+  modeloRepresentante.setDatos(representante)
+  let resultRepresentante = await modeloRepresentante.registroPadres()
+  if (resultRepresentante.rowCount > 0) {
+    respuesta_api.mensaje = "registro completado"
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "error al registrar el representante"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorRepresentante.consultar_todos = async(req, res) =>{
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloRepresentante = require("../modelo/m_representante");

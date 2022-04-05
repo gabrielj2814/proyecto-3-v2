@@ -39,61 +39,70 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     this.enviarDatos=this.enviarDatos.bind(this)
     this.consultarRepresentante=this.consultarRepresentante.bind(this)
     this.consultarCiudad = this.consultarCiudad.bind(this)
+    this.consultarParroquiasXCiudad = this.consultarParroquiasXCiudad.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
         estado_menu:false,
         //formulario
-        id_cedula: "",
-        nombres: "",
-        apellidos: "",
-        fecha_nacimiento: "",
-        nivel_instruccion: "",
-        ocupacion: "",
-        direccion: "",
-        id_estado:"",
-        id_ciudad:"",
-        telefono_movil_representante: "",
-        telefono_local_representante: "",
-        numero_hijos_representante: "",
-        constitucion_familiar_representante: "",
-        ingresos_representante: "",
-        tipo_vivienda_representante: "",
-        estatus_representante:"1",
-        numero_estudiante_inicial_representante: "0",
-        numero_estudiante_grado_1_representante: "0",
-        numero_estudiante_grado_2_representante: "0",
-        numero_estudiante_grado_3_representante: "0",
-        numero_estudiante_grado_4_representante: "0",
-        numero_estudiante_grado_5_representante: "0",
-        numero_estudiante_grado_6_representante: "0",
-        //MSJ
-        msj_id_cedula:[{mensaje:"",color_texto:""}],
-        msj_nombres:[{mensaje:"",color_texto:""}],
-        msj_apellidos:[{mensaje:"",color_texto:""}],
-        msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
-        msj_estatus_representante:[{mensaje:"",color_texto:""}],
-        msj_id_estado:[{ mensaje:"", color_texto:""}],
-        msj_id_ciudad:[{ mensaje:"", color_texto:""}],
-        msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
-        msj_ocupacion:[{ mensaje:"", color_texto:""}],
-        msj_direccion: [{ mensaje:"", color_texto:""}],
-        msj_telefono_movil_representante: [{ mensaje:"", color_texto:""}],
-        msj_telefono_local_representante: [{ mensaje:"", color_texto:""}],
-        msj_numero_hijos_representante: [{ mensaje:"", color_texto:""}],
-        msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
-        msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
-        msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_2_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_3_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_4_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_5_representante:[{ mensaje:"", color_texto:""}],
-        msj_numero_estudiante_grado_6_representante:[{ mensaje:"", color_texto:""}],
+        // Datos MAMA
+        id_cedula_mama: "",
+        nombres_mama: "",
+        apellidos_mama: "",
+        fecha_nacimiento_mama: "",
+        nivel_instruccion_mama: "",
+        ocupacion_mama: "",
+        telefono_movil_mama: "",
+        telefono_local_mama: "",
+        ingresos_mama: "",
+        tipo_vivienda_mama: "",
+        constitucion_familiar_mama: "",
+        estatus_mama:"1",
+        // MSJ MAMA
+        msj_id_cedula_mama:[{mensaje:"",color_texto:""}],
+        msj_nombres_mama:[{mensaje:"",color_texto:""}],
+        msj_apellidos_mama:[{mensaje:"",color_texto:""}],
+        msj_fecha_nacimiento_mama:[{mensaje:"",color_texto:""}],
+        msj_estatus_mama:[{mensaje:"",color_texto:""}],
+        msj_nivel_instruccion_mama:[{ mensaje:"", color_texto:""}],
+        msj_ocupacion_mama:[{ mensaje:"", color_texto:""}],
+        msj_constitucion_familiar_mama: [{ mensaje:"", color_texto:""}],
+        msj_ingresos_mama: [{ mensaje:"", color_texto:""}],
+        msj_tipo_vivienda_mama: [{ mensaje:"", color_texto:""}],
+        msj_telefono_movil_mama: [{ mensaje:"", color_texto:""}],
+        msj_telefono_local_mama: [{ mensaje:"", color_texto:""}],
+        // Datos PAPA
+        id_cedula_papa: "",
+        nombres_papa: "",
+        apellidos_papa: "",
+        fecha_nacimiento_papa: "",
+        nivel_instruccion_papa: "",
+        ocupacion_papa: "",
+        telefono_movil_papa: "",
+        telefono_local_papa: "",
+        ingresos_papa: "",
+        tipo_vivienda_papa: "",
+        constitucion_familiar_papa: "",
+        estatus_papa:"1",
+        // MSJ PAPA
+        msj_id_cedula_papa:[{mensaje:"",color_texto:""}],
+        msj_nombres_papa:[{mensaje:"",color_texto:""}],
+        msj_apellidos_papa:[{mensaje:"",color_texto:""}],
+        msj_fecha_nacimiento_papa:[{mensaje:"",color_texto:""}],
+        msj_estatus_papa:[{mensaje:"",color_texto:""}],
+        msj_nivel_instruccion_papa:[{ mensaje:"", color_texto:""}],
+        msj_ocupacion_papa:[{ mensaje:"", color_texto:""}],
+        msj_constitucion_familiar_papa: [{ mensaje:"", color_texto:""}],
+        msj_ingresos_papa: [{ mensaje:"", color_texto:""}],
+        msj_tipo_vivienda_papa: [{ mensaje:"", color_texto:""}],
+        msj_telefono_movil_papa: [{ mensaje:"", color_texto:""}],
+        msj_telefono_local_papa: [{ mensaje:"", color_texto:""}],
         //// combo box
+        papa_existe: false,
+        mama_existe: false,
         estados:[],
         ciudades:[],
+        parroquias:[],
         fecha_minimo:"",
         hashEstudiante:{},
         estadoBusquedaRepresentante:false,
@@ -120,6 +129,8 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         //
         fechaServidor:null,
         edadRepresentante:null,
+        edadMama: null,
+        edadPapa: null,
         StringExprecion: /[A-Za-z]|[0-9]/
     }
   }
@@ -135,7 +146,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       propiedad_descripcion="nombre_estado",
       propiedad_estado="estatu_estado"
       const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-      console.log("lista de estados ->>>",estados)
+
       const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
       nombre_propiedad_lista_2="ciudades",
       propiedad_id_2="id_ciudad",
@@ -143,11 +154,20 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       propiedad_estado_2="estatu_ciudad"
       const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
+      const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+      nombre_propiedad_lista_3="datos",
+      propiedad_id_3="id_parroquia",
+      propiedad_descripcion_3="nombre_parroquia",
+      propiedad_estado_3="estatu_parroquia"
+      const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
       this.setState({
           estados,
           ciudades,
+          parroquias,
           id_estado:(estados.length===0)?null:estados[0].id,
           id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+          id_parroquia:(parroquias.length===0)?null:parroquias[0].id,
       })
     }
   }
@@ -188,7 +208,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
 
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
         this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
@@ -221,7 +241,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         this.setState({hashRepresentante:hash})
     })
     .catch(error => {
-        console.log(error)
+        console.error(error)
     })
   }
 
@@ -243,7 +263,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         }
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
         this.props.history.push(`/dashboard/configuracion/representante${JSON.stringify(mensaje)}`)
@@ -258,7 +278,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     await axios.get(ruta_api)
     .then(respuesta=>{
         respuesta_servidor=respuesta.data
-        if(respuesta_servidor.estado_peticion==="200"){
+        if(respuesta_servidor.estado_peticion==="200" || respuesta_servidor.color_alerta == "success"){
             var lista_vacia=[]
             const propiedades={
                 id:propiedad_id,
@@ -274,7 +294,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         }
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
     })
     return lista
   }
@@ -287,12 +307,29 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     propiedad_descripcion_2="nombre_ciudad",
     propiedad_estado_2="estatu_ciudad"
     const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-    console.log("lista de de ciudades por estado ->>>",ciudades)
+
     this.setState({
         id_estado:input.value,
         ciudades,
         id_ciudad:(ciudades.length===0)?null:ciudades[0].id
     })
+  }
+
+  async consultarParroquiasXCiudad(a){
+      let input=a.target
+      const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${input.value}`,
+      nombre_propiedad_lista_3="datos",
+      propiedad_id_3="id_parroquia",
+      propiedad_descripcion_3="nombre_parroquia",
+      propiedad_estado_3="estatu_parroquia"
+      const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
+      this.setState({
+          id_ciudad:input.value,
+          parroquias,
+          id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+          id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
+      })
   }
 
   formatoOptionSelect(lista,lista_vacia,propiedades){
@@ -337,24 +374,12 @@ class ComponentMultiStepFormRepresentante extends React.Component{
   }
 
   longitudCampo(input){
-    if(input.name==="id_cedula"){
-        if(input.value.length<=8){
-            this.cambiarEstadoDos(input)
-        }
+    if(input.name==="id_cedula_mama" || input.name==="id_cedula_papa"){ if(input.value.length <= 8) this.cambiarEstadoDos(input) }
+    else if(input.name==="telefono_movil_papa" || input.name==="telefono_local_papa" || input.name==="telefono_movil_mama" || input.name==="telefono_local_mama"){
+        if(input.value.length <= 11) this.cambiarEstadoDos(input)
     }
-    else if(input.name==="telefono_movil_representante" || input.name==="telefono_local_representante"){
-        if(input.value.length<=11){
-            this.cambiarEstadoDos(input)
-        }
-    }else if(input.name === "ingresos_representante"){
-      if(input.value.length<=10){
-        this.cambiarEstadoDos(input)
-      }
-    }else{
-      if(input.value.length<10){
-        this.cambiarEstadoDos(input)
-      }
-    }
+    else if(input.name === "ingresos_mama" || input.name === "ingresos_papa"){ if(input.value.length <= 10) this.cambiarEstadoDos(input) }
+    else{ if(input.value.length < 10) this.cambiarEstadoDos(input) }
   }
 
   cambiarEstadoDos(input){
@@ -369,45 +394,38 @@ class ComponentMultiStepFormRepresentante extends React.Component{
   fechaNacimiento(a){
     let input=a.target
     this.cambiarEstado(a)
-    // console.log(input.value)
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-    let edadRepresentante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
-    this.setState({edadRepresentante})
+    let edad = (parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+    if(input.name == "fecha_nacimiento_mama") this.setState({edadMama: edad})
+    else this.setState({edadPapa: edad})
   }
 
   validarCampo(nombre_campo){
     var estado=false
-    const valor=this.state[nombre_campo]
-    let msj_nombres=this.state["msj_"+nombre_campo]
-    let msj_apellidos=this.state["msj_"+nombre_campo]
-    let msj_ocupacion = this.state["msj_"+nombre_campo]
-    let msj_constitucion_familiar_representante = this.state["msj_"+nombre_campo]
+
+    const valor = this.state[nombre_campo]
+    let msj = this.state["msj_"+nombre_campo];
 
     if(valor!==""){
       if(this.state.StringExprecion.test(valor)){
         estado=true
-        console.log("campo nombre "+nombre_campo+" OK")
-        msj_nombres[0] = {mensaje: "",color_texto:"rojo"}
-        msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
-        msj_ocupacion[0] = {mensaje: "",color_texto:"rojo"}
-        msj_constitucion_familiar_representante[0] = {mensaje: "",color_texto:"rojo"}
+        msj[0] = {mensaje: "",color_texto:"rojo"}
       }else{
-        msj_nombres[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-        msj_apellidos[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-        msj_ocupacion[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-        msj_constitucion_familiar_representante[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+        msj[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
       }
     }else{
-      msj_nombres[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-      msj_apellidos[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-      msj_ocupacion[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-      msj_constitucion_familiar_representante[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
+      msj[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
     }
 
-    if(nombre_campo === "nombres") this.setState(msj_nombres)
-    else if(nombre_campo === "constitucion_familiar_representante") this.setState(msj_constitucion_familiar_representante)
-    else if(nombre_campo === "ocupacion") this.setState(msj_ocupacion)
-    else this.setState(msj_apellidos)
+    if(nombre_campo === "nombres_mama") this.setState({msj_nombres_mama: msj})
+    if(nombre_campo === "nombres_papa") this.setState({msj_nombres_papa: msj})
+    if(nombre_campo === "apellidos_papa") this.setState({msj_apellidos_mama: msj})
+    if(nombre_campo === "apellidos_mama") this.setState({msj_apellidos_papa: msj})
+    if(nombre_campo === "ocupacion_mama") this.setState({msj_ocupacion_mama: msj})
+    if(nombre_campo === "ocupacion_papa") this.setState({msj_ocupacion_papa: msj})
+    if(nombre_campo === "constitucion_familiar_mama") this.setState({msj_constitucion_familiar_mama: msj})
+    if(nombre_campo === "constitucion_familiar_papa") this.setState({msj_constitucion_familiar_papa: msj})
+
     return estado
   }
 
@@ -459,35 +477,39 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       return estado
   }
 
-  validarFechaNacimineto(){
+  validarFechaNacimineto(name_campo){
       var estado=false
-      var fecha_representante_nacimiento=Moment(new Date(this.state.fecha_nacimiento))
+      var fecha_representante_nacimiento=Moment(new Date(this.state[name_campo]))
       fecha_representante_nacimiento.add(1,"d")
       var fecha_minima=Moment();
       var fecha_maxima=Moment();
       fecha_minima.subtract(18,"y")
       fecha_maxima.subtract(99,"y")
-      var msj_fecha_nacimiento=this.state.msj_fecha_nacimiento
+      var msj_fecha_nacimiento=this.state['msj_'+name_campo]
       if(this.state.fecha_nacimiento!==""){
           if(!fecha_representante_nacimiento.isAfter(fecha_minima)){
               if(fecha_representante_nacimiento.isAfter(fecha_maxima)){
                   estado=true
                   msj_fecha_nacimiento[0]={mensaje:"",color_texto:"rojo"}
-                  this.setState(msj_fecha_nacimiento)
+                  if(name_campo == "fecha_nacimiento_mama") this.setState({msj_fecha_nacimiento_mama: msj_fecha_nacimiento})
+                  if(name_campo == "fecha_nacimiento_papa") this.setState({msj_fecha_nacimiento_papa: msj_fecha_nacimiento})
               }
               else{
-                  msj_fecha_nacimiento[0]={mensaje:"El representante solo puede tener hasta 99 años ",color_texto:"rojo"}
-                  this.setState(msj_fecha_nacimiento)
+                  msj_fecha_nacimiento[0]={mensaje:"tener hasta 99 años ",color_texto:"rojo"}
+                  if(name_campo == "fecha_nacimiento_mama") this.setState({msj_fecha_nacimiento_mama: msj_fecha_nacimiento})
+                  if(name_campo == "fecha_nacimiento_papa") this.setState({msj_fecha_nacimiento_papa: msj_fecha_nacimiento})
               }
           }
           else{
               msj_fecha_nacimiento[0]={mensaje:"es demadiaso joven",color_texto:"rojo"}
-              this.setState(msj_fecha_nacimiento)
+              if(name_campo == "fecha_nacimiento_mama") this.setState({msj_fecha_nacimiento_mama: msj_fecha_nacimiento})
+              if(name_campo == "fecha_nacimiento_papa") this.setState({msj_fecha_nacimiento_papa: msj_fecha_nacimiento})
           }
       }
       else{
           msj_fecha_nacimiento[0]={mensaje:"la fecha de nacimiento no puede estar vacia",color_texto:"rojo"}
-          this.setState(msj_fecha_nacimiento)
+          if(name_campo == "fecha_nacimiento_mama") this.setState({msj_fecha_nacimiento_mama: msj_fecha_nacimiento})
+          if(name_campo == "fecha_nacimiento_papa") this.setState({msj_fecha_nacimiento_papa: msj_fecha_nacimiento})
       }
       return estado
   }
@@ -544,35 +566,40 @@ class ComponentMultiStepFormRepresentante extends React.Component{
   validarRadio(name){
     let estado = false
     const valor = this.state[name]
-    let msj_estatus_representante = this.state["msj_"+name]
+    let msj = this.state["msj_"+name]
     if(valor !== ""){
       estado = true
-      msj_estatus_representante[0] = {mensaje: "", color_texto:"rojo"}
+      msj[0] = {mensaje: "", color_texto:"rojo"}
     }else{
-      msj_estatus_representante[0] = {mensaje: "Debe de seleccionar el estado del representante", color_texto:"rojo"}
+      msj[0] = {mensaje: "Debe de seleccionar el estado del representante", color_texto:"rojo"}
     }
-    if(name === "estatus_representante") this.setState(msj_estatus_representante)
+    if(name === "estatus_mama") this.setState({msj_estatus_mama: msj})
+    if(name === "estatus_papa") this.setState({msj_estatus_papa: msj})
     return estado
   }
 
   validarFormularioRegistrar(){
-    const validarCedula = this.validarCampoNumero('id_cedula'), validarNombre = this.validarCampo('nombres'), validarApellido = this.validarCampo('apellidos'),
-    validarTelefonoMovil = this.validarCampoNumero('telefono_movil_representante'), validarTelefonoLocal = this.validarCampoNumero('telefono_local_representante'),
-    validarFechaNacimineto = this.validarFechaNacimineto(), validarOcupacion = this.validarCampo('ocupacion'), validarIngresos = this.validarCampoNumero('ingresos_representante'),
-    validarGradoIntruccion = this.validarSelect('nivel_instruccion'), validarNumeroHijos = this.validarCampoNumero('numero_hijos_representante'),
-    validarNumEstInicial = this.validarCampoNumero('numero_estudiante_inicial_representante'), ValidarNumEstGrado1 = this.validarCampoNumero('numero_estudiante_grado_1_representante'),
-    ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
-    ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
-    ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
-    validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
-    ValidarCiudad = this.validarSelect('id_ciudad'), ValidarStatus = this.validarRadio('estatus_representante')
+    const validarCedulaMama = this.validarCampoNumero('id_cedula_mama'), validarNombreMama = this.validarCampo('nombres_mama'), validarApellidoMama = this.validarCampo('apellidos_mama'),
+    validarTelefonoMovilMama = this.validarCampoNumero('telefono_movil_mama'), validarTelefonoLocalMama = this.validarCampoNumero('telefono_local_mama'),
+    validarFechaNaciminetoMama = this.validarFechaNacimineto("fecha_nacimiento_mama"), validarOcupacionMama = this.validarCampo('ocupacion_mama'), validarIngresosMama = this.validarCampoNumero('ingresos_mama'),
+    validarGradoIntruccionMama = this.validarSelect('nivel_instruccion_mama'),validarTipViviendaMama = this.validarSelect('tipo_vivienda_mama'),ValidarStatusMama = this.validarRadio('estatus_mama'),
+    ValidarConstFamiliarMama = this.validarCampo('constitucion_familiar_mama')
+
+    const validarCedulaPapa = this.validarCampoNumero('id_cedula_papa'), validarNombrePapa = this.validarCampo('nombres_papa'), validarApellidoPapa = this.validarCampo('apellidos_papa'),
+    validarTelefonoMovilPapa = this.validarCampoNumero('telefono_movil_papa'), validarTelefonoLocalPapa = this.validarCampoNumero('telefono_local_papa'),
+    validarFechaNaciminetoPapa = this.validarFechaNacimineto("fecha_nacimiento_papa"), validarOcupacionPapa = this.validarCampo('ocupacion_papa'),
+    validarIngresosPapa = this.validarCampoNumero('ingresos_papa'),
+    validarGradoIntruccionPapa = this.validarSelect('nivel_instruccion_papa'),validarTipViviendaPapa = this.validarSelect('tipo_vivienda_papa'),ValidarStatusPapa = this.validarRadio('estatus_papa'),
+    ValidarConstFamiliarPapa = this.validarCampo('constitucion_familiar_papa')
 
     if(
-      validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
-      validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
-      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarStatus
+      validarCedulaMama && validarNombreMama && validarApellidoMama && validarTelefonoMovilMama && validarTelefonoLocalMama && validarFechaNaciminetoMama && validarOcupacionMama && validarIngresosMama
+      && validarGradoIntruccionMama && validarTipViviendaMama && ValidarStatusMama &&
+
+      validarCedulaPapa && validarNombrePapa && validarApellidoPapa && validarTelefonoMovilPapa && validarTelefonoLocalPapa && validarFechaNaciminetoPapa && validarOcupacionPapa && validarIngresosPapa
+      && validarGradoIntruccionPapa && validarTipViviendaPapa && ValidarStatusPapa
     ){
-      return { estado: true, fecha: validarFechaNacimineto.fecha }
+      return { estado: true, fecha: validarFechaNaciminetoMama.fecha }
     }else{
       return {estado: false}
     }
@@ -583,29 +610,31 @@ class ComponentMultiStepFormRepresentante extends React.Component{
 
       const mensaje_formulario={
           mensaje:"",
-          msj_id_cedula:[{mensaje:"",color_texto:""}],
-          msj_nombres:[{mensaje:"",color_texto:""}],
-          msj_apellidos:[{mensaje:"",color_texto:""}],
-          msj_fecha_nacimiento:[{mensaje:"",color_texto:""}],
-          msj_estatus_representante:[{mensaje:"",color_texto:""}],
-          msj_id_estado:[{ mensaje:"", color_texto:""}],
-          msj_id_ciudad:[{ mensaje:"", color_texto:""}],
-          msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
-          msj_ocupacion:[{ mensaje:"", color_texto:""}],
-          msj_direccion: [{ mensaje:"", color_texto:""}],
-          msj_telefono_movil_representante: [{ mensaje:"", color_texto:""}],
-          msj_telefono_local_representante: [{ mensaje:"", color_texto:""}],
-          msj_numero_hijos_representante: [{ mensaje:"", color_texto:""}],
-          msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
-          msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
-          msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_2_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_3_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_4_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_5_representante:[{ mensaje:"", color_texto:""}],
-          msj_numero_estudiante_grado_6_representante:[{ mensaje:"", color_texto:""}],
+          msj_id_cedula_mama:[{mensaje:"",color_texto:""}],
+          msj_nombres_mama:[{mensaje:"",color_texto:""}],
+          msj_apellidos_mama:[{mensaje:"",color_texto:""}],
+          msj_fecha_nacimiento_mama:[{mensaje:"",color_texto:""}],
+          msj_estatus_mama:[{mensaje:"",color_texto:""}],
+          msj_nivel_instruccion_mama:[{ mensaje:"", color_texto:""}],
+          msj_ocupacion_mama:[{ mensaje:"", color_texto:""}],
+          msj_constitucion_familiar_mama: [{ mensaje:"", color_texto:""}],
+          msj_ingresos_mama: [{ mensaje:"", color_texto:""}],
+          msj_tipo_vivienda_mama: [{ mensaje:"", color_texto:""}],
+          msj_telefono_movil_mama: [{ mensaje:"", color_texto:""}],
+          msj_telefono_local_mama: [{ mensaje:"", color_texto:""}],
+
+          msj_id_cedula_papa:[{mensaje:"",color_texto:""}],
+          msj_nombres_papa:[{mensaje:"",color_texto:""}],
+          msj_apellidos_papa:[{mensaje:"",color_texto:""}],
+          msj_fecha_nacimiento_papa:[{mensaje:"",color_texto:""}],
+          msj_estatus_papa:[{mensaje:"",color_texto:""}],
+          msj_nivel_instruccion_papa:[{ mensaje:"", color_texto:""}],
+          msj_ocupacion_papa:[{ mensaje:"", color_texto:""}],
+          msj_constitucion_familiar_papa: [{ mensaje:"", color_texto:""}],
+          msj_ingresos_papa: [{ mensaje:"", color_texto:""}],
+          msj_tipo_vivienda_papa: [{ mensaje:"", color_texto:""}],
+          msj_telefono_movil_papa: [{ mensaje:"", color_texto:""}],
+          msj_telefono_local_papa: [{ mensaje:"", color_texto:""}],
       }
 
       const estado_validar_formulario=this.validarFormularioRegistrar()
@@ -613,58 +642,112 @@ class ComponentMultiStepFormRepresentante extends React.Component{
           this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
               var respuesta_servidor=""
-              axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto)
-              .then(respuesta=>{
+              if(!this.state.mama_existe){
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
+                .then(respuesta=>{
+                    respuesta_servidor=respuesta.data
+                    mensaje.texto=respuesta_servidor.mensaje
+                    mensaje.estado=respuesta_servidor.estado_respuesta
+                    mensaje_formulario.mensaje=mensaje
+                    this.setState(mensaje_formulario)
+
+                    this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
+                })
+                .catch(error=>{
+                    mensaje.texto="No se puedo conectar con el servidor"
+                    mensaje.estado=false
+                    console.error(error)
+                    mensaje_formulario.mensaje=mensaje
+                    this.setState(mensaje_formulario)
+                })
+              }
+
+              if(!this.state.papa_existe){
+                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.papa)
+                .then(respuesta=>{
                   respuesta_servidor=respuesta.data
                   mensaje.texto=respuesta_servidor.mensaje
                   mensaje.estado=respuesta_servidor.estado_respuesta
                   mensaje_formulario.mensaje=mensaje
                   this.setState(mensaje_formulario)
-                  
-                  this.props.addCedulas(this.state.id_cedula)
-                  this.props.next();
-              })
-              .catch(error=>{
+
+                  this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
+                })
+                .catch(error=>{
                   mensaje.texto="No se puedo conectar con el servidor"
                   mensaje.estado=false
-                  console.log(error)
+                  console.error(error)
                   mensaje_formulario.mensaje=mensaje
                   this.setState(mensaje_formulario)
-              })
+                })
+              }
+
+              this.props.next();
           })
       }
   }
 
   enviarDatos(estado_validar_formulario,petion){
       const token=localStorage.getItem('usuario')
-      const objeto={
+      const objeto = {
+        mama:{
           representante:{
-            id_cedula_representante: this.state.id_cedula,
+            id_cedula_representante: this.state.id_cedula_mama,
             nueva_cedula: "",
-            nombres_representante: this.state.nombres,
-            apellidos_representante: this.state.apellidos,
-            fecha_nacimiento_representante: this.state.fecha_nacimiento,
-            nivel_instruccion_representante: this.state.nivel_instruccion,
-            ocupacion_representante: this.state.ocupacion,
-            direccion_representante: this.state.direccion,
-            id_ciudad: this.state.id_ciudad,
-            telefono_movil_representante: this.state.telefono_movil_representante,
-            telefono_local_representante: this.state.telefono_local_representante,
-            numero_hijos_representante: this.state.numero_hijos_representante,
-            constitucion_familiar_representante: this.state.constitucion_familiar_representante,
-            ingresos_representante: this.state.ingresos_representante,
-            tipo_vivienda_representante: this.state.tipo_vivienda_representante,
-            numero_estudiante_inicial_representante: this.state.numero_estudiante_inicial_representante,
-            numero_estudiante_grado_1_representante: this.state.numero_estudiante_grado_1_representante,
-            numero_estudiante_grado_2_representante: this.state.numero_estudiante_grado_2_representante,
-            numero_estudiante_grado_3_representante: this.state.numero_estudiante_grado_3_representante,
-            numero_estudiante_grado_4_representante: this.state.numero_estudiante_grado_4_representante,
-            numero_estudiante_grado_5_representante: this.state.numero_estudiante_grado_5_representante,
-            numero_estudiante_grado_6_representante: this.state.numero_estudiante_grado_6_representante,
-            estatus_representante: this.state.estatus_representante,
+            nombres_representante: this.state.nombres_mama,
+            apellidos_representante: this.state.apellidos_mama,
+            fecha_nacimiento_representante: this.state.fecha_nacimiento_mama,
+            nivel_instruccion_representante: this.state.nivel_instruccion_mama,
+            ocupacion_representante: this.state.ocupacion_mama,
+            telefono_movil_representante: this.state.telefono_movil_mama,
+            telefono_local_representante: this.state.telefono_local_mama,
+            ingresos_representante: this.state.ingresos_mama,
+            tipo_vivienda_representante: this.state.tipo_vivienda_mama,
+            constitucion_familiar_representante: this.state.constitucion_familiar_mama,
+            estatus_representante: this.state.estatus_mama,
+
+            direccion_representante: "",
+            numero_hijos_representante: "",
+            numero_estudiante_inicial_representante: "",
+            numero_estudiante_grado_1_representante: "",
+            numero_estudiante_grado_2_representante: "",
+            numero_estudiante_grado_3_representante: "",
+            numero_estudiante_grado_4_representante: "",
+            numero_estudiante_grado_5_representante: "",
+            numero_estudiante_grado_6_representante: "",
           },
           token:token
+        },
+        papa:{
+          representante:{
+            id_cedula_representante: this.state.id_cedula_papa,
+            nueva_cedula: "",
+            nombres_representante: this.state.nombres_papa,
+            apellidos_representante: this.state.apellidos_papa,
+            fecha_nacimiento_representante: this.state.fecha_nacimiento_papa,
+            nivel_instruccion_representante: this.state.nivel_instruccion_papa,
+            ocupacion_representante: this.state.ocupacion_papa,
+            telefono_movil_representante: this.state.telefono_movil_papa,
+            telefono_local_representante: this.state.telefono_local_papa,
+            ingresos_representante: this.state.ingresos_papa,
+            tipo_vivienda_representante: this.state.tipo_vivienda_papa,
+            constitucion_familiar_representante: this.state.constitucion_familiar_papa,
+            estatus_representante: this.state.estatus_papa,
+
+            direccion_representante: "",
+            numero_hijos_representante: "",
+            numero_estudiante_inicial_representante: "",
+            numero_estudiante_grado_1_representante: "",
+            numero_estudiante_grado_2_representante: "",
+            numero_estudiante_grado_3_representante: "",
+            numero_estudiante_grado_4_representante: "",
+            numero_estudiante_grado_5_representante: "",
+            numero_estudiante_grado_6_representante: "",
+          },
+          token:token
+        },
       }
+
       petion(objeto)
   }
 
@@ -678,8 +761,11 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       // console.log(input.value)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
     if(hashRepresentante[input.value]){
+      let index;
+      if(input.name == "id_cedula_mama") index = "papa_existe"; else index = "mama_existe";
       this.setState({
-        estadoBusquedaRepresentante:true
+        estadoBusquedaRepresentante:true,
+        [index]: true,
       })
       alert("este representante ya esta resgistrado")
     }
@@ -712,7 +798,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario representante</span>
+                        <span className="titulo-form-trabajador">Registro de Padre y Madre</span>
                     </div>
                 </div>
                 {/* <div className="row">
@@ -726,38 +812,33 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                     </div>
                 </div> */}
                 <form id="form_trabajador">
-                    <div className="row justify-content-center">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula[0]}
-                          nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula}
-                          name="id_cedula" id="id_cedula" placeholder="Cédula" eventoPadre={this.buscarRepresentante}
-                        />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_nombres[0]}
-                          nombreCampo="Nombres:" activo="si" type="text" value={this.state.nombres}
-                          name="nombres" id="nombres" placeholder="Nombre" eventoPadre={this.validarTexto}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_apellidos[0]}
-                        nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos}
-                        name="apellidos" id="apellidos" placeholder="Apellido" eventoPadre={this.validarTexto}
-                      />
-                    </div>
-                    <div className="row justify-content-center">
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_representante[0]}
-                          nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_representante}
-                          name="telefono_movil_representante" id="telefono_movil" placeholder="Telefono movil" eventoPadre={this.validarNumero}
-                        />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
-                          nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_representante}
-                          name="telefono_local_representante" id="telefono_movil" placeholder="Telefono local" eventoPadre={this.validarNumero}
-                        />
-                      <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          obligatorio="si" mensaje={this.state.msj_fecha_nacimiento[0]} nombreCampoDate="Fecha de Nacimiento:"
-                          clasesCampo="form-control" value={this.state.fecha_nacimiento} name="fecha_nacimiento"
-                          id="fecha_nacimiento" eventoPadre={this.fechaNacimiento}
+                  <div className="row justify-content-center">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                          <span className="titulo-form-trabajador">Datos de la Madre</span>
+                      </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_mama[0]}
+                      nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula_mama}
+                      name="id_cedula_mama" id="id_cedula_mama" placeholder="Cédula" eventoPadre={this.buscarRepresentante}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_nombres_mama[0]}
+                      nombreCampo="Nombres:" activo="si" type="text" value={this.state.nombres_mama}
+                      name="nombres_mama" id="nombres_mama" placeholder="Nombre" eventoPadre={this.validarTexto}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_apellidos_mama[0]}
+                      nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos_mama}
+                      name="apellidos_mama" id="apellidos_mama" placeholder="Apellido" eventoPadre={this.validarTexto}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si" mensaje={this.state.msj_fecha_nacimiento_mama[0]} nombreCampoDate="Fecha de Nacimiento:"
+                          clasesCampo="form-control" value={this.state.fecha_nacimiento_mama} name="fecha_nacimiento_mama"
+                          id="fecha_nacimiento_mama" eventoPadre={this.fechaNacimiento}
                         />
                       {this.state.edadRepresentante!==null &&
                             (
@@ -769,149 +850,182 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                             </div>
                             )
                         }
-                    </div>
-                    <div className="row justify-content-center mx-auto my-2">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion[0]}
-                        nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion}
-                        name="ocupacion" id="ocupacion" placeholder="Ocupacion" eventoPadre={this.validarTexto}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_representante[0]}
-                        nombreCampo="Ingresos:" activo="si" type="text" value={this.state.ingresos_representante}
-                        name="ingresos_representante" id="ingresos_representante" placeholder="Ingresos del representante" eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormSelect
-                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                        obligatorio="si"
-                        mensaje={this.state.msj_nivel_instruccion[0]}
-                        nombreCampoSelect="Nivel Instrucción:"
-                        clasesSelect="custom-select"
-                        name="nivel_instruccion"
-                        id="nivel_instruccion"
-                        eventoPadre={this.cambiarEstado}
-                        defaultValue={this.state.nivel_instruccion}
-                        option={this.state.grados_instruccion}
-                      />
-                    </div>
-                    <div className="row justify-content-center mt-1">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_hijos_representante[0]}
-                        nombreCampo="Numero de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
-                        name="numero_hijos_representante" id="numer_hijos_representante" placeholder="Numero de hijos" eventoPadre={this.validarNumero}
-                      />
-
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_inicial_representante[0]}
-                        nombreCampo="Numero estudiantes en inicial:" activo="si" type="text" value={this.state.numero_estudiante_inicial_representante}
-                        name="numero_estudiante_inicial_representante" id="numer_estudiante_inicial" placeholder="Numero estudiantes en inicial" eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_1_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (1) :" activo="si" type="text" value={this.state.numero_estudiante_grado_1_representante}
-                        name="numero_estudiante_grado_1_representante" id="numero_estudiante_grado_1_representante" placeholder="Numero estudiantes en grado (1) " eventoPadre={this.validarNumero}
-                      />
-                    </div>
-
-                    <div className="row justify-content-center mt-1">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_2_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (2) :" activo="si" type="text" value={this.state.numero_estudiante_grado_2_representante}
-                        name="numero_estudiante_grado_2_representante" id="numero_estudiante_grado_2_representante" placeholder="Numero estudiantes en grado (2) " eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_3_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (3) :" activo="si" type="text" value={this.state.numero_estudiante_grado_3_representante}
-                        name="numero_estudiante_grado_3_representante" id="numero_estudiante_grado_3_representante" placeholder="Numero estudiantes en grado (3) " eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_4_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (4) :" activo="si" type="text" value={this.state.numero_estudiante_grado_4_representante}
-                        name="numero_estudiante_grado_4_representante" id="numero_estudiante_grado_4_representante" placeholder="Numero estudiantes en grado (4) " eventoPadre={this.validarNumero}
-                      />
-                    </div>
-
-                    <div className="row justify-content-center mt-1">
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_5_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (5) :" activo="si" type="text" value={this.state.numero_estudiante_grado_5_representante}
-                        name="numero_estudiante_grado_5_representante" id="numero_estudiante_grado_5_representante" placeholder="Numero estudiantes en grado (5) " eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_6_representante[0]}
-                        nombreCampo="Numero estudiantes en grado (6) :" activo="si" type="text" value={this.state.numero_estudiante_grado_6_representante}
-                        name="numero_estudiante_grado_6_representante" id="numero_estudiante_grado_6_representante" placeholder="Numero estudiantes en grado (6) " eventoPadre={this.validarNumero}
-                      />
-                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
-                        nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
-                        name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
-                      />
-                    </div>
-                    <div className="row justify-content-center mx-auto">
-                      <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                        obligatorio="si" mensaje={this.state.msj_direccion[0]} nombreCampoTextArea="Dirección:"
-                        clasesTextArear="form-control" name="direccion" id="direccion" value={this.state.direccion}
-                        eventoPadre={this.cambiarEstado}
-                      />
-                    </div>
-                    <div className="row justify-content-center mt-1">
-                      <ComponentFormSelect
-                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                        obligatorio="si"
-                        mensaje={this.state.msj_tipo_vivienda_representante[0]}
-                        nombreCampoSelect="Tipo de vivienda:"
-                        clasesSelect="custom-select"
-                        name="tipo_vivienda_representante"
-                        id="tipo_vivienda_representante"
-                        eventoPadre={this.cambiarEstado}
-                        defaultValue={this.state.tipo_vivienda_representante}
-                        option={this.state.tipo_viviendas}
-                      />
-                      <ComponentFormSelect
-                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                        obligatorio="si"
-                        mensaje={this.state.msj_id_estado}
-                        nombreCampoSelect="Estado:"
-                        clasesSelect="custom-select"
-                        name="id_estado"
-                        id="id_estado"
-                        eventoPadre={this.consultarCiudadesXEstado}
-                        defaultValue={this.state.id_estado}
-                        option={this.state.estados}
-                      />
-                      <ComponentFormSelect
-                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                        obligatorio="si"
-                        mensaje={this.state.msj_id_ciudad}
-                        nombreCampoSelect="Ciudad:"
-                        clasesSelect="custom-select"
-                        name="id_ciudad"
-                        id="id_ciudad"
-                        eventoPadre={this.cambiarEstado}
-                        defaultValue={this.state.id_ciudad}
-                        option={this.state.ciudades}
-                      />
-                    </div>
-
-                    <div className="row justify-content-center mt-1">
-                      <ComponentFormRadioState
-                        clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
-                        extra="custom-control-inline"
-                        nombreCampoRadio="Estatus:"
-                        name="estatu_representante"
-                        nombreLabelRadioA="Activó"
-                        idRadioA="activoestudianterA"
-                        checkedRadioA={this.state.estatus_representante}
-                        valueRadioA="1"
-                        nombreLabelRadioB="Inactivo"
-                        idRadioB="activoestudianterB"
-                        valueRadioB="0"
-                        eventoPadre={this.cambiarEstado}
-                        checkedRadioB={this.state.estatus_representante}
-                      />
-                    </div>
-
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_nivel_instruccion_mama[0]}
+                      nombreCampoSelect="Nivel Instrucción:"
+                      clasesSelect="custom-select"
+                      name="nivel_instruccion_mama"
+                      id="nivel_instruccion_mama"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.nivel_instruccion_mama}
+                      option={this.state.grados_instruccion}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_mama[0]}
+                      nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion_mama}
+                      name="ocupacion_mama" id="ocupacion_mama" placeholder="Ocupacion" eventoPadre={this.validarTexto}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_mama[0]}
+                      nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_mama}
+                      name="telefono_movil_mama" id="telefono_movil_mama" placeholder="Telefono movil" eventoPadre={this.validarNumero}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_mama[0]}
+                      nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_mama}
+                      name="telefono_local_mama" id="telefono_local_mama" placeholder="Telefono local" eventoPadre={this.validarNumero}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_mama[0]}
+                      nombreCampo="Ingresos:" activo="si" type="text" value={this.state.ingresos_mama}
+                      name="ingresos_mama" id="ingresos_mama" placeholder="Ingresos del representante" eventoPadre={this.validarNumero}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_mama[0]}
+                      nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_mama}
+                      name="constitucion_familiar_mama" id="constitucion_familiar_mama" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_tipo_vivienda_mama[0]}
+                      nombreCampoSelect="Tipo de vivienda:"
+                      clasesSelect="custom-select"
+                      name="tipo_vivienda_mama"
+                      id="tipo_vivienda_mama"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.tipo_vivienda__mama}
+                      option={this.state.tipo_viviendas}
+                    />
+                    <ComponentFormRadioState
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      extra="custom-control-inline"
+                      nombreCampoRadio="Estatus:"
+                      name="estatu_mama"
+                      nombreLabelRadioA="Activó"
+                      idRadioA="activoestudianterA"
+                      checkedRadioA={this.state.estatus_mama}
+                      valueRadioA="1"
+                      nombreLabelRadioB="Inactivo"
+                      idRadioB="activoestudianterB"
+                      valueRadioB="0"
+                      eventoPadre={this.cambiarEstado}
+                      checkedRadioB={this.state.estatus_papa}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                          <span className="titulo-form-trabajador">Datos del Padre</span>
+                      </div>
+                  </div>
+                  <div class="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_papa[0]}
+                      nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula_papa}
+                      name="id_cedula_papa" id="id_cedula_papa" placeholder="Cédula" eventoPadre={this.buscarRepresentante}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_nombres_papa[0]}
+                      nombreCampo="Nombres:" activo="si" type="text" value={this.state.nombres_papa}
+                      name="nombres_papa" id="nombres_papa" placeholder="Nombre" eventoPadre={this.validarTexto}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_apellidos_papa[0]}
+                      nombreCampo="Apellidos:" activo="si" type="text" value={this.state.apellidos_papa}
+                      name="apellidos_papa" id="apellidos_papa" placeholder="Apellido" eventoPadre={this.validarTexto}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormDate clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si" mensaje={this.state.msj_fecha_nacimiento_papa[0]} nombreCampoDate="Fecha de Nacimiento:"
+                          clasesCampo="form-control" value={this.state.fecha_nacimiento_papa} name="fecha_nacimiento_papa"
+                          id="fecha_nacimiento_papa" eventoPadre={this.fechaNacimiento}
+                        />
+                      {this.state.edadRepresentante!==null &&
+                            (
+                            <div className="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
+                                    <div className="form-ground">
+                                        <label className="mb-3">Edad:</label>
+                                        <div >{this.state.edadRepresentante} Años</div>
+                                    </div>
+                            </div>
+                            )
+                        }
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_nivel_instruccion_papa[0]}
+                      nombreCampoSelect="Nivel Instrucción:"
+                      clasesSelect="custom-select"
+                      name="nivel_instruccion_papa"
+                      id="nivel_instruccion_papa"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.nivel_instruccion_papa}
+                      option={this.state.grados_instruccion}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_papa[0]}
+                      nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion_papa}
+                      name="ocupacion_papa" id="ocupacion_papa" placeholder="Ocupacion" eventoPadre={this.validarTexto}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_papa[0]}
+                      nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_papa}
+                      name="telefono_movil_papa" id="telefono_movil_papa" placeholder="Telefono movil" eventoPadre={this.validarNumero}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_papa[0]}
+                      nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_papa}
+                      name="telefono_local_papa" id="telefono_local_papa" placeholder="Telefono local" eventoPadre={this.validarNumero}
+                    />
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_papa[0]}
+                      nombreCampo="Ingresos:" activo="si" type="text" value={this.state.ingresos_papa}
+                      name="ingresos_papa" id="ingresos_papa" placeholder="Ingresos del representante" eventoPadre={this.validarNumero}
+                    />
+                  </div>
+                  <div className="row justify-content-center">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_papa[0]}
+                      nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_papa}
+                      name="constitucion_familiar_papa" id="constitucion_familiar_papa" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_tipo_vivienda_papa[0]}
+                      nombreCampoSelect="Tipo de vivienda:"
+                      clasesSelect="custom-select"
+                      name="tipo_vivienda_papa"
+                      id="tipo_vivienda_papa"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.tipo_vivienda_papa}
+                      option={this.state.tipo_viviendas}
+                    />
+                    <ComponentFormRadioState
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      extra="custom-control-inline"
+                      nombreCampoRadio="Estatus:"
+                      name="estatu_papa"
+                      nombreLabelRadioA="Activó"
+                      idRadioA="activoestudianterA"
+                      checkedRadioA={this.state.estatus_papa}
+                      valueRadioA="1"
+                      nombreLabelRadioB="Inactivo"
+                      idRadioB="activoestudianterB"
+                      valueRadioB="0"
+                      eventoPadre={this.cambiarEstado}
+                      checkedRadioB={this.state.estatus_papa}
+                    />
+                  </div>
                     <div className="row justify-content-center">
                         <div className="col-auto">
                             {this.props.operacion==="registrar" &&

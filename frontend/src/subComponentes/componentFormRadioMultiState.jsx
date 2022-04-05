@@ -16,7 +16,9 @@ const ComponentFormRadioMultiState = (props) => {
             let id = props.idRadio[index], nombre, valor = item;
             if(!props.nombreUnico) nombre = props.nombreLabelRadio[index]
             else{
-              nombre = `${props.nombreUnico[0]}${item[props.nombreUnico[1]]} ${item[props.nombreUnico[2]]} ${item[props.nombreUnico[3]]}`
+              nombre = `${props.nombreUnico[0]}${item[props.nombreUnico[1]]}`;
+              if(item[props.nombreUnico[2]]) nombre += `${item[props.nombreUnico[2]]}`
+              if(item[props.nombreUnico[3]]) nombre += ` ${item[props.nombreUnico[3]]}`
               valor = item[props.name]
             }
 

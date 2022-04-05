@@ -44,9 +44,8 @@ class ComponentMultiStepForm extends React.Component{
             //formulario
             formulario_step: 0,
             id_estudiante:"",
-            cedulas_representante: [
-              {id: "", descripcion: ""},
-            ],
+            cedula_mama: "",
+            cedula_papa: "",
             ///
             mensaje:{
                 texto:"",
@@ -260,15 +259,18 @@ class ComponentMultiStepForm extends React.Component{
     reverse(){ this.setState(prevState => ({formulario_step: prevState.formulario_step - 1 }))}
     StatePadre(index, value){ this.setState({[index]: value}); }
     AddCedulas(value){
-        let cedulas_representante = this.state.cedulas_representante;
-        let status = true;
-        if(cedulas_representante.length > 0){
-            cedulas_representante.map( item => { if(item.id == value) status = false; })
-            if(!status) return ;
-
-            cedulas_representante.push({id: value, descripcion: value});
-            this.setState({cedulas_representante: cedulas_representante})
-        }else this.setState({cedulas_representante: [value]});
+      if(value.tipo == "mama") this.setState({cedula_mama: value.cedula})
+      if(value.tipo == "papa") this.setState({cedula_papa: value.cedula});
+        //
+        // let cedulas_representante = this.state.cedulas_representante;
+        // let status = true;
+        // if(cedulas_representante.length > 0){
+        //     cedulas_representante.map( item => { if(item.id == value) status = false; })
+        //     if(!status) return ;
+        //
+        //     cedulas_representante.push({id: value, descripcion: value});
+        //     this.setState({cedulas_representante: cedulas_representante})
+        // }else this.setState({cedulas_representante: [value]});
     }
 
     render(){
@@ -297,8 +299,8 @@ class ComponentMultiStepForm extends React.Component{
                 next={this.next}
                 state={this.StatePadre}
                 idEstudiante={this.state.id_estudiante}
-                cedulasRepresentante={ this.state.cedulas_representante }
-                reverse={this.reverse}
+                cedulaMama={this.state.cedula_mama}
+                cedulaPapa={this.state.cedula_papa}
                 obligatorio={true}
             />
         </>
