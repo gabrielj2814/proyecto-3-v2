@@ -218,8 +218,6 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_estado_3="estatu_parroquia"
             const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-            console.log(parroquias)
-
             this.setState({
               id_estudiante: datos.id_estudiante,
               codigo_cedula_escolar: datos.codigo_cedula_escolar,
