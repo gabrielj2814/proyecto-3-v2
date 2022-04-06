@@ -31,12 +31,12 @@ class ComponentMultiStepForm extends React.Component{
     constructor(){
         super();
         this.mostrarModulo = this.mostrarModulo.bind(this);
-        this.agregar=this.agregar.bind(this);
         this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
         this.StatePadre = this.StatePadre.bind(this);
         this.next = this.next.bind(this);
         this.AddCedulas = this.AddCedulas.bind(this)
         this.reverse = this.reverse.bind(this);
+        this.return_index = this.return_index.bind(this);
         this.state={
             // ------------------
             modulo:"",// modulo menu
@@ -44,8 +44,8 @@ class ComponentMultiStepForm extends React.Component{
             //formulario
             formulario_step: 0,
             id_estudiante:"",
-            cedula_mama: "",
-            cedula_papa: "",
+            cedula_mama:"",
+            cedula_papa:"",
             ///
             mensaje:{
                 texto:"",
@@ -89,29 +89,9 @@ class ComponentMultiStepForm extends React.Component{
     }
 
     async UNSAFE_componentWillMount(){
-        // let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
-        if(true){
-            await this.consultarFechaServidor()
-            const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
-            nombre_propiedad_lista="estados",
-            propiedad_id="id_estado",
-            propiedad_descripcion="nombre_estado",
-            propiedad_estado="estatu_estado"
-            const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-
-            const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
-            nombre_propiedad_lista_2="ciudades",
-            propiedad_id_2="id_ciudad",
-            propiedad_descripcion_2="nombre_ciudad",
-            propiedad_estado_2="estatu_ciudad"
-            const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-
-            this.setState({
-                estados,
-                ciudades,
-                id_estado:(estados.length===0)?null:estados[0].id,
-                id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-            })
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
+        if(acessoModulo){
+          await this.consultarFechaServidor()
         }
     }
 
@@ -162,7 +142,7 @@ class ComponentMultiStepForm extends React.Component{
             // this.setState({modulosSistema})
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -175,7 +155,7 @@ class ComponentMultiStepForm extends React.Component{
             this.setState({fechaServidor})
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.error("error al conectar con el servidor")
         })
     }
 
@@ -202,7 +182,7 @@ class ComponentMultiStepForm extends React.Component{
             }
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
         })
         return lista
     }
@@ -218,59 +198,17 @@ class ComponentMultiStepForm extends React.Component{
         return lista_vacia
     }
 
-    async agregar(){
-      var mensaje=this.state.mensaje
-      mensaje.estado=""
-      var mensaje_campo=[{mensaje:"",color_texto:""}]
-      this.setState({
-        id_cedula_escolar:"",
-        id_cedula:"",
-        nombres:"",
-        apellidos:"",
-        fecha_nacimiento:"",
-        direccion_nacimiento:"",
-        escolaridad:"",
-        vive_con:"",
-        procedencia:"",
-        id_estado:"",
-        id_ciudad:"",
-        sexo_estudiante:"1",
-        estatu_estudiante:"1",
-        //MSJ
-        msj_id_cedula_escolar:mensaje_campo,
-        msj_id_cedula:mensaje_campo,
-        msj_nombres:mensaje_campo,
-        msj_apellidos:mensaje_campo,
-        msj_fecha_nacimiento:mensaje_campo,
-        msj_direccion_nacimiento:mensaje_campo,
-        msj_escolaridad:mensaje_campo,
-        msj_vive_con:mensaje_campo,
-        msj_procedencia:mensaje_campo,
-        msj_sexo_estudiante:mensaje_campo,
-        msj_estatu_estudiante:mensaje_campo,
-        msj_id_estado:mensaje_campo,
-        msj_id_ciudad:mensaje_campo,
-        edadEstudiante:null,
-      })
-      this.props.history.push("/dashboard/configuracion/estudiante/registrar")
+    return_index(){
+      this.props.history.push("/dashboard/configuracion/estudiante")
     }
 
     next(){ this.setState({formulario_step: this.state.formulario_step + 1})}
     reverse(){ this.setState(prevState => ({formulario_step: prevState.formulario_step - 1 }))}
     StatePadre(index, value){ this.setState({[index]: value}); }
     AddCedulas(value){
+
       if(value.tipo == "mama") this.setState({cedula_mama: value.cedula})
       if(value.tipo == "papa") this.setState({cedula_papa: value.cedula});
-        //
-        // let cedulas_representante = this.state.cedulas_representante;
-        // let status = true;
-        // if(cedulas_representante.length > 0){
-        //     cedulas_representante.map( item => { if(item.id == value) status = false; })
-        //     if(!status) return ;
-        //
-        //     cedulas_representante.push({id: value, descripcion: value});
-        //     this.setState({cedulas_representante: cedulas_representante})
-        // }else this.setState({cedulas_representante: [value]});
     }
 
     render(){
@@ -301,6 +239,7 @@ class ComponentMultiStepForm extends React.Component{
                 idEstudiante={this.state.id_estudiante}
                 cedulaMama={this.state.cedula_mama}
                 cedulaPapa={this.state.cedula_papa}
+                returnDashoard={this.return_index}
                 obligatorio={true}
             />
         </>

@@ -57,6 +57,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         ingresos_mama: "",
         tipo_vivienda_mama: "",
         constitucion_familiar_mama: "",
+        numero_hijos_mama: "1",
+        id_estado_mama: "",
+        id_ciudad_mama: "",
+        id_parroquia_mama: "",
         estatus_mama:"1",
         // MSJ MAMA
         msj_id_cedula_mama:[{mensaje:"",color_texto:""}],
@@ -71,6 +75,9 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         msj_tipo_vivienda_mama: [{ mensaje:"", color_texto:""}],
         msj_telefono_movil_mama: [{ mensaje:"", color_texto:""}],
         msj_telefono_local_mama: [{ mensaje:"", color_texto:""}],
+        msj_id_estado_mama:[{ mensaje:"", color_texto:""}],
+        msj_id_ciudad_mama:[{ mensaje:"", color_texto:""}],
+        msj_id_parroquia_mama: [{ mensaje:"", color_texto:""}],
         // Datos PAPA
         id_cedula_papa: "",
         nombres_papa: "",
@@ -83,6 +90,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         ingresos_papa: "",
         tipo_vivienda_papa: "",
         constitucion_familiar_papa: "",
+        numero_hijos_papa: "1",
+        id_estado_papa: "",
+        id_ciudad_papa: "",
+        id_parroquia_papa: "",
         estatus_papa:"1",
         // MSJ PAPA
         msj_id_cedula_papa:[{mensaje:"",color_texto:""}],
@@ -97,12 +108,21 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         msj_tipo_vivienda_papa: [{ mensaje:"", color_texto:""}],
         msj_telefono_movil_papa: [{ mensaje:"", color_texto:""}],
         msj_telefono_local_papa: [{ mensaje:"", color_texto:""}],
+        msj_id_estado_papa:[{ mensaje:"", color_texto:""}],
+        msj_id_ciudad_papa:[{ mensaje:"", color_texto:""}],
+        msj_id_parroquia_papa: [{ mensaje:"", color_texto:""}],
         //// combo box
         papa_existe: false,
         mama_existe: false,
-        estados:[],
-        ciudades:[],
-        parroquias:[],
+
+        estados_m:[],
+        ciudades_m:[],
+        parroquias_m:[],
+
+        estados_p:[],
+        ciudades_p:[],
+        parroquias_p:[],
+
         fecha_minimo:"",
         hashEstudiante:{},
         estadoBusquedaRepresentante:false,
@@ -162,12 +182,18 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
       this.setState({
-          estados,
-          ciudades,
-          parroquias,
-          id_estado:(estados.length===0)?null:estados[0].id,
-          id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-          id_parroquia:(parroquias.length===0)?null:parroquias[0].id,
+        estados_p: estados,
+        estados_m: estados,
+        ciudades_p: ciudades,
+        ciudades_m: ciudades,
+        parroquias_p: parroquias,
+        parroquias_m: parroquias,
+        id_estado_papa:(estados.length===0)?null:estados[0].id,
+        id_estado_mama:(estados.length===0)?null:estados[0].id,
+        id_ciudad_papa:(ciudades.length===0)?null:ciudades[0].id,
+        id_ciudad_mama:(ciudades.length===0)?null:ciudades[0].id,
+        id_parroquia_papa:(parroquias.length===0)?null:parroquias[0].id,
+        id_parroquia_mama:(parroquias.length===0)?null:parroquias[0].id,
       })
     }
   }
@@ -308,10 +334,19 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     propiedad_estado_2="estatu_ciudad"
     const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
+    let ciudad, ciudades_lista;
+    if(input.name == "id_estado_mama"){
+      ciudad = "id_ciudad_mama";
+      ciudades_lista = "ciudades_m";
+    }else{
+      ciudad = "id_ciudad_papa";
+      ciudades_lista = "ciudades_p";
+    }
+
     this.setState({
-        id_estado:input.value,
-        ciudades,
-        id_ciudad:(ciudades.length===0)?null:ciudades[0].id
+        [input.name]:input.value,
+        [ciudades_lista]: ciudades,
+        [ciudad]:(ciudades.length===0)?null:ciudades[0].id
     })
   }
 
@@ -324,11 +359,19 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       propiedad_estado_3="estatu_parroquia"
       const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
+      let parroquia, parroquias_lista;
+      if(input.name == "id_ciudad_mama"){
+        parroquia = "id_parroquia_mama";
+        parroquias_lista = "parroquias_m";
+      }else{
+         parroquia = "id_parroquia_papa";
+         parroquias_lista = "parroquias_p";
+      }
+
       this.setState({
-          id_ciudad:input.value,
-          parroquias,
-          id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
-          id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
+          [input.name]:input.value,
+          [parroquias_lista]: parroquias,
+          [parroquia]:(parroquias.length===0)?null:parroquias[0].id
       })
   }
 
@@ -541,25 +584,15 @@ class ComponentMultiStepFormRepresentante extends React.Component{
   validarSelect(name){
     let estado = false
     const valor = this.state[name]
-    let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name], msj_nivel_instruccion = this.state["msj_"+name],
-    msj_tipo_vivienda_representante = this.state["msj_"+name];
+    let msj = this.state["msj_"+name];
 
     if(valor != ""){
       estado = true
-      msj_id_ciudad[0] = {mensaje: "", color_texto:"rojo"}
-      msj_id_estado[0] = {mensaje: "", color_texto:"rojo"}
-      msj_nivel_instruccion[0] = {mensaje: "", color_texto:"rojo"}
-      msj_tipo_vivienda_representante[0] = {mensaje:"", color_texto:"rojo"}
+      msj[0] = {mensaje: "", color_texto:"rojo"}
     }else{
-      msj_id_ciudad[0] = {mensaje: "Debe de seleccionar una ciudad", color_texto:"rojo"}
-      msj_id_estado[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
-      msj_nivel_instruccion[0] = {mensaje: "Debe de seleccionar un grado de intrucccion", color_texto:"rojo"}
-      msj_tipo_vivienda_representante[0] = {mensaje:"Debe de seleccionar una opcion", color_texto:"rojo"}
+      msj[0] = {mensaje: "Debe seleccionar una opcion", color_texto:"rojo"}
     }
-    if(name === "id_ciudad") this.setState(msj_id_ciudad)
-    else if(name === "id_estado") this.setState(msj_id_estado)
-    else if(name === "nivel_instruccion") this.setState(msj_nivel_instruccion)
-    else if(name === "tipo_vivienda_representante") this.setState(msj_tipo_vivienda_representante)
+    this.setState({[name]: msj})
     return estado
   }
 
@@ -583,21 +616,23 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     validarTelefonoMovilMama = this.validarCampoNumero('telefono_movil_mama'), validarTelefonoLocalMama = this.validarCampoNumero('telefono_local_mama'),
     validarFechaNaciminetoMama = this.validarFechaNacimineto("fecha_nacimiento_mama"), validarOcupacionMama = this.validarCampo('ocupacion_mama'), validarIngresosMama = this.validarCampoNumero('ingresos_mama'),
     validarGradoIntruccionMama = this.validarSelect('nivel_instruccion_mama'),validarTipViviendaMama = this.validarSelect('tipo_vivienda_mama'),ValidarStatusMama = this.validarRadio('estatus_mama'),
-    ValidarConstFamiliarMama = this.validarCampo('constitucion_familiar_mama')
+    ValidarConstFamiliarMama = this.validarCampo('constitucion_familiar_mama'), validarCiudadMama = this.validarSelect('id_ciudad_mama'),
+    validaEstadoMama = this.validarSelect('id_estado_mama'), ValidarParroquiaMama = this.validarSelect('id_parroquia_mama')
 
     const validarCedulaPapa = this.validarCampoNumero('id_cedula_papa'), validarNombrePapa = this.validarCampo('nombres_papa'), validarApellidoPapa = this.validarCampo('apellidos_papa'),
     validarTelefonoMovilPapa = this.validarCampoNumero('telefono_movil_papa'), validarTelefonoLocalPapa = this.validarCampoNumero('telefono_local_papa'),
     validarFechaNaciminetoPapa = this.validarFechaNacimineto("fecha_nacimiento_papa"), validarOcupacionPapa = this.validarCampo('ocupacion_papa'),
     validarIngresosPapa = this.validarCampoNumero('ingresos_papa'),
     validarGradoIntruccionPapa = this.validarSelect('nivel_instruccion_papa'),validarTipViviendaPapa = this.validarSelect('tipo_vivienda_papa'),ValidarStatusPapa = this.validarRadio('estatus_papa'),
-    ValidarConstFamiliarPapa = this.validarCampo('constitucion_familiar_papa')
+    ValidarConstFamiliarPapa = this.validarCampo('constitucion_familiar_papa'), validarCiudadPapa = this.validarSelect('id_ciudad_mama'),
+    validaEstadoPapa = this.validarSelect('id_estado_papa'), ValidarParroquiaPapa = this.validarSelect('id_parroquia_papa')
 
     if(
       validarCedulaMama && validarNombreMama && validarApellidoMama && validarTelefonoMovilMama && validarTelefonoLocalMama && validarFechaNaciminetoMama && validarOcupacionMama && validarIngresosMama
-      && validarGradoIntruccionMama && validarTipViviendaMama && ValidarStatusMama &&
+      && validarGradoIntruccionMama && validarTipViviendaMama && ValidarStatusMama && ValidarParroquiaMama && validaEstadoMama && validarCiudadMama &&
 
       validarCedulaPapa && validarNombrePapa && validarApellidoPapa && validarTelefonoMovilPapa && validarTelefonoLocalPapa && validarFechaNaciminetoPapa && validarOcupacionPapa && validarIngresosPapa
-      && validarGradoIntruccionPapa && validarTipViviendaPapa && ValidarStatusPapa
+      && validarGradoIntruccionPapa && validarTipViviendaPapa && ValidarStatusPapa && ValidarParroquiaPapa && validaEstadoPapa && validarCiudadPapa
     ){
       return { estado: true, fecha: validarFechaNaciminetoMama.fecha }
     }else{
@@ -641,6 +676,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       if(estado_validar_formulario.estado){
           this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
+
               var respuesta_servidor=""
               if(!this.state.mama_existe){
                 axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
@@ -650,8 +686,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                     mensaje.estado=respuesta_servidor.estado_respuesta
                     mensaje_formulario.mensaje=mensaje
                     this.setState(mensaje_formulario)
-
-                    this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
                 })
                 .catch(error=>{
                     mensaje.texto="No se puedo conectar con el servidor"
@@ -671,7 +705,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   mensaje_formulario.mensaje=mensaje
                   this.setState(mensaje_formulario)
 
-                  this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
                 })
                 .catch(error=>{
                   mensaje.texto="No se puedo conectar con el servidor"
@@ -682,7 +715,12 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                 })
               }
 
-              this.props.next();
+              this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
+              this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
+              setTimeout( () => {
+                this.props.next();
+              }, 100);
+
           })
       }
   }
@@ -705,9 +743,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
             tipo_vivienda_representante: this.state.tipo_vivienda_mama,
             constitucion_familiar_representante: this.state.constitucion_familiar_mama,
             estatus_representante: this.state.estatus_mama,
+            id_parroquia: this.state.id_parroquia_mama,
 
             direccion_representante: "",
-            numero_hijos_representante: "",
+            numero_hijos_representante: this.state.numero_hijos_mama,
             numero_estudiante_inicial_representante: "",
             numero_estudiante_grado_1_representante: "",
             numero_estudiante_grado_2_representante: "",
@@ -733,9 +772,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
             tipo_vivienda_representante: this.state.tipo_vivienda_papa,
             constitucion_familiar_representante: this.state.constitucion_familiar_papa,
             estatus_representante: this.state.estatus_papa,
+            id_parroquia: this.state.id_parroquia_papa,
 
             direccion_representante: "",
-            numero_hijos_representante: "",
+            numero_hijos_representante: this.state.numero_hijos_papa,
             numero_estudiante_inicial_representante: "",
             numero_estudiante_grado_1_representante: "",
             numero_estudiante_grado_2_representante: "",
@@ -919,6 +959,44 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       checkedRadioB={this.state.estatus_papa}
                     />
                   </div>
+                  <div className="row justify-content-center mt-1">
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_estado_mama}
+                      nombreCampoSelect="Estado:"
+                      clasesSelect="custom-select"
+                      name="id_estado_mama"
+                      id="id_estado_mama"
+                      eventoPadre={this.consultarCiudadesXEstado}
+                      defaultValue={this.state.id_estado_mama}
+                      option={this.state.estados_m}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_ciudad_mama}
+                      nombreCampoSelect="Ciudad:"
+                      clasesSelect="custom-select"
+                      name="id_ciudad_mama"
+                      id="id_ciudad_mama"
+                      eventoPadre={this.consultarParroquiasXCiudad}
+                      defaultValue={this.state.id_ciudad_mama}
+                      option={this.state.ciudades_m}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_parroquia_mama}
+                      nombreCampoSelect="Parroquia:"
+                      clasesSelect="custom-select"
+                      name="id_parroquia_mama"
+                      id="id_parroquia_mama"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.id_parroquia_mama}
+                      option={this.state.parroquias_m}
+                    />
+                  </div>
                   <div className="row justify-content-center">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
                           <span className="titulo-form-trabajador">Datos del Padre</span>
@@ -990,6 +1068,44 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_papa[0]}
                       nombreCampo="Ingresos:" activo="si" type="text" value={this.state.ingresos_papa}
                       name="ingresos_papa" id="ingresos_papa" placeholder="Ingresos del representante" eventoPadre={this.validarNumero}
+                    />
+                  </div>
+                  <div className="row justify-content-center mt-1">
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_estado_papa}
+                      nombreCampoSelect="Estado:"
+                      clasesSelect="custom-select"
+                      name="id_estado_papa"
+                      id="id_estado_papa"
+                      eventoPadre={this.consultarCiudadesXEstado}
+                      defaultValue={this.state.id_estado_papa}
+                      option={this.state.estados_p}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_ciudad_papa}
+                      nombreCampoSelect="Ciudad:"
+                      clasesSelect="custom-select"
+                      name="id_ciudad_papa"
+                      id="id_ciudad_papa"
+                      eventoPadre={this.consultarParroquiasXCiudad}
+                      defaultValue={this.state.id_ciudad_papa}
+                      option={this.state.ciudades_p}
+                    />
+                    <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_parroquia_papa}
+                      nombreCampoSelect="Parroquia:"
+                      clasesSelect="custom-select"
+                      name="id_parroquia_papa"
+                      id="id_parroquia_papa"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.id_parroquia_representante}
+                      option={this.state.parroquias_p}
                     />
                   </div>
                   <div className="row justify-content-center">

@@ -51,22 +51,21 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         estado_menu:false,
         //formulario
         id_asignacion_representante_estudiante: null,
-        id_estudiante: this.props.idEstudiante,
-        cedula_mama: this.props.cedulaMama,
+        id_estudiante: "",
+        cedula_mama: "",
         nombres_mama: "",
         apellidos_mama: "",
 
-        cedula_papa: this.props.cedulaPapa,
+        cedula_papa: "",
         nombres_papa: "",
         apellidos_papa: "",
 
         cedula_representante: "",
         cedula_escolar: "",
-        cedulas_representante: [this.props.cedulaMama,this.props.cedulaPapa,"O"],
+        cedulas_representante: [],
         id_cedula_representante: "",
         tipo_representante: "",
         parentesco_representante: "",
-        numero_representante: 0,
         estatus_asignacion_representante_estudiante:"1",
         // Datos extras para el formulario
         nombre_representante: "",
@@ -181,8 +180,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   async UNSAFE_componentWillMount(){
     await this.consultarFechaServidor()
     await this.GetTodosRepresentantesEstudiantes()
-    await this.BuscarEstudiante()
-    this.buscarRepresentante()
 
     const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
     nombre_propiedad_lista="estados",
@@ -190,7 +187,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     propiedad_descripcion="nombre_estado",
     propiedad_estado="estatu_estado";
     const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-    console.log(estados)
+
     const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
     nombre_propiedad_lista_2="ciudades",
     propiedad_id_2="id_ciudad",
@@ -209,10 +206,17 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         estados,
         ciudades,
         parroquias,
+        id_estudiante: this.props.idEstudiante,
+        cedula_mama: this.props.cedulaMama,
+        cedula_papa: this.props.cedulaPapa,
+        cedulas_representante: [this.props.cedulaMama,this.props.cedulaPapa,"O"],
         id_estado_representante:(estados.length===0)?null:estados[0].id,
         id_ciudad_representante:(ciudades.length===0)?null:ciudades[0].id,
         id_parroquia_representante:(parroquias.length===0)?null:parroquias[0].id,
     })
+
+    await this.BuscarEstudiante()
+    this.buscarRepresentante()
   }
 
   async consultarFechaServidor(){
@@ -348,14 +352,12 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   }
 
   longitudCampo(input){
-    if(input.name==="id_estudiante" || input.name === "id_cedula_representante"){
+    if(input.name==="id_estudiante" || input.name === "cedula_representante" || input.name === "cedula_papa" || input.name === "cedula_mama"){
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }else if(input.name==="telefono_movil_representante" || input.name==="telefono_local_representante"){
       if(input.value.length <= 11) this.cambiarEstadoDos(input)
     }else if(input.name === "ingresos_representante"){
       if(input.value.length <= 10) this.cambiarEstadoDos(input)
-    }else if(input.name==="numero_representante"){
-      if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }else if(input.name==="cedula_escolar"){
       if(input.value.length <= 12) this.cambiarEstadoDos(input)
     }else{
@@ -465,7 +467,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         }
       }else{
         msj[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-        console.log(nombre_campo)
         this.setState({["msj_"+nombre_campo]:msj})
       }
       return estado
@@ -603,9 +604,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       validar_cedula_escolar && validar_id_representante && validarstatus_asignacion && validar_parentesco
     ){
 
-      console.log("YA CASIIIIIIIIII");
-      return {estado: false};
-      // return {estado: true}
+      return {estado: true}
     }else return {estado: false}
   }
 
@@ -647,7 +646,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           msj_numero_estudiante_grado_6_representante:[{ mensaje:"", color_texto:""}],
       }
       const estado_validar_formulario=this.validarFormularioRegistrar()
-
       if(estado_validar_formulario.estado){
         this.enviarDatos(estado_validar_formulario,(objeto)=>{
           const mensaje =this.state.mensaje
@@ -685,7 +683,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             this.setState(mensaje_formulario)
           });
           // Registro Representante
-          if(this.state.nuevo_representante){
+          if(!this.state.nuevo_representante){
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.representanteRegistro)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
@@ -736,7 +734,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         });
 
         alert("Registro completado");
-        this.props.history.push("/dashboard/configuracion/estudiante");
+        this.props.returnDashoard();
       }
   }
 
@@ -750,7 +748,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             id_cedula_representante:  this.state.cedula_mama,
             tipo_representante:  "M",
             parentesco: "",
-            numero_representante:  1,
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,
           },
           token:token
@@ -762,7 +759,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             id_cedula_representante:  this.state.cedula_papa,
             tipo_representante: "P",
             parentesco: "",
-            numero_representante: 2,
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,
           },
           token:token
@@ -786,7 +782,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             parentesco_representante: (this.state.tipo_representante == "M") ? "Mama" : "Papa",
             id_estado_representante: this.state.id_estado,
             id_ciudad_representante: this.state.id_ciudad,
-            id_parroquia_representante: this.state.id_parroquia,
+            id_parroquia: this.state.id_parroquia_representante,
             numero_hijos_representante: this.state.numero_hijos_representante,
             numero_estudiante_inicial_representante: this.state.numero_estudiante_inicial_representante,
             numero_estudiante_grado_1_representante: this.state.numero_estudiante_grado_1_representante,
@@ -804,8 +800,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             id_estudiante:  this.state.id_estudiante,
             id_cedula_representante:  this.state.cedulas_representante,
             tipo_representante: this.state.tipo_representante,
-            parentesco: this.state.parentesco,
-            numero_representante: 3,
+            parentesco: this.state.parentesco_representante,
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,
           },
           token:token
@@ -819,6 +814,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   BuscarEstudiante(){
 
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
+    console.log(hashEstudiante)
 
     if(hashEstudiante[this.state.id_estudiante]){
       this.setState({
@@ -1168,7 +1164,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                         />
                       </div>
                       <div className="row justify-content-center mt-1">
-
                         <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                           obligatorio="si"
