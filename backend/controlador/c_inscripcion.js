@@ -129,6 +129,19 @@ controladorInscripcion.actualizar= async (req,res) => {
     res.end()
 }
 
+controladorInscripcion.culminarInscripcion= async (id_inscripcion) => {
+    const ModeloInscripcion=require('../modelo/m_inscripcion')
+    let modeloInscripcion=new ModeloInscripcion()
+    modeloInscripcion.setIdInscripcion(id_inscripcion)
+    let resultInscripcion=await modeloInscripcion.culminar()
+    if(resultInscripcion.rowCount>0){
+        return true
+    }
+    else{
+        return false
+    }
+}
+
 controladorInscripcion.obtenerEstudianteProfesor=async (req,res) => {
     const ModeloInscripcion=require('../modelo/m_inscripcion')
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:"",datos:[]}

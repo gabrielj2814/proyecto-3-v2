@@ -90,7 +90,12 @@ class ModeloInscripcion extends DriverPostgres {
     const SQL = `UPDATE tinscripcion SET id_estudiante='${this.id_estudiante}', id_asignacion_representante_estudiante='${this.id_asignacion_representante_estudiante}',
     id_asignacion_aula_profesor= '${this.id_asignacion_aula_profesor}', fecha_inscripcion= '${this.fecha_inscripcion}',
     estatus_inscripcion= '${this.estatus_inscripcion}' WHERE id_inscripcion = ${this.id_inscripcion}
+    `
+    return await this.query(SQL);
+  }
 
+  async culminar(){
+    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion}
     `
     return await this.query(SQL);
   }

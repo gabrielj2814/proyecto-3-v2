@@ -47,7 +47,7 @@ class ModeloPromocion extends DriverPostgre{
         )
         VALUES(
             ${this.id_inscripcion},
-            '${this.fecha_promocion}',
+            '${fecha}',
             '${this.descripcion_logro}',
             '${this.recomendacion_pariente}',
             '${this.nota_promocion}',

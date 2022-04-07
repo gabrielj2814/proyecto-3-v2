@@ -2,15 +2,24 @@ const ControladorPromocion={}
 const ModeloPromocion= require("../modelo/m_promocion")
 
 ControladorPromocion.registrar= async () => {
+    const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setDatos(promocion)
     const resultPromocion=await modeloPromocion.registrar()
     if(resultPromocion.rowCount>0){
-        respuesta_api.mensaje="Registro completado"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
+        if(ControladorInscripcion.culminarInscripcion(promocion.id_inscripcion)){
+            respuesta_api.mensaje="Registro completado"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+        }
+        else{
+            respuesta_api.mensaje="error: se creo la promocion pero no se pudo culminar la inscripción"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="danger"
+        }
+
     }
     else{
         respuesta_api.mensaje="error al registrar(la promocion)"
