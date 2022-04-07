@@ -87,5 +87,27 @@ ControladorPromocion.actualizar= async () => {
     res.end()
 }
 
+ControladorPromocion.consultarEstudiantesAsignados= async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    const controladorInscripcion=require("./c_inscripcion")
+    let {cedula_profesor} = req.params
+    let datos=await controladorInscripcion.obtenerEstudianteProfesor2(cedula_profesor)
+    if(datos.estado){
+        respuesta_api.mensaje="lista de estudiantes"
+        respuesta_api.datos=datos.listaDeEstudiantes
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="no tiene estudiantes"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 
 module.exports= ControladorPromocion

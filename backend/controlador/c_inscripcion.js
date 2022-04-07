@@ -182,6 +182,47 @@ controladorInscripcion.obtenerEstudianteProfesor=async (req,res) => {
     res.end()
 }
 
+controladorInscripcion.obtenerEstudianteProfesor2=async (cedula) => {
+    const ModeloInscripcion=require('../modelo/m_inscripcion')
+    let modeloInscripcion= new ModeloInscripcion()
+    const resultAnoActual=await modeloInscripcion.consultarAnoEscolarActivo()
+    const resultProfesor=await modeloInscripcion.consultarProfesorTrabajador(cedula)
+    // console.log("profesor =>>> ",resultProfesor.rows)
+    // console.log("ano =>>> ",resultAnoActual.rows)
+    if(resultProfesor.rowCount>0 && resultAnoActual.rowCount>0){
+        let datosProfesor=resultProfesor.rows[0]
+        let datosAnoActual=resultAnoActual.rows[0]
+        const consultarAsigancionActulaProfesor=await modeloInscripcion.consultarAsigancionActulaProfesor(datosProfesor.id_profesor,datosAnoActual.id_ano_escolar)
+        // console.log("asignacion =>>> ",consultarAsigancionActulaProfesor.rows)
+        if(consultarAsigancionActulaProfesor.rowCount>0){
+            let datosAsignacion=consultarAsigancionActulaProfesor.rows[0]
+            const resultEstudiantesInscriptos= await modeloInscripcion.consultarEstudiantesPorAsignacion(datosAsignacion.id_asignacion_aula_profesor)
+            // console.log("inscriptos =>>> ",resultEstudiantesInscriptos.rows)
+            if(resultEstudiantesInscriptos.rowCount>0){
+                return {
+                    estado:true,
+                    datosProfesor,
+                    datosAnoActual,
+                    datosAsignacion,
+                    listaDeEstudiantes:resultEstudiantesInscriptos.rows,
+                }
+
+            }
+            else{
+                return {}
+            }
+
+        }
+        else{
+            return {}
+        }
+    }
+    else{
+        return {}
+    }
+}
+
+
 
 
 module.exports = controladorInscripcion

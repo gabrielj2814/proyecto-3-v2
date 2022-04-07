@@ -9,7 +9,7 @@ ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
     const controladorInscripcion=require("./c_inscripcion")
     let {cedula} = req.params
     let resultAsistenciaDeHoy= await modeloAsistenciaEstudiante.consultarAsistenciaDeHoy()
-    let datos=await controladorInscripcion.obtenerEstudianteProfesor(cedula)
+    let datos=await controladorInscripcion.obtenerEstudianteProfesor2(cedula)
     if(resultAsistenciaDeHoy.rowCount>0){
         respuesta_api.mensaje="ya hay asistencia de hoy"
         respuesta_api.datos=resultAsistenciaDeHoy.rows
@@ -17,7 +17,7 @@ ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
         respuesta_api.color_alerta="success"
     }
     else{
-        if(datos.estado===true){
+        if(datos.estado){
             for(let estudiante of datos.listaDeEstudiantes){
                 let datosAsistencia={
                     id_asistencia_estudiante:"",
