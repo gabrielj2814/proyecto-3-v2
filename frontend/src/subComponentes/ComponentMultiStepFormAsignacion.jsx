@@ -352,7 +352,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   }
 
   longitudCampo(input){
-    if(input.name==="id_estudiante" || input.name === "cedula_representante" || input.name === "cedula_papa" || input.name === "cedula_mama"){
+    if(input.name==="id_estudiante" || input.name === "id_cedula_representante" || input.name === "cedula_papa" || input.name === "cedula_mama"){
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }else if(input.name==="telefono_movil_representante" || input.name==="telefono_local_representante"){
       if(input.value.length <= 11) this.cambiarEstadoDos(input)
@@ -747,7 +747,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             id_estudiante:  this.state.id_estudiante,
             id_cedula_representante:  this.state.cedula_mama,
             tipo_representante:  "M",
-            parentesco: "",
+            parentesco: "MAMA",
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,
           },
           token:token
@@ -758,7 +758,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             id_estudiante:  this.state.id_estudiante,
             id_cedula_representante:  this.state.cedula_papa,
             tipo_representante: "P",
-            parentesco: "",
+            parentesco: "PAPA",
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,
           },
           token:token

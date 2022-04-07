@@ -394,25 +394,15 @@ class ComponentMultiStepFormEstudiante extends React.Component{
     }
 
     longitudCampo(input){
-        if(input.name === "id_cedula_escolar"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
-        }else if(input.name==="id_cedula" || input.name === "codigo_cedula_escolar"){
-            if(input.value.length<=8){
-                this.cambiarEstadoDos(input)
-            }
-        }
-        else if(input.name==="telefono_movil" || input.name==="telefono_local"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
-        }else if(input.name === "codigo_cedula_escolar"){
-          if(input.value.length <= 2){
-            // limite por base de datos (8)
-            this.cambiarEstadoDos(input)
-          }
-        }
+      if(input.name == "id_cedula_escolar"){
+        if(input.value.length <= 11) this.cambiarEstadoDos(input)
+      }else if(input.name==="id_cedula"){
+        if(input.value.length <= 8) this.cambiarEstadoDos(input)
+      }else if(input.name==="telefono_movil" || input.name==="telefono_local"){
+        if(input.value.length <= 11) this.cambiarEstadoDos(input)
+      }else if(input.name === "codigo_cedula_escolar"){
+        if(input.value.length <= 4) this.cambiarEstadoDos(input)
+      }
     }
 
     cambiarEstadoDos(input){
