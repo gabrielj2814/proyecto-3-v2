@@ -65,6 +65,7 @@ class ComponentRepresentanteForm extends React.Component{
         ingresos_representante: "",
         tipo_vivienda_representante: "",
         estatus_representante:"1",
+        id_parroquia: "",
         numero_estudiante_inicial_representante: "0",
         numero_estudiante_grado_1_representante: "0",
         numero_estudiante_grado_2_representante: "0",
@@ -89,6 +90,7 @@ class ComponentRepresentanteForm extends React.Component{
         msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
         msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
         msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
+        msj_id_parroquia: [{ mensaje:"", color_texto:""}],
         msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
         msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
         msj_numero_estudiante_grado_2_representante:[{ mensaje:"", color_texto:""}],
@@ -99,6 +101,7 @@ class ComponentRepresentanteForm extends React.Component{
         //// combo box
         estados:[],
         ciudades:[],
+        parroquias:[],
         fecha_minimo:"",
         hashEstudiante:{},
         estadoBusquedaRepresentante:false,
@@ -137,25 +140,36 @@ class ComponentRepresentanteForm extends React.Component{
       const operacion=this.props.match.params.operacion
 
       if(operacion==="registrar"){
+
         const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
         nombre_propiedad_lista="estados",
         propiedad_id="id_estado",
         propiedad_descripcion="nombre_estado",
         propiedad_estado="estatu_estado"
+
         const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-        console.log("lista de estados ->>>",estados)
+
         const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
         nombre_propiedad_lista_2="ciudades",
         propiedad_id_2="id_ciudad",
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-        console.log("lista de de ciudades por estado ->>>",ciudades)
+
+        const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+        nombre_propiedad_lista_3="datos",
+        propiedad_id_3="id_parroquia",
+        propiedad_descripcion_3="nombre_parroquia",
+        propiedad_estado_3="estatu_parroquia"
+        const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
         this.setState({
             estados,
             ciudades,
+            parroquias,
             id_estado:(estados.length===0)?null:estados[0].id,
             id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+            id_parroquia:(parroquias.length===0)?null:parroquias[0].id,
         })
       }
       else if(operacion==="actualizar"){
@@ -176,6 +190,13 @@ class ComponentRepresentanteForm extends React.Component{
             propiedad_descripcion_2="nombre_ciudad",
             propiedad_estado_2="estatu_ciudad"
             const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+
+            const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+            nombre_propiedad_lista_3="datos",
+            propiedad_id_3="id_parroquia",
+            propiedad_descripcion_3="nombre_parroquia",
+            propiedad_estado_3="estatu_parroquia"
+            const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
             this.setState({
               id_cedula: datos.id_cedula_representante,
@@ -202,6 +223,8 @@ class ComponentRepresentanteForm extends React.Component{
               estatus_representante: datos.estatus_representante,
               estados: estados,
               ciudades: ciudades,
+              parroquias: parroquias,
+              id_parroquia: datos.id_parroquia,
               id_estado:datos.id_estado,
             })
 
@@ -389,7 +412,7 @@ class ComponentRepresentanteForm extends React.Component{
     await axios.get(ruta_api)
     .then(respuesta=>{
         respuesta_servidor=respuesta.data
-        if(respuesta_servidor.estado_peticion==="200"){
+        if(respuesta_servidor.estado_peticion==="200" || respuesta_servidor.color_alerta == "success"){
             var lista_vacia=[]
             const propiedades={
                 id:propiedad_id,
@@ -418,12 +441,29 @@ class ComponentRepresentanteForm extends React.Component{
     propiedad_descripcion_2="nombre_ciudad",
     propiedad_estado_2="estatu_ciudad"
     const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-    console.log("lista de de ciudades por estado ->>>",ciudades)
+
     this.setState({
         id_estado:input.value,
         ciudades,
         id_ciudad:(ciudades.length===0)?null:ciudades[0].id
     })
+  }
+
+  async consultarParroquiasXCiudad(a){
+      let input=a.target
+      const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${input.value}`,
+      nombre_propiedad_lista_3="datos",
+      propiedad_id_3="id_parroquia",
+      propiedad_descripcion_3="nombre_parroquia",
+      propiedad_estado_3="estatu_parroquia"
+      const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+
+      this.setState({
+          id_ciudad:input.value,
+          parroquias,
+          id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+          id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
+      })
   }
 
   formatoOptionSelect(lista,lista_vacia,propiedades){
@@ -482,7 +522,7 @@ class ComponentRepresentanteForm extends React.Component{
         this.cambiarEstadoDos(input)
       }
     }else{
-      if(input.value.length<10){
+      if(input.value.length < 10){
         this.cambiarEstadoDos(input)
       }
     }
@@ -563,6 +603,7 @@ class ComponentRepresentanteForm extends React.Component{
       ingresos_representante: "",
       tipo_vivienda_representante: "",
       estatus_representante:"1",
+      id_parroquia:"",
       numero_estudiante_inicial_representante: "",
       numero_estudiante_grado_1_representante: "",
       numero_estudiante_grado_2_representante: "",
@@ -587,6 +628,7 @@ class ComponentRepresentanteForm extends React.Component{
       msj_constitucion_familiar_representante:mensaje_campo,
       msj_ingresos_representante:mensaje_campo,
       msj_tipo_vivienda_representante:mensaje_campo,
+      msj_id_parroquia:mensaje_campo,
       numero_estudiante_inicial_representante:mensaje_campo,
       numero_estudiante_grado_1_representante:mensaje_campo,
       numero_estudiante_grado_2_representante:mensaje_campo,
@@ -622,7 +664,7 @@ class ComponentRepresentanteForm extends React.Component{
                     parseInt(this.state.numero_estudiante_grado_6_representante),
                   ]
                   let total_estudiante_representante = numeros.reduce(sumatoria)
-                  
+
                   if(numero_hijos != total_estudiante_representante){
                     estado = false
                     mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
@@ -708,22 +750,25 @@ class ComponentRepresentanteForm extends React.Component{
     let estado = false
     const valor = this.state[name]
     let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name], msj_nivel_instruccion = this.state["msj_"+name],
-    msj_tipo_vivienda_representante = this.state["msj_"+name];
+    msj_tipo_vivienda_representante = this.state["msj_"+name],msj_id_parroquia = this.state["msj_"+name];
 
     if(valor != ""){
       estado = true
       msj_id_ciudad[0] = {mensaje: "", color_texto:"rojo"}
       msj_id_estado[0] = {mensaje: "", color_texto:"rojo"}
+      msj_id_parroquia[0] = {mensaje: "", color_texto:"rojo"}
       msj_nivel_instruccion[0] = {mensaje: "", color_texto:"rojo"}
       msj_tipo_vivienda_representante[0] = {mensaje:"", color_texto:"rojo"}
     }else{
       msj_id_ciudad[0] = {mensaje: "Debe de seleccionar una ciudad", color_texto:"rojo"}
       msj_id_estado[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
+      msj_id_parroquia[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
       msj_nivel_instruccion[0] = {mensaje: "Debe de seleccionar un grado de intrucccion", color_texto:"rojo"}
       msj_tipo_vivienda_representante[0] = {mensaje:"Debe de seleccionar una opcion", color_texto:"rojo"}
     }
     if(name === "id_ciudad") this.setState(msj_id_ciudad)
     else if(name === "id_estado") this.setState(msj_id_estado)
+    else if(name === "id_parroquia") this.setState(msj_id_parroquia)
     else if(name === "nivel_instruccion") this.setState(msj_nivel_instruccion)
     else if(name === "tipo_vivienda_representante") this.setState(msj_tipo_vivienda_representante)
     return estado
@@ -753,12 +798,12 @@ class ComponentRepresentanteForm extends React.Component{
     ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
     ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
     validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
-    ValidarCiudad = this.validarSelect('id_ciudad'), ValidarStatus = this.validarRadio('estatus_representante')
+    ValidarCiudad = this.validarSelect('id_ciudad'),ValidarParroquia = this.validarSelect('id_parroquia'),ValidarStatus = this.validarRadio('estatus_representante')
 
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
-      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarStatus
+      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
     ){
       return { estado: true, fecha: validarFechaNacimineto.fecha }
     }else{
@@ -777,14 +822,12 @@ class ComponentRepresentanteForm extends React.Component{
     ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
     ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
     validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
-    ValidarCiudad = this.validarSelect('id_ciudad'), ValidarStatus = this.validarRadio('estatus_representante')
-
-    console.log(ValidarEstado, ValidarCiudad)
+    ValidarCiudad = this.validarSelect('id_ciudad'),ValidarParroquia = this.validarSelect('id_parroquia'), ValidarStatus = this.validarRadio('estatus_representante')
 
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
-      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarStatus
+      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
     ){
       return { estado: true, fecha: validarFechaNacimineto.fecha }
     }else{
@@ -815,6 +858,7 @@ class ComponentRepresentanteForm extends React.Component{
           msj_numero_hijos_representante: [{ mensaje:"", color_texto:""}],
           msj_constitucion_familiar_representante: [{ mensaje:"", color_texto:""}],
           msj_ingresos_representante: [{ mensaje:"", color_texto:""}],
+          msj_id_parroquia: [{ mensaje:"", color_texto:""}],
           msj_tipo_vivienda_representante: [{ mensaje:"", color_texto:""}],
           msj_numero_estudiante_inicial_representante:[{ mensaje:"", color_texto:""}],
           msj_numero_estudiante_grado_1_representante:[{ mensaje:"", color_texto:""}],
@@ -855,7 +899,7 @@ class ComponentRepresentanteForm extends React.Component{
 
           if(estado_validar_formulario.estado){
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                  const mensaje =this.state.mensaje
+                  const mensaje = this.state.mensaje
                   var respuesta_servidor=""
                   axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/actualizar/${id}`,objeto)
                   .then(respuesta=>{
@@ -902,6 +946,7 @@ class ComponentRepresentanteForm extends React.Component{
             numero_estudiante_grado_4_representante: this.state.numero_estudiante_grado_4_representante,
             numero_estudiante_grado_5_representante: this.state.numero_estudiante_grado_5_representante,
             numero_estudiante_grado_6_representante: this.state.numero_estudiante_grado_6_representante,
+            id_parroquia: this.state.id_parroquia,
             estatus_representante: this.state.estatus_representante,
           },
           token:token
@@ -1100,18 +1145,6 @@ class ComponentRepresentanteForm extends React.Component{
                       <ComponentFormSelect
                         clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                         obligatorio="si"
-                        mensaje={this.state.msj_tipo_vivienda_representante[0]}
-                        nombreCampoSelect="Tipo de vivienda:"
-                        clasesSelect="custom-select"
-                        name="tipo_vivienda_representante"
-                        id="tipo_vivienda_representante"
-                        eventoPadre={this.cambiarEstado}
-                        defaultValue={this.state.tipo_vivienda_representante}
-                        option={this.state.tipo_viviendas}
-                      />
-                      <ComponentFormSelect
-                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                        obligatorio="si"
                         mensaje={this.state.msj_id_estado}
                         nombreCampoSelect="Estado:"
                         clasesSelect="custom-select"
@@ -1133,9 +1166,33 @@ class ComponentRepresentanteForm extends React.Component{
                         defaultValue={this.state.id_ciudad}
                         option={this.state.ciudades}
                       />
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_parroquia}
+                      nombreCampoSelect="Parroquia:"
+                      clasesSelect="custom-select"
+                      name="id_parroquia"
+                      id="id_parroquia"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.id_parroquia}
+                      option={this.state.parroquias}
+                      />
                     </div>
 
                     <div className="row justify-content-center mt-1">
+                      <ComponentFormSelect
+                        clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                        obligatorio="si"
+                        mensaje={this.state.msj_tipo_vivienda_representante[0]}
+                        nombreCampoSelect="Tipo de vivienda:"
+                        clasesSelect="custom-select"
+                        name="tipo_vivienda_representante"
+                        id="tipo_vivienda_representante"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.tipo_vivienda_representante}
+                        option={this.state.tipo_viviendas}
+                      />
                       <ComponentFormRadioState
                         clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
                         extra="custom-control-inline"

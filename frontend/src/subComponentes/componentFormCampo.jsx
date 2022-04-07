@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentFormCampo.css'
 
 const ComponentFormCampo = (props) => {
-  
+
     return(
         <div className={props.clasesColumna+" columna"}>
             <div className="form-groud">

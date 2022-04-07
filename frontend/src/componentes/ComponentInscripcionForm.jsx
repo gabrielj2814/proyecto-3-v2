@@ -164,22 +164,23 @@ class ComponentInscripcionForm extends React.Component{
   }
 
   async Consultar_ano_escolar(){
-    await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-activo/`)
+    return await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-activo/`)
     .then( res => {
-
       if(res.data.color_alerta == "danger"){
         let mensaje = {};
         mensaje.texto=res.data.mensaje
         mensaje.estado=res.data.color_alerta
-        this.props.history.push(`/dashboard/configuracion/inscripcion${JSON.stringify(mensaje)}`)
-        return ;
+        // this.props.history.push(`/dashboard/configuracion/inscripcion${JSON.stringify(mensaje)}`)
+        this.setState({mensaje})
+        return false;
       }
 
       this.setState({id_ano_escolar: res.data.datos[0].id_ano_escolar})
-
+      return true;
     })
     .catch( error => {
-      console.log(error)
+      console.error(error)
+      return false;
     })
   }
 
@@ -187,16 +188,22 @@ class ComponentInscripcionForm extends React.Component{
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
     if(acessoModulo){
       await this.consultarFechaServidor()
-      await this.Consultar_ano_escolar();
-      await this.GetRepresentant_Estudiant()
-      await this.obtenerDatosDeLasesion();
-      await this.Consultar_asignacion_aula();
-      const operacion=this.props.match.params.operacion
+      let responseAnoEscolar = await this.Consultar_ano_escolar();
+      if(responseAnoEscolar){
+        await this.GetRepresentant_Estudiant()
+        await this.obtenerDatosDeLasesion();
+        await this.Consultar_asignacion_aula();
+        const operacion=this.props.match.params.operacion
+      }else{
+          document.getElementById("cedula_escolar").disabled = true;
+          document.getElementById("boton-registrar").disabled = true;
+      }
 
       document.getElementById("activoestudianter1").disabled = true;
       document.getElementById("activoestudianter2").disabled = true;
       document.getElementById("activoestudianter3").disabled = true;
       document.getElementById("activoestudianter4").disabled = true;
+
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
@@ -248,7 +255,7 @@ class ComponentInscripcionForm extends React.Component{
         // this.setState({modulosSistema})
     })
     .catch(error =>  {
-        console.log(error)
+        console.error(error)
     })
     return estado
   }
@@ -314,7 +321,7 @@ class ComponentInscripcionForm extends React.Component{
       }
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
         this.props.history.push(`/dashboard/configuracion/asignacion-representante-estudiante${JSON.stringify(mensaje)}`)
@@ -344,7 +351,7 @@ class ComponentInscripcionForm extends React.Component{
           }
       })
       .catch(error=>{
-          console.log(error)
+          console.error(error)
       })
       return lista
   }
@@ -375,7 +382,7 @@ class ComponentInscripcionForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 13) this.cambiarEstadoDos(input)
+      if(input.value.length <= 16) this.cambiarEstadoDos(input)
     }
   }
 
@@ -551,7 +558,7 @@ class ComponentInscripcionForm extends React.Component{
                   .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
                       mensaje.estado=false
-                      console.log(error)
+                      console.error(error)
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
                   })
@@ -667,7 +674,7 @@ class ComponentInscripcionForm extends React.Component{
         <div className="row justify-content-center">
 
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false) &&
+                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>

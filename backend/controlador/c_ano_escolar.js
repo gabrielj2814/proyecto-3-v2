@@ -56,7 +56,7 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
   const formato = 'YYYY-MM-DD';
   const fecha = await hoy.format(formato)
   //console.log({ data: fecha });
-  res.json({ 
+  res.json({
     mensaje: 'consulta completada',
     datos: fecha,
     estado_respuesta: true,
@@ -124,7 +124,7 @@ controladorAnoEscolar.consultarAnoEscolarActivo= async (req, res) => {
     respuesta_api.color_alerta = "success"
   }
   else {
-    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.mensaje = "No existe un año escolar activo"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
   }
