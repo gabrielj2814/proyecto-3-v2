@@ -218,8 +218,6 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_estado_3="estatu_parroquia"
             const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-            console.log(parroquias)
-
             this.setState({
               id_estudiante: datos.id_estudiante,
               codigo_cedula_escolar: datos.codigo_cedula_escolar,
@@ -535,19 +533,14 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     longitudCampo(input){
-        if(input.name === "id_cedula_escolar"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
-        }else if(input.name==="id_cedula" || input.name === "codigo_cedula_escolar"){
-            if(input.value.length<=8){
-                this.cambiarEstadoDos(input)
-            }
-        }
-        else if(input.name==="telefono_movil" || input.name==="telefono_local"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
+        if(input.name == "id_cedula_escolar"){
+          if(input.value.length <= 11) this.cambiarEstadoDos(input)
+        }else if(input.name==="id_cedula"){
+          if(input.value.length <= 8) this.cambiarEstadoDos(input)
+        }else if(input.name === "codigo_cedula_escolar"){
+          if(input.value.length <= 8) this.cambiarEstadoDos(input)
+        }else if(input.name==="telefono_movil" || input.name==="telefono_local"){
+          if(input.value.length <= 11) this.cambiarEstadoDos(input)
         }
     }
 

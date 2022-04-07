@@ -87,9 +87,13 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             msj_id_parroquia_vive:[{ mensaje:"", color_texto:""}],
             msj_id_parroquia_nacimiento:[{ mensaje:"", color_texto:""}],
             //// combo box
-            estados:[],
-            ciudades:[],
-            parroquias:[],
+            estados_n:[],
+            ciudades_n:[],
+            parroquias_n:[],
+
+            estados_v:[],
+            ciudades_v:[],
+            parroquias_v:[],
             vacunas:[],
             fecha_minimo:"",
             hashEstudiante:{},
@@ -134,9 +138,12 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
         this.setState({
-          estados,
-          ciudades,
-          parroquias,
+          estados_n: estados,
+          estados_v: estados,
+          ciudades_n: ciudades,
+          ciudades_v: ciudades,
+          parroquias_n: parroquias,
+          parroquias_v: parroquias,
           id_estado:(estados.length===0)?null:estados[0].id,
           id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
           id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
@@ -321,10 +328,20 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+
+        let ciudad, ciudades_lista;
+        if(input.name == "id_estado_nacimiento"){
+          ciudad = "id_ciudad_nacimiento";
+          ciudades_lista = "ciudades_n";
+        }else{
+          ciudad = "id_ciudad";
+          ciudades_lista = "ciudades_v";
+        }
+
         this.setState({
-            id_estado:input.value,
-            ciudades,
-            id_ciudad:(ciudades.length===0)?null:ciudades[0].id
+            [input.name]:input.value,
+            [ciudades_lista]: ciudades,
+            [ciudad]:(ciudades.length===0)?null:ciudades[0].id
         })
     }
 
@@ -337,11 +354,19 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         propiedad_estado_3="estatu_parroquia"
         const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
+        let parroquia, parroquias_lista;
+        if(input.name == "id_ciudad_nacimiento"){
+          parroquia = "id_parroquia_nacimiento";
+          parroquias_lista = "parroquias_n";
+        }else{
+           parroquia = "id_parroquia_vive";
+           parroquias_lista = "parroquias_v";
+        }
+
         this.setState({
-            id_ciudad:input.value,
-            parroquias,
-            id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
-            id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
+            [input.name]:input.value,
+            [parroquias_lista]: parroquias,
+            [parroquia]:(parroquias.length===0)?null:parroquias[0].id,
         })
     }
 
@@ -369,20 +394,15 @@ class ComponentMultiStepFormEstudiante extends React.Component{
     }
 
     longitudCampo(input){
-        if(input.name === "id_cedula_escolar"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
-        }else if(input.name==="id_cedula" || input.name === "codigo_cedula_escolar"){
-            if(input.value.length<=8){
-                this.cambiarEstadoDos(input)
-            }
-        }
-        else if(input.name==="telefono_movil" || input.name==="telefono_local"){
-            if(input.value.length<=11){
-                this.cambiarEstadoDos(input)
-            }
-        }
+      if(input.name == "id_cedula_escolar"){
+        if(input.value.length <= 11) this.cambiarEstadoDos(input)
+      }else if(input.name==="id_cedula"){
+        if(input.value.length <= 8) this.cambiarEstadoDos(input)
+      }else if(input.name==="telefono_movil" || input.name==="telefono_local"){
+        if(input.value.length <= 11) this.cambiarEstadoDos(input)
+      }else if(input.name === "codigo_cedula_escolar"){
+        if(input.value.length <= 4) this.cambiarEstadoDos(input)
+      }
     }
 
     cambiarEstadoDos(input){
@@ -863,7 +883,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_estado"
                           eventoPadre={this.consultarCiudadesXEstado}
                           defaultValue={this.state.id_estado}
-                          option={this.state.estados}
+                          option={this.state.estados_v}
                           />
                           <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -875,7 +895,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_ciudad"
                           eventoPadre={this.consultarParroquiasXCiudad}
                           defaultValue={this.state.id_ciudad}
-                          option={this.state.ciudades}
+                          option={this.state.ciudades_v}
                           />
                           <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -887,7 +907,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_parroquia_vive"
                           eventoPadre={this.cambiarEstado}
                           defaultValue={this.state.id_parroquia_vive}
-                          option={this.state.parroquias}
+                          option={this.state.parroquias_v}
                           />
                         </div>
                         <div className="row justify-content-center mx-auto">
@@ -913,7 +933,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_estado_nacimiento"
                           eventoPadre={this.consultarCiudadesXEstado}
                           defaultValue={this.state.id_estado_nacimiento}
-                          option={this.state.estados}
+                          option={this.state.estados_n}
                           />
                           <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -925,7 +945,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_ciudad_nacimiento"
                           eventoPadre={this.consultarParroquiasXCiudad}
                           defaultValue={this.state.id_ciudad_nacimiento}
-                          option={this.state.ciudades}
+                          option={this.state.ciudades_n}
                           />
                           <ComponentFormSelect
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
@@ -937,7 +957,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           id="id_parroquia_nacimiento"
                           eventoPadre={this.cambiarEstado}
                           defaultValue={this.state.id_parroquia_nacimiento}
-                          option={this.state.parroquias}
+                          option={this.state.parroquias_n}
                           />
                         </div>
                         <div className="row justify-content-center mx-auto">

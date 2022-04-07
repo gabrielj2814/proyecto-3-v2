@@ -289,7 +289,6 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   longitudCampo(input){
-    console.log(input.name)
     if(input.name==="id_estudiante" || input.name === "id_cedula_representante"){
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }
@@ -297,7 +296,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 13) this.cambiarEstadoDos(input)
+      if(input.value.length <= 16) this.cambiarEstadoDos(input)
     }
   }
 
