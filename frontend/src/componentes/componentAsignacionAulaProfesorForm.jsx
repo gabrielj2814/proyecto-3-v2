@@ -36,6 +36,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.regresar=this.regresar.bind(this)
         this.cerrarModal=this.cerrarModal.bind(this)
         this.verficarDisponibilidadProfesorAnoEscolarSiguiente=this.verficarDisponibilidadProfesorAnoEscolarSiguiente.bind(this)
+        this.consultarAnoEscolarActivo = this.consultarAnoEscolarActivo.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -81,8 +82,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             },
             //
             alerta:{
-                color:null,
-                mensaje:null,
+                color:"",
+                mensaje:"",
                 estado:false
             }
         }
@@ -127,7 +128,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             let cantidadDeEstudiante=35
             let listaDenNumeroEstudiante=[]
 
-            for(let contador=0;contador<cantidadDeEstudiante;contador++){
+            for(let contador=0;contador < cantidadDeEstudiante;contador++){
                 listaDenNumeroEstudiante.push(contador+1)
             }
             this.setState({listaDenNumeroEstudiante})
@@ -277,12 +278,29 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-activo`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
+
             if(json.datos.length===1){
-                this.setState({hashAnoEscolaresActivo:json.datos[0]})
-                this.setState({id_ano_escolar:this.state.hashAnoEscolaresActivo.id_ano_escolar})
-                this.setState({ano_desde:this.state.hashAnoEscolaresActivo.ano_desde})
-                this.setState({ano_hasta:this.state.hashAnoEscolaresActivo.ano_hasta})
+
+                this.setState({
+                  id_ano_escolar:json.datos[0].id_ano_escolar,
+                  ano_desde:json.datos[0].ano_desde,
+                  ano_hasta:json.datos[0].ano_hasta,
+                  hashAnoEscolaresActivo: json.datos[0]
+                })
+                return true;
+            }else{
+              let mensaje = {};
+
+              mensaje.color = json.color_alerta
+              mensaje.estado = true
+              mensaje.mensaje = json.mensaje
+
+              document.getElementById("id_cedula").disabled = true;
+              document.getElementById("boton-registrar").disabled = true;
+              this.setState({alerta:mensaje})
+              // alert(alerta.mensaje);
+
+              return false;
             }
 
         })
@@ -548,6 +566,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     async verificarDisponibilidadAula(a){
         this.cambiarEstado(a)
         let input =a.target
+        if(this.state.id_ano_escolar == "") return false;
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
@@ -695,11 +714,13 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 if(estadoOperacion){
                     let datosFormulario=new FormData(document.getElementById("formularioAsigAulaProf"))
                     let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
+                    datosFormatiados.id_ano_escolar = this.state.id_ano_escolar
                     let datosAsignacion={
                         asignacionAulaProfesor:datosFormatiados,
                         token
                     }
-                    // console.log(datosAula)
+
+                    console.log(datosFormulario)
                     await axiosCustom.put(`transaccion/asignacion-aula-profesor/actualizar/${this.props.match.params.id}`,datosAsignacion)
                     .then(respuesta => {
                         let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
@@ -781,12 +802,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             </div>
                         </div>
                     </div>
-
-
-
-
-
-
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_asig_aula_prof">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-asig-aula-prof">
@@ -794,21 +809,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         </div>
                     </div>
                     <form id="formularioAsigAulaProf" >
-                        <div className="row justify-content-center">
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            nombreCampo="Código Asignación:"
-                            activo="no"
-                            type="text"
-                            value={this.state.id_asignacion_aula_profesor}
-                            name="id_asignacion_aula_profesor"
-                            id="id_asignacion_aula_profesor"
-                            placeholder="Código Asignacion"
-                            eventoPadre={this.cambiarEstado}
-                            />
-                            <div className='col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3'></div>
-                            <div className='col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3'>
+                        <div className="row justify-content-center text-center">
+                          <input name="id_asignacion_aula_profesor" value={this.state.id_asignacion_aula_profesor} type="hidden"/>
+
+                            <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6'>
                                 <label>Año Escolar:</label>
                                 <div>{this.state.ano_desde} - {this.state.ano_hasta}</div>
                             </div>
