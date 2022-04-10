@@ -118,7 +118,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         msj_estatus_representante:[{mensaje:"",color_texto:""}],
         msj_id_estado_representante:[{ mensaje:"", color_texto:""}],
         msj_id_ciudad_representante:[{ mensaje:"", color_texto:""}],
-        msj_id_parroquia_representante: [{ mensaje:"", color_texto:""}],
+        msj_id_parroquia_representante:[{ mensaje:"", color_texto:""}],
         msj_nivel_instruccion_representante:[{ mensaje:"", color_texto:""}],
         msj_ocupacion_representante:[{ mensaje:"", color_texto:""}],
         msj_direccion_representante: [{ mensaje:"", color_texto:""}],
@@ -388,9 +388,9 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         constitucion_familiar_representante: "",
         estatus_representante:"1",
         direccion_representante: "",
-        id_estado_representante:"",
-        id_ciudad_representante:"",
-        id_parroquia_representante: "",
+        id_estado_representante:(this.state.estados.length===0)?null:this.state.estados[0].id,
+        id_ciudad_representante:(this.state.ciudades.length===0)?null:this.state.ciudades[0].id,
+        id_parroquia_representante:(this.state.parroquias.length===0)?null:this.state.parroquias[0].id,
         numero_hijos_representante: "",
         tipo_representante: "O",
         parentesco_representante: "",
@@ -528,6 +528,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     if(valor !== "") mensaje_campo[0] = {mensaje: "", color_texto:"rojo"}
     else mensaje_campo[0] = {mensaje: "Debe de seleccionar una opcion", color_texto:"rojo"}
     this.setState({["msj_"+name]:mensaje_campo})
+
     if(mensaje_campo[0].mensaje === "") return true; else return false;
   }
 
@@ -597,6 +598,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       alert("Debe de seleccionar al representante")
       return {estado: false};
     }
+    console.log(this.state.id_cedula_representante)
+    // return {estado: false};
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
@@ -798,7 +801,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           asigRepresenteEstudiante:{
             id_asignacion_representante_estudiante:this.state.id_asignacion_representante_estudiante,
             id_estudiante:this.state.id_estudiante,
-            id_cedula_representante:this.state.cedulas_representante,
+            id_cedula_representante:this.state.id_cedula_representante,
             tipo_representante:this.state.tipo_representante,
             parentesco:this.state.parentesco_representante,
             estatus_asignacion_representante_estudiante: this.state.estatus_asignacion_representante_estudiante,

@@ -1,7 +1,7 @@
 const ControladorPromocion={}
 const ModeloPromocion= require("../modelo/m_promocion")
 
-ControladorPromocion.registrar= async () => {
+ControladorPromocion.registrar= async (req,res) => {
     const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
@@ -31,7 +31,7 @@ ControladorPromocion.registrar= async () => {
     res.end()
 }
 
-ControladorPromocion.consultar= async () => {
+ControladorPromocion.consultar= async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const {id} = req.params
     let modeloPromocion = new ModeloPromocion()
@@ -53,7 +53,7 @@ ControladorPromocion.consultar= async () => {
     res.end()
 }
 
-ControladorPromocion.consultarPorInscripcion= async () => {
+ControladorPromocion.consultarPorInscripcion= async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const {id} = req.params
     let modeloPromocion = new ModeloPromocion()
@@ -75,7 +75,7 @@ ControladorPromocion.consultarPorInscripcion= async () => {
     res.end()
 }
 
-ControladorPromocion.actualizar= async () => {
+ControladorPromocion.actualizar= async (req,res) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
     let modeloPromocion = new ModeloPromocion()
@@ -112,7 +112,7 @@ ControladorPromocion.consultarEstudiantesAsignados= async (req,res) => {
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
     }
-    
+
     res.writeHead(200,{"Content-Type":"application/json"})
     res.write(JSON.stringify(respuesta_api))
     res.end()

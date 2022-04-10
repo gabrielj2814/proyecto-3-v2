@@ -238,14 +238,6 @@ class ComponentEstudianteForm extends React.Component{
               parroquias: parroquias,
               id_parroquia_vive: datos.id_parroquia_vive,
               id_parroquia_nacimiento: datos.id_parroquia_nacimiento,
-
-              // id_estado:(estados.length===0)?null:estados[0].id,
-              // id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
-              // id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-              // id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
-              // id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
-              // id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
-
               operacion: operacion
             })
 

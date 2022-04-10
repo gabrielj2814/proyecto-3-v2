@@ -18,7 +18,7 @@ class ModeloPromocion extends DriverPostgre{
     setIdPromocion(id){
         this.id_promocion=id
     }
-    
+
     setIdInscripcion(id){
         this.id_inscripcion=id
     }
@@ -43,7 +43,7 @@ class ModeloPromocion extends DriverPostgre{
             recomendacion_pariente,
             nota_promocion,
             descripcion_nota_promocion,
-            dias_promocion,
+            dias_promocion
         )
         VALUES(
             ${this.id_inscripcion},
@@ -56,7 +56,7 @@ class ModeloPromocion extends DriverPostgre{
         ) RETURNING id_promocion`
         return await this.query(SQL)
     }
-    
+
     async actualizar(){
         const SQL=`UPDATE tpromocion SET
         nota_promocion='${this.nota_promocion}',
@@ -69,12 +69,12 @@ class ModeloPromocion extends DriverPostgre{
         `
         return await this.query(SQL)
     }
-    
+
     async consultar(){
         const SQL=`SELECT * FROM tpromocion WHERE id_promocion=${this.id_promocion}`
         return await this.query(SQL)
     }
-    
+
     async consultarPorIdInscripcion(){
         const SQL=`SELECT * FROM tpromocion WHERE id_inscripcion=${this.id_inscripcion}`
         return await this.query(SQL)
