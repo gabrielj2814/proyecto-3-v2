@@ -48,7 +48,7 @@ class ComponentPromocionForm extends React.Component{
     this.busquedaEstudiante = this.busquedaEstudiante.bind(this)
     this.ConsultarEstudiantesProfesor = this.ConsultarEstudiantesProfesor.bind(this);
     this.consultarProfesores = this.consultarProfesores.bind(this);
-
+    this.consultarPromocion = this.consultarPromocion.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -84,6 +84,7 @@ class ComponentPromocionForm extends React.Component{
         hashListaEstudiantes:{},
         selectEstudiantes:[],
         estadoBusquedaProfesor: false,
+        operacion: "Registrar",
         ///
         mensaje:{
             texto:"",
@@ -96,13 +97,19 @@ class ComponentPromocionForm extends React.Component{
     }
   }
 
-  busquedaEstudiante(id){
+  async busquedaEstudiante(id){
     let hashListaEstudiantes = JSON.parse(JSON.stringify(this.state.hashListaEstudiantes));
     if(hashListaEstudiantes[id]){
-      this.setState({
-        nombre_estudiante: hashListaEstudiantes[id].nombres_estudiante,
-        apellido_estudiante: hashListaEstudiantes[id].apellidos_estudiante
-      });
+      let busqueda = await this.consultarPromocion(id);
+
+      if(!busqueda){
+        this.setState({ operacion: "Registrar" });
+      }else{
+        this.setState({
+          nombre_estudiante: hashListaEstudiantes[id].nombres_estudiante,
+          apellido_estudiante: hashListaEstudiantes[id].apellidos_estudiante,
+        });
+      }
     }
   }
 
@@ -168,6 +175,31 @@ class ComponentPromocionForm extends React.Component{
               hash[profesor.id_cedula]=profesor
           }
           this.setState({hashListaProfesores:hash})
+      })
+      .catch(error => {
+          console.error(error)
+      })
+  }
+
+  async consultarPromocion(id){
+      return await axiosCustom.get(`transaccion/promocion/consultar-promocion-por-inscripcion/${id}`)
+      .then(respuesta =>{
+          if(respuesta.data.estado_respuesta){
+            let datos = respuesta.data.datos[0]
+
+            this.setState({
+              id_promocion: datos.id_promocion,
+              id_inscripcion: datos.id_inscripcion,
+              descripcion_logro: datos.descripcion_logro,
+              recomendacion_pariente: datos.recomendacion_pariente,
+              nota_promocion: datos.nota_promocion,
+              descripcion_nota_promocion: datos.descripcion_nota_promocion,
+              dias_promocion: datos.dias_promocion,
+              operacion: "Actualizar",
+            });
+
+            return true;
+          }else return false;
       })
       .catch(error => {
           console.error(error)
@@ -472,22 +504,11 @@ class ComponentPromocionForm extends React.Component{
     }else return {estado: false}
   }
 
-  validarFormularioActuazliar(){
-    const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
-    validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
-    validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-    validar_parentesco = this.validarCampo('parentesco');
-
-    if( validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
-      return {estado: true}
-    }else return {estado: false}
-  }
-
   operacion(){
     $(".columna-modulo").animate({
       scrollTop: 0
     }, 1000)
-    const operacion=this.props.match.params.operacion
+    const operacion=this.state.operacion
 
     const mensaje_formulario={
       mensaje:"",
@@ -499,55 +520,57 @@ class ComponentPromocionForm extends React.Component{
       msj_dias_promocion:[{mensaje:"",color_texto:""}],
       msj_id_cedula_profesor:[{mensaje:"",color_texto:""}],
     }
-
-    const estado_validar_formulario=this.validarFormularioRegistrar()
-    if(estado_validar_formulario.estado){
+    if(operacion === "Registrar"){
+      const estado_validar_formulario=this.validarFormularioRegistrar()
+      if(estado_validar_formulario.estado){
         this.enviarDatos(estado_validar_formulario,(objeto)=>{
-            const mensaje =this.state.mensaje
-            var respuesta_servidor=""
-            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/promocion/crear-promocion`,objeto)
+          const mensaje =this.state.mensaje
+          var respuesta_servidor=""
+          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/promocion/crear-promocion`,objeto)
+          .then(respuesta=>{
+            respuesta_servidor=respuesta.data
+            mensaje.texto=respuesta_servidor.mensaje
+            mensaje.estado=respuesta_servidor.estado
+            mensaje.color_alerta=respuesta_servidor.color_alerta
+            mensaje_formulario.mensaje=mensaje
+            this.setState(mensaje_formulario)
+          })
+          .catch(error=>{
+            mensaje.texto="No se puedo conectar con el servidor"
+            mensaje.color_alerta=respuesta_servidor.color_alerta
+            mensaje.estado=false
+            console.error(error)
+            mensaje_formulario.mensaje=mensaje
+            this.setState(mensaje_formulario)
+          })
+        })
+      }
+    }else if(operacion === "Actualizar"){
+      const estado_validar_formulario=this.validarFormularioRegistrar()
+
+      if(estado_validar_formulario.estado){
+        this.enviarDatos(estado_validar_formulario,(objeto)=>{
+          const mensaje =this.state.mensaje
+          var respuesta_servidor=""
+          axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/promocion/actualizar/${this.state.id_inscripcion}`,objeto)
             .then(respuesta=>{
-                respuesta_servidor=respuesta.data
-                mensaje.texto=respuesta_servidor.mensaje
-                mensaje.estado=respuesta_servidor.estado
-                mensaje.color_alerta=respuesta_servidor.color_alerta
-                mensaje_formulario.mensaje=mensaje
-                this.setState(mensaje_formulario)
+              respuesta_servidor=respuesta.data
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_respuesta
+              mensaje.color_alerta = respuesta_servidor.color_alerta
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
             })
             .catch(error=>{
-                mensaje.texto="No se puedo conectar con el servidor"
-                mensaje.estado=false
-                console.error(error)
-                mensaje_formulario.mensaje=mensaje
-                this.setState(mensaje_formulario)
+              mensaje.texto = "No se puedo conectar con el servidor"
+              mensaje.estado = false
+              mensaje.color_alerta = "danger";
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
             })
         })
       }
-      //
-      // else if(operacion==="actualizar"){
-      //     const estado_validar_formulario=this.validarFormularioActuazliar()
-      //     const {id}=this.props.match.params
-      //     if(estado_validar_formulario.estado){
-      //         this.enviarDatos(estado_validar_formulario,(objeto)=>{
-      //             const mensaje =this.state.mensaje
-      //             var respuesta_servidor=""
-      //             axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/actualizar/${id}`,objeto)
-      //             .then(respuesta=>{
-      //                 respuesta_servidor=respuesta.data
-      //                 mensaje.texto=respuesta_servidor.mensaje
-      //                 mensaje.estado=respuesta_servidor.estado_respuesta
-      //                 mensaje_formulario.mensaje=mensaje
-      //                 this.setState(mensaje_formulario)
-      //             })
-      //             .catch(error=>{
-      //                 mensaje.texto="No se puedo conectar con el servidor"
-      //                 mensaje.estado=false
-      //                 mensaje_formulario.mensaje=mensaje
-      //                 this.setState(mensaje_formulario)
-      //             })
-      //         })
-      //     }
-      // }
+    }
   }
 
   enviarDatos(estado_validar_formulario,petion){
@@ -696,14 +719,16 @@ class ComponentPromocionForm extends React.Component{
 
                     <div className="row justify-content-center">
                         <div className="col-auto">
+                        {this.state.operacion === "Registrar" &&
                           <InputButton
                             clasesBoton="btn btn-primary"
                             id="boton-registrar"
                             value="Registrar"
                             eventoPadre={this.operacion}
-                          />
+                            />
+                        }
 
-                          {this.props.match.params.operacion==="actualizar" &&
+                        {this.state.operacion === "Actualizar" &&
                             <InputButton
                               clasesBoton="btn btn-warning"
                               id="boton-actualizar"

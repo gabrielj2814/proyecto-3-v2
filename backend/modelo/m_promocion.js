@@ -65,7 +65,7 @@ class ModeloPromocion extends DriverPostgre{
         recomendacion_pariente='${this.recomendacion_pariente}',
         dias_promocion='${this.dias_promocion}'
         WHERE
-        id_inscripcion=${id_inscripcion}
+        id_inscripcion=${this.id_inscripcion}
         `
         return await this.query(SQL)
     }
