@@ -8,7 +8,7 @@ router.use(bodyparser.json())
 router.post("/crear-promocion",controladorPromocion.registrar)
 router.get("/consultar-promocion/:id",controladorPromocion.consultar)
 router.get("/consultar-promocion-por-inscripcion/:id",controladorPromocion.consultarPorInscripcion)
-router.put("/actualizar",controladorPromocion.actualizar)
+router.put("/actualizar/:id",controladorPromocion.actualizar)
 router.get("/consultar-estudiantes/:cedula_profesor",controladorPromocion.consultarEstudiantesAsignados)
 
-module.exports = router 
+module.exports = router
