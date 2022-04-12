@@ -313,9 +313,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
-            let hashAnoEscolaresSiguiente=json.datos
+            console.log(json)
+            
             if(json.estado_respuesta===true){
+                let hashAnoEscolaresSiguiente=json.datos[0]
                 this.setState({hashAnoEscolaresSiguiente})
             }
             else{
@@ -456,6 +457,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-profesor/${this.state.id_ano_escolar}/${idProfesor}`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("disponibilidad profesor",json)
             if(json.datos.disponibilidadProfesor===true){
                 // await this.consultarAnoEscolarActivo()
                 this.setState({disponibilidadProfesor:true})
@@ -570,7 +572,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
+            console.log("hhhh",json)
             if(json.datos.disponibilidadAula===true){
                 this.setState({disponibilidadAula:true})
             }
