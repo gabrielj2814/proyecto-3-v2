@@ -50,7 +50,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         nombres_mama: "",
         apellidos_mama: "",
         fecha_nacimiento_mama: "",
-        nivel_instruccion_mama: "",
+        nivel_instruccion_mama: "ingeniero",
         ocupacion_mama: "",
         telefono_movil_mama: "",
         telefono_local_mama: "",
@@ -83,7 +83,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         nombres_papa: "",
         apellidos_papa: "",
         fecha_nacimiento_papa: "",
-        nivel_instruccion_papa: "",
+        nivel_instruccion_papa: "ingeniero",
         ocupacion_papa: "",
         telefono_movil_papa: "",
         telefono_local_papa: "",
@@ -676,8 +676,14 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       if(estado_validar_formulario.estado){
           this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
-
               var respuesta_servidor=""
+              // console.group("MAMA")
+              // console.log(objeto.mama)
+              // console.groupEnd();
+              // console.group("PAPA");
+              // console.log(objeto.papa);
+              // console.groupEnd();
+              // return false;
               if(!this.state.mama_existe){
                 axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
                 .then(respuesta=>{
@@ -800,8 +806,8 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     this.validarNumero(a)
       // console.log(input.value)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
+    let index;
     if(hashRepresentante[input.value]){
-      let index;
       if(input.name == "id_cedula_mama") index = "papa_existe"; else index = "mama_existe";
       this.setState({
         estadoBusquedaRepresentante:true,
@@ -810,9 +816,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       alert("este representante ya esta resgistrado")
     }
     else{
-        // console.log("NO OK")
+      if(input.name == "id_cedula_mama") index = "papa_existe"; else index = "mama_existe";
       this.setState({
-        estadoBusquedaRepresentante:false
+        estadoBusquedaRepresentante:false,
+        [index]: false,
       })
     }
   }
