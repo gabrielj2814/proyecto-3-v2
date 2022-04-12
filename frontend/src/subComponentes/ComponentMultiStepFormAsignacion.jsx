@@ -375,11 +375,12 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       this.setState({
         status_form_representante: true,
         campos_activos: "si",
+        nuevo_representante: true,
         id_cedula_representante: "",
         nombres_representante: "",
         apellidos_representante: "",
         fecha_nacimiento_representante: "",
-        nivel_instruccion_representante: "",
+        nivel_instruccion_representante: "ingeniero",
         ocupacion_representante: "",
         telefono_movil_representante: "",
         telefono_local_representante: "",
@@ -393,6 +394,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         id_parroquia_representante:(this.state.parroquias.length===0)?null:this.state.parroquias[0].id,
         numero_hijos_representante: "",
         tipo_representante: "O",
+        cedula_representante: "O",
         parentesco_representante: "",
         numero_estudiante_inicial_representante: "0",
         numero_estudiante_grado_1_representante: "0",
@@ -407,13 +409,23 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       let hashRepresentante = JSON.parse(JSON.stringify(this.state.hashRepresentante));
 
       if(hashRepresentante[input.value]){
-        let tipo_representante;
-        if(this.state.cedula_mama == input.value) tipo_representante = "M";
-        else tipo_representante = "P"
+        let tipo_representante, cedula_representante, parentesco;
+        if(this.state.cedula_mama == input.value){
+          tipo_representante = "M";
+          parentesco = "MAMA"
+        }else{
+           tipo_representante = "P"
+           parentesco = "PAPA"
+        }
+
+        if(this.state.cedula_papa == input.value || this.state.cedula_mama == input.value){
+          cedula_representante = input.value;
+        }else cedula_representante = "O";
 
         this.setState({
           status_form_representante: true,
           campos_activos: "no",
+          nuevo_representante: false,
           id_cedula_representante: hashRepresentante[input.value].id_cedula_representante,
           nombres_representante: hashRepresentante[input.value].nombres_representante,
           apellidos_representante: hashRepresentante[input.value].apellidos_representante,
@@ -428,7 +440,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           estatus_representante: hashRepresentante[input.value].estatus_representante,
           direccion_representante: hashRepresentante[input.value].direccion_representante,
           tipo_representante: tipo_representante,
-          parentesco_representante: (tipo_representante == "M") ? "Mama" : "Papa",
+          cedula_representante: cedula_representante,
+          parentesco_representante: (tipo_representante == "O") ? "" : parentesco,
           id_estado_representante: hashRepresentante[input.value].id_estado,
           id_ciudad_representante: hashRepresentante[input.value].id_ciudad,
           id_parroquia_representante: hashRepresentante[input.value].id_parroquia,
@@ -495,17 +508,23 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                   ]
                   let total_estudiante_representante = numeros.reduce(sumatoria)
 
-                  if(numero_hijos != total_estudiante_representante){
+                  if(total_estudiante_representante != NaN){
+                    if(numero_hijos != total_estudiante_representante){
+                      estado = false
+                      mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
+                      this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
+                      return false;
+                    }
+                  }else{
                     estado = false
-                    mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
+                    mensaje_campo[0]={mensaje:"Los campos no pueden estar vacios",color_texto:"rojo"}
                     this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
                     return false;
                   }
                 }
-
-                  estado=true
-                  mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
-                  this.setState({["msj_"+nombre_campo]:mensaje_campo})
+                estado=true
+                mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
+                this.setState({["msj_"+nombre_campo]:mensaje_campo})
               }
           }
           else{
@@ -598,8 +617,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       alert("Debe de seleccionar al representante")
       return {estado: false};
     }
-    console.log(this.state.id_cedula_representante)
-    // return {estado: false};
+
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
@@ -611,7 +629,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     }else return {estado: false}
   }
 
-  operacion(){
+  async operacion(){
       $(".columna-modulo").animate({scrollTop: 0}, 1000)
       const mensaje_formulario={
           mensaje:"",
@@ -650,7 +668,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       }
       const estado_validar_formulario=this.validarFormularioRegistrar()
       if(estado_validar_formulario.estado){
-        this.enviarDatos(estado_validar_formulario,(objeto)=>{
+        await this.enviarDatos(estado_validar_formulario,(objeto)=>{
           const mensaje =this.state.mensaje
           var respuesta_servidor=""
           // MAMA
@@ -686,7 +704,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             this.setState(mensaje_formulario)
           });
           // Registro Representante
-          if(!this.state.nuevo_representante){
+          if(this.state.nuevo_representante){
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.representanteRegistro)
             .then(respuesta=>{
                 respuesta_servidor=respuesta.data
@@ -719,21 +737,23 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             })
           }
           // Representante
-          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.representante)
-          .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado_respuesta
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          })
-          .catch(error=>{
-            mensaje.texto="No se puedo conectar con el servidor"
-            mensaje.estado=false
-            console.error(error)
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          })
+          setTimeout( () => {
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.representante)
+            .then(respuesta=>{
+              respuesta_servidor=respuesta.data
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_respuesta
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            })
+            .catch(error=>{
+              mensaje.texto="No se puedo conectar con el servidor"
+              mensaje.estado=false
+              console.error(error)
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            })
+          }, 100);
         });
 
         alert("Registro completado");
@@ -781,10 +801,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             constitucion_familiar_representante:this.state.constitucion_familiar_representante,
             estatus_representante:this.state.estatus_representante,
             direccion_representante:this.state.direccion_representante,
-            tipo_representante:this.state.tipo_representante,
-            parentesco_representante:(this.state.tipo_representante == "M") ? "Mama" : "Papa",
-            id_estado_representante:this.state.id_estado,
-            id_ciudad_representante:this.state.id_ciudad,
             id_parroquia:this.state.id_parroquia_representante,
             numero_hijos_representante:this.state.numero_hijos_representante,
             numero_estudiante_inicial_representante:this.state.numero_estudiante_inicial_representante,
