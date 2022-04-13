@@ -42,7 +42,7 @@ class ComponentMultiStepForm extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
-            formulario_step: 0,
+            formulario_step:0,
             id_estudiante:"",
             cedula_mama:"",
             cedula_papa:"",

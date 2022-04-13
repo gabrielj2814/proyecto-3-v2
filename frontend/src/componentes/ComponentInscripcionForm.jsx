@@ -431,24 +431,30 @@ class ComponentInscripcionForm extends React.Component{
     var mensaje_campo=[{mensaje:"",color_texto:""}]
     this.setState({
       //formulario
-      id:"",
+      id_inscripcion: "",
       id_estudiante: "",
       cedula_escolar: "",
-      id_cedula_representante: "",
-      tipo_representante: "",
-      parentesco: "",
-      numero_representante: "",
-      estatus_asignacion_representante_estudiante:"1",
+      id_asignacion_representante_estudiante: "",
+      id_asignacion_aula_profesor: "",
+      fecha_inscripcion: "",
+      estatus_inscripcion: "I",
+      //
+      id_profesor: "",
+      id_ano_escolar: "",
+      nombre_estudiante: "",
+      apellido_estudiante: "",
+      cedula_profesor: "",
+      nombre_ano_escolar: "",
+      nombre_aula: "",
+      numero_grado: "",
+      cupos_disponibles: "",
       //MSJ
-      msj_id:[{mensaje:"",color_texto:""}],
       msj_cedula_escolar:[{mensaje:"",color_texto:""}],
-      msj_id_cedula_representante:[{mensaje:"",color_texto:""}],
-      msj_tipo_representante:[{mensaje:"",color_texto:""}],
-      msj_parentesco:[{mensaje:"",color_texto:""}],
-      msj_numero_representante:[{mensaje:"",color_texto:""}],
-      msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
+      msj_id_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
+      msj_fecha_inscripcion:[{mensaje:"",color_texto:""}],
+      msj_estatus_inscripcion:[{mensaje:"",color_texto:""}],
     })
-    this.props.history.push("/dashboard/transaccion/asignacion-representante-estudiante/registrar")
+    this.props.history.push("/dashboard/configuracion/inscripcion/registrar")
   }
 
   validarCampoNumero(nombre_campo){
