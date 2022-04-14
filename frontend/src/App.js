@@ -140,6 +140,8 @@ import ComponentParroquia from './componentes/componentParroquia'
 import ComponentParroquiaForm from './componentes/componentParroquiaForm'
 // Promocion
 import ComponentPromocionForm from './componentes/componentPromocionForm'
+// Asistencia
+import ComponentAsistenciaEstudiantesForm from './componentes/componentAsistenciaEstudiantesForm'
 
 
 function App() {
@@ -271,6 +273,7 @@ function App() {
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
 
         <Route exact path="/dashboard/transaccion/promocion" component={ComponentPromocionForm}/>
+        <Route exact path="/dashboard/transaccion/asistencia-estudiante" component={ComponentAsistenciaEstudiantesForm}/>
 
         <Route exact path="/dashboard/seguridad/bitacora" component={ComponentBitacora}/>
 
