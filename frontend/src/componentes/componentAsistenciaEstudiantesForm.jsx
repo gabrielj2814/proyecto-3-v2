@@ -52,15 +52,14 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
         estados_asistencia:[
           {id: " ",descripcion: "Seleccione una opción"},
           {id: "0",descripcion: "NO vino"},
-          {id: "1",descripcion: "Vino"},
+          {id: "1",descripcion: "SI Vino"},
           {id: "2",descripcion: "Se enfermó"},
-          {id: "3",descripcion: "Otros"},
+          {id: "3",descripcion: "No Vino por otros motivos"},
         ],
         // -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo, 3 -> otros sumar observacion
         //// combo box
         hashListaEstudiantes:{},
         estadoBusquedaProfesor: false,
-        operacion: "Registrar",
         ///
         mensaje:{
             texto:"",
@@ -129,7 +128,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asistencia_estudiante")
+    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asistencia-estudiante")
     if(acessoModulo){
       await this.consultarFechaServidor()
       await this.obtenerDatosDeLasesion();
@@ -311,11 +310,9 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     const estado_validar_formulario=this.validarFormularioRegistrar()
     if(estado_validar_formulario.estado){
       this.enviarDatos(estado_validar_formulario,(objeto)=>{
-        console.log(objeto)
-        return false;
         const mensaje =this.state.mensaje
         var respuesta_servidor=""
-        axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia-estudiante/actualizar-estado`,objeto)
+        axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/asistencia-estudiante/actualizar-estado`,objeto)
         .then(respuesta=>{
           respuesta_servidor=respuesta.data
           mensaje.texto=respuesta_servidor.mensaje
@@ -352,7 +349,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
         <div className="row justify-content-center">
 
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+                {this.state.mensaje.texto!=="" &&
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
@@ -423,23 +420,12 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
 
                     <div className="row justify-content-center">
                       <div className="col-auto">
-                        {this.state.operacion === "Registrar" &&
-                          <InputButton
-                            clasesBoton="btn btn-primary"
-                            id="boton-registrar"
-                            value="Registrar"
-                            eventoPadre={this.operacion}
-                            />
-                        }
-
-                        {this.state.operacion === "Actualizar" &&
-                            <InputButton
-                              clasesBoton="btn btn-warning"
-                              id="boton-actualizar"
-                              value="Actualizar"
-                              eventoPadre={this.operacion}
-                            />
-                          }
+                        <InputButton
+                          clasesBoton="btn btn-primary"
+                          id="boton-registrar"
+                          value="Registrar"
+                          eventoPadre={this.operacion}
+                          />
                         </div>
                         <div className="col-auto">
                             <InputButton
