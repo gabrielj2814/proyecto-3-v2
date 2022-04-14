@@ -6,7 +6,7 @@ class DriverPostgreSQL {
             user:"gabriel",
             host:"localhost",
             password:"stark",
-            database:"proyecto_3"
+            database:"proyecto_4_test"
         }
         this.database=new Pool(config);
     }
