@@ -44,20 +44,33 @@ ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
 
 
 ControladorAsistenciaEstudiante.actualizarEstadoAsistencia= async (req,res) => {
-    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {asistencia} = req.body
-    let modeloAsistenciaEstudiante=new ModeloAsistenciaEstudiante()
-    modeloAsistenciaEstudiante.setIdAsistencia(asistencia.id_asistencia_estudiante)
-    let resultAsistencia = await modeloAsistenciaEstudiante.actualizarEstadoAsistencia(asistencia.estatus_asistencia_estudiante)
-    if(resultAsistencia.rowCount>0){
+    const respuesta_api={mensaje:"",totalEstudiantes:0,listaIdEstudiantesError:[],totalEstudiatnesOk:0,totalEstudiatnesError:0,estado_respuesta:false,color_alerta:""}
+    let {asistencias} = req.body
+    let listaIdEstudiantesError=[]
+    for(let asistencia of asistencias){
+        let modeloAsistenciaEstudiante=new ModeloAsistenciaEstudiante()
+        modeloAsistenciaEstudiante.setIdAsistencia(asistencia.id_asistencia_estudiante)
+        let resultAsistencia = await modeloAsistenciaEstudiante.actualizarAsistencia(asistencia.estatus_asistencia_estudiante,asistencia.observacion_asistencia_estudiante)
+        if(resultAsistencia.rowCount===0){
+            listaIdEstudiantesError.push(asistencia.id_asistencia_estudiante)
+        }
+        if(resultAsistencia.rowCount>0){
+            respuesta_api.totalEstudiatnesOk+=1
+        }
+
+    }
+    respuesta_api.totalEstudiantes=asistencias.length
+    if(listaIdEstudiantesError.length>0){
+        respuesta_api.mensaje="error algunos estudiantes no se le lograr actualzar la asistencia"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+        respuesta_api.totalEstudiatnesError=listaIdEstudiantesError.length
+        respuesta_api.listaIdEstudiantesError=listaIdEstudiantesError
+    }
+    else{
         respuesta_api.mensaje="actualizacion de estado completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
-    }
-    else{
-        respuesta_api.mensaje="error al actualizar el estado"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="danger"
     }
     res.writeHead(200,{"Content-Type":"application/json"})
     res.write(JSON.stringify(respuesta_api))

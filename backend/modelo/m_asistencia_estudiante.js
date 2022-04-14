@@ -28,9 +28,10 @@ class ModeloAsistenciaEstudiante extends DriverPostgre {
         this.observacion_asistencia_estudiante=datos.observacion_asistencia_estudiante
     }
 
-    async actualizarEstadoAsistencia(estado){
+    async actualizarAsistencia(estado,observacion){
         const SQL=`UPDATE tasistencia_estudiante SET 
-        estatus_asistencia_estudiante='${estado}'
+        estatus_asistencia_estudiante='${estado}',
+        observacion_asistencia_estudiante='${observacion}'
         WHERE 
         id_asistencia_estudiante=${this.id_asistencia_estudiante}
         `
