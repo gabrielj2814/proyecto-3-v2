@@ -167,16 +167,19 @@ class MenuDashboard extends React.Component{
                                 <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/reposo-trabajador" texto="Gestionar Reposo"/>
                             }
                             {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-aula-profesor"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-aula-profesor" texto="Asignacion Aula Profesor"/>
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-aula-profesor" texto="Asignación Aula Profesor"/>
                             }
                             {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-representante-estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-representante-estudiante" texto="Asignacion Estudiante Representante"/>
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-representante-estudiante" texto="Asignación Estudiante Representante"/>
                             }
                             {this.state.modulosSistema["/dashboard/transaccion"]["/planificaion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/planificacion" texto="Planificaion"/>
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/planificacion" texto="Planificación"/>
                             }
                             {this.state.modulosSistema["/dashboard/transaccion"]["/promocion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion" texto="Promocion"/>
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion" texto="Promoción"/>
+                            }
+                            {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia-estudiante"]&&
+                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia-estudiante" texto="Asistencia Estudiantes"/>
                             }
 
                         </div>
