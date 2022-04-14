@@ -335,7 +335,7 @@ class ComponentPromocionForm extends React.Component{
           else if(respuesta_servidor.estado_peticion==="404"){
               mensaje.texto=respuesta_servidor.mensaje
               mensaje.estado=respuesta_servidor.estado_peticion
-              this.props.history.push(`/dashboard/configuracion/asignacion-representante-estudiante${JSON.stringify(mensaje)}`)
+              this.props.history.push(`/dashboard/transaccion/promocion${JSON.stringify(mensaje)}`)
           }
       })
       .catch(error=>{

@@ -528,10 +528,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
 
-    console.log(hashEstudiante)
-
     if(hashEstudiante[a.target.value]){
-      console.log(hashEstudiante[a.target.value])
       this.setState({
         estadoBusquedaEstudiante: true,
         id_estudiante: hashEstudiante[a.target.value].id_estudiante,

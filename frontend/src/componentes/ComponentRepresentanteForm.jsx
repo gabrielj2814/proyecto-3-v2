@@ -44,6 +44,7 @@ class ComponentRepresentanteForm extends React.Component{
     this.consultarRepresentante=this.consultarRepresentante.bind(this)
     this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
     this.consultarCiudad = this.consultarCiudad.bind(this)
+    this.RellenarCamposHijos = this.RellenarCamposHijos.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -311,14 +312,13 @@ class ComponentRepresentanteForm extends React.Component{
                 modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
             }
         }
-        console.log(modulosSistema)
         if(modulosSistema[modulo][subModulo]){
           estado=true
         }
         // this.setState({modulosSistema})
     })
     .catch(error =>  {
-        console.log(error)
+        console.error(error)
     })
     return estado
   }
@@ -342,7 +342,7 @@ class ComponentRepresentanteForm extends React.Component{
 
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
         this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
@@ -371,11 +371,10 @@ class ComponentRepresentanteForm extends React.Component{
         for(let representante of json.datos){
             hash[representante.id_cedula_representante]=representante
         }
-        console.log("hash representante =>>> ",hash)
         this.setState({hashRepresentante:hash})
     })
     .catch(error => {
-        console.log(error)
+        console.error(error)
     })
   }
 
@@ -397,7 +396,7 @@ class ComponentRepresentanteForm extends React.Component{
         }
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
         mensaje.texto="No se puedo conectar con el servidor"
         mensaje.estado="500"
         this.props.history.push(`/dashboard/configuracion/representante${JSON.stringify(mensaje)}`)
@@ -428,7 +427,7 @@ class ComponentRepresentanteForm extends React.Component{
         }
     })
     .catch(error=>{
-        console.log(error)
+        console.error(error)
     })
     return lista
   }
@@ -498,9 +497,6 @@ class ComponentRepresentanteForm extends React.Component{
           if(exprecion.test(input.value)){
               this.cambiarEstadoDos(input)
           }
-          else{
-              console.log("NO se acepta valores numericos")
-          }
       }
       else{
           this.cambiarEstadoDos(input)
@@ -557,7 +553,6 @@ class ComponentRepresentanteForm extends React.Component{
     if(valor!==""){
       if(this.state.StringExprecion.test(valor)){
         estado=true
-        console.log("campo nombre "+nombre_campo+" OK")
         msj_nombres[0] = {mensaje: "",color_texto:"rojo"}
         msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
         msj_ocupacion[0] = {mensaje: "",color_texto:"rojo"}
@@ -641,6 +636,23 @@ class ComponentRepresentanteForm extends React.Component{
     this.props.history.push("/dashboard/configuracion/representante/registrar")
   }
 
+  RellenarCamposHijos(){
+    let lista = [
+      'numero_estudiante_inicial_representante',
+      'numero_estudiante_grado_1_representante',
+      'numero_estudiante_grado_2_representante',
+      'numero_estudiante_grado_3_representante',
+      'numero_estudiante_grado_4_representante',
+      'numero_estudiante_grado_5_representante',
+      'numero_estudiante_grado_6_representante'
+    ];
+
+    lista.forEach( item => {
+      let value = this.state[item];
+      if(value == "" || value == null) this.setState({[item]: "0"})
+    })
+  }
+
   validarCampoNumero(nombre_campo){
       var estado=false
       const campo=this.state[nombre_campo],
@@ -652,25 +664,35 @@ class ComponentRepresentanteForm extends React.Component{
               if(exprecion.test(campo)){
 
                 if(nombre_campo == "numero_hijos_representante"){
-                  let numero_hijos = parseInt(this.state.numero_hijos_representante)
-                  const sumatoria = (a, b) => a + b;
-                  let numeros = [
-                    parseInt(this.state.numero_estudiante_inicial_representante),
-                    parseInt(this.state.numero_estudiante_grado_1_representante),
-                    parseInt(this.state.numero_estudiante_grado_2_representante),
-                    parseInt(this.state.numero_estudiante_grado_3_representante),
-                    parseInt(this.state.numero_estudiante_grado_4_representante),
-                    parseInt(this.state.numero_estudiante_grado_5_representante),
-                    parseInt(this.state.numero_estudiante_grado_6_representante),
-                  ]
-                  let total_estudiante_representante = numeros.reduce(sumatoria)
+                  this.RellenarCamposHijos();
+                  setTimeout( () => {
+                    let numero_hijos = parseInt(this.state.numero_hijos_representante)
+                    const sumatoria = (a, b) => a + b;
+                    let numeros = [
+                      parseInt(this.state.numero_estudiante_inicial_representante),
+                      parseInt(this.state.numero_estudiante_grado_1_representante),
+                      parseInt(this.state.numero_estudiante_grado_2_representante),
+                      parseInt(this.state.numero_estudiante_grado_3_representante),
+                      parseInt(this.state.numero_estudiante_grado_4_representante),
+                      parseInt(this.state.numero_estudiante_grado_5_representante),
+                      parseInt(this.state.numero_estudiante_grado_6_representante),
+                    ]
+                    let total_estudiante_representante = numeros.reduce(sumatoria)
 
-                  if(numero_hijos != total_estudiante_representante){
-                    estado = false
-                    mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
-                    this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
-                    return false;
-                  }
+                    if(!isNaN(total_estudiante_representante)){
+                      if(numero_hijos != total_estudiante_representante){
+                        estado = false
+                        mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
+                        this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
+                        return false;
+                      }
+                    }else{
+                      estado = false
+                      mensaje_campo[0]={mensaje:"Los campos no pueden estar vacios",color_texto:"rojo"}
+                      this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
+                      return false;
+                    }
+                  }, 100)
                 }
                 estado=true
                 mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
@@ -886,7 +908,7 @@ class ComponentRepresentanteForm extends React.Component{
                   .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
                       mensaje.estado=false
-                      console.log(error)
+                      console.error(error)
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
                   })
