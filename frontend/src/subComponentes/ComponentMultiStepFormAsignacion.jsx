@@ -45,6 +45,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     this.fechaNacimiento = this.fechaNacimiento.bind(this)
     this.BusquedaRepresentante = this.BusquedaRepresentante.bind(this);
     this.validarFechaNacimineto = this.validarFechaNacimineto.bind(this);
+    this.RellenarCamposHijos = this.RellenarCamposHijos.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -469,7 +470,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       const valor=this.state[nombre_campo]
       let msj = this.state["msj_"+nombre_campo]
 
-      if(valor!==""){
+      if(valor !== "" || valor == null){
         if(this.state.StringExprecion.test(valor)){
           estado=true
           msj[0] = {mensaje: "",color_texto:"rojo"}
@@ -485,6 +486,23 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       return estado
   }
 
+  RellenarCamposHijos(){
+    let lista = [
+      'numero_estudiante_inicial_representante',
+      'numero_estudiante_grado_1_representante',
+      'numero_estudiante_grado_2_representante',
+      'numero_estudiante_grado_3_representante',
+      'numero_estudiante_grado_4_representante',
+      'numero_estudiante_grado_5_representante',
+      'numero_estudiante_grado_6_representante'
+    ];
+
+    lista.forEach( item => {
+      let value = this.state[item];
+      if(value == "" || value == null) this.setState({[item]: "0"})
+    })
+  }
+
   validarCampoNumero(nombre_campo){
       var estado=false
       const campo=this.state[nombre_campo],
@@ -495,32 +513,35 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           if(!exprecion_2.test(campo)){
               if(exprecion.test(campo)){
                 if(nombre_campo == "numero_hijos_representante"){
-                  let numero_hijos = parseInt(this.state.numero_hijos_representante)
-                  const sumatoria = (a, b) => a + b;
-                  let numeros = [
-                    parseInt(this.state.numero_estudiante_inicial_representante),
-                    parseInt(this.state.numero_estudiante_grado_1_representante),
-                    parseInt(this.state.numero_estudiante_grado_2_representante),
-                    parseInt(this.state.numero_estudiante_grado_3_representante),
-                    parseInt(this.state.numero_estudiante_grado_4_representante),
-                    parseInt(this.state.numero_estudiante_grado_5_representante),
-                    parseInt(this.state.numero_estudiante_grado_6_representante),
-                  ]
-                  let total_estudiante_representante = numeros.reduce(sumatoria)
+                  this.RellenarCamposHijos();
+                  setTimeout( () => {
+                    let numero_hijos = parseInt(this.state.numero_hijos_representante)
+                    const sumatoria = (a, b) => a + b;
+                    let numeros = [
+                      parseInt(this.state.numero_estudiante_inicial_representante),
+                      parseInt(this.state.numero_estudiante_grado_1_representante),
+                      parseInt(this.state.numero_estudiante_grado_2_representante),
+                      parseInt(this.state.numero_estudiante_grado_3_representante),
+                      parseInt(this.state.numero_estudiante_grado_4_representante),
+                      parseInt(this.state.numero_estudiante_grado_5_representante),
+                      parseInt(this.state.numero_estudiante_grado_6_representante),
+                    ]
+                    let total_estudiante_representante = numeros.reduce(sumatoria)
 
-                  if(total_estudiante_representante != NaN){
-                    if(numero_hijos != total_estudiante_representante){
+                    if(!isNaN(total_estudiante_representante)){
+                      if(numero_hijos != total_estudiante_representante){
+                        estado = false
+                        mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
+                        this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
+                        return false;
+                      }
+                    }else{
                       estado = false
-                      mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
+                      mensaje_campo[0]={mensaje:"Los campos no pueden estar vacios",color_texto:"rojo"}
                       this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
                       return false;
                     }
-                  }else{
-                    estado = false
-                    mensaje_campo[0]={mensaje:"Los campos no pueden estar vacios",color_texto:"rojo"}
-                    this.setState({["msj_numero_hijos_representante"]:mensaje_campo})
-                    return false;
-                  }
+                  }, 100)
                 }
                 estado=true
                 mensaje_campo[0]={mensaje:"",color_texto:"rojo"}

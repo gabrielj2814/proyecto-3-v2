@@ -102,15 +102,44 @@ class ComponentPromocionForm extends React.Component{
     if(hashListaEstudiantes[id]){
       let busqueda = await this.consultarPromocion(id);
 
-      if(!busqueda){
-        this.setState({ operacion: "Registrar" });
+      if(busqueda){
+        this.setState({
+          nombre_estudiante: hashListaEstudiantes[id].nombres_estudiante,
+          apellido_estudiante: hashListaEstudiantes[id].apellidos_estudiante
+        });
       }else{
         this.setState({
           nombre_estudiante: hashListaEstudiantes[id].nombres_estudiante,
           apellido_estudiante: hashListaEstudiantes[id].apellidos_estudiante,
+          operacion: "Registrar"
         });
       }
     }
+  }
+
+  async consultarPromocion(id){
+      return await axiosCustom.get(`transaccion/promocion/consultar-promocion-por-inscripcion/${id}`)
+      .then(respuesta =>{
+          if(respuesta.data.datos.length > 0){
+            let datos = respuesta.data.datos[0]
+
+            this.setState({
+              id_promocion: datos.id_promocion,
+              id_inscripcion: datos.id_inscripcion,
+              descripcion_logro: datos.descripcion_logro,
+              recomendacion_pariente: datos.recomendacion_pariente,
+              nota_promocion: datos.nota_promocion,
+              descripcion_nota_promocion: datos.descripcion_nota_promocion,
+              dias_promocion: datos.dias_promocion,
+              operacion: "Actualizar",
+            });
+
+            return true;
+          }else return false;
+      })
+      .catch(error => {
+          console.error(error)
+      })
   }
 
   BuscarProfesor(a){
@@ -175,31 +204,6 @@ class ComponentPromocionForm extends React.Component{
               hash[profesor.id_cedula]=profesor
           }
           this.setState({hashListaProfesores:hash})
-      })
-      .catch(error => {
-          console.error(error)
-      })
-  }
-
-  async consultarPromocion(id){
-      return await axiosCustom.get(`transaccion/promocion/consultar-promocion-por-inscripcion/${id}`)
-      .then(respuesta =>{
-          if(respuesta.data.estado_respuesta){
-            let datos = respuesta.data.datos[0]
-
-            this.setState({
-              id_promocion: datos.id_promocion,
-              id_inscripcion: datos.id_inscripcion,
-              descripcion_logro: datos.descripcion_logro,
-              recomendacion_pariente: datos.recomendacion_pariente,
-              nota_promocion: datos.nota_promocion,
-              descripcion_nota_promocion: datos.descripcion_nota_promocion,
-              dias_promocion: datos.dias_promocion,
-              operacion: "Actualizar",
-            });
-
-            return true;
-          }else return false;
       })
       .catch(error => {
           console.error(error)
@@ -373,11 +377,9 @@ class ComponentPromocionForm extends React.Component{
   cambiarEstadoDos(input){ this.setState({[input.name]:input.value}) }
 
   cambiarEstado(a){
-
     var input=a.target;
-    this.setState({[input.name]:input.value})
-
     if(input.name == "id_inscripcion") this.busquedaEstudiante(input.value)
+    this.setState({[input.name]:input.value})
   }
 
   validarCampo(nombre_campo){
