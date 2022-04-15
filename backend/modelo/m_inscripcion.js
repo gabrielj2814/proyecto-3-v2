@@ -127,6 +127,27 @@ class ModeloInscripcion extends DriverPostgres {
                 return await this.query(SQL)
   }
 
+  async consultarEstudianteProfesorAulaInscripcion(idAula){
+    const SQL = `SELECT * FROM tano_escolar,taula,tasignacion_aula_profesor,tprofesor,ttrabajador WHERE taula.id_aula=${idAula} AND
+     tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND tano_escolar.estatus_ano_escolar='1' AND 
+     tasignacion_aula_profesor.id_aula=taula.id_aula AND tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND 
+     ttrabajador.id_cedula=tprofesor.id_cedula;
+
+    `
+    return await this.query(SQL);
+  }
+
+  async consultarEstudianteAulaProfesor(idEstudiante) {
+    const SQL = `SELECT * FROM tinscripcion WHERE id_estudiante=${idEstudiante}`
+    return await this.query(SQL)
+  }
+
+  // async consultarEstudianteAulaProfesor(){
+  //   const SQL = ` SELECT * FROM tinscripcion,testudiante,tasignacion_aula_profesor WHERE id_estudiante= '${this.id_estudiante} '
+  //   AND id_asignacion_aula_profesor=tasignacion_aula_profesor.id_asignacion_aula_profesor`
+  //   return await this.query(SQL);
+  // }
+
 }
 
 module.exports = ModeloInscripcion;
