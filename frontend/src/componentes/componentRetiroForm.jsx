@@ -28,7 +28,7 @@ const axiosCustom=axios.create({
     baseURL:`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/`
 })
 
-class ComponentPromocionForm extends React.Component{
+class ComponentRetiroForm extends React.Component{
   constructor(){
     super();
     this.consultarPerfilTrabajador=this.consultarPerfilTrabajador.bind(this)
@@ -54,13 +54,12 @@ class ComponentPromocionForm extends React.Component{
         modulo:"",// modulo menu
         estado_menu:false,
         //formulario
-        id_promocion:"",
-        id_inscripcion:"",
-        descripcion_logro:"",
-        recomendacion_pariente:"",
-        nota_promocion:"",
-        descripcion_nota_promocion:"",
-        dias_promocion:"",
+        id_retiro: "",
+        id_inscripcion: "",
+        cedula_representante_solicitud: "",
+        motivo_retiro: "",
+        fecha_retiro: "",
+        estado_retiro: "E",
         // Datos alumno
         cedula_escolar: "",
         nombre_estudiante: "",
@@ -69,21 +68,28 @@ class ComponentPromocionForm extends React.Component{
         id_cedula_profesor: "",
         nombre_profesor: "",
         apellido_profesor: "",
+        // Datos representante
+        id_cedula_representante: "",
+        nombre_representante: "",
+        apellido_representante: "",
+        // Datos Aula
+        id_aula: "",
+        id_grado: "",
         //MSJ
         msj_id_inscripcion:[{mensaje:"",color_texto:""}],
-        msj_descripcion_logro:[{mensaje:"",color_texto:""}],
-        msj_recomendacion_pariente:[{mensaje:"",color_texto:""}],
-        msj_nota_promocion:[{mensaje:"",color_texto:""}],
-        msj_descripcion_nota_promocion:[{mensaje:"",color_texto:""}],
-        msj_dias_promocion:[{mensaje:"",color_texto:""}],
-        msj_id_cedula_profesor:[{mensaje:"",color_texto:""}],
+        msj_cedula_representante_solicitud:[{mensaje:"",color_texto:""}],
+        msj_motivo_retiro:[{mensaje:"",color_texto:""}],
+        msj_fecha_retiro:[{mensaje:"",color_texto:""}],
+        msj_estado_retiro:[{mensaje:"",color_texto:""}],
         //// combo box
         lista_profesores: [],
-        notas:['A','B','C','D','E','F'],
+        estados:['E','R','A'],
         hashListaProfesores:{},
         hashListaEstudiantes:{},
-        selectEstudiantes:[],
+        hashListaRepresentantes:{},
         estadoBusquedaProfesor: false,
+        estadoBusquedaEstudiante: false,
+        estadoBusquedaRepresentante: false,
         operacion: "Registrar",
         ///
         mensaje:{
@@ -768,4 +774,4 @@ class ComponentPromocionForm extends React.Component{
   }
 }
 
-export default withRouter(ComponentPromocionForm)
+export default withRouter(ComponentRetiroForm)
