@@ -98,7 +98,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"},
                     {descripcion:"asignacion estudiante representante",id:"/asignacion-representante-estudiante"},
                     {descripcion:"planificación",id:"/planificaion"},
-                    {descripcion:"promoción",id:"/promocion"}
+                    {descripcion:"promoción",id:"/promocion"},
+                    {descripcion:"Asistencia Estudiatnes",id:"/asistencia-estudiante"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},
