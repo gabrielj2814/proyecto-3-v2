@@ -236,6 +236,37 @@ controladorInscripcion.obtenerEstudianteProfesor2=async (cedula) => {
 }
 
 
+controladorInscripcion.obtenerEstudianteAulaProfesor = async (req, res) => {
+    const ModeloInscripcion = require('../modelo/m_inscripcion')
+    const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "", datos: [] }
+    let { idEstudiante, idAula } = req.params;
+    let modeloInscripcion = new ModeloInscripcion()
+    const resultEstudianteProfesorAulaInscripcion = await modeloInscripcion.consultarEstudianteProfesorAulaInscripcion(idAula)
+    const resultEstudianteAulaProfesor = await modeloInscripcion.consultarEstudianteAulaProfesor(idEstudiante)
+    // console.log(resultEstudianteProfesorAulaInscripcion.rows[0])
+    // console.log(resultEstudianteAulaProfesor.rows[0])
 
+    if (resultEstudianteProfesorAulaInscripcion.rowCount > 0 && resultEstudianteAulaProfesor.rowCount>0){
+        const datos1 = resultEstudianteProfesorAulaInscripcion.rows
+        const datos2 = resultEstudianteAulaProfesor.rows
+
+        respuesta_api.datos = {
+            datos1,
+            datos2
+        }
+        respuesta_api.estado_respuesta = true;
+        respuesta_api.color_alerta = "success"
+        respuesta_api.mensaje = "consulta completada"
+        
+    }else{
+        respuesta_api.estado_respuesta = false;
+        respuesta_api.color_alerta = "danger"
+        respuesta_api.mensaje = "No se encontraron resultado de su busqueda";
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+
+}
 
 module.exports = controladorInscripcion
