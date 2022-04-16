@@ -710,6 +710,11 @@ class ComponentInscripcionForm extends React.Component{
                     </div>
                 </div>
                 <form id="form_trabajador">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                      </div>
+                  </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
@@ -722,9 +727,10 @@ class ComponentInscripcionForm extends React.Component{
                       </div>
 
                   </div>
+
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Representantes</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -745,7 +751,7 @@ class ComponentInscripcionForm extends React.Component{
 
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Representantes</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos academicos</span>
                       </div>
                   </div>
 
@@ -785,11 +791,6 @@ class ComponentInscripcionForm extends React.Component{
                     estates={this.state.estates_radios}
                     eventoPadre={this.cambiarEstado}
                   />
-                  </div>
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos academicos</span>
-                      </div>
                   </div>
 
                     <div className="row justify-content-center">

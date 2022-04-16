@@ -423,17 +423,9 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
                         <InputButton
                           clasesBoton="btn btn-primary"
                           id="boton-registrar"
-                          value="Registrar"
+                          value="Pasar Asistencia"
                           eventoPadre={this.operacion}
                           />
-                        </div>
-                        <div className="col-auto">
-                            <InputButton
-                            clasesBoton="btn btn-danger"
-                            id="boton-cancelar"
-                            value="Cancelar"
-                            eventoPadre={this.regresar}
-                            />
                         </div>
                     </div>
                 </form>

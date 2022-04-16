@@ -616,7 +616,7 @@ class ComponentPromocionForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Promcion de Estudiantes</span>
+                        <span className="titulo-form-trabajador">Promción de Estudiantes</span>
                     </div>
                 </div>
                 <div className="row">
@@ -672,7 +672,7 @@ class ComponentPromocionForm extends React.Component{
                   </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Nota de promocion</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Nota de promoción</span>
                       </div>
                   </div>
 
@@ -691,8 +691,8 @@ class ComponentPromocionForm extends React.Component{
                       />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_dias_promocion[0]}
-                        nombreCampo="Dia de promocion:" activo="si" type="text" value={this.state.dias_promocion}
-                        name="dias_promocion" id="dias_promocion" placeholder="Descripcion del logro" eventoPadre={this.validarNumero}
+                        nombreCampo="Dia de promoción:" activo="si" type="text" value={this.state.dias_promocion}
+                        name="dias_promocion" id="dias_promocion" placeholder="Descripción del logro" eventoPadre={this.validarNumero}
                       />
 
                   </div>
@@ -701,7 +701,7 @@ class ComponentPromocionForm extends React.Component{
                     <ComponentFormRadioMultiState
                       clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                       extra="custom-control-inline"
-                      nombreCampoRadio="Notas de promocion :"
+                      nombreCampoRadio="Notas de promoción :"
                       name="nota_promocion"
                       nombreUnico={[""]}
                       checkedRadio={this.state.nota_promocion}
@@ -714,7 +714,7 @@ class ComponentPromocionForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                      obligatorio="si" mensaje={this.state.msj_descripcion_nota_promocion[0]} nombreCampoTextArea="Descripcion de la nota promocional:"
+                      obligatorio="si" mensaje={this.state.msj_descripcion_nota_promocion[0]} nombreCampoTextArea="Descripción de la nota promocional:"
                       clasesTextArear="form-control" name="descripcion_nota_promocion" id="descripcion_nota_promocion" value={this.state.descripcion_nota_promocion}
                       eventoPadre={this.cambiarEstado}
                     />
