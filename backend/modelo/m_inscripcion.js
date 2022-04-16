@@ -111,7 +111,7 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarValidandoInscripcionEstudiante(){
-    const SQL=`SELECT * FROM tinscripcion WHERE id_estudiante='${this.id_estudiante}' AND (estatus_inscripcion='I' OR estatus_inscripcion='T' OR estatus_inscripcion='R')`
+    const SQL=`SELECT * FROM tinscripcion WHERE id_estudiante='${this.id_estudiante}' AND id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor} AND (estatus_inscripcion='I' OR estatus_inscripcion='T' OR estatus_inscripcion='R' OR estatus_inscripcion='C')`
     return await this.query(SQL)
   }
 
