@@ -8,11 +8,11 @@ class DriverPostgreSql {
         $this->host="localhost";
         $this->usuario="gabriel";
         $this->clave="stark";
-        $this->db="proyecto_3";
+        $this->db="proyecto_4_test";
     }
 
     protected function conectar(){
-        $this->conexion=pg_connect("host=localhost dbname=proyecto_3 user=gabriel password=stark")or die('Could not connect: ' . pg_last_error());
+        $this->conexion=pg_connect("host=". $this->host." dbname=".$this->db." user=".$this->usuario." password=".$this->clave)or die('Could not connect: ' . pg_last_error());
     }
 
     function query($SQL){
