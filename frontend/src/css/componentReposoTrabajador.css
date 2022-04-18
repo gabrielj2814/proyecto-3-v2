@@ -1,0 +1,30 @@
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.component_reposo_trabajador{
+	height: 100%;
+    width: 100%;
+}
+
+.columna-boton{
+	background-color: var(--color-fondo-formulario);
+    border-radius: 15px;
+    margin-top: 30px;
+    height:60px;
+}
+
+.contenedor-boton{
+    height: 100%;
+}
+
+.component-tabla-de-datos{
+    margin-top: 30px;
+    height: auto;
+}
+
+.contenedor-tabla-de-datos{
+    height: 100%;
+    border-radius: 15px;
+    padding-top: 15px;
+}

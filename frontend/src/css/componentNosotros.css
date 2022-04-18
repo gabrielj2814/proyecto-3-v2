@@ -1,0 +1,58 @@
+.component_nosotros{
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    overflow-x: hidden;
+}
+
+.imagen_comunidad{
+    height: 300px;
+    width: 100%;
+}
+
+.organigrama_comunidad{
+    height: 550px;
+    width: 100%;
+}
+
+.fila_menu_pills{
+    margin-bottom: 10px;
+}
+
+.fila_nosotros{
+    height: 100%;
+}
+
+.menu_informacion{
+    padding-top: 30px;
+    height: 80%;
+}
+
+.fila_imagen_ubicacion_comunidad{
+    width: 100%;
+    margin: 0;
+}
+
+.contenedor_imagen_comunidad{
+    padding: 0;
+}
+
+.columna_nosotros{
+    height: 100%;
+}
+
+.columna{
+    height: 100%;
+    overflow: hidden;
+}
+
+.contenedor_panel{
+    height: 100%;
+    
+}
+
+.panel_historia{
+    height: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
+}

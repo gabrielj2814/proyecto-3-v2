@@ -1,0 +1,27 @@
+/*
+.component_carusel{
+    height: 50%;
+}
+*/
+.row-conenedor-carusel{
+    margin: 0;
+}
+.columna_carusel{
+    height: 300px;
+    padding: 0;
+    /*background-color: blue;*/
+}
+
+.contenedor_imagen{
+    height: 100%;
+    width:100%;
+}
+
+.img{
+    height: 100%;
+    width: 100%;
+}
+
+h3{
+    font-family: Arial, Helvetica, sans-serif;
+}

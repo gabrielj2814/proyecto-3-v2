@@ -1,0 +1,23 @@
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.component_tipo_trabajador_consulta{
+    height: 100%;
+}
+
+.contenedor_tipo_trabajador_consulta{
+    background-color: var(--color-fondo-formulario);
+    height: auto;
+    border-radius: 15px;
+    padding-bottom: 30px;
+}
+
+.contenedor-titulo-tipo-trabajador-consulta{
+    border-bottom: 1px solid #111;
+    margin-bottom: 15px;
+}
+
+.titulo-tipo-trabajador-consulta{
+    font-size: 2.5rem; 
+}

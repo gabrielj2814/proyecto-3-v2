@@ -1,0 +1,19 @@
+.obligatorio-campo{
+    color:red
+}
+
+.color-texto-rojo{
+    color:red
+}
+
+.color-texto-verde{
+    color:green
+}
+
+.color-texto-blanco{
+    color:white
+}
+
+.textArea{
+    resize: none;
+}
