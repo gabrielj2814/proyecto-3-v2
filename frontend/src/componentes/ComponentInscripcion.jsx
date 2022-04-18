@@ -341,9 +341,9 @@ class ComponentInscripcion extends React.Component{
       const jsx_tabla_encabezado = (
             <thead>
                 <tr>
-                    <th>Codigo</th>
-                    <th>fecha de inscripcion</th>
-                    <th>Cedula escolar</th>
+                    <th>Código</th>
+                    <th>fecha de inscripción</th>
+                    <th>Cédula escolar</th>
                     <th>Estado</th>
                 </tr>
             </thead>

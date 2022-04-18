@@ -53,8 +53,6 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
           {id: " ",descripcion: "Seleccione una opción"},
           {id: "0",descripcion: "NO vino"},
           {id: "1",descripcion: "SI Vino"},
-          {id: "2",descripcion: "Se enfermó"},
-          {id: "3",descripcion: "No Vino por otros motivos"},
         ],
         // -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo, 3 -> otros sumar observacion
         //// combo box
@@ -280,7 +278,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     let msj = this.state.asistencias_estudiantes.map( item => {
       if(item.estatus_asistencia_estudiante == " " || item.estatus_asistencia_estudiante == null || item.estatus_asistencia_estudiante == ""){
         return {msj: "Todos los estudiantes deben de tener un estatus", name: `estatus_asistencia_estudiante-${item.id_inscripcion}`}
-      }else if(item.estatus_asistencia_estudiante == "3" && item.observacion_asistencia_estudiante == ""){
+      }else if(item.estatus_asistencia_estudiante == "0" && item.observacion_asistencia_estudiante == ""){
         return {msj: "Tambien debes de ingresar una observación", name: `observacion_asistencia_estudiante-${item.id_inscripcion}`}
       }
 

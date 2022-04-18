@@ -807,14 +807,14 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_asig_aula_prof">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-asig-aula-prof">
-                            <span className="titulo-form-reposo">Formulario Asignacion Aula Profesor</span>
+                            <span className="titulo-form-reposo">Formulario Asignación Aula Profesor</span>
                         </div>
                     </div>
                     <form id="formularioAsigAulaProf" >
                         <div className="row justify-content-center text-center">
                           <input name="id_asignacion_aula_profesor" value={this.state.id_asignacion_aula_profesor} type="hidden"/>
 
-                            <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6'>
+                            <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6 h3' >
                                 <label>Año Escolar:</label>
                                 <div>{this.state.ano_desde} - {this.state.ano_hasta}</div>
                             </div>
@@ -828,13 +828,13 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Cedula:"
+                            nombreCampo="Cédula:"
                             activo="si"
                             type="text"
                             value={this.state.id_cedula}
                             name="id_cedula"
                             id="id_cedula"
-                            placeholder="Cedula"
+                            placeholder="Cédula"
                             mensaje={this.state.msj_id_cedula}
                             eventoPadre={this.buscarProfesor}
                             />

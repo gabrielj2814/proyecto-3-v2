@@ -803,8 +803,8 @@ class ComponentInscripcionForm extends React.Component{
                   <div className="row justify-content-center mt-1">
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
-                      nombreCampo="Ano Escolar:" activo="no" type="text" value={this.state.nombre_ano_escolar}
-                      name="ano_escolar" id="ano_escolar" placeholder="Ano escolar"
+                      nombreCampo="Año Escolar:" activo="no" type="text" value={this.state.nombre_ano_escolar}
+                      name="ano_escolar" id="ano_escolar" placeholder="Año escolar"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
@@ -814,7 +814,7 @@ class ComponentInscripcionForm extends React.Component{
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
                       nombreCampo="Nombre del aula:" activo="no" type="text" value={this.state.nombre_aula}
-                      name="nombre_aula" id="nombre_aula" placeholder="nombre del aula"
+                      name="nombre_aula" id="nombre_aula" placeholder="Nombre del aula"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"

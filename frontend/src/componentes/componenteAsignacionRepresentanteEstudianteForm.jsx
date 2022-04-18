@@ -607,7 +607,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario de asignacion representante-estudiante</span>
+                        <span className="titulo-form-trabajador">Formulario de asignación representante-estudiante</span>
                     </div>
                 </div>
                 <div className="row">
@@ -640,7 +640,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
-                        nombreCampo="Cedula del estudiante:" activo="si" type="text" value={this.state.cedula_escolar}
+                        nombreCampo="Cédula del estudiante:" activo="si" type="text" value={this.state.cedula_escolar}
                         name="cedula_escolar" id="cedula_escolar" placeholder="Cédula escolar del estudiante" eventoPadre={this.BuscarEstudiante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>

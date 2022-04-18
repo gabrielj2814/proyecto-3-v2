@@ -438,7 +438,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     let input=a.target
     this.cambiarEstado(a)
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-    let edad = (parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+    let edad = (parseInt(fechaServidor.diff(input.value,"years")))
     if(input.name == "fecha_nacimiento_mama") this.setState({edadMama: edad})
     else this.setState({edadPapa: edad})
   }
@@ -677,13 +677,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
           this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
               var respuesta_servidor=""
-              // console.group("MAMA")
-              // console.log(objeto.mama)
-              // console.groupEnd();
-              // console.group("PAPA");
-              // console.log(objeto.papa);
-              // console.groupEnd();
-              // return false;
               if(!this.state.mama_existe){
                 axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
                 .then(respuesta=>{
@@ -804,7 +797,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
   buscarRepresentante(a){
     let input = a.target
     this.validarNumero(a)
-      // console.log(input.value)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
     let index;
     if(hashRepresentante[input.value]){
@@ -911,7 +903,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_mama[0]}
-                      nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion_mama}
+                      nombreCampo="Ocupación:" activo="si" type="text" value={this.state.ocupacion_mama}
                       name="ocupacion_mama" id="ocupacion_mama" placeholder="Ocupacion" eventoPadre={this.validarTexto}
                     />
                   </div>
@@ -1056,7 +1048,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_papa[0]}
-                      nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion_papa}
+                      nombreCampo="Ocupación:" activo="si" type="text" value={this.state.ocupacion_papa}
                       name="ocupacion_papa" id="ocupacion_papa" placeholder="Ocupacion" eventoPadre={this.validarTexto}
                     />
                   </div>
@@ -1118,7 +1110,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   <div className="row justify-content-center">
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_papa[0]}
-                      nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_papa}
+                      nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_papa}
                       name="constitucion_familiar_papa" id="constitucion_familiar_papa" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
                     />
                     <ComponentFormSelect

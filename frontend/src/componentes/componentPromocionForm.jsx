@@ -715,7 +715,7 @@ class ComponentPromocionForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                       obligatorio="si" mensaje={this.state.msj_descripcion_nota_promocion[0]} nombreCampoTextArea="Descripción de la nota promocional:"
-                      clasesTextArear="form-control" name="descripcion_nota_promocion" id="descripcion_nota_promocion" value={this.state.descripcion_nota_promocion}
+                      clasesTextArear="form-control h-100" name="descripcion_nota_promocion" id="descripcion_nota_promocion" value={this.state.descripcion_nota_promocion}
                       eventoPadre={this.cambiarEstado}
                     />
                   </div>
