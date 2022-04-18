@@ -263,7 +263,7 @@ class ComponentRetiroForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion")
+    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/retiro-formulario")
     if(acessoModulo){
       const operacion = this.props.match.params.operacion;
       await this.consultarFechaServidor()

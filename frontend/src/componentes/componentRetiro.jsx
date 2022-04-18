@@ -89,7 +89,7 @@ class ComponentRetiro extends React.Component {
     }
 
     async componentWillMount(){
-        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion")
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/retiro")
         if(acessoModulo){
             await this.consultarRetiros()
         }

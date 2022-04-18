@@ -100,7 +100,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"planificación",id:"/planificaion"},
                     {descripcion:"promoción",id:"/promocion"},
                     {descripcion:"Asistencia Estudiatnes",id:"/asistencia-estudiante"},
-                    {descripcion:"Retiro",id:"/retiro"}
+                    {descripcion:"Retiro",id:"/retiro"},
+                    {descripcion:"Retiro Formulario",id:"/retiro-formulario"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},
