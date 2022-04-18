@@ -162,12 +162,12 @@ class ComponentInscripcion extends React.Component{
           servidor.mensaje=mensaje
         }
         this.setState(servidor)
-       }
-       else{
+      }
+      else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
-       }
       }
+    }
 
       async validarAccesoDelModulo(modulo,subModulo){
           // /dashboard/configuracion/acceso
@@ -179,6 +179,8 @@ class ComponentInscripcion extends React.Component{
               .then(async respuesta=>{
                   respuesta_servior=respuesta.data
                   if(respuesta_servior.usuario){
+                    console.log("datos del token =>>>> ",respuesta_servior)
+                    this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
                     this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                     estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
                   }
@@ -294,24 +296,26 @@ class ComponentInscripcion extends React.Component{
     console.log(datos)
     datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
     datos.push({name:"tipo_matricula",value:this.state.tipoPdf})
+    datos.push({name:"cedula_usuario",value:this.state.id_cedula})
     console.log(datos)
     if(datos!==null){
       // alert("generar pdf")
       $.ajax({
-        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_medico_especialidad.php`,
+        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_matricula_inicial.php`,
         type:"post",
         data:datos,
         success: function(respuesta) {
             console.log(respuesta)
             let json=JSON.parse(respuesta)
-            // if(json.nombrePdf!=="false"){
-            //     $filaVerPdf.classList.remove("ocultarFormulario") 
-            //     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
-            // }
-            // else{
-            //     $filaVerPdf.classList.add("ocultarFormulario") 
-            //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-            // }
+            console.log("datos reporte martricula =>>>> ",json)
+            if(json.nombrePdf!=="false"){
+                $filaVerPdf.classList.remove("ocultarFormulario") 
+                document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+            }
+            else{
+                $filaVerPdf.classList.add("ocultarFormulario") 
+                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+            }
         },
         error: function() {
         //   alert("error")
