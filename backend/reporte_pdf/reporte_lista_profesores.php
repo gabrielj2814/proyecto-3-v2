@@ -53,39 +53,37 @@ class PdfListaProfesores extends FPDF{
         $this->ln(15);
         
         //TABLA
-        $this->Cell(60,10,'',0,0,'C');
+        $this->Cell(45,10,'',0,0,'C');
         $this->Cell(10,10,'Nro',1,0,'C');
-        $this->Cell(40,10,'Nombre y Apellido',1,0,'C');
+        $this->Cell(65,10,'Nombre y Apellido',1,0,'C');
         $this->Cell(30,10,'Grado',1,0,'C');
         $this->Cell(30,10,'Seccion',1,0,'C');
         $this->Cell(30,10,'Ano Escolar',1,0,'C');
 
-        $this->ln(10);
 
-        $this->Cell(60,10,'',0,0,'C');
-        $this->Cell(10,10,'1',1,0,'C');
-        $this->Cell(40,10,'Juan Arraiz',1,0,'C');
-        $this->Cell(30,10,'6to',1,0,'C');
-        $this->Cell(30,10,'A',1,0,'C');
-        $this->Cell(30,10,'2022-2023',1,0,'C');
         
-        // $contador=0;
-        // foreach($this->datosPdf as $inscripto){
-        //     $contador++;
-        //     $this->ln(10);
-        //     $cedula="no tiene";
-        //     if($inscripto["cedula_estudiante"]===null){
-        //         $cedula=$inscripto["cedula_escolar"];
-        //     }
-        //     else{
-        //         $cedula=$inscripto["cedula_estudiante"];
-        //     }
-
-        //     $this->Cell(15,10,'',0,0,'C');
-        //     $this->Cell(10,10,$contador,1,0,'C');
-        //     $this->Cell(40,10,$inscripto["nombres_estudiante"],1,0,'C');
-        //     $this->Cell(30,10,$cedula,1,0,'C');
-        // }
+        $contador=0;
+        foreach($this->datosPdf as $profesor){
+            $contador++;
+            $grado=NULL;
+            $aula=$profesor["nombre_aula"];
+            switch($profesor["numero_grado"]){
+                case '1': $grado="1 RO"; break;
+                case '2': $grado="2 DO"; break;
+                case '3': $grado="3 RO"; break;
+                case '4': $grado="4 TO"; break;
+                case '5': $grado="5 TO"; break;
+                case '6': $grado="6 TO"; break;
+            }
+            $anno_escolar=$profesor["ano_desde"]."-".$profesor["ano_hasta"];
+            $this->ln(10);
+            $this->Cell(45,10,'',0,0,'C');
+            $this->Cell(10,10,$contador,1,0,'C');
+            $this->Cell(65,10,$profesor["nombres"]." ".$profesor["apellidos"],1,0,'C');
+            $this->Cell(30,10,$grado,1,0,'C');
+            $this->Cell(30,10,$aula,1,0,'C');
+            $this->Cell(30,10,$anno_escolar,1,0,'C');
+        }
 
         
         $this->ln(20);

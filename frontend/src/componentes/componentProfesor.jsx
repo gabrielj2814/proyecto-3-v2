@@ -202,7 +202,7 @@ class ComponentProfesor extends React.Component {
         let datos=[]
         // console.log(datos)
         datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
-        datos.push({name:"tipo_matricula",value:this.state.tipoPdf})
+        datos.push({name:"tipoPdf",value:this.state.tipoPdf})
         datos.push({name:"cedula_usuario",value:this.state.id_cedula})
         console.log(datos)
         if(datos!==null){
