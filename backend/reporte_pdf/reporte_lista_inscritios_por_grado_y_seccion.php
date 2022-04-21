@@ -1,5 +1,5 @@
 <?php
-
+include_once("../librerias_php/fpdf/fpdf.php");
 class PdfListaInscriptiosPorGradoYSeccion extends FPDF{
 
     private $datosPdf;
@@ -33,13 +33,23 @@ class PdfListaInscriptiosPorGradoYSeccion extends FPDF{
 
     function generarPdf(){
         
-        $nombrePdf="Matricula Inicial.pdf";
+        $nombrePdf="Lista de Inscrtios por grado y aula.pdf";
         $this->AliasNbPages();
         $this->Addpage();
         $this->ln(20);
+        $grado=NULL;
+        $aula=$this->datosPdf[0]["nombre_aula"];
+        switch($this->datosPdf[0]["numero_grado"]){
+            case '1': $grado="1 RO"; break;
+            case '2': $grado="2 DO"; break;
+            case '3': $grado="3 RO"; break;
+            case '4': $grado="4 TO"; break;
+            case '5': $grado="5 TO"; break;
+            case '6': $grado="6 TO"; break;
+        }
         //TITULO
         $this->SetFont("Arial","B",10);
-        $this->Cell(0,10,"LISTADO DE INSCRITOS 6TO GRADO SECCION",0,0,"C");
+        $this->Cell(0,10,"LISTADO DE INSCRITOS $grado GRADO SECCION $aula",0,0,"C");
         
         $this->ln(12);
         //fECHA
@@ -64,13 +74,19 @@ class PdfListaInscriptiosPorGradoYSeccion extends FPDF{
         foreach($this->datosPdf as $inscritos){
             $contador++;
             $this->ln(10);
-
+            $cedula="no tiene";
+            if($inscritos["cedula_estudiante"]===null){
+                $cedula=$inscritos["cedula_escolar"];
+            }
+            else{
+                $cedula=$inscritos["cedula_estudiante"];
+            }
             $this->Cell(15,10,'',0,0,'C');
             $this->Cell(10,10,$contador,1,0,'C');
-            $this->Cell(40,10,'pepito paredes',1,0,'C');
-            $this->Cell(30,10,'V-267591371',1,0,'C');
-            $this->Cell(30,10,'0424-5445967',1,0,'C');
-            $this->Cell(55,10,'Juan de Dios Arraiz',1,0,'C');
+            $this->Cell(40,10,$inscritos["nombres_estudiante"]." ".$inscritos["apellidos_estudiante"],1,0,'C');
+            $this->Cell(30,10,$cedula,1,0,'C');
+            $this->Cell(30,10,$inscritos["telefono_movil_representante"],1,0,'C');
+            $this->Cell(55,10,$inscritos["nombres_representante"]." ".$inscritos["apellidos_representante"],1,0,'C');
         }
 
         

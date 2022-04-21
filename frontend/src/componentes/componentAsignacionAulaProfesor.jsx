@@ -35,6 +35,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this)
         this.consultarTodasLasAulaPorGrado=this.consultarTodasLasAulaPorGrado.bind(this)
         this.mostrarFiltros=this.mostrarFiltros.bind(this)
+        this.generarPdf=this.generarPdf.bind(this)
         // this.cambiarEstado=this.cambiarEstado.bind(this)
         this.state={
             modulo:"",
@@ -269,32 +270,33 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
         datos.push({name:"tipoPdf",value:this.state.tipoPdf})
         datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+        datos.push({name:"id_aula",value:this.state.id_aula})
         console.log(datos)
-        // if(datos!==null){
-        //   // alert("generar pdf")
-        //   $.ajax({
-        //     url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_lista_profesor.php`,
-        //     type:"post",
-        //     data:datos,
-        //     success: function(respuesta) {
-        //         console.log(respuesta)
-        //         let json=JSON.parse(respuesta)
-        //         console.log("datos reporte martricula =>>>> ",json)
-        //         if(json.nombrePdf!=="false"){
-        //             $filaVerPdf.classList.remove("ocultarFormulario") 
-        //             document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
-        //         }
-        //         else{
-        //             $filaVerPdf.classList.add("ocultarFormulario") 
-        //             alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-        //         }
-        //     },
-        //     error: function() {
-        //     //   alert("error")
-        //       $filaVerPdf.classList.add("ocultarFormulario") 
-        //     }
-        //   });
-        // }
+        if(datos!==null){
+          // alert("generar pdf")
+          $.ajax({
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_inscricion_grado_aula.php`,
+            type:"post",
+            data:datos,
+            success: function(respuesta) {
+                console.log(respuesta)
+                let json=JSON.parse(respuesta)
+                console.log("datos reporte martricula =>>>> ",json)
+                if(json.nombrePdf!=="false"){
+                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+                }
+                else{
+                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                }
+            },
+            error: function() {
+            //   alert("error")
+              $filaVerPdf.classList.add("ocultarFormulario") 
+            }
+          });
+        }
     }
 
     render(){
