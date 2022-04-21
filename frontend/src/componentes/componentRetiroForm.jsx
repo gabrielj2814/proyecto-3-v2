@@ -659,7 +659,7 @@ class ComponentRetiroForm extends React.Component{
       petion(objeto)
   }
 
-  regresar(){ this.props.history.push("/dashboard/transaccion/retiro"); }
+  regresar(){ this.props.history.push("/dashboard/transaccion/retiro/registrar"); }
 
   render(){
     var jsx_promocion_form=(

@@ -46,6 +46,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     this.BusquedaRepresentante = this.BusquedaRepresentante.bind(this);
     this.validarFechaNacimineto = this.validarFechaNacimineto.bind(this);
     this.RellenarCamposHijos = this.RellenarCamposHijos.bind(this);
+    this.consultarTodoXParroquia = this.consultarTodoXParroquia.bind(this);
+    this.cambiarEstatusCampos = this.cambiarEstatusCampos.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -368,11 +370,36 @@ class ComponentMultiStepFormAsignacion extends React.Component{
 
   cambiarEstadoDos(input){ this.setState({[input.name]:input.value}) }
 
+  cambiarEstatusCampos(status){
+    let array = [
+      "id_cedula_representante",
+      "nombres_representante",
+      "apellidos_representante",
+      "fecha_nacimiento_representante",
+      "nivel_instruccion_representante",
+      "ocupacion_representante",
+      "telefono_movil_representante",
+      "telefono_local_representante",
+      "ingresos_representante",
+      "tipo_vivienda_representante",
+      "constitucion_familiar_representante",
+      "id_estado_representante",
+      "id_ciudad_representante",
+      "id_parroquia_representante",
+    ]
+    setTimeout( () => {
+      array.map( item => {
+        document.getElementById(item).disabled = status
+      })
+    },100)
+  }
+
   CapturaTipoRepresentante(a){
     var input = (a.target != undefined) ? a.target : a;
     this.setState({[input.name]:input.value})
 
     if(input.value === "O"){
+
       this.setState({
         status_form_representante: true,
         campos_activos: "si",
@@ -405,6 +432,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         numero_estudiante_grado_5_representante: "0",
         numero_estudiante_grado_6_representante: "0",
       })
+
+      this.cambiarEstatusCampos(false)
     }else{
 
       let hashRepresentante = JSON.parse(JSON.stringify(this.state.hashRepresentante));
@@ -455,6 +484,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           numero_estudiante_grado_5_representante: hashRepresentante[input.value].numero_estudiante_grado_5_representante,
           numero_estudiante_grado_6_representante: hashRepresentante[input.value].numero_estudiante_grado_6_representante,
         })
+
+        this.cambiarEstatusCampos(true)
       }
     }
   }
@@ -871,15 +902,42 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     });
   }
 
-  BusquedaRepresentante(a){
+  async BusquedaRepresentante(a){
     let input = a.target
     this.validarNumero(a)
-    // console.log(input.value)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
     if(hashRepresentante[input.value]){
+
+      let datos = await this.consultarTodoXParroquia(hashRepresentante[input.value].id_parroquia)
+      this.cambiarEstatusCampos(true)
+
       this.setState({
         estadoBusquedaRepresentante:true,
-        nuevo_representante: false
+        nuevo_representante: false,
+        id_cedula_representante: hashRepresentante[input.value].id_cedula_representante,
+        nombres_representante: hashRepresentante[input.value].nombres_representante,
+        apellidos_representante: hashRepresentante[input.value].apellidos_representante,
+        fecha_nacimiento_representante:Moment( hashRepresentante[input.value].fecha_nacimiento_representante).format("YYYY-MM-DD"),
+        nivel_instruccion_representante: hashRepresentante[input.value].nivel_instruccion_representante,
+        ocupacion_representante: hashRepresentante[input.value].ocupacion_representante,
+        telefono_movil_representante: hashRepresentante[input.value].telefono_movil_representante,
+        telefono_local_representante: hashRepresentante[input.value].telefono_local_representante,
+        ingresos_representante: hashRepresentante[input.value].ingresos_representante,
+        tipo_vivienda_representante: hashRepresentante[input.value].tipo_vivienda_representante,
+        constitucion_familiar_representante: hashRepresentante[input.value].constitucion_familiar_representante,
+        estatus_representante: hashRepresentante[input.value].estatus_representante,
+        id_estado_representante: datos.id_estado,
+        id_ciudad_representante: datos.id_ciudad,
+        id_parroquia_representante: datos.id_parroquia,
+        direccion_representante: hashRepresentante[input.value].direccion_representante,
+        numero_hijos_representante: hashRepresentante[input.value].numero_hijos_representante,
+        numero_estudiante_inicial_representante: hashRepresentante[input.value].numero_estudiante_inicial_representante,
+        numero_estudiante_grado_1_representante: hashRepresentante[input.value].numero_estudiante_grado_1_representante,
+        numero_estudiante_grado_2_representante: hashRepresentante[input.value].numero_estudiante_grado_2_representante,
+        numero_estudiante_grado_3_representante: hashRepresentante[input.value].numero_estudiante_grado_3_representante,
+        numero_estudiante_grado_4_representante: hashRepresentante[input.value].numero_estudiante_grado_4_representante,
+        numero_estudiante_grado_5_representante: hashRepresentante[input.value].numero_estudiante_grado_5_representante,
+        numero_estudiante_grado_6_representante: hashRepresentante[input.value].numero_estudiante_grado_6_representante,
       })
       alert("este representante ya esta resgistrado")
       this.CapturaTipoRepresentante({name:"cedula_representante",value: input.value})
@@ -944,6 +1002,22 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       this.setState({hashRepresentante: hash});
     })
     .catch( err => console.error(err));
+  }
+
+  async consultarTodoXParroquia(id){
+    const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}`
+
+    let datos = await axios.get(ruta_api_3)
+    .then( ({data}) => {
+      return {
+        id_estado: data.datos[0].id_estado,
+        id_ciudad: data.datos[0].id_ciudad,
+        id_parroquia: data.datos[0].id_parroquia,
+      }
+    })
+    .catch( error => console.error(error))
+
+    return datos;
   }
 
   render(){
@@ -1081,7 +1155,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                         <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
                             nombreCampo="Telefono local:" activo={this.state.campos_activos} type="text" value={this.state.telefono_local_representante}
-                            name="telefono_local_representante" id="telefono_movil_representante" placeholder="Telefono local" eventoPadre={this.validarNumero}
+                            name="telefono_local_representante" id="telefono_local_representante" placeholder="Telefono local" eventoPadre={this.validarNumero}
                           />
                       </div>
                       <div className="row justify-content-center mx-auto my-2">
