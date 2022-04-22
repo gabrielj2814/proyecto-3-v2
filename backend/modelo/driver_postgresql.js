@@ -5,6 +5,7 @@ class DriverPostgreSQL {
         config={
             user:"gabriel",
             host:"localhost",
+
             password:"stark",
             database:"proyecto_4_test"
 
