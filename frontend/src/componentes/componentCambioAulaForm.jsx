@@ -48,7 +48,8 @@ class ComponentCambioAulaForm extends React.Component{
     this.longitudCampo = this.longitudCampo.bind(this);
     this.BuscarEstudiante = this.BuscarEstudiante.bind(this);
     this.buscarRepresentante = this.buscarRepresentante.bind(this);
-    this.ConsultarGrados = this.ConsultarGrados.bind(this);
+    this.ConsultarAulasPorGrado = this.ConsultarAulasPorGrado.bind(this);
+    this.traslado = this.traslado.bind(this);
 
     this.state={
         // ------------------
@@ -87,6 +88,7 @@ class ComponentCambioAulaForm extends React.Component{
         hashListaRepresentantes:{},
         selectRepresentantes: [],
         estadoBusquedaEstudiante: false,
+        form_step: 0,
         ///
         mensaje:{
             texto:"",
@@ -99,24 +101,60 @@ class ComponentCambioAulaForm extends React.Component{
     }
   }
 
-  async ConsultarGrados(){
-    return await axiosCustom.get(`configuracion/grado/consultar-todos`)
-    .then(({data}) =>{
-      console.log(data);
-    })
-    .catch(error => {
-        console.error(error)
-    })
-  }
-
   async UNSAFE_componentWillMount(){
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
     if(acessoModulo){
-      await this.ConsultarGrados()
+
+      const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/grado/consultar-todos`,
+      nombre_propiedad_lista_1="datos",
+      propiedad_id_1="id_grado",
+      propiedad_descripcion_1="numero_grado",
+      propiedad_estado_1="estatus_grado"
+      const grados = await this.consultarServidor(ruta_api,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
+
+      const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/aula/consultar-aula-por-grado/${grados[0].id}`,
+      nombre_propiedad_lista_2="datos",
+      propiedad_id_2="id_aula",
+      propiedad_descripcion_2="nombre_aula",
+      propiedad_estado_2="estatus_aula"
+      const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+
+      console.log(aulas);
+
+      this.setState({
+        listaGrados: grados,
+        listaAulas: aulas,
+        id_grado: grados[0].id,
+        id_aula_a: aulas[0].id,
+        id_aula_b: aulas[0].id,
+      })
+
+
+      // await this.ConsultarGrados()
+      // alert("HOLA");
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+  }
+
+  async ConsultarAulasPorGrado(a){
+    let target = a.target;
+
+    this.cambiarEstado(a)
+
+    const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/aula/consultar-aula-por-grado/${target.value}`,
+    nombre_propiedad_lista_2="datos",
+    propiedad_id_2="id_aula",
+    propiedad_descripcion_2="nombre_aula",
+    propiedad_estado_2="estatus_aula"
+    const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+
+    this.setState({
+      listaAulas: aulas,
+      id_aula_a: (aulas.length > 0) ? aulas[0].id : null,
+      id_aula_b: (aulas.length > 0) ? aulas[0].id : null,
+    })
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
@@ -220,7 +258,7 @@ class ComponentCambioAulaForm extends React.Component{
       await axios.get(ruta_api)
       .then(respuesta=>{
           respuesta_servidor=respuesta.data
-          if(respuesta_servidor.estado_peticion==="200"){
+          if(respuesta_servidor.estado_respuesta){
               var lista_vacia=[]
               const propiedades={
                   id:propiedad_id,
@@ -239,6 +277,17 @@ class ComponentCambioAulaForm extends React.Component{
           console.error(error)
       })
       return lista
+  }
+
+  formatoOptionSelect(lista,lista_vacia,propiedades){
+      var veces=0
+      while(veces < lista.length){
+          if(lista[veces][propiedades.estado]==="1"){
+              lista_vacia.push({id:lista[veces][propiedades.id],descripcion:lista[veces][propiedades.descripcion]})
+          }
+          veces+=1
+      }
+      return lista_vacia
   }
 
   async ObtenerEstudiantesRepresentantes(){
@@ -617,72 +666,207 @@ class ComponentCambioAulaForm extends React.Component{
       petion(objeto)
   }
 
+  traslado(){
+    this.setState({form_step: 1})
+  }
+
   regresar(){ this.props.history.push("/dashboard/transaccion/retiro/registrar"); }
 
   render(){
-    var jsx_traslado_form=(
-        <div className="row justify-content-center">
+    let jsx_traslado_form;
 
-            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+    if(this.state.form_step == 0){
+      jsx_traslado_form=(
+          <div className="row justify-content-center">
+
+              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                  {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+                      <div className="row">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
+                                  <p>Mensaje: {this.state.mensaje.texto}</p>
+                                  <button className="close" data-dismiss="alert">
+                                      <span>X</span>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  }
+              </div>
+              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
+                  <div className="row justify-content-center">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                          <span className="titulo-form-trabajador">Traslado de estudiantes</span>
+                      </div>
+                  </div>
+                  <form id="form_trabajador">
                     <div className="row">
-                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
-                                <button className="close" data-dismiss="alert">
-                                    <span>X</span>
-                                </button>
-                            </div>
+                        <div className="col-auto">
+                            <ButtonIcon
+                            clasesBoton="btn btn-outline-success"
+                            icon="icon-plus"
+                            id="icon-plus"
+                            eventoPadre={this.agregar}
+                            />
                         </div>
                     </div>
-                }
-            </div>
-            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
-                <div className="row justify-content-center">
-                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Traslado de estudiantes</span>
+                    <div className="row mt-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                            <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante</span>
+                        </div>
                     </div>
-                </div>
-                <form id="form_trabajador">
-                  <div className="row">
-                      <div className="col-auto">
-                          <ButtonIcon
-                          clasesBoton="btn btn-outline-success"
-                          icon="icon-plus"
-                          id="icon-plus"
-                          eventoPadre={this.agregar}
-                          />
-                      </div>
-                  </div>
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante</span>
-                      </div>
-                  </div>
+                    <div className="row justify-content-center mx-auto my-2">
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_grado}
+                      nombreCampoSelect="Grados:"
+                      clasesSelect="custom-select"
+                      name="id_grado"
+                      id="id_grado"
+                      eventoPadre={this.ConsultarAulasPorGrado}
+                      defaultValue={this.state.id_grado}
+                      option={this.state.listaGrados}
+                      />
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_aula_a}
+                      nombreCampoSelect="Aula (A):"
+                      clasesSelect="custom-select"
+                      name="id_grado_a"
+                      id="id_grado_a"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.id_aula_a}
+                      option={this.state.listaAulas}
+                      />
+                    </div>
 
-                  </div>
-                    <div className="row justify-content-center">
+
+
+                      <div className="row justify-content-center">
                         <div className="col-auto">
                           <InputButton
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="Actualizar"
-                            eventoPadre={this.operacion}
+                            value="Confirmar Traslado"
+                            eventoPadre={this.traslado}
                           />
                         </div>
-                        <div className="col-auto">
+                          <div className="col-auto">
                             <InputButton
-                            clasesBoton="btn btn-danger"
-                            id="boton-cancelar"
-                            value="Cancelar"
-                            eventoPadre={this.regresar}
+                              clasesBoton="btn btn-warning"
+                              id="boton-actualizar"
+                              value="Actualizar"
+                              eventoPadre={this.operacion}
+                            />
+                          </div>
+                          <div className="col-auto">
+                              <InputButton
+                              clasesBoton="btn btn-danger"
+                              id="boton-cancelar"
+                              value="Cancelar"
+                              eventoPadre={this.regresar}
+                              />
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      )
+    }else{
+      jsx_traslado_form=(
+          <div className="row justify-content-center">
+
+              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                  {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+                      <div className="row">
+                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                              <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
+                                  <p>Mensaje: {this.state.mensaje.texto}</p>
+                                  <button className="close" data-dismiss="alert">
+                                      <span>X</span>
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                  }
+              </div>
+              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
+                  <div className="row justify-content-center">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                          <span className="titulo-form-trabajador">Traslado de estudiantes</span>
+                      </div>
+                  </div>
+                  <form id="form_trabajador">
+                    <div className="row">
+                        <div className="col-auto">
+                            <ButtonIcon
+                            clasesBoton="btn btn-outline-success"
+                            icon="icon-plus"
+                            id="icon-plus"
+                            eventoPadre={this.agregar}
                             />
                         </div>
                     </div>
-                </form>
-            </div>
-        </div>
-    )
+                    <div className="row mt-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                            <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante2</span>
+                        </div>
+                    </div>
+                    <div className="row justify-content-center mx-auto my-2">
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_grado}
+                      nombreCampoSelect="Grados:"
+                      clasesSelect="custom-select"
+                      name="id_grado"
+                      id="id_grado"
+                      eventoPadre={this.ConsultarAulasPorGrado}
+                      defaultValue={this.state.id_grado}
+                      option={this.state.listaGrados}
+                      />
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_aula_a}
+                      nombreCampoSelect="Aula (A):"
+                      clasesSelect="custom-select"
+                      name="id_grado_a"
+                      id="id_grado_a"
+                      eventoPadre={this.cambiarEstado}
+                      defaultValue={this.state.id_aula_a}
+                      option={this.state.listaAulas}
+                      />
+                    </div>
+
+
+
+                      <div className="row justify-content-center">
+                        <div className="col-auto">
+                          <InputButton
+                            clasesBoton="btn btn-warning"
+                            id="boton-actualizar"
+                            value="Confirmar Traslado"
+                            eventoPadre={this.traslado}
+                          />
+                        </div>
+                          <div className="col-auto">
+                              <InputButton
+                              clasesBoton="btn btn-danger"
+                              id="boton-cancelar"
+                              value="Cancelar"
+                              eventoPadre={this.regresar}
+                              />
+                          </div>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      )
+    }
+
 
     return(
         <div className="component_trabajador_form">

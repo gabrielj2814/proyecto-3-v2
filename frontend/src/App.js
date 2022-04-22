@@ -146,7 +146,7 @@ import ComponentAsistenciaEstudiantesForm from './componentes/componentAsistenci
 import ComponentRetiroForm from './componentes/componentRetiroForm'
 import ComponentRetiro from './componentes/componentRetiro'
 // Cambio de aula
-import ComponentCambiosAulaForm from './componentes/componentCambioAulaForm'
+import ComponentCambioAulaForm from './componentes/componentCambioAulaForm'
 
 function App() {
   return (
@@ -249,7 +249,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/inscripcion/:operacion/:id?" component={ComponentInscripcionForm}/>
         <Route exact path="/dashboard/configuracion/inscripcion/:mensaje?" component={ComponentInscripcion}/>
 
-        <Route exact path="/dashboard/configuracion/cambio-aula" component={ComponentCambiosAulaForm}/>
+        <Route exact path="/dashboard/configuracion/traslado-estudiantes" component={ComponentCambioAulaForm}/>
 
         <Route exact path="/dashboard/configuracion/parroquia/:operacion/:id?" component={ComponentParroquiaForm}/>
         <Route exact path="/dashboard/configuracion/parroquia/:mensaje?" component={ComponentParroquia}/>
