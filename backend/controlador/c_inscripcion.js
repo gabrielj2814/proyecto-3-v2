@@ -174,6 +174,28 @@ controladorInscripcion.culminarInscripcion= async (id_inscripcion) => {
     }
 }
 
+controladorInscripcion.obtenerEstudianteAula = async(req, res) => {
+    const ModeloInscripcion = require('../modelo/m_inscripcion')
+    const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "", datos: [] }
+    let { idAula } = req.params;
+    let modeloInscripcion = new ModeloInscripcion()
+    const resultEstudianteAula = await modeloInscripcion.contultaEstudianteAula(idAula)
+    if(resultEstudianteAula.rowCount > 0){
+        respuesta_api.mensaje = "consulta completada"
+        respuesta_api.datos = resultEstudianteAula.rows
+        respuesta_api.estado_respuesta = true
+        respuesta_api.color_alerta = "success"
+    }
+    else {
+        respuesta_api.mensaje = "No se a encontrado registro en la base de datos"
+        respuesta_api.estado_respuesta = false
+        respuesta_api.color_alerta = "danger"
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 controladorInscripcion.obtenerEstudianteProfesor=async (req,res) => {
     const ModeloInscripcion=require('../modelo/m_inscripcion')
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:"",datos:[]}
