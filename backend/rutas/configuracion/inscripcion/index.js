@@ -9,5 +9,6 @@ router.get("/consultar/:id", controladorInscripcion.consultar) //consultar una i
 router.put("/actualizar/:id", controladorInscripcion.actualizar) //actualizar una inscripción
 router.get("/consultar-estudiante-por-profesor/:cedula", controladorInscripcion.obtenerEstudianteProfesor)
 router.put("/cambiar/:id", controladorInscripcion.cambio) //realizando cambio de estudiante
+router.get("/consultar-estudiante/:idAula", controladorInscripcion.obtenerEstudianteAula) //consultar estudiantes en aula
 
 module.exports = router
