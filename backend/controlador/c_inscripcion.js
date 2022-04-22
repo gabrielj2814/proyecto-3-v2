@@ -97,6 +97,38 @@ controladorInscripcion.consultar=async (req,res) => {
     res.end()
 }
 
+controladorInscripcion.cambio = async (req, res) =>{
+    const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" } 
+    const ModeloInscripcion = require('../modelo/m_inscripcion')
+    let { cambio } = req.body
+    let { id } = req.params
+    let modeloInscripcion = new ModeloInscripcion()
+    modeloInscripcion.setCambio(cambio)
+    modeloInscripcion.setIdInscripcion(id)
+    let resultInscripcion = await modeloInscripcion.cambioDeAula()
+    if(resultInscripcion.rowCount > 0) {
+        let resultInscripcion2 = await modeloInscripcion.cambioDeAula()
+        if(resultInscripcion2.rowCount > 0 ){
+            respuesta_api.mensaje = "actualización completada"
+            respuesta_api.estado_respuesta = true
+            respuesta_api.color_alerta = "success"
+        }
+        else {
+            respuesta_api.mensaje = "error al Cambiar"
+            respuesta_api.estado_respuesta = false
+            respuesta_api.color_alerta = "danger"
+        }
+    }
+    else {
+        respuesta_api.mensaje = "error al realizar el cambio (Este registro no se encuentra en la base de datos)"
+        respuesta_api.estado_respuesta = false
+        respuesta_api.color_alerta = "warning"
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 controladorInscripcion.actualizar= async (req,res) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const ModeloInscripcion=require('../modelo/m_inscripcion')
