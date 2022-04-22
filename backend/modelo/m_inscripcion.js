@@ -22,6 +22,10 @@ class ModeloInscripcion extends DriverPostgres {
 
   }
 
+  setCambio(cambio) {
+    this.id_asignacion_aula_profesor = cambio.id_asignacion_aula_profesor;
+  }
+
   setIdInscripcion(id){
     this.id_inscripcion = id
   }
@@ -94,8 +98,16 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL);
   }
 
+  async cambioDeAula(){
+    const SQL = `UPDATE tinscripcion SET id_asignacion_aula_profesor= '${this.id_asignacion_aula_profesor}' 
+     WHERE id_inscripcion = ${this.id_inscripcion}`
+
+    return await this.query(SQL);
+  }
+
   async culminar(){
-    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion}
+    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion} 
+       
     `
     return await this.query(SQL);
   }

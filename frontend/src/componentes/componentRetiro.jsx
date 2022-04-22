@@ -258,17 +258,6 @@ class ComponentRetiro extends React.Component {
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
-
-                <div className="row">
-
-                  <div className="col-3 col-ms-3 col-md-3 columna-boton">
-                      <div className="row justify-content-center align-items-center contenedor-boton">
-                        <div className="col-auto">
-                          <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
-                        </div>
-                      </div>
-                    </div>
-                </div>
             </div>
         )
         return (

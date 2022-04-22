@@ -40,6 +40,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     this.consultarRepresentante=this.consultarRepresentante.bind(this)
     this.consultarCiudad = this.consultarCiudad.bind(this)
     this.consultarParroquiasXCiudad = this.consultarParroquiasXCiudad.bind(this)
+    this.consultarTodoXParroquia = this.consultarTodoXParroquia.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -375,6 +376,22 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       })
   }
 
+  async consultarTodoXParroquia(id){
+    const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}`
+
+    let datos = await axios.get(ruta_api_3)
+    .then( ({data}) => {
+      return {
+        id_estado: data.datos[0].id_estado,
+        id_ciudad: data.datos[0].id_ciudad,
+        id_parroquia: data.datos[0].id_parroquia,
+      }
+    })
+    .catch( error => console.error(error))
+
+    return datos;
+  }
+
   formatoOptionSelect(lista,lista_vacia,propiedades){
       var veces=0
       while(veces < lista.length){
@@ -406,9 +423,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       if(input.value!==""){
           if(exprecion.test(input.value)){
               this.cambiarEstadoDos(input)
-          }
-          else{
-              console.log("NO se acepta valores numericos")
           }
       }
       else{
@@ -460,15 +474,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       msj[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
     }
 
-    if(nombre_campo === "nombres_mama") this.setState({msj_nombres_mama: msj})
-    if(nombre_campo === "nombres_papa") this.setState({msj_nombres_papa: msj})
-    if(nombre_campo === "apellidos_papa") this.setState({msj_apellidos_mama: msj})
-    if(nombre_campo === "apellidos_mama") this.setState({msj_apellidos_papa: msj})
-    if(nombre_campo === "ocupacion_mama") this.setState({msj_ocupacion_mama: msj})
-    if(nombre_campo === "ocupacion_papa") this.setState({msj_ocupacion_papa: msj})
-    if(nombre_campo === "constitucion_familiar_mama") this.setState({msj_constitucion_familiar_mama: msj})
-    if(nombre_campo === "constitucion_familiar_papa") this.setState({msj_constitucion_familiar_papa: msj})
-
+    this.setState({["msj_"+nombre_campo]: msj})
     return estado
   }
 
@@ -794,21 +800,63 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       this.props.history.push("/dashboard/configuracion/representante");
   }
 
-  buscarRepresentante(a){
+  async buscarRepresentante(a){
     let input = a.target
     this.validarNumero(a)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
-    let index;
+    let index, name;
     if(hashRepresentante[input.value]){
-      if(input.name == "id_cedula_mama") index = "papa_existe"; else index = "mama_existe";
+      if(input.name == "id_cedula_mama"){
+        index = "mama_existe";
+        name = "mama";
+
+        if(input.value == this.state.id_cedula_papa){
+          alert("No puedes duplicar cedulas")
+          return false;
+        }
+      }else{
+        index = "papa_existe";
+        name = "papa"
+        if(input.value == this.state.id_cedula_mama){
+          alert("No puedes duplicar cedulas")
+          return false;
+        }
+      }
+
+
+      let datos = await this.consultarTodoXParroquia(hashRepresentante[input.value].id_parroquia)
+      let indexes = [
+        `id_cedula_${name}`,`nombres_${name}`,`apellidos_${name}`,`fecha_nacimiento_${name}`,`nivel_instruccion_${name}`,
+        `ocupacion_${name}`,`telefono_movil_${name}`,`telefono_local_${name}`,`ingresos_${name}`,
+        `tipo_vivienda_${name}`,`constitucion_familiar_${name}`,`estatus_${name}2`,`estatus_${name}2`,
+        `id_estado_${name}`,`id_ciudad_${name}`,`id_parroquia_${name}`,
+      ];
+
+      indexes.map( item => { document.getElementById(item).disabled = true; })
+
       this.setState({
         estadoBusquedaRepresentante:true,
+        ["id_cedula_"+name]: hashRepresentante[input.value].id_cedula_representante,
+        ["nombres_"+name]: hashRepresentante[input.value].nombres_representante,
+        ["apellidos_"+name]: hashRepresentante[input.value].apellidos_representante,
+        ["fecha_nacimiento_"+name]: Moment(hashRepresentante[input.value].fecha_nacimiento_representante).format("YYYY-MM-DD"),
+        ["nivel_instruccion_"+name]: hashRepresentante[input.value].nivel_instruccion_representante,
+        ["ocupacion_"+name]: hashRepresentante[input.value].ocupacion_representante,
+        ["telefono_movil_"+name]: hashRepresentante[input.value].telefono_movil_representante,
+        ["telefono_local_"+name]: hashRepresentante[input.value].telefono_local_representante,
+        ["ingresos_"+name]: hashRepresentante[input.value].ingresos_representante,
+        ["tipo_vivienda_"+name]: hashRepresentante[input.value].tipo_vivienda_representante,
+        ["constitucion_familiar_"+name]: hashRepresentante[input.value].constitucion_familiar_representante,
+        ["estatus_"+name]: hashRepresentante[input.value].estatus_representante,
+        ["id_estado_"+name]: datos.id_estado,
+        ["id_ciudad_"+name]: datos.id_ciudad,
+        ["id_parroquia_"+name]: datos.id_parroquia,
         [index]: true,
       })
       alert("este representante ya esta resgistrado")
     }
     else{
-      if(input.name == "id_cedula_mama") index = "papa_existe"; else index = "mama_existe";
+      if(input.name == "id_cedula_mama") index = "mama_existe"; else index = "papa_existe";
       this.setState({
         estadoBusquedaRepresentante:false,
         [index]: false,
@@ -939,20 +987,20 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       name="tipo_vivienda_mama"
                       id="tipo_vivienda_mama"
                       eventoPadre={this.cambiarEstado}
-                      defaultValue={this.state.tipo_vivienda__mama}
+                      defaultValue={this.state.tipo_vivienda_mama}
                       option={this.state.tipo_viviendas}
                     />
                     <ComponentFormRadioState
                       clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus:"
-                      name="estatu_mama"
+                      name="estatus_mama"
                       nombreLabelRadioA="Activó"
-                      idRadioA="activoestudianterA"
+                      idRadioA="estatus_mama1"
                       checkedRadioA={this.state.estatus_mama}
                       valueRadioA="1"
                       nombreLabelRadioB="Inactivo"
-                      idRadioB="activoestudianterB"
+                      idRadioB="estatus_mama2"
                       valueRadioB="0"
                       eventoPadre={this.cambiarEstado}
                       checkedRadioB={this.state.estatus_papa}
@@ -1129,13 +1177,13 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus:"
-                      name="estatu_papa"
+                      name="estatus_papa"
                       nombreLabelRadioA="Activó"
-                      idRadioA="activoestudianterA"
+                      idRadioA="estatus_papa1"
                       checkedRadioA={this.state.estatus_papa}
                       valueRadioA="1"
                       nombreLabelRadioB="Inactivo"
-                      idRadioB="activoestudianterB"
+                      idRadioB="estatus_papa2"
                       valueRadioB="0"
                       eventoPadre={this.cambiarEstado}
                       checkedRadioB={this.state.estatus_papa}

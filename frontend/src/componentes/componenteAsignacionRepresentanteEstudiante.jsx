@@ -106,7 +106,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
       return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
       .then(repuesta => {
         this.setState({
-          registros:repuesta.data.datos 
+          registros:repuesta.data.datos
         })
       })
       .catch(error => {
@@ -231,7 +231,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            
+
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
@@ -276,7 +276,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
               </tr>
           </thead>
       );
-                  
+
       const jsx_tabla_body=(
         <tbody>
               {this.state.registros.map( asignacion => {
@@ -321,7 +321,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
             }
             <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Asignacion representante estudiante"/>
             <ComponentTablaDatos eventoBuscar={this.buscar} eventoEscribirCodigo={this.escribir_codigo}
-                tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.numeros_registros}
+                tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}
             />
             <div className="row justify-content-between">
               <div className="col-3 col-ms-3 col-md-3 columna-boton">
