@@ -1,0 +1,37 @@
+
+:root{
+    --color-fondo-formulario:#fff;
+}
+
+.contenedor_formulario_promocion{
+    background-color: var(--color-fondo-formulario);
+    height: auto;
+    border-radius: 15px;
+    padding-bottom: 30px;
+}
+
+.component_promocion_form{
+    height: 100%;
+}
+
+.contenedor-titulo-form-promocion{
+    border-bottom: 1px solid #111;
+    margin-bottom: 15px;
+}
+
+.titulo-form-promocion{
+    font-size: 2.5rem; 
+}
+
+.sub-titulo-form-promocion{
+    font-size: 2.0rem;
+}
+
+.texarea-alto{
+    height: 350px !important;
+}
+
+table{
+    text-transform: uppercase;
+    /* font-weight: bold; */
+}

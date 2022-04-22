@@ -66,13 +66,14 @@ class ModeloAsistenciaEstudiante extends DriverPostgre {
         return await this.query(SQL)
     }
 
-    async consultarAsistenciaDeHoy(){
+    async consultarAsistenciaDeHoy(textoConsultaSQL){
         let fecha=Moment().format("YYYY-MM-DD")
         const SQL=`SELECT * FROM 
         testudiante,
         tinscripcion,
         tasistencia_estudiante 
         WHERE
+        ${textoConsultaSQL} AND
         tasistencia_estudiante.fecha_asistencia_estudiante='${fecha}' AND
         tinscripcion.id_inscripcion=tasistencia_estudiante.id_inscripcion AND
         testudiante.id_estudiante=tinscripcion.id_estudiante

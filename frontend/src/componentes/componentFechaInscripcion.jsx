@@ -296,7 +296,7 @@ class ComponentFechaInscripcion extends React.Component{
                         
                     </div>)
                 }
-                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center " tituloModulo="Módulo de Grado"/>
+                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center " tituloModulo="Módulo de Fecha de incripción"/>
                 
   
                 <div className="row">

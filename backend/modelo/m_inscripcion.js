@@ -123,7 +123,7 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async consultarValidandoInscripcionEstudiante(){
-    const SQL=`SELECT * FROM tinscripcion WHERE id_estudiante='${this.id_estudiante}' AND (estatus_inscripcion='I' OR estatus_inscripcion='T' OR estatus_inscripcion='R')`
+    const SQL=`SELECT * FROM tinscripcion WHERE id_estudiante='${this.id_estudiante}' AND id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor} AND (estatus_inscripcion='I' OR estatus_inscripcion='T' OR estatus_inscripcion='R' OR estatus_inscripcion='C')`
     return await this.query(SQL)
   }
 
@@ -138,6 +138,34 @@ class ModeloInscripcion extends DriverPostgres {
                 `
                 return await this.query(SQL)
   }
+
+  async consultarProfesorAula(idAula){
+    const SQL = `SELECT tprofesor.id_cedula,ttrabajador.nombres,ttrabajador.apellidos FROM tano_escolar,taula,tasignacion_aula_profesor,tprofesor,ttrabajador WHERE taula.id_aula=${idAula} AND
+     tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND tano_escolar.estatus_ano_escolar='1' AND
+     tasignacion_aula_profesor.id_aula=taula.id_aula AND tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+     ttrabajador.id_cedula=tprofesor.id_cedula;
+    `
+    return await this.query(SQL);
+  }
+
+  async consultarEstudianteAulaProfesor(idEstudiante) {
+    const SQL = `SELECT * FROM tinscripcion WHERE id_estudiante=${idEstudiante}`
+    return await this.query(SQL)
+  }
+
+  async ConsultarEstudiantesInscritos(){
+    const SQL = `SELECT * FROM tano_escolar,taula,tasignacion_aula_profesor,testudiante, tinscripcion WHERE
+      tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND tano_escolar.estatus_ano_escolar='1' AND
+      tasignacion_aula_profesor.id_aula=taula.id_aula AND tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor AND
+      testudiante.id_estudiante = tinscripcion.id_estudiante`;
+    return await this.query(SQL);
+  }
+
+  // async consultarEstudianteAulaProfesor(){
+  //   const SQL = ` SELECT * FROM tinscripcion,testudiante,tasignacion_aula_profesor WHERE id_estudiante= '${this.id_estudiante} '
+  //   AND id_asignacion_aula_profesor=tasignacion_aula_profesor.id_asignacion_aula_profesor`
+  //   return await this.query(SQL);
+  // }
 
 }
 

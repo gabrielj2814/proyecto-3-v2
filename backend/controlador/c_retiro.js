@@ -45,6 +45,28 @@ ControladorRetiro.actualizar= async (req,res) => {
     res.end()
 }
 
+ControladorRetiro.consultar = async (req,res) => {
+    const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
+    let { id_retiro } = req.params
+    const modeloRetiro=new ModeloRetiro()
+    modeloRetiro.setIdRetiro(id_retiro)
+    let consultaRetiro=await modeloRetiro.consultar()
+    if(consultaRetiro.rowCount>0){
+        respuesta_api.datos=consultaRetiro.rows
+        respuesta_api.mensaje="solicitud actualizado con existo"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al actualizar la solicitud de retiro"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 ControladorRetiro.consultarPorEstado= async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const {estado,fechaDesde,fechaHasta} = req.params

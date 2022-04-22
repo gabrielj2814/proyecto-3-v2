@@ -18,7 +18,9 @@ const componentFormSelect = (props) => {
                 {props.option.length!==0 &&
                     <select defaultValue={props.defaultValue} className={props.clasesSelect} name={props.name} id={props.id} onBlur={props.eventoPadre}>
                     {props.option.map((option)=>{
-                        return (<option key={props.name+"#"+option.id} id={option.id} value={option.id}>{option.descripcion}</option>)
+                        let selected;
+                        if(option.id === props.defaultValue) selected = "selected"; else selected = "";
+                        return (<option key={props.name+"#"+option.id} id={option.id} value={option.id} selected={selected} >{option.descripcion}</option>)
                         }
                     )}
                     </select>
