@@ -1,6 +1,6 @@
 <?php
 include_once("../librerias_php/fpdf/fpdf.php");
-class PdfMatriculaFinal extends FPDF{
+class PdfListaInscriptiosPorGradoYSeccion extends FPDF{
 
     private $datosPdf;
     private $generado;
@@ -33,7 +33,7 @@ class PdfMatriculaFinal extends FPDF{
 
     function generarPdf(){
         
-        $nombrePdf="Matricula fINAL.pdf";
+        $nombrePdf="Lista de Inscrtios por grado y aula.pdf";
         $this->AliasNbPages();
         $this->Addpage();
         $this->ln(20);
@@ -49,7 +49,7 @@ class PdfMatriculaFinal extends FPDF{
         }
         //TITULO
         $this->SetFont("Arial","B",10);
-        $this->Cell(0,10,"MATRICULA FINAL ".$grado." GRADO SECCION ".$aula,0,0,"C");
+        $this->Cell(0,10,"LISTADO DE INSCRITOS $grado GRADO SECCION $aula",0,0,"C");
         
         $this->ln(12);
         //fECHA
@@ -67,48 +67,26 @@ class PdfMatriculaFinal extends FPDF{
         $this->Cell(10,10,'Nro',1,0,'C');
         $this->Cell(40,10,'Nombre y Apellido',1,0,'C');
         $this->Cell(30,10,'Cedula',1,0,'C');
-        $this->Cell(30,10,'Aprobado',1,0,'C');
-        $this->Cell(30,10,'Reprobado',1,0,'C');
-        $this->Cell(30,10,'Retirado',1,0,'C');
+        $this->Cell(30,10,'Telefono',1,0,'C');
+        $this->Cell(55,10,'Nombre del representante',1,0,'C');
         
         $contador=0;
-        foreach($this->datosPdf as $inscripto){
+        foreach($this->datosPdf as $inscritos){
             $contador++;
             $this->ln(10);
             $cedula="no tiene";
-            if($inscripto["cedula_estudiante"]===null){
-                $cedula=$inscripto["cedula_escolar"];
+            if($inscritos["cedula_estudiante"]===null){
+                $cedula=$inscritos["cedula_escolar"];
             }
             else{
-                $cedula=$inscripto["cedula_estudiante"];
+                $cedula=$inscritos["cedula_estudiante"];
             }
-
-
-            $nota_promocion=null;
             $this->Cell(15,10,'',0,0,'C');
             $this->Cell(10,10,$contador,1,0,'C');
-            $this->Cell(40,10,$inscripto["nombres_estudiante"],1,0,'C');
+            $this->Cell(40,10,$inscritos["nombres_estudiante"]." ".$inscritos["apellidos_estudiante"],1,0,'C');
             $this->Cell(30,10,$cedula,1,0,'C');
-            $nota=null;
-            // nota_promocion
-            if(array_key_exists("nota_promocion",$inscripto)){
-                if($inscripto["nota_promocion"]==="F"){
-                    $this->Cell(30,10,"",1,0,'C');
-                    $this->Cell(30,10,'X',1,0,'C');
-                    $this->Cell(30,10,'',1,0,'C');
-                }
-                else{
-                    $this->Cell(30,10,"X",1,0,'C');
-                    $this->Cell(30,10,'',1,0,'C');
-                    $this->Cell(30,10,'',1,0,'C');
-                }
-            }
-            else{
-                $this->Cell(30,10,'',1,0,'C');
-                $this->Cell(30,10,'',1,0,'C');
-                $this->Cell(30,10,'X',1,0,'C');
-            }
-
+            $this->Cell(30,10,$inscritos["telefono_movil_representante"],1,0,'C');
+            $this->Cell(55,10,$inscritos["nombres_representante"]." ".$inscritos["apellidos_representante"],1,0,'C');
         }
 
         
@@ -125,7 +103,7 @@ class PdfMatriculaFinal extends FPDF{
 
 }
 
-// $pdf = new FPDF("L","mm","letter");
+
 // $pdf->Addpage();
 // $pdf->Image("imagenes/encabezado1.jpg",24,10,190,12);$pdf->Image("imagenes/carabobo.jpg",213,2,50,30);
 
@@ -133,7 +111,7 @@ class PdfMatriculaFinal extends FPDF{
 
 // //TITULO
 // $pdf->SetFont("Arial","B",10);
-// $pdf->Cell(0,10,"MATRICULA FINAL 6TO GRADO SECCION A",0,0,"C");
+// $pdf->Cell(0,10,"LISTADO DE INSCRITOS 6TO GRADO SECCION",0,0,"C");
 
 // $pdf->ln(12);
 // //fECHA
@@ -151,9 +129,9 @@ class PdfMatriculaFinal extends FPDF{
 // $pdf->Cell(10,10,'Nro',1,0,'C');
 // $pdf->Cell(40,10,'Nombre y Apellido',1,0,'C');
 // $pdf->Cell(30,10,'Cedula',1,0,'C');
-// $pdf->Cell(30,10,'Aprobado',1,0,'C');
-// $pdf->Cell(30,10,'Reprobado',1,0,'C');
-// $pdf->Cell(30,10,'Retirado',1,0,'C');
+// $pdf->Cell(30,10,'Telefono',1,0,'C');
+// $pdf->Cell(55,10,'Nombre del representante',1,0,'C');
+
 
 // $pdf->ln(10);
 
@@ -161,9 +139,9 @@ class PdfMatriculaFinal extends FPDF{
 // $pdf->Cell(10,10,'1',1,0,'C');
 // $pdf->Cell(40,10,'pepito paredes',1,0,'C');
 // $pdf->Cell(30,10,'V-267591371',1,0,'C');
-// $pdf->Cell(30,10,'X',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
+// $pdf->Cell(30,10,'0424-5445967',1,0,'C');
+// $pdf->Cell(55,10,'Juan de Dios Arraiz',1,0,'C');
+
 
 // $pdf->ln(10);
 
@@ -171,9 +149,8 @@ class PdfMatriculaFinal extends FPDF{
 // $pdf->Cell(10,10,'2',1,0,'C');
 // $pdf->Cell(40,10,'panchita paredes',1,0,'C');
 // $pdf->Cell(30,10,'V-267591372',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
-// $pdf->Cell(30,10,'X',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
+// $pdf->Cell(30,10,'0424-5445967',1,0,'C');
+// $pdf->Cell(55,10,'Juan de Dios Arraiz',1,0,'C');
 
 // $pdf->ln(10);
 
@@ -182,8 +159,7 @@ class PdfMatriculaFinal extends FPDF{
 // $pdf->Cell(40,10,'',1,0,'C');
 // $pdf->Cell(30,10,'',1,0,'C');
 // $pdf->Cell(30,10,'',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
-// $pdf->Cell(30,10,'',1,0,'C');
+// $pdf->Cell(55,10,'',1,0,'C');
 
 
 // $pdf->ln(20);

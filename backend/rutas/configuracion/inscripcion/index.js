@@ -10,6 +10,7 @@ router.put("/actualizar/:id", controladorInscripcion.actualizar) //actualizar un
 router.get("/consultar-estudiante-por-profesor/:cedula", controladorInscripcion.obtenerEstudianteProfesor)
 
 router.put("/cambiar/:id", controladorInscripcion.cambio) //realizando cambio de estudiante
+router.get("/consultar-estudiante/:idAula", controladorInscripcion.obtenerEstudianteAula) //consultar estudiantes en aula
 
 router.get("/consultar-aula-profesor/:idAula", controladorInscripcion.obtenerAulaProfesor)
 router.get("/consultar-estudiante-inscritos", controladorInscripcion.ObtenerEstudiantesInscritos)

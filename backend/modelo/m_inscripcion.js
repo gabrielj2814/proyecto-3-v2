@@ -139,6 +139,14 @@ class ModeloInscripcion extends DriverPostgres {
                 return await this.query(SQL)
   }
 
+  async contultaEstudianteAula(idAula){
+    const SQL = `SELECT * FROM tinscripcion, testudiante, tano_escolar, tasignacion_aula_profesor WHERE
+                tano_escolar.estatus_ano_escolar='1'  AND testudiante.id_estudiante = tinscripcion.id_estudiante 
+                AND tasignacion_aula_profesor.id_aula = ${idAula}
+                 `
+    return await this.query(SQL)
+  }
+
   async consultarProfesorAula(idAula){
     const SQL = `SELECT tprofesor.id_cedula,ttrabajador.nombres,ttrabajador.apellidos FROM tano_escolar,taula,tasignacion_aula_profesor,tprofesor,ttrabajador WHERE taula.id_aula=${idAula} AND
      tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND tano_escolar.estatus_ano_escolar='1' AND
@@ -161,11 +169,6 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL);
   }
 
-  // async consultarEstudianteAulaProfesor(){
-  //   const SQL = ` SELECT * FROM tinscripcion,testudiante,tasignacion_aula_profesor WHERE id_estudiante= '${this.id_estudiante} '
-  //   AND id_asignacion_aula_profesor=tasignacion_aula_profesor.id_asignacion_aula_profesor`
-  //   return await this.query(SQL);
-  // }
 
 }
 
