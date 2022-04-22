@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import $ from "jquery"
+import moment from "moment"
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -92,7 +93,8 @@ class ComponentInscripcionForm extends React.Component{
         },
         //
         fechaServidor:null,
-        StringExprecion: /[A-Za-z]|[0-9]/
+        StringExprecion: /[A-Za-z]|[0-9]/,
+        mostarFomrulario:true
     }
   }
 
@@ -188,26 +190,69 @@ class ComponentInscripcionForm extends React.Component{
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
     if(acessoModulo){
       await this.consultarFechaServidor()
-      let responseAnoEscolar = await this.Consultar_ano_escolar();
-      if(responseAnoEscolar){
-        await this.GetRepresentant_Estudiant()
-        await this.obtenerDatosDeLasesion();
-        await this.Consultar_asignacion_aula();
-        const operacion=this.props.match.params.operacion
-      }else{
-          document.getElementById("cedula_escolar").disabled = true;
-          document.getElementById("boton-registrar").disabled = true;
+      await this.consultarFechaInscripcionActual()
+      let apertura=true
+      if(this.state.mostarFomrulario===apertura){
+        let responseAnoEscolar = await this.Consultar_ano_escolar();
+        if(responseAnoEscolar){
+          await this.GetRepresentant_Estudiant()
+          await this.obtenerDatosDeLasesion();
+          await this.Consultar_asignacion_aula();
+          const operacion=this.props.match.params.operacion
+        }else{
+            document.getElementById("cedula_escolar").disabled = true;
+            document.getElementById("boton-registrar").disabled = true;
+        }
+  
+        document.getElementById("activoestudianter1").disabled = true;
+        document.getElementById("activoestudianter2").disabled = true;
+        document.getElementById("activoestudianter3").disabled = true;
+        document.getElementById("activoestudianter4").disabled = true;
       }
-
-      document.getElementById("activoestudianter1").disabled = true;
-      document.getElementById("activoestudianter2").disabled = true;
-      document.getElementById("activoestudianter3").disabled = true;
-      document.getElementById("activoestudianter4").disabled = true;
 
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+  }
+
+  async consultarFechaInscripcionActual(){
+    this.setState({mostarFomrulario:false})
+    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/fecha-inscripcion/consultar-fecha-inscripcion-actual`)
+    .then(async respuesta=>{
+        let respuesta_servior = respuesta.data
+        console.log("datos de fecha inscripcion actual =>>>> ",respuesta_servior)
+        let fecha_incripcion_desde=respuesta_servior.datos.fecha_incripcion_desde
+        let fecha_incripcion_hasta=respuesta_servior.datos.fecha_incripcion_hasta
+        let fecha_tope_inscripcion=respuesta_servior.datos.fecha_tope_inscripcion
+        let estado_reapertura_inscripcion=respuesta_servior.datos.estado_reapertura_inscripcion
+        let apertura="1"
+        if(moment(this.state.fechaServidor).isSameOrAfter(fecha_incripcion_desde)){
+          if(moment(this.state.fechaServidor).isSameOrBefore(fecha_incripcion_hasta)){
+            this.setState({mostarFomrulario:true})
+          }
+          else{
+            if(estado_reapertura_inscripcion===apertura){
+              if(moment(this.state.fechaServidor).isSameOrBefore(fecha_tope_inscripcion)){
+                alert("OK todavia esta a tiempo")
+                this.setState({mostarFomrulario:true})
+              }
+              else{
+                alert("Su pero la Fecha tope de la reapertura de inscripción")
+                this.props.history.push(`/dashboard/configuracion/inscripcion`)
+              }
+            }
+            else{
+              alert("NO se ha Reaperturado la inscripción")
+              this.props.history.push(`/dashboard/configuracion/inscripcion`)
+            }
+          }
+        }
+        else{
+          alert("No se ha Abriertos las Inscripciones")
+          this.props.history.push(`/dashboard/configuracion/inscripcion`)
+        }
+    })
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
@@ -710,6 +755,11 @@ class ComponentInscripcionForm extends React.Component{
                     </div>
                 </div>
                 <form id="form_trabajador">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                      </div>
+                  </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
@@ -722,9 +772,10 @@ class ComponentInscripcionForm extends React.Component{
                       </div>
 
                   </div>
+
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Representantes</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -745,15 +796,15 @@ class ComponentInscripcionForm extends React.Component{
 
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Representantes</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos academicos</span>
                       </div>
                   </div>
 
                   <div className="row justify-content-center mt-1">
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
-                      nombreCampo="Ano Escolar:" activo="no" type="text" value={this.state.nombre_ano_escolar}
-                      name="ano_escolar" id="ano_escolar" placeholder="Ano escolar"
+                      nombreCampo="Año Escolar:" activo="no" type="text" value={this.state.nombre_ano_escolar}
+                      name="ano_escolar" id="ano_escolar" placeholder="Año escolar"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
@@ -763,7 +814,7 @@ class ComponentInscripcionForm extends React.Component{
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
                       nombreCampo="Nombre del aula:" activo="no" type="text" value={this.state.nombre_aula}
-                      name="nombre_aula" id="nombre_aula" placeholder="nombre del aula"
+                      name="nombre_aula" id="nombre_aula" placeholder="Nombre del aula"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                       clasesCampo="form-control" obligatorio="si"
@@ -785,11 +836,6 @@ class ComponentInscripcionForm extends React.Component{
                     estates={this.state.estates_radios}
                     eventoPadre={this.cambiarEstado}
                   />
-                  </div>
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos academicos</span>
-                      </div>
                   </div>
 
                     <div className="row justify-content-center">

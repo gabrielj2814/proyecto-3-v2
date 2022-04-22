@@ -8,8 +8,23 @@ ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
     let modeloAsistenciaEstudiante=new ModeloAsistenciaEstudiante()
     const controladorInscripcion=require("./c_inscripcion")
     let {cedula} = req.params
-    let resultAsistenciaDeHoy= await modeloAsistenciaEstudiante.consultarAsistenciaDeHoy()
     let datos=await controladorInscripcion.obtenerEstudianteProfesor2(cedula)
+    console.log("datos estudiantes =>>> ",datos.listaDeEstudiantes)
+    let condicionSQL=[]
+    let textoConsultaSQL=""
+    if(datos.listaDeEstudiantes.length>1){
+        for(let estudiante of datos.listaDeEstudiantes){
+            let condicion="tinscripcion.id_inscripcion= "+estudiante.id_inscripcion
+            condicionSQL.push(condicion)
+        }
+        textoConsultaSQL=" ( "+condicionSQL.join(" OR ")+" ) "
+    }
+    else{
+        textoConsultaSQL=" tinscripcion.id_inscripcion= "+datos.listaDeEstudiantes[0].id_inscripcion
+    }
+    console.log(" consultar texto =>>> ",textoConsultaSQL)
+    let resultAsistenciaDeHoy= await modeloAsistenciaEstudiante.consultarAsistenciaDeHoy(textoConsultaSQL)
+    console.log("datos asistencia =>>> ",resultAsistenciaDeHoy.rows)
     if(resultAsistenciaDeHoy.rowCount>0){
         respuesta_api.mensaje="ya hay asistencia de hoy"
         respuesta_api.datos=resultAsistenciaDeHoy.rows
@@ -29,7 +44,7 @@ ControladorAsistenciaEstudiante.crearAsistenciaDeHoy= async (req,res) => {
                 modeloAsistenciaEstudiante.setDatos(datosAsistencia)
                 modeloAsistenciaEstudiante.registrarAsistencia()
             }
-            resultAsistenciaDeHoy= await modeloAsistenciaEstudiante.consultarAsistenciaDeHoy()
+            resultAsistenciaDeHoy= await modeloAsistenciaEstudiante.consultarAsistenciaDeHoy(textoConsultaSQL)
             respuesta_api.mensaje="no hay asistencia de hoy asi que se creo"
             respuesta_api.datos=resultAsistenciaDeHoy.rows
             respuesta_api.estado_respuesta=true

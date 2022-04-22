@@ -14,5 +14,6 @@ router.get("/consultar-todo-2",ControladorFechaInscripcion.consultarTodo2)
 router.put("/actualizar/:id",ControladorFechaInscripcion.actualizar)
 router.put("/abrir-inscripcion/:id",ControladorFechaInscripcion.reAbrirInscripcion)
 router.put("/cerrar-inscripcion/:id",ControladorFechaInscripcion.cerrarInscripcion)
+router.get("/consultar-fecha-inscripcion-actual",ControladorFechaInscripcion.consultarFechaInscripcionActual)
 
 module.exports = router 

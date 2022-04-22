@@ -583,6 +583,39 @@ CREATE TABLE tretiro(
     constraint PK_id_retiro primary key(id_retiro),
     constraint FK_id_inscripcion_tretiro foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
+-- SELECT 
+-- tasignacion_aula_profesor.id_asignacion_aula_profesor,
+-- ttrabajador.id_cedula,
+-- ttrabajador.nombres,
+-- ttrabajador.apellidos 
+-- FROM 
+-- tano_escolar,
+-- taula,
+-- tasignacion_aula_profesor,
+-- tprofesor,
+-- ttrabajador WHERE 
+-- taula.id_aula=1 AND 
+-- tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
+-- tano_escolar.estatus_ano_escolar='1' AND
+-- tasignacion_aula_profesor.id_aula=taula.id_aula AND 
+-- tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+-- ttrabajador.id_cedula=tprofesor.id_cedula;
+
+-- SELECT 
+-- *
+-- FROM 
+-- tano_escolar,
+-- taula,
+-- tasignacion_aula_profesor,
+-- tprofesor,
+-- ttrabajador WHERE 
+-- taula.id_aula=1 AND 
+-- tano_escolar.id_ano_escolar=tasignacion_aula_profesor.id_ano_escolar AND
+-- tano_escolar.estatus_ano_escolar='1' AND
+-- tasignacion_aula_profesor.id_aula=taula.id_aula AND 
+-- tprofesor.id_profesor=tasignacion_aula_profesor.id_profesor AND
+-- ttrabajador.id_cedula=tprofesor.id_cedula;
+
 
 -- DROP TABLE tretiro;
 -- DROP TABLE tpromocion;

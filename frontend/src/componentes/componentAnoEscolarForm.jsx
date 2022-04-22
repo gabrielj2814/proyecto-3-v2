@@ -111,7 +111,7 @@ class ComponentAnoEscolarForm extends React.Component{
 
 
   async UNSAFE_componentWillMount(){
-    
+
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/ano-escolar")
     let mensaje = {};
     const operacion=this.props.match.params.operacion
@@ -167,7 +167,7 @@ class ComponentAnoEscolarForm extends React.Component{
           fecha_actual: fecha_actual_servidor.datos,
           fecha_maxima: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
         });
-        
+
         mensaje.texto = "No es posible actualizar el Año escolar, ya que este se encuentra en curso";
         mensaje.estado = "404";
         if(!this.validarFecha(true)) return this.props.history.push(`/dashboard/configuracion/ano-escolar${JSON.stringify(mensaje)}`)
@@ -248,7 +248,7 @@ class ComponentAnoEscolarForm extends React.Component{
           // this.setState({modulosSistema})
       })
       .catch(error =>  {
-          console.log(error)
+          console.error(error)
       })
       return estado
   }
@@ -288,7 +288,7 @@ class ComponentAnoEscolarForm extends React.Component{
           }
       })
       .catch(error=>{
-          console.log(error)
+          console.error(error)
       })
       return lista
   }
@@ -440,7 +440,6 @@ class ComponentAnoEscolarForm extends React.Component{
     }
 
     if(fecha_cierre.isAfter(fecha_maxima)){
-      console.log(fecha_cierre, fecha_maxima)
       let msj_fecha_cierre_ano_escolar = this.state.msj_fecha_cierre_ano_escolar
       msj_fecha_cierre_ano_escolar[0] = {mensaje: "La fecha de cierre es mayor a la fecha maxima", color_texto:"rojo"}
       this.setState(msj_fecha_cierre_ano_escolar)
@@ -517,7 +516,7 @@ class ComponentAnoEscolarForm extends React.Component{
                   .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
                       mensaje.estado=false
-                      console.log(error)
+                      console.error(error)
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
                   })

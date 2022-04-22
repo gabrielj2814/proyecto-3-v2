@@ -1049,6 +1049,12 @@ class ComponentEstudianteForm extends React.Component{
                                 </div>
                                 )
                             }
+                            <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                              extra="custom-control-inline" nombreCampoRadio="Sexo:" name="sexo_estudiante"
+                              nombreLabelRadioA="Masculino" idRadioA="masculino" checkedRadioA={this.state.sexo_estudiante}
+                              valueRadioA="1" nombreLabelRadioB="Femenino" idRadioB="femenino"
+                              valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
+                            />
                         </div>
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
@@ -1170,12 +1176,7 @@ class ComponentEstudianteForm extends React.Component{
                           />
                         </div>
                         <div className="row justify-content-center mt-1">
-                            <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
-                              extra="custom-control-inline" nombreCampoRadio="Sexo:" name="sexo_estudiante"
-                              nombreLabelRadioA="Masculino" idRadioA="masculino" checkedRadioA={this.state.sexo_estudiante}
-                              valueRadioA="1" nombreLabelRadioB="Femenino" idRadioB="femenino"
-                              valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
-                            />
+                            
                         </div>
                         <div className="row justify-content-center mt-1">
                           <ComponentFormRadioState

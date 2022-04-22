@@ -31,6 +31,26 @@ ControladorFechaInscripcion.consultarFechaServidor=async (req,res) => {
     res.end()
 }
 
+ControladorFechaInscripcion.consultarFechaInscripcionActual=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let modeloFechaInscripcion=new ModeloFechaInscripcion()
+    let resultFecha=await modeloFechaInscripcion.consultarFechaInscripcionActual()
+    if(resultFecha.rowCount>0){
+        respuesta_api.mensaje="consulta completada"
+        respuesta_api.datos=resultFecha.rows[0]
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+    }
+    else{
+        respuesta_api.mensaje="error al consultar"
+        respuesta_api.estado_respuesta=false
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 ControladorFechaInscripcion.consultar=async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let {id}=req.params

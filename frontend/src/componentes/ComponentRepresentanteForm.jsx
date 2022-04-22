@@ -536,9 +536,8 @@ class ComponentRepresentanteForm extends React.Component{
   fechaNacimiento(a){
     let input=a.target
     this.cambiarEstado(a)
-    // console.log(input.value)
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-    let edadRepresentante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+    let edadRepresentante=(parseInt(fechaServidor.diff(input.value,"years")))
     this.setState({edadRepresentante})
   }
 
@@ -1020,7 +1019,7 @@ class ComponentRepresentanteForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario representante</span>
+                        <span className="titulo-form-trabajador">Formulario Representante</span>
                     </div>
                 </div>
                 <div className="row">
@@ -1081,7 +1080,7 @@ class ComponentRepresentanteForm extends React.Component{
                     <div className="row justify-content-center mx-auto my-2">
                       <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion[0]}
-                        nombreCampo="Ocupacion:" activo="si" type="text" value={this.state.ocupacion}
+                        nombreCampo="Ocupación:" activo="si" type="text" value={this.state.ocupacion}
                         name="ocupacion" id="ocupacion" placeholder="Ocupacion" eventoPadre={this.validarTexto}
                       />
                       <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1152,7 +1151,7 @@ class ComponentRepresentanteForm extends React.Component{
                       />
                       <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
-                        nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
+                        nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
                         name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
                       />
                     </div>

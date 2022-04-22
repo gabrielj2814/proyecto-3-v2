@@ -419,7 +419,8 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         this.cambiarEstado(a)
         // console.log(input.value)
         let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-        let edadEstudiante=(parseInt(fechaServidor.diff(input.value,"years"))>=18)?fechaServidor.diff(input.value,"years"):null
+        let edadEstudiante=(parseInt(fechaServidor.diff(input.value,"years")))
+        console.log(edadEstudiante)
         this.setState({edadEstudiante})
     }
 
@@ -851,7 +852,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                             />
                           {this.state.edadEstudiante!==null &&
                                 (
-                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <div className="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                         <div className="form-ground">
                                             <label className="mb-3">Edad:</label>
                                             <div >{this.state.edadEstudiante} Años</div>
@@ -859,10 +860,16 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                                 </div>
                                 )
                             }
+                            <ComponentFormRadioState clasesColumna="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4"
+                              extra="custom-control-inline" nombreCampoRadio="Sexo:" name="sexo_estudiante"
+                              nombreLabelRadioA="Masculino" idRadioA="masculino" checkedRadioA={this.state.sexo_estudiante}
+                              valueRadioA="1" nombreLabelRadioB="Femenino" idRadioB="femenino"
+                              valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
+                            />
                         </div>
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="procedencia del estudiante:"
+                            obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="Procedencia del estudiante:"
                             clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
                             eventoPadre={this.cambiarEstado}
                           />
@@ -980,12 +987,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           />
                         </div>
                         <div className="row justify-content-center mt-1">
-                            <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
-                              extra="custom-control-inline" nombreCampoRadio="Sexo:" name="sexo_estudiante"
-                              nombreLabelRadioA="Masculino" idRadioA="masculino" checkedRadioA={this.state.sexo_estudiante}
-                              valueRadioA="1" nombreLabelRadioB="Femenino" idRadioB="femenino"
-                              valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
-                            />
+                            
                         </div>
                         <div className="row justify-content-center mt-1">
                           <ComponentFormRadioState

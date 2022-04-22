@@ -1,9 +1,9 @@
 import React from 'react'
 import {withRouter} from "react-router-dom"
-
 //JS
 import axios from 'axios'
 import Moment from 'moment'
+import $ from 'jquery'
 // IP servidor
 import servidor from '../ipServer.js'
 //css
@@ -32,10 +32,12 @@ class ComponentInscripcion extends React.Component{
         this.verficarLista = this.verficarLista.bind(this)
         this.ConsultarRegistros = this.ConsultarRegistros.bind(this)
         this.redirigirFormulario = this.redirigirFormulario.bind(this)
-        this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
         this.consultarPerfilTrabajador = this.consultarPerfilTrabajador.bind(this)
         this.buscar = this.buscar.bind(this)
         this.escribir_codigo = this.escribir_codigo.bind(this)
+        this.mostrarModalPdf=this.mostrarModalPdf.bind(this)
+        this.mostrarFiltros=this.mostrarFiltros.bind(this)
+        this.generarPdf=this.generarPdf.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -51,7 +53,9 @@ class ComponentInscripcion extends React.Component{
           mensaje:{
             texto:"",
             estado:""
-          }
+          },
+          matriculaInicial:"I",
+          matriculaFinal:"F",
         }
     }
 
@@ -175,6 +179,7 @@ class ComponentInscripcion extends React.Component{
               .then(async respuesta=>{
                   respuesta_servior=respuesta.data
                   if(respuesta_servior.usuario){
+                    this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                     estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
                   }
               })
@@ -261,6 +266,63 @@ class ComponentInscripcion extends React.Component{
       const input = a.target;
       if(input.value==="Registrar") this.props.history.push("/dashboard/configuracion/inscripcion/registrar")
     }
+
+    mostrarModalPdf(){
+      $("#modalPdf").modal("show")
+    }
+
+    mostrarFiltros(a){
+      let $boton=a.target
+      let tipo=$boton.getAttribute("data-tipo-matricula")
+      let $filaVerPdf=document.getElementById("filaVerPdf")
+      $filaVerPdf.classList.add("ocultarFormulario")
+      let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+      this.setState({tipoPdf:tipo})
+      if(tipo!==null){
+        $botonGenerarPdf.classList.remove("ocultarFormulario")
+      }
+      else{
+        $botonGenerarPdf.classList.add("ocultarFormulario")
+      }
+  }
+
+  generarPdf(){
+    let $filaVerPdf=document.getElementById("filaVerPdf")
+    // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
+    // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
+    let datos=[]
+    console.log(datos)
+    datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+    datos.push({name:"tipo_matricula",value:this.state.tipoPdf})
+    console.log(datos)
+    if(datos!==null){
+      // alert("generar pdf")
+      $.ajax({
+        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_medico_especialidad.php`,
+        type:"post",
+        data:datos,
+        success: function(respuesta) {
+            console.log(respuesta)
+            let json=JSON.parse(respuesta)
+            // if(json.nombrePdf!=="false"){
+            //     $filaVerPdf.classList.remove("ocultarFormulario") 
+            //     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+            // }
+            // else{
+            //     $filaVerPdf.classList.add("ocultarFormulario") 
+            //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+            // }
+        },
+        error: function() {
+        //   alert("error")
+          $filaVerPdf.classList.add("ocultarFormulario") 
+        }
+      });
+    }
+    
+
+  }
+
     render(){
       const jsx_modales = (
       <>
@@ -279,9 +341,9 @@ class ComponentInscripcion extends React.Component{
       const jsx_tabla_encabezado = (
             <thead>
                 <tr>
-                    <th>Codigo</th>
-                    <th>fecha de inscripcion</th>
-                    <th>Cedula escolar</th>
+                    <th>Código</th>
+                    <th>fecha de inscripción</th>
+                    <th>Cédula escolar</th>
                     <th>Estado</th>
                 </tr>
             </thead>
@@ -334,6 +396,53 @@ class ComponentInscripcion extends React.Component{
 
       var jsx_inscripcion_inicio=(
           <div>
+              <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <button className='btn btn-primary btn-block' data-tipo-matricula="I" onClick={this.mostrarFiltros}>Matricula Inicial</button>
+                                </div>
+                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                                <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                    <button className='btn btn-primary btn-block' data-tipo-matricula="F" onClick={this.mostrarFiltros}>Matricula Final</button>
+                                </div>
+                              </div>
+                              {(this.state.tipoPdf==="I" || this.state.tipoPdf==="F") && 
+                                (
+                                  <div className="row justify-content-center mb-3">
+                                    <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                        Se generara un reporte de : {((this.state.tipoPdf===this.state.matriculaInicial)?"Inicial":(this.state.tipoPdf===this.state.matriculaFinal)?"Final":"NULL")}
+                                    </div>
+                                  </div>
+                                )
+                              }
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
+
+
+
+
+
               {this.state.mensaje.texto!=="" && (this.state.mensaje.estado==="500" || this.state.mensaje.estado==="404") &&
               <div className="row">
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
@@ -358,7 +467,14 @@ class ComponentInscripcion extends React.Component{
                         <InputButton clasesBoton="btn btn-primary" eventoPadre={this.redirigirFormulario} value="Registrar"/>
                       </div>
                     </div>
+                </div>
+                <div className="col-3 col-ms-3 col-md-3 columna-boton">
+                  <div className="row justify-content-center align-items-center contenedor-boton">
+                      <div className="col-auto">
+                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                      </div>
                   </div>
+                </div>
               </div>
           </div>
       )
