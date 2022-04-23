@@ -309,21 +309,21 @@ class ComponentInscripcion extends React.Component{
             let json=JSON.parse(respuesta)
             console.log("datos reporte martricula =>>>> ",json)
             if(json.nombrePdf!=="false"){
-                $filaVerPdf.classList.remove("ocultarFormulario") 
+                $filaVerPdf.classList.remove("ocultarFormulario")
                 document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
             }
             else{
-                $filaVerPdf.classList.add("ocultarFormulario") 
+                $filaVerPdf.classList.add("ocultarFormulario")
                 alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
             }
         },
         error: function() {
         //   alert("error")
-          $filaVerPdf.classList.add("ocultarFormulario") 
+          $filaVerPdf.classList.add("ocultarFormulario")
         }
       });
     }
-    
+
 
   }
 
@@ -363,6 +363,7 @@ class ComponentInscripcion extends React.Component{
                   estado = (inscripcion.estatus_inscripcion == "P") ? "Pre-Inscrito" : estado;
                   estado = (inscripcion.estatus_inscripcion == "R") ? "Retiro" : estado;
                   estado = (inscripcion.estatus_inscripcion == "T") ? "Terminado" : estado;
+                  estado = (inscripcion.estatus_inscripcion == "C") ? "Culminado" : estado;
                     return(
                         <tr key={index}>
                           <td>{inscripcion.id_inscripcion}</td>
@@ -419,7 +420,7 @@ class ComponentInscripcion extends React.Component{
                                     <button className='btn btn-primary btn-block' data-tipo-matricula="F" onClick={this.mostrarFiltros}>Matricula Final</button>
                                 </div>
                               </div>
-                              {(this.state.tipoPdf==="I" || this.state.tipoPdf==="F") && 
+                              {(this.state.tipoPdf==="I" || this.state.tipoPdf==="F") &&
                                 (
                                   <div className="row justify-content-center mb-3">
                                     <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
@@ -433,7 +434,7 @@ class ComponentInscripcion extends React.Component{
                                     <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
-                              
+
                             </div>
                             <div class="modal-footer ">
                                 <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>

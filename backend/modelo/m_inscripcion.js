@@ -99,15 +99,15 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async cambioDeAula(){
-    const SQL = `UPDATE tinscripcion SET id_asignacion_aula_profesor= '${this.id_asignacion_aula_profesor}' 
+    const SQL = `UPDATE tinscripcion SET id_asignacion_aula_profesor= '${this.id_asignacion_aula_profesor}'
      WHERE id_inscripcion = ${this.id_inscripcion}`
 
     return await this.query(SQL);
   }
 
   async culminar(){
-    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion} 
-       
+    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion}
+
     `
     return await this.query(SQL);
   }
@@ -141,8 +141,8 @@ class ModeloInscripcion extends DriverPostgres {
 
   async contultaEstudianteAula(idAula){
     const SQL = `SELECT * FROM tinscripcion, testudiante, tano_escolar, tasignacion_aula_profesor WHERE
-                tano_escolar.estatus_ano_escolar='1'  AND testudiante.id_estudiante = tinscripcion.id_estudiante 
-                AND tasignacion_aula_profesor.id_aula = ${idAula}
+                tano_escolar.estatus_ano_escolar='1'  AND testudiante.id_estudiante = tinscripcion.id_estudiante
+                AND tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor AND tasignacion_aula_profesor.id_aula = ${idAula}
                  `
     return await this.query(SQL)
   }
