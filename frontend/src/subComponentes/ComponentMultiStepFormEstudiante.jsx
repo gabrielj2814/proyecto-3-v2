@@ -173,7 +173,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
 
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
             mensaje.texto="No se puedo conectar con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
@@ -196,11 +196,10 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                 }else hash[estudiante.cedula_estudiante]=estudiante;
 
             }
-            console.log("hash estudiante =>>> ",hash)
             this.setState({hashEstudiante:hash})
         })
         .catch(error => {
-            console.log(error)
+            console.error(error)
         })
     }
 
@@ -274,7 +273,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
           }
       })
       .catch(error=>{
-          console.log(error)
+          console.error(error)
           mensaje.texto="No se puedo conectar con el servidor"
           mensaje.estado="500"
           this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
@@ -305,7 +304,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             }
         })
         .catch(error=>{
-            console.log(error)
+            console.error(error)
         })
         return lista
     }
@@ -711,7 +710,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                 .catch(error=>{
                     mensaje.texto="No se puedo conectar con el servidor"
                     mensaje.estado=false
-                    console.log(error)
+                    console.error(error)
                     mensaje_formulario.mensaje=mensaje
                     this.setState(mensaje_formulario)
                 })
@@ -987,7 +986,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           />
                         </div>
                         <div className="row justify-content-center mt-1">
-                            
+
                         </div>
                         <div className="row justify-content-center mt-1">
                           <ComponentFormRadioState

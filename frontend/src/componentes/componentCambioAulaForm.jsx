@@ -37,19 +37,16 @@ class ComponentCambioAulaForm extends React.Component{
     this.operacion=this.operacion.bind(this);
     this.cambiarEstado=this.cambiarEstado.bind(this);
     this.agregar=this.agregar.bind(this);
-    this.validarNumero = this.validarNumero.bind(this);
-    this.validarTexto=this.validarTexto.bind(this);
     this.validarSelect=this.validarSelect.bind(this);
     this.cambiarEstadoDos = this.cambiarEstadoDos.bind(this);
-    this.validarFormularioRegistrar=this.validarFormularioRegistrar.bind(this);
-    this.validarCampo=this.validarCampo.bind(this)
+    this.validarFormulario = this.validarFormulario.bind(this);
     this.enviarDatos=this.enviarDatos.bind(this)
-    this.ObtenerEstudiantesRepresentantes = this.ObtenerEstudiantesRepresentantes.bind(this);
-    this.longitudCampo = this.longitudCampo.bind(this);
     this.BuscarEstudiante = this.BuscarEstudiante.bind(this);
-    this.buscarRepresentante = this.buscarRepresentante.bind(this);
     this.ConsultarAulasPorGrado = this.ConsultarAulasPorGrado.bind(this);
     this.traslado = this.traslado.bind(this);
+    this.atras = this.atras.bind(this);
+    this.consultarAula = this.consultarAula.bind(this)
+    this.validaEstudianteA = this.validaEstudianteA.bind(this);
 
     this.state={
         // ------------------
@@ -64,6 +61,7 @@ class ComponentCambioAulaForm extends React.Component{
         nombres_estudiante_a: "",
         apellidos_estudiante_a: "",
         datos_docente_a: "",
+        id_asignacion_aula_a:"",
         // ESTUDIANTE B
         id_inscripcion_b: "",
         id_aula_b: "",
@@ -71,9 +69,14 @@ class ComponentCambioAulaForm extends React.Component{
         nombres_estudiante_b: "",
         apellidos_estudiante_b: "",
         datos_docente_b: "",
+        id_asignacion_aula_b:"",
         //
         listaGrados:[],
         listaAulas:[],
+        listaEstudiantes_a:[],
+        listaEstudiantes_b:[],
+        hashEstudiantes_a:{},
+        hashEstudiantes_b:{},
         //MSJ
         msj_id_grado:[{mensaje:"",color_texto:""}],
         msj_id_aula_a:[{mensaje:"",color_texto:""}],
@@ -82,11 +85,6 @@ class ComponentCambioAulaForm extends React.Component{
         msj_id_inscripcion_b:[{mensaje:"",color_texto:""}],
         //// combo box
         lista_profesores: [],
-        hashAsignacionRepresentante:{},
-        hashListaProfesores:{},
-        hashListaEstudiantes:{},
-        hashListaRepresentantes:{},
-        selectRepresentantes: [],
         estadoBusquedaEstudiante: false,
         form_step: 0,
         ///
@@ -102,7 +100,7 @@ class ComponentCambioAulaForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
+    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/traslado-estudiantes")
     if(acessoModulo){
 
       const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/grado/consultar-todos`,
@@ -118,20 +116,16 @@ class ComponentCambioAulaForm extends React.Component{
       propiedad_descripcion_2="nombre_aula",
       propiedad_estado_2="estatus_aula"
       const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-
-      console.log(aulas);
+      aulas.unshift({id: "", descripcion: "Selecione un aula"})
 
       this.setState({
         listaGrados: grados,
         listaAulas: aulas,
         id_grado: grados[0].id,
-        id_aula_a: aulas[0].id,
-        id_aula_b: aulas[0].id,
+        id_aula_a: '',
+        id_aula_b: '',
       })
 
-
-      // await this.ConsultarGrados()
-      // alert("HOLA");
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
@@ -149,12 +143,66 @@ class ComponentCambioAulaForm extends React.Component{
     propiedad_descripcion_2="nombre_aula",
     propiedad_estado_2="estatus_aula"
     const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+    aulas.unshift({id: "", descripcion: "Selecione un aula"})
 
     this.setState({
       listaAulas: aulas,
-      id_aula_a: (aulas.length > 0) ? aulas[0].id : null,
-      id_aula_b: (aulas.length > 0) ? aulas[0].id : null,
+      id_aula_a: "",
+      id_aula_b: "",
     })
+
+    if(target.name == "id_grado_a") await this.consultarEstudiantes({lista:'a', id: aulas[0].id})
+    else await this.consultarEstudiantes({lista:'b', id: aulas[0].id})
+  }
+
+  async consultarAula(a){
+
+    if(a.target.name === "id_aula_b" && a.target.value === this.state.id_aula_a){
+      this.setState({id_aula_b: ""})
+      alert("Debes de seleccionar un aula diferente")
+    }else{
+      this.cambiarEstado(a);
+      if(a.target.name == "id_aula_a") await this.consultarEstudiantes({lista: 'a', id: a.target.value})
+      else await this.consultarEstudiantes({lista: 'b', id: a.target.value})
+    }
+  }
+
+  async consultarEstudiantes(datos){
+    let idAula = datos.id;
+    let name = datos.lista;
+
+    if(!idAula){
+      alert("No Existen aulas")
+      return false;
+    }
+
+    await axiosCustom.get(`configuracion/inscripcion/consultar-estudiante/${idAula}`)
+    .then( ({data}) => {
+
+      if(data.estado_respuesta){
+        this.consultarProfesor(datos)
+
+        let estudianteLista = data.datos.map( item => {
+          return {id: item.id_inscripcion, descripcion: `${item.codigo_cedula_escolar}-${item.cedula_escolar}`}
+        })
+
+        estudianteLista.unshift({id: "", descripcion: "Seleccione un estudiante"})
+
+        let hashEstudiantes={}
+        for(let estudiante of data.datos) hashEstudiantes[estudiante.id_inscripcion] = estudiante
+
+        this.setState({
+          [`listaEstudiantes_${name}`]: estudianteLista,
+          [`hashEstudiantes_${name}`]: hashEstudiantes,
+        })
+
+        this.BuscarEstudiante({target:{ name: `id_inscripcion_${name}`, value: estudianteLista[0].id }})
+      }else{
+        alert("No existen asignaciones para el aula seleccionada");
+      }
+
+    })
+    .catch( error => console.error(error))
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
@@ -195,7 +243,7 @@ class ComponentCambioAulaForm extends React.Component{
                 modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
             }
         }
-        console.log(modulosSistema)
+
         if(modulosSistema[modulo][subModulo]){
           estado=true
         }
@@ -290,150 +338,59 @@ class ComponentCambioAulaForm extends React.Component{
       return lista_vacia
   }
 
-  async ObtenerEstudiantesRepresentantes(){
-    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
-    .then( res => {
-      let json = JSON.parse(JSON.stringify(res.data));
-      let hash = {};
+  async consultarProfesor(datos){
+    let idAula = datos.id;
+    let name = datos.lista;
 
-      for(let asignacion of json.datos){
-        if(asignacion.estatus_asignacion_representante_estudiante == "1"){
-          hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
-        }
-      }
-      this.setState({hashAsignacionRepresentante:hash})
-
-    })
-    .catch( err => console.error(err));
-
-    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-estudiante-inscritos`)
-    .then( res => {
-      let json = JSON.parse(JSON.stringify(res.data));
-      let hash = {};
-      for(let estudiante of json.datos){
-        if(estudiante.estatus_estudiante == "1"){
-          hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
-        }
-      }
-      this.setState({hashListaEstudiantes: hash});
-    })
-    .catch( err => console.error(err));
-  }
-
-  async consultarProfesor(idAula){
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-aula-profesor/${idAula}`)
     .then( res => {
+
       let profesor = res.data.datos[0];
-      this.setState({
-        datos_docente: `${profesor.id_cedula} ${profesor.nombres} ${profesor.apellidos}`
-      });
+      this.setState({ [`datos_docente_${name}`]: `${profesor.id_cedula} ${profesor.nombres} ${profesor.apellidos}`});
     })
     .catch( err => console.error(err));
-
   }
 
   BuscarEstudiante(a){
-    this.validarNumero(a)
-    let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashListaEstudiantes));
+    let letra;
+    if(a.target.name == "id_inscripcion_a") letra = 'a'; else letra = 'b';
+
+    let hashEstudiante = JSON.parse(JSON.stringify(this.state[`hashEstudiantes_${letra}`]));
 
     if(hashEstudiante[a.target.value]){
-      let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
-      let representantes = [];
+      if(letra == "b"){
+        if(this.state.id_inscripcion_a !== a.target.value){
+          this.cambiarEstado(a)
+          this.setState({
+            [`id_cedula_estudiante_${letra}`]: `${hashEstudiante[a.target.value].codigo_cedula_escolar}-${hashEstudiante[a.target.value].cedula_escolar}`,
+            [`nombres_estudiante_${letra}`]: hashEstudiante[a.target.value].nombres_estudiante,
+            [`apellidos_estudiante_${letra}`]: hashEstudiante[a.target.value].apellidos_estudiante,
+            [`id_asignacion_aula_${letra}`]: hashEstudiante[a.target.value].id_asignacion_aula_profesor,
+            estadoBusquedaEstudiante: true,
+          });
+        }else{
+          this.setState({
+            id_cedula_estudiante_b: "",
+            id_inscripcion_b: "",
+            nombres_estudiante_b: "",
+            apellidos_estudiante_b: "",
+          });
 
-      for(let id in hashAsignacionRepresentante){
-        if(hashAsignacionRepresentante[id].id_estudiante == hashEstudiante[a.target.value].id_estudiante){
-          if(hashAsignacionRepresentante[id].estatus_representante == "1"){
-            representantes.push({id: hashAsignacionRepresentante[id].id_cedula_representante, descripcion: hashAsignacionRepresentante[id].id_cedula_representante})
-          }
+          alert("No se pude volver a seleccionar el mismo estudiante")
         }
-      }
+      }else{
 
-      if(representantes.length == 0){
-        alert("El estudiante no tiene representantes asignados");
+        this.cambiarEstado(a)
         this.setState({
-          estadoBusquedaEstudiante: false,
-          hashListaRepresentantes: []
+          [`id_cedula_estudiante_${letra}`]: `${hashEstudiante[a.target.value].codigo_cedula_escolar}-${hashEstudiante[a.target.value].cedula_escolar}`,
+          [`nombres_estudiante_${letra}`]: hashEstudiante[a.target.value].nombres_estudiante,
+          [`apellidos_estudiante_${letra}`]: hashEstudiante[a.target.value].apellidos_estudiante,
+          [`id_asignacion_aula_${letra}`]: hashEstudiante[a.target.value].id_asignacion_aula_profesor,
+          estadoBusquedaEstudiante: true,
         });
-        return ;
       }
-
-      this.buscarRepresentante({target:{value: representantes[0].id, name: "cedula_representante_solicitud"}})
-      this.consultarProfesor(hashEstudiante[a.target.value].id_aula)
-      this.setState({
-        estadoBusquedaEstudiante: true,
-        id_inscripcion: hashEstudiante[a.target.value].id_inscripcion,
-        id_estudiante: hashEstudiante[a.target.value].id_estudiante,
-        nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
-        apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
-        id_aula: hashEstudiante[a.target.value].id_aula,
-        id_grado: hashEstudiante[a.target.value].id_grado,
-        nombre_aula: hashEstudiante[a.target.value].nombre_aula,
-        selectRepresentantes: representantes,
-      });
-
-      return;
     }
     this.setState({ estadoBusquedaEstudiante: false});
-  }
-
-  buscarRepresentante(a){
-    this.validarNumero(a);
-
-    let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
-    let representantes = [];
-
-    for(let id in hashAsignacionRepresentante){
-      if(hashAsignacionRepresentante[id].id_cedula_representante == a.target.value){
-          this.setState({
-            estadoBusquedaRepresentante: true,
-            cedula_representante_solicitud: a.target.value,
-            nombre_representante: hashAsignacionRepresentante[id].nombres_representante,
-            apellido_representante: hashAsignacionRepresentante[id].apellidos_representante
-          });
-          break;
-          return;
-      }
-    }
-
-    this.setState({
-      estadoBusquedaRepresentante: false
-    });
-  }
-
-  validarNumero(a){
-    const input = a.target,
-    exprecion= new RegExp("^[0-9-]+$")
-    if(input.value!==""){
-      if(exprecion.test(input.value)) this.longitudCampo(input)
-
-    }else this.cambiarEstadoDos(input)
-  }
-
-  longitudCampo(input){
-    if(input.name==="id_estudiante" || input.name === "id_cedula_representante"){
-      if(input.value.length <= 8) this.cambiarEstadoDos(input)
-    }
-    else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
-    }
-  }
-
-  validarTexto(a){
-    const input = a.target,
-    exprecion=/[A-Za-z\s]$/
-    if(input.value!==""){
-      if(exprecion.test(input.value)) this.cambiarEstadoDos(input)
-      else console.log("NO se acepta valores numericos")
-    }else this.cambiarEstadoDos(input)
-  }
-
-  longitudCampo(input){
-    if(input.name==="id_cedula_profesor"){
-      if(input.value.length <= 8) this.cambiarEstadoDos(input)
-    }
-    else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
-    }
   }
 
   cambiarEstadoDos(input){ this.setState({[input.name]:input.value}) }
@@ -443,96 +400,49 @@ class ComponentCambioAulaForm extends React.Component{
     this.setState({[input.name]:input.value})
   }
 
-  validarCampo(nombre_campo){
-      var estado=false
-
-      const valor=this.state[nombre_campo]
-      let msj = this.state["msj_"+nombre_campo]
-
-      if(valor!==""){
-        if(this.state.StringExprecion.test(valor)){
-          estado=true
-          msj[0] = {mensaje: "",color_texto:"rojo"}
-          this.setState({["msj_"+nombre_campo]:msj})
-        }else{
-          msj[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
-          this.setState({["msj_"+nombre_campo]:msj})
-        }
-      }else{
-        msj[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-        this.setState({["msj_"+nombre_campo]:msj})
-      }
-      return estado
-  }
-
   async agregar(){
     var mensaje=this.state.mensaje
     mensaje.estado=""
     var mensaje_campo=[{mensaje:"",color_texto:""}]
     this.setState({
-      //formulario
-      id_retiro: "",
-      id_inscripcion: "",
-      cedula_representante_solicitud: "",
-      motivo_retiro: "",
-      fecha_retiro: "",
-      estado_retiro: "E",
-      // Datos alumno
-      id_estudiante:"",
-      cedula_escolar: "",
-      nombre_estudiante: "",
-      apellido_estudiante: "",
-      // Datos profesor
-      datos_docente:"",
-      // Datos representante
-      nombre_representante: "",
-      apellido_representante: "",
-      // Datos Aula
-      id_aula: "",
-      nombre_aula: "",
       id_grado: "",
+      // ESTUDIANTE A
+      id_inscripcion_a: "",
+      id_aula_a: "",
+      cedula_escolar_a: "",
+      nombres_estudiante_a: "",
+      apellidos_estudiante_a: "",
+      datos_docente_a: "",
+      id_asignacion_aula_a:"",
+      // ESTUDIANTE B
+      id_inscripcion_b: "",
+      id_aula_b: "",
+      cedula_escolar_b: "",
+      nombres_estudiante_b: "",
+      apellidos_estudiante_b: "",
+      datos_docente_b: "",
+      id_asignacion_aula_b:"",
+      //
       listaGrados:[],
       listaAulas:[],
+      listaEstudiantes_a:[],
+      listaEstudiantes_b:[],
+      hashEstudiantes_a:{},
+      hashEstudiantes_b:{},
       //MSJ
-      msj_id_inscripcion:[{mensaje:"",color_texto:""}],
-      msj_cedula_representante_solicitud:[{mensaje:"",color_texto:""}],
-      msj_motivo_retiro:[{mensaje:"",color_texto:""}],
-      msj_fecha_retiro:[{mensaje:"",color_texto:""}],
-      msj_estado_retiro:[{mensaje:"",color_texto:""}],
       msj_id_grado:[{mensaje:"",color_texto:""}],
-      msj_cedula_escolar:[{mensaje:"",color_texto:""}],
+      msj_id_aula_a:[{mensaje:"",color_texto:""}],
+      msj_id_aula_b:[{mensaje:"",color_texto:""}],
+      msj_id_inscripcion_a:[{mensaje:"",color_texto:""}],
+      msj_id_inscripcion_b:[{mensaje:"",color_texto:""}],
       //
       hashListaEstudiantes:{},
       selectEstudiantes:[],
     })
-    this.props.history.push("/dashboard/transaccion/retiro/registrar")
+
+    this.props.history.push("/dashboard/configuracion/traslado-estudiantes")
   }
 
-  validarCampoNumero(nombre_campo){
-      var estado=false
-      const campo=this.state[nombre_campo],
-      exprecion=/\d$/,
-      exprecion_2=/\s/
-      var mensaje_campo=this.state["msj_"+nombre_campo]
-      if(campo!==""){
-          if(!exprecion_2.test(campo)){
-              if(exprecion.test(campo)){
-                  estado=true
-                  mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
-                  this.setState({["msj_"+nombre_campo]:mensaje_campo})
-              }
-          }
-          else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
-              this.setState({["msj_"+nombre_campo]:mensaje_campo})
-          }
-      }
-      else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
-          this.setState({["msj_"+nombre_campo]:mensaje_campo})
-      }
-      return estado
-  }
 
   validarSelect(name){
 
@@ -546,38 +456,12 @@ class ComponentCambioAulaForm extends React.Component{
     if(mensaje_campo[0].mensaje === "") return true; else return false;
   }
 
-  validarRadio(name){
+  validarFormulario(){
+    const validaInscripcionA = this.validarSelect("id_inscripcion_a"),
+    validaInscripcionB = this.validarSelect("id_inscripcion_b"),
+    validaAulaA = this.validarSelect("id_aula_a"),validaAulaB = this.validarSelect("id_aula_b")
 
-    const valor = this.state[name]
-    let msj = this.state["msj_"+name]
-
-    if(valor !== "") msj[0] = {mensaje: "", color_texto:"rojo"}
-    else msj[0] = {mensaje: "Debe de seleccionar una opción", color_texto:"rojo"}
-
-    if(valor === "E") msj[0] = {mensaje: "No has cambiado el estado de la solicitud", color_texto:"rojo"}
-    else msj[0] = {mensaje: "", color_texto:"rojo"}
-
-    if(msj[0].mensaje === "") return true;
-    else{
-      alert(msj[0].mensaje)
-      return false;
-    }
-  }
-
-  validarFormularioRegistrar(){
-
-    const validaCedulaEscolar = this.validarCampoNumero("cedula_escolar"), validaMotivoRetiro = this.validarCampo('motivo_retiro'),
-    validaRepresentante = this.validarSelect('cedula_representante_solicitud')
-
-    if( validaCedulaEscolar && validaMotivoRetiro && validaRepresentante){
-      return {estado: true}
-    }else return {estado: false}
-  }
-
-  validarFormularioActuazliar(){
-    const EstadoRetiro = this.validarRadio("estado_retiro")
-
-    if( EstadoRetiro ) return {estado: true}
+    if( validaInscripcionA, validaInscripcionB, validaAulaA, validaAulaB ) return {estado: true}
     else return {estado: false}
   }
 
@@ -585,92 +469,130 @@ class ComponentCambioAulaForm extends React.Component{
     $(".columna-modulo").animate({
       scrollTop: 0
     }, 1000)
-    const operacion=this.props.match.params.operacion
 
     const mensaje_formulario={
       mensaje:"",
-      msj_id_inscripcion:[{mensaje:"",color_texto:""}],
-      msj_cedula_representante_solicitud:[{mensaje:"",color_texto:""}],
-      msj_motivo_retiro:[{mensaje:"",color_texto:""}],
-      msj_fecha_retiro:[{mensaje:"",color_texto:""}],
-      msj_estado_retiro:[{mensaje:"",color_texto:""}],
+      id_grado: "",
+      // ESTUDIANTE A
+      id_inscripcion_a: "",
+      id_aula_a: "",
+      cedula_escolar_a: "",
+      nombres_estudiante_a: "",
+      apellidos_estudiante_a: "",
+      datos_docente_a: "",
+      id_asignacion_aula_a:"",
+      // ESTUDIANTE B
+      id_inscripcion_b: "",
+      id_aula_b: "",
+      cedula_escolar_b: "",
+      nombres_estudiante_b: "",
+      apellidos_estudiante_b: "",
+      datos_docente_b: "",
+      id_asignacion_aula_b:"",
+
       msj_id_grado:[{mensaje:"",color_texto:""}],
-      msj_cedula_escolar:[{mensaje:"",color_texto:""}],
+      msj_id_aula_a:[{mensaje:"",color_texto:""}],
+      msj_id_aula_b:[{mensaje:"",color_texto:""}],
+      msj_id_inscripcion_a:[{mensaje:"",color_texto:""}],
+      msj_id_inscripcion_b:[{mensaje:"",color_texto:""}],
+
+      form_step: 0,
     }
 
-    if(operacion === "registrar"){
-      const estado_validar_formulario=this.validarFormularioRegistrar()
-      if(estado_validar_formulario.estado){
-        this.enviarDatos(estado_validar_formulario,(objeto)=>{
-          const mensaje =this.state.mensaje
-          var respuesta_servidor=""
-          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/registrar`,objeto)
+    const estado_validar_formulario=this.validarFormulario()
+
+    if(estado_validar_formulario.estado){
+      this.enviarDatos(estado_validar_formulario,(objeto)=>{
+        const mensaje =this.state.mensaje
+        var respuesta_servidor=""
+        axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/cambiar/${this.state.id_inscripcion_a}`,objeto.estudiante_1)
           .then(respuesta=>{
             respuesta_servidor=respuesta.data
             mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado
-            mensaje.color_alerta=respuesta_servidor.color_alerta
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
+            mensaje.estado=respuesta_servidor.estado_respuesta
+            mensaje.color_alerta = respuesta_servidor.color_alerta
+            this.setState(mensaje)
           })
           .catch(error=>{
-            mensaje.texto="No se puedo conectar con el servidor"
-            mensaje.color_alerta=respuesta_servidor.color_alerta
-            mensaje.estado=false
-            console.error(error)
+            mensaje.texto = "No se puedo conectar con el servidor"
+            mensaje.estado = false
+            mensaje.color_alerta = "danger";
             mensaje_formulario.mensaje=mensaje
             this.setState(mensaje_formulario)
           })
-        })
-      }
-    }else if(operacion === "actualizar"){
-      const estado_validar_formulario=this.validarFormularioActuazliar()
 
-      if(estado_validar_formulario.estado){
-        this.enviarDatos(estado_validar_formulario,(objeto)=>{
-          const mensaje =this.state.mensaje
-          var respuesta_servidor=""
-          axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/actualizar`,objeto)
-            .then(respuesta=>{
+        axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/cambiar/${this.state.id_inscripcion_b}`,objeto.estudiante_2)
+          .then(respuesta=>{
               respuesta_servidor=respuesta.data
               mensaje.texto=respuesta_servidor.mensaje
               mensaje.estado=respuesta_servidor.estado_respuesta
               mensaje.color_alerta = respuesta_servidor.color_alerta
               this.setState(mensaje)
-            })
-            .catch(error=>{
+          })
+          .catch(error=>{
               mensaje.texto = "No se puedo conectar con el servidor"
               mensaje.estado = false
               mensaje.color_alerta = "danger";
               mensaje_formulario.mensaje=mensaje
               this.setState(mensaje_formulario)
-            })
-        })
-      }
+          })
+      })
     }
   }
 
   enviarDatos(estado_validar_formulario,petion){
       const token=localStorage.getItem('usuario')
       const objeto={
-          retiro:{
-            id_retiro: this.state.id_retiro,
-            id_inscripcion: this.state.id_inscripcion,
-            cedula_representante_solicitud: this.state.cedula_representante_solicitud,
-            motivo_retiro: this.state.motivo_retiro,
-            fecha_retiro: this.state.fecha_retiro,
-            estado_retiro: this.state.estado_retiro,
+        estudiante_1:{
+          cambio:{
+            id_inscripcion: this.state.id_inscripcion_a,
+            id_asignacion_aula_profesor: this.state.id_asignacion_aula_b,
           },
           token:token
+        },
+        estudiante_2:{
+          cambio:{
+            id_inscripcion: this.state.id_inscripcion_b,
+            id_asignacion_aula_profesor: this.state.id_asignacion_aula_a,
+          },
+          token:token
+        }
       }
       petion(objeto)
   }
 
-  traslado(){
-    this.setState({form_step: 1})
+  validaEstudianteA(){
+    const validaInscripcionA = this.validarSelect("id_inscripcion_a"),validaAulaA = this.validarSelect("id_aula_a")
+
+    if( validaInscripcionA && validaAulaA ) return true
+    else return false
   }
 
-  regresar(){ this.props.history.push("/dashboard/transaccion/retiro/registrar"); }
+  validaEstudianteB(){
+    const validaInscripcionB = this.validarSelect("id_inscripcion_b"),validaAulaB = this.validarSelect("id_aula_b")
+
+    if( validaInscripcionB && validaAulaB ) return true
+    else return false
+  }
+
+  traslado(){
+    let num = parseInt(this.state.form_step) + 1;
+
+    if(num === 1){
+
+      if(this.validaEstudianteA()) this.setState({form_step: num})
+    }else if(num === 2){
+
+      if(this.validaEstudianteB()) this.setState({form_step: num})
+    }
+  }
+
+  atras(){
+    let num = parseInt(this.state.form_step) - 1;
+    this.setState({form_step: num})
+  }
+
+  regresar(){ this.props.history.push("/dashboard"); }
 
   render(){
     let jsx_traslado_form;
@@ -712,7 +634,7 @@ class ComponentCambioAulaForm extends React.Component{
                     </div>
                     <div className="row mt-3">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                            <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante</span>
+                            <span className="sub-titulo-form-reposo-trabajador">Datos del aula (A) </span>
                         </div>
                     </div>
                     <div className="row justify-content-center mx-auto my-2">
@@ -731,139 +653,293 @@ class ComponentCambioAulaForm extends React.Component{
                       <ComponentFormSelect
                       clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                       obligatorio="si"
-                      mensaje={this.state.msj_id_aula_a}
+                      mensaje={this.state.msj_id_aula_a[0]}
                       nombreCampoSelect="Aula (A):"
                       clasesSelect="custom-select"
-                      name="id_grado_a"
-                      id="id_grado_a"
-                      eventoPadre={this.cambiarEstado}
+                      name="id_aula_a"
+                      id="id_aula_a"
+                      eventoPadre={this.consultarAula}
                       defaultValue={this.state.id_aula_a}
                       option={this.state.listaAulas}
                       />
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                          clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                          nombreCampo="Datos del docente:" activo="no" type="text" value={this.state.datos_docente_a}
+                          name="datos_docente_a" id="datos_docente_a" placeholder="Datos del docente"
+                        />
                     </div>
-
-
+                    <div className="row mt-3">
+                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                            <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante (A)</span>
+                        </div>
+                    </div>
+                    <div className="row justify-content-center mx-auto my-2">
+                      <ComponentFormSelect
+                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                      obligatorio="si"
+                      mensaje={this.state.msj_id_inscripcion_a[0]}
+                      nombreCampoSelect="Estudiante:"
+                      clasesSelect="custom-select"
+                      name="id_inscripcion_a"
+                      id="id_inscripcion_a"
+                      eventoPadre={this.BuscarEstudiante}
+                      defaultValue={this.state.id_inscripcion_a}
+                      option={this.state.listaEstudiantes_a}
+                      />
+                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                          <label>Nombre del estudiante: {this.state.nombres_estudiante_a}</label><br></br>
+                          <label>Apellido del estudiante: {this.state.apellidos_estudiante_a}</label>
+                      </div>
+                    </div>
 
                       <div className="row justify-content-center">
                         <div className="col-auto">
                           <InputButton
-                            clasesBoton="btn btn-warning"
+                            clasesBoton="btn btn-success"
                             id="boton-actualizar"
-                            value="Confirmar Traslado"
+                            value="Continuar"
                             eventoPadre={this.traslado}
                           />
                         </div>
-                          <div className="col-auto">
+                        <div className="col-auto">
                             <InputButton
-                              clasesBoton="btn btn-warning"
-                              id="boton-actualizar"
-                              value="Actualizar"
-                              eventoPadre={this.operacion}
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
                             />
-                          </div>
-                          <div className="col-auto">
-                              <InputButton
-                              clasesBoton="btn btn-danger"
-                              id="boton-cancelar"
-                              value="Cancelar"
-                              eventoPadre={this.regresar}
-                              />
-                          </div>
+                        </div>
                       </div>
                   </form>
               </div>
           </div>
       )
-    }else{
+    }else if(this.state.form_step == 1){
       jsx_traslado_form=(
-          <div className="row justify-content-center">
+        <div className="row justify-content-center">
 
-              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                  {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
-                      <div className="row">
-                          <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                              <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
-                                  <p>Mensaje: {this.state.mensaje.texto}</p>
-                                  <button className="close" data-dismiss="alert">
-                                      <span>X</span>
-                                  </button>
-                              </div>
-                          </div>
-                      </div>
-                  }
-              </div>
-              <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
-                  <div className="row justify-content-center">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                          <span className="titulo-form-trabajador">Traslado de estudiantes</span>
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+                    <div className="row">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
+                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <button className="close" data-dismiss="alert">
+                                    <span>X</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                        <span className="titulo-form-trabajador">Traslado de estudiantes</span>
+                    </div>
+                </div>
+                <form id="form_trabajador">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del aula (B) </span>
                       </div>
                   </div>
-                  <form id="form_trabajador">
-                    <div className="row">
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Grado:" activo="no" type="text" value={this.state.id_grado}
+                      name="grado_b" id="grado_b" placeholder="Datos del docente"
+                    />
+                    <ComponentFormSelect
+                    clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                    obligatorio="si"
+                    mensaje={this.state.msj_id_aula_b[0]}
+                    nombreCampoSelect="Aula (B):"
+                    clasesSelect="custom-select"
+                    name="id_aula_b"
+                    id="id_aula_b"
+                    eventoPadre={this.consultarAula}
+                    defaultValue={this.state.id_aula_b}
+                    option={this.state.listaAulas}
+                    />
+                  <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                        clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                        nombreCampo="Datos del docente:" activo="no" type="text" value={this.state.datos_docente_b}
+                        name="datos_docente_b" id="datos_docente_b" placeholder="Datos del docente"
+                      />
+                  </div>
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante (B)</span>
+                      </div>
+                  </div>
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormSelect
+                    clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                    obligatorio="si"
+                    mensaje={this.state.msj_id_inscripcion_b[0]}
+                    nombreCampoSelect="Estudiante:"
+                    clasesSelect="custom-select"
+                    name="id_inscripcion_b"
+                    id="id_inscripcion_b"
+                    eventoPadre={this.BuscarEstudiante}
+                    defaultValue={this.state.id_inscripcion_b}
+                    option={this.state.listaEstudiantes_b}
+                    />
+                    <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                        <label>Nombre del estudiante: {this.state.nombres_estudiante_b}</label><br></br>
+                        <label>Apellido del estudiante: {this.state.apellidos_estudiante_b}</label>
+                    </div>
+                  </div>
+
+
+
+                    <div className="row justify-content-center">
                         <div className="col-auto">
-                            <ButtonIcon
-                            clasesBoton="btn btn-outline-success"
-                            icon="icon-plus"
-                            id="icon-plus"
-                            eventoPadre={this.agregar}
+                          <InputButton
+                            clasesBoton="btn btn-success"
+                            id="boton-actualizar"
+                            value="Confirmar"
+                            eventoPadre={this.traslado}
+                          />
+                        </div>
+                        <div className="col-auto">
+                          <InputButton
+                            clasesBoton="btn btn-primary"
+                            id="boton-atras"
+                            value="Atrás"
+                            eventoPadre={this.atras}
+                          />
+                        </div>
+                        <div className="col-auto">
+                            <InputButton
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
                             />
                         </div>
                     </div>
-                    <div className="row mt-3">
-                        <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                            <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante2</span>
+                </form>
+            </div>
+        </div>
+      )
+    }else if(this.state.form_step == 2){
+      jsx_traslado_form=(
+        <div className="row justify-content-center">
+
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
+                {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
+                    <div className="row">
+                        <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                            <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
+                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <button className="close" data-dismiss="alert">
+                                    <span>X</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div className="row justify-content-center mx-auto my-2">
-                      <ComponentFormSelect
-                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                      obligatorio="si"
-                      mensaje={this.state.msj_id_grado}
-                      nombreCampoSelect="Grados:"
-                      clasesSelect="custom-select"
-                      name="id_grado"
-                      id="id_grado"
-                      eventoPadre={this.ConsultarAulasPorGrado}
-                      defaultValue={this.state.id_grado}
-                      option={this.state.listaGrados}
-                      />
-                      <ComponentFormSelect
-                      clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                      obligatorio="si"
-                      mensaje={this.state.msj_id_aula_a}
-                      nombreCampoSelect="Aula (A):"
-                      clasesSelect="custom-select"
-                      name="id_grado_a"
-                      id="id_grado_a"
-                      eventoPadre={this.cambiarEstado}
-                      defaultValue={this.state.id_aula_a}
-                      option={this.state.listaAulas}
-                      />
+                }
+            </div>
+            <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
+                <div className="row justify-content-center">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                        <span className="titulo-form-trabajador">Traslado de estudiantes</span>
                     </div>
+                </div>
+                <form id="form_trabajador">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante (A)</span>
+                      </div>
+                  </div>
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Cédula escolar:" activo="no" type="text" value={this.state.id_cedula_estudiante_a}
+                      name="id_cedula_estudiante_a" id="id_cedula_estudiante_a" placeholder="Datos del estudiante"
+                    />
+                    <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                        <label>Nombre del estudiante: {this.state.nombres_estudiante_a}</label><br></br>
+                        <label>Apellido del estudiante: {this.state.apellidos_estudiante_a}</label>
+                    </div>
+                  </div>
 
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Aula origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
+                      name="id_aula_a" id="id_aula_a" placeholder="aula"
+                    />
 
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Aula Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
+                      name="id_aula_b" id="id_aula_b" placeholder="aula"
+                    />
+                  </div>
 
-                      <div className="row justify-content-center">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del estudiante (B)</span>
+                      </div>
+                  </div>
+
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Cédula escolar:" activo="no" type="text" value={this.state.id_cedula_estudiante_b}
+                      name="id_cedula_estudiante_b" id="id_cedula_estudiante_b" placeholder="Datos del estudiante"
+                    />
+                    <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                        <label>Nombre del estudiante: {this.state.nombres_estudiante_b}</label><br></br>
+                        <label>Apellido del estudiante: {this.state.apellidos_estudiante_b}</label>
+                    </div>
+                  </div>
+                  <div className="row justify-content-center mx-auto my-2">
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Aula origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
+                      name="id_aula_a" id="id_aula_a" placeholder="aula"
+                    />
+
+                    <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
+                      clasesCampo="form-control" obligatorio="si" mensaje={[]}
+                      nombreCampo="Aula Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
+                      name="id_aula_b" id="id_aula_b" placeholder="aula"
+                    />
+                  </div>
+
+                    <div className="row justify-content-center">
                         <div className="col-auto">
                           <InputButton
                             clasesBoton="btn btn-warning"
                             id="boton-actualizar"
-                            value="Confirmar Traslado"
-                            eventoPadre={this.traslado}
+                            value="Confirmar intercambio"
+                            eventoPadre={this.operacion}
                           />
                         </div>
-                          <div className="col-auto">
-                              <InputButton
-                              clasesBoton="btn btn-danger"
-                              id="boton-cancelar"
-                              value="Cancelar"
-                              eventoPadre={this.regresar}
-                              />
-                          </div>
-                      </div>
-                  </form>
-              </div>
-          </div>
+                        <div className="col-auto">
+                          <InputButton
+                            clasesBoton="btn btn-primary"
+                            id="boton-atras"
+                            value="Atrás"
+                            eventoPadre={this.atras}
+                          />
+                        </div>
+                        <div className="col-auto">
+                            <InputButton
+                            clasesBoton="btn btn-danger"
+                            id="boton-cancelar"
+                            value="Cancelar"
+                            eventoPadre={this.regresar}
+                            />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
       )
     }
 

@@ -251,7 +251,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         this.setState({fechaServidor})
     })
     .catch(error => {
-        console.log("error al conectar con el servidor")
+        console.error("error al conectar con el servidor")
     })
   }
 
@@ -264,7 +264,6 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         for(let representante of json.datos){
             hash[representante.id_cedula_representante]=representante
         }
-        console.log("hash representante =>>> ",hash)
         this.setState({hashRepresentante:hash})
     })
     .catch(error => {
