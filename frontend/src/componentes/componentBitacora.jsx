@@ -56,6 +56,7 @@ class ComponentBitacora extends React.Component {
                 tcintillo:"cintillo",
                 tespecialidad:"especialidad",
                 tasignacionmedicoespecialidad:"asignación especialidad medico",
+                tparroquia:"parroquia",
             },
             tablas:[
                 {name:"ttipotrabajador",value:"tipo de trabajador"},
@@ -75,6 +76,7 @@ class ComponentBitacora extends React.Component {
                 {name:"treposotrabajador",value:"reposo del trabajador"},
                 {name:"tasistencia",value:"asistencia"},
                 {name:"tcintillo",value:"cintillo"},
+                {name:"tparroquia",value:"parroquia"},
             ],
             alerta:{
                 color:null,

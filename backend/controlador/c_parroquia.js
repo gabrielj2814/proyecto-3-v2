@@ -1,9 +1,10 @@
 const controladorParroquia = {}
+const VitacoraControlador=require("./c_vitacora")
 
-controladorParroquia.registrar_parroquia = async (req, res) => {
+controladorParroquia.registrar_parroquia = async (req, res, next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloParraquia = require("../modelo/m_parroquia");
-  let { parroquia } = req.body
+  let { parroquia ,token } = req.body
   let modeloParroquia = new ModeloParraquia()
   modeloParroquia.setDatos(parroquia);
   let resultParroquia = await modeloParroquia.registrar()
@@ -12,15 +13,19 @@ controladorParroquia.registrar_parroquia = async (req, res) => {
     respuesta_api.mensaje = "registro completado"
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora=VitacoraControlador.json(respuesta_api,token,"INSERT","tparroquia",resultParroquia.rows[0].id_parroquia)
+    next()
+
   }
   else {
     respuesta_api.mensaje = "error al registrar a la parroquia"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
+
 }
 
 controladorParroquia.consultarTodos = async (req, res) => {
@@ -44,10 +49,10 @@ controladorParroquia.consultarTodos = async (req, res) => {
   res.end()
 }
 
-controladorParroquia.consultar = async (req, res) => {
+controladorParroquia.consultar = async (req, res, next) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloParraquia = require("../modelo/m_parroquia")
-  let { id } = req.params
+  let { id ,token} = req.params
   let modeloParroquia = new ModeloParraquia()
   modeloParroquia.setIdParraquia(id)
   let resultParroquia = await modeloParroquia.consultar()
@@ -56,15 +61,18 @@ controladorParroquia.consultar = async (req, res) => {
     respuesta_api.datos = resultParroquia.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora=VitacoraControlador.json(respuesta_api,token,"SELECT","tparroquia",resultParroquia.rows[0].id_parroquia)
+    next()
   }
   else {
     respuesta_api.mensaje = "no se a encontrado el registro en la base de datos"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
+
 }
 
 controladorParroquia.consultarpatron = async (req, res) => {
@@ -113,10 +121,10 @@ controladorParroquia.consultarParroquiaXCiudadModulo = async (req, res) => {
   res.end()
 }
 
-controladorParroquia.actualizar = async (req, res) => {
+controladorParroquia.actualizar = async (req, res,next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloParraquia = require("../modelo/m_parroquia")
-  let { parroquia } = req.body
+  let { parroquia ,token} = req.body
   let { id } = req.params
   let modeloParroquia = new ModeloParraquia()
   modeloParroquia.setDatos(parroquia)
@@ -128,21 +136,27 @@ controladorParroquia.actualizar = async (req, res) => {
       respuesta_api.mensaje = "actualización completada"
       respuesta_api.estado_respuesta = true
       respuesta_api.color_alerta = "success"
+      req.vitacora=VitacoraControlador.json(respuesta_api,token,"UPDATE","tparroquia",resultParroquia.rows[0].id_parroquia)
+      next()
     }
     else {
       respuesta_api.mensaje = "error al actualizar"
       respuesta_api.estado_respuesta = false
       respuesta_api.color_alerta = "danger"
+      res.writeHead(200, { "Content-Type": "application/json" })
+      res.write(JSON.stringify(respuesta_api))
+      res.end()
     }
   }
   else {
     respuesta_api.mensaje = "error al actualizar (este registro no se encuentra en la base de datos)"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "warning"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
+
 }
 
 

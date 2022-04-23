@@ -199,7 +199,8 @@ class ComponentParroquiaForm extends React.Component{
   }
 
   async ConsultarRegistro(id){
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}`)
+    const token=localStorage.getItem("usuario")
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}/${token}`)
     .then(async response => response.data)
     .catch( error => console.error(error))
   }

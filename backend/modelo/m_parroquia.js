@@ -22,7 +22,7 @@ class ModuloParroquia extends DriverPostgres {
 
   async registrar() {
     const SQL = ` INSERT INTO tparroquia (nombre_parroquia,id_ciudad,estatu_parroquia) VALUES ('${this.nombre_parroquia}',
-                  '${this.id_ciudad}','${this.estatu_parroquia}')
+                  '${this.id_ciudad}','${this.estatu_parroquia}') RETURNING id_parroquia;
     `
     return await this.query(SQL)
   }
