@@ -78,8 +78,10 @@ ControladorPromocion.consultarPorInscripcion= async (req,res) => {
 ControladorPromocion.actualizar= async (req,res) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
+    let { id } = req.params
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setDatos(promocion)
+    modeloPromocion.setIdInscripcion(id)
     const resultPromocion=await modeloPromocion.actualizar()
     if(resultPromocion.rowCount>0){
         respuesta_api.mensaje="actualización completado"
