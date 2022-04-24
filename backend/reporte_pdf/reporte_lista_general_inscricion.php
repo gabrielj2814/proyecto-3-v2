@@ -33,7 +33,7 @@ class PdfListaInscricionGeneral extends FPDF{
 
     function generarPdf(){
         
-        $nombrePdf="Matricula Inicial.pdf";
+        $nombrePdf="Lista General De Inscriciones.pdf";
         $this->AliasNbPages();
         $this->Addpage();
         $this->ln(20);
@@ -74,24 +74,32 @@ class PdfListaInscricionGeneral extends FPDF{
         $contador=0;
         foreach($this->datosPdf as $inscripto){
             $contador++;
-            // $this->ln(10);
-            // $cedula="no tiene";
-            // if($inscripto["cedula_estudiante"]===null){
-            //     $cedula=$inscripto["cedula_escolar"];
-            // }
-            // else{
-            //     $cedula=$inscripto["cedula_estudiante"];
-            // }
+            $cedula="no tiene";
+            if($inscripto["cedula_estudiante"]===null){
+                $cedula=$inscripto["cedula_escolar"];
+            }
+            else{
+                $cedula=$inscripto["cedula_estudiante"];
+            }
 
+            $grado=NULL;
+            $aula=$inscripto["nombre_aula"];
+            switch($inscripto["numero_grado"]){
+                case '1': $grado="1RO"; break;
+                case '2': $grado="2DO"; break;
+                case '3': $grado="3RO"; break;
+                case '4': $grado="4TO"; break;
+                case '5': $grado="5TO"; break;
+                case '6': $grado="6TO"; break;
+            }
             $this->ln(10);
-
             $this->Cell(15,10,'',0,0,'C');
             $this->Cell(10,10,$contador,1,0,'C');
-            $this->Cell(40,10,'pepito paredes',1,0,'C');
-            $this->Cell(30,10,'V-267591371',1,0,'C');
-            $this->Cell(30,10,'0424-5445967',1,0,'C');
-            $this->Cell(30,10,'6to',1,0,'C');
-            $this->Cell(30,10,'A',1,0,'C');
+            $this->Cell(40,10,$inscripto["nombres_estudiante"]." ".$inscripto["apellidos_estudiante"],1,0,'C');
+            $this->Cell(30,10,$cedula,1,0,'C');
+            $this->Cell(30,10,$inscripto["telefono_movil_representante"],1,0,'C');
+            $this->Cell(30,10,$grado,1,0,'C');
+            $this->Cell(30,10,$aula,1,0,'C');
         }
 
         
