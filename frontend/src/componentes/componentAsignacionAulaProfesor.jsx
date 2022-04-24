@@ -36,6 +36,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         this.consultarTodasLasAulaPorGrado=this.consultarTodasLasAulaPorGrado.bind(this)
         this.mostrarFiltros=this.mostrarFiltros.bind(this)
         this.generarPdf=this.generarPdf.bind(this)
+        this.capturarDatosReporteEspecifico=this.capturarDatosReporteEspecifico.bind(this)
         // this.cambiarEstado=this.cambiarEstado.bind(this)
         this.state={
             modulo:"",
@@ -118,7 +119,6 @@ class ComponentAsignacionAulaProfesor extends React.Component{
 
     async consultarTodasLasAulaPorGrado(a){
         let $select=a.target
-        this.mostrarFiltros($select)
         this.setState({id_grado:$select.value})
         await axiosCustom.get(`configuracion/aula/consultar-aula-por-grado/${$select.value}`)
         .then(respuesta => {
@@ -245,18 +245,34 @@ class ComponentAsignacionAulaProfesor extends React.Component{
     mostrarFiltros(a){
         let $select=a.target
         let $filaVerPdf=document.getElementById("filaVerPdf")
+        let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
         $filaVerPdf.classList.add("ocultarFormulario")
-        // alert($select.value)
+        if($select.value==="1"){
+            // alert("especifico")
+            this.setState({tipoPdf:"1"})
+        }
+        else if($select.value==="0"){
+            // alert("general")
+            this.setState({tipoPdf:"0"})
+            $botonGenerarPdf.classList.remove("ocultarFormulario")
+        }
+        else{
+            // alert("verga")
+            this.setState({tipoPdf:null})
+            $botonGenerarPdf.classList.add("ocultarFormulario")
+        }
+        
+    }
+
+    capturarDatosReporteEspecifico(){
         let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
         let $selectGrado=document.getElementById("selectGrado")
         let $selectAula=document.getElementById("selectAula")
         this.setState({id_aula:$selectAula.value})
         if($selectAula.value!=="null" && $selectGrado.value!=="null"){
             $botonGenerarPdf.classList.remove("ocultarFormulario")
-            this.setState({tipoPdf:true})
         }
         else{
-            this.setState({tipoPdf:false})
             $botonGenerarPdf.classList.add("ocultarFormulario")
         }
     }
@@ -266,11 +282,13 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
         // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
         let datos=[]
-        // console.log(datos)
         datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
         datos.push({name:"tipoPdf",value:this.state.tipoPdf})
         datos.push({name:"cedula_usuario",value:this.state.id_cedula})
-        datos.push({name:"id_aula",value:this.state.id_aula})
+        if(this.state.tipoPdf==="1"){
+            datos.push({name:"id_aula",value:this.state.id_aula})
+        }
+        
         console.log(datos)
         if(datos!==null){
           // alert("generar pdf")
@@ -355,37 +373,52 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                             </div>
                             <div class="modal-body">
                             <div className="row justify-content-center mb-3">
-                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                            <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
                                   <div class="form-groud">
                                     <label>Grado</label>
-                                    <select id="selectGrado" class="form-select custom-select" aria-label="Default select example"onChange={this.consultarTodasLasAulaPorGrado} >
-                                      <option value="null" >Seleccione Un Grado</option>
-                                      {this.state.listaGrados.map((grado, index) => {
-                                          return (
-                                            <option value={grado.id_grado} key={index}>{grado.numero_grado}</option>
-                                          )
-                                        })
-
-                                      }
-                                    </select>
-                                  </div>
-                                </div>
-                                <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
-                                  <div class="form-groud">
-                                    <label>Aula</label>
-                                    <select id="selectAula" class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >Seleccione Una Aula</option>
-                                      {this.state.listaAulasPorGrado.map((aula, index) => {
-                                          return (
-                                            <option value={aula.id_aula} key={index}>{aula.nombre_aula}</option>
-                                          )
-                                        })
-
-                                      }
+                                    <select id="tipoDeReporte" class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros} >
+                                      <option value="null" >Seleccione Un Tipo de Reporte</option>
+                                      <option value="1" >Especifico</option>
+                                      <option value="0" >General</option>
                                     </select>
                                   </div>
                                 </div>
                             </div>
+                            {this.state.tipoPdf==="1" &&
+                                <div className="row justify-content-center mb-3">
+                                    <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                    <div class="form-groud">
+                                        <label>Grado</label>
+                                        <select id="selectGrado" class="form-select custom-select" aria-label="Default select example"onChange={this.consultarTodasLasAulaPorGrado} >
+                                        <option value="null" >Seleccione Un Grado</option>
+                                        {this.state.listaGrados.map((grado, index) => {
+                                            return (
+                                                <option value={grado.id_grado} key={index}>{grado.numero_grado}</option>
+                                            )
+                                            })
+
+                                        }
+                                        </select>
+                                    </div>
+                                    </div>
+                                    <div className="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5">
+                                    <div class="form-groud">
+                                        <label>Aula</label>
+                                        <select id="selectAula" class="form-select custom-select" aria-label="Default select example" onChange={this.capturarDatosReporteEspecifico}>
+                                        <option value="null" >Seleccione Una Aula</option>
+                                        {this.state.listaAulasPorGrado.map((aula, index) => {
+                                            return (
+                                                <option value={aula.id_aula} key={index}>{aula.nombre_aula}</option>
+                                            )
+                                            })
+
+                                        }
+                                        </select>
+                                    </div>
+                                    </div>
+                                </div>
+                            }
+
                              
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
