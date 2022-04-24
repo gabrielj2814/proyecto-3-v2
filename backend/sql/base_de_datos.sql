@@ -569,6 +569,8 @@ CREATE TABLE tpromocion(
     nota_promocion character(1) NOT NULL,
     descripcion_nota_promocion character varying(3000) NOT NULL,
     dias_promocion character varying(2) NOT NULL,
+    estatus_promocion character(1) NOT NULL, -- A aplicar promocion, R rezachar y E en espera
+    nota_rezacho_promocion character varying(3000) NOT NULL,
     constraint PK_id_promocion primary key(id_promocion),
     constraint FK_id_inscripcion_tpromocion foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
