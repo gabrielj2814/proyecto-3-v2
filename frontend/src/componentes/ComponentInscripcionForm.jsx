@@ -1,6 +1,7 @@
 import React from 'react';
 import {withRouter} from 'react-router-dom'
 import $ from "jquery"
+import moment from "moment"
 //css
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/css/bootstrap-grid.css'
@@ -92,7 +93,8 @@ class ComponentInscripcionForm extends React.Component{
         },
         //
         fechaServidor:null,
-        StringExprecion: /[A-Za-z]|[0-9]/
+        StringExprecion: /[A-Za-z]|[0-9]/,
+        mostarFomrulario:true
     }
   }
 
@@ -188,26 +190,69 @@ class ComponentInscripcionForm extends React.Component{
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
     if(acessoModulo){
       await this.consultarFechaServidor()
-      let responseAnoEscolar = await this.Consultar_ano_escolar();
-      if(responseAnoEscolar){
-        await this.GetRepresentant_Estudiant()
-        await this.obtenerDatosDeLasesion();
-        await this.Consultar_asignacion_aula();
-        const operacion=this.props.match.params.operacion
-      }else{
-          document.getElementById("cedula_escolar").disabled = true;
-          document.getElementById("boton-registrar").disabled = true;
+      await this.consultarFechaInscripcionActual()
+      let apertura=true
+      if(this.state.mostarFomrulario===apertura){
+        let responseAnoEscolar = await this.Consultar_ano_escolar();
+        if(responseAnoEscolar){
+          await this.GetRepresentant_Estudiant()
+          await this.obtenerDatosDeLasesion();
+          await this.Consultar_asignacion_aula();
+          const operacion=this.props.match.params.operacion
+        }else{
+            document.getElementById("cedula_escolar").disabled = true;
+            document.getElementById("boton-registrar").disabled = true;
+        }
+  
+        document.getElementById("activoestudianter1").disabled = true;
+        document.getElementById("activoestudianter2").disabled = true;
+        document.getElementById("activoestudianter3").disabled = true;
+        document.getElementById("activoestudianter4").disabled = true;
       }
-
-      document.getElementById("activoestudianter1").disabled = true;
-      document.getElementById("activoestudianter2").disabled = true;
-      document.getElementById("activoestudianter3").disabled = true;
-      document.getElementById("activoestudianter4").disabled = true;
 
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+  }
+
+  async consultarFechaInscripcionActual(){
+    this.setState({mostarFomrulario:false})
+    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/fecha-inscripcion/consultar-fecha-inscripcion-actual`)
+    .then(async respuesta=>{
+        let respuesta_servior = respuesta.data
+        console.log("datos de fecha inscripcion actual =>>>> ",respuesta_servior)
+        let fecha_incripcion_desde=respuesta_servior.datos.fecha_incripcion_desde
+        let fecha_incripcion_hasta=respuesta_servior.datos.fecha_incripcion_hasta
+        let fecha_tope_inscripcion=respuesta_servior.datos.fecha_tope_inscripcion
+        let estado_reapertura_inscripcion=respuesta_servior.datos.estado_reapertura_inscripcion
+        let apertura="1"
+        if(moment(this.state.fechaServidor).isSameOrAfter(fecha_incripcion_desde)){
+          if(moment(this.state.fechaServidor).isSameOrBefore(fecha_incripcion_hasta)){
+            this.setState({mostarFomrulario:true})
+          }
+          else{
+            if(estado_reapertura_inscripcion===apertura){
+              if(moment(this.state.fechaServidor).isSameOrBefore(fecha_tope_inscripcion)){
+                alert("OK todavia esta a tiempo")
+                this.setState({mostarFomrulario:true})
+              }
+              else{
+                alert("Su pero la Fecha tope de la reapertura de inscripción")
+                this.props.history.push(`/dashboard/configuracion/inscripcion`)
+              }
+            }
+            else{
+              alert("NO se ha Reaperturado la inscripción")
+              this.props.history.push(`/dashboard/configuracion/inscripcion`)
+            }
+          }
+        }
+        else{
+          alert("No se ha Abriertos las Inscripciones")
+          this.props.history.push(`/dashboard/configuracion/inscripcion`)
+        }
+    })
   }
 
   async validarAccesoDelModulo(modulo,subModulo){
