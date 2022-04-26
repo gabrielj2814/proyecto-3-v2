@@ -2,24 +2,15 @@ const ControladorPromocion={}
 const ModeloPromocion= require("../modelo/m_promocion")
 
 ControladorPromocion.registrar= async (req,res) => {
-    const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setDatos(promocion)
     const resultPromocion=await modeloPromocion.registrar()
     if(resultPromocion.rowCount>0){
-        if(ControladorInscripcion.culminarInscripcion(promocion.id_inscripcion)){
-            respuesta_api.mensaje="Registro completado"
-            respuesta_api.estado_respuesta=true
-            respuesta_api.color_alerta="success"
-        }
-        else{
-            respuesta_api.mensaje="error: se creo la promocion pero no se pudo culminar la inscripción"
-            respuesta_api.estado_respuesta=true
-            respuesta_api.color_alerta="danger"
-        }
-
+      respuesta_api.mensaje="Registro completado"
+      respuesta_api.estado_respuesta=true
+      respuesta_api.color_alerta="success"
     }
     else{
         respuesta_api.mensaje="error al registrar(la promocion)"
@@ -37,6 +28,26 @@ ControladorPromocion.consultar= async (req,res) => {
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setIdPromocion(id)
     const resultPromocion=await modeloPromocion.consultar()
+    if(resultPromocion.rowCount>0){
+        respuesta_api.mensaje="consula completada"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="success"
+        respuesta_api.datos=resultPromocion.rows
+    }
+    else{
+        respuesta_api.mensaje="error al consultar(la promocion)"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
+ControladorPromocion.consultarTodos= async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let modeloPromocion = new ModeloPromocion()
+    const resultPromocion=await modeloPromocion.consultarTodos()
     if(resultPromocion.rowCount>0){
         respuesta_api.mensaje="consula completada"
         respuesta_api.estado_respuesta=true
@@ -76,6 +87,7 @@ ControladorPromocion.consultarPorInscripcion= async (req,res) => {
 }
 
 ControladorPromocion.actualizar= async (req,res) => {
+    const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {promocion} = req.body
     let { id } = req.params
@@ -84,9 +96,21 @@ ControladorPromocion.actualizar= async (req,res) => {
     modeloPromocion.setIdInscripcion(id)
     const resultPromocion=await modeloPromocion.actualizar()
     if(resultPromocion.rowCount>0){
+      if(promocion.estatus_promocion === "A"){
+        if(ControladorInscripcion.culminarInscripcion(promocion.id_inscripcion)){
+          respuesta_api.mensaje="actualización completado"
+          respuesta_api.estado_respuesta=true
+          respuesta_api.color_alerta="success"
+        }else{
+          respuesta_api.mensaje="error: se creo la promocion pero no se pudo culminar la inscripción"
+          respuesta_api.estado_respuesta=true
+          respuesta_api.color_alerta="danger"
+        }
+      }else{
         respuesta_api.mensaje="actualización completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+      }
     }
     else{
         respuesta_api.mensaje="error al actualizar"
