@@ -38,6 +38,7 @@ class ComponentInscripcion extends React.Component{
         this.mostrarModalPdf=this.mostrarModalPdf.bind(this)
         this.mostrarFiltros=this.mostrarFiltros.bind(this)
         this.generarPdf=this.generarPdf.bind(this)
+        this.generarPdfDeInscripcion=this.generarPdfDeInscripcion.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -293,7 +294,6 @@ class ComponentInscripcion extends React.Component{
     // $filaVerPdf.classList.remove("ocultarFormulario") //esta line sirve para mostrar el boton para ver el pdf => usar en success
     // $filaVerPdf.classList.add("ocultarFormulario") //esta line sirve para ocultar el boton para ver el pdf => usar en error
     let datos=[]
-    console.log(datos)
     datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
     datos.push({name:"tipo_matricula",value:this.state.tipoPdf})
     datos.push({name:"cedula_usuario",value:this.state.id_cedula})
@@ -323,8 +323,38 @@ class ComponentInscripcion extends React.Component{
         }
       });
     }
+  }
 
-
+  generarPdfDeInscripcion(a){
+    let boton=a.target
+    alert(boton.id)
+    let datos=[]
+    datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+    datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+    datos.push({name:"id_inscripcion",value:boton.id})
+    console.log(datos)
+    $.ajax({
+      url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_inscripcion.php`,
+      type:"post",
+      data:datos,
+      success: function(respuesta) {
+          console.log(respuesta)
+          let json=JSON.parse(respuesta)
+          console.log("datos reporte martricula =>>>> ",json)
+          // if(json.nombrePdf!=="false"){
+          //     $filaVerPdf.classList.remove("ocultarFormulario")
+          //     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+          // }
+          // else{
+          //     $filaVerPdf.classList.add("ocultarFormulario")
+          //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+          // }
+      },
+      error: function() {
+      //   alert("error")
+        // $filaVerPdf.classList.add("ocultarFormulario")
+      }
+    });
   }
 
     render(){
@@ -370,29 +400,9 @@ class ComponentInscripcion extends React.Component{
                           <td>{Moment(inscripcion.fecha_inscripcion).format("D/M/YYYY")}</td>
                           <td>{inscripcion.codigo_cedula_escolar}-{inscripcion.cedula_escolar}</td>
                           <td>{estado}</td>
-                         {
-                           // !inscripcion.vacio &&
-                           // <td>
-                           //   <ButtonIcon
-                           //      clasesBoton="btn btn-warning btn-block"
-                           //      value={inscripcion.id_inscripcion}
-                           //      id={inscripcion.id_inscripcion}
-                           //      eventoPadre={this.actualizarElementoTabla}
-                           //      icon="icon-pencil"
-                           //    />
-                           //  </td>
-                         }
-                         {/* {!enfermedad.vacio &&
-                           <td>
-                             <ButtonIcon
-                               clasesBoton="btn btn-secondary btn-block"
-                               value={enfermedad.id_enfermedad}
-                               id={enfermedad.id_enfermedad}
-                               eventoPadre={this.consultarElementoTabla}
-                               icon="icon-search"
-                              />
-                           </td>
-                         } */}
+                          <td>
+                            <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.generarPdfDeInscripcion}>PDF</button>
+                          </td>
                     </tr>
                     )
                 })}
