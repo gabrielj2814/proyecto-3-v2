@@ -49,6 +49,7 @@ class ComponentPromocionForm extends React.Component{
     this.ConsultarEstudiantesProfesor = this.ConsultarEstudiantesProfesor.bind(this);
     this.consultarProfesores = this.consultarProfesores.bind(this);
     this.consultarPromocion = this.consultarPromocion.bind(this);
+    this.consultarPromocionPorId = this.consultarPromocionPorId.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -61,6 +62,8 @@ class ComponentPromocionForm extends React.Component{
         nota_promocion:"",
         descripcion_nota_promocion:"",
         dias_promocion:"",
+        estatus_promocion: "E",
+        nota_rezacho_promocion: "",
         // Datos alumno
         cedula_escolar: "",
         nombre_estudiante: "",
@@ -77,9 +80,12 @@ class ComponentPromocionForm extends React.Component{
         msj_descripcion_nota_promocion:[{mensaje:"",color_texto:""}],
         msj_dias_promocion:[{mensaje:"",color_texto:""}],
         msj_id_cedula_profesor:[{mensaje:"",color_texto:""}],
+        msj_estatus_promocion:[{mensaje:"",color_texto:""}],
+        msj_nota_rezacho_promocion:[{mensaje:"",color_texto:""}],
         //// combo box
         lista_profesores: [],
         notas:['A','B','C','D','E','F'],
+        estados_promocion: ['A','R','E'],
         hashListaProfesores:{},
         hashListaEstudiantes:{},
         selectEstudiantes:[],
@@ -131,11 +137,62 @@ class ComponentPromocionForm extends React.Component{
               nota_promocion: datos.nota_promocion,
               descripcion_nota_promocion: datos.descripcion_nota_promocion,
               dias_promocion: datos.dias_promocion,
+              estatus_promocion: datos.estatus_promocion,
+              nota_rezacho_promocion: datos.nota_rezacho_promocion,
               operacion: "Actualizar",
             });
 
+            if(datos.estatus_promocion === "R") document.getElementById("nota_rezacho_promocion").disabled = true;
+
             return true;
-          }else return false;
+          }else{
+            this.setState({
+              id_promocion: "",
+              id_inscripcion: id,
+              descripcion_logro: "",
+              recomendacion_pariente: "",
+              nota_promocion: "",
+              descripcion_nota_promocion: "",
+              dias_promocion: "",
+              estatus_promocion: "E",
+              nota_rezacho_promocion: "",
+              operacion: "Registrar",
+            });
+            return false;
+          }
+      })
+      .catch(error => {
+          console.error(error)
+      })
+  }
+
+  async consultarPromocionPorId(id_promocion){
+      return await axiosCustom.get(`transaccion/promocion/consultar-promocion/${id_promocion}`)
+      .then(respuesta =>{
+          if(respuesta.data.datos.length > 0){
+            let datos = respuesta.data.datos[0]
+
+            this.setState({
+              id_promocion: datos.id_promocion,
+              id_inscripcion: datos.id_inscripcion,
+              descripcion_logro: datos.descripcion_logro,
+              recomendacion_pariente: datos.recomendacion_pariente,
+              nota_promocion: datos.nota_promocion,
+              descripcion_nota_promocion: datos.descripcion_nota_promocion,
+              dias_promocion: datos.dias_promocion,
+              estatus_promocion: datos.estatus_promocion,
+              nota_rezacho_promocion: datos.nota_rezacho_promocion,
+              // Datos alumno
+              cedula_escolar: datos.codigo_cedula_escolar+'-'+datos.cedula_escolar,
+              nombre_estudiante: datos.nombres_estudiante,
+              apellido_estudiante: datos.apellidos_estudiante,
+              // Datos profesor
+              id_cedula_profesor: datos.id_cedula,
+              nombre_profesor: datos.nombres,
+              apellido_profesor: datos.apellidos,
+              operacion: "Actualizar"
+            })
+          }
       })
       .catch(error => {
           console.error(error)
@@ -215,7 +272,27 @@ class ComponentPromocionForm extends React.Component{
     if(acessoModulo){
       await this.consultarFechaServidor()
       await this.consultarProfesores();
+      const operacion = this.props.match.params.operacion;
 
+      if(operacion === "actualizar"){
+        await this.consultarPromocionPorId(this.props.match.params.id)
+        document.getElementById("nota_rezacho_promocion").disabled = true;
+      }
+
+      if(operacion === "evaluacion"){
+
+        let accesoModuloGestion = await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion-gestion")
+        if(accesoModuloGestion){
+          await this.consultarPromocionPorId(this.props.match.params.id)
+          for(let i = 0; i < 5; i++){
+            document.getElementById(`nota${i}`).disabled = true;
+          }
+          document.getElementById("descripcion_nota_promocion").disabled = true;
+        }else{
+          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          this.props.history.goBack()
+        }
+      }
     }else{
         alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
@@ -437,7 +514,7 @@ class ComponentPromocionForm extends React.Component{
       hashListaEstudiantes:{},
       selectEstudiantes:[],
     })
-    this.props.history.push("/dashboard/transaccion/promocion")
+    this.props.history.push("/dashboard/transaccion/promocion/registrar")
   }
 
   validarCampoNumero(nombre_campo){
@@ -484,12 +561,12 @@ class ComponentPromocionForm extends React.Component{
     let msj = this.state["msj_"+name]
 
     if(valor !== "") msj[0] = {mensaje: "", color_texto:"rojo"}
-    else msj[0] = {mensaje: "Debe de seleccionar una opcion", color_texto:"rojo"}
+    else msj[0] = {mensaje: "Debe de seleccionar una opción", color_texto:"rojo"}
 
-    this.setState({[name]: msj})
+    this.setState({["msj_"+name]: msj})
     if(msj[0].mensaje === "") return true;
     else{
-      alert("No hay nota seleccionada")
+      alert(msj[0].mensaje)
       document.getElementsByName(name)[0].focus();
       return false
     };
@@ -506,6 +583,29 @@ class ComponentPromocionForm extends React.Component{
     }else return {estado: false}
   }
 
+  validarFormularioActualizacion(){
+    const validaCedulaProfesor = this.validarCampoNumero("id_cedula_profesor"), validaDescripcionNota = this.validarCampo('descripcion_nota_promocion'), validaInscripcion = this.validarSelect('id_inscripcion'),
+    validaRecomendacionPariente = this.validarCampo('recomendacion_pariente'), validarDescripcionLogro = this.validarCampo('descripcion_logro'),
+    validarNotaPromocion = this.validarRadio('nota_promocion'),validaDiasPromocion = this.validarCampoNumero('dias_promocion'),
+    validarEstadoPromocion = this.validarRadio("estatus_promocion")
+
+    if( validaDescripcionNota && validaInscripcion && validaRecomendacionPariente && validarDescripcionLogro && validarNotaPromocion
+      && validaDiasPromocion,validarEstadoPromocion){
+        if(this.props.match.params.operacion === "evaluacion"){
+
+          if(this.state.estatus_promocion === "R"){
+            let validacionObservacion = this.validarCampo("nota_rezacho_promocion")
+            if(validacionObservacion) return {estado: true}
+            else return {estado: false}
+          }else if(this.state.estatus_promocion === "E"){
+            alert("Debes de cambiar el estado de esta promoción")
+            return {estado: false}
+          }else return {estado: true}
+        }else return {estado: true}
+
+    }else return {estado: false}
+  }
+
   operacion(){
     $(".columna-modulo").animate({
       scrollTop: 0
@@ -514,6 +614,23 @@ class ComponentPromocionForm extends React.Component{
 
     const mensaje_formulario={
       mensaje:"",
+      //formulario
+      id_promocion:"",
+      id_inscripcion:"",
+      descripcion_logro:"",
+      recomendacion_pariente:"",
+      nota_promocion:"",
+      descripcion_nota_promocion:"",
+      dias_promocion:"",
+      // Datos alumno
+      cedula_escolar: "",
+      nombre_estudiante: "",
+      apellido_estudiante: "",
+      // Datos profesor
+      id_cedula_profesor: "",
+      nombre_profesor: "",
+      apellido_profesor: "",
+      //
       msj_id_inscripcion:[{mensaje:"",color_texto:""}],
       msj_descripcion_logro:[{mensaje:"",color_texto:""}],
       msj_recomendacion_pariente:[{mensaje:"",color_texto:""}],
@@ -532,7 +649,7 @@ class ComponentPromocionForm extends React.Component{
           .then(respuesta=>{
             respuesta_servidor=respuesta.data
             mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado
+            mensaje.estado=respuesta_servidor.estado_respuesta
             mensaje.color_alerta=respuesta_servidor.color_alerta
             mensaje_formulario.mensaje=mensaje
             this.setState(mensaje_formulario)
@@ -548,7 +665,7 @@ class ComponentPromocionForm extends React.Component{
         })
       }
     }else if(operacion === "Actualizar"){
-      const estado_validar_formulario=this.validarFormularioRegistrar()
+      const estado_validar_formulario=this.validarFormularioActualizacion()
 
       if(estado_validar_formulario.estado){
         this.enviarDatos(estado_validar_formulario,(objeto)=>{
@@ -587,15 +704,18 @@ class ComponentPromocionForm extends React.Component{
             descripcion_nota_promocion: this.state.descripcion_nota_promocion,
             dias_promocion: this.state.dias_promocion,
             fecha_promocion: "",
+            estatus_promocion: (this.props.match.params.operacion === "evaluacion") ? this.state.estatus_promocion : "E",
+            nota_rezacho_promocion: this.state.nota_rezacho_promocion,
           },
           token:token
       }
       petion(objeto)
   }
 
-  regresar(){ this.props.history.push("/dashboard/transaccion/promocion"); }
+  regresar(){ this.props.history.push("/dashboard"); }
 
   render(){
+    let operacion_Camp = this.props.match.params.operacion;
     var jsx_promocion_form=(
         <div className="row justify-content-center">
 
@@ -639,7 +759,7 @@ class ComponentPromocionForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_profesor[0]}
-                        nombreCampo="Cédula:" activo="si" type="text" value={this.state.id_cedula_profesor}
+                        nombreCampo="Cédula:" activo={(operacion_Camp === "registrar") ? "si" : "no"} type="text" value={this.state.id_cedula_profesor}
                         name="id_cedula_profesor" id="id_cedula_profesor" placeholder="Cédula" eventoPadre={this.BuscarProfesor}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
@@ -653,18 +773,27 @@ class ComponentPromocionForm extends React.Component{
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
-                    <ComponentFormSelect
-                      clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
-                      obligatorio="si"
-                      mensaje={this.state.msj_id_inscripcion}
-                      nombreCampoSelect="Estudiante:"
-                      clasesSelect="custom-select"
-                      name="id_inscripcion"
-                      id="id_inscripcion"
-                      eventoPadre={this.cambiarEstado}
-                      defaultValue={this.state.id_inscripcion}
-                      option={this.state.selectEstudiantes}
-                    />
+                    {this.props.match.params.operacion !== "registrar" &&
+                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_inscripcion[0]}
+                        nombreCampo="Cédula escolar:" activo="no" type="text" value={this.state.cedula_escolar}
+                        name="cedula_escolar" id="cedula_escolar" placeholder="Cédula" eventoPadre={""}
+                      />
+                    }
+                    {this.props.match.params.operacion === "registrar"  &&
+                      <ComponentFormSelect
+                        clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                        obligatorio="si"
+                        mensaje={this.state.msj_id_inscripcion}
+                        nombreCampoSelect="Estudiante:"
+                        clasesSelect="custom-select"
+                        name="id_inscripcion"
+                        id="id_inscripcion"
+                        eventoPadre={this.cambiarEstado}
+                        defaultValue={this.state.id_inscripcion}
+                        option={this.state.selectEstudiantes}
+                        />
+                    }
                     <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
                       <label>Nombre del Estudiante: {this.state.nombre_estudiante}</label><br></br>
                       <label>Apellido del Estudiante: {this.state.apellido_estudiante}</label>
@@ -678,14 +807,14 @@ class ComponentPromocionForm extends React.Component{
 
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                      obligatorio="si" mensaje={this.state.msj_descripcion_logro[0]} nombreCampoTextArea="Descripción del logro:"
+                      obligatorio={(operacion_Camp !== "evaluacion") ? "si" : "no"} mensaje={this.state.msj_descripcion_logro[0]} nombreCampoTextArea="Descripción del logro:"
                       clasesTextArear="form-control texarea-alto" name="descripcion_logro" id="descripcion_logro" value={this.state.descripcion_logro}
                       eventoPadre={this.validarTexto}
                     />
                   </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                        obligatorio="si" mensaje={this.state.msj_recomendacion_pariente[0]} nombreCampoTextArea="Recomendación al pariente:"
+                        obligatorio={(operacion_Camp !== "evaluacion") ? "si" : "no"} mensaje={this.state.msj_recomendacion_pariente[0]} nombreCampoTextArea="Recomendación al pariente:"
                         clasesTextArear="form-control texarea-alto" name="recomendacion_pariente" id="recomendacion_pariente" value={this.state.recomendacion_pariente}
                         eventoPadre={this.validarTexto}
                       />
@@ -694,7 +823,7 @@ class ComponentPromocionForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                   <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_dias_promocion[0]}
-                        nombreCampo="Dia de promoción:" activo="si" type="text" value={this.state.dias_promocion}
+                        nombreCampo="Dia de promoción:" activo={(operacion_Camp !== "evaluacion") ? "si" : "no"} type="text" value={this.state.dias_promocion}
                         name="dias_promocion" id="dias_promocion" placeholder="Descripción del logro" eventoPadre={this.validarNumero}
                       />
                     <ComponentFormRadioMultiState
@@ -718,6 +847,32 @@ class ComponentPromocionForm extends React.Component{
                       eventoPadre={this.cambiarEstado}
                     />
                   </div>
+                  {this.props.match.params.operacion === "evaluacion" &&
+                    <div className="row justify-content-center align-items-center">
+                      <ComponentFormRadioMultiState
+                        clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
+                        extra="custom-control-inline"
+                        nombreCampoRadio="Estado de la promoción :"
+                        name="estatus_promocion"
+                        nombreLabelRadio={["Aplicar","Rechazar","Espera"]}
+                        checkedRadio={this.state.estatus_promocion}
+
+                        idRadio={["status0","status1","status2"]}
+
+                        estates={this.state.estados_promocion}
+                        eventoPadre={this.cambiarEstado}
+                        />
+                    </div>
+                  }
+                  {this.state.estatus_promocion === "R" &&
+                    <div className="row justify-content-center align-items-center">
+                      <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                        obligatorio="si" mensaje={this.state.msj_nota_rezacho_promocion[0]} nombreCampoTextArea="Observación :"
+                        clasesTextArear="form-control texarea-alto" name="nota_rezacho_promocion" id="nota_rezacho_promocion" value={this.state.nota_rezacho_promocion}
+                        eventoPadre={this.cambiarEstado}
+                      />
+                    </div>
+                  }
 
 
                     <div className="row justify-content-center">

@@ -66,12 +66,12 @@ class ModeloPromocion extends DriverPostgre{
     }
 
     async actualizar(){
-        const SQL=`UPDATE tpromocion SET 
+        const SQL=`UPDATE tpromocion SET
         descripcion_logro='${this.descripcion_logro}',
         recomendacion_pariente='${this.recomendacion_pariente}',
         nota_promocion='${this.nota_promocion}',
         descripcion_nota_promocion='${this.descripcion_nota_promocion}',
-        dias_promocion='${this.dias_promocion}', 
+        dias_promocion='${this.dias_promocion}',
         estatus_promocion = '${this.estatus_promocion}',
         nota_rezacho_promocion = '${this.nota_rezacho_promocion}'
         WHERE
@@ -81,8 +81,26 @@ class ModeloPromocion extends DriverPostgre{
     }
 
     async consultar(){
-        const SQL=`SELECT * FROM tpromocion WHERE id_promocion=${this.id_promocion}`
+        const SQL=`SELECT tpromocion.*,testudiante.*,tprofesor.id_cedula,ttrabajador.nombres,ttrabajador.apellidos
+        FROM tpromocion,tinscripcion,testudiante,tasignacion_aula_profesor,tano_escolar,tprofesor,ttrabajador WHERE
+        tpromocion.id_inscripcion = tinscripcion.id_inscripcion AND
+        tinscripcion.id_estudiante = testudiante.id_estudiante AND
+        tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor AND
+        tasignacion_aula_profesor.id_profesor = tprofesor.id_profesor AND
+        tprofesor.id_cedula = ttrabajador.id_cedula AND
+        tasignacion_aula_profesor.estatus_asignacion_aula_profesor = '1' AND
+        tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND tano_escolar.estatus_ano_escolar = '1' AND
+        tpromocion.id_promocion=${this.id_promocion}`
         return await this.query(SQL)
+    }
+
+    async consultarTodos(){
+      const SQL=`select tpromocion.* from tpromocion,tinscripcion,tasignacion_aula_profesor,tano_escolar where
+      tpromocion.id_inscripcion = tinscripcion.id_inscripcion AND
+      tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor AND
+      tasignacion_aula_profesor.estatus_asignacion_aula_profesor = '1' AND
+      tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND tano_escolar.estatus_ano_escolar = '1';`;
+      return await this.query(SQL)
     }
 
     async consultarPorIdInscripcion(){

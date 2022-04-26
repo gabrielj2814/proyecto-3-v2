@@ -139,9 +139,11 @@ import ComponentInscripcion from './componentes/ComponentInscripcion'
 import ComponentParroquia from './componentes/componentParroquia'
 import ComponentParroquiaForm from './componentes/componentParroquiaForm'
 // Promocion
+import ComponentPromocion from './componentes/componentPromocion'
 import ComponentPromocionForm from './componentes/componentPromocionForm'
 // Asistencia
 import ComponentAsistenciaEstudiantesForm from './componentes/componentAsistenciaEstudiantesForm'
+import ComponentAsistenciaEstudiantesGeneralForm from './componentes/componentAsistenciaEstudianteGeneralForm'
 // Retiro
 import ComponentRetiroForm from './componentes/componentRetiroForm'
 import ComponentRetiro from './componentes/componentRetiro'
@@ -278,8 +280,11 @@ function App() {
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante/:operacion/:id?" component={ComponenteAsignacionRepresentanteEstudianteForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
 
-        <Route exact path="/dashboard/transaccion/promocion" component={ComponentPromocionForm}/>
+        <Route exact path="/dashboard/transaccion/promocion" component={ComponentPromocion}/>
+        <Route exact path="/dashboard/transaccion/promocion/:operacion/:id?" component={ComponentPromocionForm}/>
+
         <Route exact path="/dashboard/transaccion/asistencia-estudiante" component={ComponentAsistenciaEstudiantesForm}/>
+        <Route exact path="/dashboard/transaccion/asistencia-general-estudiante" component={ComponentAsistenciaEstudiantesGeneralForm}/>
 
         <Route exact path="/dashboard/transaccion/retiro/:operacion/:id?" component={ComponentRetiroForm}/>
         <Route exact path="/dashboard/transaccion/retiro:mensaje?" component={ComponentRetiro}/>
