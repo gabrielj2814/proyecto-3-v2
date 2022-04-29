@@ -1,6 +1,6 @@
 <?php
 include_once("../librerias_php/fpdf/fpdf.php");
-class PdfMatriculaInicial extends FPDF{
+class PdfInscripcion extends FPDF{
 
     private $datosPdf;
     private $generado;
@@ -32,7 +32,7 @@ class PdfMatriculaInicial extends FPDF{
 
     function generarPdf(){
         
-        $nombrePdf="Matricula Inicial.pdf";
+        $nombrePdf="Reporte de Inscripcion.pdf";
         $this->AliasNbPages();
         $this->Addpage();
         // $this->ln(20);

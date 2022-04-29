@@ -57,15 +57,15 @@ foreach($datosConsulta as $key => $datoConsulta){
 }
 
 // print_r($datosConsulta);
-// if(count($datosConsulta)>0){
-//    $PDF=new PdfMatriculaInicial($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
-//    $nombrePdf=$PDF->generarPdf();
-//    // // print($nombrePdf);
-//    $respuesta["nombrePdf"]=$nombrePdf;
-// }
-// else{
-//    $respuesta["nombrePdf"]="false";
-// }
+if(count($datosConsulta)>0){
+   $PDF=new PdfInscripcion($datosConsulta,$_POST["nombre_usuario"],$result);
+   $nombrePdf=$PDF->generarPdf();
+   // // print($nombrePdf);
+   $respuesta["nombrePdf"]=$nombrePdf;
+}
+else{
+   $respuesta["nombrePdf"]="false";
+}
 
 print(json_encode($respuesta));
 ?>
