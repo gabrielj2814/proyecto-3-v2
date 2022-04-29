@@ -54,22 +54,6 @@ class ComponentMedicoForm extends React.Component{
         }
 	}
 
-	// async generarIdMedico(){
-    //     var respuesta_servidor="",
-    //     mensaje={texto:"",estado:""}
-    //     await axios.get("http://localhost:8080/configuracion/medico/generar-id")
-    //     .then(respuesta=>{
-    //         respuesta_servidor=respuesta.data
-    //         //console.log(respuesta_servidor)
-    //     })
-    //     .catch(error=>{
-    //         mensaje.texto="no hay conxion con el servido"
-    //         mensaje.estado="500"
-    //         this.props.history.push(`/dashboard/configuracion/medico${JSON.stringify(mensaje)}`)
-    //     })
-    //     return respuesta_servidor
-    // }
-
     cambiarEstado(a){
         var input=a.target;
         this.setState({[input.name]:input.value})
@@ -113,7 +97,7 @@ class ComponentMedicoForm extends React.Component{
   
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
-        await axios.get(`http://localhost:8080/configuracion/acceso/consultar/${idPerfil}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
         .then(repuesta => {
             let json=JSON.parse(JSON.stringify(repuesta.data))
             // console.log("datos modulos =>>>",json)

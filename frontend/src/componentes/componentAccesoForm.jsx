@@ -85,7 +85,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"año escolar",id:"/ano-escolar"},
                     {descripcion:"Fecha Inscripción",id:"/fecha-inscripcion"},
                     {descripcion:"Inscripción",id:"/inscripcion"},
-                    {descripcion:"Parroquia",id:"/parroquia"}
+                    {descripcion:"Parroquia",id:"/parroquia"},
+                    {descripcion:"Traslado estudiante",id:"/traslado-estudiantes"}
                 ],
                 // reporte:[
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
@@ -101,7 +102,9 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"promoción",id:"/promocion"},
                     {descripcion:"Asistencia Estudiatnes",id:"/asistencia-estudiante"},
                     {descripcion:"Retiro",id:"/retiro"},
-                    {descripcion:"Retiro Formulario",id:"/retiro-formulario"}
+                    {descripcion:"Retiro Formulario",id:"/retiro-formulario"},
+                    {descripcion:"Promocion",id:"/promocion"},
+                    {descripcion:"Promocion evaluar",id:"/promocion-gestion"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},

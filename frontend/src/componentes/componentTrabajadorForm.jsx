@@ -139,14 +139,14 @@ class ComponentTrabajadorForm extends React.Component{
     
             const operacion=this.props.match.params.operacion
             if(operacion==="registrar"){
-                const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
+                const ruta_api_1=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar-perfiles`,
                 nombre_propiedad_lista_1="perfiles",
                 propiedad_id_1="id_perfil",
                 propiedad_descripcion_1="nombre_perfil",
                 propiedad_estado_1="estatu_perfil"
                 const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
                 //
-                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                const ruta_api=`http:/${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
                 nombre_propiedad_lista="tipos_trabajador",
                 propiedad_id="id_tipo_trabajador",
                 propiedad_descripcion="descripcion_tipo_trabajador",
@@ -171,13 +171,13 @@ class ComponentTrabajadorForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             // this.setState({fecha_inactividad:Moment().format("YYYY-MM-DD")})
-                const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
+                const ruta_api_1=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar-perfiles`,
                 nombre_propiedad_lista_1="perfiles",
                 propiedad_id_1="id_perfil",
                 propiedad_descripcion_1="nombre_perfil",
                 propiedad_estado_1="estatu_perfil"
                 const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-                const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
                 nombre_propiedad_lista="tipos_trabajador",
                 propiedad_id="id_tipo_trabajador",
                 propiedad_descripcion="descripcion_tipo_trabajador",
@@ -546,13 +546,13 @@ class ComponentTrabajadorForm extends React.Component{
     }
 
     async agregar(){
-        const ruta_api_1="http://localhost:8080/configuracion/acceso/consultar-perfiles",
+        const ruta_api_1=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar-perfiles`,
         nombre_propiedad_lista_1="perfiles",
         propiedad_id_1="id_perfil",
         propiedad_descripcion_1="nombre_perfil",
         propiedad_estado_1="estatu_perfil"
         const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
-        const ruta_api="http://localhost:8080/configuracion/tipo-trabajador/consultar-tipos-trabajador",
+        const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
         nombre_propiedad_lista="tipos_trabajador",
         propiedad_id="id_tipo_trabajador",
         propiedad_descripcion="descripcion_tipo_trabajador",

@@ -709,6 +709,7 @@ class ComponentPromocionForm extends React.Component{
           },
           token:token
       }
+      console.log(objeto)
       petion(objeto)
   }
 
