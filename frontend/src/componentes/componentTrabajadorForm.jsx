@@ -146,7 +146,7 @@ class ComponentTrabajadorForm extends React.Component{
                 propiedad_estado_1="estatu_perfil"
                 const lista_perfiles=await this.consultarServidor(ruta_api_1,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
                 //
-                const ruta_api=`http:/${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
+                const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-trabajador/consultar-tipos-trabajador`,
                 nombre_propiedad_lista="tipos_trabajador",
                 propiedad_id="id_tipo_trabajador",
                 propiedad_descripcion="descripcion_tipo_trabajador",
