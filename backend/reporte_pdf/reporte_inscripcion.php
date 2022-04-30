@@ -29,6 +29,31 @@ class PdfInscripcion extends FPDF{
     }
 
 
+    function buscarRepresentante($listaRepresentante,$tipoRepresentante){
+        $representanteEncontrado=null;
+        foreach($listaRepresentante AS $representante){
+            if($representante["tipo_representante"]===$tipoRepresentante){
+                $representanteEncontrado=$representante;
+                break;
+            }
+        }
+        return $representanteEncontrado;
+    }
+
+    function retornarFechaFormatoLATAM($fecha){
+        $fecha=explode("-",$fecha);
+        return $fecha[1]."/".$fecha[2]."/".$fecha[0];
+    }
+
+    function calculaedad($fechanacimiento){
+        list($ano,$mes,$dia) = explode("-",$fechanacimiento);
+        $ano_diferencia  = date("Y") - $ano;
+        $mes_diferencia = date("m") - $mes;
+        $dia_diferencia   = date("d") - $dia;
+        if ($dia_diferencia < 0 || $mes_diferencia < 0)
+          $ano_diferencia--;
+        return $ano_diferencia;
+      }
 
     function generarPdf(){
         
@@ -99,7 +124,7 @@ class PdfInscripcion extends FPDF{
 
         $this->SetFont("Arial","",10);
         $this->Cell(11,10,"",0,0,"C");
-        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(20,6,"poto",'B',0,"C");
+        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(20,6,$this->calculaedad($this->datosPdf[0]["fecha_nacimiento_estudiante"]).utf8_decode(" Años"),'B',0,"C");
 
         $this->SetFont("Arial","",10);
         $this->Cell(-2,10,"",0,0,"C");
@@ -198,6 +223,10 @@ class PdfInscripcion extends FPDF{
         $this->Cell(-420,10,"____________________________________________________",0,0,"C");
 
         $this->ln(8);
+        
+        // $tipoRepresentante="O";
+        // $datosOtro=$this->buscarRepresentante($this->datosPdf[0]["representante"],$tipoRepresentante);
+        // $nombreOtro=$datosOtro["nombres_representante"]." ".$datosOtro["apellidos_representante"];
 
         $this->SetFont("Arial","",10);
         $this->Cell(10.5,10,"",0,0,"C");
@@ -252,36 +281,151 @@ class PdfInscripcion extends FPDF{
         $this->Cell(5.8,10,"Telefonos:",0,0,"R");$this->Cell(95.5,6,"",'B',0,"C");
 
         $this->ln(8);
-
+        $tipoRepresentante="M";
+        $datosMadre=$this->buscarRepresentante($this->datosPdf[0]["representante"],$tipoRepresentante);
+        $nombreMadre=$datosMadre["nombres_representante"]." ".$datosMadre["apellidos_representante"];
         $this->SetFont("Arial","B",10);
         $this->Cell(44,10,"",0,0,"C");
-        $this->Cell(12,10,"Apellidos y Nombres de la madre:",0,0,"R");$this->Cell(156.5,6,"",'B',0,"C");
+        $this->Cell(12,10,"Apellidos y Nombres de la madre:",0,0,"R");$this->Cell(156.5,6,$nombreMadre,'B',0,"C");
 
         $this->ln(8);
 
         $this->SetFont("Arial","",10);
         $this->Cell(0.4,10,"",0,0,"C");
-        $this->Cell(11,10,"C.I. No:",0,0,"R");$this->Cell(50,6,"",'B',0,"C");
+        $this->Cell(11,10,"C.I. No:",0,0,"R");$this->Cell(50,6,$datosMadre["id_cedula_representante"],'B',0,"C");
 
         $this->SetFont("Arial","",10);
         $this->Cell(12,10,"",0,0,"C");
-        $this->Cell(13,10,"Fecha de Nac:",0,0,"R");$this->Cell(70,6,"",'B',0,"C");
+        $this->Cell(13,10,"Fecha de Nac:",0,0,"R");$this->Cell(70,6,$this->retornarFechaFormatoLATAM($datosMadre["fecha_nacimiento_representante"]),'B',0,"C");
 
         $this->SetFont("Arial","",10);
         $this->Cell(15,10,"",0,0,"C");
-        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(44,6,"",'B',0,"C");
+        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(44,6,$this->calculaedad($datosMadre["fecha_nacimiento_representante"]).utf8_decode(" Años"),'B',0,"C");
 
         $this->ln(8);
 
         $this->SetFont("Arial","",10);
         $this->Cell(27,10,"",0,0,"C");
-        $this->Cell(4,10,"Nivel de instruccion:",0,0,"R");$this->Cell(80,6,"",'B',0,"C");
+        $this->Cell(4,10,"Nivel de instruccion:",0,0,"R");$this->Cell(80,6,$datosMadre["nivel_instruccion_representante"],'B',0,"C");
 
         $this->SetFont("Arial","",10);
         $this->Cell(14,10,"",0,0,"C");
-        $this->Cell(6,10,"Ocupacion:",0,0,"R");$this->Cell(81.5,6,"",'B',0,"C");
+        $this->Cell(6,10,"Ocupacion:",0,0,"R");$this->Cell(81.5,6,$datosMadre["ocupacion_representante"],'B',0,"C");
 
         $this->ln(8);
+
+        $tipoRepresentante="P";
+        $datosPadre=$this->buscarRepresentante($this->datosPdf[0]["representante"],$tipoRepresentante);
+        $nombrePadre=$datosPadre["nombres_representante"]." ".$datosPadre["apellidos_representante"];
+
+        $this->SetFont("Arial","B",10);
+        $this->Cell(40,10,"",0,0,"C");
+        $this->Cell(12,10,"Apellidos y Nombres del padre:",0,0,"R");$this->Cell(160,6,$nombrePadre,'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(0.4,10,"",0,0,"C");
+        $this->Cell(11,10,"C.I. No:",0,0,"R");$this->Cell(50,6,$datosPadre["id_cedula_representante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(13,10,"Fecha de Nac:",0,0,"R");$this->Cell(70,6,$this->retornarFechaFormatoLATAM($datosPadre["fecha_nacimiento_representante"]),'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(15,10,"",0,0,"C");
+        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(44,6,$this->calculaedad($datosPadre["fecha_nacimiento_representante"]).utf8_decode(" Años"),'B',0,"C");
+
+        $this->ln(8);
+        $this->SetFont("Arial","",10);
+        $this->Cell(27,10,"",0,0,"C");
+        $this->Cell(4,10,"",0,0,"R");
+        $this->ln(40);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(27,10,"",0,0,"C");
+        $this->Cell(4,10,"Nivel de instruccion:",0,0,"R");$this->Cell(80,6,$datosPadre["nivel_instruccion_representante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(14,10,"",0,0,"C");
+        $this->Cell(6,10,"Ocupacion:",0,0,"R");$this->Cell(81.5,6,$datosPadre["ocupacion_representante"],'B',0,"C");
+        // ======
+        // ======
+        // ======
+        // ======
+        $this->ln(8);
+
+        $this->SetFont("Arial","B",10);
+        $this->Cell(55.5,10,"",0,0,"C");
+        $this->Cell(12,10,"Documentos consignados al inscribirse:",0,0,"R");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(41,10,"",0,0,"C");
+        $this->Cell(17.5,10,"Fotocopia de la C.I del representante:",0,0,"R");;$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(20,10,"",0,0,"C");
+        $this->Cell(13,10,"Informe descriptivo:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(30,10,"",0,0,"C");
+        $this->Cell(13,10,"Constancia de promocion:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(38,10,"",0,0,"C");
+        $this->Cell(13,10,"Fotocopia de la C.I del alumno:",0,0,"R");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1,10,"",0,0,"C");
+        $this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(63,10,"",0,0,"C");
+        $this->Cell(17.5,10,"Fotocopia de la partida de nacimiento del alumno:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(20,10,"",0,0,"C");
+        $this->Cell(13,10,"Control de vacunas:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(15,10,"",0,0,"C");
+        $this->Cell(13,10,"Foto del alumno:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(22,10,"",0,0,"C");
+        $this->Cell(13,10,"Foto del representan",0,0,"R");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-8,10,"",0,0,"C");
+        $this->Cell(12,10,"te:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1,10,"",0,0,"C");
+        $this->Cell(12,10,"otros:",0,0,"R");$this->Cell(190,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12.5,10,"",0,0,"C");
+        $this->Cell(12,10,"Observaciones:",0,0,"R");$this->Cell(190,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1,10,"",0,0,"C");
+        $this->Cell(215.5,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1,10,"",0,0,"C");
+        $this->Cell(215.5,6,"",'B',0,"C");
 
         
 
