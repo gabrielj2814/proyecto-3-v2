@@ -288,6 +288,9 @@ class ComponentPromocionForm extends React.Component{
             document.getElementById(`nota${i}`).disabled = true;
           }
           document.getElementById("descripcion_nota_promocion").disabled = true;
+          document.getElementById("recomendacion_pariente").disabled = true;
+          document.getElementById("descripcion_logro").disabled = true;
+                      
         }else{
           alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
@@ -824,8 +827,8 @@ class ComponentPromocionForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                   <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_dias_promocion[0]}
-                        nombreCampo="Dia de promoción:" activo={(operacion_Camp !== "evaluacion") ? "si" : "no"} type="text" value={this.state.dias_promocion}
-                        name="dias_promocion" id="dias_promocion" placeholder="Descripción del logro" eventoPadre={this.validarNumero}
+                        nombreCampo="Día de promoción:" activo={(operacion_Camp !== "evaluacion") ? "si" : "no"} type="text" value={this.state.dias_promocion}
+                        name="dias_promocion" id="dias_promocion" placeholder="Día de promoción" eventoPadre={this.validarNumero}
                       />
                     <ComponentFormRadioMultiState
                       clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
@@ -874,7 +877,6 @@ class ComponentPromocionForm extends React.Component{
                       />
                     </div>
                   }
-
 
                     <div className="row justify-content-center">
                         <div className="col-auto">
