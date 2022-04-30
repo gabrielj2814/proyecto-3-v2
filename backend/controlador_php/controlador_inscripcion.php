@@ -9,7 +9,8 @@ $respuesta=[];
 $SQL="";
 $datosConsulta=[];
 // print_r($_POST);
-$result=$driver->query("SELECT * FROM tcintillo WHERE estatu_foto_cintillo='1'");
+$result_cintillo=$driver->query("SELECT * FROM tcintillo WHERE estatu_foto_cintillo='1'");
+$result_cintillo=$driver->resultDatos($result_cintillo);
 
 $SQL="SELECT * FROM 
 ttrabajador,
@@ -58,7 +59,7 @@ foreach($datosConsulta as $key => $datoConsulta){
 
 // print_r($datosConsulta);
 if(count($datosConsulta)>0){
-   $PDF=new PdfInscripcion($datosConsulta,$_POST["nombre_usuario"],$result);
+   $PDF=new PdfInscripcion($datosConsulta,$_POST["nombre_usuario"],$result_cintillo);
    $nombrePdf=$PDF->generarPdf();
    // // print($nombrePdf);
    $respuesta["nombrePdf"]=$nombrePdf;

@@ -35,14 +35,14 @@ class PdfInscripcion extends FPDF{
         $nombrePdf="Reporte de Inscripcion.pdf";
         $this->AliasNbPages();
         $this->Addpage();
-        // $this->ln(20);
-        // //fECHA
-        // $this->SetFont("Arial","",10);
-        // $this->Cell(187,10,"",0,0,"L");
-        // $this->Cell(12,10,"Araure",0,0,"C");$this->Cell(1,10,"",0,0,"L");$this->Cell(10,6,date("d"),'B',0,"C");$this->Cell(1,10,"",0,0,"L");
-        // $this->Cell(5,10,"de",0,0,"C");$this->Cell(1,10,"",0,0,"L");$this->Cell(17,6,date("m"),'B',0,"C");
-        // $this->Cell(1,10,"",0,0,"L");
-        // $this->Cell(5,10,"de",0,0,"C");$this->Cell(1,10,"",0,0,"L");$this->Cell(17,6,date("Y"),'B',0,"C");
+
+        $sexo=null;
+        if($this->datosPdf[0]["procedencia_estudiante"]==="1"){
+            $sexo="Masculino";
+        }
+        else{
+            $sexo="Femenino";
+        }
         
 
         $this->ln(22);
@@ -51,14 +51,152 @@ class PdfInscripcion extends FPDF{
         $this->SetFont("Arial","B",10);
         $this->Cell(0,10,"FICHA DE INSCRIPCION",0,0,"C");
         $this->Cell(-259,10,"_______________________",0,0,"C");
+
+        $this->ln(8);
+
         //SUBTITULO
         $this->SetFont("Arial","B",10);
         $this->Cell(-2.5,10,"",0,0,"C");
         $this->Cell(0,10,"DATOS DEL ALUMNO",0,0,"L");
         $this->Cell(-485,10,"___________________",0,0,"C");
+
+        $this->ln(8);
         // ========
         // ========
         // ========
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(10.5,10,"",0,0,"C");
+        $this->Cell(4,10,"Apellidos:",0,0,"R");$this->Cell(90,6,$this->datosPdf[0]["apellidos_estudiante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(6,10,"Nombres:",0,0,"R");$this->Cell(90,6,$this->datosPdf[0]["nombres_estudiante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(5,10,"",0,0,"C");
+        $this->Cell(40,50,"",1,0,"R");
+        $this->Cell(-40,40,"Foto",0,0,"C");
+
+        $this->ln(8);
+
+        $fecha=explode("-",$this->datosPdf[0]["fecha_nacimiento_estudiante"]);
+        $fecha=$fecha[1]."/".$fecha[2]."/".$fecha[0];
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(11,10,"",0,0,"C");
+        $this->Cell(11,10,"Fecha de Nac:",0,0,"R");$this->Cell(30,6,$fecha,'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(13,10,"Lugar de Nac:",0,0,"R");$this->Cell(59,6,$this->datosPdf[0]["direccion_nacimiento_estudiante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(-2,10,"Edo:",0,0,"R");$this->Cell(67,6,$this->datosPdf[0]["id_parroquia_nacimiento"],'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(11,10,"",0,0,"C");
+        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(20,6,"poto",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-2,10,"",0,0,"C");
+        $this->Cell(13,10,"Sexo:",0,0,"R");$this->Cell(30,6,$sexo,'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(12,10,"Procedencia:",0,0,"R");$this->Cell(120,6,$this->datosPdf[0]["procedencia_estudiante"],'B',0,"C");
+
+        $this->ln(8);
+        
+        $this->SetFont("Arial","",10);
+        $this->Cell(11.5,10,"",0,0,"C");
+        $this->Cell(20,10,"Escolaridad Regular:",0,0,"R");$this->Cell(10,8,"",1,0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(14,10,"",0,0,"C");
+        $this->Cell(5,10,"Repitiente:",0,0,"R");$this->Cell(10,8,"",1,0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(10.8,10,"",0,0,"C");
+        $this->Cell(12,10,"Enfermedades:",0,0,"R");$this->Cell(120,6,$this->datosPdf[0]["enfermedades_estudiante"],'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(4,10,"",0,0,"C");
+        $this->Cell(13,10,"Vive con :",0,0,"R");$this->Cell(53,6,$this->datosPdf[0]["vive_con_estudiante"],'B',0,"C");
+
+
+        // =========
+        // =========
+        // =========
+        // =========
+
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(11.5,10,"",0,0,"C");
+        $this->Cell(17.5,10,"Vacunas recibidas:",0,0,"R");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(8,10,"",0,0,"C");
+        $this->Cell(13,10,"Antiraviolica:",0,0,"R");$this->Cell(21.5,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-2,10,"",0,0,"C");
+        $this->Cell(13,10,"BCG:",0,0,"R");$this->Cell(21.5,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(8,10,"",0,0,"C");
+        $this->Cell(13,10,"Sarampion:",0,0,"R");$this->Cell(21.5,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1.5,10,"",0,0,"C");
+        $this->Cell(13,10,"Triple:",0,0,"R");$this->Cell(21.5,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1,10,"",0,0,"C");
+        $this->Cell(13,10,"Pollo:",0,0,"R");$this->Cell(21.5,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(5.8,10,"",0,0,"C");
+        $this->Cell(13,10,"Antitetanica:",0,0,"R");$this->Cell(22.7,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(14,10,"",0,0,"C");
+        $this->Cell(13,10,"Fiebre amarilla:",0,0,"R");$this->Cell(22.7,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(5,10,"",0,0,"C");
+        $this->Cell(13,10,"Trivalente:",0,0,"R");$this->Cell(22.7,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(6,10,"",0,0,"C");
+        $this->Cell(13,10,"Meningitis:",0,0,"R");$this->Cell(22.7,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(4,10,"",0,0,"C");
+        $this->Cell(13,10,"Hepatitis:",0,0,"R");$this->Cell(22.7,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        // =========
+        // =========
+        // =========
+        // =========
+        //  ME QUEDE AQUI
+        //SUBTITULO
+        $this->SetFont("Arial","B",10);
+        $this->Cell(-2.5,10,"",0,0,"C");
+        $this->Cell(0,10,"DATOS DEL RESPRESENTANTE Y ASPECTOS FAMILIARES",0,0,"L");
+        $this->Cell(-420,10,"____________________________________________________",0,0,"C");
+
         $this->ln(8);
 
         $this->SetFont("Arial","",10);
@@ -72,9 +210,78 @@ class PdfInscripcion extends FPDF{
         $this->SetFont("Arial","",10);
         $this->Cell(5,10,"",0,0,"C");
         $this->Cell(40,50,"",1,0,"R");
-        $this->Cell(-40,40,"Foto",0,0,"C");
-        
-        
+        $this->Cell(-40,50,"Foto",0,0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(0.4,10,"",0,0,"C");
+        $this->Cell(11,10,"C.I. No:",0,0,"R");$this->Cell(30,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(13,10,"Fecha de Nac:",0,0,"R");$this->Cell(59,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(9,10,"Parentesco:",0,0,"R");$this->Cell(66,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(27,10,"",0,0,"C");
+        $this->Cell(4,10,"Nivel de instruccion:",0,0,"R");$this->Cell(80,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(14,10,"",0,0,"C");
+        $this->Cell(6,10,"Ocupacion:",0,0,"R");$this->Cell(81.5,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(3,10,"",0,0,"C");
+        $this->Cell(12,10,"Direccion:",0,0,"R");$this->Cell(198,6,"",'B',0,"C");
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(-1.6,10,"",0,0,"C");
+        $this->Cell(100,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(13,10,"",0,0,"C");
+        $this->Cell(5.8,10,"Telefonos:",0,0,"R");$this->Cell(95.5,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","B",10);
+        $this->Cell(44,10,"",0,0,"C");
+        $this->Cell(12,10,"Apellidos y Nombres de la madre:",0,0,"R");$this->Cell(156.5,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(0.4,10,"",0,0,"C");
+        $this->Cell(11,10,"C.I. No:",0,0,"R");$this->Cell(50,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(12,10,"",0,0,"C");
+        $this->Cell(13,10,"Fecha de Nac:",0,0,"R");$this->Cell(70,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(15,10,"",0,0,"C");
+        $this->Cell(-3,10,"Edad:",0,0,"R");$this->Cell(44,6,"",'B',0,"C");
+
+        $this->ln(8);
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(27,10,"",0,0,"C");
+        $this->Cell(4,10,"Nivel de instruccion:",0,0,"R");$this->Cell(80,6,"",'B',0,"C");
+
+        $this->SetFont("Arial","",10);
+        $this->Cell(14,10,"",0,0,"C");
+        $this->Cell(6,10,"Ocupacion:",0,0,"R");$this->Cell(81.5,6,"",'B',0,"C");
+
+        $this->ln(8);
 
         
 
@@ -167,6 +374,10 @@ class PdfInscripcion extends FPDF{
 // $pdf->Cell(4,10,"",0,0,"C");
 // $pdf->Cell(13,10,"Vive con :",0,0,"R");$pdf->Cell(53,6,"",'B',0,"C");
 
+
+
+
+
 // $pdf->ln(8);
 
 // $pdf->SetFont("Arial","",10);
@@ -214,6 +425,11 @@ class PdfInscripcion extends FPDF{
 // $pdf->SetFont("Arial","",10);
 // $pdf->Cell(4,10,"",0,0,"C");
 // $pdf->Cell(13,10,"Hepatitis:",0,0,"R");$pdf->Cell(22.7,6,"",'B',0,"C");
+
+
+
+
+
 
 // $pdf->ln(8);
 
@@ -308,6 +524,32 @@ class PdfInscripcion extends FPDF{
 // $pdf->Cell(6,10,"Ocupacion:",0,0,"R");$pdf->Cell(81.5,6,"",'B',0,"C");
 
 // $pdf->ln(8);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // $pdf->SetFont("Arial","B",10);
 // $pdf->Cell(40,10,"",0,0,"C");
