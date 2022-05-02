@@ -1073,7 +1073,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                   </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos de la Mama</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos de la Mamá</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -1091,7 +1091,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
 
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos del Papa</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del Papá</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -1108,7 +1108,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                   </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos del representante</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos del Representante</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -1149,19 +1149,19 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                       <div className="row justify-content-center">
                           <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_representante[0]}
-                            nombreCampo="Telefono movil:" activo={this.state.campos_activos} type="text" value={this.state.telefono_movil_representante}
+                            nombreCampo="Télefono móvil:" activo={this.state.campos_activos} type="text" value={this.state.telefono_movil_representante}
                             name="telefono_movil_representante" id="telefono_movil_representante" placeholder="Telefono movil" eventoPadre={this.validarNumero}
                           />
                         <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
-                            nombreCampo="Telefono local:" activo={this.state.campos_activos} type="text" value={this.state.telefono_local_representante}
+                            nombreCampo="Télefono local:" activo={this.state.campos_activos} type="text" value={this.state.telefono_local_representante}
                             name="telefono_local_representante" id="telefono_local_representante" placeholder="Telefono local" eventoPadre={this.validarNumero}
                           />
                       </div>
                       <div className="row justify-content-center mx-auto my-2">
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_representante[0]}
-                          nombreCampo="Ocupacion:" activo={this.state.campos_activos} type="text" value={this.state.ocupacion_representante}
+                          nombreCampo="Ocupación:" activo={this.state.campos_activos} type="text" value={this.state.ocupacion_representante}
                           name="ocupacion_representante" id="ocupacion_representante" placeholder="Ocupacion" eventoPadre={this.validarTexto}
                         />
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1213,13 +1213,13 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                       </div>
                       <div className="row justify-content-center">
                           <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                              <span className="h4">Numero de alumnos inscritos en el plantel por el mismo representante</span>
+                              <span className="h4">Número de alumnos inscritos en el plantel por el mismo representante</span>
                           </div>
                       </div>
                       <div className="row justify-content-center mt-1">
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_hijos_representante[0]}
-                          nombreCampo="Numero de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
+                          nombreCampo="Número de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
                           name="numero_hijos_representante" id="numer_hijos_representante" placeholder="Numero de hijos" eventoPadre={this.validarNumero}
                         />
 
@@ -1266,7 +1266,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                         />
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
-                          nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
+                          nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
                           name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
                         />
                       </div>
@@ -1334,7 +1334,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus de la asignacion:"
                       name="estatus_asignacion_representante_estudiante"
-                      nombreLabelRadioA="Activó"
+                      nombreLabelRadioA="Activo"
                       idRadioA="activoestudianterA"
                       checkedRadioA={this.state.estatus_asignacion_representante_estudiante}
                       valueRadioA="1"

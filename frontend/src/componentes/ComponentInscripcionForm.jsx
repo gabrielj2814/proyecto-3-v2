@@ -203,7 +203,7 @@ class ComponentInscripcionForm extends React.Component{
             document.getElementById("cedula_escolar").disabled = true;
             document.getElementById("boton-registrar").disabled = true;
         }
-  
+
         document.getElementById("activoestudianter1").disabled = true;
         document.getElementById("activoestudianter2").disabled = true;
         document.getElementById("activoestudianter3").disabled = true;
@@ -796,7 +796,7 @@ class ComponentInscripcionForm extends React.Component{
 
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos academicos</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos académicos</span>
                       </div>
                   </div>
 
