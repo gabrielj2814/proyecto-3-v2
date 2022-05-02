@@ -24,6 +24,7 @@ ControladorRetiro.registrar= async (req,res) => {
 }
 
 ControladorRetiro.actualizar= async (req,res) => {
+    const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {retiro} = req.body
     const modeloRetiro=new ModeloRetiro()
@@ -31,9 +32,29 @@ ControladorRetiro.actualizar= async (req,res) => {
     modeloRetiro.setEstado(retiro.estado_retiro)
     let resultRetiro=await modeloRetiro.actualizar()
     if(resultRetiro.rowCount>0){
-        respuesta_api.mensaje="solicitud actualizado con existo"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
+        // 
+        if(retiro.estado_retiro==="A"){
+            let retiroResult=await modeloRetiro.consultar()
+            if(ControladorInscripcion.RetirarEstudiante(retiroResult.rows[0].id_inscripcion)){
+                respuesta_api.mensaje="actualización completado"
+                respuesta_api.estado_respuesta=true
+                respuesta_api.color_alerta="success"
+            }else{
+                respuesta_api.mensaje="error: se creo la promocion pero no se pudo retirar el estudiante"
+                respuesta_api.estado_respuesta=true
+                respuesta_api.color_alerta="danger"
+            }
+        }
+        if(retiro.estado_retiro==="R"){
+            respuesta_api.mensaje="La solicitud de retiro del estudiante se rechazado exitosamente"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+        }
+        if(retiro.estado_retiro==="E"){
+            respuesta_api.mensaje="La solicitud de retiro todavia sigue en espera"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+        }
     }
     else{
         respuesta_api.mensaje="error al actualizar la solicitud de retiro"

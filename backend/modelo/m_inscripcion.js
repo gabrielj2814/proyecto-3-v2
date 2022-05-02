@@ -106,9 +106,12 @@ class ModeloInscripcion extends DriverPostgres {
   }
 
   async culminar(){
-    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion}
-
-    `
+    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'C' WHERE id_inscripcion = ${this.id_inscripcion}`
+    return await this.query(SQL);
+  }
+  
+  async retirar(){
+    const SQL = `UPDATE tinscripcion SET estatus_inscripcion= 'R' WHERE id_inscripcion = ${this.id_inscripcion}`
     return await this.query(SQL);
   }
 
