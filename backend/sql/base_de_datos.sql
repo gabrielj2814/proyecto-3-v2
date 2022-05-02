@@ -371,6 +371,14 @@ CREATE TABLE tfecha_incripcion(
     constraint FK_id_ano_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
 
+CREATE TABLE tdirector(
+    id_director SERIAL ,
+    id_cedula character varying(8) NOT NULL,
+    estatus_director character(1) NOT NULL,
+    constraint PK_id_director primary key(id_director),
+    constraint FK_id_cedula_tdirector foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
+
 CREATE TABLE tprofesor(
     id_profesor SERIAL ,
     id_cedula character varying(8) NOT NULL,
