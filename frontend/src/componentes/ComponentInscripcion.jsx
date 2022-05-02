@@ -57,6 +57,8 @@ class ComponentInscripcion extends React.Component{
           },
           matriculaInicial:"I",
           matriculaFinal:"F",
+          nombre_usuario:null,
+          id_cedula:null
         }
     }
 

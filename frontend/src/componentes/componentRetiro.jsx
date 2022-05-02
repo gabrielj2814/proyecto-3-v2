@@ -7,6 +7,7 @@ import '../css/componentProfesor.css'
 //JS
 import axios from 'axios'
 import Moment from 'moment'
+import $ from 'jquery'
 // IP servidor
 import servidor from '../ipServer.js'
 //componentes
@@ -34,6 +35,7 @@ class ComponentRetiro extends React.Component {
         this.irAlFormularioDeActualizacion=this.irAlFormularioDeActualizacion.bind(this)
         this.consultarRetiros = this.consultarRetiros.bind(this)
         this.cambiarEstado = this.cambiarEstado.bind(this)
+        this.generarPdfRetiro = this.generarPdfRetiro.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -52,7 +54,9 @@ class ComponentRetiro extends React.Component {
                 color:null,
                 mensaje:null,
                 estado:false
-            }
+            },
+            nombre_usuario:null,
+            id_cedula:null
         }
     }
 
@@ -109,6 +113,8 @@ class ComponentRetiro extends React.Component {
             .then(async respuesta=>{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
+                    this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
+                    this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
                 }
             })
@@ -179,6 +185,40 @@ class ComponentRetiro extends React.Component {
       }, 100)
     }
 
+    generarPdfRetiro(a){
+        let $filaVerPdf=document.getElementById("filaVerPdf")
+        let boton=a.target
+        // alert(boton.id)
+        let datos=[]
+        datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+        datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+        datos.push({name:"id_retiro",value:boton.id})
+        console.log(datos)
+        $.ajax({
+          url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_retiro.php`,
+          type:"post",
+          data:datos,
+          success: function(respuesta) {
+              console.log(respuesta)
+              let json=JSON.parse(respuesta)
+              console.log("datos reporte martricula =>>>> ",json)
+              if(json.nombrePdf!=="false"){
+                    $("#modalPdf").modal("show")
+                    $filaVerPdf.classList.remove("ocultarFormulario")
+                    document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+              }
+              else{
+                  $filaVerPdf.classList.add("ocultarFormulario")
+                  alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+              }
+          },
+          error: function() {
+          //   alert("error")
+            // $filaVerPdf.classList.add("ocultarFormulario")
+          }
+        });
+      }
+
     render(){
 
         const jsx_tabla_encabezado=(
@@ -212,6 +252,11 @@ class ComponentRetiro extends React.Component {
                           icon="icon-pencil"
                         />
                       </td>
+                        <td>
+                            <button id={retiro.id_retiro} className='btn btn-danger btn-block' onClick={this.generarPdfRetiro}>
+                                PDF
+                            </button>
+                        </td>
                     </tr>
                   )
                 })}
@@ -219,6 +264,28 @@ class ComponentRetiro extends React.Component {
         )
         const jsx=(
             <div>
+                <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                        <div className="col-auto">
+                                            <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer ">
+                                    <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
                 {this.state.alerta.estado===true &&
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
