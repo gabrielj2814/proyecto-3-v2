@@ -5,6 +5,8 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentFormSelect.css'
 
 const componentFormSelect = (props) => {
+    let desactivado = "";
+    if(props.inactivo && props.inactivo == "si"){ desactivado = "disabled" }
     return(
         <div className={props.clasesColumna+" columna"}>
             <div className="form-groud">
@@ -16,7 +18,7 @@ const componentFormSelect = (props) => {
                 }
                 {props.nombreCampoSelect}</label>
                 {props.option.length!==0 &&
-                    <select defaultValue={props.defaultValue} className={props.clasesSelect} name={props.name} id={props.id} onBlur={props.eventoPadre}>
+                    <select disabled={desactivado} defaultValue={props.defaultValue} className={props.clasesSelect} name={props.name} id={props.id} onBlur={props.eventoPadre}>
                     {props.option.map((option)=>{
                         let selected;
                         if(option.id === props.defaultValue) selected = "selected"; else selected = "";
