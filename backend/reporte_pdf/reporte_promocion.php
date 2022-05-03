@@ -166,8 +166,8 @@ class PdfPromocion extends FPDF{
 
         $this->SetFont("Arial","",10);
         $this->Cell(-14,10,"",0,0,"R");	
-        $this->Cell(82,10,"En Araure a los:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");$this->Cell(-11,9,$this->datosPdf[0]["dias_promocion"],0,0,"C");
-        $this->Cell(59,10,"dias del mes de ".$this->obtenerElMes($fechaPromocion[1])." de 2021",0,0,"R");
+        $this->Cell(82,10,"En Araure a los:",0,0,"R");$this->Cell(10,6,"",'B',0,"C");$this->Cell(-11,9,$fechaPromocion[2],0,0,"C");
+        $this->Cell(59,10,"dias del mes de ".$this->obtenerElMes($fechaPromocion[1])." de ".$fechaPromocion[0],0,0,"R");
 
         $this->ln(20);
 
