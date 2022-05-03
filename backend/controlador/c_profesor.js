@@ -1,9 +1,10 @@
 const controladorProfesor={}
 const ModeloProfesor= require("../modelo/m_profesor")
+const VitacoraControlador = require("./c_vitacora")
 
-controladorProfesor.registrar=async (req,res) => {
+controladorProfesor.registrar=async (req,res,next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    const {profesor} = req.body
+    const {profesor, token} = req.body
     let modelo_profesor = new ModeloProfesor()
     modelo_profesor.setDatos(profesor)
     const resultProfesor=await modelo_profesor.consultarPorCedula()
@@ -12,21 +13,23 @@ controladorProfesor.registrar=async (req,res) => {
         respuesta_api.mensaje="Registro completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tprofesor", profesor.id_profesor)
+        next()
     }
     else{
         respuesta_api.mensaje="error al registrar( el profesor ya esta registrado)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
     
 }
 
-controladorProfesor.consultar=async (req,res) => {
+controladorProfesor.consultar=async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
-    const {id} = req.params
+    const {id, token} = req.params
     let modelo_profesor = new ModeloProfesor()
     modelo_profesor.setIdProfesor(id)
     let resultProfesor=await modelo_profesor.consultar()
@@ -35,20 +38,22 @@ controladorProfesor.consultar=async (req,res) => {
         respuesta_api.mensaje="consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tprofesor", id)
+        next()
     }
     else{
         respuesta_api.mensaje="error al consultar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
-controladorProfesor.actualizar=async (req,res) => {
+controladorProfesor.actualizar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    const {profesor} = req.body
+    const {profesor, token} = req.body
     let modelo_profesor=new ModeloProfesor()
     modelo_profesor.setDatos(profesor)
     let resultProfesor=await modelo_profesor.actualizar()
@@ -56,15 +61,17 @@ controladorProfesor.actualizar=async (req,res) => {
         respuesta_api.mensaje="actualización completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tprofesor", profesor.id_profesor)
+        next()
     }
     else{
         respuesta_api.mensaje="error al actualizar (no se a encontrado el registro)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 controladorProfesor.consultarTodos=async (req,res) => {
