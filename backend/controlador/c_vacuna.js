@@ -1,10 +1,12 @@
 const ModuloVacuna=require("../modelo/m_vacuna")
 const ControladorVacuna={}
 
+const VitacoraControlador = require("./c_vitacora")
 
-ControladorVacuna.registrar=async (req,res) => {
+
+ControladorVacuna.registrar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {vacuna} = req.body
+    let {vacuna, token} = req.body
     let Vacuna=new ModuloVacuna()
     Vacuna.setDatos(vacuna)
     let resultVacuna=await Vacuna.registrar()
@@ -12,20 +14,22 @@ ControladorVacuna.registrar=async (req,res) => {
         respuesta_api.mensaje="Registro completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tlista_vacuna", vacuna.id_vacuna)
+        next()
     }
     else{
         respuesta_api.mensaje="error al registrar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
-ControladorVacuna.consultar=async (req,res) => {
+ControladorVacuna.consultar=async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
-    let {id} = req.params
+    let {id, token} = req.params
     let Vacuna=new ModuloVacuna()
     Vacuna.setIdVacuna(id)
     let resultVacuna=await Vacuna.consultar()
@@ -34,15 +38,17 @@ ControladorVacuna.consultar=async (req,res) => {
         respuesta_api.mensaje="Consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tlista_vacuna", id)
+        next()
     }
     else{
         respuesta_api.mensaje="error al consultar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorVacuna.consultarTodos=async (req,res) => {
@@ -86,9 +92,9 @@ ControladorVacuna.consultarPorPatron=async (req,res) => {
     res.end()
 }
 
-ControladorVacuna.actualizar=async (req,res) => {
+ControladorVacuna.actualizar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {vacuna} = req.body
+    let {vacuna, token} = req.body
     let Vacuna=new ModuloVacuna()
     Vacuna.setDatos(vacuna)
     let resultVacuna=await Vacuna.actualizar()
@@ -96,15 +102,17 @@ ControladorVacuna.actualizar=async (req,res) => {
         respuesta_api.mensaje="Actualizar completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tlista_vacuna", vacuna.id_vacuna)
+        next()
     }
     else{
         respuesta_api.mensaje="error al actualizar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 module.exports = ControladorVacuna

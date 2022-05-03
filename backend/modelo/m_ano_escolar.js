@@ -32,7 +32,7 @@ class ModuloAnoEscolar extends DriverPostgre {
   async registrar(){
     const SQL = `INSERT INTO tano_escolar(ano_desde, ano_hasta, fecha_inicio_ano_escolar, fecha_cierre_ano_escolar, estatus_ano_escolar, seguimiento_ano_escolar)
                   VALUES('${this.ano_desde}', '${this.ano_hasta}', '${this.fecha_inicio_ano_escolar}', '${this.fecha_cierre_ano_escolar}', 
-                  '${this.estatus_ano_escolar}', '${this.seguimiento_ano_escolar}')
+                  '${this.estatus_ano_escolar}', '${this.seguimiento_ano_escolar}') RETURNING id_ano_escolar
                 `
     return await this.query(SQL)
   }

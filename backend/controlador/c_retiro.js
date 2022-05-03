@@ -1,6 +1,8 @@
 const ControladorRetiro={}
 const ModeloRetiro=require("../modelo/m_retiro")
 
+const VitacoraControlador = require("./c_vitacora")
+
 ControladorRetiro.registrar= async (req,res) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {retiro} = req.body
@@ -11,6 +13,7 @@ ControladorRetiro.registrar= async (req,res) => {
         respuesta_api.mensaje="solicitud de retiro enviada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        
     }
     else{
         respuesta_api.mensaje="No se pudo procesar el solicitud de retiro"
@@ -32,6 +35,7 @@ ControladorRetiro.actualizar= async (req,res) => {
     modeloRetiro.setEstado(retiro.estado_retiro)
     let resultRetiro=await modeloRetiro.actualizar()
     if(resultRetiro.rowCount>0){
+
         // 
         if(retiro.estado_retiro==="A"){
             let retiroResult=await modeloRetiro.consultar()
@@ -55,6 +59,7 @@ ControladorRetiro.actualizar= async (req,res) => {
             respuesta_api.estado_respuesta=true
             respuesta_api.color_alerta="success"
         }
+
     }
     else{
         respuesta_api.mensaje="error al actualizar la solicitud de retiro"
@@ -77,6 +82,7 @@ ControladorRetiro.consultar = async (req,res) => {
         respuesta_api.mensaje="solicitud actualizado con existo"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        
     }
     else{
         respuesta_api.mensaje="error al actualizar la solicitud de retiro"
