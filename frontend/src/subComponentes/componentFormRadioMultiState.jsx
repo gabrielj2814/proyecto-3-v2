@@ -25,19 +25,21 @@ const ComponentFormRadioMultiState = (props) => {
           }else valor = item;
         }
 
-        return (
-          <ComponentFormRadio
-            key={index}
-            clasesRadio="custom-control-input"
-            extra={props.extra}
-            name={props.name}
-            id={id}
-            value={valor}
-            nombreLabe={nombre}
-            eventoPadre={props.eventoPadre}
-            estado={props.checkedRadio}
-          />
-        )
+        if(valor !== ""){
+          return (
+            <ComponentFormRadio
+              key={index}
+              clasesRadio="custom-control-input"
+              extra={props.extra}
+              name={props.name}
+              id={id}
+              value={valor}
+              nombreLabe={nombre}
+              eventoPadre={props.eventoPadre}
+              estado={props.checkedRadio}
+              />
+          )
+        }
       })}
     </div>
   )
