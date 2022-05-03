@@ -3,11 +3,12 @@ router=express.Router(),
 bodyparser=require("body-parser"),
 ControladorRetiro=require("../../../controlador/c_retiro")
 
+
 router.use(bodyparser.json())
 
 router.post("/registrar",ControladorRetiro.registrar)
 router.put("/actualizar",ControladorRetiro.actualizar)
-router.get("/consultar/:id_retiro",ControladorRetiro.consultar)
+router.get("/consultar/:id_retiro/:token",ControladorRetiro.consultar)
 router.get("/consultar-por-estado/:estado/:fechaDesde/:fechaHasta",ControladorRetiro.consultarPorEstado)
 
 module.exports = router

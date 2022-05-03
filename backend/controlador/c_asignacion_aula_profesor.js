@@ -1,9 +1,11 @@
 const ModeloAsignacionAulaProfesor=require("../modelo/m_asignacion_aula_profesor")
 const ControladorAsignacionAulaProfesor={}
 
-ControladorAsignacionAulaProfesor.registrar=async (req,res) => {
+const VitacoraControlador = require("./c_vitacora")
+
+ControladorAsignacionAulaProfesor.registrar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {asignacionAulaProfesor} = req.body
+    let {asignacionAulaProfesor, token} = req.body
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setDatos(asignacionAulaProfesor)
     let resultAsignacionAulaProfesor=await modeloAsignacionAulaProfesor.consultarProProfesorAnoEscolarYAula()
@@ -13,43 +15,50 @@ ControladorAsignacionAulaProfesor.registrar=async (req,res) => {
             respuesta_api.mensaje="registro completado"
             respuesta_api.estado_respuesta=true
             respuesta_api.color_alerta="success" 
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tasignacion_aula_profesor", asignacionAulaProfesor.id_asignacion_aula_profesor)
+            next()
         }
         else{
             respuesta_api.mensaje="error al registrar"
             respuesta_api.estado_respuesta=true
             respuesta_api.color_alerta="danger" 
+            res.writeHead(200, { "Content-Type": "application/json" })
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
         }
     }
     else if(resultAsignacionAulaProfesor.rowCount>0){
         respuesta_api.mensaje="error al registrar (el profesor ya fue asignado a esa aula)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
-ControladorAsignacionAulaProfesor.consultar=async (req,res) => {
+ControladorAsignacionAulaProfesor.consultar=async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
-    let {id} = req.params
+    let {id, token} = req.params
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setdatoIdAsignacionAulaProfesor(id)
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultar()
     if(resultAsignacionAulaProfesor.rowCount>0){
-        respuesta_api.mensaje="consultar completada"
+        respuesta_api.mensaje="Consultar completada"
         respuesta_api.datos=resultAsignacionAulaProfesor.rows
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="succes"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tasignacion_aula_profesor", id)
+        next()
     }
     else{
-        respuesta_api.mensaje="error al consultar ( no se entrol el registro )"
+        respuesta_api.mensaje="Error al consultar ( no se entrol el registro )"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorAsignacionAulaProfesor.consultarDisponibilidadAula=async (req,res) => {
@@ -142,9 +151,9 @@ ControladorAsignacionAulaProfesor.consultarPorAnoEscolar=async (req,res) => {
     res.end()
 }
 
-ControladorAsignacionAulaProfesor.actualizar=async (req,res) => {
+ControladorAsignacionAulaProfesor.actualizar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {asignacionAulaProfesor} = req.body
+    let {asignacionAulaProfesor, token} = req.body
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setDatos(asignacionAulaProfesor)
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.actualizar()
@@ -152,15 +161,17 @@ ControladorAsignacionAulaProfesor.actualizar=async (req,res) => {
         respuesta_api.mensaje="actualización completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tasignacion_aula_profesor", asignacionAulaProfesor.id_asignacion_aula_profesor)
+        next()
     }
     else{
         respuesta_api.mensaje="error al actualizar ( no se entrol el registro )"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorAsignacionAulaProfesor.consularProfesorPorAulaYAno = async (req,res) => {

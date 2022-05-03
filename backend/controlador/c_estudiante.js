@@ -1,9 +1,10 @@
 const controladorEstudiante = {};
+const VitacoraControlador = require("./c_vitacora")
 
-controladorEstudiante.registrar_estudiante = async (req, res) => {
+controladorEstudiante.registrar_estudiante = async (req, res, next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
   const ModeloEstudiante = require("../modelo/m_estudiante");
-  let { estudiante } = req.body
+  let { estudiante, token } = req.body
   let modeloEstudiante = new ModeloEstudiante()
   modeloEstudiante.setDatos(estudiante)
   let resultEstudiante = await modeloEstudiante.registrar()
@@ -12,15 +13,17 @@ controladorEstudiante.registrar_estudiante = async (req, res) => {
     respuesta_api.datos = resultEstudiante.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "testudiante", estudiante.id_estudiante)
+    next()
   }
   else {
     respuesta_api.mensaje = "error al registrar el estudiante"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
 }
 
 controladorEstudiante.consultar_todos = async(req, res) => {
@@ -45,10 +48,10 @@ controladorEstudiante.consultar_todos = async(req, res) => {
   res.end()
 }
 
-controladorEstudiante.consultar = async (req, res) => {
+controladorEstudiante.consultar = async (req, res, next) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloEstudiante = require("../modelo/m_estudiante");
-  let { id } = req.params
+  let { id, token } = req.params
   let modeloEstudiante = new ModeloEstudiante()
   modeloEstudiante.setIdEstudiante(id)
   let resultEstudiante = await modeloEstudiante.consultar()
@@ -58,15 +61,17 @@ controladorEstudiante.consultar = async (req, res) => {
     respuesta_api.datos = resultEstudiante.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "testudiante", id)
+    next()
   }
   else {
     respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
 
 }
 
@@ -139,10 +144,10 @@ controladorEstudiante.consultarEstudiantesInactivos = async (req, res) => {
 
 }
 
-controladorEstudiante.actualizar = async(req, res) => {
+controladorEstudiante.actualizar = async(req, res, next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloEstudiante = require("../modelo/m_estudiante");
-  let { estudiante } = req.body
+  let { estudiante, token } = req.body
   let { id } = req.params
   let modeloEstudiante = new ModeloEstudiante()
   modeloEstudiante.setDatos(estudiante)
@@ -156,21 +161,26 @@ controladorEstudiante.actualizar = async(req, res) => {
       respuesta_api.mensaje = "actualización completada"
       respuesta_api.estado_respuesta = true
       respuesta_api.color_alerta = "success"
+      req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "testudiante", estudiante.id_estudiante)
+      next()
     }
     else {
       respuesta_api.mensaje = "error al actualizar"
       respuesta_api.estado_respuesta = false
       respuesta_api.color_alerta = "danger"
+      res.writeHead(200, { "Content-Type": "application/json" })
+      res.write(JSON.stringify(respuesta_api))
+      res.end()
     }
   }
   else {
     respuesta_api.mensaje = "error al actualizar (este registro no se encuentra en la base de datos)"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "warning"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
 }
 
 module.exports = controladorEstudiante;

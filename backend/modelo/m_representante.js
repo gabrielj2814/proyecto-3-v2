@@ -72,7 +72,7 @@ class ModeloRepresentante extends DriverPostgre {
       '${this.constitucion_familiar_representante}', '${this.ingresos_representante}', '${this.tipo_vivienda_representante}', '${this.numero_estudiante_inicial_representante}',
       '${this.numero_estudiante_grado_1_representante}', '${this.numero_estudiante_grado_2_representante}', '${this.numero_estudiante_grado_3_representante}',
       '${this.numero_estudiante_grado_4_representante}', '${this.numero_estudiante_grado_5_representante}', '${this.numero_estudiante_grado_6_representante}',
-      '${this.estatus_representante}','${this.id_parroquia}')`
+      '${this.estatus_representante}','${this.id_parroquia}') RETURNING id_cedula_representante`
 
     return await this.query(SQL);
   }
@@ -84,7 +84,7 @@ class ModeloRepresentante extends DriverPostgre {
       estatus_representante, id_parroquia) VALUES('${this.id_cedula_representante}', '${this.nombres_representante}', '${this.apellidos_representante}',
       '${this.fecha_nacimiento_representante}', '${this.nivel_instruccion_representante}', '${this.ocupacion_representante}','${this.telefono_movil_representante}',
       '${this.telefono_local_representante}', '${this.numero_hijos_representante}','${this.constitucion_familiar_representante}', '${this.ingresos_representante}',
-      '${this.tipo_vivienda_representante}','${this.estatus_representante}','${this.id_parroquia}')`
+      '${this.tipo_vivienda_representante}','${this.estatus_representante}','${this.id_parroquia}') RETURNING id_cedula_representante`
 
     return await this.query(SQL);
   }

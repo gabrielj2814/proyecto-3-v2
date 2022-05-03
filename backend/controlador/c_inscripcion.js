@@ -1,4 +1,5 @@
 const controladorInscripcion = {}
+// const VitacoraControlador = require("./c_vitacora")
 
 controladorInscripcion.registrar_inscripcion = async ( req, res) => {
     const respuesta_api = { mensaje: "", datos:[],estado_respuesta: false, color_alerta: "" };
@@ -19,11 +20,13 @@ controladorInscripcion.registrar_inscripcion = async ( req, res) => {
                 respuesta_api.mensaje="registro completado"
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="success"
+                
             }
             else{
                 respuesta_api.mensaje="error al realizar la inscripción"
                 respuesta_api.estado_respuesta=false
                 respuesta_api.color_alerta="danger"
+                
             }
             // let inscripcionesEstudiate=await modeloInscripcion.consultarInscripcionesEstudiante()
             // if(inscripcionesEstudiate.rowCount===0){
@@ -38,6 +41,7 @@ controladorInscripcion.registrar_inscripcion = async ( req, res) => {
             respuesta_api.mensaje="error no cupos disponibles"
             respuesta_api.estado_respuesta=false
             respuesta_api.color_alerta="danger"
+           
         }
     }
     else{
@@ -149,6 +153,7 @@ controladorInscripcion.actualizar= async (req,res) => {
             respuesta_api.mensaje="error al actualizar"
             respuesta_api.estado_respuesta=false
             respuesta_api.color_alerta="danger"
+            
         }
     }
     else{

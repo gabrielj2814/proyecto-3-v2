@@ -3,11 +3,12 @@ const moment = require('moment');
 moment.locale('es');
 
 const controladorAnoEscolar = {}
+const VitacoraControlador = require("./c_vitacora")
 
-controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
+controladorAnoEscolar.registrar_ano_escolar = async (req, res, next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
-  let { anoescolar } = req.body
+  let { anoescolar, token } = req.body
   let modeloAnoEscolar = new ModeloAnoEscolar()
   modeloAnoEscolar.setDatos(anoescolar)
   let resultAnoEscolar = await modeloAnoEscolar.registrar()
@@ -15,15 +16,17 @@ controladorAnoEscolar.registrar_ano_escolar = async (req, res) => {
     respuesta_api.mensaje = "registro completado"
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tano_escolar", anoescolar.id_ano_escolar)
+    next()
   }
   else {
     respuesta_api.mensaje = "error al registrar el año escolar"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
 }
 
 controladorAnoEscolar.consultar_todos = async (req, res) => {
@@ -65,10 +68,10 @@ controladorAnoEscolar.getDateNow = async (req, res) => {
 }
 
 
-controladorAnoEscolar.consultar= async (req, res) => {
+controladorAnoEscolar.consultar= async (req, res, next) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
-  let {id} = req.params
+  let {id, token} = req.params
   let modeloAnoEscolar = new ModeloAnoEscolar()
   modeloAnoEscolar.setIdAnoEscolar(id)
   let resultAnoEscolar = await modeloAnoEscolar.consultar()
@@ -78,15 +81,17 @@ controladorAnoEscolar.consultar= async (req, res) => {
     respuesta_api.datos = resultAnoEscolar.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tano_escolar", resultAnoEscolar.rows[0].id_ano_escolar)
+    next()
   }
   else {
     respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
 }
 
 controladorAnoEscolar.consultarAnoSeguimiento = async (req, res) => {
@@ -159,7 +164,7 @@ controladorAnoEscolar.consultarpatron = async (req, res) => {
 controladorAnoEscolar.actualizar = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
-  let { anoescolar } = req.body
+  let { anoescolar, token } = req.body
   let { id } = req.params
   let modeloAnoEscolar = new ModeloAnoEscolar()
   modeloAnoEscolar.setDatos(anoescolar)
@@ -173,21 +178,27 @@ controladorAnoEscolar.actualizar = async (req, res) => {
       respuesta_api.mensaje = "actualización completada"
       respuesta_api.estado_respuesta = true
       respuesta_api.color_alerta = "success"
+      req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tano_escolar", anoescolar.id_ano_escolar)
+      next()
     }
     else {
       respuesta_api.mensaje = "error al actualizar"
       respuesta_api.estado_respuesta = false
       respuesta_api.color_alerta = "danger"
+      res.writeHead(200, { "Content-Type": "application/json" })
+      res.write(JSON.stringify(respuesta_api))
+      res.end()
     }
   }
   else {
     respuesta_api.mensaje = "error al actualizar (este registro no se encuentra en la base de datos)"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "warning"
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
   }
-  res.writeHead(200, { "Content-Type": "application/json" })
-  res.write(JSON.stringify(respuesta_api))
-  res.end()
+  
 }
 
 controladorAnoEscolar.verificarAnoEscolar= async (req,res) => {

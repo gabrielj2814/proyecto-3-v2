@@ -1,5 +1,7 @@
 const controladorAsignacionRepresentantEstudiante = {}
 
+const VitacoraControlador = require("./c_vitacora")
+
 controladorAsignacionRepresentantEstudiante.registrar_asig_representante_estudiante = async (req, res) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" };
   const ModeloAsigRepresentanteEstudiante = require('../modelo/m_asignacion_representante_estudiante');
@@ -11,6 +13,7 @@ controladorAsignacionRepresentantEstudiante.registrar_asig_representante_estudia
     respuesta_api.mensaje = "registro completado"
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    
   }
   else {
     respuesta_api.mensaje = "error al registrar a la asignación "
@@ -51,13 +54,13 @@ controladorAsignacionRepresentantEstudiante.consultar = async (req, res) => {
   let resultAsigRepEst = await modeloAsigRepresentanteEstudiante.consultar()
 
   if (resultAsigRepEst.rowCount > 0) {
-    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.mensaje = "Consulta completada"
     respuesta_api.datos = resultAsigRepEst.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
   }
   else {
-    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.mensaje = "No se ha encontrado registro en la base de datos"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
   }
@@ -75,13 +78,14 @@ controladorAsignacionRepresentantEstudiante.consultar = async (req, res) => {
   let resultAsigRepEst = await modeloAsigRepresentanteEstudiante.consultar()
 
   if (resultAsigRepEst.rowCount > 0) {
-    respuesta_api.mensaje = "consulta completada"
+    respuesta_api.mensaje = "Consulta completada"
     respuesta_api.datos = resultAsigRepEst.rows
     respuesta_api.estado_respuesta = true
     respuesta_api.color_alerta = "success"
+    
   }
   else {
-    respuesta_api.mensaje = "no se a encontrado registro en la base de datos"
+    respuesta_api.mensaje = "No se ha encontrado registro en la base de datos"
     respuesta_api.estado_respuesta = false
     respuesta_api.color_alerta = "danger"
   }
@@ -131,6 +135,8 @@ controladorAsignacionRepresentantEstudiante.actualizar = async (req, res) => {
       respuesta_api.mensaje = "actualización completada"
       respuesta_api.estado_respuesta = true
       respuesta_api.color_alerta = "success"
+     
+      
     }
     else {
       respuesta_api.mensaje = "error al actualizar"
