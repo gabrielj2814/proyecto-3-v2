@@ -185,7 +185,7 @@ class ComponentParroquiaForm extends React.Component{
 
   async consultarCiudadesXEstado(a){
       let input=a.target
-      const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
+      const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${input.value}`,
       nombre_propiedad_lista_2="ciudades",
       propiedad_id_2="id_ciudad",
       propiedad_descripcion_2="nombre_ciudad",
@@ -324,7 +324,7 @@ class ComponentParroquiaForm extends React.Component{
       msj_fecha_cierre_ano_escolar: mensaje_campo,
       msj_estatus_ano_escolar: mensaje_campo,
     })
-    this.props.history.push("/dashboard/configuracion/enfermedad/registrar")
+    this.props.history.push("/dashboard/configuracion/parroquia/registrar")
   }
 
   validarTexto(a){
@@ -426,7 +426,7 @@ class ComponentParroquiaForm extends React.Component{
 
           let estado_validar_formulario = this.validarFormularioRegistrar()
           if(estado_validar_formulario.estado){
-            
+
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
                   const mensaje =this.state.mensaje
                   var respuesta_servidor=""

@@ -473,7 +473,7 @@ class ComponentEstudianteForm extends React.Component{
     }
     async consultarCiudadesXEstado(a){
         let input=a.target
-        const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
+        const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${input.value}`,
         nombre_propiedad_lista_2="ciudades",
         propiedad_id_2="id_ciudad",
         propiedad_descripcion_2="nombre_ciudad",
@@ -1007,8 +1007,8 @@ class ComponentEstudianteForm extends React.Component{
                         <div className="row justify-content-center">
                             <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_codigo_cedula_escolar[0]}
-                              nombreCampo="Codigo de la Cédula escolar:" activo="si" type="text" value={this.state.codigo_cedula_escolar}
-                              name="codigo_cedula_escolar" id="codigo_cedula_escolar" placeholder="Codigo de la Cédula escolar" eventoPadre={this.validarNumero}
+                              nombreCampo="Código de la Cédula escolar:" activo="si" type="text" value={this.state.codigo_cedula_escolar}
+                              name="codigo_cedula_escolar" id="codigo_cedula_escolar" placeholder="Código de la Cédula escolar" eventoPadre={this.validarNumero}
                             />
                             <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="no" mensaje={this.state.msj_id_cedula_escolar[0]}
@@ -1058,7 +1058,7 @@ class ComponentEstudianteForm extends React.Component{
                         </div>
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                            obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="procedencia del estudiante:"
+                            obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="Procedencia del estudiante:"
                             clasesTextArear="form-control" name="procedencia" id="procedencia" value={this.state.procedencia}
                             eventoPadre={this.cambiarEstado}
                           />
@@ -1176,7 +1176,7 @@ class ComponentEstudianteForm extends React.Component{
                           />
                         </div>
                         <div className="row justify-content-center mt-1">
-                            
+
                         </div>
                         <div className="row justify-content-center mt-1">
                           <ComponentFormRadioState
@@ -1184,7 +1184,7 @@ class ComponentEstudianteForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus:"
                             name="estatu_estudiante"
-                            nombreLabelRadioA="Activó"
+                            nombreLabelRadioA="Activo"
                             idRadioA="activoestudianterA"
                             checkedRadioA={this.state.estatu_estudiante}
                             valueRadioA="1"

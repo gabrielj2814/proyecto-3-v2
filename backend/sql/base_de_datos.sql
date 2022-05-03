@@ -371,6 +371,14 @@ CREATE TABLE tfecha_incripcion(
     constraint FK_id_ano_escolar foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
 );
 
+CREATE TABLE tdirector(
+    id_director SERIAL ,
+    id_cedula character varying(8) NOT NULL,
+    estatus_director character(1) NOT NULL,
+    constraint PK_id_director primary key(id_director),
+    constraint FK_id_cedula_tdirector foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
+);
+
 CREATE TABLE tprofesor(
     id_profesor SERIAL ,
     id_cedula character varying(8) NOT NULL,
@@ -522,6 +530,7 @@ CREATE TABLE tinscripcion(
     id_asignacion_aula_profesor INTEGER NOT NULL,
     fecha_inscripcion DATE NOT NULL,
     estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS I -> inscripto ,R -> retirado, C => culmino,T => termino la mierda 
+    inscripcio_regular character(1) NOT NULL,
     constraint PK_id_inscripcion primary key(id_inscripcion),
     constraint FK_id_estudiante_tinscripcion foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_representante_estudiante_tinscripcion foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
@@ -585,12 +594,3 @@ CREATE TABLE tretiro(
     constraint PK_id_retiro primary key(id_retiro),
     constraint FK_id_inscripcion_tretiro foreign key(id_inscripcion) references tinscripcion(id_inscripcion) on update cascade on delete cascade
 );
-
--- DROP TABLE tretiro;
--- DROP TABLE tpromocion;
--- DROP TABLE tasistencia_estudiante;
--- DROP TABLE tinscripcion;
--- DROP TABLE tasignacion_representante_estudiante;
--- DROP TABLE trepresentante;
--- DROP TABLE vacuna_estudiante;
--- DROP TABLE testudiante;

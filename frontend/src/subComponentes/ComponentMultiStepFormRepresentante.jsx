@@ -327,7 +327,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
 
   async consultarCiudadesXEstado(a){
     let input=a.target
-    const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
+    const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${input.value}`,
     nombre_propiedad_lista_2="ciudades",
     propiedad_id_2="id_ciudad",
     propiedad_descripcion_2="nombre_ciudad",
@@ -957,12 +957,12 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   <div className="row justify-content-center">
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_mama[0]}
-                      nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_mama}
+                      nombreCampo="Teléfono móvil:" activo="si" type="text" value={this.state.telefono_movil_mama}
                       name="telefono_movil_mama" id="telefono_movil_mama" placeholder="Telefono movil" eventoPadre={this.validarNumero}
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_mama[0]}
-                      nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_mama}
+                      nombreCampo="Teléfono local:" activo="si" type="text" value={this.state.telefono_local_mama}
                       name="telefono_local_mama" id="telefono_local_mama" placeholder="Telefono local" eventoPadre={this.validarNumero}
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -974,7 +974,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   <div className="row justify-content-center">
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_mama[0]}
-                      nombreCampo="Constitucion familiar:" activo="si" type="text" value={this.state.constitucion_familiar_mama}
+                      nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_mama}
                       name="constitucion_familiar_mama" id="constitucion_familiar_mama" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
                     />
                     <ComponentFormSelect
@@ -994,7 +994,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus:"
                       name="estatus_mama"
-                      nombreLabelRadioA="Activó"
+                      nombreLabelRadioA="Activo"
                       idRadioA="estatus_mama1"
                       checkedRadioA={this.state.estatus_mama}
                       valueRadioA="1"
@@ -1102,12 +1102,12 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   <div className="row justify-content-center">
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_papa[0]}
-                      nombreCampo="Telefono movil:" activo="si" type="text" value={this.state.telefono_movil_papa}
+                      nombreCampo="Télefono móvil:" activo="si" type="text" value={this.state.telefono_movil_papa}
                       name="telefono_movil_papa" id="telefono_movil_papa" placeholder="Telefono movil" eventoPadre={this.validarNumero}
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                       clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_papa[0]}
-                      nombreCampo="Telefono local:" activo="si" type="text" value={this.state.telefono_local_papa}
+                      nombreCampo="Télefono local:" activo="si" type="text" value={this.state.telefono_local_papa}
                       name="telefono_local_papa" id="telefono_local_papa" placeholder="Telefono local" eventoPadre={this.validarNumero}
                     />
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
@@ -1177,7 +1177,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus:"
                       name="estatus_papa"
-                      nombreLabelRadioA="Activó"
+                      nombreLabelRadioA="Activo"
                       idRadioA="estatus_papa1"
                       checkedRadioA={this.state.estatus_papa}
                       valueRadioA="1"

@@ -312,7 +312,7 @@ class ComponentCamFormulario extends React.Component {
 
     async consultarCiudadesXEstado(a){
         let input=a.target
-        const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${input.value}`,
+        const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${input.value}`,
         nombre_propiedad_lista_2="ciudades",
         propiedad_id_2="id_ciudad",
         propiedad_descripcion_2="nombre_ciudad",
@@ -586,21 +586,21 @@ class ComponentCamFormulario extends React.Component {
     }
 
     async agregar(){
-        const ruta_api="http://localhost:8080/configuracion/estado/consultar-todos",
+        const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
         nombre_propiedad_lista="estados",
         propiedad_id="id_estado",
         propiedad_descripcion="nombre_estado",
         propiedad_estado="estatu_estado"
         const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
         console.log("lista de estados ->>>",estados)
-        const ruta_api_2=`http://localhost:8080/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
+        const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
         nombre_propiedad_lista_2="ciudades",
         propiedad_id_2="id_ciudad",
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
         console.log("lista de de ciudades por estado ->>>",ciudades)
-        const ruta_api_3="http://localhost:8080/configuracion/tipo-cam/consultar-todos",
+        const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/tipo-cam/consultar-todos`,
         nombre_propiedad_lista_3="tipo_cams",
         propiedad_id_3="id_tipo_cam",
         propiedad_descripcion_3="nombre_tipo_cam",

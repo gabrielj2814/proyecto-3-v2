@@ -461,7 +461,7 @@ class ComponentPerfilTrabajador extends React.Component{
         let $filaVerPdf=document.getElementById("filaVerPdfReposo")
         $filaVerPdf.classList.add("ocultarFormulario")
         $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_reposo_especifico.php',
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_reposo_especifico.php`,
             type:"post",
             data:[{name:"id_reposo_trabajador",value:boton.id}],
             success: function(respuesta) {
@@ -470,7 +470,7 @@ class ComponentPerfilTrabajador extends React.Component{
                 let json=JSON.parse(respuesta)
                 if(json.nombrePdf!=="false"){
                     $filaVerPdf.classList.remove("ocultarFormulario") 
-                    document.getElementById("linkPdfReposo").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                    document.getElementById("linkPdfReposo").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
@@ -489,7 +489,7 @@ class ComponentPerfilTrabajador extends React.Component{
         $filaVerPdf.classList.add("ocultarFormulario") 
 
         $.ajax({
-            url: 'http://localhost:80/proyecto/backend/controlador_php/controlador_permiso_especifico.php',
+            url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_permiso_especifico.php`,
             type:"post",
             data:[{name:"id_permiso_trabajador",value:boton.id}],
             success: function(respuesta) {
@@ -498,7 +498,7 @@ class ComponentPerfilTrabajador extends React.Component{
                 let json=JSON.parse(respuesta)
                 if(json.nombrePdf!=="false"){
                     $filaVerPdf.classList.remove("ocultarFormulario") 
-                    document.getElementById("linkPdfPermiso").href=`http://localhost:8080/reporte/${json.nombrePdf}`
+                    document.getElementById("linkPdfPermiso").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
