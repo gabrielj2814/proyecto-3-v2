@@ -42,7 +42,7 @@ class PdfInscripcion extends FPDF{
 
     function retornarFechaFormatoLATAM($fecha){
         $fecha=explode("-",$fecha);
-        return $fecha[1]."/".$fecha[2]."/".$fecha[0];
+        return $fecha[2]."/".$fecha[1]."/".$fecha[0];
     }
 
     function calculaedad($fechanacimiento){

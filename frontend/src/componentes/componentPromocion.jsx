@@ -34,6 +34,7 @@ class ComponentPromocion extends React.Component {
         this.irAlFormularioDeActualizacion=this.irAlFormularioDeActualizacion.bind(this)
         this.ifAlFormularioEvaluacion = this.ifAlFormularioEvaluacion.bind(this)
         this.cambiarEstado = this.cambiarEstado.bind(this);
+        this.generarPdfPromo = this.generarPdfPromo.bind(this);
 
         this.state={
             modulo:"",
@@ -187,6 +188,40 @@ class ComponentPromocion extends React.Component {
         this.props.history.push(`/dashboard/transaccion/promocion/actualizar/${input.id}`)
     }
 
+    generarPdfPromo(a){
+      let $filaVerPdf=document.getElementById("filaVerPdf")
+      let boton=a.target
+      // alert(boton.id)
+      let datos=[]
+      datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+      datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+      datos.push({name:"id_promocion",value:boton.id})
+      console.log(datos)
+      $.ajax({
+        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_promocion.php`,
+        type:"post",
+        data:datos,
+        success: function(respuesta) {
+            console.log(respuesta)
+            let json=JSON.parse(respuesta)
+            console.log("datos reporte martricula =>>>> ",json)
+            if(json.nombrePdf!=="false"){
+                  $("#modalPdf").modal("show")
+                  $filaVerPdf.classList.remove("ocultarFormulario")
+                  document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+            }
+            else{
+                $filaVerPdf.classList.add("ocultarFormulario")
+                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+            }
+        },
+        error: function() {
+        //   alert("error")
+          // $filaVerPdf.classList.add("ocultarFormulario")
+        }
+      });
+    }
+
     render(){
 
         const jsx_tabla_encabezado=(
@@ -210,7 +245,6 @@ class ComponentPromocion extends React.Component {
                         <tr key={index}>
                           <td>{Moment(promocion.fecha_promocion).format("DD/MM/YYYY")}</td>
                           <td>{promocion.nota_promocion}</td>
-
                           <td>{status}</td>
                           {promocion.estatus_promocion === "E" &&
                             <td>
@@ -235,6 +269,13 @@ class ComponentPromocion extends React.Component {
                                 />
                             </td>
                           }
+                          {promocion.estatus_promocion === "A" &&
+                            <td>
+                                <button id={promocion.id_promocion} className='btn btn-danger btn-block' onClick={this.generarPdfPromo}>
+                                    PDF
+                                </button>
+                            </td>
+                        }
                     </tr>
                     )
                 })}
@@ -242,6 +283,28 @@ class ComponentPromocion extends React.Component {
         )
         const jsx=(
             <div>
+              <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                        <div className="col-auto">
+                                            <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer ">
+                                    <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
                 {this.state.alerta.estado===true &&
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
