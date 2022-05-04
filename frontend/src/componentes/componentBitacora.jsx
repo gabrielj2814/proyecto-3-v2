@@ -57,6 +57,15 @@ class ComponentBitacora extends React.Component {
                 tespecialidad:"especialidad",
                 tasignacionmedicoespecialidad:"asignación especialidad medico",
                 tparroquia:"parroquia",
+                tano_escolar: "Año escolar",
+                testudiante: "Estudiante",
+                trepresentante: "Representante",
+                taula: "Aula",
+                tgrado: "Grado",
+                tlista_vacuna: "Vacuna",
+                tprofesor: "Profesor",
+                tlista_enfermedad: "Enfermedad",
+                tasignacion_aula_profesor: "Asignación aula profesor"
             },
             tablas:[
                 {name:"ttipotrabajador",value:"tipo de trabajador"},
@@ -77,6 +86,16 @@ class ComponentBitacora extends React.Component {
                 {name:"tasistencia",value:"asistencia"},
                 {name:"tcintillo",value:"cintillo"},
                 {name:"tparroquia",value:"parroquia"},
+                { name:"tano_escolar", value:"Año escolar"},
+                { name: "testudiante", value: "Estudiante"},
+                { name: "trepresentante", value: "Representante" },
+                { name: "taula", value: "Aula" },
+                { name: "tgrado", value: "Grado" },
+                { name: "tlista_vacuna", value: "Vacuna" },
+                { name: "tprofesor", value: "Profesor" },
+                { name: "tlista_enfermedad", value: "Enfermedad" },
+                { name: "tasignacion_aula_profesor", value: "Asignación aula profesor" }
+
             ],
             alerta:{
                 color:null,
