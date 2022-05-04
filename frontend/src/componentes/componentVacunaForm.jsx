@@ -150,7 +150,8 @@ class ComponentVacunaForm extends React.Component {
     }
 
     async consultarVacuna(id){
-        await axiosCustom.get(`configuracion/vacuna/consultar/${id}`)
+        const token = localStorage.getItem("usuario")
+        await axiosCustom.get(`configuracion/vacuna/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>",json)

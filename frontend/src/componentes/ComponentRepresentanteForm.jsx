@@ -383,7 +383,7 @@ class ComponentRepresentanteForm extends React.Component{
     const token=localStorage.getItem('usuario')
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
     // /${token}
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/consultar/${id}`)
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/consultar/${id}/${token}`)
     .then(respuesta=>{
         let respuesta_servidor=respuesta.data
         if(respuesta_servidor.estado_respuesta=== true){

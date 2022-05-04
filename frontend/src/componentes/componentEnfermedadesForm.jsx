@@ -117,7 +117,8 @@ class ComponentEnfermedadesForm extends React.Component{
   }
   
   async ConsultarRegistro(id){
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar/${id}`)
+      const token = localStorage.getItem("usuario")
+      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/enfermedad/consultar/${id}/${token}`)
     .then(async response => response.data)
   }
 

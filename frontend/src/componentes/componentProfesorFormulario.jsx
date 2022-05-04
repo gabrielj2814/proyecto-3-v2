@@ -155,8 +155,8 @@ class ComponentProfesorFormulario extends React.Component {
     }
 
     async consultarProfesorTrabajador(id){
-        // const token=localStorage.getItem('usuario')
-        await axiosCustom.get(`configuracion/profesor/consultar/${id}`)
+        const token=localStorage.getItem('usuario')
+        await axiosCustom.get(`configuracion/profesor/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log(json)
