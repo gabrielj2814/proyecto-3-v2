@@ -10,7 +10,7 @@ router.post("/crear-promocion",controladorPromocion.registrar)
 router.get("/consultar-promocion/:id/:token",controladorPromocion.consultar)
 router.get("/consultar-todos/",controladorPromocion.consultarTodos)
 router.get("/consultar-promocion-por-inscripcion/:id/:token",controladorPromocion.consultarPorInscripcion)
-router.put("/actualizar/:id",controladorPromocion.actualizar, botacorra.capturaDatos)
+router.put("/actualizar/:id",controladorPromocion.actualizar)
 router.get("/consultar-estudiantes/:cedula_profesor",controladorPromocion.consultarEstudiantesAsignados)
 
 module.exports = router
