@@ -319,6 +319,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             if(json.estado_respuesta===true){
                 let hashAnoEscolaresSiguiente=json.datos[0]
                 this.setState({hashAnoEscolaresSiguiente})
+                this.setState({id_ano_escolar:this.state.hashAnoEscolaresSiguiente.id_ano_escolar})
             }
             else{
                 this.setState({disponibilidadProfesor:false})
@@ -417,6 +418,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
     async buscarProfesor(a){
         this.cambiarEstado(a)
+        this.setState({hashAnoEscolaresSiguiente:{}})
         let input=a.target
         let $seccionNombreProfesor=document.getElementById("nombreProfesor")
         let msj_id_cedula=JSON.parse(JSON.stringify(this.state.msj_id_cedula))
@@ -460,7 +462,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log("disponibilidad profesor",json)
             if(json.datos.disponibilidadProfesor===true){
-                // await this.consultarAnoEscolarActivo()
+                alert("ook")
                 this.setState({disponibilidadProfesor:true})
             }
             else{
@@ -469,11 +471,13 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
                     if(this.props.match.params.operacion==="actualizar"){
                         if(this.state.respaldoDatos.id_profesor!==this.state.id_profesor){
+                            alert("aqui 2")
                             $("#modalAginacionProferosSiguiente").modal("show")
                             document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
                         }
                     }
                     else{
+                        alert("aqui")
                         $("#modalAginacionProferosSiguiente").modal("show")
                         document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
                     }
@@ -569,19 +573,23 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     async verificarDisponibilidadAula(a){
         this.cambiarEstado(a)
         let input =a.target
+        // alert(this.state.hashAnoEscolaresActivo.id_ano_escolar)
         if(this.state.id_ano_escolar == "") return false;
-        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.id_ano_escolar}/${input.value}`)
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.hashAnoEscolaresActivo.id_ano_escolar}/${input.value}`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log("hhhh",json)
             if(json.datos.disponibilidadAula===true){
                 this.setState({disponibilidadAula:true})
+                // this.setState({id_ano_escolar:this.state.hashAnoEscolaresActivo.id_ano_escolar})
             }
             else{
 
                 // this.setState({disponibilidadAula:false})
                 await this.consultarAnoEscolarSiguiente()
                 if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
+                    this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
+                    this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
                     // $("#modalAginacionProferosSiguiente").modal("show")
                     // document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
                     await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);
@@ -870,7 +878,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <div class="form-groud">
                                     <label>Grado</label>
                                     <select id="id_grado" name="id_grado" class="form-select custom-select" aria-label="Default select example" onChange={this.consultarAulasPorGrado2}>
-                                        {this.state.listaGrados.map((grado,index)=> {
+                                    <option value='null' >Seleccione</option>
+                                            {this.state.listaGrados.map((grado,index)=> {
                                             return(
                                                 <option key={index} value={grado.id_grado} >{grado.numero_grado}</option>
                                             )
@@ -884,6 +893,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <div class="form-groud">
                                     <label>Sección</label>
                                     <select id="id_aula" name="id_aula" class="form-select custom-select" aria-label="Default select example" onChange={this.verificarDisponibilidadAula}>
+                                        <option value='null' >Seleccione</option>
                                         {this.state.listaAulas.map((aula,index)=> {
                                             return(
                                                 <option key={index} value={aula.id_aula} >{aula.nombre_aula}</option>
@@ -915,6 +925,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <div class="form-groud">
                                     <label>Numero total de estudiantes</label>
                                     <select id="numero_total_de_estudiantes" name="numero_total_de_estudiantes" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
+                                            
                                         {this.state.listaDenNumeroEstudiante.map((numeroEstudiante,index)=> {
                                             return(
                                                 <option key={index} value={numeroEstudiante} >{numeroEstudiante}</option>
