@@ -35,6 +35,10 @@ ControladorPromocion.consultar= async (req,res) => {
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
         respuesta_api.datos=resultPromocion.rows
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
+
     }
     else{
         respuesta_api.mensaje="error al consultar(la promocion)"

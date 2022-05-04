@@ -236,7 +236,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     }
 
     async consultarAsignacionAulaProfesor(id){
-        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}`)
+        const token=localStorage.getItem("usuario")
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             // console.log(json)
@@ -898,10 +899,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                     <label>Disponibilidad del Aula:</label>
                                     {this.state.disponibilidadAula===true &&
-                                            <div>Aula Disponible</div>
+                                            <div className="text-success">Aula Disponible</div>
                                     }
                                     {this.state.disponibilidadAula===false &&
-                                            <div>Aula no Disponible</div>
+                                            <div className='text-danger'>Aula no Disponible</div>
                                     }
                                 </div>
                             }

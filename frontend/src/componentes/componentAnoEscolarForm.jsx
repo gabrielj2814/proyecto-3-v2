@@ -200,7 +200,8 @@ class ComponentAnoEscolarForm extends React.Component{
   }
 
   async ConsultarRegistro(id){
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/consultar/${id}`)
+    const token=localStorage.getItem("usuario")
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ano-escolar/consultar/${id}/${token}`)
     .then(async response => response.data)
   }
 

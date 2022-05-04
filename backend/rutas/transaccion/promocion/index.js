@@ -2,7 +2,7 @@ const express=require("express"),
 router=express.Router(),
 bodyparser=require("body-parser"),
 controladorPromocion=require("../../../controlador/c_promocion")
-// botacorra = require("../../../controlador/c_vitacora")
+bitacora = require("../../../controlador/c_vitacora")
 
 router.use(bodyparser.json())
 

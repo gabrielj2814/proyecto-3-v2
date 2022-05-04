@@ -120,7 +120,8 @@ class ComponenrGradoFormulario extends React.Component{
       }
 
     async consultarGrado(id){
-        axiosCustom.get(`configuracion/grado/consultar/${id}`)
+        const token=localStorage.getItem("usuario")
+        axiosCustom.get(`configuracion/grado/consultar/${id}/${token}`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
             console.log(respuestaServidor)

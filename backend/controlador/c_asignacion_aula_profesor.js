@@ -68,13 +68,16 @@ ControladorAsignacionAulaProfesor.consultarDisponibilidadAula=async (req,res) =>
     modeloAsignacionAulaProfesor.setdatoIdAnoEscolar(id_ano_escolar)
     modeloAsignacionAulaProfesor.setdatoIdAula(id_aula)
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarDisponibilidadAula()
+    console.log("que verga paso ",resultAsignacionAulaProfesor.rowCount)
     if(resultAsignacionAulaProfesor.rowCount===0){
+        console.log("SI")
         respuesta_api.mensaje="aula disponible"
         respuesta_api.datos={disponibilidadAula:true}
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="succes"
     }
     else{
+        console.log("no")
         respuesta_api.mensaje="aula no disponible"
         respuesta_api.datos={disponibilidadAula:false}
         respuesta_api.estado_respuesta=true

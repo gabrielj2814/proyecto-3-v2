@@ -237,7 +237,8 @@ class ComponentRetiroForm extends React.Component{
   }
 
   async consultarRetiro(id){
-    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/consultar/${id}`)
+    const token=localStorage.getItem("usuario")
+    await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/consultar/${id}/${token}`)
     .then( res => {
       this.setState({
         id_retiro: this.props.match.params.id,
@@ -273,13 +274,15 @@ class ComponentRetiroForm extends React.Component{
 
         let {id} = this.props.match.params;
         await this.consultarRetiro(id);
-
-        document.getElementById("motivo_retiro").disabled = true;
-        document.getElementById("cedula_representante_solicitud").disabled = true;
-        document.getElementById("docente").disabled = true;
-        document.getElementById("nombre_aula").disabled = true;
-        document.getElementById("id_grado").disabled = true;
-        document.getElementById("cedula_escolar").disabled = true;
+        setTimeout( ()=>{
+          document.getElementById("motivo_retiro").disabled = true;
+          // document.getElementById("cedula_representante_solicitud").disabled = true;
+          document.getElementById("docente").disabled = true;
+          document.getElementById("nombre_aula").disabled = true;
+          document.getElementById("id_grado").disabled = true;
+          document.getElementById("cedula_escolar").disabled = true;
+        },1000)
+        
       }
 
 
@@ -292,7 +295,6 @@ class ComponentRetiroForm extends React.Component{
   async validarAccesoDelModulo(modulo,subModulo){
     let estado = false
     if(localStorage.getItem("usuario")){
-
       const token=localStorage.getItem("usuario")
       await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/login/verificar-sesion${token}`)
       .then(async respuesta=>{

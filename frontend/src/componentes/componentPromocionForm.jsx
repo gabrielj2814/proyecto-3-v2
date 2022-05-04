@@ -167,7 +167,8 @@ class ComponentPromocionForm extends React.Component{
   }
 
   async consultarPromocionPorId(id_promocion){
-      return await axiosCustom.get(`transaccion/promocion/consultar-promocion/${id_promocion}`)
+      const token=localStorage.getItem("usuario")
+      return await axiosCustom.get(`transaccion/promocion/consultar-promocion/${id_promocion}/${token}`)
       .then(respuesta =>{
           if(respuesta.data.datos.length > 0){
             let datos = respuesta.data.datos[0]

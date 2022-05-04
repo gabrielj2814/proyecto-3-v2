@@ -54,7 +54,7 @@ class ModuloParroquia extends DriverPostgres {
 
   async actualizar(){
     const SQL = ` UPDATE tparroquia SET nombre_parroquia= '${this.nombre_parroquia}', id_ciudad= '${this.id_ciudad}',
-                  estatu_parroquia= '${this.estatu_parroquia}'
+                  estatu_parroquia= '${this.estatu_parroquia}' WHERE id_parroquia=${this.id_parroquia}
 
     `
     return await this.query(SQL);
