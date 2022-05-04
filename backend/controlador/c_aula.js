@@ -1,10 +1,11 @@
 const ModeloAula=require("../modelo/m_aula")
 
 const ControladorAula={}
+const VitacoraControlador = require("./c_vitacora")
 
-ControladorAula.registrar=async (req,res) => {
+ControladorAula.registrar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {aula} = req.body
+    let {aula, token} = req.body
     let Aula=new ModeloAula()
     Aula.setDatos(aula)
     let resultAula=await Aula.registrar()
@@ -12,15 +13,17 @@ ControladorAula.registrar=async (req,res) => {
         respuesta_api.mensaje="Registro completado"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "taula", aula.id_aula)
+        next()
     }
     else{
         respuesta_api.mensaje="error al registrar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 
 }
 
@@ -45,9 +48,9 @@ ControladorAula.consultarTodos=async (req,res) => {
     res.end()
 }
 
-ControladorAula.consultar=async (req,res) => {
+ControladorAula.consultar=async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
-    let {id} = req.params
+    let {id, token} = req.params
     let Aula=new ModeloAula()
     Aula.setIdAula(id)
     let resultAula=await Aula.consultar()
@@ -56,20 +59,22 @@ ControladorAula.consultar=async (req,res) => {
         respuesta_api.mensaje="Consulta completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "taula",id)
+        next()
     }
     else{
         respuesta_api.mensaje="error al consultar no hay aulas"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
-ControladorAula.actualizar=async (req,res) => {
+ControladorAula.actualizar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {aula} = req.body
+    let {aula, token} = req.body
     let Aula=new ModeloAula()
     Aula.setDatos(aula)
     let resultAula=await Aula.actualizar()
@@ -77,15 +82,17 @@ ControladorAula.actualizar=async (req,res) => {
         respuesta_api.mensaje="Actualización completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "taula", aula.id_aula)
+        next()
     }
     else{
         respuesta_api.mensaje="error al actualizar (este registro no se encuantran en la base de datos)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     } 
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 
 }
 

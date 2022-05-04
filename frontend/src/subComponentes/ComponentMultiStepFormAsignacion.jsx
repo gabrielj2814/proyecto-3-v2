@@ -48,6 +48,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     this.RellenarCamposHijos = this.RellenarCamposHijos.bind(this);
     this.consultarTodoXParroquia = this.consultarTodoXParroquia.bind(this);
     this.cambiarEstatusCampos = this.cambiarEstatusCampos.bind(this);
+    this.VerifacionCedulaEscolar = this.VerifacionCedulaEscolar.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -72,6 +73,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         estatus_asignacion_representante_estudiante:"1",
         // Datos extras para el formulario
         nombre_representante: "",
+        cedula_estudiante_escolar: "",
         nombre_estudiante: "",
         apellido_estudiante: "",
         apellido_representante: "",
@@ -166,6 +168,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         tipos_representantes_usados:[],
         hashRepresentante:{},
         hashEstudiante:{},
+        campos_extras:false,
         estadoBusquedaEstudiante: false,
         estadoBusquedaRepresentante: false,
         ///
@@ -397,6 +400,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   CapturaTipoRepresentante(a){
     var input = (a.target != undefined) ? a.target : a;
     this.setState({[input.name]:input.value})
+    this.setState({campos_extras: false})
 
     if(input.value === "O"){
 
@@ -443,9 +447,11 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         if(this.state.cedula_mama == input.value){
           tipo_representante = "M";
           parentesco = "MAMA"
-        }else{
+        }else if(this.state.cedula_papa == input.value){
            tipo_representante = "P"
            parentesco = "PAPA"
+        }else{
+          tipo_representante = "O"
         }
 
         if(this.state.cedula_papa == input.value || this.state.cedula_mama == input.value){
@@ -486,6 +492,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
         })
 
         this.cambiarEstatusCampos(true)
+        this.VerifacionCedulaEscolar({target: {name: "id_cedula_representante", value: input.value, tipo: "I"}})
       }
     }
   }
@@ -652,11 +659,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     const validarCedula = this.validarCampoNumero('id_cedula_representante'), validarNombre = this.validarCampo('nombres_representante'), validarApellido = this.validarCampo('apellidos_representante'),
     validarTelefonoMovil = this.validarCampoNumero('telefono_movil_representante'), validarTelefonoLocal = this.validarCampoNumero('telefono_local_representante'),
     validarFechaNacimineto = this.validarFechaNacimineto(), validarOcupacion = this.validarCampo('ocupacion_representante'), validarIngresos = this.validarCampoNumero('ingresos_representante'),
-    validarGradoIntruccion = this.validarSelect('nivel_instruccion_representante'), validarNumeroHijos = this.validarCampoNumero('numero_hijos_representante'),
-    validarNumEstInicial = this.validarCampoNumero('numero_estudiante_inicial_representante'), ValidarNumEstGrado1 = this.validarCampoNumero('numero_estudiante_grado_1_representante'),
-    ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
-    ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
-    ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
+    validarGradoIntruccion = this.validarSelect('nivel_instruccion_representante'),
+    ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
     validarDireccion = this.validarCampo('direccion_representante'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado_representante'),
     ValidarCiudad = this.validarSelect('id_ciudad_representante'),ValidarParroquia = this.validarSelect('id_parroquia_representante'),ValidarStatus = this.validarRadio('estatus_representante')
 
@@ -670,9 +674,20 @@ class ComponentMultiStepFormAsignacion extends React.Component{
       return {estado: false};
     }
 
+    if(this.state.campos_extras == true){
+      const validarNumeroHijos = this.validarCampoNumero('numero_hijos_representante'),
+      validarNumEstInicial = this.validarCampoNumero('numero_estudiante_inicial_representante'), ValidarNumEstGrado1 = this.validarCampoNumero('numero_estudiante_grado_1_representante'),
+      ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
+      ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
+      ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante')
+
+      if(!validarNumeroHijos && !ValidarNumEstGrado1 && !ValidarNumEstGrado1 && !ValidarNumEstGrado2 && !ValidarNumEstGrado3 && !ValidarNumEstGrado4 && !ValidarNumEstGrado5 && !ValidarNumEstGrado6){
+        return {estado: false}
+      }
+    }
+
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
-      validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
       ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus &&
       validar_cedula_escolar && validar_id_representante && validarstatus_asignacion && validar_parentesco
     ){
@@ -724,37 +739,41 @@ class ComponentMultiStepFormAsignacion extends React.Component{
           const mensaje =this.state.mensaje
           var respuesta_servidor=""
           // MAMA
-          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.mama)
-          .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado_respuesta
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          })
-          .catch(error=>{
-            mensaje.texto="No se puedo conectar con el servidor"
-            mensaje.estado=false
-            console.error(error)
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          });
+          if(this.state.cedula_mama !== ""){
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.mama)
+            .then(respuesta=>{
+              respuesta_servidor=respuesta.data
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_respuesta
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            })
+            .catch(error=>{
+              mensaje.texto="No se puedo conectar con el servidor"
+              mensaje.estado=false
+              console.error(error)
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            });
+          }
           // PAPA
-          axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.papa)
-          .then(respuesta=>{
-            respuesta_servidor=respuesta.data
-            mensaje.texto=respuesta_servidor.mensaje
-            mensaje.estado=respuesta_servidor.estado_respuesta
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          })
-          .catch(error=>{
-            mensaje.texto="No se puedo conectar con el servidor"
-            mensaje.estado=false
-            console.error(error)
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
-          });
+          if(this.state.cedula_papa !== ""){
+            axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto.papa)
+            .then(respuesta=>{
+              respuesta_servidor=respuesta.data
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_respuesta
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            })
+            .catch(error=>{
+              mensaje.texto="No se puedo conectar con el servidor"
+              mensaje.estado=false
+              console.error(error)
+              mensaje_formulario.mensaje=mensaje
+              this.setState(mensaje_formulario)
+            });
+          }
           // Registro Representante
           if(this.state.nuevo_representante){
             axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.representanteRegistro)
@@ -807,7 +826,6 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             })
           }, 100);
         });
-
         alert("Registro completado");
         this.props.returnDashoard();
       }
@@ -885,13 +903,13 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   BuscarEstudiante(){
 
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
-    console.log(hashEstudiante)
 
     if(hashEstudiante[this.state.id_estudiante]){
       this.setState({
         estadoBusquedaEstudiante: true,
         id_estudiante: hashEstudiante[this.state.id_estudiante].id_estudiante,
-        cedula_escolar: hashEstudiante[this.state.id_estudiante].cedula_escolar,
+        cedula_escolar: hashEstudiante[this.state.id_estudiante].codigo_cedula_escolar+'-'+hashEstudiante[this.state.id_estudiante].cedula_escolar,
+        cedula_estudiante_escolar: hashEstudiante[this.state.id_estudiante].cedula_escolar,
         nombre_estudiante: hashEstudiante[this.state.id_estudiante].nombres_estudiante,
         apellido_estudiante: hashEstudiante[this.state.id_estudiante].apellidos_estudiante,
       });
@@ -902,9 +920,28 @@ class ComponentMultiStepFormAsignacion extends React.Component{
     });
   }
 
+  VerifacionCedulaEscolar(a){
+    if(a.target.name === "id_cedula_representante"){
+      if(a.target.value === "") this.setState({campos_extras: false})
+      if(!a.target.tipo){
+        if(a.target.value == this.state.cedula_mama || a.target.value == this.state.cedula_papa){
+          alert("No se pueden duplicar las cédulas")
+          this.setState({id_cedula_representante: ""})
+          return false;
+        }
+      }
+
+      if(a.target.value === this.state.cedula_estudiante_escolar){
+        this.setState({campos_extras: true})
+        alert("La cédula del representante coincide con la cedula del estudiante");
+      }
+    }
+  }
+
   async BusquedaRepresentante(a){
     let input = a.target
     this.validarNumero(a)
+    await this.VerifacionCedulaEscolar(a)
     let hashRepresentante=JSON.parse(JSON.stringify(this.state.hashRepresentante))
     if(hashRepresentante[input.value]){
 
@@ -1005,7 +1042,8 @@ class ComponentMultiStepFormAsignacion extends React.Component{
   }
 
   async consultarTodoXParroquia(id){
-    const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}`
+    const token=localStorage.getItem('usuario')
+    const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}/${token}`
 
     let datos = await axios.get(ruta_api_3)
     .then( ({data}) => {
@@ -1041,7 +1079,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario de asignacion representante-estudiante</span>
+                        <span className="titulo-form-trabajador">Asignación Representante-Estudiante</span>
                     </div>
                 </div>
                 {/* <div className="row">
@@ -1071,41 +1109,50 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                         <label>Apellido del estudiante: {this.state.apellido_estudiante}</label>
                       </div>
                   </div>
-                  <div className="row mt-3">
+                  { (this.state.cedula_mama !== "") &&
+                    <>
+                    <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos de la Mamá</span>
+                        <span className="sub-titulo-form-reposo-trabajador">Datos de la Mamá</span>
                       </div>
-                  </div>
-                  <div className="row justify-content-center align-items-center">
-                    <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                    </div>
+                    <div className="row justify-content-center align-items-center">
+                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                         nombreCampo="Cedula de la Mama:" activo="si" type="text" value={this.state.cedula_mama}
                         name="cedula_mama" id="cedula_mama" placeholder="Cedula de la mama"
-                      />
+                        />
 
-                    <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
                         <label>Nombre de la Mama: {this.state.nombre_mama}</label><br></br>
                         <label>Apellido de la Mama: {this.state.apellido_mama}</label>
-                    </div>
-                  </div>
-
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos del Papá</span>
                       </div>
-                  </div>
-                  <div className="row justify-content-center align-items-center">
-                    <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                    </div>
+                    </>
+                  }
+
+                  { (this.state.cedula_papa !== "") &&
+                    <>
+                    <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                        <span className="sub-titulo-form-reposo-trabajador">Datos del Papá</span>
+                      </div>
+                    </div>
+                    <div className="row justify-content-center align-items-center">
+                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                         nombreCampo="Cedula del Papa:" activo="si" type="text" value={this.state.cedula_papa}
                         name="cedula_papa" id="cedula_papa" placeholder="Cedula del Papa"
-                      />
+                        />
 
-                    <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
+                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
                         <label>Nombre de la Papa: {this.state.nombre_papa}</label><br></br>
                         <label>Apellido de la Papa: {this.state.apellido_papa}</label>
+                      </div>
                     </div>
-                  </div>
+                    </>
+                  }
+
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
                           <span className="sub-titulo-form-reposo-trabajador">Datos del Representante</span>
@@ -1126,7 +1173,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                       eventoPadre={this.CapturaTipoRepresentante}
                     />
                   </div>
-                  {this.state.status_form_representante == true &&
+                  { (this.state.status_form_representante == true) &&
 
                     <div>
                       <div className="row justify-content-center">
@@ -1147,23 +1194,28 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                         />
                       </div>
                       <div className="row justify-content-center">
-                          <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                          <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_movil_representante[0]}
                             nombreCampo="Télefono móvil:" activo={this.state.campos_activos} type="text" value={this.state.telefono_movil_representante}
                             name="telefono_movil_representante" id="telefono_movil_representante" placeholder="Telefono movil" eventoPadre={this.validarNumero}
                           />
-                        <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_telefono_local_representante[0]}
                             nombreCampo="Télefono local:" activo={this.state.campos_activos} type="text" value={this.state.telefono_local_representante}
                             name="telefono_local_representante" id="telefono_local_representante" placeholder="Telefono local" eventoPadre={this.validarNumero}
                           />
+                          <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                            clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_representante[0]}
+                            nombreCampo="Ocupación:" activo={this.state.campos_activos} type="text" value={this.state.ocupacion_representante}
+                            name="ocupacion_representante" id="ocupacion_representante" placeholder="Ocupacion" eventoPadre={this.validarTexto}
+                          />
                       </div>
                       <div className="row justify-content-center mx-auto my-2">
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ocupacion_representante[0]}
-                          nombreCampo="Ocupación:" activo={this.state.campos_activos} type="text" value={this.state.ocupacion_representante}
-                          name="ocupacion_representante" id="ocupacion_representante" placeholder="Ocupacion" eventoPadre={this.validarTexto}
-                        />
+                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
+                          nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
+                          name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
+                          />
                         <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                           clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ingresos_representante[0]}
                           nombreCampo="Ingresos:" activo={this.state.campos_activos} type="text" value={this.state.ingresos_representante}
@@ -1211,65 +1263,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                           option={this.state.tipo_viviendas}
                         />
                       </div>
-                      <div className="row justify-content-center">
-                          <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                              <span className="h4">Número de alumnos inscritos en el plantel por el mismo representante</span>
-                          </div>
-                      </div>
-                      <div className="row justify-content-center mt-1">
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_hijos_representante[0]}
-                          nombreCampo="Número de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
-                          name="numero_hijos_representante" id="numer_hijos_representante" placeholder="Numero de hijos" eventoPadre={this.validarNumero}
-                        />
 
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_inicial_representante[0]}
-                          nombreCampo="En inicial:" activo="si" type="text" value={this.state.numero_estudiante_inicial_representante}
-                          name="numero_estudiante_inicial_representante" id="numero_estudiante_inicial" placeholder="Numero estudiantes en inicial" eventoPadre={this.validarNumero}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_1_representante[0]}
-                          nombreCampo="En Primer Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_1_representante}
-                          name="numero_estudiante_grado_1_representante" id="numero_estudiante_grado_1_representante" placeholder="Numero estudiantes en grado (1) " eventoPadre={this.validarNumero}
-                        />
-                      </div>
-
-                      <div className="row justify-content-center mt-1">
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_2_representante[0]}
-                          nombreCampo="En Segundo Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_2_representante}
-                          name="numero_estudiante_grado_2_representante" id="numero_estudiante_grado_2_representante" placeholder="Numero estudiantes en grado (2) " eventoPadre={this.validarNumero}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_3_representante[0]}
-                          nombreCampo="En Tercer Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_3_representante}
-                          name="numero_estudiante_grado_3_representante" id="numero_estudiante_grado_3_representante" placeholder="Numero estudiantes en grado (3) " eventoPadre={this.validarNumero}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_4_representante[0]}
-                          nombreCampo="En Cuarto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_4_representante}
-                          name="numero_estudiante_grado_4_representante" id="numero_estudiante_grado_4_representante" placeholder="Numero estudiantes en grado (4) " eventoPadre={this.validarNumero}
-                        />
-                      </div>
-
-                      <div className="row justify-content-center mt-1">
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_5_representante[0]}
-                          nombreCampo="En Quinto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_5_representante}
-                          name="numero_estudiante_grado_5_representante" id="numero_estudiante_grado_5_representante" placeholder="Numero estudiantes en grado (5) " eventoPadre={this.validarNumero}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_6_representante[0]}
-                          nombreCampo="En Sexto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_6_representante}
-                          name="numero_estudiante_grado_6_representante" id="numero_estudiante_grado_6_representante" placeholder="Numero estudiantes en grado (6) " eventoPadre={this.validarNumero}
-                        />
-                        <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                          clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_constitucion_familiar_representante[0]}
-                          nombreCampo="Constitución familiar:" activo="si" type="text" value={this.state.constitucion_familiar_representante}
-                          name="constitucion_familiar_representante" id="constitucion_familiar_representante" placeholder="Constitucion familiar" eventoPadre={this.validarTexto}
-                        />
-                      </div>
                       <div className="row justify-content-center mx-auto">
                         <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                           obligatorio="si" mensaje={this.state.msj_direccion_representante[0]} nombreCampoTextArea="Dirección:"
@@ -1318,7 +1312,66 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                     </div>
                   }
 
-                  {this.state.cedula_representante === "O" &&
+                  { (this.state.campos_extras === true) &&
+                    <>
+                    <div className="row justify-content-center">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
+                        <span className="h4">Número de alumnos inscritos en el plantel por el mismo representante</span>
+                      </div>
+                    </div>
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_hijos_representante[0]}
+                        nombreCampo="Número de hijos:" activo="si" type="text" value={this.state.numero_hijos_representante}
+                        name="numero_hijos_representante" id="numer_hijos_representante" placeholder="Numero de hijos" eventoPadre={this.validarNumero}
+                        />
+
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_inicial_representante[0]}
+                        nombreCampo="En inicial:" activo="si" type="text" value={this.state.numero_estudiante_inicial_representante}
+                        name="numero_estudiante_inicial_representante" id="numero_estudiante_inicial" placeholder="Numero estudiantes en inicial" eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_1_representante[0]}
+                        nombreCampo="En Primer Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_1_representante}
+                        name="numero_estudiante_grado_1_representante" id="numero_estudiante_grado_1_representante" placeholder="Numero estudiantes en grado (1) " eventoPadre={this.validarNumero}
+                        />
+                    </div>
+
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_2_representante[0]}
+                        nombreCampo="En Segundo Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_2_representante}
+                        name="numero_estudiante_grado_2_representante" id="numero_estudiante_grado_2_representante" placeholder="Numero estudiantes en grado (2) " eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_3_representante[0]}
+                        nombreCampo="En Tercer Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_3_representante}
+                        name="numero_estudiante_grado_3_representante" id="numero_estudiante_grado_3_representante" placeholder="Numero estudiantes en grado (3) " eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_4_representante[0]}
+                        nombreCampo="En Cuarto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_4_representante}
+                        name="numero_estudiante_grado_4_representante" id="numero_estudiante_grado_4_representante" placeholder="Numero estudiantes en grado (4) " eventoPadre={this.validarNumero}
+                        />
+                    </div>
+
+                    <div className="row justify-content-center mt-1">
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_5_representante[0]}
+                        nombreCampo="En Quinto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_5_representante}
+                        name="numero_estudiante_grado_5_representante" id="numero_estudiante_grado_5_representante" placeholder="Numero estudiantes en grado (5) " eventoPadre={this.validarNumero}
+                        />
+                      <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
+                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_numero_estudiante_grado_6_representante[0]}
+                        nombreCampo="En Sexto Grado:" activo="si" type="text" value={this.state.numero_estudiante_grado_6_representante}
+                        name="numero_estudiante_grado_6_representante" id="numero_estudiante_grado_6_representante" placeholder="Numero estudiantes en grado (6) " eventoPadre={this.validarNumero}
+                        />
+                    </div>
+                    </>
+                  }
+
+                  { (this.state.cedula_representante === "O") &&
                     <div className="row justify-content-center">
                       <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                         obligatorio="si" mensaje={this.state.msj_parentesco_representante[0]} nombreCampoTextArea="Parentesco:"
