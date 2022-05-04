@@ -319,7 +319,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             if(json.estado_respuesta===true){
                 let hashAnoEscolaresSiguiente=json.datos[0]
                 this.setState({hashAnoEscolaresSiguiente})
-                this.setState({id_ano_escolar:this.state.hashAnoEscolaresSiguiente.id_ano_escolar})
+                // this.setState({id_ano_escolar:this.state.hashAnoEscolaresSiguiente.id_ano_escolar})
             }
             else{
                 this.setState({disponibilidadProfesor:false})
@@ -462,7 +462,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             console.log("disponibilidad profesor",json)
             if(json.datos.disponibilidadProfesor===true){
-                alert("ook")
+                // alert("ook")
                 this.setState({disponibilidadProfesor:true})
             }
             else{
@@ -471,13 +471,13 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
 
                     if(this.props.match.params.operacion==="actualizar"){
                         if(this.state.respaldoDatos.id_profesor!==this.state.id_profesor){
-                            alert("aqui 2")
+                            // alert("aqui 2")
                             $("#modalAginacionProferosSiguiente").modal("show")
                             document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
                         }
                     }
                     else{
-                        alert("aqui")
+                        // alert("aqui")
                         $("#modalAginacionProferosSiguiente").modal("show")
                         document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
                     }
@@ -575,18 +575,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         let input =a.target
         // alert(this.state.hashAnoEscolaresActivo.id_ano_escolar)
         if(this.state.id_ano_escolar == "") return false;
-        await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.hashAnoEscolaresActivo.id_ano_escolar}/${input.value}`)
-        .then(async respuesta =>{
-            let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("hhhh",json)
-            if(json.datos.disponibilidadAula===true){
-                this.setState({disponibilidadAula:true})
-                // this.setState({id_ano_escolar:this.state.hashAnoEscolaresActivo.id_ano_escolar})
-            }
-            else{
-
-                // this.setState({disponibilidadAula:false})
-                await this.consultarAnoEscolarSiguiente()
+        if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
+            // alert("OK 2")
+            await this.consultarAnoEscolarSiguiente()
                 if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
                     this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
                     this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
@@ -600,11 +591,42 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     $("#modalMensaje").modal("show")
                     this.setState({disponibilidadAula:false})
                 }
-            }
-        })
-        .catch(error => {
-            console.error(error)
-        })
+        }
+        else{
+            // alert("OK ")
+            await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-disponibilidad-aula/${this.state.hashAnoEscolaresActivo.id_ano_escolar}/${input.value}`)
+            .then(async respuesta =>{
+                let json=JSON.parse(JSON.stringify(respuesta.data))
+                console.log("hhhh",json)
+                if(json.datos.disponibilidadAula===true){
+                    this.setState({disponibilidadAula:true})
+                    // this.setState({id_ano_escolar:this.state.hashAnoEscolaresActivo.id_ano_escolar})
+                }
+                else{
+    
+                    // this.setState({disponibilidadAula:false})
+                    await this.consultarAnoEscolarSiguiente()
+                    if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
+                        this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
+                        this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
+                        this.setState({id_ano_escolar:this.state.hashAnoEscolaresSiguiente.id_ano_escolar})
+                        // $("#modalAginacionProferosSiguiente").modal("show")
+                        // document.getElementById("asginarProfesor").setAttribute("data-id-profesor",idProfesor)
+                        await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);
+    
+                    }
+                    else{
+                        document.getElementById("parrafoMensaje").textContent="no hay año siguiente disponible"
+                        $("#modalMensaje").modal("show")
+                        this.setState({disponibilidadAula:false})
+                    }
+                }
+            })
+            .catch(error => {
+                console.error(error)
+            })
+        }
+
         if(this.props.match.params.operacion==="actualizar"){
             if(this.state.respaldoDatos.id_aula!==parseInt(input.value)){
                 this.setState({cambioAula:true})
@@ -652,11 +674,11 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         let estadoValidacionAula=false
         let estadoValidacionProfesor=false
         if(this.state.respaldoDatos.id_aula!==idAula){
-            alert("no")
+            // alert("no")
             estadoValidacionAula=true
         }
         if(this.state.respaldoDatos.id_profesor!==idProfesor){
-            alert("no")
+            // alert("no")
             estadoValidacionProfesor=true
         }
         if(estadoValidacionAula===false && estadoValidacionProfesor===false){
