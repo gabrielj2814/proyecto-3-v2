@@ -65,7 +65,8 @@ class ComponentBitacora extends React.Component {
                 tlista_vacuna: "Vacuna",
                 tprofesor: "Profesor",
                 tlista_enfermedad: "Enfermedad",
-                tasignacion_aula_profesor: "Asignación aula profesor"
+                tasignacion_aula_profesor: "Asignación aula profesor",
+                tdirector: "Director"
             },
             tablas:[
                 {name:"ttipotrabajador",value:"tipo de trabajador"},
@@ -94,7 +95,8 @@ class ComponentBitacora extends React.Component {
                 { name: "tlista_vacuna", value: "Vacuna" },
                 { name: "tprofesor", value: "Profesor" },
                 { name: "tlista_enfermedad", value: "Enfermedad" },
-                { name: "tasignacion_aula_profesor", value: "Asignación aula profesor" }
+                { name: "tasignacion_aula_profesor", value: "Asignación aula profesor" },
+                { name:"tdirector", value:"Director"}
 
             ],
             alerta:{
