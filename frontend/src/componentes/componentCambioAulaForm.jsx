@@ -110,24 +110,34 @@ class ComponentCambioAulaForm extends React.Component{
       propiedad_estado_1="estatus_grado"
       const grados = await this.consultarServidor(ruta_api,nombre_propiedad_lista_1,propiedad_id_1,propiedad_descripcion_1,propiedad_estado_1)
 
-      const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/aula/consultar-aula-por-grado/${grados[0].id}`,
-      nombre_propiedad_lista_2="datos",
-      propiedad_id_2="id_aula",
-      propiedad_descripcion_2="nombre_aula",
-      propiedad_estado_2="estatus_aula"
-      const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-      aulas.unshift({id: "", descripcion: "Selecione un aula"})
+      if(grados.length === 0){
+        alert("No hay Grados registrados (será redirigido a la vista anterior)")
+        this.props.history.goBack()
+      }else{
+        const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/aula/consultar-aula-por-grado/${grados[0].id}`,
+        nombre_propiedad_lista_2="datos",
+        propiedad_id_2="id_aula",
+        propiedad_descripcion_2="nombre_aula",
+        propiedad_estado_2="estatus_aula"
+        const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
-      this.setState({
-        listaGrados: grados,
-        listaAulas: aulas,
-        id_grado: grados[0].id,
-        id_aula_a: '',
-        id_aula_b: '',
-      })
+        if(aulas.length === 0){
+          alert("No hay Aulas registradas(será redirigido a la vista anterior)")
+          this.props.history.goBack()
+        }
+        aulas.unshift({id: "", descripcion: "Selecione un aula"})
 
+        this.setState({
+          listaGrados: grados,
+          listaAulas: aulas,
+          id_grado: grados[0].id,
+          id_aula_a: '',
+          id_aula_b: '',
+        })
+      }
+      
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -198,7 +208,7 @@ class ComponentCambioAulaForm extends React.Component{
 
         this.BuscarEstudiante({target:{ name: `id_inscripcion_${name}`, value: estudianteLista[0].id }})
       }else{
-        alert("No existen asignaciones para el aula seleccionada");
+        alert("No existen Asignaciones para el aula seleccionada");
       }
 
     })

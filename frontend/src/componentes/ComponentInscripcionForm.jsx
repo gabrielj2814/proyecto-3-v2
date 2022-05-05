@@ -741,7 +741,7 @@ class ComponentInscripcionForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario de Inscripcion Estudiante</span>
+                        <span className="titulo-form-trabajador">Formulario de Inscripción Estudiante</span>
                     </div>
                 </div>
                 <div className="row">

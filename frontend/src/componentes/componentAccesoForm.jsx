@@ -50,10 +50,10 @@ class ComponentAccesoForm extends React.Component {
               },
             //
             modulos:[],
-            lista_modulos:[],/// la listas de los al cual el perfil va a tener acceso 
+            lista_modulos:[],/// la listas de los al cual el perfil va a tener acceso
             // modulos del sistema
             modulos_principales:[
-                {descripcion:"configuracion",id:"/dashboard/configuracion"}, 
+                {descripcion:"configuracion",id:"/dashboard/configuracion"},
                 // {descripcion:"reporte",id:"/dashboard/reporte"},
                 {descripcion:"transaccion",id:"/dashboard/transaccion"},
                 {descripcion:"seguridad",id:"/dashboard/seguridad"}
@@ -61,21 +61,21 @@ class ComponentAccesoForm extends React.Component {
             sub_modulos:{
                 configuracion:[
                     {descripcion:"acceso",id:"/acceso"},
-                    {descripcion:"trabajador",id:"/trabajador"}, 
-                    {descripcion:"medico",id:"/medico"}, 
-                    {descripcion:"cam",id:"/cam"}, 
-                    {descripcion:"tipo cam",id:"/tipo-cam"}, 
-                    {descripcion:"permiso",id:"/permiso"}, 
-                    {descripcion:"reposo",id:"/reposo"}, 
-                    {descripcion:"tipo trabajador",id:"/tipo-trabajador"}, 
-                    {descripcion:"funcion trabajador",id:"/funcion-trabajador"}, 
-                    {descripcion:"estado",id:"/estado"}, 
-                    {descripcion:"ciudad",id:"/ciudad"}, 
-                    {descripcion:"especialidad",id:"/especialidad"}, 
-                    {descripcion:"asignacion especialidad medico",id:"/asignacion-especialidad-medico"}, 
-                    {descripcion:"horario",id:"/horario"}, 
-                    {descripcion:"cintillo home",id:"/cintillo-home"}, 
-                    {descripcion:"grado",id:"/grado"}, 
+                    {descripcion:"trabajador",id:"/trabajador"},
+                    {descripcion:"medico",id:"/medico"},
+                    {descripcion:"cam",id:"/cam"},
+                    {descripcion:"tipo cam",id:"/tipo-cam"},
+                    {descripcion:"permiso",id:"/permiso"},
+                    {descripcion:"reposo",id:"/reposo"},
+                    {descripcion:"tipo trabajador",id:"/tipo-trabajador"},
+                    {descripcion:"funcion trabajador",id:"/funcion-trabajador"},
+                    {descripcion:"estado",id:"/estado"},
+                    {descripcion:"ciudad",id:"/ciudad"},
+                    {descripcion:"especialidad",id:"/especialidad"},
+                    {descripcion:"asignacion especialidad medico",id:"/asignacion-especialidad-medico"},
+                    {descripcion:"horario",id:"/horario"},
+                    {descripcion:"cintillo home",id:"/cintillo-home"},
+                    {descripcion:"grado",id:"/grado"},
                     {descripcion:"estudiante",id:"/estudiante"},
                     {descripcion:"representante",id:"/representante"},
                     {descripcion:"aula",id:"/aula"},
@@ -86,7 +86,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"Fecha Inscripción",id:"/fecha-inscripcion"},
                     {descripcion:"Inscripción",id:"/inscripcion"},
                     {descripcion:"Parroquia",id:"/parroquia"},
-                    {descripcion:"Traslado estudiante",id:"/traslado-estudiantes"}
+                    {descripcion:"Traslado estudiante",id:"/traslado-estudiantes"},
+                    {descripcion:"Director",id:"/director"},
                 ],
                 // reporte:[
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
@@ -111,7 +112,7 @@ class ComponentAccesoForm extends React.Component {
             }
         }
     }
-    
+
     async UNSAFE_componentWillMount(){
         //console.log(this.props.match);
         //documentar
@@ -124,7 +125,7 @@ class ComponentAccesoForm extends React.Component {
                 [
                     [{id:0,modulo:this.state.modulos_principales}],
                     [{id:0,modulo:this.state.sub_modulos["configuracion"]}],
-                    {   
+                    {
                         id:0,
                         modulo_principal:"/dashboard/configuracion",
                         sub_modulo:"/acceso",
@@ -179,7 +180,7 @@ class ComponentAccesoForm extends React.Component {
             alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
-         
+
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -193,12 +194,12 @@ class ComponentAccesoForm extends React.Component {
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -226,8 +227,8 @@ class ComponentAccesoForm extends React.Component {
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -265,7 +266,7 @@ class ComponentAccesoForm extends React.Component {
                 mensaje.estado=respuesta_servidor.estado_peticion
                 this.props.history.push(`/dashboard/configuracion/acceso${JSON.stringify(mensaje)}`)
            }
-           
+
         })
         .catch(error=>{
             mensaje.texto="no hay conxion con el servidor"
@@ -324,7 +325,7 @@ class ComponentAccesoForm extends React.Component {
         while(veces<modulos_principales.length){
             const modulo_array=Object.entries(modulos_principales[veces]),
             atributo_sub_modulo=modulo_array[0][1],
-            modulo_principal=modulo_array[1][1];//ruta 
+            modulo_principal=modulo_array[1][1];//ruta
             var veces_2=0;
             while(veces_2<sub_modulos[atributo_sub_modulo].length){
                 const sub_modulo=sub_modulos[atributo_sub_modulo][veces_2]["id"];//ruta
@@ -350,7 +351,7 @@ class ComponentAccesoForm extends React.Component {
             }
             veces+=1;
         }
-        
+
         if(objeto_modulo.sub_modulo!==""){
             return objeto_modulo
         }
@@ -397,7 +398,7 @@ class ComponentAccesoForm extends React.Component {
                 }
                 else{
                     alert("nose puede elminar modulos ya registrados a este perfil, si no quiere que el perfil tenga acceso a ese modulo cambie el estado del modulo de activo a inactivo")
-                } 
+                }
             }
         }
         else{
@@ -463,7 +464,7 @@ class ComponentAccesoForm extends React.Component {
                         modulos[numero_indice][2]["valido"]=false;
                         this.setState({modulos:modulos,lista_modulos:lista_modulos});
                         //console.log(modulos)
-                        
+
                     }
                 }
             }
@@ -526,14 +527,14 @@ class ComponentAccesoForm extends React.Component {
             }
             else{
                 alert("error en validar sub modulo")
-            }         
+            }
         }
         else{
             console.log("NL-> 212: no se hace nada");
-        }      
+        }
     }
 
-    verificarSelect(modulo,modulos){// su funciones que detecta si el usuario cambio el valor de los option que estan en los select 
+    verificarSelect(modulo,modulos){// su funciones que detecta si el usuario cambio el valor de los option que estan en los select
         var respuesta=0,
         contador=0
         if(modulo!==""){
@@ -590,7 +591,7 @@ class ComponentAccesoForm extends React.Component {
         console.log(modulos)
         console.log(lista_modulos)
         this.setState({modulos:modulos,lista_modulos:lista_modulos});
-        
+
     }
 
     regresar(){
@@ -666,7 +667,7 @@ class ComponentAccesoForm extends React.Component {
                     },
                     modulos:this.state.lista_modulos
                 }
-                
+
                 axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/registrar`,objeto)
                 .then(respuesta=>{
                     respuesta_servidor=respuesta.data
@@ -728,7 +729,7 @@ class ComponentAccesoForm extends React.Component {
             [
                 [{id:0,modulo:this.state.modulos_principales}],
                 [{id:0,modulo:this.state.sub_modulos["configuracion"]}],
-                {   
+                {
                     id:0,
                     modulo_principal:"/dashboard/configuracion",
                     sub_modulo:"/acceso",
@@ -756,7 +757,7 @@ class ComponentAccesoForm extends React.Component {
     }
 
     render(){
-        
+
         const jsx_acceso_form=(
             <div className="row justify-content-center">
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
@@ -782,7 +783,7 @@ class ComponentAccesoForm extends React.Component {
                     </div>
                     <div className="row">
                         <div className="col-auto">
-                            <ButtonIcon 
+                            <ButtonIcon
                             clasesBoton="btn btn-outline-success"
                             icon="icon-plus"
                             id="icon-plus"
@@ -843,7 +844,7 @@ class ComponentAccesoForm extends React.Component {
                         </div>
                         <div className="row">
                             <div className="col-auto">
-                                <ButtonIcon 
+                                <ButtonIcon
                                 clasesBoton="btn btn-primary"
                                 icon="icon-plus"
                                 id="icon-plus"
@@ -851,7 +852,7 @@ class ComponentAccesoForm extends React.Component {
                                 />
                             </div>
                             <div className="col-auto">
-                                <ButtonIcon 
+                                <ButtonIcon
                                 clasesBoton="btn btn-danger"
                                 icon="icon-minus"
                                 id="icon-minus"
@@ -928,7 +929,7 @@ class ComponentAccesoForm extends React.Component {
                                                 </div>
                                             )
                                         }
-                                        
+
                                     </div>
                                 )
                             })}
@@ -936,8 +937,8 @@ class ComponentAccesoForm extends React.Component {
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
-                                    
-                                    <InputButton 
+
+                                    <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
@@ -945,21 +946,21 @@ class ComponentAccesoForm extends React.Component {
                                     />
                                 }
                                 {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
                                     value="Actualizar"
                                     eventoPadre={this.operacion}
-                                    />   
+                                    />
                                 }
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
                     </form>

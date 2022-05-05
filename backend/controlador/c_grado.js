@@ -8,21 +8,38 @@ controladorGrado.registrar_grador=async (req,res, next) => {
     let {grado, token}=req.body
     let modeloGrado=new ModeloGrado()
     modeloGrado.setDatos(grado)
-    let resultGrado=await modeloGrado.registrar()
-    if(resultGrado.rowCount>0){
-        respuesta_api.mensaje="registro completado"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
-        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tgrado", grado.id_grado)
-        next()
-    }
-    else{
-        respuesta_api.mensaje="error al registrar el grado"
-        respuesta_api.estado_respuesta=false
-        respuesta_api.color_alerta="danger"
-        res.writeHead(200,{"Content-Type":"application/json"})
+    let gradoExist = await modeloGrado.consultarGrado()
+    console.log(gradoExist.rows);
+    if(gradoExist.rowCount === 0){
+        let resultGrado=await modeloGrado.registrar()
+        if (resultGrado.rowCount > 0) {
+            console.log("registro completado")
+            respuesta_api.mensaje = "registro completado"
+            respuesta_api.estado_respuesta = true
+            respuesta_api.color_alerta = "success"
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tgrado", grado.id_grado)
+            next()
+        }
+        else {
+            console.log("error al registrar el grado")
+            respuesta_api.mensaje = "error al registrar el grado"
+            respuesta_api.estado_respuesta = false
+            respuesta_api.color_alerta = "danger"
+            res.writeHead(200, { "Content-Type": "application/json" })
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
+        
+    }else{
+        console.log("Este grado ya se encuentra registrado")
+        respuesta_api.mensaje = "Este grado ya se encuentra registrado"
+        respuesta_api.estado_respuesta = false
+        respuesta_api.color_alerta = "danger"
+        res.writeHead(200, { "Content-Type": "application/json" })
         res.write(JSON.stringify(respuesta_api))
         res.end()
+
+        
     }
 }
 
