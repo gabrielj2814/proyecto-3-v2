@@ -282,7 +282,7 @@ class ComponentRetiroForm extends React.Component{
           document.getElementById("id_grado").disabled = true;
           document.getElementById("cedula_escolar").disabled = true;
         },1000)
-        
+
       }
 
 
@@ -583,6 +583,27 @@ class ComponentRetiroForm extends React.Component{
     const operacion=this.props.match.params.operacion
 
     const mensaje_formulario={
+      //formulario
+      id_retiro: "",
+      id_inscripcion: "",
+      cedula_representante_solicitud: "",
+      motivo_retiro: "",
+      fecha_retiro: "",
+      estado_retiro: "E",
+      // Datos alumno
+      id_estudiante:"",
+      cedula_escolar: "",
+      nombre_estudiante: "",
+      apellido_estudiante: "",
+      // Datos profesor
+      datos_docente:"",
+      // Datos representante
+      nombre_representante: "",
+      apellido_representante: "",
+      // Datos Aula
+      id_aula: "",
+      nombre_aula: "",
+      id_grado: "",
       mensaje:"",
       msj_id_inscripcion:[{mensaje:"",color_texto:""}],
       msj_cedula_representante_solicitud:[{mensaje:"",color_texto:""}],
@@ -601,7 +622,7 @@ class ComponentRetiroForm extends React.Component{
           var respuesta_servidor=""
           axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/transaccion/retiro/registrar`,objeto)
           .then(respuesta=>{
-            respuesta_servidor=respuesta.data            
+            respuesta_servidor=respuesta.data
             mensaje.texto=respuesta_servidor.mensaje
             mensaje.estado=respuesta_servidor.estado_respuesta
             mensaje.color_alerta=respuesta_servidor.color_alerta
@@ -661,7 +682,7 @@ class ComponentRetiroForm extends React.Component{
       petion(objeto)
   }
 
-  regresar(){ this.props.history.push("/dashboard/transaccion/retiro/registrar"); }
+  regresar(){ this.props.history.push("/dashboard"); }
 
   render(){
     var jsx_promocion_form=(

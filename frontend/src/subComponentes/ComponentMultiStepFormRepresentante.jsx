@@ -1075,7 +1075,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                     extra="custom-control-inline"
                     nombreCampoRadio="Campos obligatorios:"
                     name="campo_obligatorio"
-                    nombreLabelRadio={["Mama","Papa","Ambos"]}
+                    nombreLabelRadio={["Mamá","Papá","Ambos"]}
                     checkedRadio={this.state.campo_obligatorio}
 
                     idRadio={["Mamá","Papá","Ambos"]}
