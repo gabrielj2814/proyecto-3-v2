@@ -7,3 +7,4 @@
 /frontend/node_modules
 
 backend/modelo/driver_postgresql.js
+/frontend/src/ipServer.js
