@@ -39,6 +39,8 @@ class ComponentInscripcion extends React.Component{
         this.mostrarFiltros=this.mostrarFiltros.bind(this)
         this.generarPdf=this.generarPdf.bind(this)
         this.generarPdfDeInscripcion=this.generarPdfDeInscripcion.bind(this)
+        this.mostrarModalPdfContaciaEstudio=this.mostrarModalPdfContaciaEstudio.bind(this)
+        this.generarPdfDeContanciaEstu=this.generarPdfDeContanciaEstu.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -58,7 +60,8 @@ class ComponentInscripcion extends React.Component{
           matriculaInicial:"I",
           matriculaFinal:"F",
           nombre_usuario:null,
-          id_cedula:null
+          id_cedula:null,
+          id_inscripcion:null
         }
     }
 
@@ -359,6 +362,50 @@ class ComponentInscripcion extends React.Component{
     });
   }
 
+  mostrarModalPdfContaciaEstudio(a){
+    $("#modalPdfConstaciaEstudio").modal("show")
+    let boton=a.target
+    this.setState({id_inscripcion:boton.id})
+  }
+
+  generarPdfDeContanciaEstu(a){
+    let $filaVerPdfConstanciaEstudia=document.getElementById("filaVerPdfConstanciaEstudia")
+    let datos=[]
+    let fechaVencimientoConstaciaEstudio=document.getElementById("fechaVencimientoConstaciaEstudio")
+    datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+    datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+    datos.push({name:"id_inscripcion",value:this.state.id_inscripcion})
+    datos.push({name:"fecha",value:fechaVencimientoConstaciaEstudio.value})
+    console.log(datos)
+    if(fechaVencimientoConstaciaEstudio.value!==''){
+      $.ajax({
+        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_constancia_estudio.php`,
+        type:"post",
+        data:datos,
+        success: function(respuesta) {
+            console.log(respuesta)
+            let json=JSON.parse(respuesta)
+            console.log("datos reporte martricula =>>>> ",json)
+            if(json.nombrePdf!=="false"){
+                $filaVerPdfConstanciaEstudia.classList.remove("ocultarFormulario")
+                document.getElementById("linkPdf2").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+            }
+            else{
+                $filaVerPdfConstanciaEstudia.classList.add("ocultarFormulario")
+                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+            }
+        },
+        error: function() {
+        //   alert("error")
+          // $filaVerPdfConstanciaEstudia.classList.add("ocultarFormulario")
+        }
+      });
+    }
+    else{
+      alert("No se puede generar la constancia de estudio por que no ha ingresado una fecha de vencimiento")
+    }
+  }
+
     render(){
       const jsx_modales = (
       <>
@@ -404,6 +451,9 @@ class ComponentInscripcion extends React.Component{
                           <td>{estado}</td>
                           <td>
                             <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.generarPdfDeInscripcion}>PDF</button>
+                          </td>
+                          <td>
+                            <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.mostrarModalPdfContaciaEstudio}>Contacia De Estu.</button>
                           </td>
                     </tr>
                     )
@@ -455,6 +505,38 @@ class ComponentInscripcion extends React.Component{
                         </div>
                   </div>
 
+                  <div class="modal fade" id="modalPdfConstaciaEstudio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                <div className='col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6'>
+                                  <div className='form-group'>
+                                    <label>Fecha De Vencimiento de Contacia de Estudio</label>
+                                    <input type='date' className='form-control' id='fechaVencimientoConstaciaEstudio' name='fechaVencimientoConstaciaEstudio'/>
+                                  </div>
+                                </div>
+                              </div>
+                              <div id="filaVerPdfConstanciaEstudia" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" id="linkPdf2" target="_blank" href="#">Ver pdf</a>
+                                  </div>
+                              </div>
+
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdfContanciaEstudio" class="btn btn-success" onClick={this.generarPdfDeContanciaEstu}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
 
 
 
@@ -488,7 +570,7 @@ class ComponentInscripcion extends React.Component{
                 <div className="col-3 col-ms-3 col-md-3 columna-boton">
                   <div className="row justify-content-center align-items-center contenedor-boton">
                       <div className="col-auto">
-                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
+                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarConstaciaEstudio} value="pdf"/>
                       </div>
                   </div>
                 </div>
