@@ -142,7 +142,7 @@ class ComponentEstudianteConsulta extends React.Component{
             // this.setState({modulosSistema})
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -152,7 +152,7 @@ class ComponentEstudianteConsulta extends React.Component{
         respuesta_servidor=""
         const token=localStorage.getItem('usuario')
         // /${token}
-        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}`)
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}/${token}`)
         .then(respuesta=>{
             respuesta_servidor=respuesta.data
             if(respuesta_servidor.estado_respuesta===true){

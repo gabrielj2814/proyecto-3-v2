@@ -164,32 +164,48 @@ class ComponentEstudianteForm extends React.Component{
               propiedad_estado="estatu_estado"
               const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
 
-              const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
-              nombre_propiedad_lista_2="ciudades",
-              propiedad_id_2="id_ciudad",
-              propiedad_descripcion_2="nombre_ciudad",
-              propiedad_estado_2="estatu_ciudad"
-              const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+              if(estados.length > 0){
+                const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
+                nombre_propiedad_lista_2="ciudades",
+                propiedad_id_2="id_ciudad",
+                propiedad_descripcion_2="nombre_ciudad",
+                propiedad_estado_2="estatu_ciudad"
+                const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
-              const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
-              nombre_propiedad_lista_3="datos",
-              propiedad_id_3="id_parroquia",
-              propiedad_descripcion_3="nombre_parroquia",
-              propiedad_estado_3="estatu_parroquia"
-              const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+                if(ciudades.length > 0){
+                  const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+                  nombre_propiedad_lista_3="datos",
+                  propiedad_id_3="id_parroquia",
+                  propiedad_descripcion_3="nombre_parroquia",
+                  propiedad_estado_3="estatu_parroquia"
+                  const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-              this.setState({
-                estados,
-                ciudades,
-                parroquias,
-                id_estado:(estados.length===0)?null:estados[0].id,
-                id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
-                id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-                id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
-                id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
-                id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
-                operacion: operacion
-              })
+                  if(parroquias.length > 0){
+                    this.setState({
+                      estados,
+                      ciudades,
+                      parroquias,
+                      id_estado:(estados.length===0)?null:estados[0].id,
+                      id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
+                      id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+                      id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
+                      id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
+                      id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+                      operacion: operacion
+                    })
+                  }else{
+                    alert("No hay Parroquias registradas(será redirigido a la vista anterior)")
+                    this.props.history.goBack()
+                  }
+
+                }else{
+                  alert("No hay Ciudades registradas(será redirigido a la vista anterior)")
+                  this.props.history.goBack()
+                }
+              }else{
+                alert("No hay Estados registrados(será redirigido a la vista anterior)")
+                this.props.history.goBack()
+              }
         }
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
@@ -247,8 +263,8 @@ class ComponentEstudianteForm extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
-            this.props.history.goBack()
+          alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
+          this.props.history.goBack()
         }
     }
 
@@ -291,7 +307,6 @@ class ComponentEstudianteForm extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
@@ -345,7 +360,6 @@ class ComponentEstudianteForm extends React.Component{
                 }else hash[estudiante.cedula_estudiante]=estudiante;
 
             }
-            console.log("hash estudiante =>>> ",hash)
             this.setState({hashEstudiante:hash})
         })
         .catch(error => {
@@ -414,7 +428,6 @@ class ComponentEstudianteForm extends React.Component{
         return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}/${token}`)
       .then(respuesta=>{
           let respuesta_servidor=respuesta.data
-          console.log(respuesta_servidor)
           if(respuesta_servidor.estado_respuesta=== true){
             return respuesta_servidor.datos[0]
           }
@@ -479,11 +492,15 @@ class ComponentEstudianteForm extends React.Component{
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-        this.setState({
+        if(ciudades.length > 0){
+          this.setState({
             id_estado:input.value,
             ciudades,
             id_ciudad:(ciudades.length===0)?null:ciudades[0].id
-        })
+          })
+        }else{
+          alert("No hay Ciudades registradas")
+        }
     }
     async consultarParroquiasXCiudad(a){
         let input=a.target
@@ -494,12 +511,16 @@ class ComponentEstudianteForm extends React.Component{
         propiedad_estado_3="estatu_parroquia"
         const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-        this.setState({
+        if(parroquias.length > 0){
+          this.setState({
             id_ciudad:input.value,
             parroquias,
             id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
             id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id
-        })
+          })
+        }else{
+          alert("No hay Parroquias registradas")
+        }
     }
 
     validarNumero(a){
@@ -526,11 +547,11 @@ class ComponentEstudianteForm extends React.Component{
 
     longitudCampo(input){
         if(input.name == "id_cedula_escolar"){
-          if(input.value.length <= 11) this.cambiarEstadoDos(input)
+          if(input.value.length <= 8) this.cambiarEstadoDos(input)
         }else if(input.name==="id_cedula"){
           if(input.value.length <= 8) this.cambiarEstadoDos(input)
         }else if(input.name === "codigo_cedula_escolar"){
-          if(input.value.length <= 8) this.cambiarEstadoDos(input)
+          if(input.value.length <= 4) this.cambiarEstadoDos(input)
         }else if(input.name==="telefono_movil" || input.name==="telefono_local"){
           if(input.value.length <= 11) this.cambiarEstadoDos(input)
         }
@@ -563,7 +584,6 @@ class ComponentEstudianteForm extends React.Component{
         if(valor!==""){
             if(this.state.StringExprecion.test(valor)){
                 estado=true
-                console.log("campo nombre "+nombre_campo+" OK")
                 msj_nombres[0] = {mensaje: "",color_texto:"rojo"}
                 msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
             }
@@ -641,7 +661,6 @@ class ComponentEstudianteForm extends React.Component{
             if(!exprecion_2.test(campo)){
                 if(exprecion.test(campo)){
                     estado=true
-                    console.log("campo nombre "+nombre_campo+" OK")
                     mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
                     this.setState({["msj_"+nombre_campo]:mensaje_campo})
                 }
@@ -701,7 +720,6 @@ class ComponentEstudianteForm extends React.Component{
         if(valor !== ""){
             if(this.state.StringExprecion.test(valor)){
                 estado = true
-                console.log(`campo ${name} OK`)
                 msj_procedencia[0]={mensaje:"",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"",color_texto:"rojo"}
@@ -881,7 +899,6 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
-            console.log(estado_validar_formulario)
             const {id}=this.props.match.params
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
@@ -990,7 +1007,7 @@ class ComponentEstudianteForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                            <span className="titulo-form-trabajador">Formulario estudiante</span>
+                            <span className="titulo-form-trabajador">Formulario Estudiante</span>
                         </div>
                     </div>
                     <div className="row">

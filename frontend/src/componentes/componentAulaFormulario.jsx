@@ -39,7 +39,7 @@ class ComponentAulaFormulario extends React.Component{
             nombre_aula:"",
             estatus_aula:"1",
             listaGradosEscolares:[],
-            // 
+            //
             msj_nombre_aula:{
                 mensaje:"",
                 color_texto:""
@@ -96,11 +96,11 @@ class ComponentAulaFormulario extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
-        
+
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -114,7 +114,7 @@ class ComponentAulaFormulario extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -147,8 +147,8 @@ class ComponentAulaFormulario extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -165,12 +165,12 @@ class ComponentAulaFormulario extends React.Component{
         await axiosCustom.get(`configuracion/grado/consultar-todos`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(respuestaServidor)
             if(respuestaServidor.estado_respuesta===true){
                 this.setState({listaGradosEscolares:respuestaServidor.datos})
             }
             else{
-                alert("No hay grados escolares registrados" )
+              alert("No hay Grados Escolares registrados(será redirigido a la vista anterior)")
+              this.props.history.goBack()
             }
 
         })
@@ -188,7 +188,7 @@ class ComponentAulaFormulario extends React.Component{
             json[next.value[0]]=next.value[1]
             next=iterador.next()
         }
-        return json   
+        return json
     }
 
     async consultarAula(id){
@@ -295,6 +295,10 @@ class ComponentAulaFormulario extends React.Component{
                         alerta.estado=respuestaServidor.estado_respuesta
                     }
                     this.setState({alerta})
+                    this.setState({
+                      nombre_aula:"",
+                      estatus_aula:"1",
+                    })
                 })
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
@@ -323,6 +327,10 @@ class ComponentAulaFormulario extends React.Component{
                         alerta.estado=respuestaServidor.estado_respuesta
                     }
                     this.setState({alerta})
+                    this.setState({
+                      nombre_aula:"",
+                      estatus_aula:"1",
+                    })
                 })
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
@@ -346,7 +354,7 @@ class ComponentAulaFormulario extends React.Component{
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_aula">
@@ -418,7 +426,7 @@ class ComponentAulaFormulario extends React.Component{
                     <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
@@ -426,21 +434,21 @@ class ComponentAulaFormulario extends React.Component{
                                     />
                                 }
                                 {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
                                     value="Actualizar"
                                     eventoPadre={this.operacion}
-                                    />   
+                                    />
                                 }
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
                 </div>
@@ -448,15 +456,15 @@ class ComponentAulaFormulario extends React.Component{
         )
         return(
             <div className="component_aula_formulario">
-                    
+
                 <ComponentDashboard
                 componente={jsx}
                 modulo={this.state.modulo}
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-            
-            
+
+
             </div>
         )
     }
