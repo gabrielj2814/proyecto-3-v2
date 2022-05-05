@@ -41,6 +41,8 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     this.obtenerDatosDeLasesion = this.obtenerDatosDeLasesion.bind(this)
     this.AsistenciaDeHoy = this.AsistenciaDeHoy.bind(this)
     this.updateObjeto = this.updateObjeto.bind(this)
+    this.mostrarModalPdf = this.mostrarModalPdf.bind(this)
+    this.generarPdf = this.generarPdf.bind(this)
 
     this.state={
         // ------------------
@@ -147,6 +149,8 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
       .then(async respuesta=>{
           let respuesta_servior = respuesta.data
           if(respuesta_servior.usuario){
+            this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
+            this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
             estado = await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
           }
       })
@@ -342,9 +346,146 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
 
   regresar(){ this.props.history.push("/dashboard/transaccion/asistencia_estudiante"); }
 
+  mostrarModalPdf(a){
+    $("#modalPdf").modal("show")
+  }
+
+  validarRangoFechas(){
+    let estadoValidacion=false
+    let $fechaInicioSemana=document.getElementById("fechaInicioSemana")
+    let $fechaFinalSemana=document.getElementById("fechaFinalSemana")
+    let diaDeSemanaInicio=Moment($fechaInicioSemana.value,"YYYY-MM-DD").format("d")
+    let diaDeSemanaFinal=Moment($fechaFinalSemana.value,"YYYY-MM-DD").format("d")
+    let fechaInicio=Moment($fechaInicioSemana.value,"YYYY-MM-DD").format("YYYY-MM-DD")
+    let fechaFinal=Moment($fechaFinalSemana.value,"YYYY-MM-DD").format("YYYY-MM-DD")
+    let listaFechaTmp=[]
+    let dias=5
+    if(diaDeSemanaInicio==="1" && diaDeSemanaFinal==="5"){
+      if(!Moment(fechaInicio).isSameOrAfter(fechaFinal)){
+        let contador=0
+        while(contador<dias){
+          let fechaTmp=Moment($fechaInicioSemana.value,"YYYY-MM-DD").add(contador,"days").format("YYYY-MM-DD")
+          if(Moment(fechaTmp).isSame(fechaFinal)){
+            listaFechaTmp.push(fechaTmp)
+            break
+          }
+          else{
+            listaFechaTmp.push(fechaTmp)
+          }
+          contador++
+        }
+        if(listaFechaTmp.length===dias && Moment(listaFechaTmp[listaFechaTmp.length-1]).isSame(fechaFinal)){
+          estadoValidacion=true
+        }
+        else{
+          alert("se contaron "+dias+" dias a partir de la fecha de inicio y no se llego a la fecha final lo mas provable es que no las dos fechas no esten en la misma semana")
+          listaFechaTmp=[]
+        }
+      }
+      else{
+        alert("la fecha de inicio es igual o posterio a la fecha final por ese motivo no se puede general el reporte la fecha de inicio tiene que ser anterio a la fecha final")
+      }
+    }
+    else{
+      alert("la fecha de incio tiene que ser un lunes y la fecha final tiene que ser un viernes")
+    }
+    return listaFechaTmp
+  }
+
+  generarPdf(a){
+    let listaDeFechas=this.validarRangoFechas()
+    let $filaVerPdf=document.getElementById("filaVerPdf")
+    if(listaDeFechas.length>0){
+      
+      // let datos=[]
+
+      // datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
+      // datos.push({name:"cedula_usuario",value:this.state.id_cedula})
+      // datos.push({name:"listaFecha",value:listaDeFechas})
+      let listaEstudiante=[]
+      for(let estudiante in this.state.hashListaEstudiantes){
+        listaEstudiante.push(this.state.hashListaEstudiantes[estudiante])
+      }
+      let datos={
+        nombre_usuario:this.state.nombre_usuario,
+        cedula_usuario:this.state.id_cedula,
+        listaFecha:listaDeFechas,
+        nombre_usuario:this.state.nombre_usuario,
+        estudiantes:listaEstudiante
+      }
+      // datos.push({name:"listaEstudiante",value:listaEstudiante})
+
+      console.log(datos)
+      $.ajax({
+        url: `http://${servidor.ipServidor}:${servidor.servidorApache.puerto}/proyecto/backend/controlador_php/controlador_asistencia_semanal_estudiante.php`,
+        type:"post",
+        data:datos,
+        success: function(respuesta) {
+            console.log(respuesta)
+            let json=JSON.parse(respuesta)
+            console.log("datos reporte martricula =>>>> ",json)
+            if(json.nombrePdf!=="false"){
+                $filaVerPdf.classList.remove("ocultarFormulario")
+                document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+            }
+            else{
+                $filaVerPdf.classList.add("ocultarFormulario")
+                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+            }
+        },
+        error: function() {
+          //   alert("error")
+          // $filaVerPdf.classList.add("ocultarFormulario")
+        }
+      });
+    }
+    else{
+      $filaVerPdf.classList.add("ocultarFormulario")
+    }
+    
+  }
+
+
   render(){
     var jsx_asistencia_form=(
         <div className="row justify-content-center">
+          <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                              <div className="row justify-content-center mb-3">
+                                  <div className='col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4'>
+                                    <div className='form-group'>
+                                      <label>Fecha Inicio</label>
+                                      <input type='date' id='fechaInicioSemana' name='fechaInicioSemana' className='form-control'/>
+                                    </div>
+                                  </div>
+                                  <div className='col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4'>
+                                    <div className='form-group'>
+                                      <label>Fecha Final</label>
+                                      <input type='date' id='fechaFinalSemana' name='fechaFinalSemana' className='form-control'/>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
+                                  </div>
+                              </div>
+
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
 
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                 {this.state.mensaje.texto!=="" &&
@@ -367,13 +508,18 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
                     </div>
                 </div>
                 <div className="row">
-                    <div className="col-auto">
+                    <div className="col-auto mb-4">
                         <ButtonIcon
                         clasesBoton="btn btn-outline-success"
                         icon="icon-plus"
                         id="icon-plus"
                         eventoPadre={this.agregar}
                         />
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-auto">
+                      <button className='btn btn-danger' onClick={this.mostrarModalPdf}>PDF</button>
                     </div>
                 </div>
                 <form id="form_trabajador">
