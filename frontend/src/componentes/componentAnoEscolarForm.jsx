@@ -124,7 +124,7 @@ class ComponentAnoEscolarForm extends React.Component{
 
         if(AnoActivo.estado_respuesta){
           if(AnoPlanificado.estado_respuesta){
-            mensaje.texto = "ya existe un año escolar en planificación";
+            mensaje.texto = "Ya existe un año escolar en planificación";
             mensaje.estado = "404";
             return this.props.history.push(`/dashboard/configuracion/ano-escolar${JSON.stringify(mensaje)}`)
           }
@@ -333,6 +333,21 @@ class ComponentAnoEscolarForm extends React.Component{
       let input=a.target
       this.cambiarEstado(a)
       let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
+      if(a.target.name === "fecha_inicio_ano_escolar"){
+
+        if(this.props.match.operacion === "registrar"){
+          this.setState({
+            fecha_maxima: Moment(a.target.value).add(1,'y').format("YYYY-MM-DD"),
+          })
+        }
+
+        if(this.props.match.operacion === "actualizar"){
+          this.setState({
+            fecha_maxima: Moment(a.target.value).add(4,'M').format("YYYY-MM-DD"),
+          })
+        }
+
+      }
   }
 
   async agregar(){
@@ -355,6 +370,38 @@ class ComponentAnoEscolarForm extends React.Component{
       msj_fecha_cierre_ano_escolar: mensaje_campo,
       msj_estatus_ano_escolar: mensaje_campo,
     })
+    let AnoActivo = await this.ConsultarAnoActivo();
+    let fecha_actual_servidor = await this.ConsultarFechaActual();
+    let AnoPlanificado = await this.AnoEnPlanificacion();
+
+    if(AnoActivo.estado_respuesta){
+      if(AnoPlanificado.estado_respuesta){
+        mensaje.texto = "Ya existe un año escolar en planificación";
+        mensaje.estado = "404";
+        return this.props.history.push(`/dashboard/configuracion/ano-escolar${JSON.stringify(mensaje)}`)
+      }
+      this.setState({
+        ano_desde: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY"),
+        ano_hasta: Moment(fecha_actual_servidor.datos).add(2,'y').format("YYYY"),
+        fecha_inicio_ano_escolar: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
+        fecha_cierre_ano_escolar: Moment(fecha_actual_servidor.datos).add(2,'y').format("YYYY-MM-DD"),
+        fecha_actual: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
+        fecha_maxima: Moment(fecha_actual_servidor.datos).add(2,'y').format("YYYY-MM-DD"),
+        estatus_ano_escolar: "0",
+        seguimiento_ano_escolar: "2",
+      });
+    }else{
+      this.setState({
+        ano_desde: Moment(fecha_actual_servidor.datos).format("YYYY"),
+        ano_hasta: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY"),
+        fecha_inicio_ano_escolar: Moment(fecha_actual_servidor.datos).format("YYYY-MM-DD"),
+        fecha_cierre_ano_escolar: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
+        fecha_actual: fecha_actual_servidor.datos,
+        fecha_maxima: Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD"),
+        estatus_ano_escolar: "1",
+        seguimiento_ano_escolar: "1",
+      });
+    }
     this.props.history.push("/dashboard/configuracion/ano-escolar/registrar")
   }
 
@@ -431,7 +478,10 @@ class ComponentAnoEscolarForm extends React.Component{
 
     if(operacion === "actualizar"){
       fecha_maxima.add(4,'M');
-      this.setState({ano_hasta: Moment(fecha_cierre).format("YYYY")});
+      this.setState({
+        ano_hasta: Moment(fecha_cierre).format("YYYY"),
+        fecha_maxima: Moment(fecha_maxima).format("YYYY-MM-DD")
+      });
     }
 
     if(fecha_inicio.isBefore(fecha_minima)){
@@ -638,12 +688,12 @@ class ComponentAnoEscolarForm extends React.Component{
                         <div className="row justify-content-center">
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ano_desde[0]}
-                              nombreCampo="Inicio año:" activo="si" type="text" value={this.state.ano_desde}
+                              nombreCampo="Inicio año:" activo="no" type="text" value={this.state.ano_desde}
                               name="ano_desde" id="ano_desde" placeholder="Desde" eventoPadre={this.validarNumero}
                             />
                           <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                               clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_ano_hasta[0]}
-                              nombreCampo="Final año:" activo="si" type="text" value={this.state.ano_hasta}
+                              nombreCampo="Final año:" activo="no" type="text" value={this.state.ano_hasta}
                               name="ano_hasta" id="ano_hasta" placeholder="Hasta" eventoPadre={this.validarNumero}
                             />
                         </div>

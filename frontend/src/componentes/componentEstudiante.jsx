@@ -291,17 +291,6 @@ class ComponenteEstudiante extends React.Component{
                               />
                             </td>
                          }
-                         {!estudiante.vacio &&
-                           <td>
-                             <ButtonIcon
-                               clasesBoton="btn btn-secondary btn-block"
-                               value={estudiante.id_estudiante}
-                               id={estudiante.id_estudiante}
-                               eventoPadre={this.consultarElementoTabla}
-                               icon="icon-search"
-                              />
-                           </td>
-                         }
                     </tr>
                     )
                 })}

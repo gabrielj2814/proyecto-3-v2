@@ -21,7 +21,6 @@ const axiosCustom=axios.create({
 
 class ComponenrGradoFormulario extends React.Component{
 
-
     constructor(){
         super()
         this.mostrarModulo=this.mostrarModulo.bind(this)
@@ -37,7 +36,7 @@ class ComponenrGradoFormulario extends React.Component{
             id_grado:"",
             numero_grado:"",
             estatus_grado:"1",
-            // 
+            //
             msj_numero_grado:{
                 mensaje:"",
                 color_texto:""
@@ -96,10 +95,10 @@ class ComponenrGradoFormulario extends React.Component{
             }
          }
          else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
           this.props.history.goBack()
          }
-        
+
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -124,21 +123,18 @@ class ComponenrGradoFormulario extends React.Component{
         axiosCustom.get(`configuracion/grado/consultar/${id}/${token}`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(respuestaServidor)
             if(respuestaServidor.estado_respuesta===true){
                 this.setState(respuestaServidor.datos[0])
-
             }
             else{
                 alert("este registro no exite")
             }
-
         })
         .catch(error => {
             console.error(`error de la peticion axios =>>> ${error}`)
         })
     }
-    
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axiosCustom.get(`configuracion/acceso/consultar/${idPerfil}`)
@@ -161,13 +157,10 @@ class ComponenrGradoFormulario extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
         })
         .catch(error =>  {
             console.log(error)
@@ -205,7 +198,7 @@ class ComponenrGradoFormulario extends React.Component{
             json[next.value[0]]=next.value[1]
             next=iterador.next()
         }
-        return json   
+        return json
     }
 
 
@@ -225,7 +218,6 @@ class ComponenrGradoFormulario extends React.Component{
             .then(respuesta => {
                 let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
                 let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
                 alerta.color=respuestaServidor.color_alerta
                 alerta.mensaje=respuestaServidor.mensaje
                 if(respuestaServidor.estado_respuesta===false){
@@ -235,6 +227,11 @@ class ComponenrGradoFormulario extends React.Component{
                     alerta.estado=respuestaServidor.estado_respuesta
                 }
                 this.setState({alerta})
+                this.setState({
+                  id_grado:"",
+                  numero_grado:"",
+                  estatus_grado:"1",
+                })
             })
             .catch(error => {
                 console.error(`error de la peticion axios =>>> ${error}`)
@@ -255,7 +252,6 @@ class ComponenrGradoFormulario extends React.Component{
             .then(respuesta => {
                 let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
                 let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                console.log(respuestaServidor)
                 alerta.color=respuestaServidor.color_alerta
                 alerta.mensaje=respuestaServidor.mensaje
                 if(respuestaServidor.estado_respuesta===false){
@@ -265,6 +261,11 @@ class ComponenrGradoFormulario extends React.Component{
                     alerta.estado=respuestaServidor.estado_respuesta
                 }
                 this.setState({alerta})
+                this.setState({
+                  id_grado:"",
+                  numero_grado:"",
+                  estatus_grado:"1",
+                })
             })
             .catch(error => {
                 console.error(`error de la peticion axios =>>> ${error}`)
@@ -276,9 +277,6 @@ class ComponenrGradoFormulario extends React.Component{
         this.props.history.push(`/dashboard/configuracion/grado`)
     }
 
-
-
-
     render(){
         const jsx=(
             <div className="row justify-content-center">
@@ -286,7 +284,7 @@ class ComponenrGradoFormulario extends React.Component{
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_grado">
@@ -346,7 +344,7 @@ class ComponenrGradoFormulario extends React.Component{
                     <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.match.params.operacion==="registrar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
                                     value="Registrar"
@@ -354,21 +352,21 @@ class ComponenrGradoFormulario extends React.Component{
                                     />
                                 }
                                 {this.props.match.params.operacion==="actualizar" &&
-                                    <InputButton 
+                                    <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"
                                     value="Actualizar"
                                     eventoPadre={this.operacion}
-                                    />   
+                                    />
                                 }
                             </div>
                             <div className="col-auto">
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
                                 eventoPadre={this.regresar}
-                                />   
+                                />
                             </div>
                         </div>
                 </div>
@@ -376,15 +374,15 @@ class ComponenrGradoFormulario extends React.Component{
         )
         return(
             <div className="component_grado_formulario">
-                    
+
                 <ComponentDashboard
                 componente={jsx}
                 modulo={this.state.modulo}
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-            
-            
+
+
             </div>
         )
     }

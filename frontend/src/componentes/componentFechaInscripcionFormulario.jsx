@@ -104,14 +104,19 @@ class ComponentFechaInscripcionFormulario extends React.Component{
             let respuestaAnoActivo=await this.consultarAnoActivo();
             let respuestaAnoSiguiente=await this.consultarAnoSiguiente();
             let datos=[...respuestaAnoActivo,...respuestaAnoSiguiente]
-            this.setState({listaAnosEscolares:datos})
-            if(operacion==="actualizar"){
+            if(datos.length === 0){
+              alert("No hay registros de Año Escolar(será redirigido a la vista anterior)")
+              this.props.history.goBack()
+            }else{
+              this.setState({listaAnosEscolares:datos})
+              if(operacion==="actualizar"){
                 const {id}=this.props.match.params
                 await this.consultarFechaInscripcion(id);
+              }
             }
          }
          else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
           this.props.history.goBack()
          }
     }
@@ -132,7 +137,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axiosCustom.get(`configuracion/acceso/consultar/${idPerfil}`)
@@ -155,16 +160,15 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                     modulosSistema[medulo.modulo_principal][medulo.sub_modulo]=true
                 }
             }
-            console.log(modulosSistema)
             if(modulosSistema[modulo][subModulo]){
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -173,7 +177,6 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         await axiosCustom.get(`configuracion/fecha-inscripcion/consultar/${id}`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("datos =>>>>>>>>>>>>>>>",respuestaServidor)
             this.setState({
                 id_fecha_incripcion:respuestaServidor.datos.id_fecha_incripcion,
                 fecha_incripcion_desde:moment(respuestaServidor.datos.fecha_incripcion_desde).format("YYYY-MM-DD"),
@@ -194,7 +197,6 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-activo`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(respuestaServidor)
             datos=respuestaServidor.datos
         })
         .catch(error => {
@@ -202,7 +204,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         })
         return datos
     }
-    
+
     async consultarAnoSiguiente(){
         let datos=[]
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
@@ -220,7 +222,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         var input=a.target;
         this.setState({[input.name]:input.value})
     }
-    
+
     validarFechaInicioInscripcio(){
             let msj_fecha_incripcion_desde=JSON.parse(JSON.stringify(this.state.msj_fecha_incripcion_hasta))
             let estado=false;
@@ -360,12 +362,10 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                     fecha_inscripcion:datosFormatiados,
                     token
                 }
-                console.log(datosFechaInscripcion)
                 await axiosCustom.post("configuracion/fecha-inscripcion/registrar",datosFechaInscripcion)
                 .then(respuesta => {
                     let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                    console.log(respuestaServidor)
                     alerta.color=respuestaServidor.color_alerta
                     alerta.mensaje=respuestaServidor.mensaje
                     if(respuestaServidor.estado_respuesta===false){
@@ -379,7 +379,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
                 })
-    
+
             }
             else if(operacion==="actualizar"){
                 // alert("actualizando")
@@ -395,7 +395,6 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 .then(respuesta => {
                     let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
-                    console.log(respuestaServidor)
                     alerta.color=respuestaServidor.color_alerta
                     alerta.mensaje=respuestaServidor.mensaje
                     if(respuestaServidor.estado_respuesta===false){
@@ -424,7 +423,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
             json[next.value[0]]=next.value[1]
             next=iterador.next()
         }
-        return json   
+        return json
     }
 
     regresar(){
@@ -433,7 +432,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
 
 
     render(){
-        const jsx=( 
+        const jsx=(
             <div className="row justify-content-center">
                 {this.state.alerta.estado===true &&
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
@@ -447,9 +446,9 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-fecha-inscripcion">
                             <span className="titulo-form-fecha-inscripcion">Formulario Fecha Inscripción</span>
                         </div>
-                    </div>	
-                    <form id="formularioFechaInscripcion" >	
-                        <div className="row justify-content-center">	 
+                    </div>
+                    <form id="formularioFechaInscripcion" >
+                        <div className="row justify-content-center">
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
@@ -474,7 +473,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                             id="fecha_incripcion_desde"
                             eventoPadre={this.cambiarEstado}
                             />
-                            
+
                             <ComponentFormDate
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             nombreCampoDate="Fecha Fin Inscripción:"
@@ -486,7 +485,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                             id="fecha_incripcion_hasta"
                             eventoPadre={this.cambiarEstado}
                             />
-                            
+
 						</div>
                         <div className="row justify-content-center">
                         <ComponentFormDate
@@ -518,7 +517,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                     <div className="row justify-content-center">
                         <div className="col-auto">
                             {this.props.match.params.operacion==="registrar" &&
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-primary"
                                 id="boton-registrar"
                                 value="Registrar"
@@ -526,21 +525,21 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                                 />
                             }
                             {this.props.match.params.operacion==="actualizar" &&
-                                <InputButton 
+                                <InputButton
                                 clasesBoton="btn btn-warning"
                                 id="boton-actualizar"
                                 value="Actualizar"
                                 eventoPadre={this.operacion}
-                                />   
+                                />
                             }
                         </div>
                         <div className="col-auto">
-                            <InputButton 
+                            <InputButton
                             clasesBoton="btn btn-danger"
                             id="boton-cancelar"
                             value="Cancelar"
                             eventoPadre={this.regresar}
-                            />   
+                            />
                         </div>
                     </div>
 				</div>
@@ -548,15 +547,15 @@ class ComponentFechaInscripcionFormulario extends React.Component{
         )
         return(
             <div className="component_fecha_inscripcion_formulario">
-                    
+
                     <ComponentDashboard
                     componente={jsx}
                     modulo={this.state.modulo}
                     eventoPadreMenu={this.mostrarModulo}
                     estado_menu={this.state.estado_menu}
                     />
-                
-                
+
+
             </div>
         )
     }
