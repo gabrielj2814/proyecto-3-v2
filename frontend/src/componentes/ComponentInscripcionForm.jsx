@@ -744,7 +744,7 @@ class ComponentInscripcionForm extends React.Component{
                         <span className="titulo-form-trabajador">Formulario de Inscripción Estudiante</span>
                     </div>
                 </div>
-                <div className="row"
+                <div className="row">
                     <div className="col-auto">
                         <ButtonIcon
                         clasesBoton="btn btn-outline-success"

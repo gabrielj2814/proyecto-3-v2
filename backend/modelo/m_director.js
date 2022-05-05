@@ -27,7 +27,7 @@ class ModuloDirector extends DriverPostgre{
   }
 
   async consultarTodos() {
-    const SQL = "SELECT * FROM tdirector"
+    const SQL = "SELECT tdirector.*,ttrabajador.nombres,ttrabajador.apellidos FROM tdirector,ttrabajador WHERE ttrabajador.id_cedula=tdirector.id_cedula"
 
     return await this.query(SQL);
   }
@@ -39,7 +39,7 @@ class ModuloDirector extends DriverPostgre{
   }
 
   async actualizar(){
-    const SQL = `UPDATE tdirector SET id_cedula= '${this.id_cedula}', estatus_director = '${this.estatus_director}' 
+    const SQL = `UPDATE tdirector SET id_cedula= '${this.id_cedula}', estatus_director = '${this.estatus_director}'
               WHERE id_director=${this.id_director}
     `
 
