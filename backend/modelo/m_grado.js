@@ -34,6 +34,11 @@ class ModeloGrado extends DriverPostgre{
         return await this.query(SQL)
     }
 
+    async consultarGrado(){
+        const SQL = `SELECT * FROM tgrado WHERE numero_grado='${this.numero_grado}';`
+        return await this.query(SQL)
+    }
+
     async actualizar(){
         const SQL=`UPDATE tgrado SET 
         numero_grado=${this.numero_grado},
