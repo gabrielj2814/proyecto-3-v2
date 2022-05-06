@@ -726,28 +726,28 @@ class ComponentRetiroForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                        clasesCampo="form-control font-weight-bold" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                         nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.cedula_escolar}
                         name="cedula_escolar" id="cedula_escolar" placeholder="Cédula escolar" eventoPadre={this.BuscarEstudiante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                          <label>Nombre del estudiante: {this.state.nombre_estudiante}</label><br></br>
-                          <label>Apellido del estudiante: {this.state.apellido_estudiante}</label>
+                <label>Nombre del estudiante: <span className="font-weight-bold">{this.state.nombre_estudiante}</span></label><br></br>
+                <label>Apellido del estudiante: <span className="font-weight-bold">{this.state.apellido_estudiante}</span></label>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                    clasesCampo="form-control font-weight-bold" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                       nombreCampo="Grado del estudiante:" activo="no" type="text" value={this.state.id_grado}
                       name="id_grado" id="id_grado" placeholder="Grado del estudiante" eventoPadre={this.cambiarEstado}
                     />
                   <ComponentFormCampo clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                      clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                    clasesCampo="form-control font-weight-bold" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                       nombreCampo="Aula del estudiante:" activo="no" type="text" value={this.state.nombre_aula}
                       name="nombre_aula" id="nombre_aula" placeholder="Aula del estudiante" eventoPadre={this.cambiarEstado}
                     />
                   <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                      clasesCampo="form-control font-weight-bold" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                         nombreCampo="Datos del docente a cargo:" activo="no" type="text" value={this.state.datos_docente}
                         name="docente" id="docente" placeholder="Datos del docente" eventoPadre={this.cambiarEstado}
                       />
@@ -763,7 +763,7 @@ class ComponentRetiroForm extends React.Component{
                       obligatorio="si"
                       mensaje={this.state.msj_cedula_representante_solicitud}
                       nombreCampoSelect="Representante:"
-                      clasesSelect="custom-select"
+                      clasesSelect="custom-select font-weight-bold"
                       name="cedula_representante_solicitud"
                       id="cedula_representante_solicitud"
                       eventoPadre={this.buscarRepresentante}
@@ -771,8 +771,8 @@ class ComponentRetiroForm extends React.Component{
                       option={this.state.selectRepresentantes}
                     />
                     <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                      <label>Nombre del Representante: {this.state.nombre_representante}</label><br></br>
-                      <label>Apellido del Representante: {this.state.apellido_representante}</label>
+                <label>Nombre del Representante: <span className="font-weight-bold">{this.state.nombre_representante}</span></label><br></br>
+                <label>Apellido del Representante: <span className="font-weight-bold">{this.state.apellido_representante}</span></label>
                     </div>
                   </div>
 
@@ -798,7 +798,7 @@ class ComponentRetiroForm extends React.Component{
                     />
                   }
                   </div>
-                    <div className="row justify-content-center">
+                    <div className="row justify-content-center mt-4">
                         <div className="col-auto">
                         {this.props.match.params.operacion === "registrar" &&
                           <InputButton

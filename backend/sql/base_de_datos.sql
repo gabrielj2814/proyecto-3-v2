@@ -534,7 +534,7 @@ CREATE TABLE tinscripcion(
     id_asignacion_aula_profesor INTEGER NOT NULL,
     fecha_inscripcion DATE NOT NULL,
     estatus_inscripcion character(1) NOT NULL, --ESTATUS CON LETRAS I -> inscripto ,R -> retirado, C => culmino,T => termino la mierda 
-    inscripcio_regular character(1) NOT NULL,
+    inscripcion_regular character(1) NOT NULL,
     constraint PK_id_inscripcion primary key(id_inscripcion),
     constraint FK_id_estudiante_tinscripcion foreign key(id_estudiante) references testudiante(id_estudiante) on update cascade on delete cascade,
     constraint FK_id_asignacion_representante_estudiante_tinscripcion foreign key(id_asignacion_representante_estudiante) references tasignacion_representante_estudiante(id_asignacion_representante_estudiante) on update cascade on delete cascade,
