@@ -11,6 +11,7 @@ router.post("/registrar", controladorDirector.registrar_director, bitacorra.capt
 router.get("/consultar-todos", controladorDirector.consultarTodos)// consultar todos
 router.get("/consultar/:id/:token", controladorDirector.consultar, bitacorra.capturaDatos)// consulta especifica
 router.put("/actualizar/:id", controladorDirector.actualizar, bitacorra.capturaDatos)// actualizar
+router.get("/consultar-patron/:patron", controladorDirector.consultarpatron)
 
 
 

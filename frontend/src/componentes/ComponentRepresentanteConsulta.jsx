@@ -144,7 +144,7 @@ class ComponentRepresentanteConsulta extends React.Component{
             id_cedula_representante : results.id_cedula_representante,
             nombre_representante: results.nombres_representante,
             apellidos_representante: results.apellidos_representante,
-            estatus_representante:(results.estatus_representante === "1") ? "Activo" : "Innactivo",
+            estatus_representante:(results.estatus_representante === "1") ? "Activo" : "Inactivo",
             fecha_nacimiento_representante: Moment(results.fecha_nacimiento_representante).format("DD/MM/YYYY"),
             nivel_instruccion_representante: results.nivel_instruccion_representante,
             ocupacion_representante: results.ocupacion_representante,

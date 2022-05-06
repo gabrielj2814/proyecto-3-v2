@@ -216,6 +216,7 @@ class ComponentMultiStepForm extends React.Component{
             <ComponentMultiStepFormEstudiante
                 operacion="registrar"
                 next={this.next}
+                return={this.return_index}
                 state={this.StatePadre}
                 obligatorio={true}
             />

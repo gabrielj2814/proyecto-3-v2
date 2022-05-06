@@ -1246,7 +1246,7 @@ class ComponentTrabajadorForm extends React.Component{
                             extra="custom-control-inline"
                             nombreCampoRadio="Estatus:"
                             name="estatu_trabajador"
-                            nombreLabelRadioA="Activó"
+                            nombreLabelRadioA="Activo"
                             idRadioA="activotrabajadorA"
                             checkedRadioA={this.state.estatu_trabajador}
                             valueRadioA="1"

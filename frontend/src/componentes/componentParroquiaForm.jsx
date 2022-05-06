@@ -565,7 +565,7 @@ class ComponentParroquiaForm extends React.Component{
                             <ComponentFormRadioState clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                               extra="custom-control-inline" nombreCampoRadio="Estatus de la parroquia:" name="estatu_parroquia"
                               nombreLabelRadioA="Activo" idRadioA="activo" checkedRadioA={this.state.estatu_parroquia}
-                              valueRadioA="1" nombreLabelRadioB="Innactivo" idRadioB="innactivo"
+                              valueRadioA="1" nombreLabelRadioB="Inactivo" idRadioB="innactivo"
                               valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.estatu_parroquia}
                             />
                         </div>

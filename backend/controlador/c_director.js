@@ -72,6 +72,29 @@ controladorDirector.consultar = async (req, res, next) => {
   }
 }
 
+controladorDirector.consultarpatron = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  const ModeloDirector = require("../modelo/m_director");
+  const patron = req.params.patron
+  let modeloDirector = new ModeloDirector()
+  let resultDirector = await modeloDirector.consultarPatron(patron)
+
+  if (resultDirector.rowCount > 0) {
+    respuesta_api.mensaje = "Consulta completada"
+    respuesta_api.datos = resultDirector.rows
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "No se Ha encontrado registro en la base de datos"
+    respuesta_api.estado_respuesta = false
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 controladorDirector.actualizar = async (req, res, next) => {
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const ModeloDirector = require("../modelo/m_director")

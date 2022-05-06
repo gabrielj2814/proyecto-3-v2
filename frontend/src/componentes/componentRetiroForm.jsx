@@ -232,7 +232,7 @@ class ComponentRetiroForm extends React.Component{
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
+      if(input.value.length <= 13) this.cambiarEstadoDos(input)
     }
   }
 

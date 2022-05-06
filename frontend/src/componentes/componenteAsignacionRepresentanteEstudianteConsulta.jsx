@@ -171,7 +171,7 @@ class ComponentAsignacionRepresentanteEstudianteConsulta extends React.Component
           tipo_representante: this.state.tipos_representantes.filter( e => e.id === respuesta_servidor.datos[0].tipo_representante )[0].descripcion,
           parentesco: respuesta_servidor.datos[0].parentesco,
           numero_representante: respuesta_servidor.datos[0].numero_representante,
-          estatus_asignacion_representante_estudiante: (respuesta_servidor.datos[0].estatus_asignacion_representante_estudiante === "1") ? "Activo" : "Innactivo",
+          estatus_asignacion_representante_estudiante: (respuesta_servidor.datos[0].estatus_asignacion_representante_estudiante === "1") ? "Activo" : "Inactivo",
         })
       }
       else if(respuesta_servidor.estado_respuesta===false){

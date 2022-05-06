@@ -270,7 +270,7 @@ class ComponentEnfermedades extends React.Component{
                         <tr key={index}>
                           <td>{enfermedad.id_enfermedad}</td>
                           <td>{enfermedad.nombre_enfermedad}</td>
-                          <td>{ (enfermedad.staus_enfermedad === '1') ? "Activo" : "Innactivo" }</td>
+                          <td>{ (enfermedad.staus_enfermedad === '1') ? "Activo" : "Inactivo" }</td>
                          {!enfermedad.vacio &&
                            <td>
                              <ButtonIcon
