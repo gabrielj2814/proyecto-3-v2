@@ -577,17 +577,6 @@ class ComponentInscripcionForm extends React.Component{
       }else return {estado: false}
   }
 
-  validarFormularioActuazliar(){
-    const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
-    validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
-    validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-      validar_parentesco = this.validarCampo('parentesco'), validaEstadoInscripcion = this.validarRadio("inscripcion_regular");;
-
-    if (validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco && validaEstadoInscripcion){
-      return {estado: true}
-    }else return {estado: false}
-  }
-
   operacion(){
       $(".columna-modulo").animate({
           scrollTop: 0
@@ -621,30 +610,6 @@ class ComponentInscripcionForm extends React.Component{
                       mensaje.texto="No se puedo conectar con el servidor"
                       mensaje.estado=false
                       console.error(error)
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-              })
-          }
-      }
-      else if(operacion==="actualizar"){
-          const estado_validar_formulario=this.validarFormularioActuazliar()
-          const {id}=this.props.match.params
-          if(estado_validar_formulario.estado){
-              this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                  const mensaje =this.state.mensaje
-                  var respuesta_servidor=""
-                  axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/actualizar/${id}`,objeto)
-                  .then(respuesta=>{
-                      respuesta_servidor=respuesta.data
-                      mensaje.texto=respuesta_servidor.mensaje
-                      mensaje.estado=respuesta_servidor.estado_respuesta
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
-                  .catch(error=>{
-                      mensaje.texto="No se puedo conectar con el servidor"
-                      mensaje.estado=false
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
                   })

@@ -111,8 +111,6 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           apellido_estudiante: datos.apellidos_estudiante,
           apellido_representante: datos.apellidos_representante,
         })
-
-        document.getElementById('tipo_representante').value = datos.tipo_representante
       }
     }
   }
@@ -213,10 +211,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   }
 
   async consultarRegistros(id){
-    let mensaje =""
+    let mensaje ={}
     const token=localStorage.getItem('usuario')
     let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
-    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar/${id}`)
+    return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar/${id}/${token}`)
     .then( respuesta => {
       let respuesta_servidor=respuesta.data
       if(respuesta_servidor.estado_respuesta=== true){
@@ -290,7 +288,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
+      if(input.value.length <= 13) this.cambiarEstadoDos(input)
     }
   }
 
@@ -409,9 +407,9 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
     let msj = this.state["msj_"+name]
 
     if(valor !== "") msj[0] = {mensaje: "", color_texto:"rojo"}
-    else msj[0] = {mensaje: "Debe de seleccionar una opcion", color_texto:"rojo"}
+    else msj[0] = {mensaje: "Debe de seleccionar una opción", color_texto:"rojo"}
 
-    if(name === "tipo_representante"){
+    if(name === "tipo_representante" && msj[0].mensaje !== ""){
       alert(msj[0].mensaje)
       document.getElementById("Mama1").focus();
     }
@@ -610,7 +608,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                 <div className="row justify-content-center">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                        <span className="titulo-form-trabajador">Formulario de asignación representante-estudiante</span>
+                        <span className="titulo-form-trabajador">Formulario de Asignación Representante-Estudiante</span>
                     </div>
                 </div>
                 <div className="row">
@@ -631,8 +629,8 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                         name="id_cedula_representante" id="id_cedula_representante" placeholder="Cédula del representante" eventoPadre={this.buscarRepresentante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                          <label>Nombre del representante: {this.state.nombre_representante}</label><br></br>
-                          <label>Apellido del representante: {this.state.apellido_representante}</label>
+                <label>Nombre del representante: <span className="font-weight-bold">{this.state.nombre_representante}</span></label><br></br>
+                <label>Apellido del representante: <span className="font-weight-bold">{this.state.apellido_representante}</span></label>
                       </div>
                   </div>
                   <div className="row mt-3">
@@ -647,8 +645,8 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                         name="cedula_escolar" id="cedula_escolar" placeholder="Cédula escolar del estudiante" eventoPadre={this.BuscarEstudiante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                        <label>Nombre del estudiante: {this.state.nombre_estudiante}</label><br></br>
-                        <label>Apellido del estudiante: {this.state.apellido_estudiante}</label>
+                <label>Nombre del estudiante: <span className="font-weight-bold">{this.state.nombre_estudiante}</span></label><br></br>
+                <label>Apellido del estudiante: <span className="font-weight-bold">{this.state.apellido_estudiante}</span></label>
                       </div>
                   </div>
                   <div className="row mt-3">
@@ -663,7 +661,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                           extra="custom-control-inline"
                           nombreCampoRadio="Seleccione el tipo de representante:"
                           name="tipo_representante"
-                          nombreLabelRadio={["Mama","Papa","Otro representante"]}
+                          nombreLabelRadio={["Mamá","Papá","Otro representante"]}
                           checkedRadio={this.state.tipo_representante}
 
                           idRadio={["Mama1","Papa2","Otro3"]}
@@ -687,7 +685,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                       extra="custom-control-inline"
                       nombreCampoRadio="Estatus de la asignacion:"
                       name="estatus_asignacion_representante_estudiante"
-                      nombreLabelRadioA="Activó"
+                      nombreLabelRadioA="Activo"
                       idRadioA="activoestudianterA"
                       checkedRadioA={this.state.estatus_asignacion_representante_estudiante}
                       valueRadioA="1"

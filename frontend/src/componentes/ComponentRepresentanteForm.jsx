@@ -1219,7 +1219,7 @@ class ComponentRepresentanteForm extends React.Component{
                         extra="custom-control-inline"
                         nombreCampoRadio="Estatus:"
                         name="estatu_representante"
-                        nombreLabelRadioA="Activó"
+                        nombreLabelRadioA="Activo"
                         idRadioA="activoestudianterA"
                         checkedRadioA={this.state.estatus_representante}
                         valueRadioA="1"

@@ -55,8 +55,9 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
         estado:""
       },
       tipos_representantes:[
-        {id: "M", descripcion: "Mama"},
-        {id: "P", descripcion: "Papa"},
+        {id: "1", descripcion: "Un coño" },
+        {id: "M", descripcion: "Mamá"},
+        {id: "P", descripcion: "Papá"},
         {id: "O", descripcion: "Otro representante"}
       ],
     }
@@ -105,9 +106,8 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
   async consultarTodosLosRegistros(){
       return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
       .then(repuesta => {
-        this.setState({
-          registros:repuesta.data.datos
-        })
+        
+        return repuesta.data.datos
       })
       .catch(error => {
           console.log(error)
@@ -134,19 +134,21 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
   async UNSAFE_componentWillMount(){
     let acessoModulo =await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-representante-estudiante")
     if(acessoModulo){
-        var json_server_response=await this.consultarTodosLosRegistros();
-        // var servidor=this.verficarLista(json_server_response);
+        let json_server_response = await this.consultarTodosLosRegistros();
+        var servidor=this.verficarLista(json_server_response);
+        
         if(this.props.match.params.mensaje){
           const msj=JSON.parse(this.props.match.params.mensaje)
           //alert("OK "+msj.texto)
           var mensaje=this.state.mensaje
           mensaje.texto=msj.texto
           mensaje.estado=msj.estado
-          this.setState(mensaje)
+          servidor.mensaje=mensaje
         }
+        this.setState(servidor)
      }
      else{
-      alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+      alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
       this.props.history.goBack()
      }
     }
@@ -268,9 +270,9 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
     const jsx_tabla_encabezado = (
           <thead>
               <tr>
-                  <th>Cedula del representante</th>
+                  <th>Cédula del representante</th>
                   <th>Nombre del representante</th>
-                  <th>Cedula escolar</th>
+                  <th>Cédula escolar</th>
                   <th>Nombre del estudiante</th>
                   <th>Tipo de representante</th>
               </tr>
@@ -280,13 +282,14 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
       const jsx_tabla_body=(
         <tbody>
               {this.state.registros.map( asignacion => {
+                
                 return(
                   <tr key={asignacion.id_asignacion_representante_estudiante}>
                         <td>{asignacion.id_cedula_representante}</td>
                         <td>{asignacion.nombres_representante+" "+asignacion.apellidos_representante}</td>
                         <td>{asignacion.codigo_cedula_escolar+"-"+asignacion.cedula_escolar}</td>
                         <td>{asignacion.nombres_estudiante+" "+asignacion.apellidos_estudiante}</td>
-                        <td>{this.state.tipos_representantes.filter( e => e.id === asignacion.tipo_representante)[0].descripcion}</td>
+                        <td>{this.state.tipos_representantes.filter(e => e.id === asignacion.tipo_representante)[0].descripcion}</td>
                        {!asignacion.vacio &&
                          <td>
                            <ButtonIcon
@@ -319,7 +322,7 @@ class ComponenteAsignacionRepresentanteEstudiante extends React.Component{
               </div>
             </div>
             }
-            <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Asignacion representante estudiante"/>
+            <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Asignación Representante Estudiante"/>
             <ComponentTablaDatos eventoBuscar={this.buscar} eventoEscribirCodigo={this.escribir_codigo}
                 tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}
             />

@@ -23,6 +23,7 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   setDatos(estudiante) {
+    console.log(estudiante)
     this.id_estudiante = estudiante.id_estudiante
     this.cedula_escolar = (estudiante.cedula_escolar != 'No tiene') ? estudiante.cedula_escolar : 'null';
     this.cedula_estudiante = (estudiante.cedula_estudiante != 'No tiene') ? estudiante.cedula_estudiante : 'null';
@@ -75,8 +76,7 @@ class ModeloEstudiante extends DriverPostgre {
 
 
   async consultar(){
-    const SQL = `SELECT * FROM testudiante JOIN tparroquia ON tparroquia.id_parroquia = testudiante.id_parroquia_vive WHERE 
-    testudiante.id_estudiante=${this.id_estudiante}`
+    const SQL = `SELECT * FROM testudiante WHERE testudiante.id_estudiante=${this.id_estudiante}`
 
     return await this.query(SQL);
   }

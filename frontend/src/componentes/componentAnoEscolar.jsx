@@ -282,7 +282,7 @@ class ComponentAnoEscolar extends React.Component{
                         <td>{anoEscolar.ano_hasta}</td>
                         <td>{Moment(anoEscolar.fecha_inicio_ano_escolar).format("DD/MM/YYYY")}</td>
                         <td>{Moment(anoEscolar.fecha_cierre_ano_escolar).format("DD/MM/YYYY")}</td>
-                        <td>{ (anoEscolar.estatus_ano_escolar === '1') ? "Activo" : "Innactivo" }</td>
+                        <td>{ (anoEscolar.estatus_ano_escolar === '1') ? "Activo" : "Inactivo" }</td>
                         <td>{ (anoEscolar.seguimiento_ano_escolar === '1') ? "Corriendo" : (anoEscolar.seguimiento_ano_escolar === '2') ? "Planificado" : "Cerrado"}</td>
                        {!anoEscolar.vacio && anoEscolar.estatus_ano_escolar === '1' &&
                          <td>

@@ -480,7 +480,7 @@ class ComponentCambioAulaForm extends React.Component{
       scrollTop: 0
     }, 1000)
 
-    const mensaje_formulario={
+    const mensajes={
       mensaje:"",
       id_grado: "",
       // ESTUDIANTE A
@@ -527,8 +527,7 @@ class ComponentCambioAulaForm extends React.Component{
             mensaje.texto = "No se puedo conectar con el servidor"
             mensaje.estado = false
             mensaje.color_alerta = "danger";
-            mensaje_formulario.mensaje=mensaje
-            this.setState(mensaje_formulario)
+            this.setState(mensaje)
           })
 
         axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/cambiar/${this.state.id_inscripcion_b}`,objeto.estudiante_2)
@@ -543,9 +542,9 @@ class ComponentCambioAulaForm extends React.Component{
               mensaje.texto = "No se puedo conectar con el servidor"
               mensaje.estado = false
               mensaje.color_alerta = "danger";
-              mensaje_formulario.mensaje=mensaje
-              this.setState(mensaje_formulario)
+              this.setState(mensaje)
           })
+        this.setState(mensajes)
       })
     }
   }

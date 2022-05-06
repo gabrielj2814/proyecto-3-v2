@@ -170,7 +170,7 @@ class ComponentEstudianteConsulta extends React.Component{
                 procedencia:results.procedencia_estudiante,
                 id_ciudad:results.nombre_ciudad,
                 sexo_estudiante:(results.sexo_estudiante == "1") ? "Masculino" : "Femenino",
-                estatu_estudiante:(results.estatus_estudiante == "1") ? "Activo" : "Innactivo",
+                estatu_estudiante:(results.estatus_estudiante == "1") ? "Activo" : "Inactivo",
               })
             }
            else if(respuesta_servidor.estado_respuesta===false){

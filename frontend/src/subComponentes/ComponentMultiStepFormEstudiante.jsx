@@ -1061,7 +1061,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
-                                eventoPadre={this.regresar}
+                                    eventoPadre={this.props.return}
                                 />
                             </div>
                             {this.props.obligatorio == false && <InputButton

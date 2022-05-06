@@ -671,7 +671,7 @@ class ComponentAnoEscolarForm extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_trabajador">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                            <span className="titulo-form-trabajador">Formulario Año escolar</span>
+                            <span className="titulo-form-trabajador">Formulario Año Escolar</span>
                         </div>
                     </div>
                     <div className="row">
@@ -713,7 +713,7 @@ class ComponentAnoEscolarForm extends React.Component{
                             <ComponentFormRadioState clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
                               extra="custom-control-inline" nombreCampoRadio="Estatus del año escolar:" name="estatus_ano_escolar"
                               nombreLabelRadioA="Activo" idRadioA="activo" checkedRadioA={this.state.estatus_ano_escolar}
-                              valueRadioA="1" nombreLabelRadioB="Innactivo" idRadioB="innactivo"
+                              valueRadioA="1" nombreLabelRadioB="Inactivo" idRadioB="innactivo"
                               valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.estatus_ano_escolar}
                             />
                         </div>

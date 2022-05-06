@@ -34,8 +34,10 @@ class ModuloParroquia extends DriverPostgres {
   }
 
   async consultar() {
-    const SQL = `SELECT * FROM tparroquia JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad WHERE
-    tparroquia.id_parroquia=${this.id_parroquia}`
+    const SQL = `SELECT * FROM tparroquia 
+    JOIN tciudad ON tciudad.id_ciudad = tparroquia.id_ciudad 
+    JOIN testado ON testado.id_estado = tciudad.id_estado
+    WHERE tparroquia.id_parroquia=${this.id_parroquia}`
 
     return await this.query(SQL);
   }
