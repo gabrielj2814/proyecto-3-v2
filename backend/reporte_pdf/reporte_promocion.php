@@ -8,9 +8,10 @@ class PdfPromocion extends FPDF{
     private $generado;
     private $datosCintillo;
     private $nombreCintillo;
-    function __construct($datos,$generado,$datosCintillo){
+    function __construct($datos,$generado,$director,$datosCintillo){
         $this->datosPdf=$datos;
         $this->generado=$generado;
+        $this->director=$director;
         $this->datosCintillo=$datosCintillo;
         $this->nombreCintillo="cintillo-".$this->datosCintillo["fecha_subida_foto"]."_".$this->datosCintillo["hora_subida_foto"].".".$this->datosCintillo["extension_foto_cintillo"];
         parent::__construct("L","mm","letter");
@@ -186,8 +187,8 @@ class PdfPromocion extends FPDF{
 
         $this->Cell(60,10,"",0,0,"C");
         $this->Cell(40,-1,"",'B',0,"C");
-
-        $this->Cell(-5,6,"Lcda. Elaine Yanez",0,0,"R");
+        $nombreDirector=$this->director[0]["nombres"]." ".$this->director[0]["apellidos"];
+        $this->Cell(-5,6,"Lcd. ".$nombreDirector,0,0,"R");
 
 
         $this->Cell(-5,12,"Director(E)",0,0,"R");
@@ -198,127 +199,6 @@ class PdfPromocion extends FPDF{
     }
 
 }
-// $pdf = new FPDF("L","mm","letter");
-// $pdf->Addpage();
-// $pdf->Image("imagenes/encabezado1.jpg",24,10,190,12);$pdf->Image("imagenes/carabobo.jpg",213,2,50,30);
 
-// $pdf->ln(22);
-
-// //TITULO
-// $pdf->SetFont("Arial","B",10);
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(0,10,"CERTIFICADO DE APRENDIZAJE",0,0,"L");
-
-// $pdf->ln(5);
-
-// $pdf->Cell(0,10,"INFORME DESCRIPTIVO",0,0,"C");
-
-// $pdf->ln(5);
-
-// $pdf->Cell(120,10,'',0,0,'C');
-// $pdf->Cell(1,10,"ANO ESCOLAR:",0,0,"C");$pdf->Cell(12,10,'',0,0,'C');$pdf->Cell(1,10,"2022- 2023",0,"L");
-
-// $pdf->ln(12);
-// //fECHA
-// $pdf->SetFont("Arial","",10);
-// $pdf->Cell(187,10,"",0,0,"L");
-// $pdf->Cell(25,5,'Codigo postal:',1,0,'l');
-// $pdf->Cell(25,5,'0000000000',1,0,'l');
-
-// $pdf->ln(5);
-
-// $pdf->Cell(187,10,"",0,0,"L");
-// $pdf->Cell(25,5,'Codigo D.E.A:',1,0,'l');
-// $pdf->Cell(25,5,'0000000000',1,0,'l');
-
-
-// $pdf->ln(15);
-
-// $pdf->SetFont("Arial","B",10);
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(0,10,"DATOS DE IDENTIFICACION",0,0,"L");
-
-// $pdf->ln(8);
-
-// //TABLA
-// $pdf->SetFont("Arial","",10);
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(120,5,'Nombres y apellidos:',1,0,'l');$pdf->Cell(-87,10,'',0,0,'C');$pdf->Cell(1,5,"JUAN DE DIOS ARRAIZ MORENO",0,"L");
-// $pdf->Cell(86,10,'',0,0,'C');
-// $pdf->Cell(60,5,'Cedula:',1,0,'l');$pdf->Cell(-48,10,'',0,0,'C');$pdf->Cell(1,5,"26.759.137",0,"L");
-
-
-// $pdf->ln(5);
-
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(60,5,'Fecha de nacimiento:',1,0,'l');$pdf->Cell(-25,10,'',0,0,'C');$pdf->Cell(1,5,"24/11/1998",0,"L");
-// $pdf->Cell(24,10,'',0,0,'C');
-// $pdf->Cell(60,5,'Lugar de nacimiento:',1,0,'l');$pdf->Cell(-26,10,'',0,0,'C');$pdf->Cell(1,5,"Araure",0,"L");
-// $pdf->Cell(25,10,'',0,0,'C');
-// $pdf->Cell(60,5,'Estado:',1,0,'l');$pdf->Cell(-47,10,'',0,0,'C');$pdf->Cell(1,5,"Portuguesa",0,"L");
-
-// $pdf->ln(5);
-
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(120,5,'Institucion:',1,0,'l');$pdf->Cell(-102,10,'',0,0,'C');$pdf->Cell(1,5,"Escuela Bolivariana Villas del pilar",0,"L");
-// $pdf->Cell(101,10,'',0,0,'C');
-// $pdf->Cell(60,5,'Cedula:',1,0,'l');$pdf->Cell(-47,10,'',0,0,'C');$pdf->Cell(1,5,"5to A",0,"L");
-
-// $pdf->ln(5);
-
-// $pdf->Cell(42,10,'',0,0,'C');
-// $pdf->Cell(180,5,'Docente:',1,0,'l');$pdf->Cell(-165,10,'',0,0,'C');$pdf->Cell(1,5,"Elaine Yanez",0,"L");
-
-// $pdf->ln(10);
-
-// $pdf->SetFont("Arial","B",10);
-// $pdf->Cell(0,10,"Descripcion de los logros alcanzados durante el ano escolar",0,0,"C");
-
-// $pdf->ln(10);
-// //aca van los texto
-// $pdf->SetFont("Arial","",10);
-// $pdf->Cell(167,10,"Compromiso del Representante: Hago constar que me comprometo a cumplir y",0,0,"R");
-
-// $pdf->ln(10);
-
-// $pdf->SetFont("Arial","B",10);
-// $pdf->Cell(0,10,"RECOMENDACIONES A LA MADRE, PADRE O REPRESENTANTE",0,0,"C");
-
-// $pdf->ln(10);
-// //aca van los texto
-// $pdf->SetFont("Arial","",10);
-// $pdf->Cell(167,10,"Compromiso del Representante: Hago constar que me comprometo a cumplir y",0,0,"R");
-
-// $pdf->ln(10);
-
-// $pdf->SetFont("Arial","",10);
-// $pdf->Cell(-14,10,"",0,0,"R");	
-// $pdf->Cell(82,10,"En Araure a los:",0,0,"R");$pdf->Cell(10,6,"",'B',0,"C");$pdf->Cell(-11,9,"19",0,0,"C");
-// $pdf->Cell(59,10,"dias del mes de julio de 2021",0,0,"R");
-
-// $pdf->ln(20);
-
-// $pdf->Cell(60,10,"",0,0,"C");
-// $pdf->Cell(40,7,"",'B',0,"C");
-
-// $pdf->ln(5);
-
-// $pdf->Cell(95,10,"Prof Elaine Yanez",0,0,"R");
-
-// $pdf->ln(3);
-
-// $pdf->Cell(93,10,"Docente de aula",0,0,"R");
-
-
-
-// $pdf->Cell(60,10,"",0,0,"C");
-// $pdf->Cell(40,-1,"",'B',0,"C");
-
-// $pdf->Cell(-5,6,"Lcda. Elaine Yanez",0,0,"R");
-
-
-// $pdf->Cell(-5,12,"Director(E)",0,0,"R");
-
-// $pdf->Output();
 
 ?>

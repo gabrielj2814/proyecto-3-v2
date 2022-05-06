@@ -34,9 +34,25 @@ while($row = pg_fetch_array($resultRetiro)){
     $datosConsulta[]=$row;
 }
 
+$SQLDirector="
+SELECT * FROM
+tdirector,
+ttrabajador
+WHERE 
+tdirector.estatus_director='1' AND
+ttrabajador.id_cedula=tdirector.id_cedula;
+";
+$resultDirector=$driver->query($SQLDirector);
+$datosDirector=[];
+while($row = pg_fetch_array($resultDirector)){
+    // print("-------");
+    // print_r($row);
+    $datosDirector[]=$row;
+}
+
 // print_r($datosConsulta);
 if(count($datosConsulta)>0){
-    $PDF=new PdfRetiro($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);
+    $PDF=new PdfRetiro($datosConsulta,$_POST["nombre_usuario"],$datosDirector,$result_cifrado);
     $nombrePdf=$PDF->generarPdf();
     // // print($nombrePdf);
     $respuesta["nombrePdf"]=$nombrePdf;

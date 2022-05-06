@@ -8,9 +8,10 @@ class PdfRetiro extends FPDF{
     private $generado;
     private $datosCintillo;
     private $nombreCintillo;
-    function __construct($datos,$generado,$datosCintillo){
+    function __construct($datos,$generado,$director,$datosCintillo){
         $this->datosPdf=$datos;
         $this->generado=$generado;
+        $this->director=$director;
         $this->datosCintillo=$datosCintillo;
         $this->nombreCintillo="cintillo-".$this->datosCintillo["fecha_subida_foto"]."_".$this->datosCintillo["hora_subida_foto"].".".$this->datosCintillo["extension_foto_cintillo"];
         parent::__construct("L","mm","letter");
@@ -39,6 +40,7 @@ class PdfRetiro extends FPDF{
         $this->AliasNbPages();
         $this->Addpage();
         $this->ln(22);
+        $nombreDirector=$this->director[0]["nombres"]." ".$this->director[0]["apellidos"];
         //TITULO
         $this->SetFont("Arial","B",10);
         $this->Cell(0,10,"CONSTANCIA DE RETIRO",0,0,"C");
@@ -47,10 +49,10 @@ class PdfRetiro extends FPDF{
         $this->ln(12);
 
         $this->SetFont("Arial","",12);
-        $this->Cell(125,10,"Quien suscribe lcda, Elaine Raquel Yanez, cedula de identidad",0,0,"R");
+        $this->Cell(125,10,"Quien suscribe lcd, ".$nombreDirector.", cedula de identidad",0,0,"R");
 
         $this->SetFont("Arial","",12);
-        $this->Cell(135,10,"V-10.541.398, directora encargada de la Escuela Bolivariana Villas del ",0,0,"R");
+        $this->Cell(135,10,$this->director[0]["id_cedula"].", director encargado de la Escuela Bolivariana Villas del ",0,0,"R");
 
         $this->ln(10);
 
@@ -121,8 +123,8 @@ class PdfRetiro extends FPDF{
 
         $this->Cell(200,10,"",0,0,"C");
         $this->Cell(40,-1,"",'B',0,"C");
-
-        $this->Cell(-1,6,"Lcda. Elaine Yanez",0,0,"R");
+        
+        $this->Cell(-1,6,"Lcd. ".$nombreDirector,0,0,"R");
 
         $this->ln(2);
 
