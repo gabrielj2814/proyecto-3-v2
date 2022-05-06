@@ -331,8 +331,8 @@ class ComponentInscripcion extends React.Component{
   }
 
   generarPdfDeInscripcion(a){
+    let $filaVerPdfInscripcion=document.getElementById("filaVerPdfInscripcion")
     let boton=a.target
-    alert(boton.id)
     let datos=[]
     datos.push({name:"nombre_usuario",value:this.state.nombre_usuario})
     datos.push({name:"cedula_usuario",value:this.state.id_cedula})
@@ -346,18 +346,19 @@ class ComponentInscripcion extends React.Component{
           console.log(respuesta)
           let json=JSON.parse(respuesta)
           console.log("datos reporte martricula =>>>> ",json)
-          // if(json.nombrePdf!=="false"){
-          //     $filaVerPdf.classList.remove("ocultarFormulario")
-          //     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
-          // }
-          // else{
-          //     $filaVerPdf.classList.add("ocultarFormulario")
-          //     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
-          // }
+          if(json.nombrePdf!=="false"){
+              $("#modalPdfInscripcion").modal("show")
+              $filaVerPdfInscripcion.classList.remove("ocultarFormulario")
+              document.getElementById("linkPdfInscripcion").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
+          }
+          else{
+              $filaVerPdfInscripcion.classList.add("ocultarFormulario")
+              alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+          }
       },
       error: function() {
       //   alert("error")
-        // $filaVerPdf.classList.add("ocultarFormulario")
+        // $filaVerPdfInscripcion.classList.add("ocultarFormulario")
       }
     });
   }
@@ -463,6 +464,31 @@ class ComponentInscripcion extends React.Component{
 
       var jsx_inscripcion_inicio=(
           <div>
+            <div class="modal fade" id="modalPdfInscripcion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Reporte pdf</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+
+                              <div id="filaVerPdfInscripcion" className="row justify-content-center ocultarFormulario">
+                                  <div className="col-auto">
+                                    <a className="btn btn-success" id="linkPdfInscripcion" target="_blank" href="#">Ver pdf</a>
+                                  </div>
+                              </div>
+
+                            </div>
+                            <div class="modal-footer ">
+                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                            </div>
+                            </div>
+                        </div>
+                  </div>
+
               <div class="modal fade" id="modalPdf" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
