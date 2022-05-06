@@ -37,7 +37,7 @@ testudiante.id_estudiante=tinscripcion.id_estudiante
 $result=$driver->query($SQL);
 while($row = pg_fetch_array($result)){
 // print("-------");
-// print_r($row);
+print_r($row);
 
 
 $SQL3="SELECT * FROM 
@@ -83,7 +83,7 @@ foreach($datosConsulta as $key => $datoConsulta){
     $result2=$driver->query($SQL2);
     while($row2 = pg_fetch_array($result2)){
         print("-------");
-        print_r($row2);
+        // print_r($row2);
         $datosConsulta[$key]["representante"][]=$row2;
     }
 }
