@@ -38,6 +38,37 @@ $result=$driver->query($SQL);
 while($row = pg_fetch_array($result)){
 // print("-------");
 // print_r($row);
+
+
+$SQL3="SELECT * FROM 
+tparroquia,
+tciudad,
+testado WHERE 
+tparroquia.id_parroquia=".$row["id_parroquia_nacimiento"]." AND
+tciudad.id_ciudad=tparroquia.id_ciudad AND
+testado.id_estado=tciudad.id_estado
+";
+$row["ubicacion"]=null;
+$resultUbicacion=$driver->query($SQL3);
+while($row3 = pg_fetch_array($resultUbicacion)){
+    // print("-------");
+    // print_r($row);
+    $row["ubicacion"]=$row3;
+}
+$SQL4="SELECT * FROM 
+vacuna_estudiante,
+tlista_vacuna
+WHERE 
+vacuna_estudiante.id_estudiante=".$row["id_estudiante"]." AND
+tlista_vacuna.id_vacuna=vacuna_estudiante.id_vacuna;
+";
+$row["vacunas"]=[];
+$vacunas=$driver->query($SQL4);
+while($row4 = pg_fetch_array($vacunas)){
+    // print("-------");
+    // print_r($row);
+    $row["vacunas"][]=$row4;
+}
 $datosConsulta[]=$row;
 }
 foreach($datosConsulta as $key => $datoConsulta){

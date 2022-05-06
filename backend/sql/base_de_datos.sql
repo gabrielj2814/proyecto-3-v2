@@ -444,6 +444,10 @@ CREATE TABLE vacuna_estudiante(
     constraint FK_id_vacuna_tlista_vacunas foreign key(id_vacuna) references tlista_vacuna(id_vacuna) on update cascade on delete cascade
 );
 
+-- INSERT INTO vacuna_estudiante(id_estudiante,id_vacuna) VALUES(40,1);
+-- INSERT INTO vacuna_estudiante(id_estudiante,id_vacuna) VALUES(40,2);
+-- INSERT INTO vacuna_estudiante(id_estudiante,id_vacuna) VALUES(40,3);
+
 -- CREATE TABLE enfermedad_estudiante( -- x no se usa
 --     id_enfermedad_estudiante SERIAL,
 --     id_estudiante INTEGER NOT NULL,
