@@ -71,6 +71,7 @@ else{
     tano_escolar.estatus_ano_escolar='1' AND
     taula.id_aula=tasignacion_aula_profesor.id_aula AND
     tgrado.id_grado=taula.id_grado AND
+    tinscripcion.estatus_inscripcion<>'R' AND
     tinscripcion.id_asignacion_aula_profesor=tasignacion_aula_profesor.id_asignacion_aula_profesor AND
     testudiante.id_estudiante=tinscripcion.id_estudiante AND
     tpromocion.id_inscripcion=tinscripcion.id_inscripcion

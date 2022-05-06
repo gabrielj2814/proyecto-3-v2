@@ -570,7 +570,7 @@ class ComponentInscripcion extends React.Component{
                 <div className="col-3 col-ms-3 col-md-3 columna-boton">
                   <div className="row justify-content-center align-items-center contenedor-boton">
                       <div className="col-auto">
-                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarConstaciaEstudio} value="pdf"/>
+                        <InputButton clasesBoton="btn btn-danger" eventoPadre={this.mostrarModalPdf} value="pdf"/>
                       </div>
                   </div>
                 </div>
