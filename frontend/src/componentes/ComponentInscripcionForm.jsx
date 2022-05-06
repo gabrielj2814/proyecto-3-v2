@@ -64,6 +64,7 @@ class ComponentInscripcionForm extends React.Component{
         id_asignacion_aula_profesor: "",
         fecha_inscripcion: "",
         estatus_inscripcion: "I",
+        inscripcion_regular: "R",
         //
         id_profesor: "",
         id_ano_escolar: "",
@@ -79,9 +80,11 @@ class ComponentInscripcionForm extends React.Component{
         msj_id_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
         msj_fecha_inscripcion:[{mensaje:"",color_texto:""}],
         msj_estatus_inscripcion:[{mensaje:"",color_texto:""}],
+        msj_inscripcion_regular: [{ mensaje: "", color_texto: "" }],
         //// combo box
         lista_representantes: [],
         estates_radios: ['I','E','P','R','T'],
+        estates_inscripcion: ["R", "P"],
         hashAsignacionRepresentante:{},
         hashEstudiante:{},
         estadoBusquedaEstudiante: false,
@@ -121,7 +124,7 @@ class ComponentInscripcionForm extends React.Component{
     await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-asignacion-actual/${this.state.cedula_profesor}`)
     .then( respuesta => {
       let respuesta_servior = respuesta.data;
-
+      
       if(respuesta_servior.datos.id_asignacion_aula_profesor){
         let mensaje = {};
 
@@ -140,11 +143,9 @@ class ComponentInscripcionForm extends React.Component{
         }
 
         if(respuesta_servior.cuposRestantes <= 0){
-          mensaje.estado=false
-          mensaje.texto="Ya no hay cupos disponibles para seguir inscribiendo"
-          this.setState({mensaje})
-
-          document.getElementById("cedula_escolar").disabled = true;
+          alert("Ya no hay cupos disponibles para seguir inscribiendo");
+          this.props.history.push(`/dashboard/configuracion/inscripcion`)
+          return false;
         }
 
         this.setState({
@@ -155,6 +156,12 @@ class ComponentInscripcionForm extends React.Component{
           nombre_ano_escolar: `${respuesta_servior.datos.ano_desde}-${respuesta_servior.datos.ano_hasta}`,
           cupos_disponibles: respuesta_servior.cuposRestantes
         });
+
+        return true;
+      }else{
+        alert("Este profesor no tiene Aula asignada(será redirigido a la vista anterior)")
+        this.props.history.push(`/dashboard/configuracion/inscripcion`)
+        return false;
       }
     })
     .catch(error => {
@@ -197,21 +204,24 @@ class ComponentInscripcionForm extends React.Component{
         if(responseAnoEscolar){
           await this.GetRepresentant_Estudiant()
           await this.obtenerDatosDeLasesion();
-          await this.Consultar_asignacion_aula();
-          const operacion=this.props.match.params.operacion
-        }else{
-            document.getElementById("cedula_escolar").disabled = true;
-            document.getElementById("boton-registrar").disabled = true;
-        }
+          let res = await this.Consultar_asignacion_aula();
+          if(res){
+            const operacion = this.props.match.params.operacion
+            document.getElementById("activoestudianter1").disabled = true;
+            document.getElementById("activoestudianter2").disabled = true;
+            document.getElementById("activoestudianter3").disabled = true;
+            document.getElementById("activoestudianter4").disabled = true;
+          }
+          
 
-        document.getElementById("activoestudianter1").disabled = true;
-        document.getElementById("activoestudianter2").disabled = true;
-        document.getElementById("activoestudianter3").disabled = true;
-        document.getElementById("activoestudianter4").disabled = true;
+        }else{
+          document.getElementById("cedula_escolar").disabled = true;
+          document.getElementById("boton-registrar").disabled = true;
+        }
       }
 
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -221,7 +231,7 @@ class ComponentInscripcionForm extends React.Component{
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/fecha-inscripcion/consultar-fecha-inscripcion-actual`)
     .then(async respuesta=>{
         let respuesta_servior = respuesta.data
-        console.log("datos de fecha inscripcion actual =>>>> ",respuesta_servior)
+        
         let fecha_incripcion_desde=respuesta_servior.datos.fecha_incripcion_desde
         let fecha_incripcion_hasta=respuesta_servior.datos.fecha_incripcion_hasta
         let fecha_tope_inscripcion=respuesta_servior.datos.fecha_tope_inscripcion
@@ -483,6 +493,7 @@ class ComponentInscripcionForm extends React.Component{
       id_asignacion_aula_profesor: "",
       fecha_inscripcion: "",
       estatus_inscripcion: "I",
+      inscripcio_regular: "",
       //
       id_profesor: "",
       id_ano_escolar: "",
@@ -546,9 +557,9 @@ class ComponentInscripcionForm extends React.Component{
     let msj = this.state["msj_"+name]
 
     if(valor !== "") msj[0] = {mensaje: "", color_texto:"rojo"}
-    else msj[0] = {mensaje: "Debe de seleccionar una opcion", color_texto:"rojo"}
+    else msj[0] = {mensaje: "Debe de seleccionar una opción", color_texto:"rojo"}
 
-    this.setState({[name]: msj})
+    this.setState({ ["msj_" + name]: msj})
     if(msj[0].mensaje === "") return true;
     else{
       alert(msj[0].mensaje)
@@ -559,9 +570,9 @@ class ComponentInscripcionForm extends React.Component{
 
   validarFormularioRegistrar(){
       const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
-      validaRepresentante = this.validarRadio('id_asignacion_representante_estudiante');
+        validaRepresentante = this.validarRadio('id_asignacion_representante_estudiante'), validaEstadoInscripcion = this.validarRadio("inscripcion_regular");
 
-      if( validar_cedula_escolar && validaRepresentante){
+    if (validar_cedula_escolar && validaRepresentante && validaEstadoInscripcion){
         return {estado: true}
       }else return {estado: false}
   }
@@ -570,9 +581,9 @@ class ComponentInscripcionForm extends React.Component{
     const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
     validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarSelect = this.validarSelect('tipo_representante'),
     validar_numero_representante = this.validarCampoNumero('numero_representante'), validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-    validar_parentesco = this.validarCampo('parentesco');
+      validar_parentesco = this.validarCampo('parentesco'), validaEstadoInscripcion = this.validarRadio("inscripcion_regular");;
 
-    if( validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco){
+    if (validar_cedula_escolar && validar_id_representante && validarSelect && validar_numero_representante && validarstatus_asignacion && validar_parentesco && validaEstadoInscripcion){
       return {estado: true}
     }else return {estado: false}
   }
@@ -652,6 +663,7 @@ class ComponentInscripcionForm extends React.Component{
             id_asignacion_aula_profesor: this.state.id_asignacion_aula_profesor,
             fecha_inscripcion: this.state.fecha_inscripcion,
             estatus_inscripcion: this.state.estatus_inscripcion,
+            inscripcion_regular: this.state.inscripcion_regular
           },
           token:token
       }
@@ -698,11 +710,21 @@ class ComponentInscripcionForm extends React.Component{
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
     .then( res => {
       let json = JSON.parse(JSON.stringify(res.data));
-      let hash = {};
-
+      let hash = {}, ultimoId;
+      
       for(let asignacion of json.datos){
-        hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
+        
+        if (hash[ultimoId] && ultimoId != null){
+
+          if(hash[ultimoId].id_cedula_representante != asignacion.id_cedula_representante){
+            hash[asignacion.id_asignacion_representante_estudiante] = asignacion;        
+          }
+        }else{
+          hash[asignacion.id_asignacion_representante_estudiante] = asignacion;        
+        }
+        ultimoId = asignacion.id_asignacion_representante_estudiante
       }
+
       this.setState({hashAsignacionRepresentante:hash})
 
     })
@@ -762,13 +784,13 @@ class ComponentInscripcionForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
+                        clasesCampo="form-control font-weight-bold" obligatorio="si" mensaje={this.state.msj_cedula_escolar[0]}
                         nombreCampo="Cédula escolar:" activo="si" type="text" value={this.state.cedula_escolar}
                         name="cedula_escolar" id="cedula_escolar" placeholder="Cédula escolar" eventoPadre={this.BuscarEstudiante}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                          <label>Nombre del estudiante: {this.state.nombre_estudiante}</label><br></br>
-                          <label>Apellido del estudiante: {this.state.apellido_estudiante}</label>
+                  <label>Nombre del estudiante:  <span className="font-weight-bold">{this.state.nombre_estudiante}</span></label><br></br>
+                  <label>Apellido del estudiante:  <span className="font-weight-bold">{this.state.apellido_estudiante}</span></label>
                       </div>
 
                   </div>
@@ -781,7 +803,7 @@ class ComponentInscripcionForm extends React.Component{
                   <div className="row justify-content-center align-items-center">
                     <ComponentFormRadioMultiState
                       clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                      extra="custom-control-inline"
+                      extra="custom-control-inline font-weight-bold"
                       nombreCampoRadio="Representantes :"
                       name="id_asignacion_representante_estudiante"
                       nombreUnico={["V-","id_cedula_representante","nombres_representante","apellidos_representante","tipo_representante"]}
@@ -802,28 +824,28 @@ class ComponentInscripcionForm extends React.Component{
 
                   <div className="row justify-content-center mt-1">
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
-                      clasesCampo="form-control" obligatorio="si"
+                    clasesCampo="form-control font-weight-bold" obligatorio="si"
                       nombreCampo="Año Escolar:" activo="no" type="text" value={this.state.nombre_ano_escolar}
                       name="ano_escolar" id="ano_escolar" placeholder="Año escolar"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
-                      clasesCampo="form-control" obligatorio="si"
+                      clasesCampo="form-control font-weight-bold" obligatorio="si"
                       nombreCampo="Grado Escolar:" activo="no" type="text" value={this.state.numero_grado}
                       name="grado_escolar" id="grado_escolar" placeholder="Grado escolar"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
-                      clasesCampo="form-control" obligatorio="si"
+                      clasesCampo="form-control font-weight-bold" obligatorio="si"
                       nombreCampo="Nombre del aula:" activo="no" type="text" value={this.state.nombre_aula}
                       name="nombre_aula" id="nombre_aula" placeholder="Nombre del aula"
                     />
                     <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
-                      clasesCampo="form-control" obligatorio="si"
+                      clasesCampo="form-control font-weight-bold" obligatorio="si"
                       nombreCampo="Cupos restantes:" activo="no" type="text" value={this.state.cupos_disponibles}
                       name="cupos__disponibles" id="cupos__disponibles" placeholder="Cupos restantes"
                     />
 
 
-                  <ComponentFormRadioMultiState
+                    <ComponentFormRadioMultiState
                     clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                     extra="custom-control-inline"
                     nombreCampoRadio="Estatus de la asignacion:"
@@ -836,6 +858,22 @@ class ComponentInscripcionForm extends React.Component{
                     estates={this.state.estates_radios}
                     eventoPadre={this.cambiarEstado}
                   />
+
+              <ComponentFormRadioMultiState
+                clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
+                extra="custom-control-inline"
+                nombreCampoRadio="Condición de la inscripción:"
+                name="inscripcion_regular"
+                nombreLabelRadio={["Regular","Repitiente",]}
+                checkedRadio={this.state.inscripcion_regular}
+
+                idRadio={["inscripcion0", "inscripcion1"]}
+
+                estates={this.state.estates_inscripcion}
+                eventoPadre={this.cambiarEstado}
+              />
+
+              
                   </div>
 
                     <div className="row justify-content-center">

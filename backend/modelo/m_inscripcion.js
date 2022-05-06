@@ -9,6 +9,7 @@ class ModeloInscripcion extends DriverPostgres {
     this.id_asignacion_aula_profesor = "";
     this.fecha_inscripcion = "";
     this.estatus_inscripcion = "";
+    this.inscripcion_regular = "";
 
   }
 
@@ -19,6 +20,7 @@ class ModeloInscripcion extends DriverPostgres {
     this.id_asignacion_aula_profesor = inscripcion.id_asignacion_aula_profesor;
     this.fecha_inscripcion = inscripcion.fecha_inscripcion;
     this.estatus_inscripcion = inscripcion.estatus_inscripcion;
+    this.inscripcion_regular = inscripcion.inscripcion_regular;
 
   }
 
@@ -44,14 +46,16 @@ class ModeloInscripcion extends DriverPostgres {
       id_asignacion_representante_estudiante,
       id_asignacion_aula_profesor,
       fecha_inscripcion,
-      estatus_inscripcion
+      estatus_inscripcion,
+      inscripcion_regular
       )
       VALUES (
       '${this.id_estudiante}',
       '${this.id_asignacion_representante_estudiante}',
       '${this.id_asignacion_aula_profesor}',
       '${this.fecha_inscripcion}',
-      '${this.estatus_inscripcion}'
+      '${this.estatus_inscripcion}',
+      '${this.inscripcion_regular}'
       )
       `
     return await this.query(SQL)

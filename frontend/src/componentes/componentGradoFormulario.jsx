@@ -13,6 +13,7 @@ import ComponentDashboard from './componentDashboard'
 import AlertBootstrap from "../subComponentes/alertBootstrap"
 import InputButton from '../subComponentes/input_button'
 import ComponentFormCampo from '../subComponentes/componentFormCampo';
+import ComponentFormSelect from '../subComponentes/componentFormSelect';
 import ComponentFormRadioState from "../subComponentes/componentFormRadioState"
 
 const axiosCustom=axios.create({
@@ -36,6 +37,14 @@ class ComponenrGradoFormulario extends React.Component{
             id_grado:"",
             numero_grado:"",
             estatus_grado:"1",
+            grados:[
+                {id: "1", descripcion: "Grado 1"},
+                {id: "2", descripcion: "Grado 2"},
+                {id: "3", descripcion: "Grado 3" },
+                {id: "4", descripcion: "Grado 4" },
+                {id: "5", descripcion: "Grado 5" },
+                {id: "6", descripcion: "Grado 6" },
+            ],
             //
             msj_numero_grado:{
                 mensaje:"",
@@ -307,18 +316,19 @@ class ComponenrGradoFormulario extends React.Component{
                             placeholder="Código Grado"
                             eventoPadre={this.cambiarEstado}
                             />
-                            <ComponentFormCampo
-                            clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
-                            clasesCampo="form-control"
-                            nombreCampo="Numero Grado:"
-                            activo="si"
-                            type="text"
-                            value={this.state.numero_grado}
-                            name="numero_grado"
-                            id="numero_grado"
-                            placeholder="Numero Grado"
-                            eventoPadre={this.validarNumero}
+                            <ComponentFormSelect
+                                clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                                obligatorio="si"
+                                mensaje={""}
+                                nombreCampoSelect="Grado:"
+                                clasesSelect="custom-select"
+                                name="numero_grado"
+                                id="numero_grado"
+                                eventoPadre={this.cambiarEstado}
+                                defaultValue={this.state.numero_grado}
+                                option={this.state.grados}
                             />
+                            
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
                         <div className="row justify-content-center">

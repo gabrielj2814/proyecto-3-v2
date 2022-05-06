@@ -866,7 +866,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             />
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <label>Nombre Completo:</label>
-                                <div id="nombreProfesor">Sin nombre</div>
+                                <div id="nombreProfesor" className="font-weight-bold">Sin nombre</div>
                             </div>
                             <input type="hidden" id="id_profesor" name="id_profesor" value={this.state.id_profesor}/>
                             <input type="hidden" id="id_ano_escolar" name="id_ano_escolar" value={this.state.id_ano_escolar}/>
@@ -874,10 +874,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3" id="contenedorDisponibilidadProfesor">
                                     <label>Disponibilidad del Profesor:</label>
                                     {this.state.disponibilidadProfesor===true &&
-                                            <div>Disponible </div>
+                                        <div className="text-success" >Disponible </div>
                                     }
                                     {this.state.disponibilidadProfesor===false &&
-                                            <div>No Disponible</div>
+                                        <div className="text-danger" >No Disponible</div>
                                     }
                                 </div>
                             }
