@@ -33,6 +33,11 @@ class PdfAsistenciaSemanal extends FPDF{
         $this->Cell(0,10,'Page '.$this->PageNo().'/{nb}',0,0,'C');
     }
 
+    function obtenerNumeroDeDiaDeLaSemana($fecha){
+        $fechaArray=explode("-",$fecha);
+        return $fechaArray[2];
+    }
+
 
 
     function generarPdf(){
@@ -76,11 +81,11 @@ class PdfAsistenciaSemanal extends FPDF{
         //TABLA
         $this->SetX(34);
         $this->Cell(60,10,'Nombres y apellidos',1,0,'C');
-        $this->Cell(30,10,'Lunes',1,0,'C');
-        $this->Cell(30,10,'Martes',1,0,'C');
-        $this->Cell(30,10,'Miercoles',1,0,'C');
-        $this->Cell(30,10,'Jueves',1,0,'C');
-        $this->Cell(30,10,'Viernes',1,0,'C');
+        $this->Cell(30,10,'Lunes - '.$this->obtenerNumeroDeDiaDeLaSemana($this->semana[0]),1,0,'C');
+        $this->Cell(30,10,'Martes - '.$this->obtenerNumeroDeDiaDeLaSemana($this->semana[1]),1,0,'C');
+        $this->Cell(30,10,'Miercoles - '.$this->obtenerNumeroDeDiaDeLaSemana($this->semana[2]),1,0,'C');
+        $this->Cell(30,10,'Jueves - '.$this->obtenerNumeroDeDiaDeLaSemana($this->semana[3]),1,0,'C');
+        $this->Cell(30,10,'Viernes - '.$this->obtenerNumeroDeDiaDeLaSemana($this->semana[4]),1,0,'C');
 
         foreach($this->datosPdf AS $estudiante){
             $nombre=$estudiante["nombres_estudiante"]." ".$estudiante["apellidos_estudiante"];
