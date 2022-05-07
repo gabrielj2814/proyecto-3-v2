@@ -280,17 +280,18 @@ class ComponentInscripcion extends React.Component{
     }
 
     mostrarFiltros(a){
+      alert("hola")
       let $boton=a.target
       let tipo=$boton.getAttribute("data-tipo-matricula")
       let $filaVerPdf=document.getElementById("filaVerPdf")
       $filaVerPdf.classList.add("ocultarFormulario")
-      let $botonGenerarPdf=document.getElementById("botonGenerarPdf")
+      let $botonGenerarPdfMatricula=document.getElementById("botonGenerarPdfMatricula")
       this.setState({tipoPdf:tipo})
       if(tipo!==null){
-        $botonGenerarPdf.classList.remove("ocultarFormulario")
+        $botonGenerarPdfMatricula.classList.remove("ocultarFormulario")
       }
       else{
-        $botonGenerarPdf.classList.add("ocultarFormulario")
+        $botonGenerarPdfMatricula.classList.add("ocultarFormulario")
       }
   }
 
@@ -451,7 +452,7 @@ class ComponentInscripcion extends React.Component{
                           <td>{inscripcion.codigo_cedula_escolar}-{inscripcion.cedula_escolar}</td>
                           <td>{estado}</td>
                           <td>
-                            <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.generarPdfDeInscripcion}>PDF</button>
+                            <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.generarPdfDeInscripcion}>Reporte de Inscrip.</button>
                           </td>
                           <td>
                             <button id={inscripcion.id_inscripcion} className="btn btn-danger btn-block" onClick={this.mostrarModalPdfContaciaEstudio}>Contacia De Estu.</button>
@@ -525,7 +526,7 @@ class ComponentInscripcion extends React.Component{
 
                             </div>
                             <div class="modal-footer ">
-                                <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
+                                <button type="button" id="botonGenerarPdfMatricula" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
                             </div>
                             </div>
                         </div>
