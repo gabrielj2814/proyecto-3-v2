@@ -93,17 +93,17 @@ class ComponentAccesoForm extends React.Component {
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
                 // ],
                 transaccion:[
-                    {descripcion:"reposo trabajador",id:"/reposo-trabajador"},
-                    {descripcion:"permiso trabajador",id:"/permiso-trabajador"},
-                    {descripcion:"asistencia",id:"/asistencia"},
+                    {descripcion:"Reposo trabajador",id:"/reposo-trabajador"},
+                    {descripcion:"Permiso trabajador",id:"/permiso-trabajador"},
+                    {descripcion:"Asistencia",id:"/asistencia"},
                     {descripcion:"lista asistencia",id:"/asistencia/lista"},
                     {descripcion:"asignacion aula profesor",id:"/asignacion-aula-profesor"},
-                    {descripcion:"asignacion estudiante representante",id:"/asignacion-representante-estudiante"},
+                    {descripcion:"Asignacion estudiante representante",id:"/asignacion-representante-estudiante"},
                     {descripcion:"planificación",id:"/planificaion"},
-                    {descripcion:"Asistencia Estudiatnes",id:"/asistencia-estudiante"},
+                    {descripcion:"Asistencia Estudiantes",id:"/asistencia-estudiante"},
                     {descripcion:"Retiro",id:"/retiro"},
                     {descripcion:"Formulario Retiro",id:"/retiro-formulario"},
-                    {descripcion:"promoción",id:"/promocion"},
+                    {descripcion:"Promoción",id:"/promocion"},
                     {descripcion:"Promocion evaluar",id:"/promocion-gestion"}
                 ],
                 seguridad:[
