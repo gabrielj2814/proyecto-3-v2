@@ -325,7 +325,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                     <th>Código</th> 
                     <th>Nombre del Profesor</th>
                     <th>Grado</th>
-                    <th>Aula</th>
+                    <th>Seccion</th>
                     <th>Año Escolar</th>
                     <th>Estado</th>
                 </tr> 

@@ -360,7 +360,7 @@ class ComponentAulaFormulario extends React.Component{
                 <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_formulario_aula">
                     <div className="row justify-content-center">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-aula">
-                            <span className="titulo-form-reposo">Formulario de Aula</span>
+                            <span className="titulo-form-reposo">Formulario de Sección</span>
                         </div>
                     </div>
                     <form id="formularioAula" >
@@ -374,13 +374,13 @@ class ComponentAulaFormulario extends React.Component{
                             value={this.state.id_aula}
                             name="id_aula"
                             id="id_aula"
-                            placeholder="Código Aula"
+                            placeholder="Código Sección"
                             eventoPadre={this.cambiarEstado}
                             />
                             <ComponentFormCampo
                             clasesColumna="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"
                             clasesCampo="form-control"
-                            nombreCampo="Nombre Aula:"
+                            nombreCampo="Nombre Sección:"
                             activo="si"
                             type="text"
                             value={this.state.nombre_aula}
