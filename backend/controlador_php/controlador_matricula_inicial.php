@@ -105,11 +105,11 @@ else{
         // print_r($row);
         $datosConsulta[]=$row;
     }
-    $result=$driver->query($SQL2);
-    while($row = pg_fetch_array($result)){
+    $result2=$driver->query($SQL2);
+    while($row2 = pg_fetch_array($result2)){
         // print("-------");
         // print_r($row);
-        $datosConsulta[]=$row;
+        $datosConsulta[]=$row2;
     }
     if(count($datosConsulta)>0){
         $PDF=new PdfMatriculaFinal($datosConsulta,$_POST["nombre_usuario"],$result_cifrado);

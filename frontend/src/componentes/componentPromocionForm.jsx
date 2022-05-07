@@ -819,7 +819,7 @@ class ComponentPromocionForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                        obligatorio={(operacion_Camp !== "evaluacion") ? "si" : "no"} mensaje={this.state.msj_recomendacion_pariente[0]} nombreCampoTextArea="Recomendación al pariente:"
+                        obligatorio={(operacion_Camp !== "evaluacion") ? "si" : "no"} mensaje={this.state.msj_recomendacion_pariente[0]} nombreCampoTextArea="Recomendación al representante:"
                         clasesTextArear="form-control texarea-alto" name="recomendacion_pariente" id="recomendacion_pariente" value={this.state.recomendacion_pariente}
                         eventoPadre={this.validarTexto}
                       />
@@ -834,7 +834,7 @@ class ComponentPromocionForm extends React.Component{
                     <ComponentFormRadioMultiState
                       clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
                       extra="custom-control-inline"
-                      nombreCampoRadio="Notas de promoción :"
+                      nombreCampoRadio="Literal:"
                       name="nota_promocion"
                       nombreUnico={[""]}
                       checkedRadio={this.state.nota_promocion}
