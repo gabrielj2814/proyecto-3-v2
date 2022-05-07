@@ -101,6 +101,7 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"Asignacion estudiante representante",id:"/asignacion-representante-estudiante"},
                     {descripcion:"planificación",id:"/planificaion"},
                     {descripcion:"Asistencia Estudiantes",id:"/asistencia-estudiante"},
+                    {descripcion:"Asistencia Estudiantes General",id:"/asistencia-general-estudiante"},
                     {descripcion:"Retiro",id:"/retiro"},
                     {descripcion:"Formulario Retiro",id:"/retiro-formulario"},
                     {descripcion:"Promoción",id:"/promocion"},
