@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentEstado.css'
 //componentes
 import ComponentDashboard from './componentDashboard'
-//sub componentes 
+//sub componentes
 import TituloModulo from '../subComponentes/tituloModulo'
 import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 import ButtonIcon from '../subComponentes/buttonIcon'
@@ -71,7 +71,7 @@ class ComponentEstado extends React.Component{
               respuesta_servior=respuesta.data
               if(respuesta_servior.usuario){
                 estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-              }  
+              }
           })
       }
       return estado
@@ -104,8 +104,8 @@ class ComponentEstado extends React.Component{
             estado=true
           }
           // this.setState({modulosSistema})
-          
-          
+
+
       })
       .catch(error =>  {
           console.log(error)
@@ -144,7 +144,7 @@ class ComponentEstado extends React.Component{
             }
         }
     }
-    
+
     async consultarTodosEstado(){
         var respuesta_servidor=[]
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`)
@@ -172,19 +172,19 @@ class ComponentEstado extends React.Component{
               registros:json_server_response,
               numeros_registros:json_server_response.length
             }
-          } 
+          }
       }
-      
+
     eliminarElementoTabla(a){
       var input=a.target;
       alert("Eliminar -> "+input.id);
     }
-    
+
     actualizarElementoTabla(a){
         var input=a.target;
         this.props.history.push("/dashboard/configuracion/estado/actualizar/"+input.id);
     }
-    
+
     consultarElementoTabla(a){
         let input=a.target;
         //alert("Consultar -> "+input.id);
@@ -240,13 +240,13 @@ class ComponentEstado extends React.Component{
     }
 
     /*
-    
+
     {!estado.vacio &&
                             <td>
-                              <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                              value={estado.id_estado} 
+                              <ButtonIcon clasesBoton="btn btn-danger btn-block"
+                              value={estado.id_estado}
                               id={estado.id_estado}
-                              eventoPadre={this.eliminarElementoTabla} 
+                              eventoPadre={this.eliminarElementoTabla}
                               icon="icon-bin"
                               />
                             </td>
@@ -256,11 +256,10 @@ class ComponentEstado extends React.Component{
     render(){
 
     	const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                  <th>Código</th> 
-                  <th>Nombre</th>
-                </tr> 
+            <thead>
+                <tr>
+                  <th>Nombre del Estado</th>
+                </tr>
             </thead>
         )
 
@@ -269,27 +268,26 @@ class ComponentEstado extends React.Component{
                   {this.state.registros.map((estado)=>{
                       return(
                           <tr key={estado.id_estado}>
-                            <td>{estado.id_estado}</td>
                             <td>{estado.nombre_estado}</td>
                            {!estado.vacio &&
                               <td>
-                                  <ButtonIcon 
-                                  clasesBoton="btn btn-warning btn-block" 
-                                  value={estado.id_estado} 
+                                  <ButtonIcon
+                                  clasesBoton="btn btn-warning btn-block"
+                                  value={estado.id_estado}
                                   id={estado.id_estado}
-                                  eventoPadre={this.actualizarElementoTabla} 
+                                  eventoPadre={this.actualizarElementoTabla}
                                   icon="icon-pencil"
                                   />
                               </td>
                            }
-                          
+
                          {!estado.vacio &&
                           <td>
-                              <ButtonIcon 
-                              clasesBoton="btn btn-secondary btn-block" 
+                              <ButtonIcon
+                              clasesBoton="btn btn-secondary btn-block"
                               value={estado.id_estado}
-                              id={estado.id_estado} 
-                              eventoPadre={this.consultarElementoTabla} 
+                              id={estado.id_estado}
+                              eventoPadre={this.consultarElementoTabla}
                               icon="icon-search"
                               />
                           </td>
@@ -316,8 +314,8 @@ class ComponentEstado extends React.Component{
                       </div>
                 }
                 <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Estado"/>
-                
-                <ComponentTablaDatos 
+
+                <ComponentTablaDatos
                     eventoBuscar={this.buscar}
                     eventoEscribirCodigo={this.escribir_codigo}
                     tabla_encabezado={jsx_tabla_encabezado}
@@ -325,7 +323,7 @@ class ComponentEstado extends React.Component{
                     numeros_registros={this.state.numeros_registros}
                 />
                 <div className="row">
-                
+
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
@@ -334,8 +332,8 @@ class ComponentEstado extends React.Component{
                       </div>
                     </div>
                 </div>
-                
-                
+
+
             </div>
         )
 

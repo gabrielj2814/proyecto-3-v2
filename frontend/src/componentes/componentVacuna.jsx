@@ -66,7 +66,7 @@ class ComponentVacuna extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -99,8 +99,8 @@ class ComponentVacuna extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -158,7 +158,7 @@ class ComponentVacuna extends React.Component{
     }
 
     async buscarVacunas(a){
-        
+
         let $inputNombreVacuna=document.getElementById("nombreVacuna")
         if($inputNombreVacuna.value!==""){
             await axiosCustom.get(`configuracion/vacuna/consultar-por-patron/${$inputNombreVacuna.value}`)
@@ -174,7 +174,7 @@ class ComponentVacuna extends React.Component{
         else{
             await this.consultarTodo()
         }
-        
+
 
     }
 
@@ -191,12 +191,11 @@ class ComponentVacuna extends React.Component{
 
     render(){
         const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                    <th>Código</th> 
+            <thead>
+                <tr>
                     <th>Nombre de la Vacuna</th>
                     <th>Estado</th>
-                </tr> 
+                </tr>
             </thead>
         )
 
@@ -205,16 +204,15 @@ class ComponentVacuna extends React.Component{
                 {this.state.registros.map((vacuna,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{vacuna.id_vacuna}</td>
                             <td>{vacuna.nombre_vacuna}</td>
                             <td>{(vacuna.estaus_vacuna==="1")?"Activo":"Inactivo"}</td>
                             {!vacuna.vacio &&
                                 <td>
-                                    <ButtonIcon 
-                                    clasesBoton="btn btn-warning btn-block" 
-                                    value={vacuna.id_vacuna} 
+                                    <ButtonIcon
+                                    clasesBoton="btn btn-warning btn-block"
+                                    value={vacuna.id_vacuna}
                                     id={vacuna.id_vacuna}
-                                    eventoPadre={this.irAlFormularioDeActualizacion} 
+                                    eventoPadre={this.irAlFormularioDeActualizacion}
                                     icon="icon-pencil"
                                     />
                                 </td>
@@ -225,18 +223,18 @@ class ComponentVacuna extends React.Component{
             </tbody>
         )
 
-        
+
         const jsx=(
             <div>
                 {this.state.alerta.estado===true &&
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Vacuna"/>
-                
+
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
                         <div className="row">

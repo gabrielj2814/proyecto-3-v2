@@ -264,7 +264,7 @@ class ComponentRepresentante extends React.Component{
   const jsx_tabla_encabezado = (
     <thead>
       <tr>
-          <th>Cedula</th>
+          <th>Cédula</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Numero de hijos</th>

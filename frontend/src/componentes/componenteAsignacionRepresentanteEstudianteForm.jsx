@@ -622,6 +622,11 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                     </div>
                 </div>
                 <form id="form_trabajador">
+                  <div className="row mt-3">
+                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
+                          <span className="sub-titulo-form-reposo-trabajador">Representante</span>
+                      </div>
+                  </div>
                   <div className="row justify-content-center align-items-center">
                       <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_representante[0]}
@@ -635,7 +640,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Representante</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
                       </div>
                   </div>
                   <div className="row justify-content-center align-items-center">
@@ -651,9 +656,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Estudiante</span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos extras</span>
                       </div>
                   </div>
+
                   <div className="row justify-content-center">
                       <div className="col-1 col-ms-1 col-md-1 col-lg-1 col-xl-1"></div>
                         <ComponentFormRadioMultiState
@@ -683,7 +689,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                     <ComponentFormRadioState
                       clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
                       extra="custom-control-inline"
-                      nombreCampoRadio="Estatus de la asignacion:"
+                      nombreCampoRadio="Estatus de la asignación:"
                       name="estatus_asignacion_representante_estudiante"
                       nombreLabelRadioA="Activo"
                       idRadioA="activoestudianterA"
@@ -696,11 +702,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                       checkedRadioB={this.state.estatus_asignacion_representante_estudiante}
                     />
                   </div>
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos extras</span>
-                      </div>
-                  </div>
+
                     <div className="row justify-content-center">
                         <div className="col-auto">
                             {this.props.match.params.operacion==="registrar" &&

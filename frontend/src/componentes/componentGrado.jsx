@@ -83,7 +83,7 @@ class ComponentGrado extends React.Component{
           alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
          }
-        
+
     }
 
     async validarAccesoDelModulo(modulo,subModulo){
@@ -152,7 +152,7 @@ class ComponentGrado extends React.Component{
     redirigirFormulario(a){
         this.props.history.push("/dashboard/configuracion/grado/registrar")
     }
-    
+
     actualizarElementoTabla(a){
         const input = a.target;
         this.props.history.push(`/dashboard/configuracion/grado/actualizar/${input.id}`)
@@ -160,12 +160,11 @@ class ComponentGrado extends React.Component{
 
     render(){
         const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                  <th>Código</th> 
-                  <th>Grado</th>
-                  <th>Estatus</th>
-                  </tr> 
+            <thead>
+                <tr>
+                  <th>Número de Grado</th>
+                  <th>Estatus del Grado</th>
+                  </tr>
             </thead>
         )
 
@@ -174,16 +173,15 @@ class ComponentGrado extends React.Component{
                 {this.state.registros.map((grado,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{grado.id_grado}</td>
                             <td>{grado.numero_grado}</td>
                             <td>{(grado.estatus_grado==="1")?"Activo":"Inactivo"}</td>
                             {!grado.vacio &&
                                 <td>
-                                    <ButtonIcon 
-                                    clasesBoton="btn btn-warning btn-block" 
-                                    value={grado.id_grado} 
+                                    <ButtonIcon
+                                    clasesBoton="btn btn-warning btn-block"
+                                    value={grado.id_grado}
                                     id={grado.id_grado}
-                                    eventoPadre={this.actualizarElementoTabla} 
+                                    eventoPadre={this.actualizarElementoTabla}
                                     icon="icon-pencil"
                                     />
                                 </td>
@@ -200,18 +198,18 @@ class ComponentGrado extends React.Component{
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center " tituloModulo="Módulo de Grado"/>
-                
+
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_grado">
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
                 <div className="row">
-                
+
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
@@ -224,15 +222,15 @@ class ComponentGrado extends React.Component{
         )
         return(
             <div className="component_grado">
-                    
+
                 <ComponentDashboard
                 componente={jsx}
                 modulo={this.state.modulo}
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-        
-        
+
+
             </div>
         )
     }

@@ -99,7 +99,7 @@ class ComponentAula extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -132,8 +132,8 @@ class ComponentAula extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -144,7 +144,7 @@ class ComponentAula extends React.Component{
     redirigirFormulario(a){
         this.props.history.push("/dashboard/configuracion/aula/registrar")
     }
-    
+
     irAlFormularioDeActualizacion(a){
         let input=a.target
         this.props.history.push(`/dashboard/configuracion/aula/actualizar/${input.id}`)
@@ -154,8 +154,8 @@ class ComponentAula extends React.Component{
         await axiosCustom.get("configuracion/aula/consultar-todos")
         .then(respuesta => {
             let repuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(repuestaServidor)
-            this.setState({registros:repuestaServidor.datos})
+            let secciones =  repuestaServidor.datos.sort( (a, b) => parseInt(a.numero_grado) - parseInt(b.numero_grado) )
+            this.setState({registros:secciones})
         })
         .catch(error => {
             console.error("error =>>> ",error)
@@ -166,7 +166,6 @@ class ComponentAula extends React.Component{
         await axiosCustom.get("configuracion/grado/consultar-todos")
         .then(respuesta => {
             let repuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(repuestaServidor)
             this.setState({grados:repuestaServidor.datos})
         })
         .catch(error => {
@@ -195,13 +194,12 @@ class ComponentAula extends React.Component{
 
     render(){
         const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                    <th>Código</th> 
+            <thead>
+                <tr>
                     <th>Nombre Aula</th>
-                    <th>Grado</th>
+                    <th>Número de Grado</th>
                     <th>Estatus</th>
-                </tr> 
+                </tr>
             </thead>
         )
 
@@ -210,17 +208,16 @@ class ComponentAula extends React.Component{
                 {this.state.registros.map((aula,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{aula.id_aula}</td>
                             <td>{aula.nombre_aula}</td>
                             <td>{aula.numero_grado}</td>
                             <td>{(aula.estatus_aula==="1")?"Activo":"Inactivo"}</td>
                             {!aula.vacio &&
                                 <td>
-                                    <ButtonIcon 
-                                    clasesBoton="btn btn-warning btn-block" 
-                                    value={aula.id_aula} 
+                                    <ButtonIcon
+                                    clasesBoton="btn btn-warning btn-block"
+                                    value={aula.id_aula}
                                     id={aula.id_aula}
-                                    eventoPadre={this.irAlFormularioDeActualizacion} 
+                                    eventoPadre={this.irAlFormularioDeActualizacion}
                                     icon="icon-pencil"
                                     />
                                 </td>
@@ -237,7 +234,7 @@ class ComponentAula extends React.Component{
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Sección"/>
@@ -260,9 +257,9 @@ class ComponentAula extends React.Component{
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
-                
+
                 <div className="row">
-                
+
                   <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
@@ -275,15 +272,15 @@ class ComponentAula extends React.Component{
         )
         return(
             <div className="component_aula">
-                    
+
                 <ComponentDashboard
                 componente={jsx}
                 modulo={this.state.modulo}
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-            
-            
+
+
             </div>
         )
     }

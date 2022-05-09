@@ -83,7 +83,7 @@ class ComponentInscripcionForm extends React.Component{
         msj_inscripcion_regular: [{ mensaje: "", color_texto: "" }],
         //// combo box
         lista_representantes: [],
-        estates_radios: ['I','E','P','R','T'],
+        estates_radios: ['I','E','R','T'],
         estates_inscripcion: ["R", "P"],
         hashAsignacionRepresentante:{},
         hashEstudiante:{},
@@ -124,7 +124,7 @@ class ComponentInscripcionForm extends React.Component{
     await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-asignacion-actual/${this.state.cedula_profesor}`)
     .then( respuesta => {
       let respuesta_servior = respuesta.data;
-      
+
       if(respuesta_servior.datos.id_asignacion_aula_profesor){
         let mensaje = {};
 
@@ -212,7 +212,7 @@ class ComponentInscripcionForm extends React.Component{
             document.getElementById("activoestudianter3").disabled = true;
             document.getElementById("activoestudianter4").disabled = true;
           }
-          
+
 
         }else{
           document.getElementById("cedula_escolar").disabled = true;
@@ -231,7 +231,7 @@ class ComponentInscripcionForm extends React.Component{
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/fecha-inscripcion/consultar-fecha-inscripcion-actual`)
     .then(async respuesta=>{
         let respuesta_servior = respuesta.data
-        
+
         let fecha_incripcion_desde=respuesta_servior.datos.fecha_incripcion_desde
         let fecha_incripcion_hasta=respuesta_servior.datos.fecha_incripcion_hasta
         let fecha_tope_inscripcion=respuesta_servior.datos.fecha_tope_inscripcion
@@ -676,16 +676,16 @@ class ComponentInscripcionForm extends React.Component{
     .then( res => {
       let json = JSON.parse(JSON.stringify(res.data));
       let hash = {}, ultimoId;
-      
+
       for(let asignacion of json.datos){
-        
+
         if (hash[ultimoId] && ultimoId != null){
 
           if(hash[ultimoId].id_cedula_representante != asignacion.id_cedula_representante){
-            hash[asignacion.id_asignacion_representante_estudiante] = asignacion;        
+            hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
           }
         }else{
-          hash[asignacion.id_asignacion_representante_estudiante] = asignacion;        
+          hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
         }
         ultimoId = asignacion.id_asignacion_representante_estudiante
       }
@@ -815,10 +815,10 @@ class ComponentInscripcionForm extends React.Component{
                     extra="custom-control-inline"
                     nombreCampoRadio="Estatus de la asignacion:"
                     name="estatus_inscripcion"
-                    nombreLabelRadio={["Inscrito","Espera","Pre-Inscrito","Retiro","Terminado"]}
+                    nombreLabelRadio={["Inscrito","Espera","Retiro","Terminado"]}
                     checkedRadio={this.state.estatus_inscripcion}
 
-                    idRadio={["activoestudianter0","activoestudianter1","activoestudianter2","activoestudianter3","activoestudianter4"]}
+                    idRadio={["activoestudianter0","activoestudianter1","activoestudianter3","activoestudianter4"]}
 
                     estates={this.state.estates_radios}
                     eventoPadre={this.cambiarEstado}
@@ -838,7 +838,7 @@ class ComponentInscripcionForm extends React.Component{
                 eventoPadre={this.cambiarEstado}
               />
 
-              
+
                   </div>
 
                     <div className="row justify-content-center">

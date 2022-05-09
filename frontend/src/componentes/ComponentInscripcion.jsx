@@ -426,7 +426,6 @@ class ComponentInscripcion extends React.Component{
       const jsx_tabla_encabezado = (
             <thead>
                 <tr>
-                    <th>Código</th>
                     <th>fecha de inscripción</th>
                     <th>Cédula escolar</th>
                     <th>Estado</th>
@@ -441,13 +440,11 @@ class ComponentInscripcion extends React.Component{
 
                   let estado = (inscripcion.estatus_inscripcion == "I") ? "Inscrito" : "";
                   estado = (inscripcion.estatus_inscripcion == "E") ? "Espera" : estado;
-                  estado = (inscripcion.estatus_inscripcion == "P") ? "Pre-Inscrito" : estado;
                   estado = (inscripcion.estatus_inscripcion == "R") ? "Retiro" : estado;
                   estado = (inscripcion.estatus_inscripcion == "T") ? "Terminado" : estado;
                   estado = (inscripcion.estatus_inscripcion == "C") ? "Culminado" : estado;
                     return(
                         <tr key={index}>
-                          <td>{inscripcion.id_inscripcion}</td>
                           <td>{Moment(inscripcion.fecha_inscripcion).format("D/M/YYYY")}</td>
                           <td>{inscripcion.codigo_cedula_escolar}-{inscripcion.cedula_escolar}</td>
                           <td>{estado}</td>
