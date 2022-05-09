@@ -1535,14 +1535,15 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                                 />
                             }
                         </div>
-                        {/* <div className="col-auto">
+
+                        <div className="col-auto">
                             <InputButton
                             clasesBoton="btn btn-danger"
-                            id="boton-cancelar"
-                            value="Cancelar"
-                            eventoPadre={this.regresar}
+                            id="boton-regresar"
+                            value="Regresar"
+                            eventoPadre={this.props.retruki}
                             />
-                        </div> */}
+                        </div>
                         {this.props.obligatorio == false && <InputButton
                           clasesBoton="btn btn-secondary"
                           id="boton-cancelar"

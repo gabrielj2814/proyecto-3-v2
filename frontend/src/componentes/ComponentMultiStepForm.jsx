@@ -42,7 +42,7 @@ class ComponentMultiStepForm extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
-            formulario_step:0,
+            formulario_step:1,
             id_estudiante:"",
             cedula_mama:"",
             cedula_papa:"",
@@ -216,6 +216,7 @@ class ComponentMultiStepForm extends React.Component{
             <ComponentMultiStepFormEstudiante
                 operacion="registrar"
                 next={this.next}
+                idEstudiante={this.state.id_estudiante}
                 return={this.return_index}
                 state={this.StatePadre}
                 obligatorio={true}
@@ -226,6 +227,7 @@ class ComponentMultiStepForm extends React.Component{
             <ComponentMultiStepFormRepresentante
                 operacion="registrar"
                 next={this.next}
+                retruki={this.reverse}
                 state={this.StatePadre}
                 addCedulas={this.AddCedulas}
                 obligatorio={true}

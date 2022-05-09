@@ -90,7 +90,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             estados_n:[],
             ciudades_n:[],
             parroquias_n:[],
-
+            operacion: "registrar",
             estados_v:[],
             ciudades_v:[],
             parroquias_v:[],
@@ -110,11 +110,77 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         }
     }
 
+    async consultarEstudiante(id){
+      const token=localStorage.getItem('usuario')
+      let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
+      // /${token}
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}/${token}`)
+      .then(respuesta=>{
+          let respuesta_servidor=respuesta.data
+          let mensaje ={}
+
+          if(respuesta_servidor.estado_respuesta=== true){
+            return respuesta_servidor.datos[0]
+          }
+          else if(respuesta_servidor.estado_respuesta===false){
+              mensaje.texto=respuesta_servidor.mensaje
+              mensaje.estado=respuesta_servidor.estado_peticion
+              this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
+          }
+      })
+      .catch(error=>{
+        let mensaje ={}
+        console.error(error)
+        mensaje.texto="No se puedo conectar con el servidor"
+        mensaje.estado="500"
+        this.props.history.push(`/dashboard/configuracion/estudiante${JSON.stringify(mensaje)}`)
+      })
+        // let edadEstudiante=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
+    }
+
     async UNSAFE_componentWillMount(){
       if(true){
         await this.consultarFechaServidor()
         await this.consultarTodosLosEstudiantes()
         await this.ConsultarVacunas();
+
+        if(this.props.idEstudiante !== ""){
+          let datos = await this.consultarEstudiante(this.props.idEstudiante)
+          let fechaServidor = Moment(this.state.fechaServidor, "YYYY-MM-DD")
+          let edadEstudiante = (parseInt(fechaServidor.diff(datos.fecha_nacimiento_estudiante, "years")))
+
+          this.setState({
+            id_estudiante: datos.id_estudiante,
+            codigo_cedula_escolar: datos.codigo_cedula_escolar,
+            id_cedula_escolar:datos.cedula_escolar,
+            id_cedula:(datos.cedula_estudiante != "" && datos.cedula_estudiante != undefined) ? datos.cedula_estudiante : "No tiene",
+            nombres:datos.nombres_estudiante,
+            apellidos:datos.apellidos_estudiante,
+            fecha_nacimiento:Moment(datos.fecha_nacimiento_estudiante).format("YYYY-MM-DD"),
+            direccion_nacimiento:datos.direccion_nacimiento_estudiante,
+            enfermedades_estudiante:datos.enfermedades_estudiante,
+            vive_con:datos.vive_con_estudiante,
+            procedencia:datos.procedencia_estudiante,
+            sexo_estudiante:datos.sexo_estudiante,
+            enfermedades: datos.enfermedades_estudiante,
+            estatu_estudiante:datos.estatus_estudiante,
+
+            //   estados_n: estados,
+            //   ciudades_n: ciudadesNacimiento,
+            //   parroquias_n: parroquiasNacimiento,
+            //   estados_v: estados,
+            //   ciudades_v: ciudadesVive,
+            //   parroquias_v: parroquiasVive,
+            //
+            // id_estado_nacimiento: dataLocacionNacimiento.id_estado,
+            // id_ciudad: dataLocacionVive.id_ciudad,
+            // id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
+            // id_parroquia_vive: dataLocacionVive.id_parroquia,
+            // id_parroquia_nacimiento: dataLocacionNacimiento.id_parroquia,
+            operacion: "actualizar",
+            edadEstudiante: edadEstudiante
+          })
+        }
 
         const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
         nombre_propiedad_lista="estados",
@@ -170,7 +236,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
     }
 
     async consultarCiudad(id){
-        var mensaje={texto:"",estado:""},
+        let mensaje={texto:"",estado:""},
         respuesta_servidor=""
         var ciudad={}
         const token=localStorage.getItem('usuario')
@@ -193,6 +259,8 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/cam${JSON.stringify(mensaje)}`)
         })
+
+        this.setState(mensaje)
         return ciudad
     }
 
@@ -275,7 +343,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
       const token=localStorage.getItem('usuario')
       let fechaServidor=Moment(this.state.fechaServidor,"YYYY-MM-DD")
       // /${token}
-      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}`)
+      return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}/${token}`)
       .then(respuesta=>{
           let respuesta_servidor=respuesta.data
           if(respuesta_servidor.estado_respuesta=== true){
@@ -884,6 +952,23 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                               valueRadioB="0" eventoPadre={this.cambiarEstado} checkedRadioB={this.state.sexo_estudiante}
                             />
                         </div>
+                        <div className="row justify-content-center mt-1">
+                          <ComponentFormRadioState
+                            clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
+                            extra="custom-control-inline"
+                            nombreCampoRadio="Estatus:"
+                            name="estatu_estudiante"
+                            nombreLabelRadioA="Activo"
+                            idRadioA="activoestudianterA"
+                            checkedRadioA={this.state.estatu_estudiante}
+                            valueRadioA="1"
+                            nombreLabelRadioB="Inactivo"
+                            idRadioB="activoestudianterB"
+                            valueRadioB="0"
+                            eventoPadre={this.cambiarEstado}
+                            checkedRadioB={this.state.estatu_estudiante}
+                          />
+                        </div>
                         <div className="row justify-content-center mx-auto">
                           <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                             obligatorio="si" mensaje={this.state.msj_procedencia[0]} nombreCampoTextArea="Procedencia del estudiante:"
@@ -1003,26 +1088,6 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                             eventoPadre={this.cambiarEstado}
                           />
                         </div>
-                        <div className="row justify-content-center mt-1">
-
-                        </div>
-                        <div className="row justify-content-center mt-1">
-                          <ComponentFormRadioState
-                            clasesColumna="col-5 col-ms-5 col-md-5 col-lg-5 col-xl-5"
-                            extra="custom-control-inline"
-                            nombreCampoRadio="Estatus:"
-                            name="estatu_estudiante"
-                            nombreLabelRadioA="Activo"
-                            idRadioA="activoestudianterA"
-                            checkedRadioA={this.state.estatu_estudiante}
-                            valueRadioA="1"
-                            nombreLabelRadioB="Inactivo"
-                            idRadioB="activoestudianterB"
-                            valueRadioB="0"
-                            eventoPadre={this.cambiarEstado}
-                            checkedRadioB={this.state.estatu_estudiante}
-                          />
-                        </div>
 
                         <div className="row justify-content-center">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
@@ -1048,6 +1113,16 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                         <div className="row justify-content-center">
                             <div className="col-auto">
                                 {this.props.operacion==="registrar" &&
+                                    <InputButton
+                                    clasesBoton="btn btn-primary"
+                                    id="boton-registrar"
+                                    value="Registrar"
+                                    eventoPadre={this.operacion}
+                                    />
+                                }
+                            </div>
+                            <div className="col-auto">
+                                {this.props.operacion==="actualizar" &&
                                     <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"

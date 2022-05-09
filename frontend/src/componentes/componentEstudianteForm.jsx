@@ -67,7 +67,7 @@ class ComponentEstudianteForm extends React.Component{
             procedencia:"",
             id_estado_nacimiento:"",
             id_ciudad_nacimiento:"",
-            
+
 
             id_ciudad:"",
             id_parroquia_vive:"",
@@ -94,7 +94,7 @@ class ComponentEstudianteForm extends React.Component{
             msj_id_ciudad_nacimiento:[{ mensaje:"", color_texto:""}],
             msj_id_parroquia_vive:[{ mensaje:"", color_texto:""}],
             msj_id_parroquia_nacimiento: [{ mensaje: "", color_texto: "" }],
-            
+
             estados_n: [],
             ciudades_n: [],
             parroquias_n: [],
@@ -197,8 +197,8 @@ class ComponentEstudianteForm extends React.Component{
                       id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
                       id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
                       id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
-                      
-            
+
+
                     })
                   }else{
                     alert("No hay Parroquias registradas(será redirigido a la vista anterior)")
@@ -216,9 +216,9 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const {id}=this.props.match.params
-                        
+
             let datos = await this.consultarEstudiante(id)
-            
+
             await this.ConsultarVacunas(datos.id_estudiante);
             const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
             nombre_propiedad_lista="estados",
@@ -226,7 +226,7 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_descripcion="nombre_estado",
             propiedad_estado="estatu_estado"
             const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-        
+
             let dataLocacionNacimiento = await this.consultarTodoParroquia(datos.id_parroquia_nacimiento)
             let dataLocacionVive = await this.consultarTodoParroquia(datos.id_parroquia_vive)
             let parroquiasNacimiento = await this.ObtenerParroquias(dataLocacionNacimiento[0].id_ciudad)
@@ -252,17 +252,17 @@ class ComponentEstudianteForm extends React.Component{
               sexo_estudiante:datos.sexo_estudiante,
               enfermedades: datos.enfermedades_estudiante,
               estatu_estudiante:datos.estatus_estudiante,
-              
+
                 estados_n: estados,
                 ciudades_n: ciudadesNacimiento,
                 parroquias_n: parroquiasNacimiento,
                 estados_v: estados,
                 ciudades_v: ciudadesVive,
                 parroquias_v: parroquiasVive,
-                
+
               id_estado_nacimiento: dataLocacionNacimiento.id_estado,
               id_ciudad: dataLocacionVive.id_ciudad,
-              id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,  
+              id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
               id_parroquia_vive: dataLocacionVive.id_parroquia,
               id_parroquia_nacimiento: dataLocacionNacimiento.id_parroquia,
               operacion: "actualizar",
@@ -279,11 +279,11 @@ class ComponentEstudianteForm extends React.Component{
                 document.getElementById("id_cedula_escolcar").readOnly = true;
             }, 100);
 
-            
+
 
             // document.getElementById("id_estado").value = datosCiudad.id_estado
             // document.getElementById("id_ciudad").value = datos.id_ciudad
-            
+
             }
         }
         else{
@@ -481,7 +481,7 @@ class ComponentEstudianteForm extends React.Component{
         return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar/${id}/${token}`)
       .then(respuesta=>{
           let respuesta_servidor=respuesta.data
-          
+
           if(respuesta_servidor.estado_respuesta=== true){
             return respuesta_servidor.datos[0]
           }
@@ -546,7 +546,7 @@ class ComponentEstudianteForm extends React.Component{
         propiedad_descripcion_2="nombre_ciudad",
         propiedad_estado_2="estatu_ciudad"
         const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-        
+
         if(ciudades.length > 0) {
             let ciudad, ciudades_lista;
             if(input.name == "id_estado_nacimiento") {
@@ -575,7 +575,7 @@ class ComponentEstudianteForm extends React.Component{
         propiedad_descripcion_3="nombre_parroquia",
         propiedad_estado_3="estatu_parroquia"
         const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
-        
+
         if(parroquias.length > 0){
             let parroquia, parroquias_lista;
             if(input.name == "id_ciudad_nacimiento") {
@@ -972,11 +972,11 @@ class ComponentEstudianteForm extends React.Component{
         }
         else if(operacion==="actualizar"){
             const estado_validar_formulario=this.validarFormularioActuazliar()
-            const {id}=this.props.match.params            
+            const {id}=this.props.match.params
 
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                    
+
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)
@@ -1014,7 +1014,7 @@ class ComponentEstudianteForm extends React.Component{
               direccion_nacimiento_estudiante: this.state.direccion_nacimiento,
               id_parroquia_nacimiento: this.state.id_parroquia_nacimiento,
               id_parroquia_vive: this.state.id_parroquia_vive,
-    
+
               sexo_estudiante: this.state.sexo_estudiante,
               procedencia_estudiante: this.state.procedencia,
               vive_con_estudiante: this.state.vive_con,
