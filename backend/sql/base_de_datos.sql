@@ -329,13 +329,20 @@ CREATE TABLE tgrado(
     constraint PK_id_grado primary key(id_grado)
 );
 
-CREATE TABLE taula(
+CREATE TABLE taula(-- eso es realmente seccion
     id_aula SERIAL,
     id_grado INTEGER NOT NULL,
     nombre_aula character varying(150) NOT NULL,
     estatus_aula character(1) NOT NULL,
     constraint PK_id_aula primary key(id_aula),
     constraint FK_id_grado foreign key(id_grado) references tgrado(id_grado) on update cascade on delete cascade
+);
+
+CREATE TABLE taula_espacio(
+    id_aula_espacio SERIAL,
+    numero_aula_espacio INTEGER NOT NULL,
+    estatus_aula_espacio character(1) NOT NULL,
+    constraint PK_id_aula_espacio primary key(id_aula_espacio)
 );
 
 CREATE TABLE tano_escolar(
