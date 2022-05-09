@@ -119,6 +119,7 @@ class ComponentPromocionForm extends React.Component{
             if(hashProfesores[respuesta_servior.usuario.id_cedula]){
               this.ConsultarEstudiantesProfesor(respuesta_servior.usuario.id_cedula)
             }
+        }
       })
       .catch(error => {
           let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))

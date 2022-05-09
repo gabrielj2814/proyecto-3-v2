@@ -456,9 +456,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
       }
       if(operacion==="registrar"){
-
+        alert("hola")
           const estado_validar_formulario=this.validarFormularioRegistrar()
           if(estado_validar_formulario.estado){
+            alert("hola 2")
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
                   const mensaje =this.state.mensaje
                   var respuesta_servidor=""
@@ -478,6 +479,9 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                       this.setState(mensaje_formulario)
                   })
               })
+          }
+          else{
+            alert("ahora si")
           }
       }
       else if(operacion==="actualizar"){
