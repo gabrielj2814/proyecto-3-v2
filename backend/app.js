@@ -52,6 +52,7 @@ const rutas_modulo_retiro = require('./rutas/transaccion/retiro')
 const rutas_modulo_parroquia = require('./rutas/configuracion/parroquia')
 const rutas_modulo_director = require('./rutas/configuracion/director')
 const rutas_modulo_especialista = require('./rutas/configuracion/especialista')
+const rutas_modulo_aula_espacio = require('./rutas/configuracion/aula-espacio')
 //SET
 app.set("puerto",8080)
 // USE
@@ -109,6 +110,7 @@ app.use("/transaccion/retiro", rutas_modulo_retiro)
 app.use("/configuracion/parroquia", rutas_modulo_parroquia)
 app.use("/configuracion/director", rutas_modulo_director)
 app.use("/configuracion/especialista", rutas_modulo_especialista)
+app.use("/configuracion/aula-espacio", rutas_modulo_aula_espacio)
 
 // app.get("/ver-imagen",(req,res) => {
 //     // console.log(fs.createReadStream(__dirname+"/upload/cintillo/cintillo-2021-02-11_05-11-56PM.png").read())
