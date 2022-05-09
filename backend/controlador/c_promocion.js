@@ -1,6 +1,6 @@
 const ControladorPromocion={}
 const ModeloPromocion= require("../modelo/m_promocion")
-// const VitacoraControlador = require("./c_vitacora")
+const VitacoraControlador = require("./c_vitacora")
 
 ControladorPromocion.registrar= async (req,res,next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
@@ -12,36 +12,37 @@ ControladorPromocion.registrar= async (req,res,next) => {
       respuesta_api.mensaje="Registro completado"
       respuesta_api.estado_respuesta=true
       respuesta_api.color_alerta="success"
+     req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tpromocion", promocion.id_promocion)
+    next()
         
     }
     else{
         respuesta_api.mensaje="error al registrar(la promocion)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
-ControladorPromocion.consultar= async (req,res) => {
+ControladorPromocion.consultar= async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const {id,token} = req.params
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setIdPromocion(id)
     const resultPromocion=await modeloPromocion.consultar()
     if(resultPromocion.rowCount>0){
-        respuesta_api.mensaje="consula completada"
+        respuesta_api.mensaje="Consula completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
         respuesta_api.datos=resultPromocion.rows
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tpromocion", id)
+        next()
 
     }
     else{
-        respuesta_api.mensaje="error al consultar(la promocion)"
+        respuesta_api.mensaje="Error al consultar(la promocion)"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
         res.writeHead(200,{"Content-Type":"application/json"})
@@ -81,6 +82,8 @@ ControladorPromocion.consultarPorInscripcion= async (req,res,next) => {
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
         respuesta_api.datos=resultPromocion.rows
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tpromocion", id)
+        next()
     }
     else{
         respuesta_api.mensaje="error al consultar(la promocion)"
@@ -92,10 +95,10 @@ ControladorPromocion.consultarPorInscripcion= async (req,res,next) => {
     }
 }
 
-ControladorPromocion.actualizar= async (req,res) => {
+ControladorPromocion.actualizar= async (req,res, next) => {
     const ControladorInscripcion=require("./c_inscripcion")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    const {promocion} = req.body
+    const {promocion, token} = req.body
     let { id } = req.params
     let modeloPromocion = new ModeloPromocion()
     modeloPromocion.setDatos(promocion)
@@ -107,17 +110,24 @@ ControladorPromocion.actualizar= async (req,res) => {
                 respuesta_api.mensaje="actualización completado"
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="success"
+                req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tpromocion", promocion.id_promocion)
+                next()
                 
             }else{
                 respuesta_api.mensaje="error: se creo la promocion pero no se pudo culminar la inscripción"
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="danger"
+                res.writeHead(200, { "Content-Type": "application/json" })
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
                 
             }
         }else{
             respuesta_api.mensaje="actualización completado"
             respuesta_api.estado_respuesta=true
             respuesta_api.color_alerta="success"
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tpromocion", promocion.id_promocion)
+            next()
             
         }
     }
@@ -125,10 +135,10 @@ ControladorPromocion.actualizar= async (req,res) => {
         respuesta_api.mensaje="error al actualizar"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorPromocion.consultarEstudiantesAsignados= async (req,res) => {
