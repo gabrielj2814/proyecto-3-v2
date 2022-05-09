@@ -50,6 +50,7 @@ class ComponentPromocionForm extends React.Component{
     this.consultarProfesores = this.consultarProfesores.bind(this);
     this.consultarPromocion = this.consultarPromocion.bind(this);
     this.consultarPromocionPorId = this.consultarPromocionPorId.bind(this)
+    this.obtenerDatosDeLasesion = this.obtenerDatosDeLasesion.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -101,6 +102,30 @@ class ComponentPromocionForm extends React.Component{
         fechaServidor:null,
         StringExprecion: /[A-Za-z]|[0-9]/
     }
+  }
+
+  async obtenerDatosDeLasesion(){
+      const token=localStorage.getItem("usuario")
+      await axiosCustom.get(`login/verificar-sesion${token}`)
+      .then(respuesta=>{
+          let respuesta_servior=respuesta.data
+          if(respuesta_servior.usuario){
+            let hashProfesores = JSON.parse(JSON.stringify(this.state.hashListaProfesores));
+
+            this.setState({
+              id_cedula_profesor:respuesta_servior.usuario.id_cedula
+            })
+
+            if(hashProfesores[respuesta_servior.usuario.id_cedula]){
+              this.ConsultarEstudiantesProfesor(respuesta_servior.usuario.id_cedula)
+            }
+      })
+      .catch(error => {
+          let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
+          mensaje.estado="danger"
+          mensaje.texto="error al conectarse con el servidor"
+          this.setState({mensaje})
+      })
   }
 
   async busquedaEstudiante(id){
@@ -273,6 +298,7 @@ class ComponentPromocionForm extends React.Component{
     if(acessoModulo){
       await this.consultarFechaServidor()
       await this.consultarProfesores();
+      await this.obtenerDatosDeLasesion();
       const operacion = this.props.match.params.operacion;
 
       if(operacion === "actualizar"){
@@ -291,7 +317,7 @@ class ComponentPromocionForm extends React.Component{
           document.getElementById("descripcion_nota_promocion").disabled = true;
           document.getElementById("recomendacion_pariente").disabled = true;
           document.getElementById("descripcion_logro").disabled = true;
-                      
+
         }else{
           alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
@@ -756,22 +782,6 @@ class ComponentPromocionForm extends React.Component{
                 </div>
                 <form id="form_trabajador">
 
-                  <div className="row mt-3">
-                      <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-promocion">
-                          <span className="sub-titulo-form-promocion">Profesor</span>
-                      </div>
-                  </div>
-                  <div className="row justify-content-center align-items-center">
-                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_cedula_profesor[0]}
-                        nombreCampo="Cédula:" activo={(operacion_Camp === "registrar") ? "si" : "no"} type="text" value={this.state.id_cedula_profesor}
-                        name="id_cedula_profesor" id="id_cedula_profesor" placeholder="Cédula" eventoPadre={this.BuscarProfesor}
-                      />
-                      <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                          <label>Nombre del Profesor: {this.state.nombre_profesor}</label><br></br>
-                          <label>Apellido del Profesor: {this.state.apellido_profesor}</label>
-                      </div>
-                  </div>
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-promocion">
                           <span className="sub-titulo-form-promocion">Estudiante inscrito</span>

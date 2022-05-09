@@ -45,7 +45,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
             id_aula:null,
             listaGrados:[],
             listaAulasPorGrado:[],
-            //------------------ 
+            //------------------
             listaAnoEscolares:[],
             registros:[],
             alerta:{
@@ -53,7 +53,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 mensaje:null,
                 estado:false
             },
-            // 
+            //
             tipoPdf:null,
             id_cedula:null,
             nombre_usuario:null,
@@ -144,7 +144,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                     this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
                     this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                     estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -177,8 +177,8 @@ class ComponentAsignacionAulaProfesor extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -232,7 +232,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         let input=a.target
         this.props.history.push(`/dashboard/transaccion/asignacion-aula-profesor/actualizar/${input.id}`)
     }
-    
+
     irAlFormularioDeRegistro(a){
         let input=a.target
         this.props.history.push(`/dashboard/transaccion/asignacion-aula-profesor/registrar`)
@@ -261,7 +261,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
             this.setState({tipoPdf:null})
             $botonGenerarPdf.classList.add("ocultarFormulario")
         }
-        
+
     }
 
     capturarDatosReporteEspecifico(){
@@ -288,7 +288,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         if(this.state.tipoPdf==="1"){
             datos.push({name:"id_aula",value:this.state.id_aula})
         }
-        
+
         console.log(datos)
         if(datos!==null){
           // alert("generar pdf")
@@ -301,17 +301,17 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 let json=JSON.parse(respuesta)
                 console.log("datos reporte martricula =>>>> ",json)
                 if(json.nombrePdf!=="false"){
-                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    $filaVerPdf.classList.remove("ocultarFormulario")
                     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
-                    $filaVerPdf.classList.add("ocultarFormulario") 
+                    $filaVerPdf.classList.add("ocultarFormulario")
                     alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
             error: function() {
             //   alert("error")
-              $filaVerPdf.classList.add("ocultarFormulario") 
+              $filaVerPdf.classList.add("ocultarFormulario")
             }
           });
         }
@@ -320,15 +320,14 @@ class ComponentAsignacionAulaProfesor extends React.Component{
     render(){
 
         const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                    <th>Código</th> 
+            <thead>
+                <tr>
                     <th>Nombre del Profesor</th>
                     <th>Grado</th>
-                    <th>Seccion</th>
+                    <th>Sección</th>
                     <th>Año Escolar</th>
                     <th>Estado</th>
-                </tr> 
+                </tr>
             </thead>
         )
 
@@ -337,7 +336,6 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 {this.state.registros.map((asignacion,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{asignacion.id_asignacion_aula_profesor}</td>
                             <td>{asignacion.nombres} {asignacion.apellidos}</td>
                             <td>{asignacion.numero_grado}</td>
                             <td>{asignacion.nombre_aula}</td>
@@ -345,11 +343,11 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                             <td>{(asignacion.estatus_asignacion_aula_profesor==="1")?"Activo":"Inactivo"}</td>
                             {!asignacion.vacio &&
                                 <td>
-                                    <ButtonIcon 
-                                    clasesBoton="btn btn-warning btn-block" 
-                                    value={asignacion.id_asignacion_aula_profesor} 
+                                    <ButtonIcon
+                                    clasesBoton="btn btn-warning btn-block"
+                                    value={asignacion.id_asignacion_aula_profesor}
                                     id={asignacion.id_asignacion_aula_profesor}
-                                    eventoPadre={this.irAlFormularioDeActualizacion} 
+                                    eventoPadre={this.irAlFormularioDeActualizacion}
                                     icon="icon-pencil"
                                     />
                                 </td>
@@ -419,13 +417,13 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                                 </div>
                             }
 
-                             
+
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
                                     <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
-                              
+
                             </div>
                             <div class="modal-footer ">
                                 <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
@@ -437,7 +435,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Asignación Aula Profesor"/>
@@ -462,7 +460,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 </div>
 
                 <div className="row justify-content-between">
-                
+
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">

@@ -22,6 +22,13 @@ import LinkButtom from '../subComponentes/link_button'
 <span className="item-sub-menu">Gestionar Reposo</span>
 ------ Reportes
 <span className="item-sub-menu">Trabajador</span>
+// {this.state.modulosSistema["/dashboard/transaccion"]["/planificaion"]&&
+//   <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/planificacion" texto="Planificación"/>
+// }
+
+// {this.state.modulosSistema["/dashboard/configuracion"]["/enfermedad"]&&
+//     <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/enfermedad" texto="Enfermedades"/>
+// }
 */
 import servidor from '../ipServer.js'
 
@@ -153,139 +160,130 @@ class MenuDashboard extends React.Component{
 
                     {modulo[1]==="transaccion"&&
                         <div id="trasaccion">
-
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia" texto="Asistencia"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia/lista"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia/lista" texto="Lista de Asistencia"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/permiso-trabajador"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/permiso-trabajador" texto="Gestionar Permiso"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/reposo-trabajador"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/reposo-trabajador" texto="Gestionar Reposo"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-aula-profesor"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-aula-profesor" texto="Asignación Aula Profesor"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-representante-estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-representante-estudiante" texto="Asignación Estudiante Representante"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/planificaion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/planificacion" texto="Planificación"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/promocion-gestion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion" texto="Gestionar Promociones"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/promocion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion/registrar" texto="Registrar Promoción"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia-estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia-estudiante" texto="Asistencia Estudiantes"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia-general-estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia-general-estudiante" texto="Asistencia Estudiantes General"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/retiro"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/retiro" texto="Retiro Estudiantes"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/transaccion"]["/retiro-formulario"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/retiro/registrar" texto="Retiro Estudiantes Formulario"/>
-                            }
-
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-representante-estudiante"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-representante-estudiante" texto="Asignación Estudiante-Representante"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asignacion-aula-profesor"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asignacion-aula-profesor" texto="Asignación Aula Profesor"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia" texto="Asistencia"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia/lista"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia/lista" texto="Lista de Asistencia"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia-estudiante"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia-estudiante" texto="Asistencia Estudiantes"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/asistencia-general-estudiante"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/asistencia-general-estudiante" texto="Asistencia Estudiantes General"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/permiso-trabajador"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/permiso-trabajador" texto="Gestionar Permiso"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/reposo-trabajador"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/reposo-trabajador" texto="Gestionar Reposo"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/promocion"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion/registrar" texto="Registrar Promoción"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/promocion-gestion"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion" texto="Gestionar Promociones"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/retiro-formulario"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/retiro/registrar" texto="Retiro Estudiantes Formulario"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/retiro"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/retiro" texto="Retiro Estudiantes"/>
+                          }
                         </div>
                     }
                     {modulo[1]==="configuracion"&&
                         <div id="configuracion">
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/inscripcion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/inscripcion" texto="Inscripción"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/director"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/director" texto="Director"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/traslado-estudiantes"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/traslado-estudiantes" texto="Traslado de Estudiantes"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/parroquia"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/parroquia" texto="Parroquia"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/estudiante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estudiante" texto="Estudiante"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/representante"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/representante" texto="Representante"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/ano-escolar"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ano-escolar" texto="Año escolar"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/grado"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/grado" texto="Grado"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/aula"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/aula" texto="Sección"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/profesor"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/profesor" texto="Profesor"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/vacuna"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/vacuna" texto="Vacuna"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/enfermedad"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/enfermedad" texto="Enfermedades"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/fecha-inscripcion"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/fecha-inscripcion" texto="Fecha Inscripción"/>
-                            }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/ano-escolar"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ano-escolar" texto="Año escolar"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/grado"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/grado" texto="Grado"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/aula"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/aula" texto="Sección"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/trabajador"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/director"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/director" texto="Director"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/profesor"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/profesor" texto="Profesor"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/estado"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/ciudad"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/parroquia"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/parroquia" texto="Parroquia"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/vacuna"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/vacuna" texto="Vacuna"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/estudiante"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estudiante" texto="Estudiante"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/representante"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/representante" texto="Representante"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/fecha-inscripcion"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/fecha-inscripcion" texto="Fecha Inscripción"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/inscripcion"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/inscripcion" texto="Inscripción"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/traslado-estudiantes"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/traslado-estudiantes" texto="Traslado de Estudiantes"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/acceso"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/acceso" texto="Acceso"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/tipo-trabajador"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-trabajador" texto="Tipo de Trabajador"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/funcion-trabajador"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/funcion-trabajador" texto="Función del Trabajador"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/especialidad"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/medico"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Médico"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/asignacion-especialidad-medico"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignación Médico Especialidad"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/permiso"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
+                          }
 
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/tipo-cam"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de Centro de Asistencia Médica"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/cam"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Médica"/>
+                          }
 
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/acceso"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/acceso" texto="Acceso"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/tipo-trabajador"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-trabajador" texto="Tipo de Trabajador"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/funcion-trabajador"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/funcion-trabajador" texto="Función del Trabajador"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/trabajador"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/trabajador" texto="Trabajador"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/permiso"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/permiso" texto="Permiso"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/especialidad"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/especialidad" texto="Especialidad"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/asignacion-especialidad-medico"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/asignacion-especialidad-medico" texto="Asignación Médico Especialidad"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/medico"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/medico" texto="Médico"/>
-                            }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/horario"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/reposo"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/cintillo-home"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cintillo-home" texto="Cintillo"/>
+                          }
 
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/estado"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/ciudad"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/tipo-cam"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/tipo-cam" texto="Tipo de Centro de Asistencia Médica"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/cam"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cam" texto="Centro de Asistencia Médica"/>
-                            }
-
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/horario"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/horario" texto="Horario"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/reposo"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/reposo" texto="Reposo"/>
-                            }
-                            {this.state.modulosSistema["/dashboard/configuracion"]["/cintillo-home"]&&
-                                <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/cintillo-home" texto="Cintillo"/>
-                            }
                         </div>
                     }
                     {modulo[1]==="seguridad"&&

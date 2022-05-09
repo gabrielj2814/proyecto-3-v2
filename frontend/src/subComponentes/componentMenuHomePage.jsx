@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap-grid.css';
 // imagenes
 import Cintillo from '../galeria/imagenes/encabezadoPrincipal.jpeg'
 //JS
-import $ from'jquery';
+import $ from 'jquery';
 import popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle';
 //SubComponentes
@@ -30,11 +30,11 @@ const ComponentMenuHomePage = () => {
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
-                <div className="collapse navbar-collapse" id="opciones">   
+                <div className="collapse navbar-collapse" id="opciones">
                     <ul className="navbar-nav">
                         <li className="nav-item">
                             <LinkButton clases="nav-link" ruta="/" texto="Inicio"/>
-                        </li> 
+                        </li>
                         <li className="nav-item">
                             <LinkButton clases="nav-link" ruta="/nosotros" texto="Nosotros"/>
                         </li>
@@ -43,12 +43,12 @@ const ComponentMenuHomePage = () => {
                         </li>
                         <li className="nav-item">
                             <LinkButton clases="nav-link" ruta="/login" texto="Iniciar Sesión"/>
-                        </li>            
+                        </li>
                     </ul>
                 </div>
             </nav>
         </div>
     )
-} 
+}
 
 export default ComponentMenuHomePage;

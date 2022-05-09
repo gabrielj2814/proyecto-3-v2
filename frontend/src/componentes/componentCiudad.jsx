@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap-grid.css'
 import '../css/componentCiudad.css'
 //componentes
 import ComponentDashboard from './componentDashboard'
-//sub componentes 
+//sub componentes
 import TituloModulo from '../subComponentes/tituloModulo'
 import ComponentTablaDatos from '../subComponentes/componentTablaDeDatos'
 import ButtonIcon from '../subComponentes/buttonIcon'
@@ -103,12 +103,12 @@ class ComponentCiudad extends React.Component{
                 respuesta_servior=respuesta.data
                 if(respuesta_servior.usuario){
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
       }
-  
+
       async consultarPerfilTrabajador(modulo,subModulo,idPerfil){
         let estado=false
         await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/acceso/consultar/${idPerfil}`)
@@ -136,11 +136,11 @@ class ComponentCiudad extends React.Component{
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
-            console.log(error)
+            console.error(error)
         })
         return estado
     }
@@ -154,7 +154,7 @@ class ComponentCiudad extends React.Component{
         })
         .catch(error=>{
             alert("No se pudo conectar con el servidor")
-            console.log(error)
+            console.error(error)
         })
         return respuesta_servidor;
     }
@@ -173,7 +173,7 @@ class ComponentCiudad extends React.Component{
                 registros:json_server_response,
                 numeros_registros:json_server_response.length
             }
-        } 
+        }
     }
 
     redirigirFormulario(a){
@@ -187,12 +187,12 @@ class ComponentCiudad extends React.Component{
         var input=a.target;
         alert("Eliminar -> "+input.id);
     }
-    
+
     actualizarElementoTabla(a){
         var input=a.target;
         this.props.history.push("/dashboard/configuracion/ciudad/actualizar/"+input.id);
     }
-    
+
     consultarElementoTabla(a){
         let input=a.target;
         //alert("Consultar -> "+input.id);
@@ -210,7 +210,7 @@ class ComponentCiudad extends React.Component{
                 this.setState({registros:respuesta_servidor.ciudades})
             })
             .catch(error=>{
-                console.log(error)
+                console.error(error)
                 alert("error en el servidor")
             })
         }
@@ -227,11 +227,10 @@ class ComponentCiudad extends React.Component{
             await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-patron/${valor}`)
                 .then(respuesta=>{
                 respuesta_servidor=respuesta.data
-                console.log(respuesta_servidor)
                 this.setState({datoDeBusqueda:valor,registros:respuesta_servidor.ciudades})
             })
             .catch(error=>{
-                console.log(error)
+                console.error(error)
                 alert("error en el servidor")
             })
         }
@@ -242,26 +241,25 @@ class ComponentCiudad extends React.Component{
 
 	render(){
 		const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                    <th>Código</th> 
-                    <th>Nombre</th>
-                </tr> 
+            <thead>
+                <tr>
+                    <th>Nombre del Municipio</th>
+                </tr>
             </thead>
         )
 
         /*
         {!ciudad.vacio &&
                             <td>
-                                <ButtonIcon clasesBoton="btn btn-danger btn-block" 
-                                value={ciudad.id_ciudad} 
+                                <ButtonIcon clasesBoton="btn btn-danger btn-block"
+                                value={ciudad.id_ciudad}
                                 id={ciudad.id_ciudad}
-                                eventoPadre={this.eliminarElementoTabla} 
+                                eventoPadre={this.eliminarElementoTabla}
                                 icon="icon-bin"
                                 />
                             </td>
                         }
-        
+
         */
 
         const jsx_tabla_body=(
@@ -269,27 +267,26 @@ class ComponentCiudad extends React.Component{
                 {this.state.registros.map((ciudad)=>{
                     return(
                         <tr key={ciudad.id_ciudad}>
-                            <td>{ciudad.id_ciudad}</td>
                             <td>{ciudad.nombre_ciudad}</td>
                         {!ciudad.vacio &&
                             <td>
-                                <ButtonIcon 
-                                clasesBoton="btn btn-warning btn-block" 
-                                value={ciudad.id_ciudad} 
+                                <ButtonIcon
+                                clasesBoton="btn btn-warning btn-block"
+                                value={ciudad.id_ciudad}
                                 id={ciudad.id_ciudad}
-                                eventoPadre={this.actualizarElementoTabla} 
+                                eventoPadre={this.actualizarElementoTabla}
                                 icon="icon-pencil"
                                 />
                             </td>
                         }
-                        
+
                         {!ciudad.vacio &&
                             <td>
-                                <ButtonIcon 
-                                clasesBoton="btn btn-secondary btn-block" 
+                                <ButtonIcon
+                                clasesBoton="btn btn-secondary btn-block"
                                 value={ciudad.id_ciudad}
-                                id={ciudad.id_ciudad} 
-                                eventoPadre={this.consultarElementoTabla} 
+                                id={ciudad.id_ciudad}
+                                eventoPadre={this.consultarElementoTabla}
                                 icon="icon-search"
                                 />
                             </td>
@@ -315,8 +312,8 @@ class ComponentCiudad extends React.Component{
                         </div>
                     </div>
                 }
-                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Ciudad"/>
-                <ComponentTablaDatos 
+                <TituloModulo clasesRow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo de Municipio"/>
+                <ComponentTablaDatos
                     eventoBuscar={this.buscar}
                     eventoEscribirCodigo={this.escribir_codigo}
                     tabla_encabezado={jsx_tabla_encabezado}
@@ -346,7 +343,7 @@ class ComponentCiudad extends React.Component{
             </div>
 
 		)
-	
+
 	}
 }
 
