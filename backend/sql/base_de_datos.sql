@@ -374,6 +374,7 @@ CREATE TABLE tfecha_incripcion(
 CREATE TABLE tespecialista(
     id_especialista SERIAL ,
     id_cedula character varying(8) NOT NULL,
+    especialidad character varying(1000) NOT NULL,
     estatus_especialista character(1) NOT NULL,
     constraint PK_id_especialista primary key(id_especialista),
     constraint FK_id_cedula_tespecialista foreign key(id_cedula) references ttrabajador(id_cedula) on update cascade on delete cascade
