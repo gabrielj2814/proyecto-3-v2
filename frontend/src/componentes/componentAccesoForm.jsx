@@ -105,7 +105,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"Retiro",id:"/retiro"},
                     {descripcion:"Formulario Retiro",id:"/retiro-formulario"},
                     {descripcion:"Promoción",id:"/promocion"},
-                    {descripcion:"Promocion evaluar",id:"/promocion-gestion"}
+                    {descripcion:"Promocion evaluar",id:"/promocion-gestion"},
+                    {descripcion:"Lista de Promocion Prof.",id:"/promocion-solo-profesor"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},
