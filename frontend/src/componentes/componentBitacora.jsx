@@ -69,7 +69,7 @@ class ComponentBitacora extends React.Component {
                 tdirector: "Director",
                 tespecialista: "Especialista",
 
-                tpromocion: "Promoción"
+                tpromocion: "Promoción",
 
                 taula_espacio: "Aula Espacio"
 
@@ -105,7 +105,7 @@ class ComponentBitacora extends React.Component {
                 { name:"tdirector", value:"Director"},
                 { name: "tespecialista", value: "Especialista"},
 
-                { name: "tpromocion", value:"Promoción"}
+                { name: "tpromocion", value:"Promoción"},
 
                 { name: "taula_espacio" , value:"Aula Espacio"}
 

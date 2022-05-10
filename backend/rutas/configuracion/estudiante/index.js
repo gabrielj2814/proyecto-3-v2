@@ -9,6 +9,7 @@ router.use(bodyparser.json())
 
 router.post("/registrar", controladorEstudiante.registrar_estudiante, bitacorra.capturaDatos)//registrar
 router.get("/consultar-todos", controladorEstudiante.consultar_todos)// consultar todos
+router.get("/consultar-todos/:queEstoyBuscando", controladorEstudiante.consultarTodosLosEstudiantesIncompletos)// consultar todos
 router.get("/consultar/:id/:token", controladorEstudiante.consultar, bitacorra.capturaDatos)// consulta especifica
 router.get("/consultar-patron/:patron", controladorEstudiante.consultarpatron) //consultar por patron
 router.get("/estudiantes-activos", controladorEstudiante.consultarEstudiantesActivos) //consultar todos los estudiantes activos

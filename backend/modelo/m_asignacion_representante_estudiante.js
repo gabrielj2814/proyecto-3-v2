@@ -71,6 +71,11 @@ class ModeloAsigRepresentanteEstudiante extends DriverPostgre {
     return await this.query(SQL)
   }
 
+  async consultarAsignacionPorIdEstudiante(idEstudiante) {
+    const SQL = `SELECT * FROM tasignacion_representante_estudiante WHERE id_estudiante=${idEstudiante} `
+    return await this.query(SQL);
+  }
+
 }
 
 module.exports = ModeloAsigRepresentanteEstudiante;
