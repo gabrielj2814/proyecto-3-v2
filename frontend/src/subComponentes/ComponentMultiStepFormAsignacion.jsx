@@ -612,13 +612,13 @@ class ComponentMultiStepFormAsignacion extends React.Component{
 
   validarRadio(name){
     const valor = this.state[name]
-    let msj_estatus_asignacion_representante_estudiante = this.state["msj_"+name]
+    let msj = this.state["msj_"+name]
 
-    if(valor !== "") msj_estatus_asignacion_representante_estudiante[0] = {mensaje: "", color_texto:"rojo"}
-    else msj_estatus_asignacion_representante_estudiante[0] = {mensaje: "Debe de seleccionar el estado de esta asignacion", color_texto:"rojo"}
+    if(valor !== "") msj[0] = {mensaje: "", color_texto:"rojo"}
+    else msj[0] = {mensaje: "Debe de seleccionar el estado de esta asignacion", color_texto:"rojo"}
 
-    this.setState(msj_estatus_asignacion_representante_estudiante)
-    if(msj_estatus_asignacion_representante_estudiante[0].mensaje === "") return true; else return false;
+    this.setState({['msj_'+name]:msj})
+    if(msj[0].mensaje === "") return true; else return false;
   }
 
   validarFechaNacimineto(){
@@ -1288,7 +1288,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                           obligatorio="si"
                           mensaje={this.state.msj_id_ciudad_representante}
-                          nombreCampoSelect="Ciudad:"
+                          nombreCampoSelect="Municipio:"
                           clasesSelect="custom-select"
                           name="id_ciudad_representante"
                           id="id_ciudad_representante"
@@ -1385,7 +1385,7 @@ class ComponentMultiStepFormAsignacion extends React.Component{
                     <ComponentFormRadioState
                       clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
                       extra="custom-control-inline"
-                      nombreCampoRadio="Estatus de la asignacion:"
+                      nombreCampoRadio="Estatus de la asignación:"
                       name="estatus_asignacion_representante_estudiante"
                       nombreLabelRadioA="Activo"
                       idRadioA="activoestudianterA"

@@ -152,6 +152,9 @@ import ComponentCambioAulaForm from './componentes/componentCambioAulaForm'
 // Director
 import ComponentDirectorForm from './componentes/componentDirectorForm'
 import ComponentDirector from './componentes/componentDirector'
+// Aula (Espacio)
+import ComponentAulaEspacio from './componentes/componentAulaEspacio'
+import ComponentAulaEspacioForm from './componentes/componentAulaEspacioForm'
 
 function App() {
   return (
@@ -261,6 +264,9 @@ function App() {
 
         <Route exact path="/dashboard/configuracion/parroquia/:operacion/:id?" component={ComponentParroquiaForm}/>
         <Route exact path="/dashboard/configuracion/parroquia/:mensaje?" component={ComponentParroquia}/>
+
+        <Route exact path="/dashboard/configuracion/espacio-aula/:operacion/:id?" component={ComponentAulaEspacioForm}/>
+        <Route exact path="/dashboard/configuracion/espacio-aula/:mensaje?" component={ComponentAulaEspacio}/>
 
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
