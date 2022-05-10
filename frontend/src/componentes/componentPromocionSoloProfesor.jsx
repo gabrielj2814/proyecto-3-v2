@@ -228,7 +228,7 @@ class ComponentPromocion extends React.Component {
             <thead>
                 <tr>
                   <th>Fecha de promoción</th>
-                  <th>Nota promocional</th>
+                  <th>Literal</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
