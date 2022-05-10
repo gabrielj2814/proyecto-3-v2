@@ -190,6 +190,9 @@ class MenuDashboard extends React.Component{
                           {this.state.modulosSistema["/dashboard/transaccion"]["/promocion-gestion"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion" texto="Gestionar Promociones"/>
                           }
+                          {this.state.modulosSistema["/dashboard/transaccion"]["/promocion-solo-profesor"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/promocion-solo-profesor" texto="Lista de Promocion Prof."/>
+                          }
                           {this.state.modulosSistema["/dashboard/transaccion"]["/retiro-formulario"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/transaccion/retiro/registrar" texto="Retiro Estudiantes Formulario"/>
                           }
@@ -205,6 +208,9 @@ class MenuDashboard extends React.Component{
                           }
                           {this.state.modulosSistema["/dashboard/configuracion"]["/grado"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/grado" texto="Grado"/>
+                          }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/aula-espacio"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/espacio-aula" texto="Espacio Aula"/>
                           }
                           {this.state.modulosSistema["/dashboard/configuracion"]["/aula"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/aula" texto="Sección"/>

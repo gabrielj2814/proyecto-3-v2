@@ -88,6 +88,7 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"Parroquia",id:"/parroquia"},
                     {descripcion:"Traslado estudiante",id:"/traslado-estudiantes"},
                     {descripcion:"Director",id:"/director"},
+                    {descripcion:"Espacio Aula",id:"/aula-espacio"},
                 ],
                 // reporte:[
                 //     {descripcion:"reporte trabajador",id:"/reporte-trabajador"}
@@ -105,7 +106,8 @@ class ComponentAccesoForm extends React.Component {
                     {descripcion:"Retiro",id:"/retiro"},
                     {descripcion:"Formulario Retiro",id:"/retiro-formulario"},
                     {descripcion:"Promoción",id:"/promocion"},
-                    {descripcion:"Promocion evaluar",id:"/promocion-gestion"}
+                    {descripcion:"Promocion evaluar",id:"/promocion-gestion"},
+                    {descripcion:"Lista de Promocion Prof.",id:"/promocion-solo-profesor"}
                 ],
                 seguridad:[
                     {descripcion:"Bitacora",id:"/bitacora"},

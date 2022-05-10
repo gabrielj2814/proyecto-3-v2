@@ -297,10 +297,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   cambiarEstado(a){
       var input=a.target;
       this.setState({[input.name]:input.value})
-      if(a.name == "tipo_representante"){
+      if(input.name == "tipo_representante"){
         let tipo;
-        if(a.value == "M") tipo = "Mama"; else tipo = "Papa";
-        if(a.value == "O") tipo = "";
+        if(input.value == "M") tipo = "Mama"; else tipo = "Papa";
+        if(input.value == "O") tipo = "";
         this.setState({parentesco: tipo})
       }
   }
@@ -308,33 +308,17 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   validarCampo(nombre_campo){
       var estado=false
       const valor=this.state[nombre_campo]
-      let msj_nombres = this.state["msj_"+nombre_campo]
-      let msj_apellidos = this.state["msj_"+nombre_campo]
-      let msj_parentesco = this.state["msj_"+nombre_campo];
+      let msj = this.state["msj_"+nombre_campo]
 
       if(valor!==""){
           if(this.state.StringExprecion.test(valor)){
               estado=true
-              console.log("campo nombre "+nombre_campo+" OK")
-              msj_nombres[0] = {mensaje: "",color_texto:"rojo"}
-              msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
-              msj_parentesco[0] = {mensaje: "",color_texto:"rojo"}
-          }
-          else{
-            msj_nombres[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-            msj_apellidos[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-            msj_parentesco[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-          }
-      }
-      else{
-        msj_nombres[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-        msj_apellidos[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-        msj_parentesco[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-      }
+              msj[0] = {mensaje: "",color_texto:"rojo"}
+          }else msj[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
 
-      if(nombre_campo == "nombres") this.setState(msj_nombres)
-      else if(nombre_campo === "parentesco") this.setState(msj_parentesco)
-      else this.setState(msj_apellidos)
+      }else msj[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
+
+      this.setState({['msj_'+nombre_campo]: msj})
       return estado
   }
 
@@ -420,23 +404,42 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
   validarFormularioRegistrar(){
       const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
       validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarTipoRepresentante = this.validarRadio('tipo_representante'),
-      validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-      validar_parentesco = this.validarCampo('parentesco');
+      validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante')
 
-      if( validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion && validar_parentesco){
-        return {estado: true}
-      }else return {estado: false}
+      if(this.state.tipo_representante === "O"){
+        const validar_parentesco = this.validarCampo('parentesco');
+
+        if(validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion && validar_parentesco && validar_parentesco){
+          return {estado: true}
+        }else{
+          return {estado: false}
+        }
+      }else{
+        if( validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion){
+          return {estado: true}
+        }else return {estado: false}
+      }
+
   }
 
-  validarFormularioActuazliar(){
+  validarFormularioActualizar(){
     const validar_cedula_escolar = this.validarCampoNumero('cedula_escolar'),
     validar_id_representante = this.validarCampoNumero('id_cedula_representante'), validarTipoRepresentante = this.validarRadio('tipo_representante'),
-    validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante'),
-    validar_parentesco = this.validarCampo('parentesco');
+    validarstatus_asignacion = this.validarRadio('estatus_asignacion_representante_estudiante')
 
-    if( validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion && validar_parentesco){
-      return {estado: true}
-    }else return {estado: false}
+    if(this.state.tipo_representante === "O"){
+      const validar_parentesco = this.validarCampo('parentesco');
+
+      if(validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion && validar_parentesco && validar_parentesco){
+        return {estado: false}
+      }else{
+        return {estado: false}
+      }
+    }else{
+      if( validar_cedula_escolar && validar_id_representante && validarTipoRepresentante && validarstatus_asignacion){
+        return {estado: true}
+      }else return {estado: false}
+    }
   }
 
   operacion(){
@@ -456,11 +459,10 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
           msj_estatus_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
       }
       if(operacion==="registrar"){
-        alert("hola")
           const estado_validar_formulario=this.validarFormularioRegistrar()
           if(estado_validar_formulario.estado){
-            alert("hola 2")
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
+
                   const mensaje =this.state.mensaje
                   var respuesta_servidor=""
                   axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/registrar`,objeto)
@@ -480,12 +482,9 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                   })
               })
           }
-          else{
-            alert("ahora si")
-          }
       }
       else if(operacion==="actualizar"){
-          const estado_validar_formulario=this.validarFormularioActuazliar()
+          const estado_validar_formulario=this.validarFormularioActualizar()
           const {id}=this.props.match.params
           if(estado_validar_formulario.estado){
               this.enviarDatos(estado_validar_formulario,(objeto)=>{
@@ -671,7 +670,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                           extra="custom-control-inline"
                           nombreCampoRadio="Seleccione el tipo de representante:"
                           name="tipo_representante"
-                          nombreLabelRadio={["Mamá","Papá","Otro representante"]}
+                          nombreLabelRadio={["Mamá","Papá","Otro Representante"]}
                           checkedRadio={this.state.tipo_representante}
 
                           idRadio={["Mama1","Papa2","Otro3"]}
