@@ -105,6 +105,7 @@ class ComponentPromocion extends React.Component {
     async conultarPromocionesProfesores(){
       axiosCustom.get("transaccion/promocion/consultar-todos-promociones/"+this.state.id_cedula)
       .then( ({data}) => {
+        
         if(data.datos.length > 0){
           this.setState({registros: data.datos})
         }else{
@@ -228,7 +229,7 @@ class ComponentPromocion extends React.Component {
             <thead>
                 <tr>
                   <th>Fecha de promoción</th>
-                  <th>Nota promocional</th>
+                  <th>Literal</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
@@ -236,7 +237,7 @@ class ComponentPromocion extends React.Component {
 
         const jsx_tabla_body=(
             <tbody>
-                {this.state.registros.filter( item => item.estatus_promocion === this.state.estatus_promocion).map((promocion,index)=>{
+                {this.state.registros.map((promocion,index)=>{
                   let status;
                   if(promocion.estatus_promocion === "E") status = "En Espera";
                   if(promocion.estatus_promocion === "R") status = "Rechazada";
@@ -246,18 +247,6 @@ class ComponentPromocion extends React.Component {
                           <td>{Moment(promocion.fecha_promocion).format("DD/MM/YYYY")}</td>
                           <td>{promocion.nota_promocion}</td>
                           <td>{status}</td>
-                          {promocion.estatus_promocion === "E" &&
-                            <td>
-                              <ButtonIcon
-                                clasesBoton="btn btn-primary btn-block"
-                                value={promocion.id_promocion}
-                                id={promocion.id_promocion}
-                                eventoPadre={this.ifAlFormularioEvaluacion}
-                                icon="icon-pencil"
-                                />
-                            </td>
-                          }
-
                           {promocion.estatus_promocion === "R" &&
                             <td>
                               <ButtonIcon
@@ -269,6 +258,7 @@ class ComponentPromocion extends React.Component {
                                 />
                             </td>
                           }
+
                           {promocion.estatus_promocion === "A" &&
                             <td>
                                 <button id={promocion.id_promocion} className='btn btn-danger btn-block' onClick={this.generarPdfPromo}>

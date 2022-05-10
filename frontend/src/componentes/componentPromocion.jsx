@@ -228,7 +228,7 @@ class ComponentPromocion extends React.Component {
             <thead>
                 <tr>
                   <th>Fecha de promoción</th>
-                  <th>Nota promocional</th>
+                  <th>Literal</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
@@ -253,18 +253,6 @@ class ComponentPromocion extends React.Component {
                                 value={promocion.id_promocion}
                                 id={promocion.id_promocion}
                                 eventoPadre={this.ifAlFormularioEvaluacion}
-                                icon="icon-pencil"
-                                />
-                            </td>
-                          }
-
-                          {promocion.estatus_promocion === "R" &&
-                            <td>
-                              <ButtonIcon
-                                clasesBoton="btn btn-warning btn-block"
-                                value={promocion.id_promocion}
-                                id={promocion.id_promocion}
-                                eventoPadre={this.irAlFormularioDeActualizacion}
                                 icon="icon-pencil"
                                 />
                             </td>

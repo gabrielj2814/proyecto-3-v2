@@ -150,7 +150,8 @@ class ComponentPromocionForm extends React.Component{
   }
 
   async consultarPromocion(id){
-      return await axiosCustom.get(`transaccion/promocion/consultar-promocion-por-inscripcion/${id}`)
+    const token=localStorage.getItem('usuario')
+      return await axiosCustom.get(`transaccion/promocion/consultar-promocion-por-inscripcion/${id}/${token}`)
       .then(respuesta =>{
           if(respuesta.data.datos.length > 0){
             let datos = respuesta.data.datos[0]
@@ -255,7 +256,7 @@ class ComponentPromocionForm extends React.Component{
       }
 
       let lista = res.data.datos.map( item => {
-        return {'id':item.id_inscripcion,'descripcion': `${item.codigo_cedula_escolar}-${item.cedula_escolar}`};
+        return {'id':item.id_inscripcion,'descripcion': `${item.codigo_cedula_escolar}-${item.cedula_escolar} ${item.nombres_estudiante} ${item.apellidos_estudiante}`};
       })
 
       let json=JSON.parse(JSON.stringify(res.data))
@@ -740,7 +741,6 @@ class ComponentPromocionForm extends React.Component{
           },
           token:token
       }
-      console.log(objeto)
       petion(objeto)
   }
 
@@ -790,7 +790,7 @@ class ComponentPromocionForm extends React.Component{
                   </div>
                   <div className="row justify-content-center align-items-center">
                     {this.props.match.params.operacion !== "registrar" &&
-                      <ComponentFormCampo clasesColumna="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"
+                      <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
                         clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_id_inscripcion[0]}
                         nombreCampo="Cédula escolar:" activo="no" type="text" value={this.state.cedula_escolar}
                         name="cedula_escolar" id="cedula_escolar" placeholder="Cédula" eventoPadre={""}
