@@ -11,7 +11,7 @@ router.get("/consultar-promocion/:id/:token",controladorPromocion.consultar, bit
 router.get("/consultar-todos/",controladorPromocion.consultarTodos)
 router.get("/consultar-todos-promociones/:cedula",controladorPromocion.consultarPromocionProfesor)
 router.get("/consultar-promocion-por-inscripcion/:id/:token",controladorPromocion.consultarPorInscripcion, bitacora.capturaDatos)
-router.put("/actualizar/:id",controladorPromocion.actualizar)
+router.put("/actualizar/:id", controladorPromocion.actualizar, bitacora.capturaDatos)
 router.get("/consultar-estudiantes/:cedula_profesor",controladorPromocion.consultarEstudiantesAsignados, bitacora.capturaDatos)
 
 module.exports = router

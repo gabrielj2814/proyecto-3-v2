@@ -95,6 +95,19 @@ controladorAsignacionRepresentantEstudiante.consultar = async (req, res) => {
 
 }
 
+controladorAsignacionRepresentantEstudiante.consultarAsignacionPorIdEstudiante = async (id) => {
+  const ModeloAsigRepresentanteEstudiante = require("../modelo/m_asignacion_representante_estudiante");
+  let modeloAsigRepresentanteEstudiante = new ModeloAsigRepresentanteEstudiante()
+  let resultAsigRepEst = await modeloAsigRepresentanteEstudiante.consultarAsignacionPorIdEstudiante(id)
+  if(resultAsigRepEst.rowCount>0){
+    return true
+  }
+  else{
+    return false
+  }
+
+}
+
 controladorAsignacionRepresentantEstudiante.consultarpatron = async (req, res) => {
   const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
   const ModeloAsigRepresentanteEstudiante = require("../modelo/m_asignacion_representante_estudiante");
