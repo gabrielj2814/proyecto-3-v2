@@ -10,7 +10,7 @@ router.post("/registrar", controladorEspecialista.registrar, bitacorra.capturaDa
 router.get("/consultar/:id/:token", controladorEspecialista.consultar, bitacorra.capturaDatos)
 router.get("/consultar-por-cedula/:cedula/:token", controladorEspecialista.consultarPorCedula, bitacorra.capturaDatos)
 router.get("/consultar-todos", controladorEspecialista.consultar_todos)
-router.put("/actualizar/:id", controladorEspecialista.actualizar)
+router.put("/actualizar/:id", controladorEspecialista.actualizar, bitacorra.capturaDatos)
 
 
 module.exports = router

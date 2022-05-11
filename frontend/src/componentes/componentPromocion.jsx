@@ -232,6 +232,7 @@ class ComponentPromocion extends React.Component {
                   <th>Literal</th>
                   <th>Cédula Escolar</th>
                   <th>Cédula del Profesor</th>
+                  <th>Grado y Seccion</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
@@ -250,6 +251,7 @@ class ComponentPromocion extends React.Component {
                           <td>{promocion.nota_promocion}</td>
                           <td>{promocion.codigo_cedula_escolar}-{promocion.cedula_escolar}</td>
                           <td>{promocion.id_cedula}</td>
+                          <td>{promocion.numero_grado} {promocion.nombre_aula}</td>
                           <td>{status}</td>
                           {promocion.estatus_promocion === "E" &&
                             <td>

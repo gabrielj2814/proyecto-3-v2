@@ -71,6 +71,7 @@ class ComponentEstudianteForm extends React.Component{
 
             id_ciudad:"",
             id_parroquia_vive:"",
+            id_parroquia_nacimiento:"",
             enfermedades_estudiante:"",
             id_vacuna: [],
             sexo_estudiante:"1",
@@ -226,9 +227,11 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_descripcion="nombre_estado",
             propiedad_estado="estatu_estado"
             const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+            
 
             let dataLocacionNacimiento = await this.consultarTodoParroquia(datos.id_parroquia_nacimiento)
             let dataLocacionVive = await this.consultarTodoParroquia(datos.id_parroquia_vive)
+
             let parroquiasNacimiento = await this.ObtenerParroquias(dataLocacionNacimiento[0].id_ciudad)
             let parroquiasVive = await this.ObtenerParroquias(dataLocacionVive[0].id_ciudad)
             let ciudadesNacimiento = await this.ObtenerCiudades(dataLocacionNacimiento[0].id_estado)
@@ -263,21 +266,21 @@ class ComponentEstudianteForm extends React.Component{
               id_estado_nacimiento: dataLocacionNacimiento.id_estado,
               id_ciudad: dataLocacionVive.id_ciudad,
               id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
-              id_parroquia_vive: dataLocacionVive.id_parroquia,
-              id_parroquia_nacimiento: dataLocacionNacimiento.id_parroquia,
+              id_parroquia_vive: dataLocacionVive[0].id_parroquia,
+              id_parroquia_nacimiento: dataLocacionNacimiento[0].id_parroquia,
               operacion: "actualizar",
                 edadEstudiante: edadEstudiante
             })
 
-            this.cambiarEstado({ target: { name: "id_parroquia_nacimiento", value: dataLocacionNacimiento.id_parroquia}})
-            this.cambiarEstado({ target: { name: "id_parroquia_vive", value: dataLocacionVive.id_parroquia } })
+            // this.cambiarEstado({ target: { name: "id_parroquia_nacimiento", value: dataLocacionNacimiento.id_parroquia}})
+            // this.cambiarEstado({ target: { name: "id_parroquia_vive", value: dataLocacionVive.id_parroquia } })
 
-            setTimeout(() => {
-                document.getElementById("id_parroquia_vive").value = `${datos.id_parroquia_vive}`
-                document.getElementById("id_parroquia_nacimiento").value = `${datos.id_parroquia_nacimiento}`
-                document.getElementById("codigo_cedula_escolar").readOnly = true;
-                document.getElementById("id_cedula_escolcar").readOnly = true;
-            }, 100);
+            // setTimeout(() => {
+            //     document.getElementById("id_parroquia_vive").value = `${datos.id_parroquia_vive}`
+            //     document.getElementById("id_parroquia_nacimiento").value = `${datos.id_parroquia_nacimiento}`
+            //     document.getElementById("codigo_cedula_escolar").readOnly = true;
+            //     document.getElementById("id_cedula_escolcar").readOnly = true;
+            // }, 100);
 
 
 
@@ -636,7 +639,6 @@ class ComponentEstudianteForm extends React.Component{
 
     cambiarEstado(a){
         var input=a.target;
-        console.log(input.name, input.value)
         this.setState({[input.name]:input.value})
     }
 
@@ -820,11 +822,9 @@ class ComponentEstudianteForm extends React.Component{
     }
 
     validarSelect(name){
-        console.log(name)
       let estado = false
       const valor = this.state[name]
       let msj = this.state["msj_"+name]
-      console.log(msj)
       if(valor != ""){
         estado = true
         msj[0] = {mensaje: "", color_texto:"rojo"}
@@ -976,7 +976,7 @@ class ComponentEstudianteForm extends React.Component{
 
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
-
+                    
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)

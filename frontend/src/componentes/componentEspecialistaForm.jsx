@@ -167,11 +167,12 @@ class ComponentEspecialistaForm extends React.Component {
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
             if(json.datos.length > 0){
+                
                 this.setState({
-                  id_especialista: json.datos.id_especialista,
-                  id_cedula: json.datos.id_cedula,
-                  especialidad: json.datos.especialidad,
-                  estatus_especialista: json.datos.estatus_especialista,
+                  id_especialista: json.datos[0].id_especialista,
+                  id_cedula: json.datos[0].id_cedula,
+                  especialidad: json.datos[0].especialidad,
+                  estatus_especialista: json.datos[0].estatus_especialista,
                 })
             }
             else{
@@ -351,7 +352,7 @@ class ComponentEspecialistaForm extends React.Component {
                     },
                     token
                 }
-                await axiosCustom.put(`configuracion/especalista/actualizar/${this.props.match.params.id}`,datosEspecialista)
+                await axiosCustom.put(`configuracion/especialista/actualizar/${this.props.match.params.id}`,datosEspecialista)
                 .then(respuesta => {
                     let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
@@ -365,6 +366,11 @@ class ComponentEspecialistaForm extends React.Component {
                         alerta.estado=respuestaServidor.estado_respuesta
                     }
                     this.setState({alerta})
+                    this.setState({
+                        id_especialista: "",
+                      id_cedula: "",
+                      especialidad: ""
+                    })
                 })
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
@@ -414,7 +420,7 @@ class ComponentEspecialistaForm extends React.Component {
                           value={this.state.id_especialista}
                           name="id_especialista"
                           id="id_especialista"
-                          placeholder="Código Profesor"
+                          placeholder="Código Especialista"
                           eventoPadre={this.cambiarEstado}
                         />
                         <ComponentFormSelect
