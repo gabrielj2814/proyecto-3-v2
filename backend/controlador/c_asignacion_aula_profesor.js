@@ -132,6 +132,28 @@ ControladorAsignacionAulaProfesor.consultarTodos=async (req,res) => {
     res.end()
 }
 
+ControladorAsignacionAulaProfesor.consultarAulasEspacioDisponibles=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let {idAnnoEscolar,aulas} = req.body
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    let aulasEspaciosDisponibles=[]
+    for(let contador=0;contador<aulas.length;contador++){
+        let aula=aulas[contador]
+        let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarProfesorPorAnoYAulaEspacio(idAnnoEscolar,aula.id_aula_espacio)
+        if(resultAsignacionAulaProfesor.rowCount===0){
+            aulasEspaciosDisponibles.push(aula)
+        }
+    }
+    respuesta_api.mensaje="consultar completada"
+    respuesta_api.datos=aulasEspaciosDisponibles
+    respuesta_api.estado_respuesta=true
+    respuesta_api.color_alerta="succes"
+    
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 ControladorAsignacionAulaProfesor.consultarPorAnoEscolar=async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let {id} = req.params

@@ -10,6 +10,8 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         this.id_ano_escolar=""
         this.estatus_asignacion_aula_profesor=""
         this.numero_total_de_estudiantes=""
+        this.id_especialista=""
+        this.id_aula_espacio=""
     }
 
     setDatos(AsignacionAulaProfesor){
@@ -19,6 +21,8 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         this.id_ano_escolar=AsignacionAulaProfesor.id_ano_escolar
         this.estatus_asignacion_aula_profesor=AsignacionAulaProfesor.estatus_asignacion_aula_profesor
         this.numero_total_de_estudiantes=AsignacionAulaProfesor.numero_total_de_estudiantes
+        this.id_especialista=AsignacionAulaProfesor.id_especialista
+        this.id_aula_espacio=AsignacionAulaProfesor.id_aula_espacio
     }
 
     setdatoIdAsignacionAulaProfesor(id){
@@ -43,13 +47,17 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
             id_aula,
             id_ano_escolar,
             numero_total_de_estudiantes,
-            estatus_asignacion_aula_profesor
+            estatus_asignacion_aula_profesor,
+            id_especialista,
+            id_aula_espacio
         ) VALUES(
             ${this.id_profesor},
             ${this.id_aula},
             ${this.id_ano_escolar},
             ${this.numero_total_de_estudiantes},
-            '1'
+            '1',
+            ${this.id_especialista},
+            ${this.id_aula_espacio}
         ) RETURNING id_asignacion_aula_profesor;`
         return await this.query(SQL)
     }
@@ -117,6 +125,13 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         return await this.query(SQL)
     }
 
+    async consultarProfesorPorAnoYAulaEspacio(idAnnoEscolar,idAulaEspacio){
+        const SQL=`SELECT * FROM tasignacion_aula_profesor WHERE
+        id_ano_escolar=${idAnnoEscolar} AND
+        id_aula_espacio=${idAulaEspacio};`
+        return await this.query(SQL)
+    }
+
     async consultarDisponibilidadProfesor(){
         const SQL=`SELECT * FROM tasignacion_aula_profesor,tprofesor,taula,tano_escolar WHERE
         tasignacion_aula_profesor.id_profesor=${this.id_profesor} AND
@@ -144,7 +159,9 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         id_aula=${this.id_aula},
         id_ano_escolar=${this.id_ano_escolar},
         estatus_asignacion_aula_profesor='${this.estatus_asignacion_aula_profesor}',
-        numero_total_de_estudiantes=${this.numero_total_de_estudiantes}
+        numero_total_de_estudiantes=${this.numero_total_de_estudiantes},
+        id_especialista=${this.id_especialista},
+        id_aula_espacio=${this.id_aula_espacio}
         WHERE
         id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor}
         `
