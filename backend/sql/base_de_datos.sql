@@ -406,7 +406,6 @@ CREATE TABLE tprofesor(
 CREATE TABLE tasignacion_aula_profesor(
     id_asignacion_aula_profesor SERIAL,
     id_profesor INTEGER NOT NULL,
-    id_especialista INTEGER NOT NULL,
     id_aula INTEGER NOT NULL,
     id_aula_espacio INTEGER NOT NULL,
     id_ano_escolar INTEGER NOT NULL,
@@ -414,10 +413,18 @@ CREATE TABLE tasignacion_aula_profesor(
     estatus_asignacion_aula_profesor character(1) NOT NULL,
     constraint PK_id_asignacion_aula_profesor primary key(id_asignacion_aula_profesor),
     constraint FK_id_profesor_tasignacion_aula_profesor foreign key(id_profesor) references tprofesor(id_profesor) on update cascade on delete cascade,
-    constraint FK_id_especialista_tasignacion_aula_profesor foreign key(id_especialista) references tespecialista(id_especialista) on update cascade on delete cascade,
     constraint FK_id_aula_tasignacion_aula_profesor foreign key(id_aula) references taula(id_aula) on update cascade on delete cascade,
     constraint FK_id_aula_espacio_tasignacion_aula_profesor foreign key(id_aula_espacio) references taula_espacio(id_aula_espacio) on update cascade on delete cascade,
     constraint FK_id_ano_escolar_tasignacion_aula_profesor foreign key(id_ano_escolar) references tano_escolar(id_ano_escolar) on update cascade on delete cascade
+);
+
+CREATE TABLE tasignacion_aula_profesor_especialista(
+    id_asignacion_aula_profesor_especialista SERIAL,
+    id_especialista INTEGER NOT NULL,
+    id_asignacion_aula_profesor INTEGER NOT NULL,
+    constraint PK_id_asignacion_aula_profesor_especialista primary key(id_asignacion_aula_profesor_especialista),
+    constraint FK_id_especialista foreign key(id_especialista) references tespecialista(id_especialista) on update cascade on delete cascade,
+    constraint FK_id_asignacion_aula_profesor foreign key(id_asignacion_aula_profesor) references tasignacion_aula_profesor(id_asignacion_aula_profesor) on update cascade on delete cascade
 );
 
 CREATE TABLE tlista_vacuna(
