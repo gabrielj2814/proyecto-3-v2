@@ -605,7 +605,6 @@ class ComponentPromocionForm extends React.Component{
   }
 
   validarFormularioRegistrar(){
-
     const validaCedulaProfesor = this.validarCampoNumero("id_cedula_profesor"), validaDescripcionNota = this.validarCampo('descripcion_nota_promocion'), validaInscripcion = this.validarSelect('id_inscripcion'),
     validaRecomendacionPariente = this.validarCampo('recomendacion_pariente'), validarDescripcionLogro = this.validarCampo('descripcion_logro'),
     validarNotaPromocion = this.validarRadio('nota_promocion'),validaDiasPromocion = this.validarCampoNumero('dias_promocion')
