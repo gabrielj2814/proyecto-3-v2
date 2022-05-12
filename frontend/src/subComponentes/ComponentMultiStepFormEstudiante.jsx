@@ -808,7 +808,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
               var respuesta_servidor=""
-              axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar`,objeto)
+              axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.props.idEstudiante}`,objeto)
               .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 let id_estu = respuesta_servidor.datos[0].id_estudiante;
@@ -817,7 +817,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                 mensaje.estado=respuesta_servidor.estado_respuesta
                 mensaje_formulario.mensaje=mensaje
                 this.setState(mensaje_formulario)
-                
+
                 if(respuesta_servidor.estado_respuesta){
                   this.setState({id_estudiante: id_estu})
                   this.registroVacunaEstudiante()
