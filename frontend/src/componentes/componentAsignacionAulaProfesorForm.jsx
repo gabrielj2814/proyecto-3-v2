@@ -37,6 +37,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         this.cerrarModal=this.cerrarModal.bind(this)
         this.verficarDisponibilidadProfesorAnoEscolarSiguiente=this.verficarDisponibilidadProfesorAnoEscolarSiguiente.bind(this)
         this.consultarAnoEscolarActivo = this.consultarAnoEscolarActivo.bind(this)
+        this.guardarEspecialista = this.guardarEspecialista.bind(this)
+        this.eliminarEspecialistas = this.eliminarEspecialistas.bind(this)
         this.state={
             modulo:"",
             estado_menu:false,
@@ -83,6 +85,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 estatus_asignacion_aula_profesor:null
             },
             listaDeEspecialistas:[],
+            listaIdEspecialistaHaEnviar:[],
+            especialistaHaMostrarInterfaz:[],
             listaDeAulaEspacio:[],
             aulasDisponiblesSelect:[],
             //
@@ -176,7 +180,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     document.getElementById("id_grado").value=this.state.id_grado
                     await this.consultarAulasPorGrado2(selectIdGrado)
                     document.getElementById("id_aula").value=this.state.id_aula
-                    document.getElementById("id_especialista").value=this.state.id_especialista
                     this.setState({cambioProfesor:false})
                     this.setState({cambioAula:false})
                     // document.getElementById("contenedorDisponibilidadProfesor").style.display="none"
@@ -283,7 +286,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            // console.log(json)
+            console.log(json)
             if(json.datos.length>0){
                 this.setState({
                     id_cedula:json.datos[0].id_cedula,
@@ -296,9 +299,15 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     ano_desde:json.datos[0].ano_desde,
                     ano_hasta:json.datos[0].ano_hasta,
                     numero_total_de_estudiantes:json.datos[0].numero_total_de_estudiantes,
-                    id_especialista:json.datos[0].id_especialista,
                     id_aula_espacio:json.datos[0].id_aula_espacio
+                    
                 })
+                let listaIdEspecialistaHaEnviar=json.datos[0].especialistas.map(especialista => parseInt(especialista.id_especialista))
+                this.setState({listaIdEspecialistaHaEnviar})
+                let especialistaHaMostrar=listaIdEspecialistaHaEnviar.map(idEspecialista => {
+                    return this.state.listaDeEspecialistas.find(especialista => parseInt(idEspecialista)===especialista.id_especialista)
+                })
+                this.setState({especialistaHaMostrarInterfaz:especialistaHaMostrar})
                 document.getElementById("numero_total_de_estudiantes").value=json.datos[0].numero_total_de_estudiantes
                 let respaldoDatos=JSON.parse(JSON.stringify({
                     id_cedula:json.datos[0].id_cedula,
@@ -308,8 +317,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     id_aula:json.datos[0].id_aula,
                     id_ano_escolar:json.datos[0].id_ano_escolar,
                     estatus_asignacion_aula_profesor:json.datos[0].estatus_asignacion_aula_profesor,
-                    id_especialista:json.datos[0].id_especialista,
-                    id_aula_espacio:json.datos[0].id_aula_espacio
+                    id_aula_espacio:json.datos[0].id_aula_espacio,
+                    listaIdEspecialistaHaEnviar
                 }))
                 this.setState({respaldoDatos})
             }
@@ -774,6 +783,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     let datosFormatiados=this.extrarDatosDelFormData(datosFormulario)
                     let datosAsignacion={
                         asignacionAulaProfesor:datosFormatiados,
+                        especialistas:this.state.listaIdEspecialistaHaEnviar,
                         token
                     }
                     console.log(datosAsignacion)
@@ -832,6 +842,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     datosFormatiados.id_ano_escolar = this.state.id_ano_escolar
                     let datosAsignacion={
                         asignacionAulaProfesor:datosFormatiados,
+                        especialistas:this.state.listaIdEspecialistaHaEnviar,
                         token
                     }
                     console.log("datos ha actualizar => ",datosAsignacion.asignacionAulaProfesor.id_aula_espacio)
@@ -872,6 +883,40 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     cerrarModal(a){
         let idModal=a.target.getAttribute("data-id-modal")
         $(`#${idModal}`).modal("hide")
+    }
+
+    guardarEspecialista(a){
+        a.preventDefault()
+        let selectEspecialista=document.getElementById("id_especialista")
+        if(selectEspecialista.value!=="null"){
+            let listaIdEspecialistaHaEnviar =[...this.state.listaIdEspecialistaHaEnviar]
+            listaIdEspecialistaHaEnviar.push(parseInt(selectEspecialista.value))
+            let borrarDuplicados=new Set(listaIdEspecialistaHaEnviar)
+            console.log(borrarDuplicados)
+            borrarDuplicados=Array.from(borrarDuplicados)
+            console.log("lista sin duplicados => ",borrarDuplicados)
+            this.setState({listaIdEspecialistaHaEnviar:borrarDuplicados})
+            let especialistaHaMostrar=borrarDuplicados.map(idEspecialista => {
+                return this.state.listaDeEspecialistas.find(especialista => parseInt(idEspecialista)===especialista.id_especialista)
+            })
+            console.log("datos => ",especialistaHaMostrar)
+            this.setState({especialistaHaMostrarInterfaz:especialistaHaMostrar})
+        }
+    }
+
+    eliminarEspecialistas(a){
+        a.preventDefault()
+        let boton=a.target
+        let id=boton.getAttribute("data-id-especialista")
+        let listaIdEspecialistaHaEnviar =[...this.state.listaIdEspecialistaHaEnviar]
+        listaIdEspecialistaHaEnviar=listaIdEspecialistaHaEnviar.filter(idEspecialista => parseInt(id)!==idEspecialista)
+        console.log("actualizando datos => ",listaIdEspecialistaHaEnviar)
+        this.setState({listaIdEspecialistaHaEnviar})
+        let especialistaHaMostrar=listaIdEspecialistaHaEnviar.map(idEspecialista => {
+            return this.state.listaDeEspecialistas.find(especialista => parseInt(idEspecialista)===especialista.id_especialista)
+        })
+        console.log("datos => ",especialistaHaMostrar)
+        this.setState({especialistaHaMostrarInterfaz:especialistaHaMostrar})
     }
 
     render(){
@@ -1068,24 +1113,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                                 <span className="sub-titulo-form-reposo-trabajador">Otros</span>
                             </div>
                         </div>
-                        <div className="row justify-content-center mb-3">
-                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
-                                <div class="form-groud">
-                                    <label>Especialista</label>
-                                    <select id="id_especialista" name="id_especialista" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
-                                    <option value='null' >Seleccione</option>
-                                            {this.state.listaDeEspecialistas.map((especialista,index)=> {
-                                            return(
-                                                <option key={index} value={especialista.id_especialista} >{especialista.nombres} {especialista.apellidos} - {especialista.especialidad}</option>
-                                            )
-                                            })
-
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
-                        </div>
+                       
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
@@ -1103,8 +1131,50 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             checkedRadioB={this.state.estatus_asignacion_aula_profesor}
                             />
                         </div>
+                        <div className="row justify-content-center mb-3">
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                <div class="form-groud">
+                                    <label>Especialista</label>
+                                    <select id="id_especialista" name="id_especialista" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
+                                    <option value='null' >Seleccione</option>
+                                            {this.state.listaDeEspecialistas.map((especialista,index)=> {
+                                            return(
+                                                <option key={index} value={especialista.id_especialista} >{especialista.nombres} {especialista.apellidos} - {especialista.especialidad}</option>
+                                            )
+                                            })
+
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3 padding-top-30">
+                                <button className='btn btn-success' onClick={this.guardarEspecialista}>Guardar</button>
+                            </div>
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
+                        </div>
+                       
 
                     </form>
+                    <div className="row justify-content-center mb-3">
+                            <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">Lista de Especialistas Guardados</div>
+                            <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                        </div>
+                        {this.state.especialistaHaMostrarInterfaz.map(especialista =>{
+                                return (
+                                    <div className="row justify-content-center mb-3" key={especialista.id_especialista}>
+                                        <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
+                                            <button data-id-especialista={especialista.id_especialista} className='btn btn-danger margin-right-10' onClick={this.eliminarEspecialistas}>
+                                                <svg data-id-especialista={especialista.id_especialista} xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
+                                                    <path data-id-especialista={especialista.id_especialista} d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5Zm-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5ZM4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06Zm6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528ZM8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5Z"/>
+                                                </svg>
+                                            </button>
+                                                {especialista.nombres} {especialista.apellidos}</div>
+                                        <div className="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6"></div>
+                                    </div>
+                                )
+                            })
+
+                        }
                     <div className="row justify-content-center">
                         <div className="col-auto">
                             {this.props.match.params.operacion==="registrar" &&

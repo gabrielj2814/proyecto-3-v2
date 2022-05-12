@@ -10,7 +10,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         this.id_ano_escolar=""
         this.estatus_asignacion_aula_profesor=""
         this.numero_total_de_estudiantes=""
-        this.id_especialista=""
         this.id_aula_espacio=""
     }
 
@@ -21,7 +20,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         this.id_ano_escolar=AsignacionAulaProfesor.id_ano_escolar
         this.estatus_asignacion_aula_profesor=AsignacionAulaProfesor.estatus_asignacion_aula_profesor
         this.numero_total_de_estudiantes=AsignacionAulaProfesor.numero_total_de_estudiantes
-        this.id_especialista=AsignacionAulaProfesor.id_especialista
         this.id_aula_espacio=AsignacionAulaProfesor.id_aula_espacio
     }
 
@@ -48,7 +46,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
             id_ano_escolar,
             numero_total_de_estudiantes,
             estatus_asignacion_aula_profesor,
-            id_especialista,
             id_aula_espacio
         ) VALUES(
             ${this.id_profesor},
@@ -56,7 +53,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
             ${this.id_ano_escolar},
             ${this.numero_total_de_estudiantes},
             '1',
-            ${this.id_especialista},
             ${this.id_aula_espacio}
         ) RETURNING id_asignacion_aula_profesor;`
         return await this.query(SQL)
@@ -160,7 +156,6 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         id_ano_escolar=${this.id_ano_escolar},
         estatus_asignacion_aula_profesor='${this.estatus_asignacion_aula_profesor}',
         numero_total_de_estudiantes=${this.numero_total_de_estudiantes},
-        id_especialista=${this.id_especialista},
         id_aula_espacio=${this.id_aula_espacio}
         WHERE
         id_asignacion_aula_profesor=${this.id_asignacion_aula_profesor}
