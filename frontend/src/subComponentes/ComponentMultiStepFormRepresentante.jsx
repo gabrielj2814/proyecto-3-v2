@@ -822,6 +822,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
 
       const estado_validar_formulario=this.validarFormularioRegistrar()
       if(estado_validar_formulario.estado){
+        let respuesta_finalServerPapa = false,respuesta_finalServerMama = false;
           this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
               var respuesta_servidor=""
@@ -835,6 +836,9 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
+
+                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerMama = true;
+                      else respuesta_finalServerMama = false;
                     })
                     .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
@@ -851,6 +855,9 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
+
+                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerMama = true;
+                      else respuesta_finalServerMama = false;
                     })
                     .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
@@ -874,6 +881,9 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
 
+                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerPapa = true;
+                      else respuesta_finalServerPapa = false;
+
                     })
                     .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
@@ -891,6 +901,9 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
 
+                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerPapa = true;
+                      else respuesta_finalServerPapa = false;
+
                     })
                     .catch(error=>{
                       mensaje.texto="No se puedo conectar con el servidor"
@@ -902,16 +915,19 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   }
                 }
               }
-
-              if(this.state.campo_obligatorio === "P") this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
-              if(this.state.campo_obligatorio === "M") this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
-              if(this.state.campo_obligatorio === "A"){
-                this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
-                this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
+              if(respuesta_finalServerMama && respuesta_finalServerPapa){
+                if(this.state.campo_obligatorio === "P") this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
+                if(this.state.campo_obligatorio === "M") this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
+                if(this.state.campo_obligatorio === "A"){
+                  this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
+                  this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
+                }
+                setTimeout( () => {
+                  this.props.next();
+                }, 100);
+              }else{
+                alert("Algo ocurrio, y la operación ha fallado")
               }
-              setTimeout( () => {
-                this.props.next();
-              }, 100);
 
           })
       }

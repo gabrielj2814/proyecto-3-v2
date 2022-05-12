@@ -232,7 +232,7 @@ class ComponentPromocion extends React.Component {
                   <th>Literal</th>
                   <th>Cédula Escolar</th>
                   <th>Cédula del Profesor</th>
-                  <th>Grado y Seccion</th>
+                  <th>Grado y Sección</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>

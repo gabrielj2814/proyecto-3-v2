@@ -231,7 +231,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/actualizar/:id?" component={ComponentEstudianteForm}/>
-        <Route exact path="/dashboard/configuracion/estudiante/registrar" component={ComponentMultiStepForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/registrar/:id?" component={ComponentMultiStepForm}/>
 
         <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
         <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
