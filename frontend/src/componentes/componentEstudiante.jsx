@@ -38,7 +38,10 @@ class ComponenteEstudiante extends React.Component{
         this.validarAccesoDelModulo = this.validarAccesoDelModulo.bind(this)
         this.consultarPerfilTrabajador = this.consultarPerfilTrabajador.bind(this)
         this.buscar = this.buscar.bind(this)
+        this.consultarTodosLosEstudiantes2 = this.consultarTodosLosEstudiantes2.bind(this)
         this.escribir_codigo = this.escribir_codigo.bind(this)
+        this.cambiarEstado = this.cambiarEstado.bind(this)
+        this.reanudarRegistro = this.reanudarRegistro.bind(this)
         this.state = {
           modulo:"",
           estado_menu:false,
@@ -46,6 +49,7 @@ class ComponenteEstudiante extends React.Component{
           nombre_usuario:null,
           datoDeBusqueda:"",
           registros:[],
+          filtro_estudiantes: "c",
           id_cedula:"",
           nombrePdf:null,
           tipoPdf:null,
@@ -100,14 +104,22 @@ class ComponenteEstudiante extends React.Component{
     }
 
     async consultarTodosLosEstudiantes(){
-        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos`)
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos/${this.state.filtro_estudiantes}`)
         .then(repuesta => repuesta.data.datos )
         .catch(error => {
             console.log(error)
         })
     }
 
-
+    async consultarTodosLosEstudiantes2(){
+        await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/consultar-todos/i`)
+        .then(repuesta =>{
+          console.log(repuesta.data.datos)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
 
     verficarLista(json_server_response){
         if(json_server_response.length===0){
@@ -239,12 +251,27 @@ class ComponenteEstudiante extends React.Component{
           return estado
       }
 
+      async cambiarEstado({target}){
+        this.setState({[target.name]:target.value})
+        await setTimeout( async ()=> {
+          var json_server_response = await this.consultarTodosLosEstudiantes();
+          var servidor = this.verficarLista(json_server_response);
+          this.setState(servidor)
+        }, 20);
+      }
+
     redirigirFormulario(a){
       const input = a.target;
       if(input.value==="Registrar"){
         this.props.history.push("/dashboard/configuracion/estudiante/registrar")
       }
     }
+
+    reanudarRegistro(a){
+      const input = a.target;
+      this.props.history.push(`/dashboard/configuracion/estudiante/registrar/${input.id}`)
+    }
+
     render(){
       const jsx_modales = (
       <>
@@ -280,13 +307,24 @@ class ComponenteEstudiante extends React.Component{
                           <td>{estudiante.nombres_estudiante}</td>
                           <td>{estudiante.apellidos_estudiante}</td>
                           <td>{ (estudiante.nombres_estudiante != null) ? (estudiante.sexo_estudiante === '1') ? "Masculino" : "Femenino" : "" }</td>
-                         {!estudiante.vacio &&
+                         {!estudiante.vacio && this.state.filtro_estudiantes === "c" &&
                            <td>
                              <ButtonIcon
                                 clasesBoton="btn btn-warning btn-block"
                                 value={estudiante.id_estudiante}
                                 id={estudiante.id_estudiante}
                                 eventoPadre={this.actualizarElementoTabla}
+                                icon="icon-pencil"
+                              />
+                            </td>
+                         }
+                         {!estudiante.vacio && this.state.filtro_estudiantes === "i" &&
+                           <td>
+                             <ButtonIcon
+                                clasesBoton="btn btn-primary btn-block"
+                                value={estudiante.id_estudiante}
+                                id={estudiante.id_estudiante}
+                                eventoPadre={this.reanudarRegistro}
                                 icon="icon-pencil"
                               />
                             </td>
@@ -313,9 +351,28 @@ class ComponenteEstudiante extends React.Component{
               </div>
               }
               <TituloModulo clasesrow="row" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Estudiante"/>
-              <ComponentTablaDatos eventoBuscar={this.buscar} eventoEscribirCodigo={this.escribir_codigo}
-                  tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.numeros_registros}
-              />
+                <div className="row mt-2 mb-0">
+                    <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
+                      <div className="row">
+                        <ComponentFormSelect
+                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
+                          obligatorio="si"
+                          mensaje={""}
+                          nombreCampoSelect="Filtro de estudiantes:"
+                          clasesSelect="custom-select"
+                          name="filtro_estudiantes"
+                          id="filtro_estudiantes"
+                          eventoPadre={this.cambiarEstado}
+                          defaultValue={this.state.filtro_estudiantes}
+                          option={[{id: "i", descripcion: "Registros Incompletos"},{id:"c", descripcion: "Registros Completos"}]}
+                        />
+                      </div>
+                      <ComponentTablaDatos eventoBuscar={this.buscar} eventoEscribirCodigo={this.escribir_codigo}
+                          tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.numeros_registros}
+                      />
+                    </div>
+                </div>
+
               <div className="row justify-content-between">
                 <div className="col-3 col-ms-3 col-md-3 columna-boton">
                     <div className="row justify-content-center align-items-center contenedor-boton">
