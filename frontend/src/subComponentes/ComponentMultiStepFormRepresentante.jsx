@@ -915,7 +915,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   }
                 }
               }
-              if(respuesta_finalServerMama && respuesta_finalServerPapa){
+              let response = false;
+
+              if(this.state.campo_obligatorio === "A"){
+                if(respuesta_finalServerMama && respuesta_finalServerPapa) response = true; else response = false;
+              }else if(this.state.campo_obligatorio === "P"){
+                if(respuesta_finalServerPapa) response = true; else response = false;
+              }else if(this.state.campo_obligatorio === "M"){
+                if(respuesta_finalServerMama) response = true; else response = false;
+              }
+
+              if(response){
                 if(this.state.campo_obligatorio === "P") this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
                 if(this.state.campo_obligatorio === "M") this.props.addCedulas({tipo: "mama", cedula: this.state.id_cedula_mama})
                 if(this.state.campo_obligatorio === "A"){

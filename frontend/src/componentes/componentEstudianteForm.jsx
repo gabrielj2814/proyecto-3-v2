@@ -227,7 +227,7 @@ class ComponentEstudianteForm extends React.Component{
             propiedad_descripcion="nombre_estado",
             propiedad_estado="estatu_estado"
             const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-            
+
 
             let dataLocacionNacimiento = await this.consultarTodoParroquia(datos.id_parroquia_nacimiento)
             let dataLocacionVive = await this.consultarTodoParroquia(datos.id_parroquia_vive)
@@ -239,7 +239,7 @@ class ComponentEstudianteForm extends React.Component{
 
             let fechaServidor = Moment(this.state.fechaServidor, "YYYY-MM-DD")
             let edadEstudiante = (parseInt(fechaServidor.diff(datos.fecha_nacimiento_estudiante, "years")))
-            
+
             this.setState({
               id_estudiante: datos.id_estudiante,
               codigo_cedula_escolar: datos.codigo_cedula_escolar,
@@ -255,44 +255,25 @@ class ComponentEstudianteForm extends React.Component{
               sexo_estudiante:datos.sexo_estudiante,
               enfermedades: datos.enfermedades_estudiante,
               estatu_estudiante:datos.estatus_estudiante,
-
-                estados_n: estados,
-                ciudades_n: ciudadesNacimiento,
-                parroquias_n: parroquiasNacimiento,
-                estados_v: estados,
-                ciudades_v: ciudadesVive,
-                parroquias_v: parroquiasVive,
-
+              estados_n: estados,
+              ciudades_n: ciudadesNacimiento,
+              parroquias_n: parroquiasNacimiento,
+              estados_v: estados,
+              ciudades_v: ciudadesVive,
+              parroquias_v: parroquiasVive,
               id_estado_nacimiento: dataLocacionNacimiento.id_estado,
               id_ciudad: dataLocacionVive.id_ciudad,
               id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
               id_parroquia_vive: dataLocacionVive[0].id_parroquia,
               id_parroquia_nacimiento: dataLocacionNacimiento[0].id_parroquia,
               operacion: "actualizar",
-                edadEstudiante: edadEstudiante
+              edadEstudiante: edadEstudiante
             })
-
-            // this.cambiarEstado({ target: { name: "id_parroquia_nacimiento", value: dataLocacionNacimiento.id_parroquia}})
-            // this.cambiarEstado({ target: { name: "id_parroquia_vive", value: dataLocacionVive.id_parroquia } })
-
-            // setTimeout(() => {
-            //     document.getElementById("id_parroquia_vive").value = `${datos.id_parroquia_vive}`
-            //     document.getElementById("id_parroquia_nacimiento").value = `${datos.id_parroquia_nacimiento}`
-            //     document.getElementById("codigo_cedula_escolar").readOnly = true;
-            //     document.getElementById("id_cedula_escolcar").readOnly = true;
-            // }, 100);
-
-
-
-            // document.getElementById("id_estado").value = datosCiudad.id_estado
-            // document.getElementById("id_ciudad").value = datos.id_ciudad
-
-            }
-        }
-        else{
-          alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
-          this.props.history.goBack()
-        }
+          }
+      }else{
+        alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
+        this.props.history.goBack()
+      }
     }
 
     async consultarTodoParroquia(id){
@@ -976,7 +957,7 @@ class ComponentEstudianteForm extends React.Component{
 
             if(estado_validar_formulario.estado){
                 this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                    
+
                     const mensaje =this.state.mensaje
                     var respuesta_servidor=""
                     axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${id}`,objeto)

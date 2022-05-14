@@ -254,7 +254,7 @@ class ComponentAnoEscolar extends React.Component{
               <tr>
                 <th>Desde</th>
                 <th>Hasta</th>
-                <th>Fecha de incio</th>
+                <th>Fecha de inicio</th>
                 <th>Fecha de cierre</th>
                 <th>Estatus</th>
                 <th>Seguimiento</th>

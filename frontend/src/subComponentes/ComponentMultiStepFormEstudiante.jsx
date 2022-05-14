@@ -108,8 +108,6 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             edadEstudiante:null,
             StringExprecion: /[A-Za-z]|[0-9]/
         }
-
-        console.log(this.props)
     }
 
     async consultarEstudiante(id){
@@ -140,6 +138,35 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         // let edadEstudiante=(parseInt(fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"))>=18)?fechaServidor.diff(Moment(this.state.fecha_nacimiento).format("YYYY-MM-DD"),"years"):null
     }
 
+    async consultarTodoParroquia(id){
+        const token = localStorage.getItem('usuario')
+        return await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar/${id}/${token}`)
+        .then( response =>{
+            return response.data.datos
+        })
+        .catch( error => console.error(error))
+    }
+
+    async ObtenerCiudades(id_estado){
+        const ruta_api_2 = `http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${id_estado}`,
+            nombre_propiedad_lista_2 = "ciudades",
+            propiedad_id_2 = "id_ciudad",
+            propiedad_descripcion_2 = "nombre_ciudad",
+            propiedad_estado_2 = "estatu_ciudad"
+        const ciudades = await this.consultarServidor(ruta_api_2, nombre_propiedad_lista_2, propiedad_id_2, propiedad_descripcion_2, propiedad_estado_2)
+        return ciudades
+    }
+
+    async ObtenerParroquias(id_ciudad){
+        const ruta_api_3 = `http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${id_ciudad}`,
+            nombre_propiedad_lista_3 = "datos",
+            propiedad_id_3 = "id_parroquia",
+            propiedad_descripcion_3 = "nombre_parroquia",
+            propiedad_estado_3 = "estatu_parroquia"
+        const parroquias = await this.consultarServidor(ruta_api_3, nombre_propiedad_lista_3, propiedad_id_3, propiedad_descripcion_3, propiedad_estado_3)
+        return parroquias
+    }
+
     async UNSAFE_componentWillMount(){
       if(true){
         await this.consultarFechaServidor()
@@ -150,6 +177,21 @@ class ComponentMultiStepFormEstudiante extends React.Component{
           let datos = await this.consultarEstudiante(this.props.idEstudiante)
           let fechaServidor = Moment(this.state.fechaServidor, "YYYY-MM-DD")
           let edadEstudiante = (parseInt(fechaServidor.diff(datos.fecha_nacimiento_estudiante, "years")))
+
+          const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
+          nombre_propiedad_lista="estados",
+          propiedad_id="id_estado",
+          propiedad_descripcion="nombre_estado",
+          propiedad_estado="estatu_estado"
+          const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+
+          let dataLocacionNacimiento = await this.consultarTodoParroquia(datos.id_parroquia_nacimiento)
+          let dataLocacionVive = await this.consultarTodoParroquia(datos.id_parroquia_vive)
+
+          let parroquiasNacimiento = await this.ObtenerParroquias(dataLocacionNacimiento[0].id_ciudad)
+          let parroquiasVive = await this.ObtenerParroquias(dataLocacionVive[0].id_ciudad)
+          let ciudadesNacimiento = await this.ObtenerCiudades(dataLocacionNacimiento[0].id_estado)
+          let ciudadesVive = await this.ObtenerCiudades(dataLocacionVive[0].id_estado)
 
           this.setState({
             id_estudiante: datos.id_estudiante,
@@ -166,32 +208,38 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             sexo_estudiante:datos.sexo_estudiante,
             enfermedades: datos.enfermedades_estudiante,
             estatu_estudiante:datos.estatus_estudiante,
+            estados_n: estados,
+            ciudades_n: ciudadesNacimiento,
+            parroquias_n: parroquiasNacimiento,
+            estados_v: estados,
+            ciudades_v: ciudadesVive,
+            parroquias_v: parroquiasVive,
 
-            //   estados_n: estados,
-            //   ciudades_n: ciudadesNacimiento,
-            //   parroquias_n: parroquiasNacimiento,
-            //   estados_v: estados,
-            //   ciudades_v: ciudadesVive,
-            //   parroquias_v: parroquiasVive,
-            //
-            // id_estado_nacimiento: dataLocacionNacimiento.id_estado,
-            // id_ciudad: dataLocacionVive.id_ciudad,
-            // id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
-            // id_parroquia_vive: dataLocacionVive.id_parroquia,
-            // id_parroquia_nacimiento: dataLocacionNacimiento.id_parroquia,
+            id_estado_nacimiento: dataLocacionNacimiento.id_estado,
+            id_ciudad: dataLocacionVive.id_ciudad,
+            id_ciudad_nacimiento: dataLocacionNacimiento.id_ciudad,
+            id_parroquia_vive: dataLocacionVive[0].id_parroquia,
+            id_parroquia_nacimiento: dataLocacionNacimiento[0].id_parroquia,
             operacion: "actualizar",
             edadEstudiante: edadEstudiante
           })
-        }
 
-        const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
-        nombre_propiedad_lista="estados",
-        propiedad_id="id_estado",
-        propiedad_descripcion="nombre_estado",
-        propiedad_estado="estatu_estado"
-        const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+          // codigo_cedula_escolar
+          // id_cedula_escolcar
+        }else {
+          const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
+          nombre_propiedad_lista="estados",
+          propiedad_id="id_estado",
+          propiedad_descripcion="nombre_estado",
+          propiedad_estado="estatu_estado"
+          const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+          console.log(estados)
+          
+          // if(estados.length > 0){
+          //   alert("No hay Estados registrados (será redirigido a la vista anterior)")
+          //   this.regresar();
+          // }
 
-        if(estados.length > 0){
           const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
           nombre_propiedad_lista_2="ciudades",
           propiedad_id_2="id_ciudad",
@@ -199,41 +247,40 @@ class ComponentMultiStepFormEstudiante extends React.Component{
           propiedad_estado_2="estatu_ciudad"
           const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
-          if(ciudades.length > 0){
-            const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
-            nombre_propiedad_lista_3="datos",
-            propiedad_id_3="id_parroquia",
-            propiedad_descripcion_3="nombre_parroquia",
-            propiedad_estado_3="estatu_parroquia"
-            const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
-
-            if(parroquias.length > 0){
-              this.setState({
-                estados_n: estados,
-                estados_v: estados,
-                ciudades_n: ciudades,
-                ciudades_v: ciudades,
-                parroquias_n: parroquias,
-                parroquias_v: parroquias,
-                id_estado:(estados.length===0)?null:estados[0].id,
-                id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
-                id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
-                id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
-                id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
-                id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
-              })
-            }
-          }else{
-            alert("No hay Ciudades registradas(será redirigido a la vista anterior)")
-            this.props.history.goBack()
+          if(ciudades.length > 0 ){
+            alert("No hay Municipios registrados (será redirigido a la vista anterior)")
+            this.regresar();
           }
 
+          const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
+          nombre_propiedad_lista_3="datos",
+          propiedad_id_3="id_parroquia",
+          propiedad_descripcion_3="nombre_parroquia",
+          propiedad_estado_3="estatu_parroquia"
+          const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-        }else{
-          alert("No hay Estados registrados(será redirigido a la vista anterior)")
-          this.props.history.goBack()
+          if(parroquias.length > 0){
+            alert("No hay Parroquias registradas (será redirigido a la vista anterior)")
+            this.regresar();
+          }
+
+          this.setState({
+            operacion: 'registrar',
+            estados_n: estados,
+            estados_v: estados,
+            ciudades_n: ciudades,
+            ciudades_v: ciudades,
+            parroquias_n: parroquias,
+            parroquias_v: parroquias,
+            id_estado:(estados.length===0)?null:estados[0].id,
+            id_estado_nacimiento:(estados.length===0)?null:estados[0].id,
+            id_ciudad:(ciudades.length===0)?null:ciudades[0].id,
+            id_ciudad_nacimiento:(ciudades.length===0)?null:ciudades[0].id,
+            id_parroquia_vive:(parroquias.length===0)?null:parroquias[0].id,
+            id_parroquia_nacimiento:(parroquias.length===0)?null:parroquias[0].id,
+          });
+
         }
-
       }
     }
 
@@ -493,7 +540,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
       }else if(input.name==="telefono_movil" || input.name==="telefono_local"){
         if(input.value.length <= 11) this.cambiarEstadoDos(input)
       }else if(input.name === "codigo_cedula_escolar"){
-        if(input.value.length <= 4) this.cambiarEstadoDos(input)
+        if(input.value.length <= 3) this.cambiarEstadoDos(input)
       }
     }
 
@@ -789,12 +836,17 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_respuesta
                 mensaje_formulario.mensaje=mensaje
-                this.setState(mensaje_formulario)
-                this.setState({id_estudiante: id_estu})
-                this.registroVacunaEstudiante()
 
-                this.props.state('id_estudiante', id_estu)
-                this.props.next();
+                if(respuesta_servidor.estado_respuesta){
+                  this.setState(mensaje_formulario)
+                  this.setState({id_estudiante: id_estu})
+                  this.registroVacunaEstudiante()
+
+                  this.props.state('id_estudiante', id_estu)
+                  this.props.next();
+                }else{
+                  this.setState(mensaje_formulario)
+                }
               })
               .catch(error=>{
                 mensaje.texto="No se puedo conectar con el servidor"
@@ -808,7 +860,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             this.enviarDatos(estado_validar_formulario,(objeto)=>{
               const mensaje =this.state.mensaje
               var respuesta_servidor=""
-              axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.props.idEstudiante}`,objeto)
+              axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.state.id_estudiante}`,objeto)
               .then(respuesta=>{
                 respuesta_servidor=respuesta.data
                 let id_estu = respuesta_servidor.datos[0].id_estudiante;
@@ -1146,7 +1198,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
 
                         <div className="row justify-content-center">
                             <div className="col-auto">
-                                {this.props.operacion==="registrar" &&
+                                {this.state.operacion==="registrar" &&
                                     <InputButton
                                     clasesBoton="btn btn-primary"
                                     id="boton-registrar"
@@ -1156,7 +1208,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                                 }
                             </div>
                             <div className="col-auto">
-                                {this.props.operacion==="actualizar" &&
+                                {this.state.operacion==="actualizar" &&
                                     <InputButton
                                     clasesBoton="btn btn-warning"
                                     id="boton-actualizar"

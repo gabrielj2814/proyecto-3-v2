@@ -259,7 +259,7 @@ class ComponentInscripcionForm extends React.Component{
           }
         }
         else{
-          alert("No se ha Abriertos las Inscripciones")
+          alert("No se ha Abierto las Inscripciones")
           this.props.history.push(`/dashboard/configuracion/inscripcion`)
         }
     })

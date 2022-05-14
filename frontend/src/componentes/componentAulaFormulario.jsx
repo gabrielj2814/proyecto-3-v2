@@ -166,7 +166,12 @@ class ComponentAulaFormulario extends React.Component{
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
             if(respuestaServidor.estado_respuesta===true){
-                this.setState({listaGradosEscolares:respuestaServidor.datos})
+              let hash = respuestaServidor.datos.filter( item => item.estatus_grado === "1")
+              if(hash.length > 0) this.setState({listaGradosEscolares:hash});
+              else{
+                alert("No hay Grados Escolares registrados que estén Activos(será redirigido a la vista anterior)")
+                this.props.history.goBack()
+              }
             }
             else{
               alert("No hay Grados Escolares registrados(será redirigido a la vista anterior)")
@@ -195,7 +200,6 @@ class ComponentAulaFormulario extends React.Component{
         const token=localStorage.getItem("usuario")
         await axiosCustom.get(`configuracion/aula/consultar/${id}/${token}`)
         .then(respuesta => {
-            console.log(respuesta.data)
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
             if(respuestaServidor.datos.length>0){
                 this.setState(respuestaServidor.datos[0])
@@ -386,7 +390,7 @@ class ComponentAulaFormulario extends React.Component{
                             value={this.state.nombre_aula}
                             name="nombre_aula"
                             id="nombre_aula"
-                            placeholder="Nombre Aula"
+                            placeholder="Nombre Sección"
                             mensaje={this.state.msj_nombre_aula}
                             eventoPadre={this.cambiarEstado}
                             />
