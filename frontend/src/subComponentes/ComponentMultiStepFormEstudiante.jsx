@@ -108,6 +108,8 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             edadEstudiante:null,
             StringExprecion: /[A-Za-z]|[0-9]/
         }
+
+        console.log(this.props)
     }
 
     async consultarEstudiante(id){
@@ -775,32 +777,64 @@ class ComponentMultiStepFormEstudiante extends React.Component{
         }
         const estado_validar_formulario=this.validarFormularioRegistrar()
         if(estado_validar_formulario.estado){
+          if(this.props.operacion === "registrar"){
             this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                const mensaje =this.state.mensaje
-                var respuesta_servidor=""
-                axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/registrar`,objeto)
-                .then(respuesta=>{
-                    respuesta_servidor=respuesta.data
-                    let id_estu = respuesta_servidor.datos[0].id_estudiante;
+              const mensaje =this.state.mensaje
+              var respuesta_servidor=""
+              axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/registrar`,objeto)
+              .then(respuesta=>{
+                respuesta_servidor=respuesta.data
+                let id_estu = respuesta_servidor.datos[0].id_estudiante;
 
-                    mensaje.texto=respuesta_servidor.mensaje
-                    mensaje.estado=respuesta_servidor.estado_respuesta
-                    mensaje_formulario.mensaje=mensaje
-                    this.setState(mensaje_formulario)
-                    this.setState({id_estudiante: id_estu})
-                    this.registroVacunaEstudiante()
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_respuesta
+                mensaje_formulario.mensaje=mensaje
+                this.setState(mensaje_formulario)
+                this.setState({id_estudiante: id_estu})
+                this.registroVacunaEstudiante()
 
-                    this.props.state('id_estudiante', id_estu)
-                    this.props.next();
-                })
-                .catch(error=>{
-                    mensaje.texto="No se puedo conectar con el servidor"
-                    mensaje.estado=false
-                    console.error(error)
-                    mensaje_formulario.mensaje=mensaje
-                    this.setState(mensaje_formulario)
-                })
+                this.props.state('id_estudiante', id_estu)
+                this.props.next();
+              })
+              .catch(error=>{
+                mensaje.texto="No se puedo conectar con el servidor"
+                mensaje.estado=false
+                console.error(error)
+                mensaje_formulario.mensaje=mensaje
+                this.setState(mensaje_formulario)
+              })
             })
+          }else if(this.props.operacion === "actualizar"){
+            this.enviarDatos(estado_validar_formulario,(objeto)=>{
+              const mensaje =this.state.mensaje
+              var respuesta_servidor=""
+              axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.props.idEstudiante}`,objeto)
+              .then(respuesta=>{
+                respuesta_servidor=respuesta.data
+                let id_estu = respuesta_servidor.datos[0].id_estudiante;
+
+                mensaje.texto=respuesta_servidor.mensaje
+                mensaje.estado=respuesta_servidor.estado_respuesta
+                mensaje_formulario.mensaje=mensaje
+                this.setState(mensaje_formulario)
+
+                if(respuesta_servidor.estado_respuesta){
+                  this.setState({id_estudiante: id_estu})
+                  this.registroVacunaEstudiante()
+                  this.props.state('id_estudiante', id_estu)
+                  this.props.next();
+                }
+
+              })
+              .catch(error=>{
+                mensaje.texto="No se puedo conectar con el servidor"
+                mensaje.estado=false
+                console.error(error)
+                mensaje_formulario.mensaje=mensaje
+                this.setState(mensaje_formulario)
+              })
+            })
+          }
         }
     }
 
@@ -1124,9 +1158,9 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                             <div className="col-auto">
                                 {this.props.operacion==="actualizar" &&
                                     <InputButton
-                                    clasesBoton="btn btn-primary"
-                                    id="boton-registrar"
-                                    value="Registrar"
+                                    clasesBoton="btn btn-warning"
+                                    id="boton-actualizar"
+                                    value="Actualizar"
                                     eventoPadre={this.operacion}
                                     />
                                 }

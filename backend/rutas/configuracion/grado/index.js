@@ -12,6 +12,7 @@ router.post("/registrar",controladorGrado.registrar_grador, bitacorra.capturaDat
 router.get("/consultar-todos",controladorGrado.consultarTodos)// consultar todos
 router.get("/consultar/:id/:token",controladorGrado.consultar, bitacorra.capturaDatos)// consulta especifica
 router.put("/actualizar/:id",controladorGrado.actualizar, bitacorra.capturaDatos)// actualizar
+router.get("/verificar-existencia-secciones-grados",controladorGrado.verificarQueTodosLosGradosTenganSecciones)
 
 
 

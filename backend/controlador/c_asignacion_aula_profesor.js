@@ -5,7 +5,8 @@ const VitacoraControlador = require("./c_vitacora")
 
 ControladorAsignacionAulaProfesor.registrar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {asignacionAulaProfesor, token} = req.body
+    const ModeloAsignacionAulaProfesorEspecialista=require("../modelo/m_asignacion_aula_profesor_especialista")
+    let {asignacionAulaProfesor,especialistas, token} = req.body
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setDatos(asignacionAulaProfesor)
     let resultAsignacionAulaProfesor=await modeloAsignacionAulaProfesor.consultarProProfesorAnoEscolarYAula()
@@ -15,7 +16,19 @@ ControladorAsignacionAulaProfesor.registrar=async (req,res, next) => {
             respuesta_api.mensaje="registro completado"
             respuesta_api.estado_respuesta=true
             respuesta_api.color_alerta="success" 
-            req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tasignacion_aula_profesor", asignacionAulaProfesor.id_asignacion_aula_profesor)
+            let modeloAsignacionAulaProfesorEspecialista=new ModeloAsignacionAulaProfesorEspecialista()
+            modeloAsignacionAulaProfesorEspecialista.setIdAsignacionAulaProfesor(resultAsignacionAulaProfesor2.rows[0].id_asignacion_aula_profesor)
+            modeloAsignacionAulaProfesorEspecialista.eliminarPorAsignacionAulaProfesor()
+            for(let especialista of especialistas){
+                let datos={
+                    id_asignacion_aula_profesor_especialista:"",
+                    id_especialista:especialista,
+                    id_asignacion_aula_profesor:resultAsignacionAulaProfesor2.rows[0].id_asignacion_aula_profesor
+                }
+                modeloAsignacionAulaProfesorEspecialista.setDatos(datos)
+                modeloAsignacionAulaProfesorEspecialista.registrar()
+            }
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tasignacion_aula_profesor", resultAsignacionAulaProfesor2.rows[0].id_asignacion_aula_profesor)
             next()
         }
         else{
@@ -38,12 +51,17 @@ ControladorAsignacionAulaProfesor.registrar=async (req,res, next) => {
 }
 
 ControladorAsignacionAulaProfesor.consultar=async (req,res, next) => {
+    const ModeloAsignacionAulaProfesorEspecialista=require("../modelo/m_asignacion_aula_profesor_especialista")
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let {id, token} = req.params
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setdatoIdAsignacionAulaProfesor(id)
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultar()
     if(resultAsignacionAulaProfesor.rowCount>0){
+        let modeloAsignacionAulaProfesorEspecialista=new ModeloAsignacionAulaProfesorEspecialista()
+        modeloAsignacionAulaProfesorEspecialista.setIdAsignacionAulaProfesor(resultAsignacionAulaProfesor.rows[0].id_asignacion_aula_profesor)
+        let resultAsignacionAulaProfesorEspecialista=await modeloAsignacionAulaProfesorEspecialista.consultarPorAsignacionAulaProfesor()
+        resultAsignacionAulaProfesor.rows[0]["especialistas"]=resultAsignacionAulaProfesorEspecialista.rows
         respuesta_api.mensaje="Consultar completada"
         respuesta_api.datos=resultAsignacionAulaProfesor.rows
         respuesta_api.estado_respuesta=true
@@ -132,6 +150,28 @@ ControladorAsignacionAulaProfesor.consultarTodos=async (req,res) => {
     res.end()
 }
 
+ControladorAsignacionAulaProfesor.consultarAulasEspacioDisponibles=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let {idAnnoEscolar,aulas} = req.body
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    let aulasEspaciosDisponibles=[]
+    for(let contador=0;contador<aulas.length;contador++){
+        let aula=aulas[contador]
+        let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarProfesorPorAnoYAulaEspacio(idAnnoEscolar,aula.id_aula_espacio)
+        if(resultAsignacionAulaProfesor.rowCount===0){
+            aulasEspaciosDisponibles.push(aula)
+        }
+    }
+    respuesta_api.mensaje="consultar completada"
+    respuesta_api.datos=aulasEspaciosDisponibles
+    respuesta_api.estado_respuesta=true
+    respuesta_api.color_alerta="succes"
+    
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 ControladorAsignacionAulaProfesor.consultarPorAnoEscolar=async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let {id} = req.params
@@ -155,8 +195,9 @@ ControladorAsignacionAulaProfesor.consultarPorAnoEscolar=async (req,res) => {
 }
 
 ControladorAsignacionAulaProfesor.actualizar=async (req,res, next) => {
+    const ModeloAsignacionAulaProfesorEspecialista=require("../modelo/m_asignacion_aula_profesor_especialista")
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {asignacionAulaProfesor, token} = req.body
+    let {asignacionAulaProfesor,especialistas, token} = req.body
     let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
     modeloAsignacionAulaProfesor.setDatos(asignacionAulaProfesor)
     let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.actualizar()
@@ -164,6 +205,18 @@ ControladorAsignacionAulaProfesor.actualizar=async (req,res, next) => {
         respuesta_api.mensaje="actualización completada"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        let modeloAsignacionAulaProfesorEspecialista=new ModeloAsignacionAulaProfesorEspecialista()
+        modeloAsignacionAulaProfesorEspecialista.setIdAsignacionAulaProfesor(asignacionAulaProfesor.id_asignacion_aula_profesor)
+        modeloAsignacionAulaProfesorEspecialista.eliminarPorAsignacionAulaProfesor()
+        for(let especialista of especialistas){
+            let datos={
+                id_asignacion_aula_profesor_especialista:"",
+                id_especialista:especialista,
+                id_asignacion_aula_profesor:asignacionAulaProfesor.id_asignacion_aula_profesor
+            }
+            modeloAsignacionAulaProfesorEspecialista.setDatos(datos)
+            modeloAsignacionAulaProfesorEspecialista.registrar()
+        }
         req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tasignacion_aula_profesor", asignacionAulaProfesor.id_asignacion_aula_profesor)
         next()
     }

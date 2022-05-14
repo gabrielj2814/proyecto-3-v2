@@ -140,6 +140,7 @@ import ComponentParroquia from './componentes/componentParroquia'
 import ComponentParroquiaForm from './componentes/componentParroquiaForm'
 // Promocion
 import ComponentPromocion from './componentes/componentPromocion'
+import ComponentPromocionSoloProfesor from './componentes/componentPromocionSoloProfesor'
 import ComponentPromocionForm from './componentes/componentPromocionForm'
 // Asistencia
 import ComponentAsistenciaEstudiantesForm from './componentes/componentAsistenciaEstudiantesForm'
@@ -152,6 +153,12 @@ import ComponentCambioAulaForm from './componentes/componentCambioAulaForm'
 // Director
 import ComponentDirectorForm from './componentes/componentDirectorForm'
 import ComponentDirector from './componentes/componentDirector'
+// Aula (Espacio)
+import ComponentAulaEspacio from './componentes/componentAulaEspacio'
+import ComponentAulaEspacioForm from './componentes/componentAulaEspacioForm'
+// Especialista
+import ComponentEspecialista from './componentes/componentEspecialista'
+import ComponentEspecialistaForm from './componentes/componentEspecialistaForm'
 
 function App() {
   return (
@@ -224,7 +231,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/estudiante/consultar/:id" component={ComponentEstudianteConsulta}/>
         <Route exact path="/dashboard/configuracion/estudiante:mensaje?" component={componenteEstudiante}/>
         <Route exact path="/dashboard/configuracion/estudiante/actualizar/:id?" component={ComponentEstudianteForm}/>
-        <Route exact path="/dashboard/configuracion/estudiante/registrar" component={ComponentMultiStepForm}/>
+        <Route exact path="/dashboard/configuracion/estudiante/registrar/:id?" component={ComponentMultiStepForm}/>
 
         <Route exact path="/dashboard/configuracion/ano-escolar:mensaje?" component={ComponentAnoEscolar}/>
         <Route exact path="/dashboard/configuracion/ano-escolar/:operacion/:id?" component={ComponentAnoEscolarForm}/>
@@ -262,6 +269,12 @@ function App() {
         <Route exact path="/dashboard/configuracion/parroquia/:operacion/:id?" component={ComponentParroquiaForm}/>
         <Route exact path="/dashboard/configuracion/parroquia/:mensaje?" component={ComponentParroquia}/>
 
+        <Route exact path="/dashboard/configuracion/espacio-aula/:operacion/:id?" component={ComponentAulaEspacioForm}/>
+        <Route exact path="/dashboard/configuracion/espacio-aula/:mensaje?" component={ComponentAulaEspacio}/>
+
+        <Route exact path="/dashboard/configuracion/especialista/:operacion/:id?" component={ComponentEspecialistaForm}/>
+        <Route exact path="/dashboard/configuracion/especialista/:mensaje?" component={ComponentEspecialista}/>
+
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor/:operacion/:id?" component={ComponentAsignacionAulaProfesorForm}/>
         <Route exact path="/dashboard/transaccion/asignacion-aula-profesor:mensaje?" component={ComponentAsignacionAulaProfesor}/>
 
@@ -287,6 +300,7 @@ function App() {
         <Route exact path="/dashboard/transaccion/asignacion-representante-estudiante:mensaje?" component={ComponenteAsignacionRepresentanteEstudiante}/>
 
         <Route exact path="/dashboard/transaccion/promocion" component={ComponentPromocion}/>
+        <Route exact path="/dashboard/transaccion/promocion-solo-profesor" component={ComponentPromocionSoloProfesor}/>
         <Route exact path="/dashboard/transaccion/promocion/:operacion/:id?" component={ComponentPromocionForm}/>
 
         <Route exact path="/dashboard/transaccion/asistencia-estudiante" component={ComponentAsistenciaEstudiantesForm}/>

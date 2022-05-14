@@ -42,10 +42,11 @@ class ComponentMultiStepForm extends React.Component{
             modulo:"",// modulo menu
             estado_menu:false,
             //formulario
-            formulario_step:1,
+            formulario_step:0,
             id_estudiante:"",
             cedula_mama:"",
             cedula_papa:"",
+            operacion: "registrar",
             ///
             mensaje:{
                 texto:"",
@@ -92,6 +93,15 @@ class ComponentMultiStepForm extends React.Component{
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/estudiante")
         if(acessoModulo){
           await this.consultarFechaServidor()
+          if(this.props.match.params.id){
+            this.setState({
+              formulario_step:1,
+              id_estudiante: this.props.match.params.id,
+              operacion: "actualizar"
+            })
+          }else{
+            this.setState({operacion: "registrar"})
+          }
         }
     }
 
@@ -214,7 +224,7 @@ class ComponentMultiStepForm extends React.Component{
     render(){
         let componenteForm1 = <>
             <ComponentMultiStepFormEstudiante
-                operacion="registrar"
+                operacion={this.state.operacion}
                 next={this.next}
                 idEstudiante={this.state.id_estudiante}
                 return={this.return_index}

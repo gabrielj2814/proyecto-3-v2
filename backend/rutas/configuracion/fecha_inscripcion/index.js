@@ -7,8 +7,10 @@ bitacorra = require('../../../controlador/c_vitacora')
 
 router.use(bodyparser.json())
 
+
 router.post("/registrar",ControladorFechaInscripcion.registrar, bitacorra.capturaDatos)
 router.get("/consultar/:id/token",ControladorFechaInscripcion.consultar, bitacorra.capturaDatos)
+router.post("/consultar-disponibilidad-fecha-inscripcion",ControladorFechaInscripcion.consultarDisponibilidadFechaInscripcion)
 router.get("/consultar-fecha-servidor",ControladorFechaInscripcion.consultarFechaServidor)
 router.get("/consultar-todo",ControladorFechaInscripcion.consultarTodo)
 router.get("/consultar-todo-2",ControladorFechaInscripcion.consultarTodo2)

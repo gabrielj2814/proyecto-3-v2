@@ -7,22 +7,34 @@ ControladorFechaInscripcion.registrar=async (req,res, next) => {
     let {fecha_inscripcion,token}=req.body
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
     modeloFechaInscripcion.setDatos(fecha_inscripcion)
-    let resultFecha=await modeloFechaInscripcion.registrar()
-    if(resultFecha.rowCount>0){
-        respuesta_api.mensaje="Registro completado Con exito...!"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
-        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
-        next()
+    let estadosAnoEscolar=await modeloFechaInscripcion.consultarPorIdAnnoEscolar()
+    if(estadosAnoEscolar.rowCount===0){
+        let resultFecha=await modeloFechaInscripcion.registrar()
+        if(resultFecha.rowCount>0){
+            respuesta_api.mensaje="registro completado"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
+            next()
+        }
+        else{
+            respuesta_api.mensaje="error al registrar la fecha inscripcion"
+            respuesta_api.estado_respuesta=false
+            respuesta_api.color_alerta="danger"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
     }
     else{
-        respuesta_api.mensaje="Error al registrar la fecha inscripción"
+        respuesta_api.mensaje="error al registrar el por que el año escolar no esta disponible"
         respuesta_api.estado_respuesta=false
         respuesta_api.color_alerta="danger"
         res.writeHead(200,{"Content-Type":"application/json"})
         res.write(JSON.stringify(respuesta_api))
         res.end()
     }
+    
 }
 
 ControladorFechaInscripcion.consultarFechaServidor=async (req,res) => {
@@ -78,6 +90,30 @@ ControladorFechaInscripcion.consultar=async (req,res,next) => {
     }
 }
 
+ControladorFechaInscripcion.consultarDisponibilidadFechaInscripcion=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let {anosEscolares}=req.body
+    // console.log(anosEscolares)
+    let modeloFechaInscripcion=new ModeloFechaInscripcion()
+    let listaNueva=[]
+    for(let contador=0;contador<anosEscolares.length;contador++){
+        let anoEscolar=anosEscolares[contador]
+        modeloFechaInscripcion.setIdAnoEscolar(anoEscolar.id_ano_escolar)
+        let resultFecha=await modeloFechaInscripcion.consultarPorIdAnnoEscolar()
+        if(resultFecha.rowCount===0){
+            listaNueva.push(anoEscolar)
+        }
+    }
+    console.log("datos => ",listaNueva)
+    respuesta_api.mensaje="consulta completada"
+    respuesta_api.datos=listaNueva
+    respuesta_api.estado_respuesta=true
+    respuesta_api.color_alerta="success"
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 ControladorFechaInscripcion.consultarTodo=async (req,res) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
@@ -123,22 +159,59 @@ ControladorFechaInscripcion.actualizar=async (req,res, next) => {
     let {fecha_inscripcion, token}=req.body
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
     modeloFechaInscripcion.setDatos(fecha_inscripcion)
-    let resultFecha=await modeloFechaInscripcion.actualizar()
-    if(resultFecha.rowCount>0){
-        respuesta_api.mensaje="Actualización completada con exito...!"
-        respuesta_api.estado_respuesta=true
-        respuesta_api.color_alerta="success"
-        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
-        next()
+    let estadosAnoEscolar=await modeloFechaInscripcion.consultarPorIdAnnoEscolar()
+    if(estadosAnoEscolar.rowCount===0){
+        let resultFecha=await modeloFechaInscripcion.actualizar()
+        if(resultFecha.rowCount>0){
+            respuesta_api.mensaje="Actualización completada"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="success"
+            req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
+            next()
+        }
+        else{
+            respuesta_api.mensaje="Error al actualizar la fecha inscripcion"
+            respuesta_api.estado_respuesta=false
+            respuesta_api.color_alerta="danger"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
     }
     else{
-        respuesta_api.mensaje="Error al actualizar la fecha inscripción"
-        respuesta_api.estado_respuesta=false
-        respuesta_api.color_alerta="danger"
-        res.writeHead(200,{"Content-Type":"application/json"})
-        res.write(JSON.stringify(respuesta_api))
-        res.end()
+        // respuesta_api.mensaje="error al actualizar por que el año escolar no esta disponible"
+        // respuesta_api.estado_respuesta=false
+        // respuesta_api.color_alerta="danger"
+        let verificarEstado=await modeloFechaInscripcion.verificarRegistro()
+        if(verificarEstado.rowCount===1){
+            let resultFecha=await modeloFechaInscripcion.actualizar()
+            if(resultFecha.rowCount>0){
+                respuesta_api.mensaje="actualización completada"
+                respuesta_api.estado_respuesta=true
+                respuesta_api.color_alerta="success"
+                req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
+                next()
+            }
+            else{
+                respuesta_api.mensaje="error al actualizar la fecha inscripcion"
+                respuesta_api.estado_respuesta=false
+                respuesta_api.color_alerta="danger"
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
+            }
+        }
+        else{
+            respuesta_api.mensaje="error al actualizar por que el año escolar no esta disponible"
+            respuesta_api.estado_respuesta=false
+            respuesta_api.color_alerta="danger"
+            res.writeHead(200,{"Content-Type":"application/json"})
+            res.write(JSON.stringify(respuesta_api))
+            res.end()
+        }
     }
+  
+   
 }
 
 ControladorFechaInscripcion.reAbrirInscripcion=async (req,res) => {

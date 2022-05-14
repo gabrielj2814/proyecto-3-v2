@@ -92,21 +92,21 @@ class ComponentPromocion extends React.Component {
     }
 
     async componentWillMount(){
-        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion-gestion")
+        let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion-solo-profesor")
         if(acessoModulo){
-            await this.conultarPromociones()
+            await this.conultarPromocionesProfesores()
         }
         else{
-            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
 
-    async conultarPromociones(){
-      axiosCustom.get("transaccion/promocion/consultar-todos")
+    async conultarPromocionesProfesores(){
+      axiosCustom.get("transaccion/promocion/consultar-todos-promociones/"+this.state.id_cedula)
       .then( ({data}) => {
+        
         if(data.datos.length > 0){
-          console.log(data.datos)
           this.setState({registros: data.datos})
         }else{
           let mensaje = {};
@@ -213,7 +213,7 @@ class ComponentPromocion extends React.Component {
             }
             else{
                 $filaVerPdf.classList.add("ocultarFormulario")
-                alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
             }
         },
         error: function() {
@@ -230,9 +230,6 @@ class ComponentPromocion extends React.Component {
                 <tr>
                   <th>Fecha de promoción</th>
                   <th>Literal</th>
-                  <th>Cédula Escolar</th>
-                  <th>Cédula del Profesor</th>
-                  <th>Grado y Sección</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
@@ -240,7 +237,7 @@ class ComponentPromocion extends React.Component {
 
         const jsx_tabla_body=(
             <tbody>
-                {this.state.registros.filter( item => item.estatus_promocion === this.state.estatus_promocion).map((promocion,index)=>{
+                {this.state.registros.map((promocion,index)=>{
                   let status;
                   if(promocion.estatus_promocion === "E") status = "En Espera";
                   if(promocion.estatus_promocion === "R") status = "Rechazada";
@@ -249,21 +246,19 @@ class ComponentPromocion extends React.Component {
                         <tr key={index}>
                           <td>{Moment(promocion.fecha_promocion).format("DD/MM/YYYY")}</td>
                           <td>{promocion.nota_promocion}</td>
-                          <td>{promocion.codigo_cedula_escolar}-{promocion.cedula_escolar}</td>
-                          <td>{promocion.id_cedula}</td>
-                          <td>{promocion.numero_grado} {promocion.nombre_aula}</td>
                           <td>{status}</td>
-                          {promocion.estatus_promocion === "E" &&
+                          {promocion.estatus_promocion === "R" &&
                             <td>
                               <ButtonIcon
-                                clasesBoton="btn btn-primary btn-block"
+                                clasesBoton="btn btn-warning btn-block"
                                 value={promocion.id_promocion}
                                 id={promocion.id_promocion}
-                                eventoPadre={this.ifAlFormularioEvaluacion}
+                                eventoPadre={this.irAlFormularioDeActualizacion}
                                 icon="icon-pencil"
                                 />
                             </td>
                           }
+
                           {promocion.estatus_promocion === "A" &&
                             <td>
                                 <button id={promocion.id_promocion} className='btn btn-danger btn-block' onClick={this.generarPdfPromo}>
@@ -307,24 +302,10 @@ class ComponentPromocion extends React.Component {
 
                     </div>)
                 }
-                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Promoción"/>
+                <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Promoción Solo Profesor"/>
 
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor_tabla_aula">
-                      <div className="row">
-                        <ComponentFormSelect
-                          clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
-                          obligatorio="si"
-                          mensaje={""}
-                          nombreCampoSelect="Estatus de la promoción:"
-                          clasesSelect="custom-select"
-                          name="estatus_promocion"
-                          id="estatus_promocion"
-                          eventoPadre={this.cambiarEstado}
-                          defaultValue={this.state.estatus_promocion}
-                          option={this.state.estatus}
-                        />
-                      </div>
                       <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>

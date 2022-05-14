@@ -56,7 +56,7 @@ class ComponentRepresentanteForm extends React.Component{
         fecha_nacimiento: "",
         nivel_instruccion: "",
         ocupacion: "",
-        direccion: "",
+        direccion_representante: "",
         id_estado:"",
         id_ciudad:"",
         telefono_movil_representante: "",
@@ -84,7 +84,7 @@ class ComponentRepresentanteForm extends React.Component{
         msj_id_ciudad:[{ mensaje:"", color_texto:""}],
         msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
         msj_ocupacion:[{ mensaje:"", color_texto:""}],
-        msj_direccion: [{ mensaje:"", color_texto:""}],
+        msj_direccion_representante: [{ mensaje:"", color_texto:""}],
         msj_telefono_movil_representante: [{ mensaje:"", color_texto:""}],
         msj_telefono_local_representante: [{ mensaje:"", color_texto:""}],
         msj_numero_hijos_representante: [{ mensaje:"", color_texto:""}],
@@ -746,52 +746,40 @@ class ComponentRepresentanteForm extends React.Component{
   validarDireccion(name){
       var estado = false
       const valor = this.state[name]
-      var msj_direccion  = this.state["msj_"+name]
+      let msj = this.state["msj_"+name]
 
       if(valor !== ""){
           if(this.state.StringExprecion.test(valor)){
               estado = true
-              msj_direccion[0]={mensaje:"",color_texto:"rojo"}
+              msj[0]={mensaje:"",color_texto:"rojo"}
           }
           else{
               estado = false
-              msj_direccion[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
+              msj[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
           }
       }
       else{
           estado = false
-          msj_direccion[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
+          msj[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
       }
 
-      if(name === 'direccion') this.setState(msj_direccion)
+      this.setState({msj_direccion_representante: msj})
       return estado
   }
 
   validarSelect(name){
     let estado = false
     const valor = this.state[name]
-    let msj_id_ciudad = this.state["msj_"+name], msj_id_estado = this.state["msj_"+name], msj_nivel_instruccion = this.state["msj_"+name],
-    msj_tipo_vivienda_representante = this.state["msj_"+name],msj_id_parroquia = this.state["msj_"+name];
+    let msj = this.state["msj_"+name];
 
     if(valor != ""){
       estado = true
-      msj_id_ciudad[0] = {mensaje: "", color_texto:"rojo"}
-      msj_id_estado[0] = {mensaje: "", color_texto:"rojo"}
-      msj_id_parroquia[0] = {mensaje: "", color_texto:"rojo"}
-      msj_nivel_instruccion[0] = {mensaje: "", color_texto:"rojo"}
-      msj_tipo_vivienda_representante[0] = {mensaje:"", color_texto:"rojo"}
+      msj[0] = {mensaje: "", color_texto:"rojo"}
     }else{
-      msj_id_ciudad[0] = {mensaje: "Debe de seleccionar una ciudad", color_texto:"rojo"}
-      msj_id_estado[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
-      msj_id_parroquia[0] = {mensaje: "Debe de seleccionar un estado", color_texto:"rojo"}
-      msj_nivel_instruccion[0] = {mensaje: "Debe de seleccionar un grado de intrucccion", color_texto:"rojo"}
-      msj_tipo_vivienda_representante[0] = {mensaje:"Debe de seleccionar una opcion", color_texto:"rojo"}
+      msj[0] = {mensaje: "Debe de seleccionar una opcion", color_texto:"rojo"}
     }
-    if(name === "id_ciudad") this.setState(msj_id_ciudad)
-    else if(name === "id_estado") this.setState(msj_id_estado)
-    else if(name === "id_parroquia") this.setState(msj_id_parroquia)
-    else if(name === "nivel_instruccion") this.setState(msj_nivel_instruccion)
-    else if(name === "tipo_vivienda_representante") this.setState(msj_tipo_vivienda_representante)
+
+    this.setState({["msj_"+name]: msj})
     return estado
   }
 
@@ -818,13 +806,13 @@ class ComponentRepresentanteForm extends React.Component{
     ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
     ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
     ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
-    validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
+    validarDireccion = this.validarDireccion('direccion_representante'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
     ValidarCiudad = this.validarSelect('id_ciudad'),ValidarParroquia = this.validarSelect('id_parroquia'),ValidarStatus = this.validarRadio('estatus_representante')
 
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
-      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
+      ValidarConstFamiliar && validarDireccion && validarNumEstInicial && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
     ){
       return { estado: true, fecha: validarFechaNacimineto.fecha }
     }else{
@@ -842,13 +830,13 @@ class ComponentRepresentanteForm extends React.Component{
     ValidarNumEstGrado2 = this.validarCampoNumero('numero_estudiante_grado_2_representante'), ValidarNumEstGrado3 = this.validarCampoNumero('numero_estudiante_grado_3_representante'),
     ValidarNumEstGrado4 = this.validarCampoNumero('numero_estudiante_grado_4_representante'), ValidarNumEstGrado5 = this.validarCampoNumero('numero_estudiante_grado_5_representante'),
     ValidarNumEstGrado6 = this.validarCampoNumero('numero_estudiante_grado_6_representante'), ValidarConstFamiliar = this.validarCampo('constitucion_familiar_representante'),
-    validarDireccion = this.validarDireccion('direccion'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
+    validarDireccion = this.validarDireccion('direccion_representante'), validarTipVivienda = this.validarSelect('tipo_vivienda_representante'), ValidarEstado = this.validarSelect('id_estado'),
     ValidarCiudad = this.validarSelect('id_ciudad'),ValidarParroquia = this.validarSelect('id_parroquia'), ValidarStatus = this.validarRadio('estatus_representante')
-
+    
     if(
       validarCedula && validarNombre && validarApellido && validarTelefonoMovil && validarTelefonoLocal && validarFechaNacimineto && validarOcupacion && validarIngresos && validarGradoIntruccion &&
       validarNumeroHijos && ValidarNumEstGrado1 && ValidarNumEstGrado1 && ValidarNumEstGrado2 && ValidarNumEstGrado3 && ValidarNumEstGrado4 && ValidarNumEstGrado5 && ValidarNumEstGrado6 &&
-      ValidarConstFamiliar && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
+      ValidarConstFamiliar && validarNumEstInicial && validarDireccion && validarTipVivienda && ValidarEstado && ValidarCiudad && ValidarParroquia && ValidarStatus
     ){
       return { estado: true, fecha: validarFechaNacimineto.fecha }
     }else{
@@ -873,7 +861,7 @@ class ComponentRepresentanteForm extends React.Component{
           msj_id_ciudad:[{ mensaje:"", color_texto:""}],
           msj_nivel_instruccion:[{ mensaje:"", color_texto:""}],
           msj_ocupacion:[{ mensaje:"", color_texto:""}],
-          msj_direccion: [{ mensaje:"", color_texto:""}],
+          msj_direccion_representante: [{ mensaje:"", color_texto:""}],
           msj_telefono_movil_representante: [{ mensaje:"", color_texto:""}],
           msj_telefono_local_representante: [{ mensaje:"", color_texto:""}],
           msj_numero_hijos_representante: [{ mensaje:"", color_texto:""}],
@@ -952,7 +940,7 @@ class ComponentRepresentanteForm extends React.Component{
             fecha_nacimiento_representante: this.state.fecha_nacimiento,
             nivel_instruccion_representante: this.state.nivel_instruccion,
             ocupacion_representante: this.state.ocupacion,
-            direccion_representante: this.state.direccion,
+            direccion_representante: this.state.direccion_representante,
             id_ciudad: this.state.id_ciudad,
             telefono_movil_representante: this.state.telefono_movil_representante,
             telefono_local_representante: this.state.telefono_local_representante,
@@ -1157,8 +1145,8 @@ class ComponentRepresentanteForm extends React.Component{
                     </div>
                     <div className="row justify-content-center mx-auto">
                       <ComponentFormTextArea clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
-                        obligatorio="si" mensaje={this.state.msj_direccion[0]} nombreCampoTextArea="Dirección:"
-                        clasesTextArear="form-control" name="direccion" id="direccion" value={this.state.direccion}
+                        obligatorio="si" mensaje={this.state.msj_direccion_representante[0]} nombreCampoTextArea="Dirección:"
+                        clasesTextArear="form-control" name="direccion_representante" id="direccion_representante" value={this.state.direccion_representante}
                         eventoPadre={this.cambiarEstado}
                       />
                     </div>

@@ -17,17 +17,32 @@ router.get("/iniciar-session/:usuario/:clave",async(req,res)=>{
     if(trabajador.rows.length!=0){
         if(bcrypt.compareSync(clave,trabajador.rows[0].clave_trabajador)){
             console.log("clave correcta creacion del token")
-            const id_cedula=trabajador.rows[0].id_cedula,
-            nombre_usuario=trabajador.rows[0].nombres+" "+trabajador.rows[0].apellidos,
-            id_perfil=trabajador.rows[0].id_perfil
-            const token=ServisWebToken.crearToken(id_cedula,nombre_usuario,id_perfil)
-            respuesta_api.token=token
-            respuesta_api.mensaje="sesion creada correctamente"
-            respuesta_api.estado_peticion="200"
-            respuesta_api.estado_sesion=true
-            res.writeHead(200,{"Content-Type":"application/json"})
-            res.write(JSON.stringify(respuesta_api))
-            res.end()
+            console.log("datos trabajador => ",trabajador.rows[0])
+            if(trabajador.rows[0].estatu_perfil==="1"){
+                console.log("entra")
+                const id_cedula=trabajador.rows[0].id_cedula,
+                nombre_usuario=trabajador.rows[0].nombres+" "+trabajador.rows[0].apellidos,
+                id_perfil=trabajador.rows[0].id_perfil
+                const token=ServisWebToken.crearToken(id_cedula,nombre_usuario,id_perfil)
+                respuesta_api.token=token
+                respuesta_api.mensaje="sesion creada correctamente"
+                respuesta_api.estado_peticion="200"
+                respuesta_api.estado_sesion=true
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
+            }
+            else{
+                console.log("no entra")
+                respuesta_api.mensaje="el perfil que tiene este usuarui esta inactivo por puede insersar al sistema"
+                respuesta_api.estado_peticion="404"
+                respuesta_api.estado_sesion=false
+                res.writeHead(200,{"Content-Type":"application/json"})
+                res.write(JSON.stringify(respuesta_api))
+                res.end()
+            }
+
+          
         }
         else{
             respuesta_api.mensaje="error al iniciar revise si la clave o el usuario esten bien escrito"
