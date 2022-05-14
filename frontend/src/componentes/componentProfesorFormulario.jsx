@@ -95,7 +95,7 @@ class ComponentProfesorFormulario extends React.Component {
 
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -165,11 +165,11 @@ class ComponentProfesorFormulario extends React.Component {
                 this.setState(json.datos[0])
             }
             else{
-                alert("el registro que intento consultar no se encuentra en la base de datos")
+                alert("El registro que intento consultar no se encuentra en la base de datos")
             }
         })
         .catch(error => {
-            console.error("error al conectar con el servidor")
+            console.error("Error al conectar con el servidor")
         })
     }
 
@@ -180,7 +180,7 @@ class ComponentProfesorFormulario extends React.Component {
             this.setState({listaTrabajadores:json.trabajadores})
         })
         .catch(error => {
-            console.error("error al conectar con el servidor")
+            console.error("Error al conectar con el servidor")
         })
     }
 
@@ -271,7 +271,7 @@ class ComponentProfesorFormulario extends React.Component {
             }
         }
         else{
-            alert("error al validar el formulario")
+            alert("Error al validar el formulario")
         }
     }
 

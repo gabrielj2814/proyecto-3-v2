@@ -206,7 +206,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -342,7 +342,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 this.setState({respaldoDatos})
             }
             else{
-                alert("el registro que intento consultar no se encuentra en la base de datos")
+                alert("El registro que intento consultar no se encuentra en la base de datos")
             }
         })
         .catch(error => {
@@ -539,7 +539,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             else{
                 $seccionNombreProfesor.textContent=``
                 this.setState({id_profesor:""})
-                msj_id_cedula.mensaje="no hay ningun profesor en la lista que tenga esta cedula"
+                msj_id_cedula.mensaje="No hay ningun profesor en la lista que tenga esta cédula"
                 msj_id_cedula.color_texto="rojo"
             }
             this.setState({msj_id_cedula})
@@ -644,17 +644,17 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     msj_id_cedula.color_texto="verde"
                 }
                 else{
-                    msj_id_cedula.mensaje=`el profesor no ha sido encontrado, por favor verifique que la cedula este bien escrita`
+                    msj_id_cedula.mensaje=`El profesor no ha sido encontrado, por favor verifique que la cedula este bien escrita`
                     msj_id_cedula.color_texto="rojo"
                 }
             }
             else{
-                msj_id_cedula.mensaje=`este campo no cumple con los caracteres minimos para realizar la busqueda del profesor ${cedulaProfesor.value.length}/8`
+                msj_id_cedula.mensaje=`Este campo no cumple con los caracteres minimos para realizar la busqueda del profesor ${cedulaProfesor.value.length}/8`
                 msj_id_cedula.color_texto="rojo"
             }
         }
         else{
-            msj_id_cedula.mensaje="este campo no puede estar vacio"
+            msj_id_cedula.mensaje="Este campo no puede estar vacio"
             msj_id_cedula.color_texto="rojo"
         }
         this.setState({msj_id_cedula})
@@ -848,11 +848,11 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         })
                     })
                     .catch(error => {
-                        console.error(`error de la peticion axios =>>> ${error}`)
+                        console.error(`Error de la peticion axios =>>> ${error}`)
                     })
                 }
                 else{
-                    alert("error al validar el formulario")
+                    alert("Error al validar el formulario")
                 }
             }
             else if(operacion==="actualizar"){
@@ -905,11 +905,11 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         })
                     })
                     .catch(error => {
-                        console.error(`error de la peticion axios =>>> ${error}`)
+                        console.error(`Error de la peticion axios =>>> ${error}`)
                     })
                 }
                 else{
-                    alert("error al validar el formulario")
+                    alert("Error al validar el formulario")
                 }
             }
 
@@ -1114,7 +1114,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         <div className="row justify-content-center">
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                 <div class="form-groud">
-                                    <label>Numero total de estudiantes</label>
+                                    <label>Número total de estudiantes</label>
                                     <select id="numero_total_de_estudiantes" name="numero_total_de_estudiantes" class="form-select custom-select" aria-label="Default select example" onChange={this.cambiarEstado}>
 
                                         {this.state.listaDenNumeroEstudiante.map((numeroEstudiante,index)=> {

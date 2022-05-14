@@ -73,7 +73,7 @@ class ComponentMedicoForm extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -266,13 +266,13 @@ class ComponentMedicoForm extends React.Component{
                 this.setState({msj_nombre_medico})
             }
             else{
-                msj_nombre_medico.mensaje="este campo solo permite letras"
+                msj_nombre_medico.mensaje="Este campo solo permite letras"
                 msj_nombre_medico.color_texto="rojo"
                 this.setState({msj_nombre_medico})
             } 
         }
         else{
-            msj_nombre_medico.mensaje="este campo no puede estar vacio"
+            msj_nombre_medico.mensaje="Este campo no puede estar vacio"
             msj_nombre_medico.color_texto="rojo"
             this.setState({msj_nombre_medico})
         }
@@ -292,13 +292,13 @@ class ComponentMedicoForm extends React.Component{
                 this.setState({msj_apellido_medico})
             }
             else{
-                msj_apellido_medico.mensaje="este campo solo permite letras"
+                msj_apellido_medico.mensaje="Este campo solo permite letras"
                 msj_apellido_medico.color_texto="rojo"
                 this.setState({msj_apellido_medico})
             } 
         }
         else{
-            msj_apellido_medico.mensaje="este campo no puede estar vacio"
+            msj_apellido_medico.mensaje="Este campo no puede estar vacio"
             msj_apellido_medico.color_texto="rojo"
             this.setState({msj_apellido_medico})
         }
@@ -318,13 +318,13 @@ class ComponentMedicoForm extends React.Component{
                 this.setState({msj_id_medico})
             }
             else{
-                msj_id_medico.mensaje="este campo solo permite letras o numeros"
+                msj_id_medico.mensaje="Este campo solo permite letras o numeros"
                 msj_id_medico.color_texto="rojo"
                 this.setState(msj_id_medico)
             } 
         }
         else{
-            msj_id_medico.mensaje="este campo no puede estar vacio"
+            msj_id_medico.mensaje="Este campo no puede estar vacio"
             msj_id_medico.color_texto="rojo"
             this.setState({msj_id_medico})
         }
@@ -390,7 +390,7 @@ class ComponentMedicoForm extends React.Component{
                 })
             }
             else{
-                alert("error al validar el formulario")
+                alert("Error al validar el formulario")
             }
         }
     }
@@ -419,8 +419,8 @@ class ComponentMedicoForm extends React.Component{
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
-                                <p>Estado: {this.state.mensaje.estado}</p>
+                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
+                                {/* <p>Estado: {this.state.mensaje.estado}</p> */}
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
                                 </button>

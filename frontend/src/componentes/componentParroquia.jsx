@@ -134,7 +134,7 @@ class ComponentParroquia extends React.Component{
           this.setState(servidor)
        }
        else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
        }
       }
@@ -168,7 +168,7 @@ class ComponentParroquia extends React.Component{
               })
               .catch(error=>{
                 console.error(error)
-                alert("error en el servidor")
+                alert("Error en el servidor")
               })
           }else{
             alert("Error:la barra de busqueda esta vacia")
@@ -186,7 +186,7 @@ class ComponentParroquia extends React.Component{
             })
             .catch(error=>{
               console.error(error)
-              alert("error en el servidor")
+              alert("Error en el servidor")
             })
           }else{
             // console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
@@ -307,8 +307,8 @@ class ComponentParroquia extends React.Component{
               <div className="row">
                 <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div className="alert alert-danger alert-dismissible ">
-                      <p>Mensaje del Error: {this.state.mensaje.texto}</p>
-                      <p>Estado del Error: {this.state.mensaje.estado}</p>
+                      <p className='font-weight-bold'>Mensaje del Error: {this.state.mensaje.texto}</p>
+                      {/* <p>Estado del Error: {this.state.mensaje.estado}</p> */}
                       <button className="close" data-dismiss="alert">
                           <span>X</span>
                       </button>

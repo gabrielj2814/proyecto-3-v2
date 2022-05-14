@@ -86,7 +86,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     .catch(error => {
         let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
         mensaje.estado="danger"
-        mensaje.texto="error al conectarse con el servidor"
+        mensaje.texto="Error al conectarse con el servidor"
         this.setState({mensaje})
     })
   }
@@ -122,7 +122,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     .catch(error => {
         let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
         mensaje.estado="danger"
-        mensaje.texto="error al conectarse con el servidor"
+        mensaje.texto="Error al conectarse con el servidor"
         this.setState({mensaje})
     })
   }
@@ -135,7 +135,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
       await this.AsistenciaDeHoy();
 
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -378,16 +378,16 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
           estadoValidacion=true
         }
         else{
-          alert("se contaron "+dias+" dias a partir de la fecha de inicio y no se llego a la fecha final lo mas provable es que no las dos fechas no esten en la misma semana")
+          alert("Se contaron "+dias+" diás a partir de la fecha de inicio y no se llego a la fecha final lo mas provable es que no las dos fechas no esten en la misma semana")
           listaFechaTmp=[]
         }
       }
       else{
-        alert("la fecha de inicio es igual o posterio a la fecha final por ese motivo no se puede general el reporte la fecha de inicio tiene que ser anterio a la fecha final")
+        alert("La fecha de inicio es igual o posterio a la fecha final por ese motivo no se puede general el reporte la fecha de inicio tiene que ser anterio a la fecha final")
       }
     }
     else{
-      alert("la fecha de incio tiene que ser un lunes y la fecha final tiene que ser un viernes")
+      alert("La fecha de inicio tiene que ser un lunes y la fecha final tiene que ser un viernes")
     }
     return listaFechaTmp
   }
@@ -430,7 +430,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
             }
             else{
                 $filaVerPdf.classList.add("ocultarFormulario")
-                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
             }
         },
         error: function() {

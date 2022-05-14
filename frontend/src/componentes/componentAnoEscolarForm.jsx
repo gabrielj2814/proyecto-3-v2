@@ -176,7 +176,7 @@ class ComponentAnoEscolarForm extends React.Component{
         document.getElementById("innactivo").disabled = true;
       }
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este módulo(será redirigido a la vista anterior)")
         this.props.history.goBack()
     }
 
@@ -264,7 +264,7 @@ class ComponentAnoEscolarForm extends React.Component{
           this.setState({fechaServidor})
       })
       .catch(error => {
-          console.log("error al conectar con el servidor")
+          console.log("Error al conectar con el servidor")
       })
   }
 
@@ -421,12 +421,12 @@ class ComponentAnoEscolarForm extends React.Component{
               }
           }
           else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+              mensaje_campo[0]={mensaje:"Este campo solo permite numeros",color_texto:"rojo"}
               this.setState({["msj_"+nombre_campo]:mensaje_campo})
           }
       }
       else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+          mensaje_campo[0]={mensaje:"Este campo no puede estar vacío",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:mensaje_campo})
       }
       return estado

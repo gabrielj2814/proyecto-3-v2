@@ -69,7 +69,7 @@ class ComponentEspecialidadConsulta extends React.Component{
             await this.consultarEspecialidad(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -181,19 +181,19 @@ class ComponentEspecialidadConsulta extends React.Component{
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Código del Especialidad: </span>
-                            <span className="valor">{this.state.id_especialidad}</span>
+                            <span className="valor font-weight-bold">{this.state.id_especialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Descripción del Especialidad: </span>
-                            <span className="valor">{this.state.nombre_especialidad}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_especialidad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estatus del Especialidad: </span>
-                            <span className="valor">{this.state.estatu_especialidad}</span>
+                            <span className="valor font-weight-bold">{this.state.estatu_especialidad}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

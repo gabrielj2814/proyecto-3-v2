@@ -38,7 +38,7 @@ class ComponentCiudadConsulta extends React.Component{
             this.consultarCiudad(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -196,25 +196,25 @@ class ComponentCiudadConsulta extends React.Component{
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Código Ciudad: </span>
-                            <span className="valor">{this.state.id_ciudad}</span>
+                            <span className="valor font-weight-bold">{this.state.id_ciudad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Nombre: </span>
-                            <span className="valor">{this.state.nombre_ciudad}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_ciudad}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estado: </span>
-                            <span className="valor">{this.state.nombre_estado}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_estado}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estatus Ciudad: </span>
-                            <span className="valor">{this.state.estatu_ciudad}</span>
+                            <span className="valor font-weight-bold">{this.state.estatu_ciudad}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

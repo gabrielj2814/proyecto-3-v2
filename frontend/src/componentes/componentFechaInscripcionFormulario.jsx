@@ -191,7 +191,8 @@ class ComponentFechaInscripcionFormulario extends React.Component{
     }
 
     async consultarFechaInscripcion(id){
-        await axiosCustom.get(`configuracion/fecha-inscripcion/consultar/${id}`)
+        const token = localStorage.getItem("usuario")
+        await axiosCustom.get(`configuracion/fecha-inscripcion/consultar/${id}/${token}`)
         .then(respuesta => {
             let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
             this.setState({
@@ -267,19 +268,19 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                     }
                     else{
                         msj_fecha_incripcion_desde.color_texto="rojo"
-                        msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción tiene que ser anterior a la fecha de fin de inscripción"
+                        msj_fecha_incripcion_desde.mensaje="La fecha inicio de inscripción tiene que ser anterior a la fecha de fin de inscripción"
                         this.setState({msj_fecha_incripcion_desde})
                     }
                 }
                 else{
                     msj_fecha_incripcion_desde.color_texto="rojo"
-                    msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción no puede salir del rango del año escolar"
+                    msj_fecha_incripcion_desde.mensaje="La fecha inicio de inscripción no puede salir del rango del año escolar"
                     this.setState({msj_fecha_incripcion_desde})
                 }
             }
             else{
                 msj_fecha_incripcion_desde.color_texto="rojo"
-                msj_fecha_incripcion_desde.mensaje="la fecha inicio de inscripción no puede salir del rango del año escolar"
+                msj_fecha_incripcion_desde.mensaje="La fecha inicio de inscripción no puede salir del rango del año escolar"
                 this.setState({msj_fecha_incripcion_desde})
             }
             return estado
@@ -311,19 +312,19 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                     }
                     else{
                         msj_fecha_incripcion_hasta.color_texto="rojo"
-                        msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción tiene que ser posterior a la fecha inicio de inscripción"
+                        msj_fecha_incripcion_hasta.mensaje="La fecha fin de inscripción tiene que ser posterior a la fecha inicio de inscripción"
                         this.setState({msj_fecha_incripcion_hasta})
                     }
                 }
                 else{
                     msj_fecha_incripcion_hasta.color_texto="rojo"
-                    msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción no puede salir del rango del año escolar"
+                    msj_fecha_incripcion_hasta.mensaje="La fecha fin de inscripción no puede salir del rango del año escolar"
                     this.setState({msj_fecha_incripcion_hasta})
                 }
             }
             else{
                 msj_fecha_incripcion_hasta.color_texto="rojo"
-                msj_fecha_incripcion_hasta.mensaje="la fecha fin de inscripción no puede salir del rango del año escolar"
+                msj_fecha_incripcion_hasta.mensaje="La fecha fin de inscripción no puede salir del rango del año escolar"
                 this.setState({msj_fecha_incripcion_hasta})
             }
             return estado;
@@ -354,13 +355,13 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 }
                 else{
                     msj_fecha_tope_inscripcion.color_texto="rojo"
-                    msj_fecha_tope_inscripcion.mensaje="la fecha tope tiene que ser posterior que la fecha de fin de inscripción"
+                    msj_fecha_tope_inscripcion.mensaje="La fecha tope tiene que ser posterior que la fecha de fin de inscripción"
                     this.setState({msj_fecha_tope_inscripcion})
                 }
             }
             else{
                 msj_fecha_tope_inscripcion.color_texto="rojo"
-                msj_fecha_tope_inscripcion.mensaje="la fecha tope no puede salir del rango del año ecolar"
+                msj_fecha_tope_inscripcion.mensaje="La fecha tope no puede salir del rango del año ecolar"
                 this.setState({msj_fecha_tope_inscripcion})
             }
             return estado
@@ -431,7 +432,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
             }
         }
         else{
-            alert("error al validar el formulario")
+            alert("Error al validar el formulario")
         }
     }
 
@@ -523,7 +524,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                                 <div class="form-groud">
                                     <label><span className="obligatorio-campo">(*)</span>Año Escolares</label>
                                     <select class="form-select custom-select" onChange={this.cambiarEstado} id="id_ano_escolar" name="id_ano_escolar" aria-label="Default select example" >
-                                        <option value="null">Selccione un año escolar</option>
+                                        <option value="null">Seleccione un año escolar</option>
 						{this.state.listaAnosEscolares.map((ano,index) => {
 								return <option key={index} value={ano.id_ano_escolar}>{ano.ano_desde}-{ano.ano_hasta}</option>
                                         })}

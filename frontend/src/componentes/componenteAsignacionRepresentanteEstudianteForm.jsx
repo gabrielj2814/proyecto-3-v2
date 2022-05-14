@@ -599,7 +599,7 @@ class ComponentAsignacionRepresentanteEstudianteForm extends React.Component{
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
                                 </button>
