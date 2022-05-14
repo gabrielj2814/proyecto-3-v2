@@ -38,7 +38,7 @@ class ComponentFuncionTrabajadorConsulta extends React.Component{
             this.consultarFuncionTrabajador(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -178,25 +178,25 @@ class ComponentFuncionTrabajadorConsulta extends React.Component{
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Codigo funcion: </span>
-                            <span className="valor">{this.state.id_funcion_trabajador}</span>
+                            <span className="valor font-weight-bold">{this.state.id_funcion_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Nombre: </span>
-                            <span className="valor">{this.state.funcion_descripcion}</span>
+                            <span className="valor font-weight-bold">{this.state.funcion_descripcion}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Tipo de Trabajador: </span>
-                            <span className="valor">{this.state.descripcion_tipo_trabajador}</span>
+                            <span className="valor font-weight-bold">{this.state.descripcion_tipo_trabajador}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estatus Funcion: </span>
-                            <span className="valor">{this.state.estatu_funcion_trabajador}</span>
+                            <span className="valor font-weight-bold">{this.state.estatu_funcion_trabajador}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

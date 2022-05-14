@@ -150,7 +150,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     .catch(error => {
         let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
         mensaje.estado="danger"
-        mensaje.texto="error al conectarse con el servidor"
+        mensaje.texto="Error al conectarse con el servidor"
         this.setState({mensaje})
     })
   }
@@ -163,7 +163,7 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
       // await this.AsistenciaDeHoy();
 
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -420,8 +420,8 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
                         name="cedula_profesor" id="cedula_profesor" placeholder="Cédula" eventoPadre={this.BuscarProfesor}
                       />
                       <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                          <label>Nombre del profesor: {this.state.nombre_profesor}</label><br></br>
-                          <label>Apellido del profesor: {this.state.apellido_profesor}</label>
+                <label>Nombre del profesor: <span className='font-weight-bold'>{this.state.nombre_profesor}</span></label><br></br>
+                <label>Apellido del profesor: <span className='font-weight-bold'>{this.state.apellido_profesor}</span></label>
                       </div>
                   </div>
                   <div className="row mt-3">

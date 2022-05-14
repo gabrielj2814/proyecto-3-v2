@@ -86,7 +86,7 @@ class ComponentPermisoTrabajador extends React.Component{
           this.setState(permisos_verificado)
         }
         else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
         }
       }
@@ -193,7 +193,7 @@ class ComponentPermisoTrabajador extends React.Component{
         })
         .catch(error=>{
             console.log(error)
-            mensaje.texto="no hay conxion con el servidor"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado="500"
             this.setState({mensaje})
         })
@@ -210,7 +210,7 @@ class ComponentPermisoTrabajador extends React.Component{
         })
         .catch(error=>{
             console.log(error)
-            mensaje.texto="no hay conxion con el servidor"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado="500"
             this.setState({mensaje})
         })
@@ -401,7 +401,7 @@ class ComponentPermisoTrabajador extends React.Component{
               }
               else{
                   $filaVerPdf.classList.add("ocultarFormulario") 
-                  alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                  alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
               }
             },
             error: function() {

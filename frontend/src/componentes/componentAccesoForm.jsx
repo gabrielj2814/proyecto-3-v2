@@ -181,7 +181,7 @@ class ComponentAccesoForm extends React.Component {
         }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -249,7 +249,7 @@ class ComponentAccesoForm extends React.Component {
             //console.log(respuesta_servidor)
         })
         .catch(error=>{
-            mensaje.texto="no hay conxion con el servido"
+            mensaje.texto="No hay conxion con el servido"
             mensaje.estado=500
             this.props.history.push(`/dashboard/configuracion/acceso${JSON.stringify(mensaje)}`)
         })
@@ -273,7 +273,7 @@ class ComponentAccesoForm extends React.Component {
 
         })
         .catch(error=>{
-            mensaje.texto="no hay conxion con el servidor"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado=500
             this.props.history.push(`/dashboard/configuracion/acceso${JSON.stringify(mensaje)}`)
         })
@@ -398,15 +398,15 @@ class ComponentAccesoForm extends React.Component {
             }
             else{
                 if(modulos.length===1){
-                    alert("al crear un perfil tiene que tener como minimo un lodulo de acceso")
+                    alert("Al crear un perfil tiene que tener como minimo un módulo de acceso")
                 }
                 else{
-                    alert("nose puede elminar modulos ya registrados a este perfil, si no quiere que el perfil tenga acceso a ese modulo cambie el estado del modulo de activo a inactivo")
+                    alert("No se puede eliminar módulos ya registrados a este perfil, si no quiere que el perfil tenga acceso a ese modulo cambie el estado del modulo de activo a inactivo")
                 }
             }
         }
         else{
-            alert("por favor no modifiques los botones")
+            alert("Por favor no modifiques los botones")
         }
     }
 
@@ -474,7 +474,7 @@ class ComponentAccesoForm extends React.Component {
             }
         }
         else{
-            alert("error en validar modulo principal")
+            alert("Error en validar modulo principal")
         }
     }
 
@@ -530,7 +530,7 @@ class ComponentAccesoForm extends React.Component {
                 }
             }
             else{
-                alert("error en validar sub modulo")
+                alert("Error en validar sub módulo")
             }
         }
         else{
@@ -614,7 +614,7 @@ class ComponentAccesoForm extends React.Component {
             return estado;
         }
         else{
-            msj_nombre_perfil.mensaje="este campo no puede estar vacio"
+            msj_nombre_perfil.mensaje="Este campo no puede estar vacio"
             msj_nombre_perfil.color_texto="rojo"
             this.setState({msj_nombre_perfil:msj_nombre_perfil})
             return estado;
@@ -639,7 +639,7 @@ class ComponentAccesoForm extends React.Component {
             return estado
         }
         else{
-            alert(`Error : el numero de modulos no validos en total son: ${contador}`)
+            alert(`Error : El numero de módulos no validos en total son: ${contador}`)
             return estado
         }
 
@@ -723,7 +723,7 @@ class ComponentAccesoForm extends React.Component {
             }
         }
         else{
-            alert("por favor no cambir el valor del boton al formulario");
+            alert("Por favor no cambiar el valor del botón al formulario");
         }
     }
 
@@ -770,7 +770,7 @@ class ComponentAccesoForm extends React.Component {
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
                                     <p>Mensaje: {this.state.mensaje.texto}</p>
-                                    <p>Estado: {this.state.mensaje.estado}</p>
+                                    {/* <p>Estado: {this.state.mensaje.estado}</p> */}
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>

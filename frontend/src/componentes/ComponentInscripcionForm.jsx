@@ -548,12 +548,12 @@ class ComponentInscripcionForm extends React.Component{
               }
           }
           else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+              mensaje_campo[0]={mensaje:"Este campo solo permite numeros",color_texto:"rojo"}
               this.setState({["msj_"+nombre_campo]:mensaje_campo})
           }
       }
       else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+          mensaje_campo[0]={mensaje:"Eeste campo no puede estar vacio",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:mensaje_campo})
       }
       return estado
@@ -736,7 +736,7 @@ class ComponentInscripcionForm extends React.Component{
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
                                 </button>

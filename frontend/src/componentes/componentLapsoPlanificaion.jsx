@@ -82,7 +82,7 @@ class ComponentLapsoPlanificaion extends React.Component{
             await this.consultarLapsoPlanificacion(id_planificacion)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -153,7 +153,7 @@ class ComponentLapsoPlanificaion extends React.Component{
         .catch(error => {
             let alerta=JSON.parse(JSON.stringify(this.state.alerta))
             alerta.color="danger"
-            alerta.mensaje="error al conectarse con el servidor"
+            alerta.mensaje="Error al conectarse con el servidor"
             alerta.estado=true
             this.setState({alerta})
         })

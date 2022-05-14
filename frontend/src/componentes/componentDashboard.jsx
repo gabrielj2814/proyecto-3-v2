@@ -78,15 +78,15 @@ class ComponentDashboard extends React.Component{
                             // console.log(tiempoExtender.format("hh:mm:ssA"))
                             // console.log(tiempoFinal.format("hh:mm:ssA"))
                             if(fechaSecion.isSameOrAfter(tiempoFinal)){
-                                console.log("sacar del sistema por que se vencio la sesion")
-                                mensaje.texto="lo sentimos pero su sesion ha caducado"
+                                console.log("Sacar del sistema por que se vencio la sesion")
+                                mensaje.texto="Lo sentimos, pero su sesión ha caducado"
                                 mensaje.estado="500"
                                 this.destruirSesion()
                                 this.props.history.push(`/login${JSON.stringify(mensaje)}`)
                             }
                             else{
                                 if(fechaSecion.isSameOrAfter(tiempoExtender)){
-                                    console.log("mostrar alerta para preguntar si quiere extender la sesion")
+                                    console.log("Mostrar alerta para preguntar si quiere extender la sesion")
                                 }
                             }
                         }
@@ -101,14 +101,14 @@ class ComponentDashboard extends React.Component{
                 })
                 .catch(error=>{
                     console.log(error)
-                    mensaje.texto="hubo un error inseperado en el servidor al momento de procesar su peticion"
+                    mensaje.texto="hubo un error inseperado en el servidor al momento de procesar su petición"
                     mensaje.estado="500"
                     this.props.history.push(`/login${JSON.stringify(mensaje)}`)
 
                 })
             }
             else{
-                mensaje.texto="Notienes la autorización para entrar al sistema"
+                mensaje.texto="No tienes la autorización para entrar al sistema"
                 mensaje.estado="500"
                 this.props.history.push(`/login${JSON.stringify(mensaje)}`)
             }
@@ -145,7 +145,7 @@ class ComponentDashboard extends React.Component{
                     // console.log("sacar del sistema por que se vencio la sesion")
                     const $alertaExtenderSesion=document.getElementById("alerta_extender_sesion")
                     $alertaExtenderSesion.classList.remove("mostart_alerta_extender_sesion")
-                    mensaje.texto="lo sentimos pero su sesion ha caducado"
+                    mensaje.texto="Lo sentimos, pero su sesión ha caducado"
                     mensaje.estado="500"
                     this.destruirSesion()
                     this.props.history.push(`/login${JSON.stringify(mensaje)}`)
@@ -228,7 +228,7 @@ class ComponentDashboard extends React.Component{
         render(){
             const mesajeAlertaExtenderSesion=(
                 <div>
-                    <span className="mensaje_alerta_estender_sesion">Estimado usuario la sesion esta a punto de caducar desea exterderla </span>
+                    <span className="mensaje_alerta_estender_sesion font-weight-bold">Estimado usuario la sesion esta a punto de caducar desea exterderla </span>
                     <InputButton 
                     clasesBoton="btn btn-warning"
                     id="boton-extender-sesion"

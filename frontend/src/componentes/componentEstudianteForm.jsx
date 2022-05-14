@@ -664,13 +664,13 @@ class ComponentEstudianteForm extends React.Component{
                 msj_apellidos[0] = {mensaje: "",color_texto:"rojo"}
             }
             else{
-              msj_nombres[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-              msj_apellidos[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+              msj_nombres[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
+              msj_apellidos[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
             }
         }
         else{
-          msj_nombres[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
-          msj_apellidos[0] = {mensaje: "Este campo no puede estar vacio",color_texto:"rojo"}
+          msj_nombres[0] = {mensaje: "Este campo no puede estar vacío",color_texto:"rojo"}
+          msj_apellidos[0] = {mensaje: "Este campo no puede estar vacío",color_texto:"rojo"}
         }
 
         if(nombre_campo == "nombres") this.setState(msj_nombres)
@@ -742,12 +742,12 @@ class ComponentEstudianteForm extends React.Component{
                 }
             }
             else{
-                mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+                mensaje_campo[0]={mensaje:"Este campo solo permite numeros",color_texto:"rojo"}
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
             }
         }
         else{
-            mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+            mensaje_campo[0]={mensaje:"Este campo no puede estar vacío",color_texto:"rojo"}
             this.setState({["msj_"+nombre_campo]:mensaje_campo})
         }
         return estado
@@ -775,12 +775,12 @@ class ComponentEstudianteForm extends React.Component{
                 }
             }
             else{
-                msj_fecha_nacimiento[0]={mensaje:"es demadiaso joven",color_texto:"rojo"}
+                msj_fecha_nacimiento[0]={mensaje:"Es demadiaso joven",color_texto:"rojo"}
                 this.setState(msj_fecha_nacimiento)
             }
         }
         else{
-            msj_fecha_nacimiento[0]={mensaje:"la fecha de nacimiento no puede estar vacia",color_texto:"rojo"}
+            msj_fecha_nacimiento[0]={mensaje:"La fecha de nacimiento no puede estar vacia",color_texto:"rojo"}
             this.setState(msj_fecha_nacimiento)
         }
         return estado
@@ -802,14 +802,14 @@ class ComponentEstudianteForm extends React.Component{
             }
             else{
                 estado = false
-                msj_procedencia[0]={mensaje:"la procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
+                msj_procedencia[0]={mensaje:"La procedencia no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_vive_con[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
                 msj_direccion_nacimiento[0]={mensaje:"Este campo no puede tener solo espacios en blanco",color_texto:"rojo"}
             }
         }
         else{
             estado = false
-            msj_procedencia[0]={mensaje:"la procedencia no puede estar vacia",color_texto:"rojo"}
+            msj_procedencia[0]={mensaje:"La procedencia no puede estar vacia",color_texto:"rojo"}
             msj_vive_con[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
             msj_direccion_nacimiento[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
         }
@@ -1039,7 +1039,7 @@ class ComponentEstudianteForm extends React.Component{
             this.setState({
                 estadoBusquedaEstudiante:true
             })
-            alert("este estudiante ya esta resgistrado")
+            alert("Este estudiante ya esta resgistrado")
         }
         else{
             // console.log("NO OK")
@@ -1071,7 +1071,7 @@ class ComponentEstudianteForm extends React.Component{
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
-                                    <p>Mensaje: {this.state.mensaje.texto}</p>
+                                    <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>
@@ -1137,7 +1137,7 @@ class ComponentEstudianteForm extends React.Component{
                                 <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3">
                                         <div className="form-ground">
                                             <label className="mb-3">Edad:</label>
-                                            <div >{this.state.edadEstudiante} Años</div>
+                                            <div className='text-success'>{this.state.edadEstudiante} Años</div>
                                         </div>
                                 </div>
                                 )
@@ -1208,7 +1208,7 @@ class ComponentEstudianteForm extends React.Component{
                         </div>
                         <div className="row justify-content-center">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 text-center contenedor-titulo-form-trabajador">
-                                <span className="titulo-form-trabajador">Donde nació el estudiante</span>
+                                <span className="titulo-form-trabajador">Dónde nació el estudiante</span>
                             </div>
                         </div>
                         <div className="row justify-content-center mx-auto my-2">

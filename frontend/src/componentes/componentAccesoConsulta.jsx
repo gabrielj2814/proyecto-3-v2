@@ -101,7 +101,7 @@ class ComponentAccesoConsulta extends React.Component {
             await this.consultarPerfil(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }

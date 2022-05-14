@@ -870,8 +870,8 @@ class ComponentCambioAulaForm extends React.Component{
                       name="id_cedula_estudiante_a" id="id_cedula_estudiante_a" placeholder="Datos del estudiante"
                     />
                     <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                        <label>Nombre del estudiante: {this.state.nombres_estudiante_a}</label><br></br>
-                        <label>Apellido del estudiante: {this.state.apellidos_estudiante_a}</label>
+                      <label>Nombre del estudiante: <span className='font-weight-bold'>{this.state.nombres_estudiante_a}</span></label><br></br>
+                     <label>Apellido del estudiante: <span className='font-weight-bold'>{this.state.apellidos_estudiante_a}</span></label>
                     </div>
                   </div>
 
@@ -902,8 +902,8 @@ class ComponentCambioAulaForm extends React.Component{
                       name="id_cedula_estudiante_b" id="id_cedula_estudiante_b" placeholder="Datos del estudiante"
                     />
                     <div className='col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5'>
-                        <label>Nombre del estudiante: {this.state.nombres_estudiante_b}</label><br></br>
-                        <label>Apellido del estudiante: {this.state.apellidos_estudiante_b}</label>
+                      <label>Nombre del estudiante: <span className='font-weight-bold'>{this.state.nombres_estudiante_b}</span></label><br></br>
+                      <label>Apellido del estudiante: <span className='font-weight-bold'>{this.state.apellidos_estudiante_b}</span></label>
                     </div>
                   </div>
                   <div className="row justify-content-center mx-auto my-2">

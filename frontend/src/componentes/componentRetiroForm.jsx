@@ -287,7 +287,7 @@ class ComponentRetiroForm extends React.Component{
 
 
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -381,7 +381,7 @@ class ComponentRetiroForm extends React.Component{
           this.setState({fechaServidor: fechaServidor, fecha_inscripcion: fechaServidor})
       })
       .catch(error => {
-          console.error("error al conectar con el servidor")
+          console.error("Error al conectar con el servidor")
       })
   }
 
@@ -518,12 +518,12 @@ class ComponentRetiroForm extends React.Component{
               }
           }
           else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+              mensaje_campo[0]={mensaje:"Este campo solo permite numeros",color_texto:"rojo"}
               this.setState({["msj_"+nombre_campo]:mensaje_campo})
           }
       }
       else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+          mensaje_campo[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:mensaje_campo})
       }
       return estado
@@ -693,7 +693,7 @@ class ComponentRetiroForm extends React.Component{
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.color_alerta)} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
                                 </button>

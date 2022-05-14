@@ -136,7 +136,7 @@ class ComponenrGradoFormulario extends React.Component{
                 this.setState(respuestaServidor.datos[0])
             }
             else{
-                alert("este registro no exite")
+                alert("Este registro no exite")
             }
         })
         .catch(error => {
