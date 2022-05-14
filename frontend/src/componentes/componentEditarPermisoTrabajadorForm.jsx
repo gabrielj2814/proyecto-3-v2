@@ -98,7 +98,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             console.log(this.state)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -294,7 +294,7 @@ class ComponentEditarPermisoTrabajadorForm extends React.Component{
             })
             .catch(error=>{
                 console.log(error)
-                mensaje.texto="no hay conexion al servidor"
+                mensaje.texto="No hay conexion al servidor"
                 mensaje.estado="500"
                 this.setState({
                     mensaje:mensaje

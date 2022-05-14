@@ -116,7 +116,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este módulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -369,7 +369,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
-                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                    alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
             error: function() {
@@ -436,7 +436,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                     <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                         <div className="alert alert-danger alert-dismissible ">
                         <p>Mensaje del Error: {this.state.mensaje.texto}</p>
-                        <p>Estado del Error: {this.state.mensaje.estado}</p>
+                        {/* <p>Estado del Error: {this.state.mensaje.estado}</p> */}
                         <button className="close" data-dismiss="alert">
                             <span>X</span>
                         </button>
@@ -461,7 +461,7 @@ class ComponentAsignacionEspecialidadMedico extends React.Component{
                                   <div class="form-groud">
                                     <label>Tipo de Reporte</label>
                                     <select class="form-select custom-select" aria-label="Default select example" onChange={this.mostrarFiltros}>
-                                      <option value="null" >Seleccione un Tipo de Reporte</option>
+                                      <option value="null" >Seleccione un tipo de Reporte</option>
                                       <option value="1" >Por Especialidad</option>
                                       <option value="0" >Por Médico</option>
                                     </select>

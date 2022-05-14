@@ -83,7 +83,7 @@ class ComponentAula extends React.Component{
             await this.consultarTodosLasAulas()
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }

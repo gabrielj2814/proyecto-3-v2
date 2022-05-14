@@ -68,7 +68,7 @@ class ComponentMedicoConsulta extends React.Component{
             await this.consultarMedico(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -183,19 +183,19 @@ class ComponentMedicoConsulta extends React.Component{
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Código del Médico: </span>
-                            <span className="valor">{this.state.id_medico}</span>
+                            <span className="valor font-weight-bold">{this.state.id_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Nombre del Médico: </span>
-                            <span className="valor">{this.state.nombre_medico}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_medico}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Apellido del Médico: </span>
-                            <span className="valor">{this.state.apellido_medico}</span>
+                            <span className="valor font-weight-bold">{this.state.apellido_medico}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

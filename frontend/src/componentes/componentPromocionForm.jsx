@@ -320,12 +320,12 @@ class ComponentPromocionForm extends React.Component{
           document.getElementById("descripcion_logro").disabled = true;
 
         }else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
         }
       }
     }else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
     }
   }
@@ -420,7 +420,7 @@ class ComponentPromocionForm extends React.Component{
           this.setState({fechaServidor: fechaServidor, fecha_inscripcion: fechaServidor})
       })
       .catch(error => {
-          console.log("error al conectar con el servidor")
+          console.log("Error al conectar con el servidor")
       })
   }
 
@@ -502,7 +502,7 @@ class ComponentPromocionForm extends React.Component{
           msj[0] = {mensaje: "",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:msj})
         }else{
-          msj[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+          msj[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:msj})
         }
       }else{

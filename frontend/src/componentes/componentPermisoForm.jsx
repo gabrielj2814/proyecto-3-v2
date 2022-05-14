@@ -65,7 +65,7 @@ class ComponentPermisoForm extends React.Component{
             //console.log(respuesta_servidor)
         })
         .catch(error=>{
-            mensaje.texto="no hay conxion con el servido"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/permiso${JSON.stringify(mensaje)}`)
         })
@@ -86,7 +86,7 @@ class ComponentPermisoForm extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -294,13 +294,13 @@ class ComponentPermisoForm extends React.Component{
                 this.setState(msj_nombre_permiso)
             }
             else{                
-                msj_nombre_permiso.mensaje="este campo solo permite letras"
+                msj_nombre_permiso.mensaje="Este campo solo permite letras"
                 msj_nombre_permiso.color_texto="rojo"
                 this.setState(msj_nombre_permiso)
             }
         }
         else{
-            msj_nombre_permiso.mensaje="este campo no puede estar vacio"
+            msj_nombre_permiso.mensaje="Este campo no puede estar vacio"
             msj_nombre_permiso.color_texto="rojo"
             this.setState(msj_nombre_permiso)
         }
@@ -319,7 +319,7 @@ class ComponentPermisoForm extends React.Component{
             this.setState(msj_dias_permiso)
         }
         else{
-            msj_dias_permiso.mensaje="este campo no puede estar vacio"
+            msj_dias_permiso.mensaje="Este campo no puede estar vacio"
             msj_dias_permiso.color_texto="rojo"
             this.setState(msj_dias_permiso)
         }
@@ -385,7 +385,7 @@ class ComponentPermisoForm extends React.Component{
                 })
             }
             else{
-                alert("error al validar el formulario")
+                alert("Error al validar el formulario")
             }
         }
     }
@@ -441,8 +441,8 @@ class ComponentPermisoForm extends React.Component{
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
-                                    <p>Mensaje: {this.state.mensaje.texto}</p>
-                                    <p>Estado: {this.state.mensaje.estado}</p>
+                                    <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
+                                    {/* <p>Estado: {this.state.mensaje.estado}</p> */}
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>

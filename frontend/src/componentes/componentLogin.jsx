@@ -118,11 +118,11 @@ class ComponentLogin extends React.Component{
                 estado=true
             }
             else{
-                alert("el codigo del usuario no cumple con los caracteres minimos "+this.state.id_cedula.length+"/8")
+                alert("El codigo del usuario no cumple con los caracteres minimos "+this.state.id_cedula.length+"/8")
             }
         }
         else{
-            alert("el codigo del usuario no puede estar vacio")
+            alert("El codigo del usuario no puede estar vacio")
         }
         return estado
     }
@@ -134,11 +134,11 @@ class ComponentLogin extends React.Component{
                 estado=true
             }
             else{
-                alert("la clave del usuario no cumple con los caracteres minimos "+this.state.clave_trabajador.length+"/6 la clave puede tener 6 o mas caracteres")
+                alert("La clave del usuario no cumple con los caracteres minimos "+this.state.clave_trabajador.length+"/6 la clave puede tener 6 o mas caracteres")
             }
         }
         else{
-            alert("el clave del usuario no puede estar vacio")
+            alert("La clave del usuario no puede estar vacio")
         }
         return estado
     }
@@ -179,7 +179,7 @@ class ComponentLogin extends React.Component{
                                     <div className="row">
                                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div className={`alert alert-${(this.state.mensaje.estado==="200" || this.state.mensaje.estado==="401")?"success":"danger"} alert-dismissible`} >
-                                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                                 <button className="close" data-dismiss="alert">
                                                     <span>X</span>
                                                 </button>

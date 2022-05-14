@@ -99,7 +99,7 @@ class ComponentDirectorForm extends React.Component {
 
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -172,11 +172,11 @@ class ComponentDirectorForm extends React.Component {
 
             }
             else{
-                alert("el registro que intento consultar no se encuentra en la base de datos")
+                alert("eE registro que intentó consultar no se encuentra en la base de datos")
             }
         })
         .catch(error => {
-            console.error("error al conectar con el servidor")
+            console.error("Error al conectar con el servidor")
         })
     }
 
@@ -212,7 +212,7 @@ class ComponentDirectorForm extends React.Component {
             this.setState({listaPersonas:json.trabajadores, id_cedula: json.trabajadores[0].id_cedula})
         })
         .catch(error => {
-            console.error("error al conectar con el servidor")
+            console.error("Error al conectar con el servidor")
         })
     }
 
@@ -270,7 +270,7 @@ class ComponentDirectorForm extends React.Component {
                     this.setState({alerta})
                 })
                 .catch(error => {
-                    console.error(`error de la peticion axios =>>> ${error}`)
+                    console.error(`Error de la peticion axios =>>> ${error}`)
                 })
             }
             else if(operacion==="actualizar"){
@@ -304,7 +304,7 @@ class ComponentDirectorForm extends React.Component {
             }
         }
         else{
-            alert("error al validar el formulario")
+            alert("Error al validar el formulario")
         }
     }
 

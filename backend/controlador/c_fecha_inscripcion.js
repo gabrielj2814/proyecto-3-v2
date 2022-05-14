@@ -1,25 +1,28 @@
 let ModeloFechaInscripcion=require("../modelo/m_fecha_inscripcion")
 let ControladorFechaInscripcion={}
+const VitacoraControlador = require("./c_vitacora")
 
-ControladorFechaInscripcion.registrar=async (req,res) => {
+ControladorFechaInscripcion.registrar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {fecha_inscripcion}=req.body
+    let {fecha_inscripcion,token}=req.body
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
     modeloFechaInscripcion.setDatos(fecha_inscripcion)
     let resultFecha=await modeloFechaInscripcion.registrar()
     if(resultFecha.rowCount>0){
-        respuesta_api.mensaje="registro completado"
+        respuesta_api.mensaje="Registro completado Con exito...!"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "INSERT", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
+        next()
     }
     else{
-        respuesta_api.mensaje="error al registrar la fecha inscripcion"
+        respuesta_api.mensaje="Error al registrar la fecha inscripción"
         respuesta_api.estado_respuesta=false
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorFechaInscripcion.consultarFechaServidor=async (req,res) => {
@@ -51,9 +54,9 @@ ControladorFechaInscripcion.consultarFechaInscripcionActual=async (req,res) => {
     res.end()
 }
 
-ControladorFechaInscripcion.consultar=async (req,res) => {
+ControladorFechaInscripcion.consultar=async (req,res,next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
-    let {id}=req.params
+    let {id, token}=req.params
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
     modeloFechaInscripcion.setIdFechaInscripcion(id)
     let resultFecha=await modeloFechaInscripcion.consultar()
@@ -62,15 +65,17 @@ ControladorFechaInscripcion.consultar=async (req,res) => {
         respuesta_api.datos=resultFecha.rows[0]
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "SELECT", "tfecha_incripcion", id)
+        next()
     }
     else{
         respuesta_api.mensaje="error al consultar"
         respuesta_api.estado_respuesta=false
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorFechaInscripcion.consultarTodo=async (req,res) => {
@@ -113,25 +118,27 @@ ControladorFechaInscripcion.consultarTodo2=async (req,res) => {
     res.end()
 }
 
-ControladorFechaInscripcion.actualizar=async (req,res) => {
+ControladorFechaInscripcion.actualizar=async (req,res, next) => {
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
-    let {fecha_inscripcion}=req.body
+    let {fecha_inscripcion, token}=req.body
     let modeloFechaInscripcion=new ModeloFechaInscripcion()
     modeloFechaInscripcion.setDatos(fecha_inscripcion)
     let resultFecha=await modeloFechaInscripcion.actualizar()
     if(resultFecha.rowCount>0){
-        respuesta_api.mensaje="actualización completada"
+        respuesta_api.mensaje="Actualización completada con exito...!"
         respuesta_api.estado_respuesta=true
         respuesta_api.color_alerta="success"
+        req.vitacora = VitacoraControlador.json(respuesta_api, token, "UPDATE", "tfecha_incripcion", fecha_inscripcion.id_fecha_incripcion)
+        next()
     }
     else{
-        respuesta_api.mensaje="error al actualizar la fecha inscripcion"
+        respuesta_api.mensaje="Error al actualizar la fecha inscripción"
         respuesta_api.estado_respuesta=false
         respuesta_api.color_alerta="danger"
+        res.writeHead(200,{"Content-Type":"application/json"})
+        res.write(JSON.stringify(respuesta_api))
+        res.end()
     }
-    res.writeHead(200,{"Content-Type":"application/json"})
-    res.write(JSON.stringify(respuesta_api))
-    res.end()
 }
 
 ControladorFechaInscripcion.reAbrirInscripcion=async (req,res) => {

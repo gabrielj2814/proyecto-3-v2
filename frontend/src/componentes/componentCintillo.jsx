@@ -78,7 +78,7 @@ class ComponentCintillo extends React.Component{
             this.refrescarGaleria()
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -152,7 +152,7 @@ class ComponentCintillo extends React.Component{
             }
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.log("Error al conectar con el servidor")
         })
     }
 
@@ -175,7 +175,7 @@ class ComponentCintillo extends React.Component{
             })
         })
         .catch(error => {
-            console.log("error al conectar con el servidor")
+            console.log("Error al conectar con el servidor")
         })
     }
 
@@ -299,13 +299,13 @@ class ComponentCintillo extends React.Component{
             }
             else{
                 $mensajeInputFile.style.color="rgb(226, 43, 43)"
-                $mensajeInputFile.textContent="el archivo no es valido los archivos permitidos son los (png,jpg,jpeg)"
+                $mensajeInputFile.textContent="El archivo no es válido los archivos permitidos son los (png,jpg,jpeg)"
                 // alert("no")
             }
         }
         else{
             $mensajeInputFile.style.color="rgb(226, 43, 43)"
-            $mensajeInputFile.textContent="este campo no puede estar vacio, selecciona un archivo"
+            $mensajeInputFile.textContent="Este campo no puede estar vacío, selecciona un archivo"
             // alert("esta vacion el input file")
         }
         return estado
@@ -324,13 +324,13 @@ class ComponentCintillo extends React.Component{
             }
             else{
                 $mensajeNombreArchivo.style.color="rgb(226, 43, 43)"
-                $mensajeNombreArchivo.textContent="no se puede enviar espacios en blanco"
+                $mensajeNombreArchivo.textContent="No se puede enviar espacios en blanco"
             }
 
         }
         else{
             $mensajeNombreArchivo.style.color="rgb(226, 43, 43)"
-            $mensajeNombreArchivo.textContent="este campo no puede estar vacio"
+            $mensajeNombreArchivo.textContent="Este campo no puede estar vacío"
         }
         return estado
     }
@@ -388,12 +388,12 @@ class ComponentCintillo extends React.Component{
                             let alerta=JSON.parse(JSON.stringify(this.state.alerta))
                             alerta.estado=true
                             alerta.color="danger"
-                            alerta.mensaje="error al subir la foto intente de nuevo"
+                            alerta.mensaje="Error al subir la foto, intente de nuevo"
                             this.setState({alerta})
                         }
                     })
                     .catch(error => {
-                        console.log("error al conectarse con el servidor")
+                        console.log("Error al conectarse con el servidor")
                     })
                 }
                 else{
@@ -401,12 +401,12 @@ class ComponentCintillo extends React.Component{
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
                     alerta.estado=true
                     alerta.color="danger"
-                    alerta.mensaje="error al registrar"
+                    alerta.mensaje="Error al registrar"
                     this.setState({alerta})
                 }
             })
             .catch(error => {
-                console.log("error al conectarse con el sevidor")
+                console.log("Error al conectarse con el sevidor")
             })
         }
         
@@ -484,7 +484,7 @@ class ComponentCintillo extends React.Component{
                                 this.cerrarModalFormularioEditar()
                             })
                             .catch(error => {
-                                console.log("error al conectar con el servidor")
+                                console.log("Error al conectar con el servidor")
                             })
                         }
                         else{
@@ -511,12 +511,12 @@ class ComponentCintillo extends React.Component{
                 let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
                 alertaEditarCintillo.estado=true
                 alertaEditarCintillo.color="danger"
-                alertaEditarCintillo.mensaje="error al eliminar el cintillo"
+                alertaEditarCintillo.mensaje="Error al eliminar el cintillo"
                 this.setState({alertaEditarCintillo})
             }
         })
         .catch(error=> {
-            console.log("error al conectar con el servidor")
+            console.log("Error al conectar con el servidor")
         })
     }
 
@@ -570,13 +570,13 @@ class ComponentCintillo extends React.Component{
             }
             else{
                 $mensajeNombreArchivo.style.color="rgb(226, 43, 43)"
-                $mensajeNombreArchivo.textContent="no se puede enviar espacios en blanco"
+                $mensajeNombreArchivo.textContent="No se puede enviar espacios en blanco"
             }
 
         }
         else{
             $mensajeNombreArchivo.style.color="rgb(226, 43, 43)"
-            $mensajeNombreArchivo.textContent="este campo no puede estar vacio"
+            $mensajeNombreArchivo.textContent="Este campo no puede estar vacio"
         }
         return estado
     }
@@ -629,12 +629,12 @@ class ComponentCintillo extends React.Component{
                                 let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
                                 alertaEditarCintillo.estado=true
                                 alertaEditarCintillo.color="danger"
-                                alertaEditarCintillo.mensaje="error al subir la foto intente de nuevo"
+                                alertaEditarCintillo.mensaje="Error al subir la foto intente de nuevo"
                                 this.setState({alertaEditarCintillo})
                             }
                         })
                         .catch(error => {
-                            console.log("error al conectarse con el servidor")
+                            console.log("Error al conectarse con el servidor")
                         })
                     }
                     else{
@@ -664,11 +664,11 @@ class ComponentCintillo extends React.Component{
                                         this.cerrarModalFormularioEditar()
                                     })
                                     .catch(error => {
-                                        console.log("error al conectar con el servidor")
+                                        console.log("Error al conectar con el servidor")
                                     })
                                 }
                                 else{
-                                    console.log("no hay remplazo")
+                                    console.log("No hay remplazo")
                                 }
     
                             }
@@ -690,7 +690,7 @@ class ComponentCintillo extends React.Component{
                     let alertaEditarCintillo=JSON.parse(JSON.stringify(this.state.alertaEditarCintillo))
                     alertaEditarCintillo.estado=true
                     alertaEditarCintillo.color="danger"
-                    alertaEditarCintillo.mensaje="no se pudo actualizar el registo"
+                    alertaEditarCintillo.mensaje="No se pudo actualizar el registo"
                     this.setState({alertaEditarCintillo})
                 }
             })

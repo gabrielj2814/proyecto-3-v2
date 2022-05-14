@@ -72,7 +72,7 @@ class ComponentRepresentanteConsulta extends React.Component{
           await this.consultarRepresentante(id)
       }
       else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
       }
 
@@ -234,133 +234,133 @@ class ComponentRepresentanteConsulta extends React.Component{
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Cédula: </span>
-                        <span className="valor">{this.state.id_cedula_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.id_cedula_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Nombre: </span>
-                        <span className="valor">{this.state.nombre_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.nombre_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Apellido: </span>
-                        <span className="valor">{this.state.apellidos_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.apellidos_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Fecha de Nacimiento: </span>
-                        <span className="valor">{this.state.fecha_nacimiento_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.fecha_nacimiento_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Direccion: </span>
-                        <span className="valor">{this.state.direccion_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.direccion_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Telefono movil: </span>
-                        <span className="valor">{this.state.telefono_movil_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.telefono_movil_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Telefono local: </span>
-                        <span className="valor">{this.state.telefono_local_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.telefono_local_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Estatus representante: </span>
-                        <span className="valor">{this.state.estatus_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.estatus_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Ocupacion: </span>
-                        <span className="valor">{this.state.ocupacion_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.ocupacion_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Grado de instruccion: </span>
-                        <span className="valor">{this.state.nivel_instruccion_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.nivel_instruccion_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Ingresos del representante: </span>
-                        <span className="valor">{this.state.ingresos_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.ingresos_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Tipo de vivienda: </span>
-                        <span className="valor">{this.state.tipo_vivienda_representante}</span>
+                        <span className="valor font-weight-bold">{this.state.tipo_vivienda_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Ciudad: </span>
-                        <span className="valor">{ this.state.nombre_ciudad}</span>
+                        <span className="valor font-weight-bold">{ this.state.nombre_ciudad}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Constitucion familiar: </span>
-                        <span className="valor">{ this.state.constitucion_familiar_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.constitucion_familiar_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de hijos del representante: </span>
-                        <span className="valor">{ this.state.numero_hijos_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_hijos_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en inicial: </span>
-                        <span className="valor">{ this.state.numero_estudiante_inicial_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_inicial_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en primer grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_1_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_1_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en segundo grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_2_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_2_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en tercer grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_3_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_3_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en cuarto grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_4_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_4_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en quinto grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_5_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_5_representante}</span>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                         <span className="propiedad">Numero de estudiantes en sexto grado: </span>
-                        <span className="valor">{ this.state.numero_estudiante_grado_6_representante}</span>
+                        <span className="valor font-weight-bold">{ this.state.numero_estudiante_grado_6_representante}</span>
                     </div>
                 </div>
                 <div className="row justify-content-center">

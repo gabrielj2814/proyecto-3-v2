@@ -89,7 +89,7 @@ class ComponentFechaInscripcion extends React.Component{
             await this.consultarTodo2()
          }
          else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
          }
     }
@@ -278,7 +278,7 @@ class ComponentFechaInscripcion extends React.Component{
                                 }
                                 {fechaInscripcion.estado_reapertura_inscripcion==="2" &&
                                     <td>
-                                       ya no se puede usar
+                                       Ya no se puede usar
                                     </td>
                                 }
                         </tr>

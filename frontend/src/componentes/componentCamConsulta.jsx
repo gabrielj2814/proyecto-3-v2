@@ -78,7 +78,7 @@ class ComponentCamConsultar extends React.Component{
                 console.log("datos estado -->>> ,",estado)
                 let tipoCam=await this.consultarTipoCam(this.state.id_tipo_cam);
                 console.log("datos tipo cam -->>> ,",tipoCam)
-                let ubicacion=`esta ubicado en el estado ${estado.nombre_estado}, en la ciudad de ${ciudad.nombre_ciudad}`
+                let ubicacion=`Está ubicado en el estado ${estado.nombre_estado}, en la ciudad de ${ciudad.nombre_ciudad}`
                 let nombre_tipo_cam=tipoCam.nombre_tipo_cam
                 this.setState({
                     ubicacion,
@@ -87,7 +87,7 @@ class ComponentCamConsultar extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
 
@@ -256,43 +256,43 @@ class ComponentCamConsultar extends React.Component{
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Código de CAM: </span>
-                            <span className="valor">{this.state.id_cam}</span>
+                            <span className="valor font-weight-bold">{this.state.id_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Nombre: </span>
-                            <span className="valor">{this.state.nombre_cam}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
-                            <span className="propiedad">Teléfono: </span>
-                            <span className="valor">{this.state.telefono_cam}</span>
+                            <span className="propiedad">Téléfono: </span>
+                            <span className="valor font-weight-bold">{this.state.telefono_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Ubicación: </span>
-                            <span className="valor">{this.state.ubicacion}</span>
+                            <span className="valor font-weight-bold">{this.state.ubicacion}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Dirección: </span>
-                            <span className="valor">{this.state.direccion_cam}</span>
+                            <span className="valor font-weight-bold">{this.state.direccion_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Tipo de Centro: </span>
-                            <span className="valor">{this.state.nombre_tipo_cam}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_tipo_cam}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                             <span className="propiedad">Estatus: </span>
-                            <span className="valor">{(this.state.estatu_cam==="1")?"Activo":"Inactivo"}</span>
+                            <span className="valor font-weight-bold">{(this.state.estatu_cam==="1")?"Activo":"Inactivo"}</span>
                         </div>
                     </div>
                     

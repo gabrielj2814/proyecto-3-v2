@@ -68,7 +68,7 @@ class ComponentEstadoConsulta extends React.Component{
             await this.consultarEstado(id)
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -180,19 +180,19 @@ class ComponentEstadoConsulta extends React.Component{
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                             <span className="propiedad">Código del Estado: </span>
-                            <span className="valor">{this.state.id_estado}</span>
+                            <span className="valor font-weight-bold">{this.state.id_estado}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-4 col-ms-4 col-md-4 col-lg-4 col-xl-4">
                             <span className="propiedad">Descripción del Estado: </span>
-                            <span className="valor">{this.state.nombre_estado}</span>
+                            <span className="valor font-weight-bold">{this.state.nombre_estado}</span>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3">
                             <span className="propiedad">Estatus del Estado: </span>
-                            <span className="valor">{this.state.estatu_estado}</span>
+                            <span className="valor font-weight-bold">{this.state.estatu_estado}</span>
                         </div>
                     </div>
                     <div className="row justify-content-center">

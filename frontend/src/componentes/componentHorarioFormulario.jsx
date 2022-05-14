@@ -132,7 +132,7 @@ class ComponentHorarioFormulario extends React.Component {
 
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -216,7 +216,7 @@ class ComponentHorarioFormulario extends React.Component {
             else{
                 let alerta={
                     color:"danger",
-                    mensaje:"no se encontro el horario consultado",
+                    mensaje:"No se encontro el horario consultado",
                     estado:true
                 }
                 this.props.history.push(`/dashboard/configuracion/horario${JSON.stringify(alerta)}`)
@@ -228,7 +228,7 @@ class ComponentHorarioFormulario extends React.Component {
             // console.log("error al conectar con el servidor")
             let alerta={
                 color:"danger",
-                mensaje:"error al conectar con el servidor",
+                mensaje:"Error al conectar con el servidor",
                 estado:true
             }
             this.props.history.push(`/dashboard/configuracion/horario${JSON.stringify(alerta)}`)
@@ -302,13 +302,13 @@ class ComponentHorarioFormulario extends React.Component {
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
                     if(json.estado_peticion==="200"){
                         alerta.color="success"
-                        alerta.mensaje="registro completado"
+                        alerta.mensaje="Registro completado"
                         alerta.estado=true
                         this.setState({alerta})
                     }
                     else{
                         alerta.color="danger"
-                        alerta.mensaje="error al registrar"
+                        alerta.mensaje="Error al registrar"
                         alerta.estado=true
                         this.setState({alerta})
 
@@ -342,13 +342,13 @@ class ComponentHorarioFormulario extends React.Component {
                     let alerta=JSON.parse(JSON.stringify(this.state.alerta))
                     if(json.estado_peticion==="200"){
                         alerta.color="success"
-                        alerta.mensaje="actualización completada"
+                        alerta.mensaje="Actualización completada"
                         alerta.estado=true
                         this.setState({alerta})
                     }
                     else{
                         alerta.color="danger"
-                        alerta.mensaje="error al actualizar"
+                        alerta.mensaje="Error al actualizar"
                         alerta.estado=true
                         this.setState({alerta})
                     }
@@ -389,7 +389,7 @@ class ComponentHorarioFormulario extends React.Component {
                 })
             }
             else{
-                msj_horario_descripcion.mensaje="no solo puede tener espacion en blanco"
+                msj_horario_descripcion.mensaje="No solo puede tener espacion en blanco"
                 msj_horario_descripcion.color_texto="rojo"
                 this.setState({
                     msj_horario_descripcion
@@ -397,7 +397,7 @@ class ComponentHorarioFormulario extends React.Component {
             }
         }
         else{
-            msj_horario_descripcion.mensaje="este campo no puede estar vacio"
+            msj_horario_descripcion.mensaje="Este campo no puede estar vacio"
             msj_horario_descripcion.color_texto="rojo"
             this.setState({
                 msj_horario_descripcion
