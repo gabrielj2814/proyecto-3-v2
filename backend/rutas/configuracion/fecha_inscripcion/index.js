@@ -8,6 +8,7 @@ router.use(bodyparser.json())
 
 router.post("/registrar",ControladorFechaInscripcion.registrar)
 router.get("/consultar/:id",ControladorFechaInscripcion.consultar)
+router.post("/consultar-disponibilidad-fecha-inscripcion",ControladorFechaInscripcion.consultarDisponibilidadFechaInscripcion)
 router.get("/consultar-fecha-servidor",ControladorFechaInscripcion.consultarFechaServidor)
 router.get("/consultar-todo",ControladorFechaInscripcion.consultarTodo)
 router.get("/consultar-todo-2",ControladorFechaInscripcion.consultarTodo2)

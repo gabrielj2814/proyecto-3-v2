@@ -37,6 +37,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
 			/////------------
 			id_fecha_incripcion:"",
 			id_ano_escolar:"",
+			id_ano_escolar_respaldo:"",
 			fecha_incripcion_desde:"",
 			fecha_incripcion_hasta:"",
 			fecha_tope_inscripcion:"",
@@ -109,6 +110,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
               this.props.history.goBack()
             }else{
               this.setState({listaAnosEscolares:datos})
+            //   await this.consultarDisponibilidadFechaInscripcion(datos)
               if(operacion==="actualizar"){
                 const {id}=this.props.match.params
                 await this.consultarFechaInscripcion(id);
@@ -120,6 +122,21 @@ class ComponentFechaInscripcionFormulario extends React.Component{
           this.props.history.goBack()
          }
     }
+
+    // async consultarDisponibilidadFechaInscripcion(datos){
+    //     let json={
+    //         anosEscolares:datos
+    //     }
+    //     await axiosCustom.post(`/configuracion/fecha-inscripcion/consultar-disponibilidad-fecha-inscripcion`,json)
+    //     .then(respuesta => {
+    //         let respuestaServidor=JSON.parse(JSON.stringify(respuesta.data))
+    //         console.log("datos => ",respuestaServidor)
+    //         this.setState({listaAnosEscolares:respuestaServidor.datos})
+    //     })
+    //     .catch(error => {
+    //         console.error(`error de la peticion axios =>>> ${error}`)
+    //     })
+    // }
 
     async validarAccesoDelModulo(modulo,subModulo){
         // /dashboard/configuracion/acceso
@@ -182,7 +199,8 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 fecha_incripcion_desde:moment(respuestaServidor.datos.fecha_incripcion_desde).format("YYYY-MM-DD"),
                 fecha_incripcion_hasta:moment(respuestaServidor.datos.fecha_incripcion_hasta).format("YYYY-MM-DD"),
                 fecha_tope_inscripcion:moment(respuestaServidor.datos.fecha_tope_inscripcion).format("YYYY-MM-DD"),
-                id_ano_escolar:"",
+                id_ano_escolar:respuestaServidor.datos.id_ano_escolar,
+                // id_ano_escolar_respaldo:respuestaServidor.datos.id_ano_escolar
             })
             document.getElementById("id_ano_escolar").value=respuestaServidor.datos.id_ano_escolar
 
@@ -379,6 +397,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
                 })
+                // this.consultarDisponibilidadFechaInscripcion(this.state.listaAnosEscolares)
 
             }
             else if(operacion==="actualizar"){
@@ -408,6 +427,7 @@ class ComponentFechaInscripcionFormulario extends React.Component{
                 .catch(error => {
                     console.error(`error de la peticion axios =>>> ${error}`)
                 })
+                // this.consultarDisponibilidadFechaInscripcion(this.state.listaAnosEscolares)
             }
         }
         else{
