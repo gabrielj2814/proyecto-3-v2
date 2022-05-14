@@ -196,34 +196,54 @@ class ComponentInscripcionForm extends React.Component{
   async UNSAFE_componentWillMount(){
     let acessoModulo=await this.validarAccesoDelModulo("/dashboard/configuracion","/inscripcion")
     if(acessoModulo){
-      await this.consultarFechaServidor()
-      await this.consultarFechaInscripcionActual()
-      let apertura=true
-      if(this.state.mostarFomrulario===apertura){
-        let responseAnoEscolar = await this.Consultar_ano_escolar();
-        if(responseAnoEscolar){
-          await this.GetRepresentant_Estudiant()
-          await this.obtenerDatosDeLasesion();
-          let res = await this.Consultar_asignacion_aula();
-          if(res){
-            const operacion = this.props.match.params.operacion
-            document.getElementById("activoestudianter1").disabled = true;
-            document.getElementById("activoestudianter2").disabled = true;
-            document.getElementById("activoestudianter3").disabled = true;
-            document.getElementById("activoestudianter4").disabled = true;
+      let resultdDirector= await this.consultarDirectorActivo()
+      if(resultdDirector.length===1){
+        await this.consultarFechaServidor()
+        await this.consultarFechaInscripcionActual()
+        let apertura=true
+        if(this.state.mostarFomrulario===apertura){
+          let responseAnoEscolar = await this.Consultar_ano_escolar();
+          if(responseAnoEscolar){
+            await this.GetRepresentant_Estudiant()
+            await this.obtenerDatosDeLasesion();
+            let res = await this.Consultar_asignacion_aula();
+            if(res){
+              const operacion = this.props.match.params.operacion
+              document.getElementById("activoestudianter1").disabled = true;
+              document.getElementById("activoestudianter2").disabled = true;
+              document.getElementById("activoestudianter3").disabled = true;
+              document.getElementById("activoestudianter4").disabled = true;
+            }
+
+
+          }else{
+            document.getElementById("cedula_escolar").disabled = true;
+            document.getElementById("boton-registrar").disabled = true;
           }
-
-
-        }else{
-          document.getElementById("cedula_escolar").disabled = true;
-          document.getElementById("boton-registrar").disabled = true;
         }
+      }
+      else{
+        alert("No hay ningun director activo por favor active un director")
+        this.props.history.goBack()
       }
 
     }else{
         alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
         this.props.history.goBack()
     }
+  }
+
+  async consultarDirectorActivo(){
+    let respuestaDirector=[]
+    await axiosCustom.get(`/configuracion/director/consultar-director-activo`)
+    .then( respuesta => {
+      let json=JSON.parse(JSON.stringify(respuesta.data))
+      respuestaDirector=json.datos
+    })
+    .catch( error => {
+      console.error(error)
+    })
+    return respuestaDirector
   }
 
   async consultarFechaInscripcionActual(){

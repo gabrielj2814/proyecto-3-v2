@@ -38,6 +38,11 @@ class ModuloDirector extends DriverPostgre{
     return await this.query(SQL);
   }
 
+  async consultarActivo() {
+    const SQL = `SELECT * FROM tdirector WHERE estatus_director='1'`
+    return await this.query(SQL);
+  }
+
   async consultarPatron(patron){
     const SQL = `SELECT tdirector.*,ttrabajador.nombres,ttrabajador.apellidos FROM tdirector,ttrabajador WHERE tdirector.id_cedula LIKE '%${patron}%' 
         AND ttrabajador.id_cedula=tdirector.id_cedula`
