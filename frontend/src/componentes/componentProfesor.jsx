@@ -220,7 +220,7 @@ class ComponentProfesor extends React.Component {
                     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
-                    $filaVerPdf.classList.add("ocultarFormulario")
+                    $filaVerPdf.classList.add("ocultarFormulario") 
                     alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
