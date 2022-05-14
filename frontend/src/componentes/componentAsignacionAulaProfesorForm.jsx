@@ -134,58 +134,67 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         const {operacion}=this.props.match.params
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asignacion-aula-profesor")
         if(acessoModulo){
-            let cantidadDeEstudiante=35
-            let listaDenNumeroEstudiante=[]
-
-            for(let contador=0;contador < cantidadDeEstudiante;contador++){
-                listaDenNumeroEstudiante.push(contador+1)
-            }
-            this.setState({listaDenNumeroEstudiante})
-            if(operacion==="registrar"){
-                await this.consultarEspecialistas()
-                await this.consultarAulaEspacio()
-                await this.consultarAnoEscolarActivo()
-                await this.consultarProfesores()
-                await this.consultarGrados()
-                await this.consultarAulasPorGrado()
-                let selectAula={
-                    target:{
-                        id:"id_aula",
-                        name:"id_aula",
-                        value:document.getElementById("id_aula").value
-                    }
+            let existenciaSeccionGrado=await this.verificarEcistenciaDeSeccionesEnGrados()
+            if(existenciaSeccionGrado.length===0){
+                let cantidadDeEstudiante=36
+                let listaDenNumeroEstudiante=[]
+    
+                for(let contador=0;contador < cantidadDeEstudiante;contador++){
+                    listaDenNumeroEstudiante.push(contador+1)
                 }
-                await this.verificarDisponibilidadAula(selectAula)
-            }
-            else if(operacion==="actualizar"){
-                const {id}=this.props.match.params
-                await this.consultarEspecialistas()
-                await this.consultarAulaEspacio()
-                await this.consultarProfesores()
-                await this.consultarGrados()
-                await this.consultarAulasPorGrado()
-                await this.consultarAsignacionAulaProfesor(id)
-                if(this.state.id_asignacion_aula_profesor!=""){
-                    let cedulaProfesor={
+                this.setState({listaDenNumeroEstudiante})
+                if(operacion==="registrar"){
+                    await this.consultarEspecialistas()
+                    await this.consultarAulaEspacio()
+                    await this.consultarAnoEscolarActivo()
+                    await this.consultarProfesores()
+                    await this.consultarGrados()
+                    await this.consultarAulasPorGrado()
+                    let selectAula={
                         target:{
-                            value:this.state.id_cedula,
+                            id:"id_aula",
+                            name:"id_aula",
+                            value:document.getElementById("id_aula").value
                         }
                     }
-                    let selectIdGrado={
-                        target:{
-                            value:this.state.id_grado,
-                        }
-                    }
-                    this.buscarProfesor(cedulaProfesor)
-                    document.getElementById("id_grado").value=this.state.id_grado
-                    await this.consultarAulasPorGrado2(selectIdGrado)
-                    document.getElementById("id_aula").value=this.state.id_aula
-                    this.setState({cambioProfesor:false})
-                    this.setState({cambioAula:false})
-                    // document.getElementById("contenedorDisponibilidadProfesor").style.display="none"
-                    await this.cosultarAulasEspaciosDisponibles(this.state.id_ano_escolar)
+                    await this.verificarDisponibilidadAula(selectAula)
                 }
-
+                else if(operacion==="actualizar"){
+                    const {id}=this.props.match.params
+                    await this.consultarEspecialistas()
+                    await this.consultarAulaEspacio()
+                    await this.consultarProfesores()
+                    await this.consultarGrados()
+                    await this.consultarAulasPorGrado()
+                    await this.consultarAsignacionAulaProfesor(id)
+                    if(this.state.id_asignacion_aula_profesor!=""){
+                        let cedulaProfesor={
+                            target:{
+                                value:this.state.id_cedula,
+                            }
+                        }
+                        let selectIdGrado={
+                            target:{
+                                value:this.state.id_grado,
+                            }
+                        }
+                        this.buscarProfesor(cedulaProfesor)
+                        document.getElementById("id_grado").value=this.state.id_grado
+                        await this.consultarAulasPorGrado2(selectIdGrado)
+                        document.getElementById("id_aula").value=this.state.id_aula
+                        this.setState({cambioProfesor:false})
+                        this.setState({cambioAula:false})
+                        // document.getElementById("contenedorDisponibilidadProfesor").style.display="none"
+                        await this.cosultarAulasEspaciosDisponibles(this.state.id_ano_escolar)
+                    }
+    
+                }
+            }
+            else{
+                let listaDeGrados=existenciaSeccionGrado.map(grado => grado.numero_grado)
+                let grados=((listaDeGrados.length>1)?listaDeGrados.join(", "):listaDeGrados[0])
+                alert("hay un total de "+existenciaSeccionGrado.length+" grados que no tienen seccion de los cuales son ( "+grados+" ) por favor agregarle al menos una sección a esos grados")
+                this.props.history.goBack()
             }
         }
         else{
@@ -716,6 +725,20 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
               }
         }
 
+    }
+
+    async verificarEcistenciaDeSeccionesEnGrados(){
+        let resupuesta = []
+        await axiosCustom.get(`configuracion/grado/verificar-existencia-secciones-grados`)
+        .then(async respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            console.log("grados sin aulas => ",json) 
+            resupuesta=json.datos
+        })
+        .catch(error => {
+            console.error(error)
+        })
+        return resupuesta
     }
 
     async consultarDisponivilidadAulaSiguienteAnoEscolar(idAula){
