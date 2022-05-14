@@ -28,6 +28,8 @@ ControladorRetiro.registrar= async (req,res) => {
 
 ControladorRetiro.actualizar= async (req,res) => {
     const ControladorInscripcion=require("./c_inscripcion")
+    const ModeloEstudiante=require("../modelo/m_estudiante")
+    const modeloEstudiante=new ModeloEstudiante()
     const respuesta_api={mensaje:"",estado_respuesta:false,color_alerta:""}
     const {retiro} = req.body
     const modeloRetiro=new ModeloRetiro()
@@ -40,6 +42,8 @@ ControladorRetiro.actualizar= async (req,res) => {
         if(retiro.estado_retiro==="A"){
             let retiroResult=await modeloRetiro.consultar()
             if(ControladorInscripcion.RetirarEstudiante(retiroResult.rows[0].id_inscripcion)){
+                modeloEstudiante.setIdEstudiante(retiroResult.rows[0].id_estudiante)
+                modeloEstudiante.desctivarEstudiante()
                 respuesta_api.mensaje="actualización completado"
                 respuesta_api.estado_respuesta=true
                 respuesta_api.color_alerta="success"

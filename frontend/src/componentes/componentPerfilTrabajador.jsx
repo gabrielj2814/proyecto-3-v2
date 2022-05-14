@@ -271,13 +271,13 @@ class ComponentPerfilTrabajador extends React.Component{
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
             }
             else{
-                mensaje_campo.mensaje="* este campo solo permite letras"
+                mensaje_campo.mensaje="* Este campo solo permite letras"
                 mensaje_campo.color_texto="blanco"
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
             } 
         }
         else{
-            mensaje_campo.mensaje="* este campo no puede estar vacio"
+            mensaje_campo.mensaje="* Este campo no puede estar vacio"
             mensaje_campo.color_texto="blanco"
             this.setState({["msj_"+nombre_campo]:mensaje_campo})
         }
@@ -362,7 +362,7 @@ class ComponentPerfilTrabajador extends React.Component{
                         this.setState({msj_clave_confirmar:mensaje_clave})
                     }
                     else{
-                        mensaje_clave.mensaje="* las claves no coinciden"
+                        mensaje_clave.mensaje="* Las claves no coinciden"
                         mensaje_clave.color_texto="negro"
                         this.setState({msj_clave_confirmar:mensaje_clave})
                     }
@@ -370,7 +370,7 @@ class ComponentPerfilTrabajador extends React.Component{
 
             }
             else{
-                mensaje_clave.mensaje="la clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
+                mensaje_clave.mensaje="La clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
                 mensaje_clave.color_texto="blanco"
                 this.setState({msj_clave_confirmar:mensaje_clave})
             }
@@ -420,7 +420,7 @@ class ComponentPerfilTrabajador extends React.Component{
         })
     }
     else{
-        alert("error al validar el formulario")
+        alert("Error al validar el formulario")
     }
 }
 
@@ -474,7 +474,7 @@ class ComponentPerfilTrabajador extends React.Component{
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
-                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                    alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
             error: function() {
@@ -502,7 +502,7 @@ class ComponentPerfilTrabajador extends React.Component{
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario") 
-                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                    alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
             error: function() {
@@ -519,7 +519,7 @@ class ComponentPerfilTrabajador extends React.Component{
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200" || this.state.mensaje.estado==="401")?"success":"danger"} alert-dismissible`} >
-                                    <p>Mensaje: {this.state.mensaje.texto}</p>
+                                    <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>

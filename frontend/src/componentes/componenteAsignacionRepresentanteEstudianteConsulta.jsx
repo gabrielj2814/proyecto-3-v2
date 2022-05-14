@@ -93,7 +93,7 @@ class ComponentAsignacionRepresentanteEstudianteConsulta extends React.Component
           await this.consultarRegistros(id)
       }
       else{
-          alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
           this.props.history.goBack()
       }
 
@@ -203,67 +203,67 @@ class ComponentAsignacionRepresentanteEstudianteConsulta extends React.Component
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Id de la asignacion: </span>
-                          <span className="valor">{this.state.id_asignacion_representante_estudiante}</span>
+                          <span className="valor font-weight-bold">{this.state.id_asignacion_representante_estudiante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Id del estudiante: </span>
-                          <span className="valor">{this.state.id_estudiante}</span>
+                          <span className="valor font-weight-bold">{this.state.id_estudiante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Nombre del estudiante: </span>
-                          <span className="valor">{this.state.nombres_estudiante}</span>
+                          <span className="valor font-weight-bold">{this.state.nombres_estudiante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Apellido del estudiante: </span>
-                          <span className="valor">{this.state.apellidos_estudiante}</span>
+                          <span className="valor font-weight-bold">{this.state.apellidos_estudiante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Cedula del representante: </span>
-                          <span className="valor">{this.state.id_cedula_representante}</span>
+                          <span className="valor font-weight-bold">{this.state.id_cedula_representante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Nombre del representante: </span>
-                          <span className="valor">{this.state.nombre_representante}</span>
+                          <span className="valor font-weight-bold">{this.state.nombre_representante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Apellido del representante: </span>
-                          <span className="valor">{this.state.apellidos_representante}</span>
+                          <span className="valor font-weight-bold">{this.state.apellidos_representante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Tipo de representante: </span>
-                          <span className="valor">{this.state.tipo_representante}</span>
+                          <span className="valor font-weight-bold">{this.state.tipo_representante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Parentesco: </span>
-                          <span className="valor">{this.state.parentesco}</span>
+                          <span className="valor font-weight-bold">{this.state.parentesco}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Numer de representante: </span>
-                          <span className="valor">{this.state.numero_representante}</span>
+                          <span className="valor font-weight-bold">{this.state.numero_representante}</span>
                       </div>
                   </div>
                   <div className="row">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
                           <span className="propiedad">Estatus de la asignacion: </span>
-                          <span className="valor">{this.state.estatus_asignacion_representante_estudiante}</span>
+                          <span className="valor font-weight-bold">{this.state.estatus_asignacion_representante_estudiante}</span>
                       </div>
                   </div>
                   <div className="row justify-content-center">

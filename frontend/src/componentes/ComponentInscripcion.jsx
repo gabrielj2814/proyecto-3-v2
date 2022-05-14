@@ -148,7 +148,7 @@ class ComponentInscripcion extends React.Component{
           .catch(error => {
               let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
               mensaje.estado="danger"
-              mensaje.texto="error al conectarse con el servidor"
+              mensaje.texto="Error al conectarse con el servidor"
               this.setState({mensaje})
           })
       }
@@ -170,7 +170,7 @@ class ComponentInscripcion extends React.Component{
         this.setState(servidor)
       }
       else{
-        alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
       }
     }
@@ -207,7 +207,7 @@ class ComponentInscripcion extends React.Component{
               })
               .catch(error=>{
                 console.log(error)
-                alert("error en el servidor")
+                alert("Error en el servidor")
               })
           }else{
             alert("Error:la barra de busqueda esta vacia")
@@ -226,7 +226,7 @@ class ComponentInscripcion extends React.Component{
             })
             .catch(error=>{
               console.log(error)
-              alert("error en el servidor")
+              alert("Error en el servidor")
             })
           }else{
             // console.log("no se puedo realizar la busqueda por que intento realizarla con el campo vacio")
@@ -320,7 +320,7 @@ class ComponentInscripcion extends React.Component{
             }
             else{
                 $filaVerPdf.classList.add("ocultarFormulario")
-                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
             }
         },
         error: function() {
@@ -354,7 +354,7 @@ class ComponentInscripcion extends React.Component{
           }
           else{
               $filaVerPdfInscripcion.classList.add("ocultarFormulario")
-              alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+              alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
           }
       },
       error: function() {
@@ -394,7 +394,7 @@ class ComponentInscripcion extends React.Component{
             }
             else{
                 $filaVerPdfConstanciaEstudia.classList.add("ocultarFormulario")
-                alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
             }
         },
         error: function() {

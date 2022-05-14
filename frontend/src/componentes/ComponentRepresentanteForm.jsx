@@ -233,7 +233,7 @@ class ComponentRepresentanteForm extends React.Component{
             document.getElementById("id_estado").value=datosCiudad.id_estado
             document.getElementById("id_ciudad").value=datos.id_ciudad
           }else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
           }
     }
@@ -358,7 +358,7 @@ class ComponentRepresentanteForm extends React.Component{
         this.setState({fechaServidor})
     })
     .catch(error => {
-        console.log("error al conectar con el servidor")
+        console.log("Error al conectar con el servidor")
     })
   }
 
@@ -557,9 +557,9 @@ class ComponentRepresentanteForm extends React.Component{
         msj_ocupacion[0] = {mensaje: "",color_texto:"rojo"}
         msj_constitucion_familiar_representante[0] = {mensaje: "",color_texto:"rojo"}
       }else{
-        msj_nombres[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-        msj_apellidos[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
-        msj_ocupacion[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
+        msj_nombres[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
+        msj_apellidos[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
+        msj_ocupacion[0] = {mensaje: "Este campo solo permite letras",color_texto:"rojo"}
         msj_constitucion_familiar_representante[0] = {mensaje: "este campo solo permite letras",color_texto:"rojo"}
       }
     }else{
@@ -699,12 +699,12 @@ class ComponentRepresentanteForm extends React.Component{
               }
           }
           else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+              mensaje_campo[0]={mensaje:"Este campo solo permite numeros",color_texto:"rojo"}
               this.setState({["msj_"+nombre_campo]:mensaje_campo})
           }
       }
       else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+          mensaje_campo[0]={mensaje:"Este campo no puede estar vacio",color_texto:"rojo"}
           this.setState({["msj_"+nombre_campo]:mensaje_campo})
       }
       return estado
@@ -732,12 +732,12 @@ class ComponentRepresentanteForm extends React.Component{
               }
           }
           else{
-              msj_fecha_nacimiento[0]={mensaje:"es demadiaso joven",color_texto:"rojo"}
+              msj_fecha_nacimiento[0]={mensaje:"Es demadiaso joven",color_texto:"rojo"}
               this.setState(msj_fecha_nacimiento)
           }
       }
       else{
-          msj_fecha_nacimiento[0]={mensaje:"la fecha de nacimiento no puede estar vacia",color_texto:"rojo"}
+          msj_fecha_nacimiento[0]={mensaje:"La fecha de nacimiento no puede estar vacia",color_texto:"rojo"}
           this.setState(msj_fecha_nacimiento)
       }
       return estado
@@ -976,7 +976,7 @@ class ComponentRepresentanteForm extends React.Component{
           this.setState({
               estadoBusquedaRepresentante:true
           })
-          alert("este representante ya esta resgistrado")
+          alert("Este representante ya esta resgistrado")
       }
       else{
           // console.log("NO OK")
@@ -995,7 +995,7 @@ class ComponentRepresentanteForm extends React.Component{
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                             <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
-                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
                                 </button>

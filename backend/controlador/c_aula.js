@@ -119,4 +119,11 @@ ControladorAula.consultarAulasPorGrado=async (req,res) => {
     res.end()
 }
 
+ControladorAula.consultarAulasPorGrado2=async (id) => {
+    let Aula=new ModeloAula()
+    Aula.setIdGrado(id)
+    let resultAula=await Aula.consultarAulaPorGrado()
+    return resultAula
+}
+
 module.exports=ControladorAula

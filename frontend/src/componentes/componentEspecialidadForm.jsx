@@ -54,7 +54,7 @@ class ComponentEspecialidadForm extends React.Component{
             //console.log(respuesta_servidor)
         })
         .catch(error=>{
-            mensaje.texto="no hay conxion con el servido"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/especialidad${JSON.stringify(mensaje)}`)
         })
@@ -71,7 +71,7 @@ class ComponentEspecialidadForm extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -222,7 +222,7 @@ class ComponentEspecialidadForm extends React.Component{
                 this.cambiarEstadoDos(input)
             }
             else{
-                console.log("NO se acepta valores numericos")
+                console.log("No se acepta valores numericos")
             }
         }
         else{
@@ -249,13 +249,13 @@ class ComponentEspecialidadForm extends React.Component{
                 this.setState(msj_nombre_especialidad)
             }
             else{
-                msj_nombre_especialidad.mensaje="este campo solo permite letras"
+                msj_nombre_especialidad.mensaje="Este campo solo permite letras"
                 msj_nombre_especialidad.color_texto="rojo"
                 this.setState(msj_nombre_especialidad)
             } 
         }
         else{
-            msj_nombre_especialidad.mensaje="este campo no puede estar vacio"
+            msj_nombre_especialidad.mensaje="Este campo no puede estar vacío"
             msj_nombre_especialidad.color_texto="rojo"
             this.setState(msj_nombre_especialidad)
         }
@@ -296,7 +296,7 @@ class ComponentEspecialidadForm extends React.Component{
                 })
             }
             else{
-                alert("error al validar el formulario")
+                alert("Error al validar el formulario")
             }
         }
         else if(operacion==="actualizar"){
@@ -321,7 +321,7 @@ class ComponentEspecialidadForm extends React.Component{
                 })
             }
             else{
-                alert("error al validar el formulario")
+                alert("Error al validar el formulario")
             }
         }
     }
@@ -352,8 +352,8 @@ class ComponentEspecialidadForm extends React.Component{
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
-                                    <p>Mensaje: {this.state.mensaje.texto}</p>
-                                    <p>Estado: {this.state.mensaje.estado}</p>
+                                    <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
+                                    {/* <p>Estado: {this.state.mensaje.estado}</p> */}
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>

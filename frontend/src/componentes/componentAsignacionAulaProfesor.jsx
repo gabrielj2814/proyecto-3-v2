@@ -100,7 +100,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
             this.consultarTodos()
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -306,7 +306,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 }
                 else{
                     $filaVerPdf.classList.add("ocultarFormulario")
-                    alert("no se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
+                    alert("No se pudo generar el pdf por que no hay registros que coincidan con los datos enviados")
                 }
             },
             error: function() {
@@ -405,7 +405,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                                     <div class="form-groud">
                                         <label>Aula</label>
                                         <select id="selectAula" class="form-select custom-select" aria-label="Default select example" onChange={this.capturarDatosReporteEspecifico}>
-                                        <option value="null" >Seleccione Una Aula</option>
+                                        <option value="null" >Seleccione una Aula</option>
                                         {this.state.listaAulasPorGrado.map((aula, index) => {
                                             return (
                                                 <option value={aula.id_aula} key={index}>{aula.nombre_aula}</option>
@@ -449,7 +449,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                                 <div class="form-groud">
                                         <label>Año Escolar</label>
                                         <select class="form-select custom-select" id="selectAnoEscolar" name="selectAnoEscolar" aria-label="Default select example" onChange={this.consultarAsignacionesPorAnoEscolar}>
-                                            <option value="null" >Seleccione un Año Escolar</option>
+                                            <option value="null" >Seleccione un año Escolar</option>
                                             {this.state.listaAnoEscolares.map((anoEscolar,index) => {
                                                 return <option key={index} value={anoEscolar.id_ano_escolar} >{anoEscolar.ano_desde} - {anoEscolar.ano_hasta}</option>
                                             })}

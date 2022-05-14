@@ -66,7 +66,7 @@ class ComponentAsistencia extends React.Component {
         // alert("hola")
         let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/asistencia")
         if(!acessoModulo){
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -178,7 +178,7 @@ class ComponentAsistencia extends React.Component {
             this.setState({mensaje})
         })
         .catch(error => {
-            mensaje.texto="Conexion defisiente"
+            mensaje.texto="Conexión defisiente"
             mensaje.estado="500"
             this.setState({mensaje})
             console.log(error)

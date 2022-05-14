@@ -119,5 +119,25 @@ controladorEspecialista.consultar_todos = async (req, res) => {
   res.end()
 }
 
+controladorEspecialista.consultar_todos_activos = async (req, res) => {
+  const respuesta_api = { mensaje: "", datos: [], estado_respuesta: false, color_alerta: "" }
+  let modelo_especialista = new ModuloEspecialista()
+  let resultEspecialista = await modelo_especialista.consultarTodosActivos()
+  if (resultEspecialista.rowCount > 0) {
+    respuesta_api.datos = resultEspecialista.rows
+    respuesta_api.mensaje = "Consulta completada"
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "success"
+  }
+  else {
+    respuesta_api.mensaje = "Error al consultar"
+    respuesta_api.estado_respuesta = true
+    respuesta_api.color_alerta = "danger"
+  }
+  res.writeHead(200, { "Content-Type": "application/json" })
+  res.write(JSON.stringify(respuesta_api))
+  res.end()
+}
+
 
 module.exports = controladorEspecialista

@@ -206,7 +206,7 @@ class ComponentAulaFormulario extends React.Component{
                 document.getElementById("id_grado").value=respuestaServidor.datos[0].id_grado
             }
             else{
-                alert("el registro que intento consultar no se encuentra en la base de datos")
+                alert("El registro que intento consultar no se encuentra en la base de datos")
             }
         })
         .catch(error => {
@@ -227,14 +227,14 @@ class ComponentAulaFormulario extends React.Component{
             }
             else{
                 // console.log("NO se acepta valores numericos")
-                msj_nombre_aula.mensaje="no puede solo haber espacios en blanco"
+                msj_nombre_aula.mensaje="No puede solo haber espacios en blanco"
                 msj_nombre_aula.color_texto="rojo"
                 estado= false
             }
         }
         else{
             msj_nombre_aula.color_texto="rojo"
-            msj_nombre_aula.mensaje="este campo no puede estar vacio"
+            msj_nombre_aula.mensaje="Este campo no puede estar vacio"
             estado= false
         }
         this.setState({msj_nombre_aula})
@@ -254,7 +254,7 @@ class ComponentAulaFormulario extends React.Component{
             }
         }
         else{
-            alert("no se a podido hacer la operacion por que no hay años escolares registrados")
+            alert("No se a podido hacer la operacion por que no hay años escolares registrados")
             return false
         }
     }

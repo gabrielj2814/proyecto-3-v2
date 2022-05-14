@@ -153,13 +153,13 @@ validarNumero(a){
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
             }
             else{
-                mensaje_campo.mensaje="* este campo solo permite letras"
+                mensaje_campo.mensaje="* Este campo solo permite letras"
                 mensaje_campo.color_texto="blanco"
                 this.setState({["msj_"+nombre_campo]:mensaje_campo})
             } 
         }
         else{
-            mensaje_campo.mensaje="* este campo no puede estar vacio"
+            mensaje_campo.mensaje="* Este campo no puede estar vacio"
             mensaje_campo.color_texto="blanco"
             this.setState({["msj_"+nombre_campo]:mensaje_campo})
         }
@@ -185,7 +185,7 @@ validarNumero(a){
                         this.setState({msj_clave_confirmar:mensaje_clave})
                     }
                     else{
-                        mensaje_clave.mensaje="* las claves no coinciden"
+                        mensaje_clave.mensaje="* Las claves no coinciden"
                         mensaje_clave.color_texto="negro"
                         this.setState({msj_clave_confirmar:mensaje_clave})
                     }
@@ -193,7 +193,7 @@ validarNumero(a){
 
             }
             else{
-                mensaje_clave.mensaje="la clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
+                mensaje_clave.mensaje="La clave debe tener al menos 2 caracteres en MAYUSCULA y dos en MINUSCULA"
                 mensaje_clave.color_texto="blanco"
                 this.setState({msj_clave_confirmar:mensaje_clave})
             }
@@ -213,7 +213,7 @@ validarNumero(a){
                 this.setState({["msj_"+propiedad]:mensaje_clave})
             }
             else{
-                mensaje_clave.mensaje="* la clave tiene que tener como minimo 6 caracteres"
+                mensaje_clave.mensaje="* La clave tiene que tener como minimo 6 caracteres"
                 mensaje_clave.color_texto="blanco"
                 this.setState({["msj_"+propiedad]:mensaje_clave})
             }
@@ -228,11 +228,11 @@ validarNumero(a){
                 
             }
             else{
-                alert("el codigo del usuario no cumple con los caracteres minimos "+this.state.id_cedula.length+"/8")
+                alert("El codigo del usuario no cumple con los caracteres minimos "+this.state.id_cedula.length+"/8")
             }
         }
         else{
-            alert("el codigo del usuario no puede estar vacio")
+            alert("El codigo del usuario no puede estar vacio")
         }
     }
 
@@ -320,7 +320,7 @@ validarNumero(a){
         })
     }
     else{
-        alert("error al validar el formulario")
+        alert("Error al validar el formulario")
     }
 }
 
@@ -454,7 +454,7 @@ validarNumero(a){
                                     <div className="row">
                                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                             <div className={`alert alert-${(this.state.mensaje.estado==="200" || this.state.mensaje.estado==="401")?"success":"danger"} alert-dismissible`} >
-                                                <p>Mensaje: {this.state.mensaje.texto}</p>
+                                                <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                                 <button className="close" data-dismiss="alert">
                                                     <span>X</span>
                                                 </button>

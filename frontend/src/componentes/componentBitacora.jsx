@@ -68,9 +68,8 @@ class ComponentBitacora extends React.Component {
                 tasignacion_aula_profesor: "Asignación aula profesor",
                 tdirector: "Director",
                 tespecialista: "Especialista",
-
                 tpromocion: "Promoción",
-
+                tfecha_incripcion: "Fecha Inscripción",
                 taula_espacio: "Aula Espacio"
 
             },
@@ -104,11 +103,9 @@ class ComponentBitacora extends React.Component {
                 { name: "tasignacion_aula_profesor", value: "Asignación aula profesor" },
                 { name:"tdirector", value:"Director"},
                 { name: "tespecialista", value: "Especialista"},
-
                 { name: "tpromocion", value:"Promoción"},
-
+                { name: "tfecha_incripcion", value:"Fecha Inscripción"},
                 { name: "taula_espacio" , value:"Aula Espacio"}
-
 
             ],
             alerta:{

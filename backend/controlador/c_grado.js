@@ -64,6 +64,29 @@ controladorGrado.consultarTodos=async (req,res) => {
     res.end()
 }
 
+controladorGrado.verificarQueTodosLosGradosTenganSecciones=async (req,res) => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    const ControladorAula=require("./c_aula")
+    const ModeloGrado=require("../modelo/m_grado")
+    let modeloGrado=new ModeloGrado()
+    let resultGrado=await modeloGrado.consultarTodos()
+    let gradosSinSecciones=[]
+    for(let contador=0;contador<resultGrado.rowCount;contador++){
+        let grado=resultGrado.rows[contador]
+        let resultSecciones=await ControladorAula.consultarAulasPorGrado2(grado.id_grado)
+        if(resultSecciones.rowCount===0){
+            gradosSinSecciones.push(grado)
+        }
+    }
+    respuesta_api.mensaje="consulta completada"
+    respuesta_api.datos=gradosSinSecciones
+    respuesta_api.estado_respuesta=true
+    respuesta_api.color_alerta="success"
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 controladorGrado.consultar=async (req,res, next) => {
     const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
     const ModeloGrado=require("../modelo/m_grado")

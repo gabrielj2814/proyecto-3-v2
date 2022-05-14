@@ -50,6 +50,12 @@ class ModeloEspecialista extends DriverPostgres{
     
     return await this.query(SQL)
   }
+  
+  async consultarTodosActivos(){
+    const SQL = `SELECT * FROM tespecialista,ttrabajador WHERE ttrabajador.id_cedula=tespecialista.id_cedula AND tespecialista.estatus_especialista='1';`
+    
+    return await this.query(SQL)
+  }
 
   async actualizar(){
     const SQL = `UPDATE tespecialista SET id_cedula='${this.id_cedula}',especialidad='${this.especialidad}',

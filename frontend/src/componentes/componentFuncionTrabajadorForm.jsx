@@ -104,7 +104,7 @@ class ComponentFuncionTrabajador extends React.Component{
             //console.log(respuesta_servidor)
         })
         .catch(error=>{
-            mensaje.texto="no hay conxion con el servido"
+            mensaje.texto="No hay conxion con el servidor"
             mensaje.estado="500"
             this.props.history.push(`/dashboard/configuracion/funcion-trabajador${JSON.stringify(mensaje)}`)
         })
@@ -157,7 +157,7 @@ class ComponentFuncionTrabajador extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -350,7 +350,7 @@ class ComponentFuncionTrabajador extends React.Component{
             }
             else{
                 msj_funcion_descripcion.color_texto="rojo"
-                msj_funcion_descripcion.mensaje="el campo no puede estar en blanco"
+                msj_funcion_descripcion.mensaje="El campo no puede estar en blanco"
                 this.setState({
                     msj_funcion_descripcion:msj_funcion_descripcion
                 })
@@ -358,7 +358,7 @@ class ComponentFuncionTrabajador extends React.Component{
         }
         else{
             msj_funcion_descripcion.color_texto="rojo"
-            msj_funcion_descripcion.mensaje="el campo no puede estar vacio"
+            msj_funcion_descripcion.mensaje="El campo no puede estar vacio"
             this.setState({
                 msj_funcion_descripcion:msj_funcion_descripcion
             })
@@ -449,7 +449,7 @@ class ComponentFuncionTrabajador extends React.Component{
             })
         }
         else{
-            alert("ERROR al validar el formulario")
+            alert("Error al validar el formulario")
         }
     }
 
@@ -474,7 +474,7 @@ class ComponentFuncionTrabajador extends React.Component{
             })
         }
         else{
-            alert("ERROR al validar el formulario")
+            alert("Error al validar el formulario")
         }
     }
 
@@ -540,8 +540,8 @@ class ComponentFuncionTrabajador extends React.Component{
                         <div className="row">
                             <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                                 <div className={`alert alert-${(this.state.mensaje.estado==="200")?"success":"danger"} alert-dismissible`}>
-                                    <p>Mensaje: {this.state.mensaje.texto}</p>
-                                    <p>Estado: {this.state.mensaje.estado}</p>
+                                    <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
+                                    {/* <p>Estado: {this.state.mensaje.estado}</p> */}
                                     <button className="close" data-dismiss="alert">
                                         <span>X</span>
                                     </button>

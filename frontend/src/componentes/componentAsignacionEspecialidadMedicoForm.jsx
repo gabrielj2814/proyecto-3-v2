@@ -97,7 +97,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             })
         })
         .catch(error => {
-            alert("error al generar el id")
+            alert("Error al generar el id")
         })
     }
 
@@ -145,7 +145,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             }
         }
         else{
-            alert("no tienes acesso a este modulo(sera redirigido a la vista anterior)")
+            alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
             this.props.history.goBack()
         }
     }
@@ -394,7 +394,7 @@ class ComponentAsignacionEspecialidadMedicoForm extends React.Component{
             this.setState({["msj_"+valorSelect]:msj})
         }
         else{
-            msj.mensaje="este combo esta vacio por favor inserte datos primero en el modulo de "+valorSelect+" para poder continuar";
+            msj.mensaje="Este combo esta vacío por favor inserte datos primero en el modulo de "+valorSelect+" para poder continuar";
             msj.color_texto="rojo";
             this.setState({["msj_"+valorSelect]:msj})
         }
