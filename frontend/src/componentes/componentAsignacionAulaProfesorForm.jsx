@@ -769,6 +769,9 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     async operacion(){
         const {operacion}=this.props.match.params
         // alert("operacion")
+        $(".columna-modulo").animate({
+            scrollTop: 0
+          }, 1000)
         const token=localStorage.getItem('usuario')
 
             if(operacion==="registrar"){
