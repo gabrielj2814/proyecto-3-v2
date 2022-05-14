@@ -98,6 +98,11 @@ class ModeloEstudiante extends DriverPostgre {
     return await this.query(SQL);
   }
 
+  async desctivarEstudiante(){
+    const SQL = `UPDATE testudiante SET estatus_estudiante='0' WHERE id_estudiante='${this.id_estudiante}'`;
+    return await this.query(SQL);
+  }
+
 
 }
 
