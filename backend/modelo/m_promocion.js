@@ -72,7 +72,6 @@ class ModeloPromocion extends DriverPostgre{
         recomendacion_pariente='${this.recomendacion_pariente}',
         nota_promocion='${this.nota_promocion}',
         descripcion_nota_promocion='${this.descripcion_nota_promocion}',
-        dias_promocion='${this.dias_promocion}',
         estatus_promocion = '${this.estatus_promocion}',
         nota_rezacho_promocion = '${this.nota_rezacho_promocion}'
         WHERE
