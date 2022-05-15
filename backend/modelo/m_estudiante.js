@@ -23,7 +23,6 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   setDatos(estudiante) {
-    console.log(estudiante)
     this.id_estudiante = estudiante.id_estudiante
     this.cedula_escolar = (estudiante.cedula_escolar != 'No tiene') ? estudiante.cedula_escolar : 'null';
     this.cedula_estudiante = (estudiante.cedula_estudiante != 'No tiene') ? estudiante.cedula_estudiante : 'null';
@@ -48,11 +47,11 @@ class ModeloEstudiante extends DriverPostgre {
   async registrar() {
     let SQL = `INSERT INTO testudiante(codigo_cedula_escolar,cedula_escolar, cedula_estudiante, nombres_estudiante, apellidos_estudiante, fecha_nacimiento_estudiante,
       direccion_nacimiento_estudiante, id_parroquia_nacimiento, id_parroquia_vive, enfermedades_estudiante, sexo_estudiante, procedencia_estudiante, vive_con_estudiante,
-      estatus_estudiante) VALUES ('${this.codigo_cedula_escolar}','${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}', 
-      '${this.fecha_nacimiento_estudiante}', '${this.direccion_nacimiento_estudiante}', '${this.id_parroquia_nacimiento}','${this.id_parroquia_vive}', '${this.enfermedades_estudiante}', 
+      estatus_estudiante) VALUES ('${this.codigo_cedula_escolar}','${this.cedula_escolar}', '${this.cedula_estudiante}', '${this.nombres_estudiante}', '${this.apellidos_estudiante}',
+      '${this.fecha_nacimiento_estudiante}', '${this.direccion_nacimiento_estudiante}', '${this.id_parroquia_nacimiento}','${this.id_parroquia_vive}', '${this.enfermedades_estudiante}',
       '${this.sexo_estudiante}','${this.procedencia_estudiante}', '${this.vive_con_estudiante}', '${this.estatus_estudiante}')
       RETURNING id_estudiante`.replace("'null'","null");
-    
+
       return await this.query(SQL);
     }
 
@@ -67,7 +66,7 @@ class ModeloEstudiante extends DriverPostgre {
 
     return this.query(SQL);
   }
-  
+
   async consultarEstudiantesInactivos() {
     const SQL = `SELECT * FROM testudiante WHERE estatus_estudiante='0' `
 
@@ -82,16 +81,16 @@ class ModeloEstudiante extends DriverPostgre {
   }
 
   async consultarpatron(patron) {
-    const SQL = `SELECT * FROM testudiante WHERE cedula_escolar LIKE '%${patron}%' OR cedula_estudiante LIKE '%${patron}%' OR 
+    const SQL = `SELECT * FROM testudiante WHERE cedula_escolar LIKE '%${patron}%' OR cedula_estudiante LIKE '%${patron}%' OR
     nombres_estudiante LIKE '%${patron}%' OR apellidos_estudiante LIKE '%${patron}%'`
 
     return await this.query(SQL);
   }
 
   async actualizar(){
-    const SQL = `UPDATE testudiante SET cedula_escolar='${this.cedula_escolar}', cedula_estudiante='${this.cedula_estudiante}', 
+    const SQL = `UPDATE testudiante SET cedula_escolar='${this.cedula_escolar}', cedula_estudiante='${this.cedula_estudiante}',
     nombres_estudiante='${this.nombres_estudiante}', apellidos_estudiante='${this.apellidos_estudiante}', fecha_nacimiento_estudiante= '${this.fecha_nacimiento_estudiante}',
-    direccion_nacimiento_estudiante= '${this.direccion_nacimiento_estudiante}', id_parroquia_nacimiento='${this.id_parroquia_nacimiento}', id_parroquia_vive='${this.id_parroquia_vive}', 
+    direccion_nacimiento_estudiante= '${this.direccion_nacimiento_estudiante}', id_parroquia_nacimiento='${this.id_parroquia_nacimiento}', id_parroquia_vive='${this.id_parroquia_vive}',
     enfermedades_estudiante='${this.enfermedades_estudiante}',sexo_estudiante='${this.sexo_estudiante}', procedencia_estudiante='${this.procedencia_estudiante}', vive_con_estudiante= '${this.vive_con_estudiante}',
     estatus_estudiante='${this.estatus_estudiante}' WHERE id_estudiante='${this.id_estudiante}'`.replace("'null'","null");
 

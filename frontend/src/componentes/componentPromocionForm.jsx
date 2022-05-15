@@ -133,7 +133,6 @@ class ComponentPromocionForm extends React.Component{
     let hashListaEstudiantes = JSON.parse(JSON.stringify(this.state.hashListaEstudiantes));
     if(hashListaEstudiantes[id]){
       let busqueda = await this.consultarPromocion(id);
-
       if(busqueda){
         this.setState({
           nombre_estudiante: hashListaEstudiantes[id].nombres_estudiante,
@@ -146,6 +145,19 @@ class ComponentPromocionForm extends React.Component{
           operacion: "Registrar"
         });
       }
+    }else{
+      this.setState({
+        nombre_estudiante: "",
+        apellido_estudiante: "",
+        id_promocion:"",
+        id_inscripcion:"",
+        descripcion_logro:"",
+        recomendacion_pariente:"",
+        nota_promocion:"",
+        descripcion_nota_promocion:"",
+        dias_promocion:"",
+        operacion: "Registrar",
+      })
     }
   }
 
@@ -259,6 +271,8 @@ class ComponentPromocionForm extends React.Component{
         return {'id':item.id_inscripcion,'descripcion': `${item.codigo_cedula_escolar}-${item.cedula_escolar} ${item.nombres_estudiante} ${item.apellidos_estudiante}`};
       })
 
+      lista.unshift({'id': '', descripcion: 'Seleccione una opción'})
+
       let json=JSON.parse(JSON.stringify(res.data))
       let hash={}
       for(let estudiante of json.datos){
@@ -271,7 +285,7 @@ class ComponentPromocionForm extends React.Component{
         id_inscripcion: lista[0].id,
       });
 
-      this.busquedaEstudiante(lista[0].id)
+      // this.busquedaEstudiante(lista[0].id)
       return true;
     })
     .catch( error => {
@@ -607,9 +621,9 @@ class ComponentPromocionForm extends React.Component{
   validarFormularioRegistrar(){
     const validaCedulaProfesor = this.validarCampoNumero("id_cedula_profesor"), validaDescripcionNota = this.validarCampo('descripcion_nota_promocion'), validaInscripcion = this.validarSelect('id_inscripcion'),
     validaRecomendacionPariente = this.validarCampo('recomendacion_pariente'), validarDescripcionLogro = this.validarCampo('descripcion_logro'),
-    validarNotaPromocion = this.validarRadio('nota_promocion'),validaDiasPromocion = this.validarCampoNumero('dias_promocion')
+    validarNotaPromocion = this.validarRadio('nota_promocion')
 
-    if( validaDescripcionNota && validaInscripcion && validaRecomendacionPariente && validarDescripcionLogro && validarNotaPromocion && validaDiasPromocion){
+    if( validaDescripcionNota && validaInscripcion && validaRecomendacionPariente && validarDescripcionLogro && validarNotaPromocion){
       return {estado: true}
     }else return {estado: false}
   }
@@ -617,11 +631,10 @@ class ComponentPromocionForm extends React.Component{
   validarFormularioActualizacion(){
     const validaCedulaProfesor = this.validarCampoNumero("id_cedula_profesor"), validaDescripcionNota = this.validarCampo('descripcion_nota_promocion'), validaInscripcion = this.validarSelect('id_inscripcion'),
     validaRecomendacionPariente = this.validarCampo('recomendacion_pariente'), validarDescripcionLogro = this.validarCampo('descripcion_logro'),
-    validarNotaPromocion = this.validarRadio('nota_promocion'),validaDiasPromocion = this.validarCampoNumero('dias_promocion'),
-    validarEstadoPromocion = this.validarRadio("estatus_promocion")
+    validarNotaPromocion = this.validarRadio('nota_promocion'),validarEstadoPromocion = this.validarRadio("estatus_promocion")
 
     if( validaDescripcionNota && validaInscripcion && validaRecomendacionPariente && validarDescripcionLogro && validarNotaPromocion
-      && validaDiasPromocion,validarEstadoPromocion){
+      && validarEstadoPromocion){
         if(this.props.match.params.operacion === "evaluacion"){
 
           if(this.state.estatus_promocion === "R"){
@@ -684,6 +697,9 @@ class ComponentPromocionForm extends React.Component{
             mensaje.color_alerta=respuesta_servidor.color_alerta
             mensaje_formulario.mensaje=mensaje
             this.setState(mensaje_formulario)
+            if(respuesta_servidor.estado_respuesta){
+              this.setState({id_inscripcion: ""});
+            }
           })
           .catch(error=>{
             mensaje.texto="No se puedo conectar con el servidor"
@@ -710,6 +726,10 @@ class ComponentPromocionForm extends React.Component{
               mensaje.color_alerta = respuesta_servidor.color_alerta
               mensaje_formulario.mensaje=mensaje
               this.setState(mensaje_formulario)
+
+              if(respuesta_servidor.estado_respuesta){
+                this.setState({id_inscripcion: ""});
+              }
             })
             .catch(error=>{
               mensaje.texto = "No se puedo conectar con el servidor"
@@ -733,7 +753,7 @@ class ComponentPromocionForm extends React.Component{
             recomendacion_pariente: this.state.recomendacion_pariente,
             nota_promocion: this.state.nota_promocion,
             descripcion_nota_promocion: this.state.descripcion_nota_promocion,
-            dias_promocion: this.state.dias_promocion,
+            dias_promocion: "",
             fecha_promocion: "",
             estatus_promocion: (this.props.match.params.operacion === "evaluacion") ? this.state.estatus_promocion : "E",
             nota_rezacho_promocion: this.state.nota_rezacho_promocion,
@@ -836,11 +856,6 @@ class ComponentPromocionForm extends React.Component{
 
                   </div>
                   <div className="row justify-content-center align-items-center">
-                  <ComponentFormCampo clasesColumna="col-2 col-sm-2 col-md-2 col-lg-2 col-xl-2"
-                        clasesCampo="form-control" obligatorio="si" mensaje={this.state.msj_dias_promocion[0]}
-                        nombreCampo="Día de promoción:" activo={(operacion_Camp !== "evaluacion") ? "si" : "no"} type="text" value={this.state.dias_promocion}
-                        name="dias_promocion" id="dias_promocion" placeholder="Día de promoción" eventoPadre={this.validarNumero}
-                      />
                     <ComponentFormRadioMultiState
                       clasesColumna="col-7 col-ms-7 col-md-7 col-lg-7 col-xl-7"
                       extra="custom-control-inline"

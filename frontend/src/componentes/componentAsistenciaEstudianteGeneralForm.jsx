@@ -134,18 +134,27 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     await axiosCustom.post(`transaccion/asistencia-estudiante/crear-asistencia/${cedula}`)
     .then(({data}) =>{
 
-      if(data.datos.length > 0){
-        let lista = data.datos.map( item => {
-          return {
-            id_asistencia_estudiante: item.id_asistencia_estudiante,
-            id_inscripcion: item.id_inscripcion,
-            fecha_asistencia_estudiante: Moment(item.fecha_asistencia_estudiante).format("YYYY-MM-DD"),
-            estatus_asistencia_estudiante: item.estatus_asistencia_estudiante,
-            observacion_asistencia_estudiante: item.observacion_asistencia_estudiante
-          }
-        })
-        this.setState({hashListaEstudiantes: data.datos, asistencias_estudiantes: lista})
-      }else alert("El profesor consultado, no posee asignaciones");
+      if(data.estado_respuesta){
+        if(data.datos.length > 0){
+          let lista = data.datos.map( item => {
+            return {
+              id_asistencia_estudiante: item.id_asistencia_estudiante,
+              id_inscripcion: item.id_inscripcion,
+              fecha_asistencia_estudiante: Moment(item.fecha_asistencia_estudiante).format("YYYY-MM-DD"),
+              estatus_asistencia_estudiante: item.estatus_asistencia_estudiante,
+              observacion_asistencia_estudiante: item.observacion_asistencia_estudiante
+            }
+          })
+          this.setState({hashListaEstudiantes: data.datos, asistencias_estudiantes: lista})
+        }else alert("El profesor consultado, no posee asignaciones");
+      }else{
+        let mensaje = {};
+        mensaje.color_alerta = data.color_alerta;
+        mensaje.texto = data.mensaje;
+        mensaje.estato = data.estado_respuesta;
+        document.getElementById("boton-registrar").disabled = "disabled";
+        this.setState({mensaje: mensaje})
+      }
     })
     .catch(error => {
         let mensaje=JSON.parse(JSON.stringify(this.state.mensaje))
@@ -160,7 +169,6 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
     if(acessoModulo){
       await this.consultarFechaServidor()
       await this.consultarProfesores();
-      // await this.AsistenciaDeHoy();
 
     }else{
         alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
