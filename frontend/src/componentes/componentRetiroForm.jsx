@@ -112,14 +112,20 @@ class ComponentRetiroForm extends React.Component{
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/asignacion-representante-estudiante/consultar-todos`)
     .then( res => {
       let json = JSON.parse(JSON.stringify(res.data));
-      let hash = {};
+      let hash = {}, ultimoId;
 
       for(let asignacion of json.datos){
-        if(asignacion.estatus_asignacion_representante_estudiante == "1"){
+        if (hash[ultimoId] && ultimoId != null){
+
+          if(hash[ultimoId].id_cedula_representante != asignacion.id_cedula_representante && asignacion.estatus_asignacion_representante_estudiante == "1"){
+            hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
+          }
+        }else{
           hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
         }
+        ultimoId = asignacion.id_asignacion_representante_estudiante
       }
-      
+
       this.setState({hashAsignacionRepresentante:hash})
 
     })
@@ -128,14 +134,25 @@ class ComponentRetiroForm extends React.Component{
     await axios.get(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/consultar-estudiante-inscritos`)
     .then( res => {
       let json = JSON.parse(JSON.stringify(res.data));
-      let hash = {};
-      for(let estudiante of json.datos){
-        if(estudiante.estatus_estudiante == "1"){
-          hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
+      if(json.estado_respuesta){
+        let hash = {};
+        for(let estudiante of json.datos){
+          if(estudiante.estatus_estudiante == "1"){
+            hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
+          }
         }
+        this.setState({hashListaEstudiantes: hash});
+      }else{
+        let mensaje = {};
+        mensaje.color_alerta = json.color_alerta;
+        mensaje.texto = json.mensaje;
+        mensaje.estado = json.estado_respuesta;
+        this.setState({mensaje: mensaje})
+
+        document.getElementById("cedula_escolar").disabled = "disabled";
+        document.getElementById("boton-registrar").disabled = "disabled";
+        document.getElementById("motivo_retiro").disabled = "disabled";
       }
-      console.log("estudiante verga  => ",hash)
-      this.setState({hashListaEstudiantes: hash});
     })
     .catch( err => console.error(err));
   }
@@ -156,6 +173,25 @@ class ComponentRetiroForm extends React.Component{
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashListaEstudiantes));
 
+    if(a.target.value.length < 12){
+      this.setState({
+        estadoBusquedaEstudiante: false,
+        id_inscripcion: "",
+        id_estudiante: "",
+        nombre_estudiante: "",
+        apellido_estudiante: "",
+        id_aula: "",
+        id_grado: "",
+        nombre_aula: "",
+        estadoBusquedaRepresentante: false,
+        datos_docente: "",
+        cedula_representante_solicitud: "",
+        nombre_representante: "",
+        apellido_representante: "",
+        selectRepresentantes: [],
+      });
+    }
+
     if(hashEstudiante[a.target.value]){
       let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
       let representantes = [];
@@ -172,7 +208,8 @@ class ComponentRetiroForm extends React.Component{
         alert("El estudiante no tiene representantes asignados");
         this.setState({
           estadoBusquedaEstudiante: false,
-          hashListaRepresentantes: []
+          hashListaRepresentantes: [],
+          cedula_escolar: "",
         });
         return ;
       }
@@ -192,6 +229,26 @@ class ComponentRetiroForm extends React.Component{
       });
 
       return;
+    }else{
+      if(a.target.value.length == 12){
+        alert("Cédula escolar no encontrada!, Por favor, Verifica los datos del estudiante")
+        this.setState({
+          estadoBusquedaEstudiante: false,
+          id_inscripcion: "",
+          id_estudiante: "",
+          nombre_estudiante: "",
+          apellido_estudiante: "",
+          id_aula: "",
+          id_grado: "",
+          nombre_aula: "",
+          estadoBusquedaRepresentante: false,
+          datos_docente: "",
+          cedula_representante_solicitud: "",
+          nombre_representante: "",
+          apellido_representante: "",
+          selectRepresentantes: [],
+        });
+      }
     }
     this.setState({ estadoBusquedaEstudiante: false});
   }
@@ -234,7 +291,7 @@ class ComponentRetiroForm extends React.Component{
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 13) this.cambiarEstadoDos(input)
+      if(input.value.length <= 12) this.cambiarEstadoDos(input)
     }
   }
 
@@ -429,7 +486,7 @@ class ComponentRetiroForm extends React.Component{
       if(input.value.length <= 8) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
+      if(input.value.length <= 12) this.cambiarEstadoDos(input)
     }
   }
 
@@ -566,9 +623,16 @@ class ComponentRetiroForm extends React.Component{
     const validaCedulaEscolar = this.validarCampoNumero("cedula_escolar"), validaMotivoRetiro = this.validarCampo('motivo_retiro'),
     validaRepresentante = this.validarSelect('cedula_representante_solicitud')
 
-    if( validaCedulaEscolar && validaMotivoRetiro && validaRepresentante){
-      return {estado: true}
-    }else return {estado: false}
+    if(this.state.estadoBusquedaEstudiante){
+      if( validaCedulaEscolar && validaMotivoRetiro && validaRepresentante){
+        return {estado: true}
+      }else return {estado: false}
+    }else{
+      alert("No has consultado los datos del estudiante")
+      document.getElementById("cedula_escolar").focus();
+      return {estado: false}
+    }
+
   }
 
   validarFormularioActuazliar(){

@@ -456,7 +456,7 @@ class ComponentInscripcionForm extends React.Component{
       if(input.value.length <= 9) this.cambiarEstadoDos(input)
     }
     else if(input.name==="cedula_escolar"){
-      if(input.value.length <= 16) this.cambiarEstadoDos(input)
+      if(input.value.length <= 12) this.cambiarEstadoDos(input)
     }
   }
 
@@ -523,6 +523,7 @@ class ComponentInscripcionForm extends React.Component{
       nombre_aula: "",
       numero_grado: "",
       cupos_disponibles: "",
+      lista_representantes: [],
       //MSJ
       msj_cedula_escolar:[{mensaje:"",color_texto:""}],
       msj_id_asignacion_representante_estudiante:[{mensaje:"",color_texto:""}],
@@ -660,7 +661,15 @@ class ComponentInscripcionForm extends React.Component{
 
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
-
+    if(a.target.value.length < 12){
+      this.setState({
+        estadoBusquedaEstudiante: false,
+        id_estudiante: "",
+        nombre_estudiante: "",
+        apellido_estudiante: "",
+        lista_representantes: []
+      })
+    }
     if(hashEstudiante[a.target.value]){
       let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
       let representantes = [];
@@ -686,6 +695,17 @@ class ComponentInscripcionForm extends React.Component{
       });
 
       return;
+    }else{
+      if(a.target.value.length == 12){
+        alert("Cédula escolar no encontrada!, Por favor, Verifica los datos del estudiante")
+        this.setState({
+          estadoBusquedaEstudiante: false,
+          id_estudiante: "",
+          nombre_estudiante: "",
+          apellido_estudiante: "",
+          lista_representantes: []
+        })
+      }
     }
     this.setState({ estadoBusquedaEstudiante: false});
 
@@ -701,7 +721,7 @@ class ComponentInscripcionForm extends React.Component{
 
         if (hash[ultimoId] && ultimoId != null){
 
-          if(hash[ultimoId].id_cedula_representante != asignacion.id_cedula_representante){
+          if(hash[ultimoId].id_cedula_representante != asignacion.id_cedula_representante  && asignacion.estatus_asignacion_representante_estudiante == "1"){
             hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
           }
         }else{

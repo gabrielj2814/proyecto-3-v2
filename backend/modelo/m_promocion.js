@@ -72,7 +72,6 @@ class ModeloPromocion extends DriverPostgre{
         recomendacion_pariente='${this.recomendacion_pariente}',
         nota_promocion='${this.nota_promocion}',
         descripcion_nota_promocion='${this.descripcion_nota_promocion}',
-        dias_promocion='${this.dias_promocion}',
         estatus_promocion = '${this.estatus_promocion}',
         nota_rezacho_promocion = '${this.nota_rezacho_promocion}'
         WHERE
@@ -116,7 +115,7 @@ class ModeloPromocion extends DriverPostgre{
         tasignacion_aula_profesor.id_asignacion_aula_profesor = tinscripcion.id_asignacion_aula_profesor AND
         tasignacion_aula_profesor.id_profesor = tprofesor.id_profesor AND
         ttrabajador.id_cedula= tprofesor.id_cedula AND
-        ttrabajador.id_cedula='${cedula}' AND  
+        ttrabajador.id_cedula='${cedula}' AND
         tasignacion_aula_profesor.estatus_asignacion_aula_profesor = '1' AND
         tasignacion_aula_profesor.id_ano_escolar = tano_escolar.id_ano_escolar AND tano_escolar.estatus_ano_escolar = '1';`;
         return await this.query(SQL)

@@ -45,6 +45,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     this.consultarTodosLosEstudiantes = this.consultarTodosLosEstudiantes.bind(this);
     this.VerifacionCedulaEscolar = this.VerifacionCedulaEscolar.bind(this);
     this.habilitarCamposRepresentante = this.habilitarCamposRepresentante.bind(this);
+    this.RellenarCamposHijos = this.RellenarCamposHijos.bind(this);
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -63,6 +64,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         ingresos_mama: "",
         tipo_vivienda_mama: "",
         constitucion_familiar_mama: "",
+        direccion_mama: "",
         id_estado_mama: "",
         id_ciudad_mama: "",
         id_parroquia_mama: "",
@@ -107,6 +109,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         tipo_vivienda_papa: "",
         constitucion_familiar_papa: "",
         numero_hijos_papa: "1",
+        direccion_papa: "",
         id_estado_papa: "",
         id_ciudad_papa: "",
         id_parroquia_papa: "",
@@ -586,51 +589,75 @@ class ComponentMultiStepFormRepresentante extends React.Component{
     return estado
   }
 
-  validarCampoNumero(nombre_campo, name = ''){
-      var estado=false
-      const campo=this.state[nombre_campo],
-      exprecion=/\d$/,
-      exprecion_2=/\s/
-      var mensaje_campo=this.state["msj_"+nombre_campo]
-      if(campo!==""){
-          if(!exprecion_2.test(campo)){
-              if(exprecion.test(campo)){
+  RellenarCamposHijos(name){
+    let lista = [
+      `numero_estudiante_inicial_${name}`,
+      `numero_estudiante_grado_1_${name}`,
+      `numero_estudiante_grado_2_${name}`,
+      `numero_estudiante_grado_3_${name}`,
+      `numero_estudiante_grado_4_${name}`,
+      `numero_estudiante_grado_5_${name}`,
+      `numero_estudiante_grado_6_${name}`
+    ];
 
-                if(nombre_campo == `numero_hijos_${name}`){
-                  let numero_hijos = parseInt(this.state[`numero_hijos_${name}`])
-                  const sumatoria = (a, b) => a + b;
-                  let numeros = [
-                    parseInt(this.state[`numero_estudiante_inicial_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_1_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_2_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_3_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_4_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_5_${name}`]),
-                    parseInt(this.state[`numero_estudiante_grado_6_${name}`]),
-                  ]
-                  let total_estudiante_representante = numeros.reduce(sumatoria)
+    lista.forEach( item => {
+      let value = this.state[item];
+      if(value == "" || value == null) this.setState({[item]: "0"})
+    })
+  }
+
+  validarCampoNumero(nombre_campo, name = ''){
+
+    var estado=false
+    const campo=this.state[nombre_campo],
+    exprecion=/\d$/,
+    exprecion_2=/\s/
+    var mensaje_campo=this.state["msj_"+nombre_campo]
+    if(campo!==""){
+        if(!exprecion_2.test(campo)){
+            if(exprecion.test(campo)){
+              if(nombre_campo == `numero_hijos_${name}`){
+                let numero_hijos = parseInt(this.state[`numero_hijos_${name}`])
+                const sumatoria = (a, b) => a + b;
+                let numeros = [
+                  parseInt(this.state[`numero_estudiante_inicial_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_1_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_2_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_3_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_4_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_5_${name}`]),
+                  parseInt(this.state[`numero_estudiante_grado_6_${name}`]),
+                ]
+                let total_estudiante_representante = numeros.reduce(sumatoria)
+                if(!isNaN(total_estudiante_representante)){
                   if(numero_hijos != total_estudiante_representante){
                     estado = false
                     mensaje_campo[0]={mensaje:"El numero de hijos no concuerda con la cantidad estudiantes registrados",color_texto:"rojo"}
                     this.setState({[`msj_numero_hijos_${name}`]:mensaje_campo})
                     return false;
                   }
+                }else{
+                  estado = false
+                  mensaje_campo[0]={mensaje:"Los campos no pueden estar vacios",color_texto:"rojo"}
+                  this.setState({[`msj_numero_hijos_${name}`]:mensaje_campo})
+                  return false;
                 }
-                estado=true
-                mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
-                this.setState({["msj_"+nombre_campo]:mensaje_campo})
               }
-          }
-          else{
-              mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+              estado=true
+              mensaje_campo[0]={mensaje:"",color_texto:"rojo"}
               this.setState({["msj_"+nombre_campo]:mensaje_campo})
-          }
-      }
-      else{
-          mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
-          this.setState({["msj_"+nombre_campo]:mensaje_campo})
-      }
-      return estado
+            }
+        }
+        else{
+            mensaje_campo[0]={mensaje:"este campo solo permite numeros",color_texto:"rojo"}
+            this.setState({["msj_"+nombre_campo]:mensaje_campo})
+        }
+    }
+    else{
+        mensaje_campo[0]={mensaje:"este campo no puede estar vacio",color_texto:"rojo"}
+        this.setState({["msj_"+nombre_campo]:mensaje_campo})
+    }
+    return estado
   }
 
   validarFechaNacimineto(name_campo){
@@ -734,8 +761,12 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       validaEstadoMama = this.validarSelect('id_estado_mama'), ValidarParroquiaMama = this.validarSelect('id_parroquia_mama')
 
       if(this.state.campos_extras_mama){
-        const validarHijos = this.validarCampoNumero('numero_hijos_mama','mama')
-        if(validarHijos === false) return {estado: false}
+        this.RellenarCamposHijos('mama');
+
+        setTimeout( () => {
+          const validarHijos = this.validarCampoNumero('numero_hijos_mama','mama')
+          if(validarHijos === false) return {estado: false}
+        }, 100)
       }
 
       if(
@@ -756,8 +787,11 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       validaEstadoPapa = this.validarSelect('id_estado_papa'), ValidarParroquiaPapa = this.validarSelect('id_parroquia_papa')
 
       if(this.state.campos_extras_papa){
-        const validarHijos = this.validarCampoNumero('numero_hijos_papa','papa')
-        if(validarHijos === false) return {estado: false}
+        this.RellenarCamposHijos('papa');
+        setTimeout( () => {
+          const validarHijos = this.validarCampoNumero('numero_hijos_papa','papa')
+          if(validarHijos === false) return {estado: false}
+        },100)
       }
 
       if(
@@ -793,6 +827,22 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         validarCedulaPapa && validarNombrePapa && validarApellidoPapa && validarTelefonoMovilPapa && validarTelefonoLocalPapa && validarFechaNaciminetoPapa && validarOcupacionPapa && validarIngresosPapa
         && validarGradoIntruccionPapa && validarTipViviendaPapa && ValidarStatusPapa && ValidarParroquiaPapa && validaEstadoPapa && validarCiudadPapa
       ){
+        if(this.state.campos_extras_papa){
+          this.RellenarCamposHijos('papa');
+          setTimeout( ()=>{
+            const validarHijos = this.validarCampoNumero('numero_hijos_papa','papa')
+            if(validarHijos === false) return {estado: false}
+          },100)
+        }
+
+        if(this.state.campos_extras_mama){
+          this.RellenarCamposHijos('mama');
+          setTimeout( ()=>{
+            const validarHijos = this.validarCampoNumero('numero_hijos_mama','mama')
+            if(validarHijos === false) return {estado: false}
+          },100)
+        }
+
         return {estado: true}
       }else return {estado: false}
     }
@@ -839,17 +889,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
               if(!this.state.mama_existe){
                 if(this.state.campo_obligatorio === "A" || this.state.campo_obligatorio === "M"){
                   if(this.state.campos_extras_mama == false){
-                    await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
+                    respuesta_finalServerMama = await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.mama)
                     .then(respuesta=>{
                       respuesta_servidor=respuesta.data
                       mensaje.texto=respuesta_servidor.mensaje
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
 
-                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerMama = true;
+                      if(respuesta_servidor.estado_respuesta) return true;
                       else{
-                        respuesta_finalServerMama = false;
                         this.setState(mensaje_formulario)
+                        return false;
                       }
                     })
                     .catch(error=>{
@@ -860,7 +910,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       this.setState(mensaje_formulario)
                     })
                   }else{
-                    await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.mama)
+                    respuesta_finalServerMama = await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.mama)
                     .then(respuesta=>{
                       respuesta_servidor=respuesta.data
                       mensaje.texto=respuesta_servidor.mensaje
@@ -868,10 +918,10 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       mensaje_formulario.mensaje=mensaje
                       this.setState(mensaje_formulario)
 
-                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerMama = true;
+                      if(respuesta_servidor.estado_respuesta) return true;
                       else{
-                        respuesta_finalServerMama = false;
                         this.setState(mensaje_formulario)
+                        return false;
                       }
                     })
                     .catch(error=>{
@@ -884,17 +934,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   }
                 }
               }else{
-                await axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/actualizar/${this.state.id_cedula_mama}`,objeto.mama)
+                respuesta_finalServerMama = await axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/actualizar/${this.state.id_cedula_mama}`,objeto.mama)
                 .then(respuesta=>{
                   respuesta_servidor=respuesta.data
                   mensaje.texto=respuesta_servidor.mensaje
                   mensaje.estado=respuesta_servidor.estado_respuesta
                   mensaje_formulario.mensaje=mensaje
 
-                  if(respuesta_servidor.estado_respuesta) respuesta_finalServerMama = true;
+                  if(respuesta_servidor.estado_respuesta) return true;
                   else{
-                    respuesta_finalServerMama = false;
                     this.setState(mensaje_formulario)
+                    return false;
                   }
                 })
                 .catch(error=>{
@@ -909,17 +959,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
               if(!this.state.papa_existe){
                 if(this.state.campo_obligatorio === "A" || this.state.campo_obligatorio === "P"){
                   if(this.state.campos_extras_papa == false){
-                    await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.papa)
+                    respuesta_finalServerPapa = await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar-padres`,objeto.papa)
                     .then(respuesta=>{
                       respuesta_servidor=respuesta.data
                       mensaje.texto=respuesta_servidor.mensaje
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
 
-                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerPapa = true;
+                      if(respuesta_servidor.estado_respuesta) return true;
                       else{
-                        respuesta_finalServerPapa = false;
                         this.setState(mensaje_formulario)
+                        return false;
                       }
 
                     })
@@ -931,17 +981,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                       this.setState(mensaje_formulario)
                     })
                   }else{
-                    await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.papa)
+                    respuesta_finalServerPapa = await axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/registrar`,objeto.papa)
                     .then(respuesta=>{
                       respuesta_servidor=respuesta.data
                       mensaje.texto=respuesta_servidor.mensaje
                       mensaje.estado=respuesta_servidor.estado_respuesta
                       mensaje_formulario.mensaje=mensaje
 
-                      if(respuesta_servidor.estado_respuesta) respuesta_finalServerPapa = true;
+                      if(respuesta_servidor.estado_respuesta) return true;
                       else{
-                        respuesta_finalServerPapa = false;
                         this.setState(mensaje_formulario)
+                        return false;
                       }
 
                     })
@@ -955,17 +1005,17 @@ class ComponentMultiStepFormRepresentante extends React.Component{
                   }
                 }
               }else{
-                await axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/actualizar/${this.state.id_cedula_papa}`,objeto.papa)
+                respuesta_finalServerPapa = await axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/representante/actualizar/${this.state.id_cedula_papa}`,objeto.papa)
                 .then(respuesta=>{
                   respuesta_servidor=respuesta.data
                   mensaje.texto=respuesta_servidor.mensaje
                   mensaje.estado=respuesta_servidor.estado_respuesta
                   mensaje_formulario.mensaje=mensaje
 
-                  if(respuesta_servidor.estado_respuesta) respuesta_finalServerPapa = true;
+                  if(respuesta_servidor.estado_respuesta) return true;
                   else{
-                    respuesta_finalServerPapa = false;
                     this.setState(mensaje_formulario)
+                    return false;
                   }
                 })
                 .catch(error=>{
@@ -980,14 +1030,13 @@ class ComponentMultiStepFormRepresentante extends React.Component{
 
               if(this.state.campo_obligatorio === "A"){
                 if(respuesta_finalServerMama && respuesta_finalServerPapa) response = true; else response = false;
+              }else{
+                if(this.state.campo_obligatorio === "P" && respuesta_finalServerPapa){
+                  response = true;
+                }else if(this.state.campo_obligatorio === "M" && respuesta_finalServerMama){
+                  response = true;
+                }else response = false;
               }
-              if(this.state.campo_obligatorio === "P" && respuesta_finalServerPapa){
-                response = true;
-              }else response = false;
-
-              if(this.state.campo_obligatorio === "M" && respuesta_finalServerMama){
-                response = true;
-              }else response = false;
 
               if(response){
                 if(this.state.campo_obligatorio === "P") this.props.addCedulas({tipo: "papa", cedula: this.state.id_cedula_papa})
@@ -1027,7 +1076,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
             estatus_representante: this.state.estatus_mama,
             id_parroquia: this.state.id_parroquia_mama,
 
-            direccion_representante: "",
+            direccion_representante: this.state.direccion_mama,
             numero_hijos_representante: this.state.numero_hijos_mama,
             numero_estudiante_inicial_representante: this.state.numero_estudiante_inicial_mama,
             numero_estudiante_grado_1_representante: this.state.numero_estudiante_grado_1_mama,
@@ -1056,7 +1105,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
             estatus_representante: this.state.estatus_papa,
             id_parroquia: this.state.id_parroquia_papa,
 
-            direccion_representante: "",
+            direccion_representante: this.state.direccion_papa,
             numero_hijos_representante: this.state.numero_hijos_papa,
             numero_estudiante_inicial_representante: this.state.numero_estudiante_inicial_papa,
             numero_estudiante_grado_1_representante: this.state.numero_estudiante_grado_1_papa,
@@ -1111,6 +1160,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
       ];
 
       indexes.map( item => { document.getElementById(item).disabled = true; })
+      console.log(parseInt(hashRepresentante[input.value].numero_estudiante_grado_1_representante))
 
       this.setState({
         estadoBusquedaRepresentante:true,
@@ -1126,17 +1176,18 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         ["tipo_vivienda_"+name]: hashRepresentante[input.value].tipo_vivienda_representante,
         ["constitucion_familiar_"+name]: hashRepresentante[input.value].constitucion_familiar_representante,
         ["estatus_"+name]: hashRepresentante[input.value].estatus_representante,
+        ["direccion_"+name]: (hashRepresentante[input.value].direccion_representante != "") ? hashRepresentante[input.value].direccion_representante : "",
         ["id_estado_"+name]: datos.id_estado,
         ["id_ciudad_"+name]: datos.id_ciudad,
         ["id_parroquia_"+name]: datos.id_parroquia,
-        ["numero_hijos_"+name]: this.state.numero_hijos_representante,
-        ["numero_estudiante_inicial_"+name]: this.state.numero_estudiante_inicial_representante,
-        ["numero_estudiante_grado_1_"+name]: this.state.numero_estudiante_grado_1_representante,
-        ["numero_estudiante_grado_2_"+name]: this.state.numero_estudiante_grado_2_representante,
-        ["numero_estudiante_grado_3_"+name]: this.state.numero_estudiante_grado_3_representante,
-        ["numero_estudiante_grado_4_"+name]: this.state.numero_estudiante_grado_4_representante,
-        ["numero_estudiante_grado_5_"+name]: this.state.numero_estudiante_grado_5_representante,
-        ["numero_estudiante_grado_6_"+name]: this.state.numero_estudiante_grado_6_representante,
+        ["numero_hijos_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_hijos_representante)) ? "0" : hashRepresentante[input.value].numero_hijos_representante,
+        ["numero_estudiante_inicial_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_inicial_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_inicial_representante),
+        ["numero_estudiante_grado_1_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_1_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_1_representante),
+        ["numero_estudiante_grado_2_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_2_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_2_representante),
+        ["numero_estudiante_grado_3_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_3_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_3_representante),
+        ["numero_estudiante_grado_4_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_4_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_4_representante),
+        ["numero_estudiante_grado_5_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_5_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_5_representante),
+        ["numero_estudiante_grado_6_"+name]: isNaN(parseInt(hashRepresentante[input.value].numero_estudiante_grado_6_representante)) ? "0" : parseInt(hashRepresentante[input.value].numero_estudiante_grado_6_representante),
         [index]: true,
       })
       alert("este representante ya esta resgistrado")
