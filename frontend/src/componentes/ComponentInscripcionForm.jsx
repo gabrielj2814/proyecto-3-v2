@@ -121,7 +121,7 @@ class ComponentInscripcionForm extends React.Component{
   }
 
   async Consultar_asignacion_aula(){
-    await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-asignacion-actual/${this.state.cedula_profesor}`)
+    return await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar-asignacion-actual/${this.state.cedula_profesor}`)
     .then( respuesta => {
       let respuesta_servior = respuesta.data;
 
@@ -207,18 +207,17 @@ class ComponentInscripcionForm extends React.Component{
             await this.GetRepresentant_Estudiant()
             await this.obtenerDatosDeLasesion();
             let res = await this.Consultar_asignacion_aula();
+
             if(res){
               const operacion = this.props.match.params.operacion
-              document.getElementById("activoestudianter1").disabled = true;
-              document.getElementById("activoestudianter2").disabled = true;
-              document.getElementById("activoestudianter3").disabled = true;
-              document.getElementById("activoestudianter4").disabled = true;
+              document.getElementById("activoestudianter1").disabled = "disabled";
+              document.getElementById("activoestudianter2").disabled = "disabled";
+              document.getElementById("activoestudianter3").disabled = "disabled";
             }
 
-
           }else{
-            document.getElementById("cedula_escolar").disabled = true;
-            document.getElementById("boton-registrar").disabled = true;
+            document.getElementById("cedula_escolar").disabled = "disabled";
+            document.getElementById("boton-registrar").disabled = "disabled";
           }
         }
       }
@@ -674,6 +673,7 @@ class ComponentInscripcionForm extends React.Component{
 
       if(representantes.length == 0){
         alert("El estudiante no tiene representantes asignados");
+        this.setState({cedula_escolar: ""});
         return ;
       }
 
@@ -833,12 +833,12 @@ class ComponentInscripcionForm extends React.Component{
                     <ComponentFormRadioMultiState
                     clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
                     extra="custom-control-inline"
-                    nombreCampoRadio="Estatus de la asignacion:"
+                    nombreCampoRadio="Estatus de la asignación:"
                     name="estatus_inscripcion"
                     nombreLabelRadio={["Inscrito","Espera","Retiro","Terminado"]}
                     checkedRadio={this.state.estatus_inscripcion}
 
-                    idRadio={["activoestudianter0","activoestudianter1","activoestudianter3","activoestudianter4"]}
+                    idRadio={["activoestudianter0","activoestudianter1","activoestudianter2","activoestudianter3"]}
 
                     estates={this.state.estates_radios}
                     eventoPadre={this.cambiarEstado}

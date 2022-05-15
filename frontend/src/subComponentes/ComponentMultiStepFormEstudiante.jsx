@@ -224,32 +224,29 @@ class ComponentMultiStepFormEstudiante extends React.Component{
             edadEstudiante: edadEstudiante
           })
 
-          // codigo_cedula_escolar
-          // id_cedula_escolcar
         }else {
           const ruta_api=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estado/consultar-todos`,
           nombre_propiedad_lista="estados",
           propiedad_id="id_estado",
           propiedad_descripcion="nombre_estado",
           propiedad_estado="estatu_estado"
-          const estados=await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
-          console.log(estados)
-          
-          // if(estados.length > 0){
-          //   alert("No hay Estados registrados (será redirigido a la vista anterior)")
-          //   this.regresar();
-          // }
+          const estados = await this.consultarServidor(ruta_api,nombre_propiedad_lista,propiedad_id,propiedad_descripcion,propiedad_estado)
+
+          if(!estados[0].id){
+            alert("No hay Estados registrados (será redirigido a la vista anterior)")
+            this.props.returnDashboard();
+          }
 
           const ruta_api_2=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/ciudad/consultar-x-estado/${estados[0].id}`,
           nombre_propiedad_lista_2="ciudades",
           propiedad_id_2="id_ciudad",
           propiedad_descripcion_2="nombre_ciudad",
           propiedad_estado_2="estatu_ciudad"
-          const ciudades=await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
+          const ciudades = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
-          if(ciudades.length > 0 ){
+          if(!ciudades[0].id){
             alert("No hay Municipios registrados (será redirigido a la vista anterior)")
-            this.regresar();
+            this.props.returnDashboard();
           }
 
           const ruta_api_3=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/parroquia/consultar-ciudad/${ciudades[0].id}`,
@@ -257,11 +254,11 @@ class ComponentMultiStepFormEstudiante extends React.Component{
           propiedad_id_3="id_parroquia",
           propiedad_descripcion_3="nombre_parroquia",
           propiedad_estado_3="estatu_parroquia"
-          const parroquias=await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
+          const parroquias = await this.consultarServidor(ruta_api_3,nombre_propiedad_lista_3,propiedad_id_3,propiedad_descripcion_3,propiedad_estado_3)
 
-          if(parroquias.length > 0){
+          if(!parroquias[0].id){
             alert("No hay Parroquias registradas (será redirigido a la vista anterior)")
-            this.regresar();
+            this.props.returnDashboard();
           }
 
           this.setState({
@@ -863,19 +860,16 @@ class ComponentMultiStepFormEstudiante extends React.Component{
               axios.put(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/estudiante/actualizar/${this.state.id_estudiante}`,objeto)
               .then(respuesta=>{
                 respuesta_servidor=respuesta.data
-                let id_estu = respuesta_servidor.datos[0].id_estudiante;
 
                 mensaje.texto=respuesta_servidor.mensaje
                 mensaje.estado=respuesta_servidor.estado_respuesta
                 mensaje_formulario.mensaje=mensaje
-                this.setState(mensaje_formulario)
 
                 if(respuesta_servidor.estado_respuesta){
-                  this.setState({id_estudiante: id_estu})
                   this.registroVacunaEstudiante()
-                  this.props.state('id_estudiante', id_estu)
+                  this.props.state('id_estudiante', this.state.id_estudiante)
                   this.props.next();
-                }
+                }else this.setState(mensaje_formulario)
 
               })
               .catch(error=>{
@@ -916,7 +910,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
     }
 
     regresar(){
-        this.props.history.push("/dashboard/configuracion/estudiante");
+      this.props.returnDashboard()
     }
 
     buscarEstudiante(a){
@@ -1084,7 +1078,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                           obligatorio="si"
                           mensaje={this.state.msj_id_ciudad}
-                          nombreCampoSelect="Ciudad:"
+                          nombreCampoSelect="Municipio:"
                           clasesSelect="custom-select"
                           name="id_ciudad"
                           id="id_ciudad"
@@ -1134,7 +1128,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                           clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                           obligatorio="si"
                           mensaje={this.state.msj_id_ciudad_nacimiento}
-                          nombreCampoSelect="Ciudad:"
+                          nombreCampoSelect="Municipio:"
                           clasesSelect="custom-select"
                           name="id_ciudad_nacimiento"
                           id="id_ciudad_nacimiento"
@@ -1222,7 +1216,7 @@ class ComponentMultiStepFormEstudiante extends React.Component{
                                 clasesBoton="btn btn-danger"
                                 id="boton-cancelar"
                                 value="Cancelar"
-                                    eventoPadre={this.props.return}
+                                    eventoPadre={this.props.returnDashboard}
                                 />
                             </div>
                             {this.props.obligatorio == false && <InputButton
