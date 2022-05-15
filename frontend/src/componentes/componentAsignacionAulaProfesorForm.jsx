@@ -319,7 +319,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                     ano_hasta:json.datos[0].ano_hasta,
                     numero_total_de_estudiantes:json.datos[0].numero_total_de_estudiantes,
                     id_aula_espacio:json.datos[0].id_aula_espacio
-                    
+
                 })
                 let listaIdEspecialistaHaEnviar=json.datos[0].especialistas.map(especialista => parseInt(especialista.id_especialista))
                 this.setState({listaIdEspecialistaHaEnviar})
@@ -409,7 +409,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         })
     }
 
-    
+
     async cosultarAulasEspaciosDisponibles(idAnnoEscolar){
         let datos={
             idAnnoEscolar:idAnnoEscolar,
@@ -522,7 +522,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 this.setState({id_profesor:profesor.id_profesor})
                 msj_id_cedula.mensaje=""
                 msj_id_cedula.color_texto="rojo"
-                
+
                 if(this.props.match.params.operacion==="actualizar"){
                     if(this.state.respaldoDatos.id_profesor!==this.state.id_profesor){
                         this.setState({cambioProfesor:true})
@@ -835,8 +835,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         const token=localStorage.getItem('usuario')
 
             if(operacion==="registrar"){
-                if(this.state.disponibilidadAula===true && 
-                    this.state.disponibilidadProfesor===true && 
+                if(this.state.disponibilidadAula===true &&
+                    this.state.disponibilidadProfesor===true &&
                     this.validarCampoCedulaProfesor()===true &&
                     document.getElementById("id_especialista").value!=="null" &&
                     document.getElementById("id_aula_espacio").value!=="null"
@@ -940,7 +940,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 }
             }
 
-            
+
     }
 
     cerrarModal(a){
@@ -1173,10 +1173,10 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                         </div>
                         <div className="row mt-3">
                             <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                                <span className="sub-titulo-form-reposo-trabajador">Otros</span>
+                                <span className="sub-titulo-form-reposo-trabajador">Datos Adicionales</span>
                             </div>
                         </div>
-                       
+
                         <div className="row justify-content-center">
                             <ComponentFormRadioState
                             clasesColumna="col-9 col-ms-9 col-md-9 col-lg-9 col-xl-9"
@@ -1215,7 +1215,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             </div>
                             <div className="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                         </div>
-                       
+
 
                     </form>
                     <div className="row justify-content-center mb-3">

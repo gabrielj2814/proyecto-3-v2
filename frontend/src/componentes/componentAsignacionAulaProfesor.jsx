@@ -322,6 +322,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
         const jsx_tabla_encabezado=(
             <thead>
                 <tr>
+                  <th>Cédula del Profesor</th>
                     <th>Nombre del Profesor</th>
                     <th>Grado</th>
                     <th>Sección</th>
@@ -336,6 +337,7 @@ class ComponentAsignacionAulaProfesor extends React.Component{
                 {this.state.registros.map((asignacion,index)=>{
                     return(
                         <tr key={index}>
+                          <td>{asignacion.id_cedula}</td>
                             <td>{asignacion.nombres} {asignacion.apellidos}</td>
                             <td>{asignacion.numero_grado}</td>
                             <td>{asignacion.nombre_aula}</td>

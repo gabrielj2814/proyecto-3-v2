@@ -36,7 +36,7 @@ class ComponentProfesor extends React.Component {
         this.state={
             modulo:"",
             estado_menu:false,
-            
+
             registros:[],
             //
             alerta:{
@@ -44,7 +44,7 @@ class ComponentProfesor extends React.Component {
                 mensaje:null,
                 estado:false
             },
-            // 
+            //
             tipoPdf:null,
             id_cedula:null,
             nombre_usuario:null,
@@ -107,7 +107,7 @@ class ComponentProfesor extends React.Component {
                     this.setState({id_cedula:respuesta_servior.usuario.id_cedula})
                     this.setState({nombre_usuario:respuesta_servior.usuario.nombre_usuario})
                   estado=await this.consultarPerfilTrabajador(modulo,subModulo,respuesta_servior.usuario.id_perfil)
-                }  
+                }
             })
         }
         return estado
@@ -140,8 +140,8 @@ class ComponentProfesor extends React.Component {
               estado=true
             }
             // this.setState({modulosSistema})
-            
-            
+
+
         })
         .catch(error =>  {
             console.log(error)
@@ -149,7 +149,7 @@ class ComponentProfesor extends React.Component {
         return estado
     }
 
-    async consultarTodosProfesorTrabajador(id){
+    async consultarTodosProfesorTrabajador(){
         // const token=localStorage.getItem('usuario')
         await axiosCustom.get(`configuracion/profesor/consultar-todos`)
         .then(respuesta => {
@@ -165,7 +165,7 @@ class ComponentProfesor extends React.Component {
     redirigirFormulario(a){
         this.props.history.push("/dashboard/configuracion/profesor/registrar")
     }
-    
+
     irAlFormularioDeActualizacion(a){
         let input=a.target
         this.props.history.push(`/dashboard/configuracion/profesor/actualizar/${input.id}`)
@@ -216,7 +216,7 @@ class ComponentProfesor extends React.Component {
                 let json=JSON.parse(respuesta)
                 console.log("datos reporte martricula =>>>> ",json)
                 if(json.nombrePdf!=="false"){
-                    $filaVerPdf.classList.remove("ocultarFormulario") 
+                    $filaVerPdf.classList.remove("ocultarFormulario")
                     document.getElementById("linkPdf").href=`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/reporte/${json.nombrePdf}`
                 }
                 else{
@@ -226,7 +226,7 @@ class ComponentProfesor extends React.Component {
             },
             error: function() {
             //   alert("error")
-              $filaVerPdf.classList.add("ocultarFormulario") 
+              $filaVerPdf.classList.add("ocultarFormulario")
             }
           });
         }
@@ -237,12 +237,12 @@ class ComponentProfesor extends React.Component {
     render(){
 
         const jsx_tabla_encabezado=(
-            <thead> 
-                <tr> 
-                    <th>Código</th> 
+            <thead>
+                <tr>
+                    <th>Cédula</th>
                     <th>Nombre del profesor</th>
                     <th>Estatus</th>
-                </tr> 
+                </tr>
             </thead>
         )
 
@@ -251,15 +251,15 @@ class ComponentProfesor extends React.Component {
                 {this.state.registros.map((profesor,index)=>{
                     return(
                         <tr key={index}>
-                            <td>{profesor.id_profesor}</td>
+                            <td>{profesor.id_cedula}</td>
                             <td>{profesor.nombres} {profesor.apellidos}</td>
                             <td>{(profesor.estatus_profesor==="1")?"Activo":"Inactivo"}</td>
                             <td>
-                                <ButtonIcon 
-                                clasesBoton="btn btn-warning btn-block" 
-                                value={profesor.id_profesor} 
+                                <ButtonIcon
+                                clasesBoton="btn btn-warning btn-block"
+                                value={profesor.id_profesor}
                                 id={profesor.id_profesor}
-                                eventoPadre={this.irAlFormularioDeActualizacion} 
+                                eventoPadre={this.irAlFormularioDeActualizacion}
                                 icon="icon-pencil"
                                 />
                             </td>
@@ -291,13 +291,13 @@ class ComponentProfesor extends React.Component {
                                   </div>
                                 </div>
                               </div>
-                             
+
                               <div id="filaVerPdf" className="row justify-content-center ocultarFormulario">
                                   <div className="col-auto">
                                     <a className="btn btn-success" id="linkPdf" target="_blank" href="#">Ver pdf</a>
                                   </div>
                               </div>
-                              
+
                             </div>
                             <div class="modal-footer ">
                                 <button type="button" id="botonGenerarPdf" class="btn btn-success ocultarFormulario" onClick={this.generarPdf}>Generar pdf</button>
@@ -310,7 +310,7 @@ class ComponentProfesor extends React.Component {
                     (<div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12">
 
                         <AlertBootstrap colorAlert={this.state.alerta.color} mensaje={this.state.alerta.mensaje}/>
-                        
+
                     </div>)
                 }
                 <TituloModulo clasesRow="row mb-5" clasesColumna="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center" tituloModulo="Módulo Profesor"/>
@@ -320,9 +320,9 @@ class ComponentProfesor extends React.Component {
                         <Tabla tabla_encabezado={jsx_tabla_encabezado} tabla_body={jsx_tabla_body} numeros_registros={this.state.registros.length}/>
                     </div>
                 </div>
-                
+
                 <div className="row justify-content-between">
-                
+
                     <div className="col-3 col-ms-3 col-md-3 columna-boton">
                       <div className="row justify-content-center align-items-center contenedor-boton">
                         <div className="col-auto">
@@ -342,15 +342,15 @@ class ComponentProfesor extends React.Component {
         )
         return (
             <div className="component_profesor">
-                    
+
                 <ComponentDashboard
                 componente={jsx}
                 modulo={this.state.modulo}
                 eventoPadreMenu={this.mostrarModulo}
                 estado_menu={this.state.estado_menu}
                 />
-            
-            
+
+
             </div>
         )
     }

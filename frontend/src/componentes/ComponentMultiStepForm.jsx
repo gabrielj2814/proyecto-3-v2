@@ -227,7 +227,7 @@ class ComponentMultiStepForm extends React.Component{
                 operacion={this.state.operacion}
                 next={this.next}
                 idEstudiante={this.state.id_estudiante}
-                return={this.return_index}
+                returnDashboard={this.return_index}
                 state={this.StatePadre}
                 obligatorio={true}
             />
@@ -238,6 +238,7 @@ class ComponentMultiStepForm extends React.Component{
                 operacion="registrar"
                 next={this.next}
                 retruki={this.reverse}
+                returnDashboard={this.return_index}
                 state={this.StatePadre}
                 addCedulas={this.AddCedulas}
                 obligatorio={true}
