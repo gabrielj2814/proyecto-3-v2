@@ -548,7 +548,34 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
             this.setState({id_profesor:""})
             $seccionNombreProfesor.textContent=``
         }
+        if(this.props.match.params.operacion==="registrar"){
+            if(document.getElementById("boton-registrar")){
+                if(input.value.length===8){
+                    this.verficarEstadoTrebajador(input.value)
+                }
+            }
+        }
+    }
 
+    async verficarEstadoTrebajador(cedula){
+        // esta funcion se ultiliza para consultrar si el trabajador esta activo 
+        // ademas ve si tiene un reposos o un permiso activo para evitar que se puede registrar el trabajador
+        // en asignacion aula profesor
+        await axiosCustom.get(`transaccion/asignacion-aula-profesor/verificar-disponibilidad-trabajador/${cedula}`)
+        .then(async respuesta =>{
+            let json=JSON.parse(JSON.stringify(respuesta.data))
+            if(json.disponibilidad===true){
+                document.getElementById("boton-registrar").removeAttribute("disabled")
+            }
+            else{
+                alert(json.mensaje)
+                document.getElementById("boton-registrar").setAttribute("disabled","disabled")
+            }
+
+        })
+        .catch(error => {
+            console.error(error)
+        })
 
     }
 

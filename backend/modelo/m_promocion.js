@@ -40,6 +40,7 @@ class ModeloPromocion extends DriverPostgre{
 
     async registrar(){
         let fecha=Moment().format("YYYY-MM-DD")
+        let dia=Moment().format("DD")
         const SQL=`INSERT INTO tpromocion(
             id_inscripcion,
             fecha_promocion,
@@ -58,7 +59,7 @@ class ModeloPromocion extends DriverPostgre{
             '${this.recomendacion_pariente}',
             '${this.nota_promocion}',
             '${this.descripcion_nota_promocion}',
-            '${this.dias_promocion}',
+            '${dia}',
             '${this.estatus_promocion}',
             '${this.nota_rezacho_promocion}'
         ) RETURNING id_promocion`

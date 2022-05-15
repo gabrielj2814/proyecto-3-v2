@@ -119,6 +119,7 @@ class ComponentRetiroForm extends React.Component{
           hash[asignacion.id_asignacion_representante_estudiante] = asignacion;
         }
       }
+      
       this.setState({hashAsignacionRepresentante:hash})
 
     })
@@ -133,6 +134,7 @@ class ComponentRetiroForm extends React.Component{
           hash[estudiante.codigo_cedula_escolar+'-'+estudiante.cedula_escolar] = estudiante;
         }
       }
+      console.log("estudiante verga  => ",hash)
       this.setState({hashListaEstudiantes: hash});
     })
     .catch( err => console.error(err));

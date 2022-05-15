@@ -281,7 +281,7 @@ controladorInscripcion.obtenerEstudianteProfesor2=async (cedula) => {
         // console.log("asignacion =>>> ",consultarAsigancionActulaProfesor.rows)
         if(consultarAsigancionActulaProfesor.rowCount>0){
             let datosAsignacion=consultarAsigancionActulaProfesor.rows[0]
-            const resultEstudiantesInscriptos= await modeloInscripcion.consultarEstudiantesPorAsignacion(datosAsignacion.id_asignacion_aula_profesor)
+            const resultEstudiantesInscriptos= await modeloInscripcion.consultarEstudiantesPorAsignacion2(datosAsignacion.id_asignacion_aula_profesor)
             // console.log("inscriptos =>>> ",resultEstudiantesInscriptos.rows)
             if(resultEstudiantesInscriptos.rowCount>0){
                 return {

@@ -82,6 +82,10 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL)
   }
 
+  async consultarEstudiantesPorAsignacion2(idAsignacion){
+    const SQL = `SELECT * FROM tinscripcion,testudiante WHERE tinscripcion.id_asignacion_aula_profesor=${idAsignacion} AND testudiante.id_estudiante=tinscripcion.id_estudiante AND tinscripcion.estatus_inscripcion='I';`
+    return await this.query(SQL)
+  }
 
 
   async consultar(){

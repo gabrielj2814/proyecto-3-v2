@@ -284,6 +284,65 @@ ControladorAsignacionAulaProfesor.consularAsigancionActualProfesor= async (req,r
 
 }
 
+ControladorAsignacionAulaProfesor.verificarDisponibilidadTrabajador= async (req,res) => {
+    // esta funcion se ultiliza para consultrar si el trabajador esta activo 
+    // ademas ve si tiene un reposos o un permiso activo para evitar que se puede registrar el trabajador
+    // en asignacion aula profesor
+    const ModeloTrabajador = require("../modelo/m_trabajador");
+    const ModeloPermisoTrabajador = require("../modelo/m_permiso_trabajador");
+    const ModeloReposoTrabajador = require("../modelo/m_reposo_trabajador");
+    const modeloTrabajador=new ModeloTrabajador()
+    const respuesta_api={mensaje:"",disponibilidad:false,estado_respuesta:false,color_alerta:""}
+    let {cedula} = req.params
+    modeloTrabajador.set_idCedula(cedula)
+    let resultTrabajador=await modeloTrabajador.consultarModelo()
+    if(resultTrabajador.rowCount>0){
+        let trabajador=resultTrabajador.rows[0]
+        if(trabajador.estatu_trabajador==="1"){
+            const modeloPermisoTrabajador=new ModeloPermisoTrabajador()
+            modeloPermisoTrabajador.setCedulaPermiso(cedula)
+            let resultPermisoTrabajador=await modeloPermisoTrabajador.consultarPermisoTrabajadorXCedulaActivolModelo()
+            if(resultPermisoTrabajador.rowCount===0){
+                const modeloReposoTrabajador=new ModeloReposoTrabajador()
+                modeloReposoTrabajador.setCedulaTrabajador(cedula)
+                let resultReporsoTrabajador=await modeloReposoTrabajador.consultarXReposoTrabajadorActivoModelo() 
+                if(resultReporsoTrabajador.rowCount===0){
+                    respuesta_api.mensaje=""
+                    respuesta_api.disponibilidad=true
+                    respuesta_api.estado_respuesta=true
+                    respuesta_api.color_alerta="success"
+                }
+                else{
+                    respuesta_api.mensaje="error al consultar el profesor tiene un reposo activo"
+                    respuesta_api.estado_respuesta=true
+                    respuesta_api.color_alerta="danger"
+                }
+            }
+            else{
+                respuesta_api.mensaje="error al consultar el profesor tiene un permiso activo"
+                respuesta_api.estado_respuesta=true
+                respuesta_api.color_alerta="danger"
+            }
+        }
+        else{
+            respuesta_api.mensaje="error al consultar el profesor no esta activo"
+            respuesta_api.estado_respuesta=true
+            respuesta_api.color_alerta="danger"
+        }
+    }
+    else{
+        respuesta_api.mensaje="error al consultar el profesor no existe en la base de datos"
+        respuesta_api.estado_respuesta=true
+        respuesta_api.color_alerta="danger"
+    }
+    // console.log("datos => ",resultTrabajador)
+    res.writeHead(200,{"Content-Type":"application/json"})
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+
+
+}
+
 // ==================
 // ==================
 // ==================
