@@ -280,7 +280,6 @@ class ComponentInscripcion extends React.Component{
     }
 
     mostrarFiltros(a){
-      alert("hola")
       let $boton=a.target
       let tipo=$boton.getAttribute("data-tipo-matricula")
       let $filaVerPdf=document.getElementById("filaVerPdf")
