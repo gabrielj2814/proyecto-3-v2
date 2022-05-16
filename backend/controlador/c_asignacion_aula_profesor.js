@@ -360,5 +360,17 @@ ControladorAsignacionAulaProfesor.consultarDatosAsignacion= async (id) => {
     }
 }
 
+ControladorAsignacionAulaProfesor.consultarAsignacionActualInscripcion= async () => {
+    const respuesta_api={mensaje:"",datos:[],estado_respuesta:false,color_alerta:""}
+    let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
+    let resultAsignacionAulaProfesor= await modeloAsignacionAulaProfesor.consultarAsignacionActualInscripcion()
+    if(resultAsignacionAulaProfesor.rowCount>0){
+        return resultAsignacionAulaProfesor.rows
+    }
+    else{
+        return []
+    }
+}
+
 
 module.exports= ControladorAsignacionAulaProfesor
