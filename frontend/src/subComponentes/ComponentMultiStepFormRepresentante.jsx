@@ -452,7 +452,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         return false;
       }
 
-      if(a.target.value.length <= 7){
+      if(a.target.value.length < 7){
         this.habilitarCamposRepresentante('mama', false)
         return false;
       }
@@ -472,7 +472,7 @@ class ComponentMultiStepFormRepresentante extends React.Component{
         this.habilitarCamposRepresentante('papa', false)
         return false;
       }
-      if(a.target.value.length <= 7){
+      if(a.target.value.length < 7){
         this.habilitarCamposRepresentante('papa', false)
         return false;
       }

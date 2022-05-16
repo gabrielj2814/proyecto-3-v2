@@ -122,20 +122,21 @@ class ComponentCambioAulaForm extends React.Component{
         const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
 
         if(aulas.length === 0){
-          alert("No hay Aulas registradas(será redirigido a la vista anterior)")
+          alert("No hay Secciones registradas(será redirigido a la vista anterior)")
           this.props.history.goBack()
         }
-        aulas.unshift({id: "", descripcion: "Selecione un aula"})
+        aulas.unshift({id: "", descripcion: "Selecione una Sección"})
+        grados.unshift({id: "", descripcion: "Selecione un Grado"})
 
         this.setState({
           listaGrados: grados,
           listaAulas: aulas,
-          id_grado: grados[0].id,
+          id_grado: "",
           id_aula_a: '',
           id_aula_b: '',
         })
       }
-      
+
     }else{
         alert("No tienes acesso a este modulo(será redirigido a la vista anterior)")
         this.props.history.goBack()
@@ -153,16 +154,21 @@ class ComponentCambioAulaForm extends React.Component{
     propiedad_descripcion_2="nombre_aula",
     propiedad_estado_2="estatus_aula"
     const aulas = await this.consultarServidor(ruta_api_2,nombre_propiedad_lista_2,propiedad_id_2,propiedad_descripcion_2,propiedad_estado_2)
-    aulas.unshift({id: "", descripcion: "Selecione un aula"})
 
-    this.setState({
-      listaAulas: aulas,
-      id_aula_a: "",
-      id_aula_b: "",
-    })
+    if(aulas.length > 1){
+      aulas.unshift({id: "", descripcion: "Selecione una Sección"})
 
-    if(target.name == "id_grado_a") await this.consultarEstudiantes({lista:'a', id: aulas[0].id})
-    else await this.consultarEstudiantes({lista:'b', id: aulas[0].id})
+      this.setState({
+        listaAulas: aulas,
+        id_aula_a: "",
+        id_aula_b: "",
+      })
+
+      if(target.name == "id_grado_a") await this.consultarEstudiantes({lista:'a', id: aulas[1].id})
+      else await this.consultarEstudiantes({lista:'b', id: aulas[1].id})
+    }else{
+      alert("No hay Suficientes secciones registradas en el Grado Seleccionado")
+    }
   }
 
   async consultarAula(a){
@@ -208,7 +214,7 @@ class ComponentCambioAulaForm extends React.Component{
 
         this.BuscarEstudiante({target:{ name: `id_inscripcion_${name}`, value: estudianteLista[0].id }})
       }else{
-        alert("No existen Asignaciones para el aula seleccionada");
+        alert("No hay Estudiantes en la Sección seleccionada");
       }
 
     })
@@ -643,7 +649,7 @@ class ComponentCambioAulaForm extends React.Component{
                     </div>
                     <div className="row mt-3">
                         <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                            <span className="sub-titulo-form-reposo-trabajador">Datos del aula (A) </span>
+                            <span className="sub-titulo-form-reposo-trabajador">Datos de la Sección (A) </span>
                         </div>
                     </div>
                     <div className="row justify-content-center mx-auto my-2">
@@ -663,7 +669,7 @@ class ComponentCambioAulaForm extends React.Component{
                       clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                       obligatorio="si"
                       mensaje={this.state.msj_id_aula_a[0]}
-                      nombreCampoSelect="Aula (A):"
+                      nombreCampoSelect="Sección (A):"
                       clasesSelect="custom-select"
                       name="id_aula_a"
                       id="id_aula_a"
@@ -750,7 +756,7 @@ class ComponentCambioAulaForm extends React.Component{
                 <form id="form_trabajador">
                   <div className="row mt-3">
                       <div className="col-12 col-ms-12 col-md-12 col-lg-12 col-xl-12 contenedor-titulo-form-asig-aula-prof">
-                          <span className="sub-titulo-form-reposo-trabajador">Datos del aula (B) </span>
+                          <span className="sub-titulo-form-reposo-trabajador">Datos de la Sección (B) </span>
                       </div>
                   </div>
                   <div className="row justify-content-center mx-auto my-2">
@@ -763,7 +769,7 @@ class ComponentCambioAulaForm extends React.Component{
                     clasesColumna="col-3 col-ms-3 col-md-3 col-lg-3 col-xl-3"
                     obligatorio="si"
                     mensaje={this.state.msj_id_aula_b[0]}
-                    nombreCampoSelect="Aula (B):"
+                    nombreCampoSelect="Sección (B):"
                     clasesSelect="custom-select"
                     name="id_aula_b"
                     id="id_aula_b"
@@ -878,13 +884,13 @@ class ComponentCambioAulaForm extends React.Component{
                   <div className="row justify-content-center mx-auto my-2">
                     <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
                       clasesCampo="form-control" obligatorio="si" mensaje={[]}
-                      nombreCampo="Aula origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
+                      nombreCampo="Sección origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
                       name="id_aula_a" id="id_aula_a" placeholder="aula"
                     />
 
                     <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
                       clasesCampo="form-control" obligatorio="si" mensaje={[]}
-                      nombreCampo="Aula Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
+                      nombreCampo="Sección Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
                       name="id_aula_b" id="id_aula_b" placeholder="aula"
                     />
                   </div>
@@ -909,13 +915,13 @@ class ComponentCambioAulaForm extends React.Component{
                   <div className="row justify-content-center mx-auto my-2">
                     <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
                       clasesCampo="form-control" obligatorio="si" mensaje={[]}
-                      nombreCampo="Aula origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
+                      nombreCampo="Sección origen:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_b)[0].descripcion}
                       name="id_aula_a" id="id_aula_a" placeholder="aula"
                     />
 
                     <ComponentFormCampo clasesColumna="col-5 col-sm-5 col-md-5 col-lg-5 col-xl-5"
                       clasesCampo="form-control" obligatorio="si" mensaje={[]}
-                      nombreCampo="Aula Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
+                      nombreCampo="Sección Destino:" activo="no" type="text" value={this.state.listaAulas.filter( aula => aula.id == this.state.id_aula_a)[0].descripcion}
                       name="id_aula_b" id="id_aula_b" placeholder="aula"
                     />
                   </div>
