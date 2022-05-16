@@ -163,7 +163,6 @@ CREATE TABLE testado(
 );
 
 INSERT INTO testado(id_estado,nombre_estado,estatu_estado) VALUES('est-1','portuguesa','1');
-INSERT INTO testado(id_estado,nombre_estado,estatu_estado) VALUES('est-2','lara','1');
 
 CREATE TABLE tciudad(
     id_ciudad character varying(8) NOT NULL,
@@ -174,9 +173,8 @@ CREATE TABLE tciudad(
     constraint FK_id_estado_tciudad foreign key(id_estado) references testado(id_estado) on update cascade on delete cascade
 );
 
-INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-1','acarigua','est-1','1');
+INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-1','paez','est-1','1');
 INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-2','araure','est-1','1');
-INSERT INTO tciudad(id_ciudad,nombre_ciudad,id_estado,estatu_ciudad) VALUES('ciu-3','barquisimeto','est-2','1');
 
 CREATE TABLE tparroquia(
     id_parroquia SERIAL,
