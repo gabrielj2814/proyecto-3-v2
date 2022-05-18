@@ -135,6 +135,7 @@ import ComponentMultiStepForm from './componentes/ComponentMultiStepForm'
 // Incripcion
 import ComponentInscripcionForm from './componentes/ComponentInscripcionForm'
 import ComponentInscripcion from './componentes/ComponentInscripcion'
+import ComponentInscripcionSoloDirector from './componentes/ComponentInscripcionSoloDirector'
 // Parroquia
 import ComponentParroquia from './componentes/componentParroquia'
 import ComponentParroquiaForm from './componentes/componentParroquiaForm'
@@ -258,6 +259,7 @@ function App() {
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:operacion/:id?" component={ComponentFechaInscripcionFormulario}/>
         <Route exact path="/dashboard/configuracion/fecha-inscripcion/:mensaje?" component={ComponentFechaInscripcion}/>
 
+        <Route exact path="/dashboard/configuracion/solo-director-inscripcion" component={ComponentInscripcionSoloDirector}/>
         <Route exact path="/dashboard/configuracion/inscripcion/:operacion/:id?" component={ComponentInscripcionForm}/>
         <Route exact path="/dashboard/configuracion/inscripcion/:mensaje?" component={ComponentInscripcion}/>
 

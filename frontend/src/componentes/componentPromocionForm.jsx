@@ -85,7 +85,7 @@ class ComponentPromocionForm extends React.Component{
         msj_nota_rezacho_promocion:[{mensaje:"",color_texto:""}],
         //// combo box
         lista_profesores: [],
-        notas:['A','B','C','D','E','F'],
+        notas:['A','B','C','D','E'],
         estados_promocion: ['A','R','E'],
         hashListaProfesores:{},
         hashListaEstudiantes:{},

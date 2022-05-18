@@ -53,8 +53,8 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
         asistencias_estudiantes: [],
         estados_asistencia:[
           {id: " ",descripcion: "Seleccione una opción"},
-          {id: "0",descripcion: "NO vino"},
-          {id: "1",descripcion: "SI Vino"},
+          {id: "0",descripcion: "NO"},
+          {id: "1",descripcion: "SI"},
         ],
         // -- 1 -> vino , 0 -> no vino , 2 -> por que se enfermo, 3 -> otros sumar observacion
         //// combo box

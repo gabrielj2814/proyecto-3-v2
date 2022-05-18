@@ -105,7 +105,7 @@ class ComponentPromocion extends React.Component {
     async conultarPromocionesProfesores(){
       axiosCustom.get("transaccion/promocion/consultar-todos-promociones/"+this.state.id_cedula)
       .then( ({data}) => {
-        
+
         if(data.datos.length > 0){
           this.setState({registros: data.datos})
         }else{
@@ -230,6 +230,8 @@ class ComponentPromocion extends React.Component {
                 <tr>
                   <th>Fecha de promoción</th>
                   <th>Literal</th>
+                  <th>Cédula Escolar</th>
+                  <th>Nombre del Estudiante</th>
                   <th>Estado de promoción</th>
                 </tr>
             </thead>
@@ -246,6 +248,8 @@ class ComponentPromocion extends React.Component {
                         <tr key={index}>
                           <td>{Moment(promocion.fecha_promocion).format("DD/MM/YYYY")}</td>
                           <td>{promocion.nota_promocion}</td>
+                          <td>{promocion.codigo_cedula_escolar}-{promocion.cedula_escolar}</td>
+                          <td>{promocion.nombres_estudiante} {promocion.apellidos_estudiante}</td>
                           <td>{status}</td>
                           {promocion.estatus_promocion === "R" &&
                             <td>
