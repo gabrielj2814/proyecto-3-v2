@@ -15,6 +15,7 @@ router.get("/consultar-estudiante/:idAula", controladorInscripcion.obtenerEstudi
 
 router.get("/consultar-aula-profesor/:idAula", controladorInscripcion.obtenerAulaProfesor)
 router.get("/consultar-estudiante-inscritos", controladorInscripcion.ObtenerEstudiantesInscritos)
+router.get("/consultar-ultima-inscripcion-estudiante/:id", controladorInscripcion.consultarInscripcionesEstudiante)
 
 
 module.exports = router
