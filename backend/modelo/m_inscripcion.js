@@ -180,6 +180,32 @@ class ModeloInscripcion extends DriverPostgres {
     return await this.query(SQL);
   }
 
+  async consultarTodasLasInscripcionesEstudianteMayor(){
+    const SQL=`SELECT max(id_inscripcion) FROM 
+    tinscripcion
+    WHERE 
+    id_estudiante=${this.id_estudiante} 
+    `
+    return await this.query(SQL)
+  }
+
+  async consultarTodasLasInscripcionesEstudiante(){
+    const SQL=`SELECT * FROM 
+    tpromocion,
+    tinscripcion,
+    tasignacion_aula_profesor,
+    taula,
+    tgrado 
+    WHERE 
+    tinscripcion.id_inscripcion=${this.id_inscripcion} AND
+    tpromocion.id_inscripcion=tinscripcion.id_inscripcion AND
+    tasignacion_aula_profesor.id_asignacion_aula_profesor=tinscripcion.id_asignacion_aula_profesor AND
+    taula.id_aula=tasignacion_aula_profesor.id_aula AND
+    tgrado.id_grado=taula.id_grado;
+    `
+    return await this.query(SQL)
+  }
+
 
 }
 

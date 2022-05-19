@@ -362,4 +362,46 @@ controladorInscripcion.ObtenerEstudiantesInscritos = async (req, res) => {
     res.end()
 }
 
+controladorInscripcion.consultarInscripcionesEstudiante = async (req,res) => {
+    const ModeloInscripcion = require('../modelo/m_inscripcion')
+    const respuesta_api = { mensaje: "",estadoDeInscripcion:false, estado_respuesta: false, color_alerta: "", datos: [] }
+    let {id} = req.params
+    let modeloInscripcion = new ModeloInscripcion()
+    modeloInscripcion.setIdEstudiante(id)
+    let resultInscripcion=await modeloInscripcion.consultarTodasLasInscripcionesEstudianteMayor()
+    if (resultInscripcion.rowCount > 0){
+        console.log(resultInscripcion.rows)
+        let id_inscripcion=resultInscripcion.rows[0].max
+        console.log(id_inscripcion)
+        modeloInscripcion.setIdInscripcion(id_inscripcion)
+        let resultInscripcion2=await modeloInscripcion.consultarTodasLasInscripcionesEstudiante()
+        if(resultInscripcion2.rowCount>0){
+            if(resultInscripcion2.rows[0].nota_promocion==="E"){
+                respuesta_api.estadoDeInscripcion=true
+                respuesta_api.mensaje = "el estudiante aplazo el grado pasado"
+            }
+            else{
+                respuesta_api.mensaje = "el estudiante esta joya"
+            }
+            respuesta_api.datos = resultInscripcion2.rows
+            respuesta_api.estado_respuesta = true;
+            respuesta_api.color_alerta = "success"
+            
+        }
+        else{
+            respuesta_api.estado_respuesta = true;
+            respuesta_api.color_alerta = "success"
+            respuesta_api.mensaje = "el estudiante esta joya por que ya esta inscripto pero no tiene promoción";
+        }
+
+    }else{
+        respuesta_api.estado_respuesta = false;
+        respuesta_api.color_alerta = "danger"
+        respuesta_api.mensaje = "No se encontraron resultado de su busqueda";
+    }
+    res.writeHead(200, { "Content-Type": "application/json" })
+    res.write(JSON.stringify(respuesta_api))
+    res.end()
+}
+
 module.exports = controladorInscripcion
