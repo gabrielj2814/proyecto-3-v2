@@ -57,8 +57,8 @@ class ComponentAsistenciaEstudiantesForm extends React.Component{
         msj_cedula_profesor: [{mensaje: "", color: "rojo"}],
         estados_asistencia:[
           {id: " ",descripcion: "Seleccione una opción"},
-          {id: "0",descripcion: "NO vino"},
-          {id: "1",descripcion: "SI Vino"},
+          {id: "0",descripcion: "NO"},
+          {id: "1",descripcion: "SI"},
         ],
         //// combo box
         hashListaEstudiantes:{},

@@ -251,6 +251,9 @@ class MenuDashboard extends React.Component{
                           {this.state.modulosSistema["/dashboard/configuracion"]["/inscripcion"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/inscripcion" texto="Inscripción"/>
                           }
+                          {this.state.modulosSistema["/dashboard/configuracion"]["/solo-director-inscripcion"]&&
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/solo-director-inscripcion" texto="Inscripción Solo Director"/>
+                          }
                           {this.state.modulosSistema["/dashboard/configuracion"]["/traslado-estudiantes"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/traslado-estudiantes" texto="Traslado de Estudiantes"/>
                           }

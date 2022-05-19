@@ -141,12 +141,12 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 if(datosEspecialistaActivos.length>0){
                     let cantidadDeEstudiante=36
                     let listaDenNumeroEstudiante=[]
-        
+
                     for(let contador=0;contador < cantidadDeEstudiante;contador++){
                         listaDenNumeroEstudiante.push(contador+1)
                     }
                     this.setState({listaDenNumeroEstudiante})
-                
+
                     await this.consultarAulaEspacio()
                     await this.consultarAnoEscolarActivo()
                     await this.consultarProfesores()
@@ -190,7 +190,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                             // document.getElementById("contenedorDisponibilidadProfesor").style.display="none"
                             await this.cosultarAulasEspaciosDisponibles(this.state.id_ano_escolar)
                         }
-        
+
                     }
                 }
                 else{
@@ -218,7 +218,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`/configuracion/especialista/consultar-todos-activo`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("especialistas => ",json)
             respuestaEspecialista=[...json.datos]
             if(json.estado_respuesta===true){
                 this.setState({listaDeEspecialistas: json.datos})
@@ -235,8 +234,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`/configuracion/aula-espacio/consultar-todos`)
         .then(respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("aula-espacio => ",json)
-
             if(json.estado_respuesta===true){
                 this.setState({listaDeAulaEspacio: json.datos})
             }
@@ -305,7 +302,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/consultar/${id}/${token}`)
         .then(respuesta => {
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(json)
             if(json.datos.length>0){
                 this.setState({
                     id_cedula:json.datos[0].id_cedula,
@@ -390,8 +386,6 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`configuracion/ano-escolar/consultar-ano-escolar-siguiente`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log(json)
-
             if(json.estado_respuesta===true){
                 let hashAnoEscolaresSiguiente=json.datos[0]
                 await this.cosultarAulasEspaciosDisponibles(json.datos[0].id_ano_escolar)
@@ -558,7 +552,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
     }
 
     async verficarEstadoTrebajador(cedula){
-        // esta funcion se ultiliza para consultrar si el trabajador esta activo 
+        // esta funcion se ultiliza para consultrar si el trabajador esta activo
         // ademas ve si tiene un reposos o un permiso activo para evitar que se puede registrar el trabajador
         // en asignacion aula profesor
         await axiosCustom.get(`transaccion/asignacion-aula-profesor/verificar-disponibilidad-trabajador/${cedula}`)
@@ -721,9 +715,19 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 alert("Cambio de Año Escolar")
                 await this.consultarAnoEscolarSiguiente()
                 if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
-                  this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
-                  this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
-                  await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);
+
+                  if(window.confirm("Deseas cambiar al siguiente Año Escolar?") === true){
+                    this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
+                    this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
+                    await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);
+
+                    if(this.props.match.operacion === "registrar") document.getElementById("btn-registrar").disabled = "";
+                    else document.getElementById("btn-actualizar").disabled = "";
+                  }else{
+                    if(this.props.match.operacion === "registrar") document.getElementById("btn-registrar").disabled = "disabled";
+                    else document.getElementById("btn-actualizar").disabled = "disabled";
+                    alert("No se puede continuar con la operación");
+                  }
                 }
                 else{
                   document.getElementById("parrafoMensaje").textContent="no hay año siguiente disponible"
@@ -769,7 +773,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         await axiosCustom.get(`configuracion/grado/verificar-existencia-secciones-grados`)
         .then(async respuesta =>{
             let json=JSON.parse(JSON.stringify(respuesta.data))
-            console.log("grados sin aulas => ",json) 
+            console.log("grados sin aulas => ",json)
             resupuesta=json.datos
         })
         .catch(error => {
