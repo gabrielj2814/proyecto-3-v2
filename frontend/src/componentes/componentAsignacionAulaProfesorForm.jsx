@@ -509,7 +509,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         let input=a.target
         let $seccionNombreProfesor=document.getElementById("nombreProfesor")
         let msj_id_cedula=JSON.parse(JSON.stringify(this.state.msj_id_cedula))
-        if(input.value.length===8){
+        if(input.value.length>=7){
             let profesor=this.state.hashListaProfesores[input.value]
             if(this.state.hashListaProfesores[input.value]){
                 $seccionNombreProfesor.textContent=`${profesor.nombres} ${profesor.apellidos}`
@@ -544,7 +544,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         }
         if(this.props.match.params.operacion==="registrar"){
             if(document.getElementById("boton-registrar")){
-                if(input.value.length===8){
+                if(input.value.length>=7){
                     this.verficarEstadoTrebajador(input.value)
                 }
             }
@@ -658,7 +658,7 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
         let exprecion=/[0-9]/
         let msj_id_cedula=JSON.parse(JSON.stringify(this.state.msj_id_cedula))
         if(cedulaProfesor.value!=""){
-            if(cedulaProfesor.value.length===8){
+            if(cedulaProfesor.value.length>=7){
                 if(this.state.hashListaProfesores[cedulaProfesor.value]){
                     estado=true
                     msj_id_cedula.mensaje=``

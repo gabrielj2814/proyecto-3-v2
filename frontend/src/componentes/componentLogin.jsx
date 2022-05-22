@@ -114,7 +114,7 @@ class ComponentLogin extends React.Component{
     validarCedulaUsuario(){
         var estado=false
         if(this.state.id_cedula!==""){
-            if(this.state.id_cedula.length===8){
+            if(this.state.id_cedula.length>=7){
                 estado=true
             }
             else{

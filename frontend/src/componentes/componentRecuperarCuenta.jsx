@@ -223,7 +223,7 @@ validarNumero(a){
 
     async validarCedulaUsuario(){
         if(this.state.id_cedula!==""){
-            if(this.state.id_cedula.length===8){
+            if(this.state.id_cedula.length>=7){
                 await this.consultarTrabajador(this.state.id_cedula)
                 
             }
