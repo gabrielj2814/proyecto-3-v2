@@ -130,6 +130,8 @@ class ComponentAnoEscolarForm extends React.Component{
           }
           let fecha_desde = Moment(fecha_actual_servidor.datos).add(1,'y').format("YYYY-MM-DD");
           let fecha_hasta = Moment(fecha_actual_servidor.datos).add(2,'y').format("YYYY-MM-DD");
+          fecha_desde = Moment(fecha_desde).add(1,'d').format("YYYY-MM-DD");
+          fecha_hasta = Moment(fecha_hasta).add(1,'d').format("YYYY-MM-DD");
 
           this.setState({
             ano_desde: Moment(fecha_desde).format("YYYY"),

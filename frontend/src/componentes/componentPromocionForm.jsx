@@ -260,11 +260,13 @@ class ComponentPromocionForm extends React.Component{
     .then( res => {
       if(res.data.color_alerta == "danger"){
         let mensaje = {};
-        mensaje.texto = res.data.mensaje
-        mensaje.estado = true;
-        mensaje.color_alerta = res.data.color_alerta
-        this.setState({mensaje})
-        return false;
+        if(this.props.match.operacion != "evaluacion"){
+          mensaje.texto = res.data.mensaje
+          mensaje.estado = true;
+          mensaje.color_alerta = res.data.color_alerta
+          this.setState({mensaje})
+          return false;
+        }
       }
 
       let lista = res.data.datos.map( item => {
@@ -310,38 +312,39 @@ class ComponentPromocionForm extends React.Component{
   }
 
   async UNSAFE_componentWillMount(){
-    let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion")
-    if(acessoModulo){
-      await this.consultarFechaServidor()
-      await this.consultarProfesores();
-      await this.obtenerDatosDeLasesion();
-      const operacion = this.props.match.params.operacion;
+    const operacion = this.props.match.params.operacion;
+    if(operacion === "evaluacion"){
 
-      if(operacion === "actualizar"){
+      let accesoModuloGestion = await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion-gestion")
+      if(accesoModuloGestion){
         await this.consultarPromocionPorId(this.props.match.params.id)
-        document.getElementById("nota_rezacho_promocion").disabled = true;
-      }
-
-      if(operacion === "evaluacion"){
-
-        let accesoModuloGestion = await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion-gestion")
-        if(accesoModuloGestion){
-          await this.consultarPromocionPorId(this.props.match.params.id)
-          for(let i = 0; i < 5; i++){
-            document.getElementById(`nota${i}`).disabled = true;
-          }
-          document.getElementById("descripcion_nota_promocion").disabled = true;
-          document.getElementById("recomendacion_pariente").disabled = true;
-          document.getElementById("descripcion_logro").disabled = true;
-
-        }else{
-          alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
-          this.props.history.goBack()
+        for(let i = 0; i < 5; i++){
+          document.getElementById(`nota${i}`).disabled = true;
         }
-      }
-    }else{
+        document.getElementById("descripcion_nota_promocion").disabled = true;
+        document.getElementById("recomendacion_pariente").disabled = true;
+        document.getElementById("descripcion_logro").disabled = true;
+
+      }else{
         alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
         this.props.history.goBack()
+      }
+    }else{
+      let acessoModulo=await this.validarAccesoDelModulo("/dashboard/transaccion","/promocion")
+      if(acessoModulo){
+        await this.consultarFechaServidor()
+        await this.consultarProfesores();
+        await this.obtenerDatosDeLasesion();
+
+        if(operacion === "actualizar"){
+          await this.consultarPromocionPorId(this.props.match.params.id)
+          document.getElementById("nota_rezacho_promocion").disabled = true;
+        }
+
+      }else{
+        alert("No tienes acesso a este modulo(sera redirigido a la vista anterior)")
+        this.props.history.goBack()
+      }
     }
   }
 
