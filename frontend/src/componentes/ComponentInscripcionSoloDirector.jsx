@@ -649,6 +649,7 @@ class ComponentInscripcionSoloDirector extends React.Component{
                   respuesta_servidor=respuesta.data
                   mensaje.texto=respuesta_servidor.mensaje
                   mensaje.estado=respuesta_servidor.estado_respuesta
+                  mensaje.color_alerta = respuesta_servidor.color_alerta
                   mensaje_formulario.mensaje=mensaje
                   this.Consultar_asignacion_aula(this.state.cedula_profesor);
                   this.setState(mensaje_formulario)
@@ -715,10 +716,12 @@ class ComponentInscripcionSoloDirector extends React.Component{
     return await axiosCustom.get(`configuracion/inscripcion/consultar-ultima-inscripcion-estudiante/${id}`)
     .then( res => {
       let msj = {};
-      
+
       if(this.state.numero_grado == "") return true;
+
       if(res.data.estadoDeInscripcion){
         if(res.data.datos[0].numero_grado != this.state.numero_grado){
+          $(".columna-modulo").animate({ scrollTop: 0}, 1000)
           // El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}
           msj.texto = `El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}`;
           msj.color_alerta = "danger";
@@ -731,6 +734,8 @@ class ComponentInscripcionSoloDirector extends React.Component{
           document.getElementById("inscripcion1").disabled = "disabled";
           return false
         }else{
+          $(".columna-modulo").animate({ scrollTop: 0}, 1000)
+
           msj.texto = `El estudiante aplazó el grado pasado, Será inscrito como repitiente`;
           msj.color_alerta = "danger";
           msj.estado = res.data.estado_respuesta;
@@ -743,16 +748,30 @@ class ComponentInscripcionSoloDirector extends React.Component{
           return true;
         }
       }else{
-        msj.texto = ``;
-        msj.color_alerta = "";
-        msj.estado = "";
-        this.setState({mensaje: msj});
-        this.setState({inscripcion_regular: "R"})
 
-        document.getElementById("inscripcion0").disabled = "";
-        document.getElementById("inscripcion1").disabled = "";
+        let gradoNuevo = parseInt(res.data.datos[0].numero_grado) + 1;
+        let gradoDocente = parseInt(this.state.numero_grado);
+        if(gradoNuevo != gradoDocente){
+          $(".columna-modulo").animate({ scrollTop: 0}, 1000)
+          msj.texto = `No concuerda el Grado con la data del seguimiento del estudiante, Este estudiante debe ser inscrito en el Grado ${gradoNuevo}, NO en el grado ${gradoDocente}`;
+          msj.color_alerta = "danger";
+          msj.estado = false;
 
-        return true;
+          document.getElementById("boton-registrar").disabled = "disabled";
+          document.getElementById("inscripcion0").disabled = "disabled";
+          document.getElementById("inscripcion1").disabled = "disabled";
+          this.setState({mensaje: msj,inscripcion_regular: "R"});
+          return false;
+        }else{
+          msj.texto = ``;
+          msj.color_alerta = "";
+          msj.estado = "";
+          document.getElementById("boton-registrar").disabled = "";
+          document.getElementById("inscripcion0").disabled = "";
+          document.getElementById("inscripcion1").disabled = "";
+          this.setState({mensaje: msj,inscripcion_regular: "R"});
+          return true;
+        }
       }
     })
     .catch( error => {

@@ -231,7 +231,7 @@ class MenuDashboard extends React.Component{
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/estado" texto="Estado"/>
                           }
                           {this.state.modulosSistema["/dashboard/configuracion"]["/ciudad"]&&
-                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Ciudad"/>
+                            <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/ciudad" texto="Municipio"/>
                           }
                           {this.state.modulosSistema["/dashboard/configuracion"]["/parroquia"]&&
                             <LinkButtom clases="item-sub-menu" ruta="/dashboard/configuracion/parroquia" texto="Parroquia"/>
