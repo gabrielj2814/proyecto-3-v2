@@ -748,6 +748,16 @@ class ComponentInscripcionSoloDirector extends React.Component{
           return true;
         }
       }else{
+        if(res.data.datos.length == 0){
+          msj.texto = ``;
+          msj.color_alerta = "";
+          msj.estado = "";
+          document.getElementById("boton-registrar").disabled = "";
+          document.getElementById("inscripcion0").disabled = "";
+          document.getElementById("inscripcion1").disabled = "";
+          this.setState({mensaje: msj,inscripcion_regular: "R"});
+          return true;
+        }
 
         let gradoNuevo = parseInt(res.data.datos[0].numero_grado) + 1;
         let gradoDocente = parseInt(this.state.numero_grado);
