@@ -435,7 +435,7 @@ class ComponentInscripcion extends React.Component{
         const jsx_tabla_body=(
           <tbody>
                 {this.state.registros.map((inscripcion, index)=>{
-                  if(inscripcion.vacio) return(<tr></tr>)
+                  if(inscripcion.vacio) return(<tr key={index}></tr>)
 
                   let estado = (inscripcion.estatus_inscripcion == "I") ? "Inscrito" : "";
                   estado = (inscripcion.estatus_inscripcion == "E") ? "Espera" : estado;
