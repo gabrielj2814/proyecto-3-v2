@@ -92,7 +92,7 @@ class PdfMatriculaFinal extends FPDF{
             $nota=null;
             // nota_promocion
             if(array_key_exists("nota_promocion",$inscripto)){
-                if($inscripto["nota_promocion"]==="F"){
+                if($inscripto["nota_promocion"]==="E"){
                     $this->Cell(30,10,"",1,0,'C');
                     $this->Cell(30,10,'X',1,0,'C');
                     $this->Cell(30,10,'',1,0,'C');
