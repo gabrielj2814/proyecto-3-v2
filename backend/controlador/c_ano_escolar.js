@@ -203,6 +203,8 @@ controladorAnoEscolar.actualizar = async (req, res) => {
 
 controladorAnoEscolar.verificarAnoEscolar= async (req,res) => {
   const ModeloAnoEscolar = require("../modelo/m_ano_escolar");
+  const ModeloAsignacionAulaProfesor= require("../modelo/m_asignacion_aula_profesor");
+  let modeloAsignacionAulaProfesor=new ModeloAsignacionAulaProfesor()
   const respuesta_api = { mensaje: "", estado_respuesta: false, color_alerta: "" }
   const hoy=moment().format("YYYY-MM-DD")
   let AnoEscolar=new ModeloAnoEscolar()
@@ -214,9 +216,10 @@ controladorAnoEscolar.verificarAnoEscolar= async (req,res) => {
     if(moment(hoy).isAfter(fechaDeCierreAnoActual)){
       AnoEscolar.setIdAnoEscolar(AnoEscolarActual.id_ano_escolar)
       let resultAnoEscolar2=await AnoEscolar.cierreDeAnoEscolar()
-      // if(resultAnoEscolar2.rowCount>0){
-      //   console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>OK")
-      // }
+      if(resultAnoEscolar2.rowCount>0){
+        let resultAsignacionesInactivas=modeloAsignacionAulaProfesor.cambiarPonerInactivoLaAsignacionPorAnoEscolar(AnoEscolarActual.id_ano_escolar)
+        console.log("=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>OK")
+      }
     }
   }
 

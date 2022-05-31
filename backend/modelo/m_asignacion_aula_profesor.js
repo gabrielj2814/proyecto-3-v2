@@ -187,6 +187,11 @@ class ModeloAsignacionAulaProfesor extends DriverPostgreSQL{
         return await this.query(SQL)
     }
 
+    async cambiarPonerInactivoLaAsignacionPorAnoEscolar(idAnoEscolar){
+        const SQL=`UPDATE tasignacion_aula_profesor SET estatus_asignacion_aula_profesor='0' WHERE id_ano_escolar=${idAnoEscolar};`
+        return await this.query(SQL)
+    }
+
 
 }
 
