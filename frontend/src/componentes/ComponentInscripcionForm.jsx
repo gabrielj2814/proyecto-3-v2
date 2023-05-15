@@ -50,7 +50,7 @@ class ComponentInscripcionForm extends React.Component{
     this.Consultar_ano_escolar = this.Consultar_ano_escolar.bind(this)
     this.obtenerDatosDeLasesion = this.obtenerDatosDeLasesion.bind(this)
     this.Consultar_asignacion_aula = this.Consultar_asignacion_aula.bind(this)
-    // this.consultarRepresentante=this.consultarRepresentante.bind(this)
+    this.consultarPromocionEstudiante = this.consultarPromocionEstudiante.bind(this)
 
     this.state={
         // ------------------
@@ -92,7 +92,8 @@ class ComponentInscripcionForm extends React.Component{
         ///
         mensaje:{
             texto:"",
-            estado:""
+            estado:"",
+            color_alerta: "",
         },
         //
         fechaServidor:null,
@@ -657,7 +658,55 @@ class ComponentInscripcionForm extends React.Component{
 
   regresar(){ this.props.history.push("/dashboard/configuracion/inscripcion"); }
 
-  BuscarEstudiante(a){
+  async consultarPromocionEstudiante(id){
+    return await axiosCustom.get(`configuracion/inscripcion/consultar-ultima-inscripcion-estudiante/${id}`)
+    .then( res => {
+      let msj = {};
+      if(res.data.estadoDeInscripcion){
+        if(res.data.datos[0].numero_grado != this.state.numero_grado){
+          // El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}
+          msj.texto = `El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}`;
+          msj.color_alerta = "danger";
+          msj.estado = res.data.estado_respuesta;
+
+          this.setState({inscripcion_regular: "P"})
+          this.setState({mensaje: msj});
+          document.getElementById("boton-registrar").disabled = "disabled";
+          document.getElementById("inscripcion0").disabled = "disabled";
+          document.getElementById("inscripcion1").disabled = "disabled";
+
+          return false
+        }else{
+          msj.texto = `El estudiante aplazó el grado pasado, Será inscrito como repitiente`;
+          msj.color_alerta = "danger";
+          msj.estado = res.data.estado_respuesta;
+
+          this.setState({inscripcion_regular: "P"})
+          this.setState({mensaje: msj});
+          document.getElementById("inscripcion0").disabled = "disabled";
+          document.getElementById("inscripcion1").disabled = "disabled";
+          document.getElementById("boton-registrar").disabled = "";
+          return true;
+        }
+      }else{
+        msj.texto = ``;
+        msj.color_alerta = "";
+        msj.estado = "";
+
+        this.setState({mensaje: msj});
+        document.getElementById("inscripcion0").disabled = "";
+        document.getElementById("inscripcion1").disabled = "";
+        document.getElementById("boton-registrar").disabled = "";
+        return true;
+      }
+    })
+    .catch( error => {
+      console.error(error)
+      return false;
+    })
+  }
+
+  async BuscarEstudiante(a){
 
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
@@ -671,6 +720,7 @@ class ComponentInscripcionForm extends React.Component{
       })
     }
     if(hashEstudiante[a.target.value]){
+      let valor = a.target.value;
       let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
       let representantes = [];
 
@@ -685,16 +735,25 @@ class ComponentInscripcionForm extends React.Component{
         this.setState({cedula_escolar: ""});
         return ;
       }
+      let res = await this.consultarPromocionEstudiante(hashEstudiante[a.target.value].id_estudiante);
+      if(res){
+        this.setState({
+          estadoBusquedaEstudiante: true,
+          id_estudiante: hashEstudiante[valor].id_estudiante,
+          nombre_estudiante: hashEstudiante[valor].nombres_estudiante,
+          apellido_estudiante: hashEstudiante[valor].apellidos_estudiante,
+          lista_representantes: [representantes]
+        });
+      }else{
+        this.setState({
+          nombre_estudiante: hashEstudiante[valor].nombres_estudiante,
+          apellido_estudiante: hashEstudiante[valor].apellidos_estudiante,
+        })
+      }
 
-      this.setState({
-        estadoBusquedaEstudiante: true,
-        id_estudiante: hashEstudiante[a.target.value].id_estudiante,
-        nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
-        apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
-        lista_representantes: [representantes]
-      });
+      return ;
 
-      return;
+
     }else{
       if(a.target.value.length == 12){
         alert("Cédula escolar no encontrada!, Por favor, Verifica los datos del estudiante")
@@ -755,7 +814,7 @@ class ComponentInscripcionForm extends React.Component{
                 {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
+                            <div className={`alert alert-${this.state.mensaje.color_alerta} alert-dismissible`}>
                                 <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>

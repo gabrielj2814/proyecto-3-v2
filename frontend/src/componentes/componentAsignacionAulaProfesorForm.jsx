@@ -715,8 +715,8 @@ class ComponentAsignacionAulaProfesorForm extends React.Component {
                 alert("Cambio de Año Escolar")
                 await this.consultarAnoEscolarSiguiente()
                 if(this.state.hashAnoEscolaresSiguiente.id_ano_escolar){
-                  let response = await confirm("Deseas cambiar al siguiente Año Escolar?");
-                  if(response){
+
+                  if(window.confirm("Deseas cambiar al siguiente Año Escolar?") === true){
                     this.setState({ano_desde:this.state.hashAnoEscolaresSiguiente.ano_desde})
                     this.setState({ano_hasta:this.state.hashAnoEscolaresSiguiente.ano_hasta})
                     await this.consultarDisponivilidadAulaSiguienteAnoEscolar(input.value);

@@ -52,7 +52,7 @@ class ComponentInscripcionSoloDirector extends React.Component{
     this.Consultar_asignacion_aula = this.Consultar_asignacion_aula.bind(this)
     this.consultarProfesores = this.consultarProfesores.bind(this);
     this.BuscarProfesor = this.BuscarProfesor.bind(this);
-
+    this.consultarPromocionEstudiante = this.consultarPromocionEstudiante.bind(this)
     this.state={
         // ------------------
         modulo:"",// modulo menu
@@ -98,7 +98,8 @@ class ComponentInscripcionSoloDirector extends React.Component{
         ///
         mensaje:{
             texto:"",
-            estado:""
+            estado:"",
+            color_alerta:"",
         },
         //
         fechaServidor:null,
@@ -630,7 +631,6 @@ class ComponentInscripcionSoloDirector extends React.Component{
       $(".columna-modulo").animate({
           scrollTop: 0
           }, 1000)
-      const operacion=this.props.match.params.operacion
 
       const mensaje_formulario={
           mensaje:"",
@@ -639,31 +639,28 @@ class ComponentInscripcionSoloDirector extends React.Component{
           msj_fecha_inscripcion:[{mensaje:"",color_texto:""}],
           msj_estatus_inscripcion:[{mensaje:"",color_texto:""}],
       }
-      if(operacion==="registrar"){
-
-          const estado_validar_formulario=this.validarFormularioRegistrar()
-          if(estado_validar_formulario.estado){
-              this.enviarDatos(estado_validar_formulario,(objeto)=>{
-                  const mensaje =this.state.mensaje
-                  var respuesta_servidor=""
-                  axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/registrar`,objeto)
-                  .then(respuesta=>{
-                      respuesta_servidor=respuesta.data
-                      mensaje.texto=respuesta_servidor.mensaje
-                      mensaje.estado=respuesta_servidor.estado_respuesta
-                      mensaje_formulario.mensaje=mensaje
-                      this.Consultar_asignacion_aula(this.state.cedula_profesor);
-                      this.setState(mensaje_formulario)
-                  })
-                  .catch(error=>{
-                      mensaje.texto="No se puedo conectar con el servidor"
-                      mensaje.estado=false
-                      console.error(error)
-                      mensaje_formulario.mensaje=mensaje
-                      this.setState(mensaje_formulario)
-                  })
+      const estado_validar_formulario=this.validarFormularioRegistrar()
+      if(estado_validar_formulario.estado){
+          this.enviarDatos(estado_validar_formulario,(objeto)=>{
+              const mensaje =this.state.mensaje
+              var respuesta_servidor=""
+              axios.post(`http://${servidor.ipServidor}:${servidor.servidorNode.puerto}/configuracion/inscripcion/registrar`,objeto)
+              .then(respuesta=>{
+                  respuesta_servidor=respuesta.data
+                  mensaje.texto=respuesta_servidor.mensaje
+                  mensaje.estado=respuesta_servidor.estado_respuesta
+                  mensaje_formulario.mensaje=mensaje
+                  this.Consultar_asignacion_aula(this.state.cedula_profesor);
+                  this.setState(mensaje_formulario)
               })
-          }
+              .catch(error=>{
+                  mensaje.texto="No se puedo conectar con el servidor"
+                  mensaje.estado=false
+                  console.error(error)
+                  mensaje_formulario.mensaje=mensaje
+                  this.setState(mensaje_formulario)
+              })
+          })
       }
   }
 
@@ -684,9 +681,9 @@ class ComponentInscripcionSoloDirector extends React.Component{
       petion(objeto)
   }
 
-  regresar(){ this.props.history.push("/dashboard/configuracion/inscripcion"); }
+  regresar(){ this.props.history.push("/dashboard"); }
 
-  BuscarProfesor(a){
+  async BuscarProfesor(a){
     this.validarNumero(a)
     let hashProfesores = JSON.parse(JSON.stringify(this.state.hashProfesores));
     if(a.target.value.length < 7 && this.state.estadoBusquedaProfesor === false){
@@ -704,7 +701,9 @@ class ComponentInscripcionSoloDirector extends React.Component{
         estadoBusquedaProfesor: true,
       });
 
-      this.Consultar_asignacion_aula(a.target.value);
+      await this.Consultar_asignacion_aula(a.target.value);
+      if(this.state.id_estudiante != "") await this.consultarPromocionEstudiante(this.state.id_estudiante)
+
     }else{
       this.setState({
         estadoBusquedaProfesor: false
@@ -712,7 +711,57 @@ class ComponentInscripcionSoloDirector extends React.Component{
     }
   }
 
-  BuscarEstudiante(a){
+  async consultarPromocionEstudiante(id){
+    return await axiosCustom.get(`configuracion/inscripcion/consultar-ultima-inscripcion-estudiante/${id}`)
+    .then( res => {
+      let msj = {};
+      
+      if(this.state.numero_grado == "") return true;
+      if(res.data.estadoDeInscripcion){
+        if(res.data.datos[0].numero_grado != this.state.numero_grado){
+          // El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}
+          msj.texto = `El estudiante aplazó el grado pasado, por lo tanto no tiene que repetir el grado ${res.data.datos[0].numero_grado}`;
+          msj.color_alerta = "danger";
+          msj.estado = res.data.estado_respuesta;
+
+          this.setState({mensaje: msj});
+          this.setState({inscripcion_regular: "P"})
+          document.getElementById("boton-registrar").disabled = "disabled";
+          document.getElementById("inscripcion0").disabled = "disabled";
+          document.getElementById("inscripcion1").disabled = "disabled";
+          return false
+        }else{
+          msj.texto = `El estudiante aplazó el grado pasado, Será inscrito como repitiente`;
+          msj.color_alerta = "danger";
+          msj.estado = res.data.estado_respuesta;
+
+          this.setState({inscripcion_regular: "P"})
+          this.setState({mensaje: msj});
+          document.getElementById("boton-registrar").disabled = "";
+          document.getElementById("inscripcion0").disabled = "disabled";
+          document.getElementById("inscripcion1").disabled = "disabled";
+          return true;
+        }
+      }else{
+        msj.texto = ``;
+        msj.color_alerta = "";
+        msj.estado = "";
+        this.setState({mensaje: msj});
+        this.setState({inscripcion_regular: "R"})
+
+        document.getElementById("inscripcion0").disabled = "";
+        document.getElementById("inscripcion1").disabled = "";
+
+        return true;
+      }
+    })
+    .catch( error => {
+      console.error(error)
+      return false;
+    })
+  }
+
+  async BuscarEstudiante(a){
 
     this.validarNumero(a)
     let hashEstudiante = JSON.parse(JSON.stringify(this.state.hashEstudiante));
@@ -726,6 +775,7 @@ class ComponentInscripcionSoloDirector extends React.Component{
       })
     }
     if(hashEstudiante[a.target.value]){
+      let valor = a.target.value;
       let hashAsignacionRepresentante = JSON.parse(JSON.stringify(this.state.hashAsignacionRepresentante));
       let representantes = [];
 
@@ -741,13 +791,23 @@ class ComponentInscripcionSoloDirector extends React.Component{
         return ;
       }
 
-      this.setState({
-        estadoBusquedaEstudiante: true,
-        id_estudiante: hashEstudiante[a.target.value].id_estudiante,
-        nombre_estudiante: hashEstudiante[a.target.value].nombres_estudiante,
-        apellido_estudiante: hashEstudiante[a.target.value].apellidos_estudiante,
-        lista_representantes: [representantes]
-      });
+      let res = await this.consultarPromocionEstudiante(hashEstudiante[a.target.value].id_estudiante);
+
+      if(res){
+        this.setState({
+          estadoBusquedaEstudiante: true,
+          id_estudiante: hashEstudiante[valor].id_estudiante,
+          nombre_estudiante: hashEstudiante[valor].nombres_estudiante,
+          apellido_estudiante: hashEstudiante[valor].apellidos_estudiante,
+          lista_representantes: [representantes]
+        });
+      }else{
+        this.setState({
+          id_estudiante: hashEstudiante[valor].id_estudiante,
+          nombre_estudiante: hashEstudiante[valor].nombres_estudiante,
+          apellido_estudiante: hashEstudiante[valor].apellidos_estudiante,
+        })
+      }
 
       return;
     }else{
@@ -810,7 +870,7 @@ class ComponentInscripcionSoloDirector extends React.Component{
                 {this.state.mensaje.texto!=="" && (this.state.mensaje.estado===true || this.state.mensaje.estado===false || this.state.mensaje.estado==="danger") &&
                     <div className="row">
                         <div className="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div className={`alert alert-${(this.state.mensaje.estado===true)?"success":"danger"} alert-dismissible`}>
+                            <div className={`alert alert-${this.state.mensaje.color_alerta} alert-dismissible`}>
                                 <p className='font-weight-bold'>Mensaje: {this.state.mensaje.texto}</p>
                                 <button className="close" data-dismiss="alert">
                                     <span>X</span>
@@ -954,22 +1014,12 @@ class ComponentInscripcionSoloDirector extends React.Component{
 
                     <div className="row justify-content-center">
                         <div className="col-auto">
-                            {this.props.match.params.operacion==="registrar" &&
-                                <InputButton
-                                clasesBoton="btn btn-primary"
-                                id="boton-registrar"
-                                value="Registrar"
-                                eventoPadre={this.operacion}
-                                />
-                            }
-                            {this.props.match.params.operacion==="actualizar" &&
-                                <InputButton
-                                clasesBoton="btn btn-warning"
-                                id="boton-actualizar"
-                                value="Actualizar"
-                                eventoPadre={this.operacion}
-                                />
-                            }
+                            <InputButton
+                            clasesBoton="btn btn-primary"
+                            id="boton-registrar"
+                            value="Registrar"
+                            eventoPadre={this.operacion}
+                            />
                         </div>
                         <div className="col-auto">
                             <InputButton
